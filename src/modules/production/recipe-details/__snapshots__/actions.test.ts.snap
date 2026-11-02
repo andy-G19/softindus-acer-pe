@@ -1,0 +1,1931 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createRecipeDetailAction > ADMIN agrega el material con la unidad del inventario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "detalle_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_requerida": 2.5,
+        "id_detalle_receta": "DRE00000012",
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+        "merma_estimada_porcentaje": 5,
+        "observaciones": "Plancha entera",
+        "tipo_consumo": "materia_prima",
+        "unidad_medida": "kg",
+      },
+    },
+    "prisma": "detalle_receta.create",
+  },
+  {
+    "args": {
+      "accion": "MODIFICAR_DETALLE_RECETA",
+      "detalle": "Material Plancha de acero agregado a la versión VER00000005.",
+      "enTransaccion": true,
+      "entidad_afectada": "detalle_receta",
+      "id_registro_afectado": "DRE00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000005/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > ADMIN agrega el material con la unidad del inventario > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-created"`;
+
+exports[`createRecipeDetailAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createRecipeDetailAction > WORKSHOP_MASTER tambien agrega > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "detalle_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_requerida": 2.5,
+        "id_detalle_receta": "DRE00000012",
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+        "merma_estimada_porcentaje": 5,
+        "observaciones": "Plancha entera",
+        "tipo_consumo": "materia_prima",
+        "unidad_medida": "kg",
+      },
+    },
+    "prisma": "detalle_receta.create",
+  },
+  {
+    "args": {
+      "accion": "MODIFICAR_DETALLE_RECETA",
+      "detalle": "Material Plancha de acero agregado a la versión VER00000005.",
+      "enTransaccion": true,
+      "entidad_afectada": "detalle_receta",
+      "id_registro_afectado": "DRE00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000005/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > WORKSHOP_MASTER tambien agrega > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-created"`;
+
+exports[`createRecipeDetailAction > datos invalidos devuelven errores por campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > datos invalidos devuelven errores por campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del material.",
+    "fieldErrors": {
+      "cantidad_requerida": [
+        "La cantidad requerida debe ser mayor a 0.",
+      ],
+      "tipo_consumo": [
+        "Seleccione un tipo de consumo válido.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRecipeDetailAction > el material no existe o esta inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > el material no existe o esta inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_material": [
+        "El material seleccionado no existe o está inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRecipeDetailAction > el material ya esta en la version > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "detalle_receta.findFirst",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > el material ya esta en la version > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este material ya está registrado en esta versión de receta.",
+    "fieldErrors": {
+      "id_material": [
+        "Este material ya está registrado en esta versión de receta.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > la receta no esta activa > resultado 1`] = `
+{
+  "estado": {
+    "error": "La receta técnica no está activa.",
+  },
+}
+`;
+
+exports[`createRecipeDetailAction > la version no existe o no esta vigente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > la version no existe o no esta vigente > resultado 1`] = `
+{
+  "estado": {
+    "error": "La versión de receta no existe o no está vigente.",
+  },
+}
+`;
+
+exports[`createRecipeDetailAction > la version ya la usan ordenes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > la version ya la usan ordenes > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad.",
+  },
+}
+`;
+
+exports[`createRecipeDetailAction > sin merma ni observaciones se guarda null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "detalle_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_requerida": 2.5,
+        "id_detalle_receta": "DRE00000012",
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+        "merma_estimada_porcentaje": null,
+        "observaciones": null,
+        "tipo_consumo": "materia_prima",
+        "unidad_medida": "kg",
+      },
+    },
+    "prisma": "detalle_receta.create",
+  },
+  {
+    "args": {
+      "accion": "MODIFICAR_DETALLE_RECETA",
+      "detalle": "Material Plancha de acero agregado a la versión VER00000005.",
+      "enTransaccion": true,
+      "entidad_afectada": "detalle_receta",
+      "id_registro_afectado": "DRE00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000005/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > sin merma ni observaciones se guarda null > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-created"`;
+
+exports[`createRecipeDetailAction > una carrera (P2002) deja el error de Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "detalle_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_requerida": 2.5,
+        "id_detalle_receta": "DRE00000012",
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+        "merma_estimada_porcentaje": 5,
+        "observaciones": "Plancha entera",
+        "tipo_consumo": "materia_prima",
+        "unidad_medida": "kg",
+      },
+    },
+    "prisma": "detalle_receta.create",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > una carrera (P2002) deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;
+
+exports[`createRecipeDetailAction > una merma fuera de rango devuelve su error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > una merma fuera de rango devuelve su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del material.",
+    "fieldErrors": {
+      "merma_estimada_porcentaje": [
+        "La merma estimada debe estar entre 0 y 100%.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`deleteRecipeDetailAction > ADMIN elimina la linea > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.delete",
+  },
+  {
+    "args": {
+      "accion": "MODIFICAR_DETALLE_RECETA",
+      "detalle": "Material Plancha de acero eliminado de la versión VER00000005.",
+      "enTransaccion": true,
+      "entidad_afectada": "detalle_receta",
+      "id_registro_afectado": "DRE00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000005/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > ADMIN elimina la linea > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-deleted"`;
+
+exports[`deleteRecipeDetailAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`deleteRecipeDetailAction > WORKSHOP_MASTER tambien elimina > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.delete",
+  },
+  {
+    "args": {
+      "accion": "MODIFICAR_DETALLE_RECETA",
+      "detalle": "Material Plancha de acero eliminado de la versión VER00000005.",
+      "enTransaccion": true,
+      "entidad_afectada": "detalle_receta",
+      "id_registro_afectado": "DRE00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000005/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > WORKSHOP_MASTER tambien elimina > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-deleted"`;
+
+exports[`deleteRecipeDetailAction > la linea no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > la linea no existe > resultado 1`] = `"error: El material de la receta no existe."`;
+
+exports[`deleteRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > la receta no esta activa > resultado 1`] = `"error: La receta técnica no está activa."`;
+
+exports[`deleteRecipeDetailAction > la version no existe o no esta vigente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > la version no existe o no esta vigente > resultado 1`] = `"error: La versión de receta no existe o no está vigente."`;
+
+exports[`deleteRecipeDetailAction > la version ya la usan ordenes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > la version ya la usan ordenes > resultado 1`] = `"error: No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad."`;
+
+exports[`deleteRecipeDetailAction > sin id lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > sin id lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: No se recibió el material de la receta."`;
+
+exports[`deleteRecipeDetailAction > un fallo al borrar revierte y deja el error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.delete",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > un fallo al borrar revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
+
+exports[`updateRecipeDetailAction > ADMIN actualiza la linea con la unidad del inventario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_receta": true,
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_detalle_receta": {
+          "not": "DRE00000007",
+        },
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "detalle_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_requerida": 2.5,
+        "id_material": "MAT00000001",
+        "merma_estimada_porcentaje": 5,
+        "observaciones": "Plancha entera",
+        "tipo_consumo": "materia_prima",
+        "unidad_medida": "kg",
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.update",
+  },
+  {
+    "args": {
+      "accion": "MODIFICAR_DETALLE_RECETA",
+      "detalle": "Material Plancha de acero actualizado en la versión VER00000005.",
+      "enTransaccion": true,
+      "entidad_afectada": "detalle_receta",
+      "id_registro_afectado": "DRE00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000005/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > ADMIN actualiza la linea con la unidad del inventario > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-updated"`;
+
+exports[`updateRecipeDetailAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`updateRecipeDetailAction > WORKSHOP_MASTER tambien actualiza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_receta": true,
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_detalle_receta": {
+          "not": "DRE00000007",
+        },
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "detalle_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_requerida": 2.5,
+        "id_material": "MAT00000001",
+        "merma_estimada_porcentaje": 5,
+        "observaciones": "Plancha entera",
+        "tipo_consumo": "materia_prima",
+        "unidad_medida": "kg",
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.update",
+  },
+  {
+    "args": {
+      "accion": "MODIFICAR_DETALLE_RECETA",
+      "detalle": "Material Plancha de acero actualizado en la versión VER00000005.",
+      "enTransaccion": true,
+      "entidad_afectada": "detalle_receta",
+      "id_registro_afectado": "DRE00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000005/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > WORKSHOP_MASTER tambien actualiza > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-updated"`;
+
+exports[`updateRecipeDetailAction > datos invalidos devuelven errores por campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > datos invalidos devuelven errores por campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del material.",
+    "fieldErrors": {
+      "cantidad_requerida": [
+        "La cantidad requerida debe ser mayor a 0.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateRecipeDetailAction > la linea es de otra version > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_receta": true,
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > la linea es de otra version > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material no pertenece a la versión indicada.",
+  },
+}
+`;
+
+exports[`updateRecipeDetailAction > la linea no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_receta": true,
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > la linea no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material de la receta no existe.",
+  },
+}
+`;
+
+exports[`updateRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_receta": true,
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > la receta no esta activa > resultado 1`] = `
+{
+  "estado": {
+    "error": "La receta técnica no está activa.",
+  },
+}
+`;
+
+exports[`updateRecipeDetailAction > la version no existe o no esta vigente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_receta": true,
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > la version no existe o no esta vigente > resultado 1`] = `
+{
+  "estado": {
+    "error": "La versión de receta no existe o no está vigente.",
+  },
+}
+`;
+
+exports[`updateRecipeDetailAction > la version ya la usan ordenes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_receta": true,
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > la version ya la usan ordenes > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad.",
+  },
+}
+`;
+
+exports[`updateRecipeDetailAction > otra linea ya usa ese material > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_receta": true,
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_detalle_receta": {
+          "not": "DRE00000007",
+        },
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "detalle_receta.findFirst",
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > otra linea ya usa ese material > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este material ya está registrado en esta versión de receta.",
+    "fieldErrors": {
+      "id_material": [
+        "Este material ya está registrado en esta versión de receta.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateRecipeDetailAction > sin id devuelve su mensaje sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > sin id devuelve su mensaje sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió el material de la receta.",
+  },
+}
+`;
+
+exports[`updateRecipeDetailAction > un material inactivo se rechaza, aunque sea el de la linea > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_receta": true,
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > un material inactivo se rechaza, aunque sea el de la linea > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_material": [
+        "El material seleccionado no existe o está inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateRecipeDetailAction > una carrera (P2002) deja el error de Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_receta": true,
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_detalle_receta": {
+          "not": "DRE00000007",
+        },
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "detalle_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_requerida": 2.5,
+        "id_material": "MAT00000001",
+        "merma_estimada_porcentaje": 5,
+        "observaciones": "Plancha entera",
+        "tipo_consumo": "materia_prima",
+        "unidad_medida": "kg",
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.update",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > una carrera (P2002) deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;

@@ -1,0 +1,2756 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createRecipeVersionAction > ADMIN crea la version vigente y reemplaza la anterior > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "version_receta": {
+          "orderBy": {
+            "fecha_version": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+            "MAT00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "numero_version": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "numero_version": "V3",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "version_receta",
+      "prefijo": "VER",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reemplazada",
+      },
+      "where": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+        "id_usuario_aprueba": "USU00000001",
+        "id_version_receta": "VER00000012",
+        "motivo_cambio": "Cambio de proveedor",
+        "numero_version": "V3",
+      },
+    },
+    "prisma": "version_receta.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad_requerida": 2.5,
+          "id_detalle_receta": "DRE00000012",
+          "id_material": "MAT00000001",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 5,
+          "observaciones": null,
+          "tipo_consumo": "materia_prima",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_requerida": 1,
+          "id_detalle_receta": "DRE00000013",
+          "id_material": "MAT00000002",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 0,
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+          "unidad_medida": "gl",
+        },
+      ],
+    },
+    "prisma": "detalle_receta.createMany",
+  },
+  {
+    "args": {
+      "accion": "CREAR_VERSION_RECETA",
+      "detalle": "Nueva versión vigente V3 creada para la receta REC00000003 con 2 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000012/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > ADMIN crea la version vigente y reemplaza la anterior > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+
+exports[`createRecipeVersionAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createRecipeVersionAction > WORKSHOP_MASTER tambien crea versiones > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "version_receta": {
+          "orderBy": {
+            "fecha_version": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+            "MAT00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "numero_version": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "numero_version": "V3",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "version_receta",
+      "prefijo": "VER",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reemplazada",
+      },
+      "where": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+        "id_usuario_aprueba": "USU00000001",
+        "id_version_receta": "VER00000012",
+        "motivo_cambio": "Cambio de proveedor",
+        "numero_version": "V3",
+      },
+    },
+    "prisma": "version_receta.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad_requerida": 2.5,
+          "id_detalle_receta": "DRE00000012",
+          "id_material": "MAT00000001",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 5,
+          "observaciones": null,
+          "tipo_consumo": "materia_prima",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_requerida": 1,
+          "id_detalle_receta": "DRE00000013",
+          "id_material": "MAT00000002",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 0,
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+          "unidad_medida": "gl",
+        },
+      ],
+    },
+    "prisma": "detalle_receta.createMany",
+  },
+  {
+    "args": {
+      "accion": "CREAR_VERSION_RECETA",
+      "detalle": "Nueva versión vigente V3 creada para la receta REC00000003 con 2 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000012/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > WORKSHOP_MASTER tambien crea versiones > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+
+exports[`createRecipeVersionAction > el numero sigue al mayor, no al ultimo ni a los que no tienen digitos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "version_receta": {
+          "orderBy": {
+            "fecha_version": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+            "MAT00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "numero_version": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "numero_version": "V8",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "version_receta",
+      "prefijo": "VER",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reemplazada",
+      },
+      "where": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+        "id_usuario_aprueba": "USU00000001",
+        "id_version_receta": "VER00000012",
+        "motivo_cambio": "Cambio de proveedor",
+        "numero_version": "V8",
+      },
+    },
+    "prisma": "version_receta.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad_requerida": 2.5,
+          "id_detalle_receta": "DRE00000012",
+          "id_material": "MAT00000001",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 5,
+          "observaciones": null,
+          "tipo_consumo": "materia_prima",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_requerida": 1,
+          "id_detalle_receta": "DRE00000013",
+          "id_material": "MAT00000002",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 0,
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+          "unidad_medida": "gl",
+        },
+      ],
+    },
+    "prisma": "detalle_receta.createMany",
+  },
+  {
+    "args": {
+      "accion": "CREAR_VERSION_RECETA",
+      "detalle": "Nueva versión vigente V8 creada para la receta REC00000003 con 2 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000012/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > el numero sigue al mayor, no al ultimo ni a los que no tienen digitos > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+
+exports[`createRecipeVersionAction > la primera version es la V1 > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "version_receta": {
+          "orderBy": {
+            "fecha_version": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+            "MAT00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "numero_version": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "numero_version": "V1",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "version_receta",
+      "prefijo": "VER",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reemplazada",
+      },
+      "where": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+        "id_usuario_aprueba": "USU00000001",
+        "id_version_receta": "VER00000012",
+        "motivo_cambio": "Cambio de proveedor",
+        "numero_version": "V1",
+      },
+    },
+    "prisma": "version_receta.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad_requerida": 2.5,
+          "id_detalle_receta": "DRE00000012",
+          "id_material": "MAT00000001",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 5,
+          "observaciones": null,
+          "tipo_consumo": "materia_prima",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_requerida": 1,
+          "id_detalle_receta": "DRE00000013",
+          "id_material": "MAT00000002",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 0,
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+          "unidad_medida": "gl",
+        },
+      ],
+    },
+    "prisma": "detalle_receta.createMany",
+  },
+  {
+    "args": {
+      "accion": "CREAR_VERSION_RECETA",
+      "detalle": "Nueva versión vigente V1 creada para la receta REC00000003 con 2 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000012/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > la primera version es la V1 > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+
+exports[`createRecipeVersionAction > la receta no existe o esta inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "version_receta": {
+          "orderBy": {
+            "fecha_version": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > la receta no existe o esta inactiva > resultado 1`] = `"error: La receta técnica no existe o está inactiva."`;
+
+exports[`createRecipeVersionAction > sin lineas une su mensaje > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > sin lineas une su mensaje > resultado 1`] = `"error: Debe registrar al menos un material en la versión."`;
+
+exports[`createRecipeVersionAction > sin motivo se guarda null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "version_receta": {
+          "orderBy": {
+            "fecha_version": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+            "MAT00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "numero_version": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "numero_version": "V3",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "version_receta",
+      "prefijo": "VER",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reemplazada",
+      },
+      "where": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+        "id_usuario_aprueba": "USU00000001",
+        "id_version_receta": "VER00000012",
+        "motivo_cambio": null,
+        "numero_version": "V3",
+      },
+    },
+    "prisma": "version_receta.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad_requerida": 2.5,
+          "id_detalle_receta": "DRE00000012",
+          "id_material": "MAT00000001",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 5,
+          "observaciones": null,
+          "tipo_consumo": "materia_prima",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_requerida": 1,
+          "id_detalle_receta": "DRE00000013",
+          "id_material": "MAT00000002",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 0,
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+          "unidad_medida": "gl",
+        },
+      ],
+    },
+    "prisma": "detalle_receta.createMany",
+  },
+  {
+    "args": {
+      "accion": "CREAR_VERSION_RECETA",
+      "detalle": "Nueva versión vigente V3 creada para la receta REC00000003 con 2 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000012/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > sin motivo se guarda null > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+
+exports[`createRecipeVersionAction > un fallo en las lineas revierte y deja el error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "version_receta": {
+          "orderBy": {
+            "fecha_version": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+            "MAT00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "numero_version": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "numero_version": "V3",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "version_receta",
+      "prefijo": "VER",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reemplazada",
+      },
+      "where": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+        "id_usuario_aprueba": "USU00000001",
+        "id_version_receta": "VER00000012",
+        "motivo_cambio": "Cambio de proveedor",
+        "numero_version": "V3",
+      },
+    },
+    "prisma": "version_receta.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad_requerida": 2.5,
+          "id_detalle_receta": "DRE00000012",
+          "id_material": "MAT00000001",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 5,
+          "observaciones": null,
+          "tipo_consumo": "materia_prima",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_requerida": 1,
+          "id_detalle_receta": "DRE00000013",
+          "id_material": "MAT00000002",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 0,
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+          "unidad_medida": "gl",
+        },
+      ],
+    },
+    "prisma": "detalle_receta.createMany",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > un fallo en las lineas revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
+
+exports[`createRecipeVersionAction > un material no existe o esta inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "version_receta": {
+          "orderBy": {
+            "fecha_version": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+            "MAT00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > un material no existe o esta inactivo > resultado 1`] = `"error: Uno o más materiales seleccionados no existen o están inactivos."`;
+
+exports[`createRecipeVersionAction > un material repetido se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > un material repetido se rechaza > resultado 1`] = `"error: No se permite duplicar materiales dentro de la versión."`;
+
+exports[`createRecipeVersionAction > un material vacio se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > un material vacio se rechaza > resultado 1`] = `"error: Seleccione un material."`;
+
+exports[`createRecipeVersionAction > un numero enviado que ya existe se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "version_receta": {
+          "orderBy": {
+            "fecha_version": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+            "MAT00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "numero_version": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "numero_version": "V2",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > un numero enviado que ya existe se rechaza > resultado 1`] = `"error: Ya existe una versión con ese número para esta receta."`;
+
+exports[`createRecipeVersionAction > un numero enviado se respeta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "version_receta": {
+          "orderBy": {
+            "fecha_version": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+            "MAT00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "numero_version": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "numero_version": "V9-B",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "version_receta",
+      "prefijo": "VER",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reemplazada",
+      },
+      "where": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+        "id_usuario_aprueba": "USU00000001",
+        "id_version_receta": "VER00000012",
+        "motivo_cambio": "Cambio de proveedor",
+        "numero_version": "V9-B",
+      },
+    },
+    "prisma": "version_receta.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad_requerida": 2.5,
+          "id_detalle_receta": "DRE00000012",
+          "id_material": "MAT00000001",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 5,
+          "observaciones": null,
+          "tipo_consumo": "materia_prima",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_requerida": 1,
+          "id_detalle_receta": "DRE00000013",
+          "id_material": "MAT00000002",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 0,
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+          "unidad_medida": "gl",
+        },
+      ],
+    },
+    "prisma": "detalle_receta.createMany",
+  },
+  {
+    "args": {
+      "accion": "CREAR_VERSION_RECETA",
+      "detalle": "Nueva versión vigente V9-B creada para la receta REC00000003 con 2 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000012/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > un numero enviado se respeta > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+
+exports[`createRecipeVersionAction > una carrera (P2002) deja el error de Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "version_receta": {
+          "orderBy": {
+            "fecha_version": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+            "MAT00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "numero_version": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "numero_version": "V3",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "version_receta",
+      "prefijo": "VER",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reemplazada",
+      },
+      "where": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+        "id_usuario_aprueba": "USU00000001",
+        "id_version_receta": "VER00000012",
+        "motivo_cambio": "Cambio de proveedor",
+        "numero_version": "V3",
+      },
+    },
+    "prisma": "version_receta.create",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > una carrera (P2002) deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;
+
+exports[`createRecipeVersionAction > una linea sin merma ni observaciones > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "version_receta": {
+          "orderBy": {
+            "fecha_version": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "numero_version": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "numero_version": "V3",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "version_receta",
+      "prefijo": "VER",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_receta",
+      "prefijo": "DRE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reemplazada",
+      },
+      "where": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+        "id_usuario_aprueba": "USU00000001",
+        "id_version_receta": "VER00000012",
+        "motivo_cambio": "Cambio de proveedor",
+        "numero_version": "V3",
+      },
+    },
+    "prisma": "version_receta.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad_requerida": 2,
+          "id_detalle_receta": "DRE00000012",
+          "id_material": "MAT00000001",
+          "id_version_receta": "VER00000012",
+          "merma_estimada_porcentaje": 0,
+          "observaciones": null,
+          "tipo_consumo": "auxiliar",
+          "unidad_medida": "kg",
+        },
+      ],
+    },
+    "prisma": "detalle_receta.createMany",
+  },
+  {
+    "args": {
+      "accion": "CREAR_VERSION_RECETA",
+      "detalle": "Nueva versión vigente V3 creada para la receta REC00000003 con 1 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions/VER00000012/details",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > una linea sin merma ni observaciones > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+
+exports[`createRecipeVersionAction > varios errores se unen en un mensaje > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > varios errores se unen en un mensaje > resultado 1`] = `"error: La cantidad requerida debe ser mayor a 0. Seleccione un tipo de consumo válido. La cantidad requerida debe ser mayor a 0."`;
+
+exports[`setCurrentRecipeVersionAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`setCurrentRecipeVersionAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`setCurrentRecipeVersionAction > WORKSHOP_MASTER tambien la marca > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reemplazada",
+      },
+      "where": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_usuario_aprueba": "USU00000001",
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.update",
+  },
+  {
+    "args": {
+      "accion": "CAMBIAR_VERSION_VIGENTE",
+      "detalle": "La versión V2 fue marcada como vigente para la receta REC00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`setCurrentRecipeVersionAction > WORKSHOP_MASTER tambien la marca > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-set-current"`;
+
+exports[`setCurrentRecipeVersionAction > la que ya es vigente redirige sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`setCurrentRecipeVersionAction > la que ya es vigente redirige sin escribir > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions"`;
+
+exports[`setCurrentRecipeVersionAction > la receta no esta activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`setCurrentRecipeVersionAction > la receta no esta activa > resultado 1`] = `"error: La receta técnica no está activa."`;
+
+exports[`setCurrentRecipeVersionAction > la version no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`setCurrentRecipeVersionAction > la version no existe > resultado 1`] = `"error: La versión seleccionada no existe."`;
+
+exports[`setCurrentRecipeVersionAction > sin receta lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`setCurrentRecipeVersionAction > sin receta lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null"`;
+
+exports[`setCurrentRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`setCurrentRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null"`;
+
+exports[`setCurrentRecipeVersionAction > un fallo al escribir revierte y deja el error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reemplazada",
+      },
+      "where": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_usuario_aprueba": "USU00000001",
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.update",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`setCurrentRecipeVersionAction > un fallo al escribir revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
+
+exports[`setCurrentRecipeVersionAction > una anulada no se puede marcar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`setCurrentRecipeVersionAction > una anulada no se puede marcar > resultado 1`] = `"error: No se puede marcar como vigente una versión anulada."`;
+
+exports[`setCurrentRecipeVersionAction > una reemplazada pasa a vigente y la vigente queda reemplazada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reemplazada",
+      },
+      "where": {
+        "estado": "vigente",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "version_receta.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_usuario_aprueba": "USU00000001",
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.update",
+  },
+  {
+    "args": {
+      "accion": "CAMBIAR_VERSION_VIGENTE",
+      "detalle": "La versión V2 fue marcada como vigente para la receta REC00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`setCurrentRecipeVersionAction > una reemplazada pasa a vigente y la vigente queda reemplazada > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-set-current"`;
+
+exports[`voidRecipeVersionAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`voidRecipeVersionAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`voidRecipeVersionAction > WORKSHOP_MASTER tambien anula > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.update",
+  },
+  {
+    "args": {
+      "accion": "ANULAR_VERSION_RECETA",
+      "detalle": "Versión V2 anulada para la receta REC00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`voidRecipeVersionAction > WORKSHOP_MASTER tambien anula > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-annulled"`;
+
+exports[`voidRecipeVersionAction > con la receta inactiva tambien se anula > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.update",
+  },
+  {
+    "args": {
+      "accion": "ANULAR_VERSION_RECETA",
+      "detalle": "Versión V2 anulada para la receta REC00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`voidRecipeVersionAction > con la receta inactiva tambien se anula > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-annulled"`;
+
+exports[`voidRecipeVersionAction > la version no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`voidRecipeVersionAction > la version no existe > resultado 1`] = `"error: La versión seleccionada no existe."`;
+
+exports[`voidRecipeVersionAction > la vigente se anula y promueve la mas reciente no anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_version": "desc",
+      },
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_receta": "REC00000003",
+        "id_version_receta": {
+          "not": "VER00000005",
+        },
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_usuario_aprueba": "USU00000001",
+      },
+      "where": {
+        "id_version_receta": "VER00000004",
+      },
+    },
+    "prisma": "version_receta.update",
+  },
+  {
+    "args": {
+      "accion": "ANULAR_VERSION_RECETA",
+      "detalle": "Versión V2 anulada y reemplazada por VER00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`voidRecipeVersionAction > la vigente se anula y promueve la mas reciente no anulada > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-annulled"`;
+
+exports[`voidRecipeVersionAction > la vigente sin otra version valida no se anula > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_version": "desc",
+      },
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_receta": "REC00000003",
+        "id_version_receta": {
+          "not": "VER00000005",
+        },
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`voidRecipeVersionAction > la vigente sin otra version valida no se anula > resultado 1`] = `"error: No se puede anular la única versión vigente sin otra versión válida para reemplazarla."`;
+
+exports[`voidRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`voidRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null"`;
+
+exports[`voidRecipeVersionAction > un fallo al promover revierte y deja el error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_version": "desc",
+      },
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_receta": "REC00000003",
+        "id_version_receta": {
+          "not": "VER00000005",
+        },
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vigente",
+        "id_usuario_aprueba": "USU00000001",
+      },
+      "where": {
+        "id_version_receta": "VER00000004",
+      },
+    },
+    "prisma": "version_receta.update",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`voidRecipeVersionAction > un fallo al promover revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
+
+exports[`voidRecipeVersionAction > una reemplazada se anula > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.update",
+  },
+  {
+    "args": {
+      "accion": "ANULAR_VERSION_RECETA",
+      "detalle": "Versión V2 anulada para la receta REC00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "version_receta",
+      "id_registro_afectado": "VER00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes/REC00000003/versions",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`voidRecipeVersionAction > una reemplazada se anula > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-annulled"`;
+
+exports[`voidRecipeVersionAction > usada por ordenes no se anula > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`voidRecipeVersionAction > usada por ordenes no se anula > resultado 1`] = `"error: No se puede anular una versión usada por órdenes de trabajo. Se conserva como histórica."`;
+
+exports[`voidRecipeVersionAction > ya estaba anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_receta": "REC00000003",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`voidRecipeVersionAction > ya estaba anulada > resultado 1`] = `"error: La versión ya se encuentra anulada."`;
