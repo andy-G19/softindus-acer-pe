@@ -4279,7 +4279,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <div>
 <label for="quantity">Cantidad a fabricar<span aria-hidden="true">*</span>
 </label>
-<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" min="0.01" step="0.01" name="quantity" value="25"/>
+<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" autoComplete="off" min="0.01" step="0.01" name="quantity" value="25"/>
 <p id="quantity-ayuda">El sistema multiplicará los materiales de la receta por esta cantidad.</p>
 </div>
 <button data-variant="default" type="submit">Calcular</button>
@@ -4499,7 +4499,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <div>
 <label for="quantity">Cantidad a fabricar<span aria-hidden="true">*</span>
 </label>
-<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" min="0.01" step="0.01" name="quantity" value="1"/>
+<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" autoComplete="off" min="0.01" step="0.01" name="quantity" value="1"/>
 <p id="quantity-ayuda">El sistema multiplicará los materiales de la receta por esta cantidad.</p>
 </div>
 <button data-variant="default" type="submit">Calcular</button>
@@ -4759,7 +4759,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <div>
 <label for="quantity">Cantidad a fabricar<span aria-hidden="true">*</span>
 </label>
-<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" min="0.01" step="0.01" name="quantity" value="1"/>
+<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" autoComplete="off" min="0.01" step="0.01" name="quantity" value="1"/>
 <p id="quantity-ayuda">El sistema multiplicará los materiales de la receta por esta cantidad.</p>
 </div>
 <button data-variant="default" type="submit">Calcular</button>
@@ -4973,7 +4973,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <div>
 <label for="quantity">Cantidad a fabricar<span aria-hidden="true">*</span>
 </label>
-<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" min="0.01" step="0.01" name="quantity" value="1"/>
+<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" autoComplete="off" min="0.01" step="0.01" name="quantity" value="1"/>
 <p id="quantity-ayuda">El sistema multiplicará los materiales de la receta por esta cantidad.</p>
 </div>
 <button data-variant="default" type="submit">Calcular</button>
@@ -5190,7 +5190,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <div>
 <label for="quantity">Cantidad a fabricar<span aria-hidden="true">*</span>
 </label>
-<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" min="0.01" step="0.01" name="quantity" value="1"/>
+<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" autoComplete="off" min="0.01" step="0.01" name="quantity" value="1"/>
 <p id="quantity-ayuda">El sistema multiplicará los materiales de la receta por esta cantidad.</p>
 </div>
 <button data-variant="default" type="submit">Calcular</button>

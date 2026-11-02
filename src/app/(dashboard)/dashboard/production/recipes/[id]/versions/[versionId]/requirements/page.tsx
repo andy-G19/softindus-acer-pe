@@ -171,12 +171,15 @@ export default async function MaterialRequirementsPage({
           >
             {(control) => (
               // Next no remonta la pagina al cambiar la consulta y un input solo lee
-              // defaultValue al montarse: sin key, Atras dejaria la cantidad vieja.
+              // defaultValue al montarse: sin key, Atras dejaria la cantidad vieja. Este
+              // formulario GET carga el documento: al volver es el navegador quien
+              // restauraria lo escrito, y autoComplete off lo evita.
               <Input
                 {...control}
                 key={quantityToProduce}
                 name="quantity"
                 type="number"
+                autoComplete="off"
                 min="0.01"
                 step="0.01"
                 defaultValue={quantityToProduce}

@@ -9,7 +9,9 @@ import MaterialRequirementsPage from "./page";
 // 10.6). Next no remonta la pagina al cambiar la consulta y un input solo lee
 // defaultValue al montarse: al volver con Atras quedaba la cantidad vieja junto a
 // KPI de otra cantidad. La prueba pinta la pagina real dos veces sobre la misma raiz,
-// que es lo que hace Next.
+// que es lo que hace Next con una navegacion suave. El formulario GET, en cambio, carga
+// el documento: al volver es el navegador quien restaura lo escrito, y eso solo lo
+// evita autocomplete="off" (medido en staging en la 10.6b).
 
 vi.mock("server-only", () => ({}));
 vi.mock("@/lib/authz", () => ({ requireRole: async () => ({ user: { id: "USR00000001" } }) }));
@@ -92,6 +94,12 @@ describe("cantidad a fabricar", () => {
       "multiplicará los materiales",
     );
     expect(input.required).toBe(true);
+  });
+
+  it("el navegador no restaura lo escrito al volver con Atras", async () => {
+    await renderAt("25");
+
+    expect(quantityInput().autocomplete).toBe("off");
   });
 
   it("no abre otro main", async () => {
