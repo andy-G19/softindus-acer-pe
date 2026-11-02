@@ -10,6 +10,30 @@ exports[`createRecipeDetailAction > ADMIN agrega el material con la unidad del i
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "orden_trabajo": {
@@ -48,10 +72,6 @@ exports[`createRecipeDetailAction > ADMIN agrega el material con la unidad del i
       },
     },
     "prisma": "detalle_receta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -139,6 +159,30 @@ exports[`createRecipeDetailAction > WORKSHOP_MASTER tambien agrega > llamadas 1`
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "orden_trabajo": {
@@ -177,10 +221,6 @@ exports[`createRecipeDetailAction > WORKSHOP_MASTER tambien agrega > llamadas 1`
       },
     },
     "prisma": "detalle_receta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -282,6 +322,30 @@ exports[`createRecipeDetailAction > el material no existe o esta inactivo > llam
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "orden_trabajo": {
@@ -311,6 +375,10 @@ exports[`createRecipeDetailAction > el material no existe o esta inactivo > llam
       },
     },
     "prisma": "material.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -338,180 +406,28 @@ exports[`createRecipeDetailAction > el material ya esta en la version > llamadas
     ],
   },
   {
-    "args": {
-      "include": {
-        "orden_trabajo": {
-          "select": {
-            "id_orden_trabajo": true,
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "estado": "vigente",
-        "id_version_receta": "VER00000005",
-      },
-    },
-    "prisma": "version_receta.findFirst",
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
       "select": {
-        "id_material": true,
-        "nombre_material": true,
-        "unidad_medida": true,
+        "id_receta": true,
       },
       "where": {
-        "estado": true,
-        "id_material": "MAT00000001",
-      },
-    },
-    "prisma": "material.findFirst",
-  },
-  {
-    "args": {
-      "where": {
-        "id_material": "MAT00000001",
         "id_version_receta": "VER00000005",
       },
     },
-    "prisma": "detalle_receta.findFirst",
+    "prisma": "version_receta.findUnique",
   },
-]
-`;
-
-exports[`createRecipeDetailAction > el material ya esta en la version > resultado 1`] = `
-{
-  "estado": {
-    "error": "Este material ya está registrado en esta versión de receta.",
-    "fieldErrors": {
-      "id_material": [
-        "Este material ya está registrado en esta versión de receta.",
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
       ],
     },
-  },
-}
-`;
-
-exports[`createRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "include": {
-        "orden_trabajo": {
-          "select": {
-            "id_orden_trabajo": true,
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "estado": "vigente",
-        "id_version_receta": "VER00000005",
-      },
-    },
-    "prisma": "version_receta.findFirst",
-  },
-]
-`;
-
-exports[`createRecipeDetailAction > la receta no esta activa > resultado 1`] = `
-{
-  "estado": {
-    "error": "La receta técnica no está activa.",
-  },
-}
-`;
-
-exports[`createRecipeDetailAction > la version no existe o no esta vigente > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "include": {
-        "orden_trabajo": {
-          "select": {
-            "id_orden_trabajo": true,
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "estado": "vigente",
-        "id_version_receta": "VER00000005",
-      },
-    },
-    "prisma": "version_receta.findFirst",
-  },
-]
-`;
-
-exports[`createRecipeDetailAction > la version no existe o no esta vigente > resultado 1`] = `
-{
-  "estado": {
-    "error": "La versión de receta no existe o no está vigente.",
-  },
-}
-`;
-
-exports[`createRecipeDetailAction > la version ya la usan ordenes > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "include": {
-        "orden_trabajo": {
-          "select": {
-            "id_orden_trabajo": true,
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "estado": "vigente",
-        "id_version_receta": "VER00000005",
-      },
-    },
-    "prisma": "version_receta.findFirst",
-  },
-]
-`;
-
-exports[`createRecipeDetailAction > la version ya la usan ordenes > resultado 1`] = `
-{
-  "estado": {
-    "error": "No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad.",
-  },
-}
-`;
-
-exports[`createRecipeDetailAction > sin merma ni observaciones se guarda null > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -555,7 +471,282 @@ exports[`createRecipeDetailAction > sin merma ni observaciones se guarda null > 
   },
   {
     "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > el material ya esta en la version > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este material ya está registrado en esta versión de receta.",
+    "fieldErrors": {
+      "id_material": [
+        "Este material ya está registrado en esta versión de receta.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > la receta no esta activa > resultado 1`] = `
+{
+  "estado": {
+    "error": "La receta técnica no está activa.",
+  },
+}
+`;
+
+exports[`createRecipeDetailAction > la version no existe o no esta vigente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > la version no existe o no esta vigente > resultado 1`] = `
+{
+  "estado": {
+    "error": "La versión de receta no existe o no está vigente.",
+  },
+}
+`;
+
+exports[`createRecipeDetailAction > la version ya la usan ordenes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createRecipeDetailAction > la version ya la usan ordenes > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad.",
+  },
+}
+`;
+
+exports[`createRecipeDetailAction > sin merma ni observaciones se guarda null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "detalle_receta.findFirst",
   },
   {
     "args": {
@@ -629,6 +820,30 @@ exports[`createRecipeDetailAction > una carrera (P2002) deja el error de Prisma 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "orden_trabajo": {
@@ -667,10 +882,6 @@ exports[`createRecipeDetailAction > una carrera (P2002) deja el error de Prisma 
       },
     },
     "prisma": "detalle_receta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -738,6 +949,41 @@ exports[`deleteRecipeDetailAction > ADMIN elimina la linea > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": {
@@ -768,10 +1014,6 @@ exports[`deleteRecipeDetailAction > ADMIN elimina la linea > llamadas 1`] = `
       },
     },
     "prisma": "version_receta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -845,6 +1087,41 @@ exports[`deleteRecipeDetailAction > WORKSHOP_MASTER tambien elimina > llamadas 1
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": {
@@ -875,10 +1152,6 @@ exports[`deleteRecipeDetailAction > WORKSHOP_MASTER tambien elimina > llamadas 1
       },
     },
     "prisma": "version_receta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -938,19 +1211,23 @@ exports[`deleteRecipeDetailAction > la linea no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
-      "include": {
-        "material": {
-          "select": {
-            "nombre_material": true,
-          },
-        },
+      "select": {
+        "id_version_receta": true,
       },
       "where": {
         "id_detalle_receta": "DRE00000007",
       },
     },
     "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -967,13 +1244,13 @@ exports[`deleteRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
-      "include": {
-        "material": {
-          "select": {
-            "nombre_material": true,
-          },
-        },
+      "select": {
+        "id_version_receta": true,
       },
       "where": {
         "id_detalle_receta": "DRE00000007",
@@ -983,140 +1260,23 @@ exports[`deleteRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
-        "orden_trabajo": {
-          "select": {
-            "id_orden_trabajo": true,
-          },
-        },
-        "receta_tecnica": true,
+      "select": {
+        "id_receta": true,
       },
       "where": {
-        "estado": "vigente",
         "id_version_receta": "VER00000005",
       },
     },
-    "prisma": "version_receta.findFirst",
-  },
-]
-`;
-
-exports[`deleteRecipeDetailAction > la receta no esta activa > resultado 1`] = `"error: La receta técnica no está activa."`;
-
-exports[`deleteRecipeDetailAction > la version no existe o no esta vigente > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
+    "prisma": "version_receta.findUnique",
   },
   {
     "args": {
-      "include": {
-        "material": {
-          "select": {
-            "nombre_material": true,
-          },
-        },
-      },
-      "where": {
-        "id_detalle_receta": "DRE00000007",
-      },
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
     },
-    "prisma": "detalle_receta.findUnique",
-  },
-  {
-    "args": {
-      "include": {
-        "orden_trabajo": {
-          "select": {
-            "id_orden_trabajo": true,
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "estado": "vigente",
-        "id_version_receta": "VER00000005",
-      },
-    },
-    "prisma": "version_receta.findFirst",
-  },
-]
-`;
-
-exports[`deleteRecipeDetailAction > la version no existe o no esta vigente > resultado 1`] = `"error: La versión de receta no existe o no está vigente."`;
-
-exports[`deleteRecipeDetailAction > la version ya la usan ordenes > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "include": {
-        "material": {
-          "select": {
-            "nombre_material": true,
-          },
-        },
-      },
-      "where": {
-        "id_detalle_receta": "DRE00000007",
-      },
-    },
-    "prisma": "detalle_receta.findUnique",
-  },
-  {
-    "args": {
-      "include": {
-        "orden_trabajo": {
-          "select": {
-            "id_orden_trabajo": true,
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "estado": "vigente",
-        "id_version_receta": "VER00000005",
-      },
-    },
-    "prisma": "version_receta.findFirst",
-  },
-]
-`;
-
-exports[`deleteRecipeDetailAction > la version ya la usan ordenes > resultado 1`] = `"error: No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad."`;
-
-exports[`deleteRecipeDetailAction > sin id lanza su mensaje sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-]
-`;
-
-exports[`deleteRecipeDetailAction > sin id lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: No se recibió el material de la receta."`;
-
-exports[`deleteRecipeDetailAction > un fallo al borrar revierte y deja el error > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1152,7 +1312,263 @@ exports[`deleteRecipeDetailAction > un fallo al borrar revierte y deja el error 
   },
   {
     "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > la receta no esta activa > resultado 1`] = `"error: La receta técnica no está activa."`;
+
+exports[`deleteRecipeDetailAction > la version no existe o no esta vigente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > la version no existe o no esta vigente > resultado 1`] = `"error: La versión de receta no existe o no está vigente."`;
+
+exports[`deleteRecipeDetailAction > la version ya la usan ordenes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > la version ya la usan ordenes > resultado 1`] = `"error: No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad."`;
+
+exports[`deleteRecipeDetailAction > sin id lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`deleteRecipeDetailAction > sin id lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: No se recibió el material de la receta."`;
+
+exports[`deleteRecipeDetailAction > un fallo al borrar revierte y deja el error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
   },
   {
     "args": {
@@ -1179,6 +1595,30 @@ exports[`updateRecipeDetailAction > ADMIN actualiza la linea con la unidad del i
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1234,10 +1674,6 @@ exports[`updateRecipeDetailAction > ADMIN actualiza la linea con la unidad del i
       },
     },
     "prisma": "detalle_receta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1319,6 +1755,30 @@ exports[`updateRecipeDetailAction > WORKSHOP_MASTER tambien actualiza > llamadas
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_detalle_receta": true,
@@ -1372,10 +1832,6 @@ exports[`updateRecipeDetailAction > WORKSHOP_MASTER tambien actualiza > llamadas
       },
     },
     "prisma": "detalle_receta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1468,6 +1924,30 @@ exports[`updateRecipeDetailAction > la linea es de otra version > llamadas 1`] =
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_detalle_receta": true,
@@ -1478,6 +1958,10 @@ exports[`updateRecipeDetailAction > la linea es de otra version > llamadas 1`] =
       },
     },
     "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -1500,6 +1984,30 @@ exports[`updateRecipeDetailAction > la linea no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_detalle_receta": true,
@@ -1510,6 +2018,10 @@ exports[`updateRecipeDetailAction > la linea no existe > llamadas 1`] = `
       },
     },
     "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -1532,6 +2044,30 @@ exports[`updateRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_detalle_receta": true,
@@ -1559,6 +2095,10 @@ exports[`updateRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
       },
     },
     "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -1581,6 +2121,21 @@ exports[`updateRecipeDetailAction > la version no existe o no esta vigente > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
     "args": {
       "select": {
         "id_detalle_receta": true,
@@ -1608,6 +2163,10 @@ exports[`updateRecipeDetailAction > la version no existe o no esta vigente > lla
       },
     },
     "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -1630,6 +2189,30 @@ exports[`updateRecipeDetailAction > la version ya la usan ordenes > llamadas 1`]
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_detalle_receta": true,
@@ -1657,6 +2240,10 @@ exports[`updateRecipeDetailAction > la version ya la usan ordenes > llamadas 1`]
       },
     },
     "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -1679,172 +2266,28 @@ exports[`updateRecipeDetailAction > otra linea ya usa ese material > llamadas 1`
     ],
   },
   {
-    "args": {
-      "select": {
-        "id_detalle_receta": true,
-        "id_version_receta": true,
-      },
-      "where": {
-        "id_detalle_receta": "DRE00000007",
-      },
-    },
-    "prisma": "detalle_receta.findUnique",
-  },
-  {
-    "args": {
-      "include": {
-        "orden_trabajo": {
-          "select": {
-            "id_orden_trabajo": true,
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "estado": "vigente",
-        "id_version_receta": "VER00000005",
-      },
-    },
-    "prisma": "version_receta.findFirst",
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
       "select": {
-        "id_material": true,
-        "nombre_material": true,
-        "unidad_medida": true,
+        "id_receta": true,
       },
       "where": {
-        "estado": true,
-        "id_material": "MAT00000001",
-      },
-    },
-    "prisma": "material.findFirst",
-  },
-  {
-    "args": {
-      "where": {
-        "id_detalle_receta": {
-          "not": "DRE00000007",
-        },
-        "id_material": "MAT00000001",
         "id_version_receta": "VER00000005",
       },
     },
-    "prisma": "detalle_receta.findFirst",
+    "prisma": "version_receta.findUnique",
   },
-]
-`;
-
-exports[`updateRecipeDetailAction > otra linea ya usa ese material > resultado 1`] = `
-{
-  "estado": {
-    "error": "Este material ya está registrado en esta versión de receta.",
-    "fieldErrors": {
-      "id_material": [
-        "Este material ya está registrado en esta versión de receta.",
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
       ],
     },
-  },
-}
-`;
-
-exports[`updateRecipeDetailAction > sin id devuelve su mensaje sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-]
-`;
-
-exports[`updateRecipeDetailAction > sin id devuelve su mensaje sin tocar Prisma > resultado 1`] = `
-{
-  "estado": {
-    "error": "No se recibió el material de la receta.",
-  },
-}
-`;
-
-exports[`updateRecipeDetailAction > un material inactivo se rechaza, aunque sea el de la linea > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "id_detalle_receta": true,
-        "id_version_receta": true,
-      },
-      "where": {
-        "id_detalle_receta": "DRE00000007",
-      },
-    },
-    "prisma": "detalle_receta.findUnique",
-  },
-  {
-    "args": {
-      "include": {
-        "orden_trabajo": {
-          "select": {
-            "id_orden_trabajo": true,
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "estado": "vigente",
-        "id_version_receta": "VER00000005",
-      },
-    },
-    "prisma": "version_receta.findFirst",
-  },
-  {
-    "args": {
-      "select": {
-        "id_material": true,
-        "nombre_material": true,
-        "unidad_medida": true,
-      },
-      "where": {
-        "estado": true,
-        "id_material": "MAT00000001",
-      },
-    },
-    "prisma": "material.findFirst",
-  },
-]
-`;
-
-exports[`updateRecipeDetailAction > un material inactivo se rechaza, aunque sea el de la linea > resultado 1`] = `
-{
-  "estado": {
-    "error": "El material seleccionado no existe o está inactivo.",
-    "fieldErrors": {
-      "id_material": [
-        "El material seleccionado no existe o está inactivo.",
-      ],
-    },
-  },
-}
-`;
-
-exports[`updateRecipeDetailAction > una carrera (P2002) deja el error de Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1903,7 +2346,227 @@ exports[`updateRecipeDetailAction > una carrera (P2002) deja el error de Prisma 
   },
   {
     "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > otra linea ya usa ese material > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este material ya está registrado en esta versión de receta.",
+    "fieldErrors": {
+      "id_material": [
+        "Este material ya está registrado en esta versión de receta.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateRecipeDetailAction > sin id devuelve su mensaje sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > sin id devuelve su mensaje sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió el material de la receta.",
+  },
+}
+`;
+
+exports[`updateRecipeDetailAction > un material inactivo se rechaza, aunque sea el de la linea > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_receta": true,
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateRecipeDetailAction > un material inactivo se rechaza, aunque sea el de la linea > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_material": [
+        "El material seleccionado no existe o está inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateRecipeDetailAction > una carrera (P2002) deja el error de Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_receta": true,
+        "id_version_receta": true,
+      },
+      "where": {
+        "id_detalle_receta": "DRE00000007",
+      },
+    },
+    "prisma": "detalle_receta.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "estado": "vigente",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_detalle_receta": {
+          "not": "DRE00000007",
+        },
+        "id_material": "MAT00000001",
+        "id_version_receta": "VER00000005",
+      },
+    },
+    "prisma": "detalle_receta.findFirst",
   },
   {
     "args": {

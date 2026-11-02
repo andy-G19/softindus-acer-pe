@@ -6,10 +6,13 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockRecipeRow } from "@/lib/row-locks";
 import {
   recipeVersionSchema,
   recipeVersionStatusSchema,
 } from "@/schemas/production/recipe-version.schema";
+
+type VersionProblem = { error: string };
 
 function getFormDataValues(formData: FormData, name: string) {
   return formData.getAll(name).map((value) => String(value).trim());
@@ -74,84 +77,84 @@ export async function createRecipeVersionAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const recipe = await prisma.receta_tecnica.findFirst({
-    where: {
-      id_receta: data.id_receta,
-      estado: "activa",
-    },
-    include: {
-      version_receta: {
-        orderBy: {
-          fecha_version: "desc",
-        },
-        take: 1,
-      },
-    },
-  });
-
-  if (!recipe) {
-    throw new Error("La receta técnica no existe o está inactiva.");
-  }
-
-  const materials = await prisma.material.findMany({
-    where: {
-      id_material: {
-        in: data.detalles.map((detail) => detail.id_material),
-      },
-      estado: true,
-    },
-    select: {
-      id_material: true,
-      unidad_medida: true,
-    },
-  });
-
-  const materialById = new Map(
-    materials.map((material) => [material.id_material, material]),
-  );
-
-  const missingMaterials = data.detalles.filter((detail) => {
-    return !materialById.has(detail.id_material);
-  });
-
-  if (missingMaterials.length > 0) {
-    throw new Error(
-      "Uno o más materiales seleccionados no existen o están inactivos.",
-    );
-  }
-
-  const recipeVersions = await prisma.version_receta.findMany({
-    where: {
-      id_receta: data.id_receta,
-    },
-    select: {
-      numero_version: true,
-    },
-  });
-
-  const versionNumber =
-    data.numero_version ??
-    getNextVersionNumber(
-      recipeVersions.map((version) => version.numero_version),
-    );
-
-  const duplicatedVersionNumber = await prisma.version_receta.findFirst({
-    where: {
-      id_receta: data.id_receta,
-      numero_version: versionNumber,
-    },
-    select: {
-      id_version_receta: true,
-    },
-  });
-
-  if (duplicatedVersionNumber) {
-    throw new Error("Ya existe una versión con ese número para esta receta.");
-  }
-
   let idVersionReceta = "";
 
-  await prisma.$transaction(async (tx) => {
+  // El candado de la receta pone en fila a todo lo que escribe sus versiones: la
+  // segunda de dos altas lee el numero y la vigente que dejo la primera. Un rechazo
+  // vuelve del callback sin escribir nada y la transaccion termina.
+  const problem = await prisma.$transaction(async (tx): Promise<VersionProblem | null> => {
+    await lockRecipeRow(tx, data.id_receta);
+
+    const recipe = await tx.receta_tecnica.findFirst({
+      where: {
+        id_receta: data.id_receta,
+        estado: "activa",
+      },
+      select: {
+        id_receta: true,
+      },
+    });
+
+    if (!recipe) {
+      return { error: "La receta técnica no existe o está inactiva." };
+    }
+
+    const materials = await tx.material.findMany({
+      where: {
+        id_material: {
+          in: data.detalles.map((detail) => detail.id_material),
+        },
+        estado: true,
+      },
+      select: {
+        id_material: true,
+        unidad_medida: true,
+      },
+    });
+
+    const materialById = new Map(
+      materials.map((material) => [material.id_material, material]),
+    );
+
+    const missingMaterials = data.detalles.filter((detail) => {
+      return !materialById.has(detail.id_material);
+    });
+
+    if (missingMaterials.length > 0) {
+      return {
+        error: "Uno o más materiales seleccionados no existen o están inactivos.",
+      };
+    }
+
+    const recipeVersions = await tx.version_receta.findMany({
+      where: {
+        id_receta: data.id_receta,
+      },
+      select: {
+        numero_version: true,
+      },
+    });
+
+    const versionNumber =
+      data.numero_version ??
+      getNextVersionNumber(
+        recipeVersions.map((version) => version.numero_version),
+      );
+
+    const duplicatedVersionNumber = await tx.version_receta.findFirst({
+      where: {
+        id_receta: data.id_receta,
+        numero_version: versionNumber,
+      },
+      select: {
+        id_version_receta: true,
+      },
+    });
+
+    if (duplicatedVersionNumber) {
+      return { error: "Ya existe una versión con ese número para esta receta." };
+    }
+
     idVersionReceta = await getNextCorrelativeId(tx, {
       codigoEntidad: "version_receta",
       prefijo: "VER",
@@ -212,7 +215,13 @@ export async function createRecipeVersionAction(formData: FormData) {
       detalle: `Nueva versión vigente ${versionNumber} creada para la receta ${data.id_receta} con ${data.detalles.length} material(es).`,
       tx,
     });
+
+    return null;
   });
+
+  if (problem) {
+    throw new Error(problem.error);
+  }
 
   revalidateRecipePaths(data.id_receta);
   revalidatePath(
@@ -236,63 +245,77 @@ export async function setCurrentRecipeVersionAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const version = await prisma.version_receta.findFirst({
-    where: {
-      id_version_receta: data.id_version_receta,
-      id_receta: data.id_receta,
+  const outcome = await prisma.$transaction(
+    async (tx): Promise<VersionProblem | "ya_vigente" | null> => {
+      await lockRecipeRow(tx, data.id_receta);
+
+      const version = await tx.version_receta.findFirst({
+        where: {
+          id_version_receta: data.id_version_receta,
+          id_receta: data.id_receta,
+        },
+        include: {
+          receta_tecnica: true,
+        },
+      });
+
+      if (!version) {
+        return { error: "La versión seleccionada no existe." };
+      }
+
+      if (version.receta_tecnica.estado !== "activa") {
+        return { error: "La receta técnica no está activa." };
+      }
+
+      if (version.estado === "anulada") {
+        return { error: "No se puede marcar como vigente una versión anulada." };
+      }
+
+      if (version.estado === "vigente") {
+        return "ya_vigente";
+      }
+
+      await tx.version_receta.updateMany({
+        where: {
+          id_receta: data.id_receta,
+          estado: "vigente",
+        },
+        data: {
+          estado: "reemplazada",
+        },
+      });
+
+      await tx.version_receta.update({
+        where: {
+          id_version_receta: data.id_version_receta,
+        },
+        data: {
+          estado: "vigente",
+          id_usuario_aprueba: session.user.id,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "version_receta",
+        id_registro_afectado: data.id_version_receta,
+        accion: "CAMBIAR_VERSION_VIGENTE",
+        detalle: `La versión ${version.numero_version} fue marcada como vigente para la receta ${data.id_receta}.`,
+        tx,
+      });
+
+      return null;
     },
-    include: {
-      receta_tecnica: true,
-    },
-  });
+  );
 
-  if (!version) {
-    throw new Error("La versión seleccionada no existe.");
-  }
-
-  if (version.receta_tecnica.estado !== "activa") {
-    throw new Error("La receta técnica no está activa.");
-  }
-
-  if (version.estado === "anulada") {
-    throw new Error("No se puede marcar como vigente una versión anulada.");
-  }
-
-  if (version.estado === "vigente") {
+  if (outcome === "ya_vigente") {
     revalidateRecipePaths(data.id_receta);
     redirect(`/dashboard/production/recipes/${data.id_receta}/versions`);
   }
 
-  await prisma.$transaction(async (tx) => {
-    await tx.version_receta.updateMany({
-      where: {
-        id_receta: data.id_receta,
-        estado: "vigente",
-      },
-      data: {
-        estado: "reemplazada",
-      },
-    });
-
-    await tx.version_receta.update({
-      where: {
-        id_version_receta: data.id_version_receta,
-      },
-      data: {
-        estado: "vigente",
-        id_usuario_aprueba: session.user.id,
-      },
-    });
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "version_receta",
-      id_registro_afectado: data.id_version_receta,
-      accion: "CAMBIAR_VERSION_VIGENTE",
-      detalle: `La versión ${version.numero_version} fue marcada como vigente para la receta ${data.id_receta}.`,
-      tx,
-    });
-  });
+  if (outcome) {
+    throw new Error(outcome.error);
+  }
 
   revalidateRecipePaths(data.id_receta);
 
@@ -315,60 +338,64 @@ export async function voidRecipeVersionAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const version = await prisma.version_receta.findFirst({
-    where: {
-      id_version_receta: data.id_version_receta,
-      id_receta: data.id_receta,
-    },
-    include: {
-      orden_trabajo: {
-        select: {
-          id_orden_trabajo: true,
-        },
-      },
-    },
-  });
+  const problem = await prisma.$transaction(async (tx): Promise<VersionProblem | null> => {
+    await lockRecipeRow(tx, data.id_receta);
 
-  if (!version) {
-    throw new Error("La versión seleccionada no existe.");
-  }
-
-  if (version.estado === "anulada") {
-    throw new Error("La versión ya se encuentra anulada.");
-  }
-
-  if (version.orden_trabajo.length > 0) {
-    throw new Error(
-      "No se puede anular una versión usada por órdenes de trabajo. Se conserva como histórica.",
-    );
-  }
-
-  if (version.estado === "vigente") {
-    const replacement = await prisma.version_receta.findFirst({
+    const version = await tx.version_receta.findFirst({
       where: {
+        id_version_receta: data.id_version_receta,
         id_receta: data.id_receta,
-        id_version_receta: {
-          not: data.id_version_receta,
-        },
-        estado: {
-          not: "anulada",
-        },
       },
-      orderBy: {
-        fecha_version: "desc",
-      },
-      select: {
-        id_version_receta: true,
+      include: {
+        orden_trabajo: {
+          select: {
+            id_orden_trabajo: true,
+          },
+        },
       },
     });
 
-    if (!replacement) {
-      throw new Error(
-        "No se puede anular la única versión vigente sin otra versión válida para reemplazarla.",
-      );
+    if (!version) {
+      return { error: "La versión seleccionada no existe." };
     }
 
-    await prisma.$transaction(async (tx) => {
+    if (version.estado === "anulada") {
+      return { error: "La versión ya se encuentra anulada." };
+    }
+
+    if (version.orden_trabajo.length > 0) {
+      return {
+        error:
+          "No se puede anular una versión usada por órdenes de trabajo. Se conserva como histórica.",
+      };
+    }
+
+    if (version.estado === "vigente") {
+      // fecha_version no guarda la hora: entre versiones del mismo dia decide el
+      // correlativo, que siempre crece.
+      const replacement = await tx.version_receta.findFirst({
+        where: {
+          id_receta: data.id_receta,
+          id_version_receta: {
+            not: data.id_version_receta,
+          },
+          estado: {
+            not: "anulada",
+          },
+        },
+        orderBy: [{ fecha_version: "desc" }, { id_version_receta: "desc" }],
+        select: {
+          id_version_receta: true,
+        },
+      });
+
+      if (!replacement) {
+        return {
+          error:
+            "No se puede anular la única versión vigente sin otra versión válida para reemplazarla.",
+        };
+      }
+
       await tx.version_receta.update({
         where: {
           id_version_receta: data.id_version_receta,
@@ -396,9 +423,7 @@ export async function voidRecipeVersionAction(formData: FormData) {
         detalle: `Versión ${version.numero_version} anulada y reemplazada por ${replacement.id_version_receta}.`,
         tx,
       });
-    });
-  } else {
-    await prisma.$transaction(async (tx) => {
+    } else {
       await tx.version_receta.update({
         where: {
           id_version_receta: data.id_version_receta,
@@ -416,7 +441,13 @@ export async function voidRecipeVersionAction(formData: FormData) {
         detalle: `Versión ${version.numero_version} anulada para la receta ${data.id_receta}.`,
         tx,
       });
-    });
+    }
+
+    return null;
+  });
+
+  if (problem) {
+    throw new Error(problem.error);
   }
 
   revalidateRecipePaths(data.id_receta);

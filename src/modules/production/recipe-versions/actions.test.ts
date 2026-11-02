@@ -10,6 +10,7 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
   type Role,
 } from "@/testing/page-characterization";
@@ -350,5 +351,70 @@ describe("el orden de las escrituras respeta la unica vigente", () => {
       "version_receta.update:anulada",
       "version_receta.update:vigente",
     ]);
+  });
+});
+
+// B2 (hallazgo 1 de la auditoria de la 10.6): dos altas a la vez ya no chocan con
+// uq_version_receta_vigente ni con uq_version_receta_numero: la segunda espera a
+// la primera y lee el numero y la vigente que dejo.
+describe("las acciones de versiones deciden con la receta bloqueada", () => {
+  const protectedRead = (call: { prisma: string }) =>
+    /^(receta_tecnica|version_receta|material)\.find/.test(call.prisma);
+
+  const repeatedNumber = createWith(
+    { numero_version: "V2" },
+    { "version_receta.findFirst": { id_version_receta: OTRA_VERSION } },
+  );
+
+  const cases: [string, (formData: FormData) => Promise<unknown>, Omit<ActionCase, "name">][] = [
+    ["el alta que acepta", createRecipeVersionAction, createWith()],
+    ["el alta de una receta inactiva", createRecipeVersionAction, createWith({}, activeRecipe(false))],
+    ["el alta con un numero repetido", createRecipeVersionAction, repeatedNumber],
+    ["marcar una reemplazada", setCurrentRecipeVersionAction, { form: statusForm, data: versions("reemplazada") }],
+    ["marcar la que ya es vigente", setCurrentRecipeVersionAction, { form: statusForm, data: versions("vigente") }],
+    ["marcar una anulada", setCurrentRecipeVersionAction, { form: statusForm, data: versions("anulada") }],
+    ["anular la vigente", voidRecipeVersionAction, { form: statusForm, data: versions("vigente") }],
+    ["anular una reemplazada", voidRecipeVersionAction, { form: statusForm, data: versions("reemplazada") }],
+    ["anular una que no existe", voidRecipeVersionAction, { form: statusForm, data: versions(null) }],
+  ];
+
+  it.each(cases)("%s", async (_name, run, actionCase) => {
+    const { calls } = await runCase(run, actionCase);
+
+    expectRowLockedBefore(calls, { table: "receta_tecnica", id: RECETA, reads: protectedRead });
+  });
+
+  it("el bloqueo va antes de reservar los correlativos", async () => {
+    const { calls } = await runCase(createRecipeVersionAction, createWith());
+    const position = (name: string) =>
+      calls.findIndex((call) => ("prisma" in call && call.prisma === name) || ("effect" in call && call.effect === name));
+
+    expect(position("$queryRaw")).toBeGreaterThanOrEqual(0);
+    expect(position("$queryRaw")).toBeLessThan(position("getNextCorrelativeId"));
+  });
+
+  it("el alta no pide las versiones de la receta que ya no usa", async () => {
+    const { calls } = await runCase(createRecipeVersionAction, createWith());
+    const recipeRead = calls.find((call) => "prisma" in call && call.prisma === "receta_tecnica.findFirst") as
+      | { args: { include?: unknown } }
+      | undefined;
+
+    expect(recipeRead?.args.include).toBeUndefined();
+  });
+});
+
+// B2 (hallazgo 4 de la auditoria de la 10.6): fecha_version es @db.Date, asi que
+// dos versiones del mismo dia empatan; decide el correlativo, que siempre crece.
+describe("el reemplazo de la vigente anulada", () => {
+  it("con la misma fecha promueve la de correlativo mas alto", async () => {
+    const { calls } = await runCase(voidRecipeVersionAction, { form: statusForm, data: versions("vigente") });
+    const replacementRead = calls.find(
+      (call) =>
+        "prisma" in call &&
+        call.prisma === "version_receta.findFirst" &&
+        (call.args as { orderBy?: unknown }).orderBy !== undefined,
+    ) as { args: { orderBy: unknown } } | undefined;
+
+    expect(replacementRead?.args.orderBy).toEqual([{ fecha_version: "desc" }, { id_version_receta: "desc" }]);
   });
 });

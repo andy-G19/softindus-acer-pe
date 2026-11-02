@@ -9,6 +9,7 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
   type Role,
 } from "@/testing/page-characterization";
@@ -196,7 +197,7 @@ defineCases("createTechnicalRecipeAction", createTechnicalRecipeAction, [
   { name: "el producto no existe o esta inactivo", ...createWith({}, product(false)) },
   { name: "ya existe una receta con ese nombre para el producto", ...createWith({}, duplicate) },
   {
-    name: "una carrera por el nombre (P2002) deja el error de Prisma",
+    name: "una carrera por el nombre (P2002) responde como el duplicado",
     ...createWith({}, { "receta_tecnica.create": failWith(uniqueViolation()) }),
   },
   {
@@ -218,3 +219,41 @@ defineCases("toggleTechnicalRecipeStatusAction", toggleTechnicalRecipeStatusActi
     data: { ...toggleOf("activa").data, "receta_tecnica.update": failWith(new Error("conexion perdida")) },
   },
 ]);
+
+// B2 (hallazgo 1 de la auditoria de la 10.6): el cambio de estado bloquea la
+// receta antes de leerla, y una carrera por el nombre, que el alta no puede evitar
+// porque todavia no hay fila que bloquear, responde como el duplicado.
+describe("las acciones de recetas deciden con la fila bloqueada", () => {
+  const DUPLICATE = "Ya existe una receta con ese nombre para este producto.";
+
+  it.each([
+    ["una que existe", toggleOf("activa")],
+    ["una que no existe", toggleOf(null)],
+  ])("el cambio de estado bloquea la receta antes de leerla (%s)", async (_name, actionCase) => {
+    const { calls } = await runCase(toggleTechnicalRecipeStatusAction, actionCase);
+
+    expectRowLockedBefore(calls, {
+      table: "receta_tecnica",
+      id: RECETA,
+      reads: (call) => call.prisma === "receta_tecnica.findUnique",
+    });
+  });
+
+  it("una carrera por el nombre responde como el duplicado", async () => {
+    const { result } = await runCase(
+      createTechnicalRecipeAction,
+      createWith({}, { "receta_tecnica.create": failWith(uniqueViolation()) }),
+    );
+
+    expect(result).toBe(`error: ${DUPLICATE}`);
+  });
+
+  it("otro fallo no se presenta como duplicado", async () => {
+    const { result } = await runCase(
+      createTechnicalRecipeAction,
+      createWith({}, { "receta_tecnica.create": failWith(new Error("conexion perdida")) }),
+    );
+
+    expect(result).toBe("error: conexion perdida");
+  });
+});

@@ -2,11 +2,15 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockRecipeRow } from "@/lib/row-locks";
 import { technicalRecipeSchema } from "@/schemas/production/recipe.schema";
+
+const DUPLICATED_RECIPE = "Ya existe una receta con ese nombre para este producto.";
 
 export async function createTechnicalRecipeAction(formData: FormData) {
   const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
@@ -23,58 +27,77 @@ export async function createTechnicalRecipeAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const product = await prisma.producto.findFirst({
-    where: {
-      id_producto: data.id_producto,
-      estado: true,
-    },
-    select: {
-      id_producto: true,
-      nombre_producto: true,
-    },
-  });
+  let problem: string | null;
 
-  if (!product) {
-    throw new Error("El producto seleccionado no existe o está inactivo.");
+  try {
+    // Un rechazo vuelve del callback sin escribir nada y la transaccion termina.
+    problem = await prisma.$transaction(async (tx): Promise<string | null> => {
+      const product = await tx.producto.findFirst({
+        where: {
+          id_producto: data.id_producto,
+          estado: true,
+        },
+        select: {
+          id_producto: true,
+          nombre_producto: true,
+        },
+      });
+
+      if (!product) {
+        return "El producto seleccionado no existe o está inactivo.";
+      }
+
+      const duplicatedRecipe = await tx.receta_tecnica.findFirst({
+        where: {
+          id_producto: data.id_producto,
+          nombre_receta: data.nombre_receta,
+        },
+      });
+
+      if (duplicatedRecipe) {
+        return DUPLICATED_RECIPE;
+      }
+
+      const idReceta = await getNextCorrelativeId(tx, {
+        codigoEntidad: "receta_tecnica",
+        prefijo: "REC",
+      });
+
+      await tx.receta_tecnica.create({
+        data: {
+          id_receta: idReceta,
+          id_producto: data.id_producto,
+          nombre_receta: data.nombre_receta,
+          descripcion: data.descripcion,
+          estado: "activa",
+          id_usuario_creacion: session.user.id,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "receta_tecnica",
+        id_registro_afectado: idReceta,
+        accion: "CREAR_RECETA",
+        detalle: `Receta técnica creada para el producto ${product.nombre_producto}.`,
+        tx,
+      });
+
+      return null;
+    });
+  } catch (error) {
+    // Una carrera por el nombre llega como violacion de uq_receta_producto_nombre:
+    // al crear no hay fila que bloquear.
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      throw new Error(DUPLICATED_RECIPE);
+    }
+
+    throw error;
   }
 
-  const duplicatedRecipe = await prisma.receta_tecnica.findFirst({
-    where: {
-      id_producto: data.id_producto,
-      nombre_receta: data.nombre_receta,
-    },
-  });
-
-  if (duplicatedRecipe) {
-    throw new Error("Ya existe una receta con ese nombre para este producto.");
+  if (problem) {
+    throw new Error(problem);
   }
-
-  await prisma.$transaction(async (tx) => {
-    const idReceta = await getNextCorrelativeId(tx, {
-      codigoEntidad: "receta_tecnica",
-      prefijo: "REC",
-    });
-
-    await tx.receta_tecnica.create({
-      data: {
-        id_receta: idReceta,
-        id_producto: data.id_producto,
-        nombre_receta: data.nombre_receta,
-        descripcion: data.descripcion,
-        estado: "activa",
-        id_usuario_creacion: session.user.id,
-      },
-    });
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "receta_tecnica",
-      id_registro_afectado: idReceta,
-      accion: "CREAR_RECETA",
-      detalle: `Receta técnica creada para el producto ${product.nombre_producto}.`,
-      tx,
-    });
-  });
 
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/recipes");
@@ -91,29 +114,31 @@ export async function toggleTechnicalRecipeStatusAction(formData: FormData) {
     throw new Error("No se recibió la receta técnica.");
   }
 
-  const recipe = await prisma.receta_tecnica.findUnique({
-    where: {
-      id_receta: idReceta,
-    },
-    select: {
-      id_receta: true,
-      estado: true,
-    },
-  });
+  const nextStatus = await prisma.$transaction(async (tx) => {
+    await lockRecipeRow(tx, idReceta);
 
-  if (!recipe) {
-    throw new Error("La receta técnica seleccionada no existe.");
-  }
+    const recipe = await tx.receta_tecnica.findUnique({
+      where: {
+        id_receta: idReceta,
+      },
+      select: {
+        id_receta: true,
+        estado: true,
+      },
+    });
 
-  const nextStatus = recipe.estado === "activa" ? "inactiva" : "activa";
+    if (!recipe) {
+      return null;
+    }
 
-  await prisma.$transaction(async (tx) => {
+    const estado = recipe.estado === "activa" ? "inactiva" : "activa";
+
     await tx.receta_tecnica.update({
       where: {
         id_receta: idReceta,
       },
       data: {
-        estado: nextStatus,
+        estado,
       },
     });
 
@@ -122,10 +147,16 @@ export async function toggleTechnicalRecipeStatusAction(formData: FormData) {
       entidad_afectada: "receta_tecnica",
       id_registro_afectado: idReceta,
       accion: "ACTUALIZAR_RECETA",
-      detalle: `Estado de receta técnica cambiado a ${nextStatus}.`,
+      detalle: `Estado de receta técnica cambiado a ${estado}.`,
       tx,
     });
+
+    return estado;
   });
+
+  if (!nextStatus) {
+    throw new Error("La receta técnica seleccionada no existe.");
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");

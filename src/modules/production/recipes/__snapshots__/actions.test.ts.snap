@@ -10,6 +10,10 @@ exports[`createTechnicalRecipeAction > ADMIN crea la receta activa con su correl
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -30,10 +34,6 @@ exports[`createTechnicalRecipeAction > ADMIN crea la receta activa con su correl
       },
     },
     "prisma": "receta_tecnica.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -107,6 +107,10 @@ exports[`createTechnicalRecipeAction > WORKSHOP_MASTER tambien crea recetas > ll
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -127,10 +131,6 @@ exports[`createTechnicalRecipeAction > WORKSHOP_MASTER tambien crea recetas > ll
       },
     },
     "prisma": "receta_tecnica.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -204,6 +204,10 @@ exports[`createTechnicalRecipeAction > el producto no existe o esta inactivo > l
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -215,6 +219,10 @@ exports[`createTechnicalRecipeAction > el producto no existe o esta inactivo > l
       },
     },
     "prisma": "producto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -229,6 +237,10 @@ exports[`createTechnicalRecipeAction > la descripcion ausente cuenta como vacia 
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -251,10 +263,6 @@ exports[`createTechnicalRecipeAction > la descripcion ausente cuenta como vacia 
       },
     },
     "prisma": "receta_tecnica.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -314,6 +322,10 @@ exports[`createTechnicalRecipeAction > la descripcion vacia se guarda como null 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -334,10 +346,6 @@ exports[`createTechnicalRecipeAction > la descripcion vacia se guarda como null 
       },
     },
     "prisma": "receta_tecnica.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -425,6 +433,10 @@ exports[`createTechnicalRecipeAction > un fallo al crear revierte y deja el erro
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -445,10 +457,6 @@ exports[`createTechnicalRecipeAction > un fallo al crear revierte y deja el erro
       },
     },
     "prisma": "receta_tecnica.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -479,7 +487,7 @@ exports[`createTechnicalRecipeAction > un fallo al crear revierte y deja el erro
 
 exports[`createTechnicalRecipeAction > un fallo al crear revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
 
-exports[`createTechnicalRecipeAction > una carrera por el nombre (P2002) deja el error de Prisma > llamadas 1`] = `
+exports[`createTechnicalRecipeAction > una carrera por el nombre (P2002) responde como el duplicado > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -487,6 +495,10 @@ exports[`createTechnicalRecipeAction > una carrera por el nombre (P2002) deja el
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -509,10 +521,6 @@ exports[`createTechnicalRecipeAction > una carrera por el nombre (P2002) deja el
       },
     },
     "prisma": "receta_tecnica.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -541,7 +549,7 @@ exports[`createTechnicalRecipeAction > una carrera por el nombre (P2002) deja el
 ]
 `;
 
-exports[`createTechnicalRecipeAction > una carrera por el nombre (P2002) deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;
+exports[`createTechnicalRecipeAction > una carrera por el nombre (P2002) responde como el duplicado > resultado 1`] = `"error: Ya existe una receta con ese nombre para este producto."`;
 
 exports[`createTechnicalRecipeAction > ya existe una receta con ese nombre para el producto > llamadas 1`] = `
 [
@@ -551,6 +559,10 @@ exports[`createTechnicalRecipeAction > ya existe una receta con ese nombre para 
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -573,6 +585,10 @@ exports[`createTechnicalRecipeAction > ya existe una receta con ese nombre para 
       },
     },
     "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -603,6 +619,19 @@ exports[`toggleTechnicalRecipeStatusAction > WORKSHOP_MASTER tambien cambia el e
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -613,10 +642,6 @@ exports[`toggleTechnicalRecipeStatusAction > WORKSHOP_MASTER tambien cambia el e
       },
     },
     "prisma": "receta_tecnica.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -671,6 +696,19 @@ exports[`toggleTechnicalRecipeStatusAction > la receta no existe > llamadas 1`] 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -681,6 +719,10 @@ exports[`toggleTechnicalRecipeStatusAction > la receta no existe > llamadas 1`] 
       },
     },
     "prisma": "receta_tecnica.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -711,6 +753,19 @@ exports[`toggleTechnicalRecipeStatusAction > un fallo al escribir revierte y dej
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -721,10 +776,6 @@ exports[`toggleTechnicalRecipeStatusAction > un fallo al escribir revierte y dej
       },
     },
     "prisma": "receta_tecnica.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -756,6 +807,19 @@ exports[`toggleTechnicalRecipeStatusAction > una receta activa se inactiva > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -766,10 +830,6 @@ exports[`toggleTechnicalRecipeStatusAction > una receta activa se inactiva > lla
       },
     },
     "prisma": "receta_tecnica.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -824,6 +884,19 @@ exports[`toggleTechnicalRecipeStatusAction > una receta inactiva se activa > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "REC00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -834,10 +907,6 @@ exports[`toggleTechnicalRecipeStatusAction > una receta inactiva se activa > lla
       },
     },
     "prisma": "receta_tecnica.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {

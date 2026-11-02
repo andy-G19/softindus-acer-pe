@@ -828,9 +828,14 @@ exports[`/dashboard/production/recipes/[id]/versions > historial con cada estado
               },
             },
           },
-          "orderBy": {
-            "fecha_version": "desc",
-          },
+          "orderBy": [
+            {
+              "fecha_version": "desc",
+            },
+            {
+              "id_version_receta": "desc",
+            },
+          ],
         },
       },
       "where": {
@@ -1105,9 +1110,14 @@ exports[`/dashboard/production/recipes/[id]/versions > inexistente > llamadas 1`
               },
             },
           },
-          "orderBy": {
-            "fecha_version": "desc",
-          },
+          "orderBy": [
+            {
+              "fecha_version": "desc",
+            },
+            {
+              "id_version_receta": "desc",
+            },
+          ],
         },
       },
       "where": {
@@ -1162,9 +1172,14 @@ exports[`/dashboard/production/recipes/[id]/versions > receta inactiva con histo
               },
             },
           },
-          "orderBy": {
-            "fecha_version": "desc",
-          },
+          "orderBy": [
+            {
+              "fecha_version": "desc",
+            },
+            {
+              "id_version_receta": "desc",
+            },
+          ],
         },
       },
       "where": {
@@ -1438,9 +1453,14 @@ exports[`/dashboard/production/recipes/[id]/versions > sin versiones > llamadas 
               },
             },
           },
-          "orderBy": {
-            "fecha_version": "desc",
-          },
+          "orderBy": [
+            {
+              "fecha_version": "desc",
+            },
+            {
+              "id_version_receta": "desc",
+            },
+          ],
         },
       },
       "where": {
@@ -1621,9 +1641,14 @@ exports[`/dashboard/production/recipes/[id]/versions > versiones > llamadas 1`] 
               },
             },
           },
-          "orderBy": {
-            "fecha_version": "desc",
-          },
+          "orderBy": [
+            {
+              "fecha_version": "desc",
+            },
+            {
+              "id_version_receta": "desc",
+            },
+          ],
         },
       },
       "where": {
@@ -5389,9 +5414,14 @@ exports[`/dashboard/production/recipes/[id]/versions/new > inexistente > llamada
               },
             },
           },
-          "orderBy": {
-            "fecha_version": "desc",
-          },
+          "orderBy": [
+            {
+              "fecha_version": "desc",
+            },
+            {
+              "id_version_receta": "desc",
+            },
+          ],
           "take": 1,
         },
       },
@@ -5453,9 +5483,14 @@ exports[`/dashboard/production/recipes/[id]/versions/new > nueva version > llama
               },
             },
           },
-          "orderBy": {
-            "fecha_version": "desc",
-          },
+          "orderBy": [
+            {
+              "fecha_version": "desc",
+            },
+            {
+              "id_version_receta": "desc",
+            },
+          ],
           "take": 1,
         },
       },
@@ -5654,9 +5689,14 @@ exports[`/dashboard/production/recipes/[id]/versions/new > receta inactiva > lla
               },
             },
           },
-          "orderBy": {
-            "fecha_version": "desc",
-          },
+          "orderBy": [
+            {
+              "fecha_version": "desc",
+            },
+            {
+              "id_version_receta": "desc",
+            },
+          ],
           "take": 1,
         },
       },
@@ -5815,9 +5855,14 @@ exports[`/dashboard/production/recipes/[id]/versions/new > sin materiales activo
               },
             },
           },
-          "orderBy": {
-            "fecha_version": "desc",
-          },
+          "orderBy": [
+            {
+              "fecha_version": "desc",
+            },
+            {
+              "id_version_receta": "desc",
+            },
+          ],
           "take": 1,
         },
       },

@@ -10,6 +10,7 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
   type Role,
 } from "@/testing/page-characterization";
@@ -170,6 +171,7 @@ const form: FormFields = {
 const version = (
   options: { exists?: boolean; receta?: string; orders?: number } = {},
 ): DataOverrides => ({
+  "version_receta.findUnique": options.exists === false ? null : { id_receta: RECETA },
   "version_receta.findFirst":
     options.exists === false
       ? null
@@ -282,3 +284,71 @@ defineCases("deleteRecipeDetailAction", deleteRecipeDetailAction, [
     ...deleteWith({ "detalle_receta.delete": failWith(new Error("conexion perdida")) }),
   },
 ]);
+
+// B2 (hallazgo 1 de la auditoria de la 10.6): una linea no tiene candado propio;
+// se bloquea la receta de su version, que no cambia, y todo lo que decide se lee
+// despues. Asi agregar, editar y borrar se ordenan con marcar vigente y anular.
+describe("las acciones de detalles deciden con la receta bloqueada", () => {
+  const LINEA_INEXISTENTE = "error: El material de la receta no existe.";
+
+  const protectedRead = (call: { prisma: string }) =>
+    call.prisma === "version_receta.findFirst" ||
+    call.prisma === "detalle_receta.findFirst" ||
+    call.prisma === "material.findFirst";
+
+  // La primera lectura de la linea solo busca su version, para saber que receta
+  // bloquear; la que decide trae el material.
+  const deciding = (call: { prisma: string; args?: unknown }) =>
+    protectedRead(call) ||
+    (call.prisma === "detalle_receta.findUnique" && (call.args as { include?: unknown }).include !== undefined);
+
+  it.each([
+    ["el alta que acepta", withState(createRecipeDetailAction), createWith()],
+    ["el alta de un duplicado", withState(createRecipeDetailAction), createWith({}, duplicate)],
+    ["el alta en una version usada", withState(createRecipeDetailAction), createWith({}, version({ orders: 1 }))],
+    ["la edicion que acepta", withState(updateRecipeDetailAction), updateWith()],
+    ["la edicion en una version usada", withState(updateRecipeDetailAction), updateWith({}, version({ orders: 1 }))],
+  ])("%s bloquea antes de leer", async (_name, run, actionCase) => {
+    const { calls } = await runCase(run, actionCase);
+
+    expectRowLockedBefore(calls, { table: "receta_tecnica", id: RECETA, reads: protectedRead });
+  });
+
+  it("la edicion lee la linea con la receta ya bloqueada", async () => {
+    const { calls } = await runCase(withState(updateRecipeDetailAction), updateWith());
+
+    expectRowLockedBefore(calls, {
+      table: "receta_tecnica",
+      id: RECETA,
+      reads: (call) => call.prisma === "detalle_receta.findUnique",
+    });
+  });
+
+  it.each([
+    ["que acepta", deleteWith()],
+    ["en una version usada", deleteWith(version({ orders: 1 }))],
+  ])("el borrado %s bloquea antes de decidir", async (_name, actionCase) => {
+    const { calls } = await runCase(deleteRecipeDetailAction, actionCase);
+
+    expectRowLockedBefore(calls, { table: "receta_tecnica", id: RECETA, reads: deciding });
+  });
+
+  it("si otro borro la linea mientras esperaba, responde que no existe y no borra", async () => {
+    let reads = 0;
+    const { calls, result } = await runCase(
+      deleteRecipeDetailAction,
+      deleteWith({
+        "detalle_receta.findUnique": () => {
+          reads += 1;
+
+          return reads === 1
+            ? { id_detalle_receta: DETALLE, id_version_receta: VERSION, material: { nombre_material: "Plancha de acero" } }
+            : null;
+        },
+      }),
+    );
+
+    expect(result).toBe(LINEA_INEXISTENTE);
+    expect(calls).not.toContainEqual(expect.objectContaining({ prisma: "detalle_receta.delete" }));
+  });
+});
