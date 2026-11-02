@@ -44,39 +44,46 @@ const optionalDateSchema = z
     },
   );
 
-export const productionCampaignSchema = z
-  .object({
-    nombre_campania: z
-      .string({ error: "El nombre de la campaña es obligatorio." })
-      .trim()
-      .min(1, "El nombre de la campaña es obligatorio.")
-      .max(100, "El nombre de la campaña no debe superar 100 caracteres."),
+const campaignFields = z.object({
+  nombre_campania: z
+    .string({ error: "El nombre de la campaña es obligatorio." })
+    .trim()
+    .min(1, "El nombre de la campaña es obligatorio.")
+    .max(100, "El nombre de la campaña no debe superar 100 caracteres."),
 
-    fecha_inicio: requiredDateSchema,
+  fecha_inicio: requiredDateSchema,
 
-    fecha_fin: optionalDateSchema,
+  fecha_fin: optionalDateSchema,
 
-    objetivo_general: optionalTextSchema,
+  objetivo_general: optionalTextSchema,
+});
 
-    estado: z.enum(["planificada", "activa", "finalizada", "anulada"], {
+// Una fecha que no existe ya tiene su mensaje. Como texto aaaa-mm-dd, el orden
+// alfabetico es el de las fechas.
+function endsAfterStart(data: { fecha_inicio: string; fecha_fin: string | null }) {
+  if (!data.fecha_fin || !isRealDate(data.fecha_inicio) || !isRealDate(data.fecha_fin)) {
+    return true;
+  }
+
+  return data.fecha_fin >= data.fecha_inicio;
+}
+
+const END_AFTER_START = {
+  message: "La fecha de fin no puede ser anterior a la fecha de inicio.",
+  path: ["fecha_fin"],
+};
+
+// Una campana nace planificada o activa. Finalizar y anular son acciones de la fila,
+// con sus reglas, su fecha de fin y su bitacora (D2 de la 10.7).
+export const productionCampaignSchema = campaignFields
+  .extend({
+    estado: z.enum(["planificada", "activa"], {
       error: "Selecciona un estado válido.",
     }),
   })
-  .refine(
-    (data) => {
-      // Una fecha que no existe ya tiene su mensaje. Como texto aaaa-mm-dd, el orden
-      // alfabetico es el de las fechas.
-      if (!data.fecha_fin || !isRealDate(data.fecha_inicio) || !isRealDate(data.fecha_fin)) {
-        return true;
-      }
+  .refine(endsAfterStart, END_AFTER_START);
 
-      return data.fecha_fin >= data.fecha_inicio;
-    },
-    {
-      message: "La fecha de fin no puede ser anterior a la fecha de inicio.",
-      path: ["fecha_fin"],
-    },
-  );
+export const updateProductionCampaignSchema = campaignFields.refine(endsAfterStart, END_AFTER_START);
 
 export const campaignDetailSchema = z.object({
   id_campania: z

@@ -2278,7 +2278,7 @@ exports[`/dashboard/production/campaigns/[id]/edit > anulada queda bloqueada > r
 </div>
 <div>
 <h1>Editar campaña</h1>
-<p>Actualiza los datos generales y el estado operativo de la campaña.</p>
+<p>Actualiza los datos generales de la campaña.</p>
 </div>
 </div>
 <div>
@@ -2305,15 +2305,6 @@ exports[`/dashboard/production/campaigns/[id]/edit > anulada queda bloqueada > r
 <label>Fecha de fin</label>
 <input type="date" disabled="" name="fecha_fin" value="2026-07-01"/>
 </div>
-</div>
-<div>
-<label>Estado</label>
-<select name="estado" disabled="">
-<option value="planificada">Planificada</option>
-<option value="activa">Activa</option>
-<option value="finalizada">Finalizada</option>
-<option value="anulada" selected="">Anulada</option>
-</select>
 </div>
 <div>
 <label>Objetivo general</label>
@@ -2379,7 +2370,7 @@ exports[`/dashboard/production/campaigns/[id]/edit > editar > resultado 1`] = `
 </div>
 <div>
 <h1>Editar campaña</h1>
-<p>Actualiza los datos generales y el estado operativo de la campaña.</p>
+<p>Actualiza los datos generales de la campaña.</p>
 </div>
 </div>
 <div>
@@ -2403,15 +2394,6 @@ exports[`/dashboard/production/campaigns/[id]/edit > editar > resultado 1`] = `
 <label>Fecha de fin</label>
 <input type="date" name="fecha_fin" value="2026-07-01"/>
 </div>
-</div>
-<div>
-<label>Estado</label>
-<select name="estado">
-<option value="planificada">Planificada</option>
-<option value="activa">Activa</option>
-<option value="finalizada">Finalizada</option>
-<option value="anulada">Anulada</option>
-</select>
 </div>
 <div>
 <label>Objetivo general</label>

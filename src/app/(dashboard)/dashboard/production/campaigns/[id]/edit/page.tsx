@@ -6,7 +6,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateProductionCampaignAction } from "@/modules/production/campaigns/actions";
@@ -45,7 +44,7 @@ export default async function EditProductionCampaignPage({
     <main className="mx-auto max-w-3xl space-y-6">
       <PageHeader
         title="Editar campaña"
-        description="Actualiza los datos generales y el estado operativo de la campaña."
+        description="Actualiza los datos generales de la campaña."
         backHref={`${navigationHrefs.campaigns}/${campaign.id_campania}`}
         backLabel="Volver a detalle"
         breadcrumbs={dashboardBreadcrumbs([
@@ -101,20 +100,6 @@ export default async function EditProductionCampaignPage({
               disabled={isVoided}
             />
           </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Estado</Label>
-          <NativeSelect
-            name="estado"
-            defaultValue={campaign.estado}
-            disabled={isVoided}
-          >
-            <option value="planificada">Planificada</option>
-            <option value="activa">Activa</option>
-            <option value="finalizada">Finalizada</option>
-            <option value="anulada">Anulada</option>
-          </NativeSelect>
         </div>
 
         <div className="space-y-2">

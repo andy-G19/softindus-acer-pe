@@ -120,6 +120,33 @@ definePageSuite([
 
 // A4 de la 10.7a: el rango de la lista es el de buildDateRangeFilter, como en los demas
 // listados: el ultimo dia se incluye con lt el dia siguiente, no con lte a las 23:59:59.
+// D2 de la 10.7: el alta ofrece dos estados y la edicion ninguno.
+describe("estado en los formularios de campana", () => {
+  it("el alta solo ofrece Planificada y Activa", async () => {
+    const { html } = await characterizePage(
+      () => import("./new/page"),
+      { name: "alta" },
+      "/dashboard/production/campaigns/new",
+    );
+
+    expect(html).toContain('value="planificada"');
+    expect(html).toContain('value="activa"');
+    expect(html).not.toContain('value="finalizada"');
+    expect(html).not.toContain('value="anulada"');
+  });
+
+  it("la edicion no tiene campo de estado", async () => {
+    const { html } = await characterizePage(
+      () => import("./[id]/edit/page"),
+      { name: "edicion", params: { id: "CAM00000001" } },
+      "/dashboard/production/campaigns/CAM00000001/edit",
+    );
+
+    expect(html).toContain('name="nombre_campania"');
+    expect(html).not.toContain('name="estado"');
+  });
+});
+
 describe("rango de fechas de la lista de campanas", () => {
   async function dateCondition(searchParams: Record<string, string>) {
     const { calls } = await characterizePage(

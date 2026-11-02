@@ -2563,146 +2563,6 @@ exports[`createProductionCampaignAction > la fecha de inicio es obligatoria > ll
 
 exports[`createProductionCampaignAction > la fecha de inicio es obligatoria > resultado 1`] = `"error: La fecha de inicio es obligatoria."`;
 
-exports[`createProductionCampaignAction > se puede crear una campana anulada > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "campania_produccion",
-      "prefijo": "CAM",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "anulada",
-        "fecha_fin": 2026-08-31T00:00:00.000Z,
-        "fecha_inicio": 2026-08-01T00:00:00.000Z,
-        "id_campania": "CAM00000012",
-        "id_usuario_registro": "USU00000001",
-        "nombre_campania": "Campana escolar",
-        "objetivo_general": "Reponer stock",
-      },
-    },
-    "prisma": "campania_produccion.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Campania de produccion creada: Campana escolar.",
-      "enTransaccion": true,
-      "entidad_afectada": "campania_produccion",
-      "id_registro_afectado": "CAM00000012",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/campaigns",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/work-orders/new",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`createProductionCampaignAction > se puede crear una campana anulada > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
-
-exports[`createProductionCampaignAction > se puede crear una campana finalizada > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "campania_produccion",
-      "prefijo": "CAM",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "finalizada",
-        "fecha_fin": 2026-08-31T00:00:00.000Z,
-        "fecha_inicio": 2026-08-01T00:00:00.000Z,
-        "id_campania": "CAM00000012",
-        "id_usuario_registro": "USU00000001",
-        "nombre_campania": "Campana escolar",
-        "objetivo_general": "Reponer stock",
-      },
-    },
-    "prisma": "campania_produccion.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Campania de produccion creada: Campana escolar.",
-      "enTransaccion": true,
-      "entidad_afectada": "campania_produccion",
-      "id_registro_afectado": "CAM00000012",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/campaigns",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/work-orders/new",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`createProductionCampaignAction > se puede crear una campana finalizada > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
-
 exports[`createProductionCampaignAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
@@ -2730,6 +2590,104 @@ exports[`createProductionCampaignAction > un estado desconocido se rechaza > lla
 `;
 
 exports[`createProductionCampaignAction > un estado desconocido se rechaza > resultado 1`] = `"error: Selecciona un estado válido."`;
+
+exports[`createProductionCampaignAction > una campana no nace anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > una campana no nace anulada > resultado 1`] = `"error: Selecciona un estado válido."`;
+
+exports[`createProductionCampaignAction > una campana no nace finalizada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > una campana no nace finalizada > resultado 1`] = `"error: Selecciona un estado válido."`;
+
+exports[`createProductionCampaignAction > una campana puede nacer activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_produccion",
+      "prefijo": "CAM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activa",
+        "fecha_fin": 2026-08-31T00:00:00.000Z,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "id_campania": "CAM00000012",
+        "id_usuario_registro": "USU00000001",
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+    },
+    "prisma": "campania_produccion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Campania de produccion creada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/new",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > una campana puede nacer activa > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
 
 exports[`createProductionCampaignAction > una fecha de fin imposible se rechaza > llamadas 1`] = `
 [
@@ -2796,7 +2754,6 @@ exports[`updateProductionCampaignAction > ADMIN actualiza la campana > llamadas 
   {
     "args": {
       "data": {
-        "estado": "planificada",
         "fecha_fin": 2026-08-31T00:00:00.000Z,
         "fecha_inicio": 2026-08-01T00:00:00.000Z,
         "nombre_campania": "Campana escolar",
@@ -2895,7 +2852,6 @@ exports[`updateProductionCampaignAction > WORKSHOP_MASTER tambien actualiza camp
   {
     "args": {
       "data": {
-        "estado": "planificada",
         "fecha_fin": 2026-08-31T00:00:00.000Z,
         "fecha_inicio": 2026-08-01T00:00:00.000Z,
         "nombre_campania": "Campana escolar",
@@ -2957,7 +2913,7 @@ exports[`updateProductionCampaignAction > datos invalidos se rechazan sin tocar 
 
 exports[`updateProductionCampaignAction > datos invalidos se rechazan sin tocar Prisma > resultado 1`] = `"error: El nombre de la campaña es obligatorio."`;
 
-exports[`updateProductionCampaignAction > editar anula sin fijar la fecha de fin y la bitacora dice actualizar > llamadas 1`] = `
+exports[`updateProductionCampaignAction > editar no anula: el estado enviado se ignora > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -2994,7 +2950,6 @@ exports[`updateProductionCampaignAction > editar anula sin fijar la fecha de fin
   {
     "args": {
       "data": {
-        "estado": "anulada",
         "fecha_fin": null,
         "fecha_inicio": 2026-08-01T00:00:00.000Z,
         "nombre_campania": "Campana escolar",
@@ -3040,9 +2995,9 @@ exports[`updateProductionCampaignAction > editar anula sin fijar la fecha de fin
 ]
 `;
 
-exports[`updateProductionCampaignAction > editar anula sin fijar la fecha de fin y la bitacora dice actualizar > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+exports[`updateProductionCampaignAction > editar no anula: el estado enviado se ignora > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
 
-exports[`updateProductionCampaignAction > editar reabre una campana finalizada, aunque la accion de fila lo prohibe > llamadas 1`] = `
+exports[`updateProductionCampaignAction > editar no reabre una campana finalizada > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -3079,7 +3034,6 @@ exports[`updateProductionCampaignAction > editar reabre una campana finalizada, 
   {
     "args": {
       "data": {
-        "estado": "activa",
         "fecha_fin": 2026-08-31T00:00:00.000Z,
         "fecha_inicio": 2026-08-01T00:00:00.000Z,
         "nombre_campania": "Campana escolar",
@@ -3125,7 +3079,21 @@ exports[`updateProductionCampaignAction > editar reabre una campana finalizada, 
 ]
 `;
 
-exports[`updateProductionCampaignAction > editar reabre una campana finalizada, aunque la accion de fila lo prohibe > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+exports[`updateProductionCampaignAction > editar no reabre una campana finalizada > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+
+exports[`updateProductionCampaignAction > el fin no puede ser anterior al inicio > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateProductionCampaignAction > el fin no puede ser anterior al inicio > resultado 1`] = `"error: La fecha de fin no puede ser anterior a la fecha de inicio."`;
 
 exports[`updateProductionCampaignAction > la campana no existe > llamadas 1`] = `
 [
@@ -3227,7 +3195,7 @@ exports[`updateProductionCampaignAction > una campana anulada no se modifica > l
 
 exports[`updateProductionCampaignAction > una campana anulada no se modifica > resultado 1`] = `"error: No se puede modificar una campania anulada."`;
 
-exports[`updateProductionCampaignAction > una campana finalizada se puede editar > llamadas 1`] = `
+exports[`updateProductionCampaignAction > una campana finalizada conserva sus datos editables > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -3264,7 +3232,6 @@ exports[`updateProductionCampaignAction > una campana finalizada se puede editar
   {
     "args": {
       "data": {
-        "estado": "finalizada",
         "fecha_fin": 2026-08-31T00:00:00.000Z,
         "fecha_inicio": 2026-08-01T00:00:00.000Z,
         "nombre_campania": "Campana escolar",
@@ -3310,4 +3277,4 @@ exports[`updateProductionCampaignAction > una campana finalizada se puede editar
 ]
 `;
 
-exports[`updateProductionCampaignAction > una campana finalizada se puede editar > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+exports[`updateProductionCampaignAction > una campana finalizada conserva sus datos editables > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;

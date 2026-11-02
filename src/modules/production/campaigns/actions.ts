@@ -11,6 +11,7 @@ import { lockCampaignRow } from "@/lib/row-locks";
 import {
   campaignDetailSchema,
   productionCampaignSchema,
+  updateProductionCampaignSchema,
 } from "@/schemas/production/campaign.schema";
 
 const CLOSED_CAMPAIGN_STATES = ["finalizada", "anulada"];
@@ -203,12 +204,11 @@ export async function updateProductionCampaignAction(formData: FormData) {
     throw new Error("No se recibio la campania.");
   }
 
-  const parsed = productionCampaignSchema.safeParse({
+  const parsed = updateProductionCampaignSchema.safeParse({
     nombre_campania: formData.get("nombre_campania"),
     fecha_inicio: formData.get("fecha_inicio"),
     fecha_fin: formData.get("fecha_fin") ?? "",
     objetivo_general: formData.get("objetivo_general") ?? "",
-    estado: formData.get("estado"),
   });
 
   if (!parsed.success) {
@@ -247,7 +247,6 @@ export async function updateProductionCampaignAction(formData: FormData) {
         fecha_inicio: parseDate(data.fecha_inicio),
         fecha_fin: parseNullableDate(data.fecha_fin),
         objetivo_general: data.objetivo_general,
-        estado: data.estado,
       },
     });
 

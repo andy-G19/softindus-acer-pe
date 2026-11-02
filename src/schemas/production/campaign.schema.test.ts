@@ -69,6 +69,10 @@ describe("productionCampaignSchema", () => {
     });
   });
 
+  it.each(["finalizada", "anulada"])("una campaña no nace %s", (estado) => {
+    expect(fieldErrors({ ...campaign, estado })).toEqual({ estado: ["Selecciona un estado válido."] });
+  });
+
   it("un objetivo largo sigue siendo valido: la columna es text", () => {
     expect(productionCampaignSchema.safeParse({ ...campaign, objetivo_general: "x".repeat(2000) }).success).toBe(true);
   });

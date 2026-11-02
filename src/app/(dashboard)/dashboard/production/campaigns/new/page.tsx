@@ -66,8 +66,6 @@ export default async function NewProductionCampaignPage() {
           <NativeSelect name="estado" required defaultValue="planificada">
             <option value="planificada">Planificada</option>
             <option value="activa">Activa</option>
-            <option value="finalizada">Finalizada</option>
-            <option value="anulada">Anulada</option>
           </NativeSelect>
         </div>
 

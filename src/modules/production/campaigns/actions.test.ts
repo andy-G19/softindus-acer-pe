@@ -218,8 +218,9 @@ defineCases("createProductionCampaignAction", createProductionCampaignAction, [
   { name: "el fin no puede ser anterior al inicio", ...createWith({ fecha_fin: "2026-07-31" }) },
   { name: "el fin puede ser el mismo dia del inicio", ...createWith({ fecha_fin: "2026-08-01" }) },
   { name: "un estado desconocido se rechaza", ...createWith({ estado: "cerrada" }) },
-  { name: "se puede crear una campana finalizada", ...createWith({ estado: "finalizada" }) },
-  { name: "se puede crear una campana anulada", ...createWith({ estado: "anulada" }) },
+  { name: "una campana no nace finalizada", ...createWith({ estado: "finalizada" }) },
+  { name: "una campana no nace anulada", ...createWith({ estado: "anulada" }) },
+  { name: "una campana puede nacer activa", ...createWith({ estado: "activa" }) },
   { name: "un POST sin campos se rechaza sin tocar Prisma", form: {} },
 ]);
 
@@ -256,15 +257,16 @@ defineCases("updateProductionCampaignAction", updateProductionCampaignAction, [
   { name: "SELLER no puede actualizar", ...updateWith(), role: "SELLER" },
   { name: "sin id se rechaza sin tocar Prisma", ...updateWith({ id_campania: "" }) },
   { name: "datos invalidos se rechazan sin tocar Prisma", ...updateWith({ nombre_campania: "" }) },
+  { name: "el fin no puede ser anterior al inicio", ...updateWith({ fecha_fin: "2026-07-31" }) },
   { name: "la campana no existe", ...updateWith({}, noCampaign) },
   { name: "una campana anulada no se modifica", ...updateWith({}, campaign("anulada")) },
-  { name: "una campana finalizada se puede editar", ...updateWith({ estado: "finalizada" }, campaign("finalizada")) },
+  { name: "una campana finalizada conserva sus datos editables", ...updateWith({ estado: "finalizada" }, campaign("finalizada")) },
   {
-    name: "editar reabre una campana finalizada, aunque la accion de fila lo prohibe",
+    name: "editar no reabre una campana finalizada",
     ...updateWith({ estado: "activa" }, campaign("finalizada")),
   },
   {
-    name: "editar anula sin fijar la fecha de fin y la bitacora dice actualizar",
+    name: "editar no anula: el estado enviado se ignora",
     ...updateWith({ estado: "anulada", fecha_fin: "" }, campaign("activa")),
   },
 ]);
@@ -292,6 +294,40 @@ defineCases("changeProductionCampaignStatusAction", changeProductionCampaignStat
 
 // Dos operaciones simultaneas sobre la misma campana se ponen en fila: la segunda
 // espera y lee lo que escribio la primera (hallazgo 1 de la 10.7).
+// D2 de la 10.7: el estado solo cambia desde la fila, con sus reglas y su bitacora.
+// Editar lo saltaba: reabria una finalizada y anulaba sin fecha de fin.
+describe("el estado no se cambia desde el formulario", () => {
+  type Recorded = { prisma?: string; args?: { data?: Record<string, unknown> } };
+
+  it.each(["activa", "anulada", "planificada"])("editar con estado %s no lo escribe", async (estado) => {
+    const { calls, result } = await runCase(
+      updateProductionCampaignAction,
+      updateWith({ estado }, campaign("finalizada")),
+    );
+    const update = (calls as Recorded[]).find((call) => call.prisma === "campania_produccion.update");
+
+    expect(result).toEqual(expect.stringContaining("toast=campaign-updated"));
+    expect(update?.args?.data).toEqual({
+      nombre_campania: campaignForm.nombre_campania,
+      fecha_inicio: new Date("2026-08-01T00:00:00"),
+      fecha_fin: new Date("2026-08-31T00:00:00"),
+      objetivo_general: campaignForm.objetivo_general,
+    });
+  });
+
+  it("editar sin el campo estado funciona", async () => {
+    const { result } = await runCase(updateProductionCampaignAction, updateWith({ estado: null }));
+
+    expect(result).toEqual(expect.stringContaining("toast=campaign-updated"));
+  });
+
+  it.each(["finalizada", "anulada"])("el alta rechaza nacer %s", async (estado) => {
+    const { result } = await runCase(createProductionCampaignAction, createWith({ estado }));
+
+    expect(result).toBe("error: Selecciona un estado válido.");
+  });
+});
+
 describe("las decisiones se toman con la campana bloqueada", () => {
   const reads = (call: { prisma: string }) =>
     call.prisma.startsWith("campania_produccion.find") ||
