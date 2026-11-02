@@ -776,28 +776,38 @@ exports[`updateReusableScrapStatusAction > WORKSHOP_MASTER tambien cambia el est
     ],
   },
   {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_retazo": true,
-      },
-      "where": {
-        "id_retazo": "RET00000003",
-      },
-    },
-    "prisma": "retazo_reutilizable.findUnique",
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
       "data": {
         "estado": "reutilizado",
       },
+      "select": {
+        "id_retazo": true,
+      },
       "where": {
+        "estado": "disponible",
         "id_retazo": "RET00000003",
       },
     },
-    "fueraDeTransaccion": true,
-    "prisma": "retazo_reutilizable.update",
+    "prisma": "retazo_reutilizable.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "reutilizado",
+      "detalle": "Retazo reutilizado: RET00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "retazo_reutilizable",
+      "id_registro_afectado": "RET00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard",
@@ -840,9 +850,27 @@ exports[`updateReusableScrapStatusAction > el retazo no existe > llamadas 1`] = 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reutilizado",
+      },
+      "select": {
+        "id_retazo": true,
+      },
+      "where": {
+        "estado": "disponible",
+        "id_retazo": "RET00000003",
+      },
+    },
+    "prisma": "retazo_reutilizable.updateManyAndReturn",
+  },
+  {
     "args": {
       "select": {
-        "estado": true,
         "id_retazo": true,
       },
       "where": {
@@ -850,6 +878,10 @@ exports[`updateReusableScrapStatusAction > el retazo no existe > llamadas 1`] = 
       },
     },
     "prisma": "retazo_reutilizable.findUnique",
+  },
+  {
+    "args": "El retazo seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -894,9 +926,27 @@ exports[`updateReusableScrapStatusAction > un retazo descartado ya no cambia > l
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reutilizado",
+      },
+      "select": {
+        "id_retazo": true,
+      },
+      "where": {
+        "estado": "disponible",
+        "id_retazo": "RET00000003",
+      },
+    },
+    "prisma": "retazo_reutilizable.updateManyAndReturn",
+  },
+  {
     "args": {
       "select": {
-        "estado": true,
         "id_retazo": true,
       },
       "where": {
@@ -904,6 +954,10 @@ exports[`updateReusableScrapStatusAction > un retazo descartado ya no cambia > l
       },
     },
     "prisma": "retazo_reutilizable.findUnique",
+  },
+  {
+    "args": "Solo se puede cambiar el estado de retazos disponibles.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -920,28 +974,38 @@ exports[`updateReusableScrapStatusAction > un retazo disponible pasa a descartad
     ],
   },
   {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_retazo": true,
-      },
-      "where": {
-        "id_retazo": "RET00000003",
-      },
-    },
-    "prisma": "retazo_reutilizable.findUnique",
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
       "data": {
         "estado": "descartado",
       },
+      "select": {
+        "id_retazo": true,
+      },
       "where": {
+        "estado": "disponible",
         "id_retazo": "RET00000003",
       },
     },
-    "fueraDeTransaccion": true,
-    "prisma": "retazo_reutilizable.update",
+    "prisma": "retazo_reutilizable.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "descartado",
+      "detalle": "Retazo descartado: RET00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "retazo_reutilizable",
+      "id_registro_afectado": "RET00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard",
@@ -960,7 +1024,7 @@ exports[`updateReusableScrapStatusAction > un retazo disponible pasa a descartad
 
 exports[`updateReusableScrapStatusAction > un retazo disponible pasa a descartado > resultado 1`] = `"redirect:/dashboard/waste-scrap/reusable-scraps"`;
 
-exports[`updateReusableScrapStatusAction > un retazo disponible pasa a reutilizado, sin bitacora ni aviso > llamadas 1`] = `
+exports[`updateReusableScrapStatusAction > un retazo disponible pasa a reutilizado y deja bitacora > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -970,28 +1034,38 @@ exports[`updateReusableScrapStatusAction > un retazo disponible pasa a reutiliza
     ],
   },
   {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_retazo": true,
-      },
-      "where": {
-        "id_retazo": "RET00000003",
-      },
-    },
-    "prisma": "retazo_reutilizable.findUnique",
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
       "data": {
         "estado": "reutilizado",
       },
+      "select": {
+        "id_retazo": true,
+      },
       "where": {
+        "estado": "disponible",
         "id_retazo": "RET00000003",
       },
     },
-    "fueraDeTransaccion": true,
-    "prisma": "retazo_reutilizable.update",
+    "prisma": "retazo_reutilizable.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "reutilizado",
+      "detalle": "Retazo reutilizado: RET00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "retazo_reutilizable",
+      "id_registro_afectado": "RET00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard",
@@ -1008,7 +1082,7 @@ exports[`updateReusableScrapStatusAction > un retazo disponible pasa a reutiliza
 ]
 `;
 
-exports[`updateReusableScrapStatusAction > un retazo disponible pasa a reutilizado, sin bitacora ni aviso > resultado 1`] = `"redirect:/dashboard/waste-scrap/reusable-scraps"`;
+exports[`updateReusableScrapStatusAction > un retazo disponible pasa a reutilizado y deja bitacora > resultado 1`] = `"redirect:/dashboard/waste-scrap/reusable-scraps"`;
 
 exports[`updateReusableScrapStatusAction > un retazo reutilizado ya no cambia > llamadas 1`] = `
 [
@@ -1020,9 +1094,27 @@ exports[`updateReusableScrapStatusAction > un retazo reutilizado ya no cambia > 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "descartado",
+      },
+      "select": {
+        "id_retazo": true,
+      },
+      "where": {
+        "estado": "disponible",
+        "id_retazo": "RET00000003",
+      },
+    },
+    "prisma": "retazo_reutilizable.updateManyAndReturn",
+  },
+  {
     "args": {
       "select": {
-        "estado": true,
         "id_retazo": true,
       },
       "where": {
@@ -1030,6 +1122,10 @@ exports[`updateReusableScrapStatusAction > un retazo reutilizado ya no cambia > 
       },
     },
     "prisma": "retazo_reutilizable.findUnique",
+  },
+  {
+    "args": "Solo se puede cambiar el estado de retazos disponibles.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { reusableScrapStatusSchema } from "@/schemas/waste-scrap/reusable-scrap-status.schema";
@@ -11,7 +12,7 @@ async function requireWasteScrapAccess() {
 }
 
 export async function updateReusableScrapStatusAction(formData: FormData) {
-  await requireWasteScrapAccess();
+  const session = await requireWasteScrapAccess();
 
   const parsedData = reusableScrapStatusSchema.safeParse({
     id_retazo: formData.get("id_retazo"),
@@ -28,33 +29,45 @@ export async function updateReusableScrapStatusAction(formData: FormData) {
 
   const data = parsedData.data;
 
-  const reusableScrap = await prisma.retazo_reutilizable.findUnique({
-    where: {
-      id_retazo: data.id_retazo,
-    },
-    select: {
-      id_retazo: true,
-      estado: true,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    // Fija el estado solo si sigue disponible: comparar y escribir en una sola sentencia
+    // evita que dos usuarios o un doble clic cambien un retazo ya reutilizado o descartado.
+    const [changed] = await tx.retazo_reutilizable.updateManyAndReturn({
+      where: {
+        id_retazo: data.id_retazo,
+        estado: "disponible",
+      },
+      data: {
+        estado: data.estado,
+      },
+      select: {
+        id_retazo: true,
+      },
+    });
 
-  if (!reusableScrap) {
-    throw new Error("El retazo seleccionado no existe.");
-  }
+    if (!changed) {
+      const exists = await tx.retazo_reutilizable.findUnique({
+        where: {
+          id_retazo: data.id_retazo,
+        },
+        select: {
+          id_retazo: true,
+        },
+      });
 
-  if (reusableScrap.estado !== "disponible") {
-    throw new Error(
-      "Solo se puede cambiar el estado de retazos disponibles.",
-    );
-  }
+      throw new Error(
+        exists ? "Solo se puede cambiar el estado de retazos disponibles." : "El retazo seleccionado no existe.",
+      );
+    }
 
-  await prisma.retazo_reutilizable.update({
-    where: {
-      id_retazo: data.id_retazo,
-    },
-    data: {
-      estado: data.estado,
-    },
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "retazo_reutilizable",
+      id_registro_afectado: data.id_retazo,
+      accion: data.estado,
+      detalle: `Retazo ${data.estado}: ${data.id_retazo}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard");

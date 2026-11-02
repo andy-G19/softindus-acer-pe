@@ -14,8 +14,7 @@ import {
 
 // Caracterizacion del alta y del cambio de estado de retazos (entrega 10.7a),
 // escrita antes de llevarlos al bloqueo de fila, al resultado de accion y al panel
-// lateral. Hoy el cambio de estado lee y escribe sin compare-and-set y no deja
-// bitacora: el snapshot lo fija y cambia a proposito en su commit fix.
+// lateral. Desde A10 el cambio de estado es un compare-and-set y deja bitacora.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -26,8 +25,6 @@ vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
     recordTransactionEnd: true,
-    // El cambio de estado de hoy escribe con el cliente global, sin transaccion.
-    writesOutsideTransaction: true,
   }),
 );
 vi.mock("@/lib/authz", async () =>
@@ -155,10 +152,12 @@ const scrapWith = (fields: FormFields = {}, data: DataOverrides = {}) => ({
   data: { ...material(true), ...workOrder("en_proceso"), ...data },
 });
 
+// El where del compare-and-set exige disponible: otro estado no devuelve ninguna fila.
 const statusWith = (estadoActual: string | null, estado: string | null = "reutilizado") => ({
   form: { id_retazo: RETAZO, estado },
   data: {
-    "retazo_reutilizable.findUnique": estadoActual === null ? null : { id_retazo: RETAZO, estado: estadoActual },
+    "retazo_reutilizable.updateManyAndReturn": estadoActual === "disponible" ? [{ id_retazo: RETAZO }] : [],
+    "retazo_reutilizable.findUnique": estadoActual === null ? null : { id_retazo: RETAZO },
   } satisfies DataOverrides,
 });
 
@@ -184,7 +183,7 @@ defineCases("createReusableScrapAction", createReusableScrapAction, [
 ]);
 
 defineCases("updateReusableScrapStatusAction", updateReusableScrapStatusAction, [
-  { name: "un retazo disponible pasa a reutilizado, sin bitacora ni aviso", ...statusWith("disponible") },
+  { name: "un retazo disponible pasa a reutilizado y deja bitacora", ...statusWith("disponible") },
   { name: "un retazo disponible pasa a descartado", ...statusWith("disponible", "descartado") },
   { name: "WORKSHOP_MASTER tambien cambia el estado", ...statusWith("disponible"), role: "WORKSHOP_MASTER" },
   { name: "SELLER no puede cambiar el estado", ...statusWith("disponible"), role: "SELLER" },
@@ -218,5 +217,44 @@ describe("las decisiones se toman con la orden bloqueada", () => {
 
     expect(lock).toBeGreaterThanOrEqual(0);
     expect(correlative).toBeGreaterThan(lock);
+  });
+});
+
+// Hallazgo 13 de la 10.7: el cambio de estado leia y escribia aparte, y sin bitacora.
+describe("el estado del retazo se fija con una sola sentencia", () => {
+  type Recorded = { prisma?: string; effect?: string; args?: { where?: unknown; data?: unknown; accion?: unknown } };
+
+  it("solo escribe si sigue disponible, sin leer antes", async () => {
+    const { calls } = await runCase(updateReusableScrapStatusAction, statusWith("disponible", "descartado"));
+    const recorded = calls as Recorded[];
+    const write = recorded.find((call) => call.prisma === "retazo_reutilizable.updateManyAndReturn");
+
+    expect(write?.args?.where).toEqual({ id_retazo: RETAZO, estado: "disponible" });
+    expect(write?.args?.data).toEqual({ estado: "descartado" });
+    expect(recorded.some((call) => call.prisma === "retazo_reutilizable.findUnique")).toBe(false);
+  });
+
+  it("deja la bitacora dentro de la transaccion, con quien lo hizo", async () => {
+    const { calls } = await runCase(updateReusableScrapStatusAction, statusWith("disponible", "descartado"));
+    const audit = (calls as Recorded[]).find((call) => call.effect === "registerAuditLog");
+
+    expect(audit?.args).toEqual(
+      expect.objectContaining({
+        entidad_afectada: "retazo_reutilizable",
+        id_registro_afectado: RETAZO,
+        accion: "descartado",
+        detalle: `Retazo descartado: ${RETAZO}.`,
+        enTransaccion: true,
+      }),
+    );
+  });
+
+  it("si ya no estaba disponible no deja bitacora ni revalida", async () => {
+    const { calls, result } = await runCase(updateReusableScrapStatusAction, statusWith("reutilizado", "descartado"));
+    const recorded = calls as Recorded[];
+
+    expect(result).toBe("error: Solo se puede cambiar el estado de retazos disponibles.");
+    expect(recorded.some((call) => call.effect === "registerAuditLog")).toBe(false);
+    expect(recorded.some((call) => call.effect === "revalidatePath")).toBe(false);
   });
 });
