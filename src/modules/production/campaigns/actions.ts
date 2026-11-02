@@ -1,14 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockCampaignRow } from "@/lib/row-locks";
 import {
   campaignDetailSchema,
@@ -402,78 +402,101 @@ export async function updateProductionCampaignAction(
   return campaignSaved(values, idCampania);
 }
 
-export async function changeProductionCampaignStatusAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
-
+// Activar, finalizar y anular desde la fila (entrega 10.7a): devuelve el resultado para
+// ConfirmActionButton en lugar de redirigir con ?toast=. Un rechazo no revalida: el
+// repintado quitaria el boton, y su mensaje con el.
+export async function changeProductionCampaignStatusAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
   const idCampania = String(formData.get("id_campania") ?? "");
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
+
+  if (!session) {
+    return rowStatusError(idCampania, PERMISSION_ERROR);
+  }
+
   const nextStatus = String(formData.get("estado") ?? "");
 
   if (!idCampania) {
-    throw new Error("No se recibio la campania.");
+    return rowStatusError(idCampania, "No se recibió la campaña.");
   }
 
   if (!["activa", "finalizada", "anulada"].includes(nextStatus)) {
-    throw new Error("Estado de campania invalido.");
+    return rowStatusError(idCampania, "Estado de campaña no válido.");
   }
 
-  await prisma.$transaction(async (tx) => {
-    await lockCampaignRow(tx, idCampania);
+  let problem: string | null;
 
-    const campaign = await tx.campania_produccion.findUnique({
-      where: {
-        id_campania: idCampania,
-      },
-      select: {
-        id_campania: true,
-        nombre_campania: true,
-        estado: true,
-      },
+  try {
+    // Un rechazo vuelve del callback sin escribir nada y la transaccion termina.
+    problem = await prisma.$transaction(async (tx) => {
+      await lockCampaignRow(tx, idCampania);
+
+      const campaign = await tx.campania_produccion.findUnique({
+        where: {
+          id_campania: idCampania,
+        },
+        select: {
+          id_campania: true,
+          nombre_campania: true,
+          estado: true,
+        },
+      });
+
+      if (!campaign) {
+        return "La campaña seleccionada no existe.";
+      }
+
+      // Un doble clic o una lista desactualizada no escriben ni dejan otra bitacora.
+      if (campaign.estado === nextStatus) {
+        return "La campaña ya estaba en ese estado.";
+      }
+
+      if (campaign.estado === "anulada") {
+        return "La campaña ya está anulada.";
+      }
+
+      if (campaign.estado === "finalizada" && nextStatus !== "anulada") {
+        return "Una campaña finalizada solo puede anularse con trazabilidad.";
+      }
+
+      await tx.campania_produccion.update({
+        where: {
+          id_campania: idCampania,
+        },
+        data: {
+          estado: nextStatus,
+          fecha_fin:
+            nextStatus === "finalizada" || nextStatus === "anulada"
+              ? new Date()
+              : undefined,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "campania_produccion",
+        id_registro_afectado: idCampania,
+        accion: nextStatus,
+        detalle: `Campania ${nextStatus}: ${campaign.nombre_campania}.`,
+        tx,
+      });
+
+      return null;
     });
+  } catch {
+    problem = "No se pudo cambiar el estado de la campaña. Intenta nuevamente.";
+  }
 
-    if (!campaign) {
-      throw new Error("La campania seleccionada no existe.");
-    }
-
-    // Un doble clic o una lista desactualizada no escriben ni dejan otra bitacora.
-    if (campaign.estado === nextStatus) {
-      throw new Error("La campania ya estaba en ese estado.");
-    }
-
-    if (campaign.estado === "anulada") {
-      throw new Error("La campania ya esta anulada.");
-    }
-
-    if (campaign.estado === "finalizada" && nextStatus !== "anulada") {
-      throw new Error("Una campania finalizada solo puede anularse con trazabilidad.");
-    }
-
-    await tx.campania_produccion.update({
-      where: {
-        id_campania: idCampania,
-      },
-      data: {
-        estado: nextStatus,
-        fecha_fin:
-          nextStatus === "finalizada" || nextStatus === "anulada"
-            ? new Date()
-            : undefined,
-      },
-    });
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "campania_produccion",
-      id_registro_afectado: idCampania,
-      accion: nextStatus,
-      detalle: `Campania ${nextStatus}: ${campaign.nombre_campania}.`,
-      tx,
-    });
-  });
+  if (problem) {
+    return rowStatusError(idCampania, problem);
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/campaigns");
   revalidatePath(`/dashboard/production/campaigns/${idCampania}`);
 
-  redirect(`/dashboard/production/campaigns?toast=campaign-status-${nextStatus}`);
+  return rowStatusDone(idCampania, nextStatus);
 }

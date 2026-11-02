@@ -1510,10 +1510,10 @@ exports[`addCampaignDetailAction > una carrera por el producto (P2002) responde 
 }
 `;
 
-exports[`changeProductionCampaignStatusAction > SELLER no puede cambiar el estado > llamadas 1`] = `
+exports[`changeProductionCampaignStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1522,12 +1522,23 @@ exports[`changeProductionCampaignStatusAction > SELLER no puede cambiar el estad
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > SELLER no puede cambiar el estado > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`changeProductionCampaignStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar campañas de producción.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > WORKSHOP_MASTER tambien cambia el estado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1605,12 +1616,25 @@ exports[`changeProductionCampaignStatusAction > WORKSHOP_MASTER tambien cambia e
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-finalizada"`;
+exports[`changeProductionCampaignStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "finalizada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > activar dos veces no escribe ni deja otra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1643,18 +1667,29 @@ exports[`changeProductionCampaignStatusAction > activar dos veces no escribe ni 
     "prisma": "campania_produccion.findUnique",
   },
   {
-    "args": "La campania ya estaba en ese estado.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > activar dos veces no escribe ni deja otra bitacora > resultado 1`] = `"error: La campania ya estaba en ese estado."`;
+exports[`changeProductionCampaignStatusAction > activar dos veces no escribe ni deja otra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "La campaña ya estaba en ese estado.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > activar una planificada no fija la fecha de fin > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1732,12 +1767,25 @@ exports[`changeProductionCampaignStatusAction > activar una planificada no fija 
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > activar una planificada no fija la fecha de fin > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-activa"`;
+exports[`changeProductionCampaignStatusAction > activar una planificada no fija la fecha de fin > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "activa",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > anular dos veces se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1770,18 +1818,29 @@ exports[`changeProductionCampaignStatusAction > anular dos veces se rechaza > ll
     "prisma": "campania_produccion.findUnique",
   },
   {
-    "args": "La campania ya estaba en ese estado.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > anular dos veces se rechaza > resultado 1`] = `"error: La campania ya estaba en ese estado."`;
+exports[`changeProductionCampaignStatusAction > anular dos veces se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "La campaña ya estaba en ese estado.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > anular una activa fija la fecha de fin > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1859,12 +1918,25 @@ exports[`changeProductionCampaignStatusAction > anular una activa fija la fecha 
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > anular una activa fija la fecha de fin > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-anulada"`;
+exports[`changeProductionCampaignStatusAction > anular una activa fija la fecha de fin > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > anular una planificada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1942,12 +2014,25 @@ exports[`changeProductionCampaignStatusAction > anular una planificada > llamada
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > anular una planificada > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-anulada"`;
+exports[`changeProductionCampaignStatusAction > anular una planificada > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > finalizar dos veces se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1980,18 +2065,29 @@ exports[`changeProductionCampaignStatusAction > finalizar dos veces se rechaza >
     "prisma": "campania_produccion.findUnique",
   },
   {
-    "args": "La campania ya estaba en ese estado.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > finalizar dos veces se rechaza > resultado 1`] = `"error: La campania ya estaba en ese estado."`;
+exports[`changeProductionCampaignStatusAction > finalizar dos veces se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "La campaña ya estaba en ese estado.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > finalizar una activa fija la fecha de fin > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2069,12 +2165,25 @@ exports[`changeProductionCampaignStatusAction > finalizar una activa fija la fec
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > finalizar una activa fija la fecha de fin > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-finalizada"`;
+exports[`changeProductionCampaignStatusAction > finalizar una activa fija la fecha de fin > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "finalizada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > finalizar una planificada se permite > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2152,12 +2261,25 @@ exports[`changeProductionCampaignStatusAction > finalizar una planificada se per
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > finalizar una planificada se permite > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-finalizada"`;
+exports[`changeProductionCampaignStatusAction > finalizar una planificada se permite > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "finalizada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > la campana no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2190,18 +2312,29 @@ exports[`changeProductionCampaignStatusAction > la campana no existe > llamadas 
     "prisma": "campania_produccion.findUnique",
   },
   {
-    "args": "La campania seleccionada no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > la campana no existe > resultado 1`] = `"error: La campania seleccionada no existe."`;
+exports[`changeProductionCampaignStatusAction > la campana no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La campaña seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > planificada no es un estado de destino > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2210,12 +2343,23 @@ exports[`changeProductionCampaignStatusAction > planificada no es un estado de d
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > planificada no es un estado de destino > resultado 1`] = `"error: Estado de campania invalido."`;
+exports[`changeProductionCampaignStatusAction > planificada no es un estado de destino > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado de campaña no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > sin estado se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2224,12 +2368,23 @@ exports[`changeProductionCampaignStatusAction > sin estado se rechaza > llamadas
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > sin estado se rechaza > resultado 1`] = `"error: Estado de campania invalido."`;
+exports[`changeProductionCampaignStatusAction > sin estado se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado de campaña no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2238,12 +2393,23 @@ exports[`changeProductionCampaignStatusAction > sin id se rechaza sin tocar Pris
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `"error: No se recibio la campania."`;
+exports[`changeProductionCampaignStatusAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió la campaña.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > un estado desconocido se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2252,12 +2418,90 @@ exports[`changeProductionCampaignStatusAction > un estado desconocido se rechaza
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > un estado desconocido se rechaza > resultado 1`] = `"error: Estado de campania invalido."`;
+exports[`changeProductionCampaignStatusAction > un estado desconocido se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado de campaña no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
+
+exports[`changeProductionCampaignStatusAction > un fallo al escribir revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "finalizada",
+        "fecha_fin": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > un fallo al escribir revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo cambiar el estado de la campaña. Intenta nuevamente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > una anulada ya no cambia > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2290,18 +2534,29 @@ exports[`changeProductionCampaignStatusAction > una anulada ya no cambia > llama
     "prisma": "campania_produccion.findUnique",
   },
   {
-    "args": "La campania ya esta anulada.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > una anulada ya no cambia > resultado 1`] = `"error: La campania ya esta anulada."`;
+exports[`changeProductionCampaignStatusAction > una anulada ya no cambia > resultado 1`] = `
+{
+  "estado": {
+    "error": "La campaña ya está anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > una finalizada no vuelve a activa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2334,18 +2589,29 @@ exports[`changeProductionCampaignStatusAction > una finalizada no vuelve a activ
     "prisma": "campania_produccion.findUnique",
   },
   {
-    "args": "Una campania finalizada solo puede anularse con trazabilidad.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > una finalizada no vuelve a activa > resultado 1`] = `"error: Una campania finalizada solo puede anularse con trazabilidad."`;
+exports[`changeProductionCampaignStatusAction > una finalizada no vuelve a activa > resultado 1`] = `
+{
+  "estado": {
+    "error": "Una campaña finalizada solo puede anularse con trazabilidad.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > una finalizada se puede anular y pierde su fecha de fin > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2423,7 +2689,20 @@ exports[`changeProductionCampaignStatusAction > una finalizada se puede anular y
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > una finalizada se puede anular y pierde su fecha de fin > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-anulada"`;
+exports[`changeProductionCampaignStatusAction > una finalizada se puede anular y pierde su fecha de fin > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CAM00000003",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > ADMIN crea la campana con su correlativo y la bitacora en la transaccion > llamadas 1`] = `
 [

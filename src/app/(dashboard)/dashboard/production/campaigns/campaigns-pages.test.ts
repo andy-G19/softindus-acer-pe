@@ -202,6 +202,33 @@ describe("agregar producto desde el detalle", () => {
   });
 });
 
+// A8: la lista usa la barra compartida y la pagina no anida otro main.
+describe("lista y detalle de campanas", () => {
+  it("la lista filtra con FilterBar y DateRangeFields, con los nombres de la URL", async () => {
+    const { html } = await characterizePage(
+      () => import("./page"),
+      { name: "lista", searchParams: { from: "2026-07-01", to: "2026-07-31" } },
+      "/dashboard/production/campaigns",
+    );
+
+    expect(html).toContain('aria-label="Filtros de campañas"');
+    expect(html).toContain('name="from"');
+    expect(html).toContain('name="to"');
+    expect(html).toContain('value="2026-07-01"');
+  });
+
+  it("ninguna de las dos pinta main: lo pone el marco del panel", async () => {
+    for (const [load, params] of [
+      [() => import("./page"), undefined],
+      [() => import("./[id]/page"), { id: "CAM00000001" }],
+    ] as const) {
+      const { html } = await characterizePage(load, { name: "sin main", params }, "/dashboard/production/campaigns");
+
+      expect(html).not.toContain("<main");
+    }
+  });
+});
+
 describe("rango de fechas de la lista de campanas", () => {
   async function dateCondition(searchParams: Record<string, string>) {
     const { calls } = await characterizePage(

@@ -72,7 +72,7 @@ export default async function ProductionCampaignDetailPage({
     totalTarget > 0 ? Math.min((totalProduced / totalTarget) * 100, 100) : 0;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title={campaign.nombre_campania}
         description={campaign.objetivo_general ?? "Campaña sin objetivo general."}
@@ -280,6 +280,6 @@ export default async function ProductionCampaignDetailPage({
           </Table>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

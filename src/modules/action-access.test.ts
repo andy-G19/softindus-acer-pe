@@ -241,6 +241,7 @@ const MODULOS: ModuloDeAcciones[] = [
       "createProductionCampaignAction",
       "addCampaignDetailAction",
       "updateProductionCampaignAction",
+      "changeProductionCampaignStatusAction",
     ],
   },
   {

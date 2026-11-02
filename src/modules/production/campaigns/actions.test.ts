@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
+import type { RowStatusState } from "@/lib/requested-status";
 import {
   addCampaignDetailAction,
   changeProductionCampaignStatusAction,
@@ -158,6 +159,8 @@ const create = (formData: FormData) => createProductionCampaignAction(initialSta
 const update = (formData: FormData) => updateProductionCampaignAction(initialState, formData);
 const initialDetailState: CampaignDetailFormState = { status: "idle" };
 const addDetail = (formData: FormData) => addCampaignDetailAction(initialDetailState, formData);
+const initialStatusState: RowStatusState = { status: "idle" };
+const changeStatus = (formData: FormData) => changeProductionCampaignStatusAction(initialStatusState, formData);
 
 const failWith = (error: Error) => () => {
   throw error;
@@ -297,7 +300,7 @@ defineCases("updateProductionCampaignAction", update, [
   },
 ]);
 
-defineCases("changeProductionCampaignStatusAction", changeProductionCampaignStatusAction, [
+defineCases("changeProductionCampaignStatusAction", changeStatus, [
   { name: "activar una planificada no fija la fecha de fin", ...statusWith("planificada", "activa") },
   { name: "finalizar una activa fija la fecha de fin", ...statusWith("activa", "finalizada") },
   { name: "anular una activa fija la fecha de fin", ...statusWith("activa", "anulada") },
@@ -305,7 +308,7 @@ defineCases("changeProductionCampaignStatusAction", changeProductionCampaignStat
   { name: "una finalizada se puede anular y pierde su fecha de fin", ...statusWith("finalizada", "anulada") },
   { name: "finalizar una planificada se permite", ...statusWith("planificada", "finalizada") },
   { name: "WORKSHOP_MASTER tambien cambia el estado", ...statusWith("activa", "finalizada"), role: "WORKSHOP_MASTER" },
-  { name: "SELLER no puede cambiar el estado", ...statusWith("activa", "finalizada"), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...statusWith("activa", "finalizada"), role: "SELLER" },
   { name: "sin id se rechaza sin tocar Prisma", ...statusWith("activa", "finalizada", { id_campania: "" }) },
   { name: "planificada no es un estado de destino", ...statusWith("activa", "planificada") },
   { name: "un estado desconocido se rechaza", ...statusWith("activa", "cerrada") },
@@ -316,6 +319,14 @@ defineCases("changeProductionCampaignStatusAction", changeProductionCampaignStat
   { name: "una finalizada no vuelve a activa", ...statusWith("finalizada", "activa") },
   { name: "finalizar dos veces se rechaza", ...statusWith("finalizada", "finalizada") },
   { name: "activar dos veces no escribe ni deja otra bitacora", ...statusWith("activa", "activa") },
+  {
+    name: "un fallo al escribir revierte con el mensaje generico",
+    form: { id_campania: CAMPANIA, estado: "finalizada" },
+    data: {
+      ...campaign("activa"),
+      "campania_produccion.update": failWith(new Error("conexion perdida")),
+    },
+  },
 ]);
 
 // Dos operaciones simultaneas sobre la misma campana se ponen en fila: la segunda
@@ -367,7 +378,7 @@ describe("las decisiones se toman con la campana bloqueada", () => {
     { name: "editar", run: update, actionCase: updateWith() },
     {
       name: "cambiar el estado",
-      run: changeProductionCampaignStatusAction,
+      run: changeStatus,
       actionCase: statusWith("activa", "finalizada"),
     },
   ];
@@ -416,10 +427,18 @@ describe("las decisiones se toman con la campana bloqueada", () => {
     expect(result).not.toEqual({ estado: expect.objectContaining({ fieldErrors: expect.anything() }) });
   });
 
-  it("pedir el estado que ya tiene no escribe ni registra bitacora", async () => {
-    const { calls, result } = await runCase(changeProductionCampaignStatusAction, statusWith("activa", "activa"));
+  it("un rechazo no revalida: el repintado quitaria el boton y su mensaje", async () => {
+    const { calls } = await runCase(changeStatus, statusWith("finalizada", "activa"));
 
-    expect(result).toBe("error: La campania ya estaba en ese estado.");
+    expect(calls.some((call) => "effect" in call && call.effect === "revalidatePath")).toBe(false);
+  });
+
+  it("pedir el estado que ya tiene no escribe ni registra bitacora", async () => {
+    const { calls, result } = await runCase(changeStatus, statusWith("activa", "activa"));
+
+    expect(result).toEqual({
+      estado: expect.objectContaining({ status: "error", error: "La campaña ya estaba en ese estado." }),
+    });
     expect(calls.some((call) => "prisma" in call && call.prisma === "campania_produccion.update")).toBe(false);
     expect(calls.some((call) => "effect" in call && call.effect === "registerAuditLog")).toBe(false);
   });
