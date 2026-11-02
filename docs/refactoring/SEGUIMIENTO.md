@@ -6514,9 +6514,10 @@ Datos leídos de la API de GitHub el 2026-11-02 (UTC) y comparados con git:
 
 ### Sub-entrega 10.6b — Recetas, versiones y detalles
 
-Fecha: del 2026-11-01 al 2026-11-02 (Lima). Estado: commits hechos, pendiente de
-verificar en staging y de integrar. El paso C0 (`8a35cd9`) registró la integración de
-la 10.6a. 9 commits de código y pruebas, de `077cd6c` a `e876ac2`, más este registro.
+Fecha: del 2026-11-01 al 2026-11-02 (Lima). Estado: verificada en staging, pendiente de
+integrar. El paso C0 (`8a35cd9`) registró la integración de la 10.6a. 9 commits de código
+y pruebas, de `077cd6c` a `e876ac2`, el registro `71b02dc`, el arreglo `e8d77ae` y el
+cierre.
 Plan en `tmp/e10-diff/plan-10-6b.md`, sobre los pasos y las decisiones D1 a D7 de
 `plan-10-6.md`.
 
@@ -6531,7 +6532,9 @@ Plan en `tmp/e10-diff/plan-10-6b.md`, sobre los pasos y las decisiones D1 a D7 d
 | 04e5392 | feat | Materiales en panel anidado, eliminar con `ConfirmActionButton`; el simulador no cuenta como cambio (hallazgo 8). |
 | 97dd5b4 | feat | Marcar vigente y anular con `RowStatusState` y confirmación (D4 y D8). |
 | 4d808a2 | feat | Alta de versión como superficie amplia, con errores `detalles.<posición>.<campo>`. |
-| e876ac2 | feat | Requerimientos con `Field` y `key` (hallazgo 9); `production-links.test.ts` suma recetas. |
+| e876ac2 | feat | Requerimientos con `Field` y `key`; `production-links.test.ts` suma recetas. El hallazgo 9 no quedó resuelto (hallazgo 36). |
+| 71b02dc | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| e8d77ae | fix | `autoComplete="off"` en la cantidad: el arreglo real del hallazgo 9. |
 
 Ajustes al plan:
 
@@ -6580,7 +6583,7 @@ Evidencia:
 4. CSS compilado: igual en C0 a B3, B5, B7 y B8. En B4 sale
    `md:grid-cols-[1.5fr_1fr_1fr_auto_auto]` y en B6 `.hover:text-chart-3:hover`, que no
    tienen otros consumidores: de 112.785 a 112.648 bytes y 1.237 reglas.
-5. `npm run check` terminó con código 0 antes de cada commit, hasta 3.821 pruebas en
+5. `npm run check` terminó con código 0 antes de cada commit, hasta 3.822 pruebas en
    215 archivos. `npm run refactor:inventory` analiza 164 páginas y 72 formularios JSX.
 
 Tiempo de preparación, aproximado: del primer guion de cada paso al último
@@ -6627,7 +6630,83 @@ línea (hallazgo 28). Hallazgos de la implementación:
     las mutaciones de B6 y paró `npm run check` en typecheck. En B7, un fragmento mal
     sangrado detuvo las mutaciones antes de mutar nada.
 35. Método: la prueba de la `key` pinta la página real dos veces sobre la misma raíz en
-    jsdom. Un snapshot de HTML no puede ver una `key`.
+    jsdom. Un snapshot de HTML no puede ver una `key`. Esa prueba no representa una
+    navegación de documento (hallazgo 36).
+
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e106b-huella`) y etiquetas `e106b/`, generadas por
+  `c-e106b-guiones.py`, que se niega a sobrescribir un archivo. Los 5 guiones comprobaron
+  su SHA-256 contra `e106b-guiones.sha256`. Plan en `plan-verificacion-10-6b.md`.
+- 16 capturas por fase: 13 de pantallas que cambian y 3 de control (rutas, campañas y
+  galería), con los datos elegidos solo leyendo: REC00000004, VER00000007 y DRE00000008.
+- Predicción antes del push en `prediccion-10-6b.md`; notas en `e106b-antes-notas.md` y
+  `e106b-despues-notas.md`; registro en `registro-10-6b.tsv` (32 filas).
+- Solo ADMIN: el responsable omitió T92, el maestro de taller; lo cubren
+  `production-links.test.ts` y las pruebas de acceso.
+
+Publicación y medición, todo el 2026-11-02 UTC:
+
+- «Antes» sobre `26e788d` (CSS servido `1poyo02240o5e.css`).
+- Push de 11 commits (de `8a35cd9` a `71b02dc`): CI #123 en verde, de 15:23 a 15:27 UTC, y
+  Vercel `success`. CSS servido `3cqkf7ly4slgj.css`, 112.647 bytes, como se predijo.
+- T86 falló y se publicó `e8d77ae`: CI #124 en verde, de 15:36 a 15:40 UTC.
+- Los 3 controles dieron hash igual. Las 8 pantallas a 1281 px cambian como se predijo,
+  revisadas con el comparador. Las 5 a 376 px no se revisaron una a una: tienen el mismo
+  número de elementos que sus parejas de 1281 px.
+
+Tareas (ADMIN):
+
+| Tarea | Antes (`26e788d`) | Después |
+|---|---|---|
+| T80 Receta con nombre repetido | Página de error; se pierde lo escrito | Panel; error junto al nombre, con el foco; todo conservado; sin toast |
+| T81 Cancelar con cambios | Sale sin preguntar en receta, material y versión | Pregunta en las tres |
+| T82 Versión con material repetido | Alerta general del cliente, sin marcar líneas, foco en el botón | «Revisa los datos de la versión.»; error en cada línea; foco en la primera |
+| T83 Tipo tras un error | Se conserva: nunca iba al servidor | Se conserva tras ir al servidor |
+| T85 Simulador | No había panel | Cerrar no pregunta y el foco vuelve a «Editar» |
+| T86 Atrás en requerimientos | Campo 7 y KPI 25 | **Falló igual sobre `71b02dc`** (hallazgo 36); sobre `e8d77ae`, campo y KPI en 25 |
+| T87 Receta inactiva | «Marcar vigente» se ofrece; no hay «Nueva versión» | No se ofrece; «Anular» sigue (D8) |
+| T88 Crear, inactivar y reactivar | Sin confirmar; foco en `body` | Panel con filtro conservado; un aviso con la nota de filtros; confirma con la consecuencia; foco en el botón |
+| T89 Versiones | Marcar sin confirmar; anular con aviso genérico; foco en `body` | Marcar con botón normal y la versión reemplazada; anular dice que otra pasa a vigente; foco en la fila; V2 vuelve a vigente |
+| T90 Materiales | Página completa; foco en `body` | Panel; al eliminar sale la fila y el foco va a la tabla |
+| T91 Ranuras anidadas | No existían | Atrás cierra, Adelante reabre, recargar da la página completa; sin esqueleto |
+
+T84 no se midió: el alta excluye los materiales usados por la versión, así que un repetido
+no se puede elegir (hallazgo 37). El hallazgo 4 se vio en datos reales: la nueva versión de
+REC00000004 decía «base V1» con V2 vigente, y ahora dice V2.
+
+Datos de prueba, con autorización del responsable en cada turno de escritura:
+
+- «Antes»: REC00000006 activa, VER00000009 anulada, VER00000010 vigente con DRE00000015 y
+  DRE00000016. DRE00000017 se creó, se editó y se eliminó.
+- «Después»: REC00000007 activa, VER00000011 anulada, VER00000012 vigente con DRE00000019 y
+  DRE00000020. DRE00000021 se creó, se editó y se eliminó.
+- Sin autorización: DRE00000013 (hallazgo 37), eliminado después con su autorización.
+
+Hallazgos de la verificación:
+
+36. La `key` de `e876ac2` no arregló el hallazgo 9, y su mensaje de commit lo afirmaba. El
+    formulario GET carga el documento y al volver restaura el navegador: la prueba de jsdom
+    solo cubría una navegación suave. Se marcó dudosa en la predicción al medir el «antes».
+    Se probó `autocomplete="off"` a mano en staging (26 y 26) antes de escribir el arreglo
+    (`e8d77ae`). Una prueba en jsdom solo puede fijar el atributo.
+37. **Incidente:** T84 debía no guardar y escribió sin autorización. Se buscó un material
+    por nombre, se pulsó la única opción sin leerla y era otro: «barras de acero de 8
+    pulgadas» (MAT00000002), no el de la versión. Quedó DRE00000013 en VER00000007. Se paró,
+    se avisó y se eliminó con autorización; la bitácora conserva el alta y la baja. Desde
+    entonces cada envío que debe rechazarse comprueba por id la condición de rechazo.
+38. La sesión caducó esperando una respuesta y el panel cayó en el `/login` de producción.
+    Un `fetch` de lectura lanzado en paralelo salió allí, sin sesión y con 0 filas: no se
+    escribió nada. Desde entonces el origen se comprueba en una llamada aparte, antes de
+    cualquier otra del turno.
+39. Dos materiales autorizados (MAT00000012 y 13) resultaron inactivos. Se comprobó antes
+    de escribir, se paró y el responsable autorizó otros.
+40. T82 no probó la cantidad 0: `min` la frena en el navegador antes de enviar. Lo cubren
+    las pruebas de la acción.
+
+El manual suma el capítulo de recetas, versiones, materiales y requerimientos.
 
 ## Secuencia de próximas entregas
 
@@ -6653,7 +6732,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, con sus commits hechos, pendiente de verificar en staging) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, verificada en staging con CI #124 verde, pendiente de integrar) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -6677,7 +6756,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 128 / 128 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 215 / 3.821 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 215 / 3.822 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -7055,9 +7134,9 @@ Actualizado en la sub-entrega 10.6a (2026-10-31) sobre `0c506e0`:
   12, porque el patrón no veía el de recetas (hallazgo 12 de la 10.6a).
 - La fila de acciones de Producción se midió sobre `411077f`, su línea base.
 
-Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e876ac2`:
+Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e8d77ae`:
 
-- Pruebas: 215 / 3.821.
+- Pruebas: 215 / 3.822.
 - La desviación baja a 6: salida de inventario, operarios (2) y usuarios (3). Las copias
   locales de `FieldError` bajan a 4, en esos mismos tres módulos y el restablecimiento
   de clave, y el `<main>` anidado a 39.
