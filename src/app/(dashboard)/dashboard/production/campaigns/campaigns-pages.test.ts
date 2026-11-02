@@ -30,6 +30,7 @@ vi.mock("next/navigation", async (importOriginal) =>
 const campaignWithoutDetails = (args: Parameters<typeof generatedRow>[2]) => ({
   ...generatedRow("campania_produccion", "findUnique", args),
   campania_detalle: [],
+  orden_trabajo: [],
 });
 
 // Una campana por estado: cada uno ofrece sus acciones de fila.
@@ -78,6 +79,11 @@ definePageSuite([
     load: () => import("./[id]/page"),
     cases: [
       { name: "detalle", params: { id: "CAM00000001" } },
+      {
+        name: "campana sin detalles no excluye productos",
+        params: { id: "CAM00000002" },
+        data: { "campania_produccion.findUnique": campaignWithoutDetails },
+      },
       {
         name: "finalizada no ofrece agregar producto",
         params: { id: "CAM00000001" },
@@ -133,23 +139,6 @@ definePageSuite([
       },
     ],
   },
-  {
-    route: "/dashboard/production/campaigns/[id]/details/new",
-    load: () => import("./[id]/details/new/page"),
-    cases: [
-      { name: "excluye productos ya agregados", params: { id: "CAM00000001" } },
-      {
-        name: "campana sin detalles",
-        params: { id: "CAM00000002" },
-        data: { "campania_produccion.findUnique": campaignWithoutDetails },
-      },
-      {
-        name: "inexistente",
-        params: { id: "CAM99999999" },
-        data: { "campania_produccion.findUnique": null },
-      },
-    ],
-  },
 ]);
 
 // A4 de la 10.7a: el rango de la lista es el de buildDateRangeFilter, como en los demas
@@ -178,6 +167,38 @@ describe("estado en los formularios de campana", () => {
 
     expect(html).toContain('name="nombre_campania"');
     expect(html).not.toContain('name="estado"');
+  });
+});
+
+// D3 de la 10.7: agregar producto es una ventana del detalle, sin pagina propia.
+describe("agregar producto desde el detalle", () => {
+  async function detail(estado: string) {
+    return characterizePage(
+      () => import("./[id]/page"),
+      {
+        name: "detalle",
+        params: { id: "CAM00000001" },
+        data: { "campania_produccion.findUnique": campaignInState(estado) },
+      },
+      "/dashboard/production/campaigns/CAM00000001",
+    );
+  }
+
+  it("una campana abierta ofrece el boton y consulta los productos que le faltan", async () => {
+    const { calls, html } = await detail("activa");
+    const query = calls.filter(isPrismaCall).find((call) => call.prisma === "producto.findMany");
+
+    expect(html).toContain("Agregar producto");
+    expect(html).not.toContain("/details/new");
+    expect((query?.args as { where: { estado: boolean } }).where.estado).toBe(true);
+    expect((query?.args as { where: { id_producto?: { notIn: string[] } } }).where.id_producto?.notIn).toHaveLength(2);
+  });
+
+  it.each(["finalizada", "anulada"])("una campana %s no ofrece el boton ni consulta productos", async (estado) => {
+    const { calls, html } = await detail(estado);
+
+    expect(html).not.toContain("Agregar producto");
+    expect(calls.filter(isPrismaCall).some((call) => call.prisma === "producto.findMany")).toBe(false);
   });
 });
 

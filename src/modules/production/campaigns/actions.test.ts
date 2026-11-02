@@ -6,6 +6,7 @@ import {
   changeProductionCampaignStatusAction,
   createProductionCampaignAction,
   updateProductionCampaignAction,
+  type CampaignDetailFormState,
   type ProductionCampaignFormState,
 } from "@/modules/production/campaigns/actions";
 import {
@@ -155,6 +156,8 @@ const PRODUCTO = "PRO00000004";
 const initialState: ProductionCampaignFormState = { status: "idle" };
 const create = (formData: FormData) => createProductionCampaignAction(initialState, formData);
 const update = (formData: FormData) => updateProductionCampaignAction(initialState, formData);
+const initialDetailState: CampaignDetailFormState = { status: "idle" };
+const addDetail = (formData: FormData) => addCampaignDetailAction(initialDetailState, formData);
 
 const failWith = (error: Error) => () => {
   throw error;
@@ -243,10 +246,10 @@ defineCases("createProductionCampaignAction", create, [
   },
 ]);
 
-defineCases("addCampaignDetailAction", addCampaignDetailAction, [
+defineCases("addCampaignDetailAction", addDetail, [
   { name: "ADMIN agrega el producto con la cantidad producida en cero", ...addWith() },
   { name: "WORKSHOP_MASTER tambien agrega productos", ...addWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER no puede agregar", ...addWith(), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...addWith(), role: "SELLER" },
   { name: "una campana planificada admite productos", ...addWith({}, campaign("planificada")) },
   { name: "las observaciones vacias se guardan como null", ...addWith({ observaciones: "" }) },
   { name: "las observaciones ausentes cuentan como vacias", ...addWith({ observaciones: null }) },
@@ -360,7 +363,7 @@ describe("las decisiones se toman con la campana bloqueada", () => {
     call.prisma === "producto.findFirst";
 
   const CASES = [
-    { name: "agregar producto", run: addCampaignDetailAction, actionCase: addWith() },
+    { name: "agregar producto", run: addDetail, actionCase: addWith() },
     { name: "editar", run: update, actionCase: updateWith() },
     {
       name: "cambiar el estado",
@@ -376,7 +379,7 @@ describe("las decisiones se toman con la campana bloqueada", () => {
   });
 
   it("el correlativo del producto se reserva despues del bloqueo", async () => {
-    const { calls } = await runCase(addCampaignDetailAction, addWith());
+    const { calls } = await runCase(addDetail, addWith());
     const lock = calls.findIndex((call) => isRowLock(call, "campania_produccion", CAMPANIA));
     const correlative = calls.findIndex((call) => "effect" in call && call.effect === "getNextCorrelativeId");
 
@@ -386,20 +389,31 @@ describe("las decisiones se toman con la campana bloqueada", () => {
 
   it("una carrera por el producto da el mensaje del duplicado", async () => {
     const { result } = await runCase(
-      addCampaignDetailAction,
+      addDetail,
       addWith({}, { "campania_detalle.create": failWith(uniqueViolation()) }),
     );
 
-    expect(result).toBe("error: Ese producto ya esta registrado en la campania.");
+    expect(result).toEqual({
+      estado: expect.objectContaining({
+        status: "error",
+        fieldErrors: { id_producto: ["Ese producto ya está registrado en la campaña."] },
+      }),
+    });
   });
 
   it("cualquier otro fallo al agregar no se disfraza de duplicado", async () => {
     const { result } = await runCase(
-      addCampaignDetailAction,
+      addDetail,
       addWith({}, { "campania_detalle.create": failWith(new Error("conexion perdida")) }),
     );
 
-    expect(result).toBe("error: conexion perdida");
+    expect(result).toEqual({
+      estado: expect.objectContaining({
+        status: "error",
+        error: "No se pudo agregar el producto. Intenta nuevamente.",
+      }),
+    });
+    expect(result).not.toEqual({ estado: expect.objectContaining({ fieldErrors: expect.anything() }) });
   });
 
   it("pedir el estado que ya tiene no escribe ni registra bitacora", async () => {

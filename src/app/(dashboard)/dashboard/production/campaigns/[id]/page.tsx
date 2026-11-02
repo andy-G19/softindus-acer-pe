@@ -17,7 +17,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getProductionCampaignDetail } from "@/modules/production/campaigns/queries";
+import { addCampaignDetailAction } from "@/modules/production/campaigns/actions";
+import { CampaignDetailDialog } from "@/modules/production/campaigns/campaign-detail-dialog";
+import {
+  findCampaignProductOptions,
+  getProductionCampaignDetail,
+} from "@/modules/production/campaigns/queries";
+import { productionNotifications } from "@/modules/production/notifications";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
@@ -50,6 +56,9 @@ export default async function ProductionCampaignDetailPage({
   }
 
   const canAddDetails = !["finalizada", "anulada"].includes(campaign.estado);
+  const availableProducts = canAddDetails
+    ? await findCampaignProductOptions(campaign.campania_detalle.map((detail) => detail.id_producto))
+    : [];
   const totalTarget = campaign.campania_detalle.reduce(
     (total, detail) => total + toNumber(detail.cantidad_objetivo),
     0,
@@ -77,13 +86,13 @@ export default async function ProductionCampaignDetailPage({
         actions={
           <>
             {canAddDetails ? (
-              <Button variant="outline" asChild>
-                <Link
-                  href={`/dashboard/production/campaigns/${campaign.id_campania}/details/new`}
-                >
-                  Agregar producto
-                </Link>
-              </Button>
+              <CampaignDetailDialog
+                action={addCampaignDetailAction}
+                idCampania={campaign.id_campania}
+                nombreCampania={campaign.nombre_campania}
+                products={availableProducts}
+                successNotification={productionNotifications["campaign-detail-created"]}
+              />
             ) : null}
 
             <Button asChild>

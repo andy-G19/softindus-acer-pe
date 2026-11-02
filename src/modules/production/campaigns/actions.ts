@@ -17,7 +17,8 @@ import {
 } from "@/schemas/production/campaign.schema";
 
 const CLOSED_CAMPAIGN_STATES = ["finalizada", "anulada"];
-const DUPLICATED_DETAIL = "Ese producto ya esta registrado en la campania.";
+const DUPLICATED_DETAIL = "Ese producto ya está registrado en la campaña.";
+const INACTIVE_PRODUCT = "El producto seleccionado no existe o está inactivo.";
 const PERMISSION_ERROR = "No tienes permisos para gestionar campañas de producción.";
 const INVALID_DATA = "Revisa los datos de la campaña.";
 const SAVE_ERROR = "No se pudo guardar la campaña. Intenta nuevamente.";
@@ -57,6 +58,40 @@ function campaignError(
 
 function campaignSaved(values: ProductionCampaignFormValues, idCampania: string): ProductionCampaignFormState {
   return { status: "success", data: { id_campania: idCampania }, values, operationId: newOperationId() };
+}
+
+/** Lo que la ventana de agregar producto envio, tal cual, para volver a mostrarlo. */
+export type CampaignDetailFormValues = {
+  id_producto: string;
+  cantidad_objetivo: string;
+  observaciones: string;
+};
+
+export type CampaignDetailFormState = FormActionState<CampaignDetailFormValues, { id_campania_detalle: string }>;
+
+type DetailProblem = { error: string; fieldErrors?: FieldErrors };
+
+const duplicatedProduct: DetailProblem = {
+  error: DUPLICATED_DETAIL,
+  fieldErrors: { id_producto: [DUPLICATED_DETAIL] },
+};
+
+function getCampaignDetailFormValues(formData: FormData): CampaignDetailFormValues {
+  const text = (name: keyof CampaignDetailFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    id_producto: text("id_producto"),
+    cantidad_objetivo: text("cantidad_objetivo"),
+    observaciones: text("observaciones"),
+  };
+}
+
+function detailError(
+  values: CampaignDetailFormValues,
+  error: string,
+  fieldErrors?: FieldErrors,
+): CampaignDetailFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
 }
 
 function parseDate(value: string) {
@@ -138,8 +173,16 @@ export async function createProductionCampaignAction(
   return campaignSaved(values, idCampania);
 }
 
-export async function addCampaignDetailAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+export async function addCampaignDetailAction(
+  _prevState: CampaignDetailFormState,
+  formData: FormData,
+): Promise<CampaignDetailFormState> {
+  const values = getCampaignDetailFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
+
+  if (!session) {
+    return detailError(values, PERMISSION_ERROR);
+  }
 
   const parsed = campaignDetailSchema.safeParse({
     id_campania: formData.get("id_campania"),
@@ -149,13 +192,16 @@ export async function addCampaignDetailAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+    return detailError(values, "Revisa los datos del producto.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
 
+  let outcome: DetailProblem | { idCampaniaDetalle: string };
+
   try {
-    await prisma.$transaction(async (tx) => {
+    // Un rechazo vuelve del callback sin escribir nada y la transaccion termina.
+    outcome = await prisma.$transaction(async (tx): Promise<DetailProblem | { idCampaniaDetalle: string }> => {
       await lockCampaignRow(tx, data.id_campania);
 
       const [campaign, product, duplicatedDetail] = await Promise.all([
@@ -191,19 +237,22 @@ export async function addCampaignDetailAction(formData: FormData) {
       ]);
 
       if (!campaign) {
-        throw new Error("La campania seleccionada no existe.");
+        return { error: "La campaña seleccionada no existe." };
       }
 
       if (CLOSED_CAMPAIGN_STATES.includes(campaign.estado)) {
-        throw new Error("No se pueden agregar productos a una campania finalizada o anulada.");
+        return { error: "No se pueden agregar productos a una campaña finalizada o anulada." };
       }
 
       if (!product) {
-        throw new Error("El producto seleccionado no existe o esta inactivo.");
+        return {
+          error: INACTIVE_PRODUCT,
+          fieldErrors: { id_producto: [INACTIVE_PRODUCT] },
+        };
       }
 
       if (duplicatedDetail) {
-        throw new Error(DUPLICATED_DETAIL);
+        return duplicatedProduct;
       }
 
       const idCampaniaDetalle = await getNextCorrelativeId(tx, {
@@ -230,15 +279,20 @@ export async function addCampaignDetailAction(formData: FormData) {
         detalle: `Producto ${product.nombre_producto} agregado a la campania ${campaign.nombre_campania}.`,
         tx,
       });
+
+      return { idCampaniaDetalle };
     });
   } catch (error) {
     // uq_campania_producto: el bloqueo pone en fila las altas, y esta restriccion
     // sigue siendo la ultima defensa de la regla.
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-      throw new Error(DUPLICATED_DETAIL);
-    }
+    outcome =
+      error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002"
+        ? duplicatedProduct
+        : { error: "No se pudo agregar el producto. Intenta nuevamente." };
+  }
 
-    throw error;
+  if ("error" in outcome) {
+    return detailError(values, outcome.error, outcome.fieldErrors);
   }
 
   revalidatePath("/dashboard");
@@ -246,9 +300,12 @@ export async function addCampaignDetailAction(formData: FormData) {
   revalidatePath("/dashboard/production/campaigns");
   revalidatePath(`/dashboard/production/campaigns/${data.id_campania}`);
 
-  redirect(
-    `/dashboard/production/campaigns/${data.id_campania}?toast=campaign-detail-created`,
-  );
+  return {
+    status: "success",
+    data: { id_campania_detalle: outcome.idCampaniaDetalle },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 export async function updateProductionCampaignAction(

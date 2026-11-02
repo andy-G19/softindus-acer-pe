@@ -139,31 +139,10 @@ export async function getProductionCampaignForEdit(idCampania: string) {
   });
 }
 
-// Devuelve null si la campana no existe; los productos excluyen los que la
-// campana ya tiene.
-export async function getNewCampaignDetailData(idCampania: string) {
-  const campaign = await prisma.campania_produccion.findUnique({
-    where: {
-      id_campania: idCampania,
-    },
-    include: {
-      campania_detalle: {
-        select: {
-          id_producto: true,
-        },
-      },
-    },
-  });
-
-  if (!campaign) {
-    return null;
-  }
-
-  const existingProductIds = campaign.campania_detalle.map(
-    (detail) => detail.id_producto,
-  );
-
-  const products = await prisma.producto.findMany({
+// Productos activos que la campana todavia no tiene, para la ventana de agregar
+// producto de su detalle.
+export function findCampaignProductOptions(existingProductIds: string[]) {
+  return prisma.producto.findMany({
     where: {
       estado: true,
       id_producto:
@@ -188,6 +167,4 @@ export async function getNewCampaignDetailData(idCampania: string) {
       unidad_medida: true,
     },
   });
-
-  return { campaign, products };
 }

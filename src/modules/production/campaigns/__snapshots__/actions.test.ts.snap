@@ -3,7 +3,7 @@
 exports[`addCampaignDetailAction > 0.004 se rechaza porque se guardaria como cero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -12,12 +12,30 @@ exports[`addCampaignDetailAction > 0.004 se rechaza porque se guardaria como cer
 ]
 `;
 
-exports[`addCampaignDetailAction > 0.004 se rechaza porque se guardaria como cero > resultado 1`] = `"error: La cantidad objetivo debe ser mayor a cero."`;
+exports[`addCampaignDetailAction > 0.004 se rechaza porque se guardaria como cero > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del producto.",
+    "fieldErrors": {
+      "cantidad_objetivo": [
+        "La cantidad objetivo debe ser mayor a cero.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_objetivo": "0.004",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > ADMIN agrega el producto con la cantidad producida en cero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -128,12 +146,27 @@ exports[`addCampaignDetailAction > ADMIN agrega el producto con la cantidad prod
 ]
 `;
 
-exports[`addCampaignDetailAction > ADMIN agrega el producto con la cantidad producida en cero > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+exports[`addCampaignDetailAction > ADMIN agrega el producto con la cantidad producida en cero > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania_detalle": "CPD00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
-exports[`addCampaignDetailAction > SELLER no puede agregar > llamadas 1`] = `
+exports[`addCampaignDetailAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -142,12 +175,26 @@ exports[`addCampaignDetailAction > SELLER no puede agregar > llamadas 1`] = `
 ]
 `;
 
-exports[`addCampaignDetailAction > SELLER no puede agregar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`addCampaignDetailAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar campañas de producción.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > WORKSHOP_MASTER tambien agrega productos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -258,12 +305,27 @@ exports[`addCampaignDetailAction > WORKSHOP_MASTER tambien agrega productos > ll
 ]
 `;
 
-exports[`addCampaignDetailAction > WORKSHOP_MASTER tambien agrega productos > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+exports[`addCampaignDetailAction > WORKSHOP_MASTER tambien agrega productos > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania_detalle": "CPD00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > el producto no existe o esta inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -321,18 +383,36 @@ exports[`addCampaignDetailAction > el producto no existe o esta inactivo > llama
     "prisma": "campania_detalle.findFirst",
   },
   {
-    "args": "El producto seleccionado no existe o esta inactivo.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`addCampaignDetailAction > el producto no existe o esta inactivo > resultado 1`] = `"error: El producto seleccionado no existe o esta inactivo."`;
+exports[`addCampaignDetailAction > el producto no existe o esta inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "El producto seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_producto": [
+        "El producto seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > el producto ya esta en la campana > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -390,18 +470,36 @@ exports[`addCampaignDetailAction > el producto ya esta en la campana > llamadas 
     "prisma": "campania_detalle.findFirst",
   },
   {
-    "args": "Ese producto ya esta registrado en la campania.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`addCampaignDetailAction > el producto ya esta en la campana > resultado 1`] = `"error: Ese producto ya esta registrado en la campania."`;
+exports[`addCampaignDetailAction > el producto ya esta en la campana > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ese producto ya está registrado en la campaña.",
+    "fieldErrors": {
+      "id_producto": [
+        "Ese producto ya está registrado en la campaña.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > la campana no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -459,18 +557,32 @@ exports[`addCampaignDetailAction > la campana no existe > llamadas 1`] = `
     "prisma": "campania_detalle.findFirst",
   },
   {
-    "args": "La campania seleccionada no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`addCampaignDetailAction > la campana no existe > resultado 1`] = `"error: La campania seleccionada no existe."`;
+exports[`addCampaignDetailAction > la campana no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La campaña seleccionada no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > la cantidad cero se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -479,12 +591,30 @@ exports[`addCampaignDetailAction > la cantidad cero se rechaza > llamadas 1`] = 
 ]
 `;
 
-exports[`addCampaignDetailAction > la cantidad cero se rechaza > resultado 1`] = `"error: La cantidad objetivo debe ser mayor a cero."`;
+exports[`addCampaignDetailAction > la cantidad cero se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del producto.",
+    "fieldErrors": {
+      "cantidad_objetivo": [
+        "La cantidad objetivo debe ser mayor a cero.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_objetivo": "0",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > la cantidad no numerica se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -493,12 +623,30 @@ exports[`addCampaignDetailAction > la cantidad no numerica se rechaza > llamadas
 ]
 `;
 
-exports[`addCampaignDetailAction > la cantidad no numerica se rechaza > resultado 1`] = `"error: La cantidad objetivo debe ser un número."`;
+exports[`addCampaignDetailAction > la cantidad no numerica se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del producto.",
+    "fieldErrors": {
+      "cantidad_objetivo": [
+        "La cantidad objetivo debe ser un número.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_objetivo": "abc",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > la cantidad se redondea a dos decimales > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -609,12 +757,27 @@ exports[`addCampaignDetailAction > la cantidad se redondea a dos decimales > lla
 ]
 `;
 
-exports[`addCampaignDetailAction > la cantidad se redondea a dos decimales > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+exports[`addCampaignDetailAction > la cantidad se redondea a dos decimales > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania_detalle": "CPD00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad_objetivo": "10.126",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > las observaciones ausentes cuentan como vacias > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -725,12 +888,27 @@ exports[`addCampaignDetailAction > las observaciones ausentes cuentan como vacia
 ]
 `;
 
-exports[`addCampaignDetailAction > las observaciones ausentes cuentan como vacias > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+exports[`addCampaignDetailAction > las observaciones ausentes cuentan como vacias > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania_detalle": "CPD00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "PRO00000004",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > las observaciones vacias se guardan como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -841,12 +1019,27 @@ exports[`addCampaignDetailAction > las observaciones vacias se guardan como null
 ]
 `;
 
-exports[`addCampaignDetailAction > las observaciones vacias se guardan como null > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+exports[`addCampaignDetailAction > las observaciones vacias se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania_detalle": "CPD00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "PRO00000004",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > sin producto se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -855,12 +1048,30 @@ exports[`addCampaignDetailAction > sin producto se rechaza > llamadas 1`] = `
 ]
 `;
 
-exports[`addCampaignDetailAction > sin producto se rechaza > resultado 1`] = `"error: El producto es obligatorio."`;
+exports[`addCampaignDetailAction > sin producto se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del producto.",
+    "fieldErrors": {
+      "id_producto": [
+        "El producto es obligatorio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -869,12 +1080,36 @@ exports[`addCampaignDetailAction > un POST sin campos se rechaza sin tocar Prism
 ]
 `;
 
-exports[`addCampaignDetailAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: La campaña es obligatoria."`;
+exports[`addCampaignDetailAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del producto.",
+    "fieldErrors": {
+      "cantidad_objetivo": [
+        "La cantidad objetivo debe ser mayor a cero.",
+      ],
+      "id_campania": [
+        "La campaña es obligatoria.",
+      ],
+      "id_producto": [
+        "El producto es obligatorio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_objetivo": "",
+      "id_producto": "",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > una campana anulada no admite productos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -932,18 +1167,32 @@ exports[`addCampaignDetailAction > una campana anulada no admite productos > lla
     "prisma": "campania_detalle.findFirst",
   },
   {
-    "args": "No se pueden agregar productos a una campania finalizada o anulada.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`addCampaignDetailAction > una campana anulada no admite productos > resultado 1`] = `"error: No se pueden agregar productos a una campania finalizada o anulada."`;
+exports[`addCampaignDetailAction > una campana anulada no admite productos > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pueden agregar productos a una campaña finalizada o anulada.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > una campana finalizada no admite productos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1001,18 +1250,32 @@ exports[`addCampaignDetailAction > una campana finalizada no admite productos > 
     "prisma": "campania_detalle.findFirst",
   },
   {
-    "args": "No se pueden agregar productos a una campania finalizada o anulada.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`addCampaignDetailAction > una campana finalizada no admite productos > resultado 1`] = `"error: No se pueden agregar productos a una campania finalizada o anulada."`;
+exports[`addCampaignDetailAction > una campana finalizada no admite productos > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pueden agregar productos a una campaña finalizada o anulada.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > una campana planificada admite productos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1123,12 +1386,27 @@ exports[`addCampaignDetailAction > una campana planificada admite productos > ll
 ]
 `;
 
-exports[`addCampaignDetailAction > una campana planificada admite productos > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+exports[`addCampaignDetailAction > una campana planificada admite productos > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania_detalle": "CPD00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`addCampaignDetailAction > una carrera por el producto (P2002) responde como el duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1212,7 +1490,25 @@ exports[`addCampaignDetailAction > una carrera por el producto (P2002) responde 
 ]
 `;
 
-exports[`addCampaignDetailAction > una carrera por el producto (P2002) responde como el duplicado > resultado 1`] = `"error: Ese producto ya esta registrado en la campania."`;
+exports[`addCampaignDetailAction > una carrera por el producto (P2002) responde como el duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ese producto ya está registrado en la campaña.",
+    "fieldErrors": {
+      "id_producto": [
+        "Ese producto ya está registrado en la campaña.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_objetivo": "100",
+      "id_producto": "PRO00000004",
+      "observaciones": "Primera semana",
+    },
+  },
+}
+`;
 
 exports[`changeProductionCampaignStatusAction > SELLER no puede cambiar el estado > llamadas 1`] = `
 [

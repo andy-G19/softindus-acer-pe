@@ -68,10 +68,6 @@ const PAGES: [RegExp, PageLoader][] = [
   [/^\/dashboard\/production\/campaigns\/new$/, () => import("./campaigns/new/page")],
   [/^\/dashboard\/production\/campaigns\/(?<id>[^/]+)$/, () => import("./campaigns/[id]/page")],
   [/^\/dashboard\/production\/campaigns\/(?<id>[^/]+)\/edit$/, () => import("./campaigns/[id]/edit/page")],
-  [
-    /^\/dashboard\/production\/campaigns\/(?<id>[^/]+)\/details\/new$/,
-    () => import("./campaigns/[id]/details/new/page"),
-  ],
   [/^\/dashboard\/production\/bottlenecks$/, () => import("./bottlenecks/page")],
   [/^\/dashboard\/production\/work-orders$/, () => import("./work-orders/page")],
   [/^\/dashboard\/production\/work-orders\/new$/, () => import("./work-orders/new/page")],

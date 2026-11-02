@@ -75,6 +75,7 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/production/campaigns/@panel/(.)[id]/edit/page.tsx [successNotification] -> campaign-updated",
   "src/app/(dashboard)/dashboard/production/campaigns/@panel/(.)new/page.tsx [successNotification] -> campaign-created",
   "src/app/(dashboard)/dashboard/production/campaigns/[id]/edit/page.tsx [successNotification] -> campaign-updated",
+  "src/app/(dashboard)/dashboard/production/campaigns/[id]/page.tsx [successNotification] -> campaign-detail-created",
   "src/app/(dashboard)/dashboard/production/campaigns/new/page.tsx [successNotification] -> campaign-created",
   "src/app/(dashboard)/dashboard/production/recipes/@panel/(.)new/page.tsx [successNotification] -> recipe-created",
   "src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/@panel/(.)[detailId]/edit/page.tsx [successNotification] -> recipe-detail-updated",
