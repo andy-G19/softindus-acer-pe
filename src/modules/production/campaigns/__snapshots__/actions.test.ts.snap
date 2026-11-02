@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`addCampaignDetailAction > 0.004 pasa y se guarda como cero > llamadas 1`] = `
+exports[`addCampaignDetailAction > 0.004 se rechaza porque se guardaria como cero > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -9,112 +9,10 @@ exports[`addCampaignDetailAction > 0.004 pasa y se guarda como cero > llamadas 1
       "WORKSHOP_MASTER",
     ],
   },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
-      "values": [
-        "CAM00000003",
-      ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_campania": true,
-        "nombre_campania": true,
-      },
-      "where": {
-        "id_campania": "CAM00000003",
-      },
-    },
-    "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": {
-      "select": {
-        "id_producto": true,
-        "nombre_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000004",
-      },
-    },
-    "prisma": "producto.findFirst",
-  },
-  {
-    "args": {
-      "select": {
-        "id_campania_detalle": true,
-      },
-      "where": {
-        "id_campania": "CAM00000003",
-        "id_producto": "PRO00000004",
-      },
-    },
-    "prisma": "campania_detalle.findFirst",
-  },
-  {
-    "args": {
-      "codigoEntidad": "campania_detalle",
-      "prefijo": "CPD",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "cantidad_objetivo": 0,
-        "cantidad_producida": 0,
-        "id_campania": "CAM00000003",
-        "id_campania_detalle": "CPD00000012",
-        "id_producto": "PRO00000004",
-        "observaciones": "Primera semana",
-      },
-    },
-    "prisma": "campania_detalle.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Producto Lampa agregado a la campania Campana escolar.",
-      "enTransaccion": true,
-      "entidad_afectada": "campania_detalle",
-      "id_registro_afectado": "CPD00000012",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/campaigns",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/campaigns/CAM00000003",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`addCampaignDetailAction > 0.004 pasa y se guarda como cero > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+exports[`addCampaignDetailAction > 0.004 se rechaza porque se guardaria como cero > resultado 1`] = `"error: La cantidad objetivo debe ser mayor a cero."`;
 
 exports[`addCampaignDetailAction > ADMIN agrega el producto con la cantidad producida en cero > llamadas 1`] = `
 [
@@ -595,7 +493,7 @@ exports[`addCampaignDetailAction > la cantidad no numerica se rechaza > llamadas
 ]
 `;
 
-exports[`addCampaignDetailAction > la cantidad no numerica se rechaza > resultado 1`] = `"error: Invalid input: expected number, received NaN"`;
+exports[`addCampaignDetailAction > la cantidad no numerica se rechaza > resultado 1`] = `"error: La cantidad objetivo debe ser un número."`;
 
 exports[`addCampaignDetailAction > la cantidad se redondea a dos decimales > llamadas 1`] = `
 [
@@ -971,7 +869,7 @@ exports[`addCampaignDetailAction > un POST sin campos se rechaza sin tocar Prism
 ]
 `;
 
-exports[`addCampaignDetailAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null"`;
+exports[`addCampaignDetailAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: La campaña es obligatoria."`;
 
 exports[`addCampaignDetailAction > una campana anulada no admite productos > llamadas 1`] = `
 [
@@ -2385,7 +2283,7 @@ exports[`createProductionCampaignAction > WORKSHOP_MASTER tambien crea campanas 
 
 exports[`createProductionCampaignAction > WORKSHOP_MASTER tambien crea campanas > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
 
-exports[`createProductionCampaignAction > el 30 de febrero pasa como 2 de marzo > llamadas 1`] = `
+exports[`createProductionCampaignAction > el 30 de febrero se rechaza > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -2394,66 +2292,10 @@ exports[`createProductionCampaignAction > el 30 de febrero pasa como 2 de marzo 
       "WORKSHOP_MASTER",
     ],
   },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "campania_produccion",
-      "prefijo": "CAM",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "planificada",
-        "fecha_fin": null,
-        "fecha_inicio": 2026-03-02T00:00:00.000Z,
-        "id_campania": "CAM00000012",
-        "id_usuario_registro": "USU00000001",
-        "nombre_campania": "Campana escolar",
-        "objetivo_general": "Reponer stock",
-      },
-    },
-    "prisma": "campania_produccion.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Campania de produccion creada: Campana escolar.",
-      "enTransaccion": true,
-      "entidad_afectada": "campania_produccion",
-      "id_registro_afectado": "CAM00000012",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/campaigns",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/work-orders/new",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createProductionCampaignAction > el 30 de febrero pasa como 2 de marzo > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+exports[`createProductionCampaignAction > el 30 de febrero se rechaza > resultado 1`] = `"error: La fecha de inicio no es válida."`;
 
 exports[`createProductionCampaignAction > el fin no puede ser anterior al inicio > llamadas 1`] = `
 [
@@ -2551,7 +2393,7 @@ exports[`createProductionCampaignAction > el nombre es obligatorio > llamadas 1`
 ]
 `;
 
-exports[`createProductionCampaignAction > el nombre es obligatorio > resultado 1`] = `"error: El nombre de la campania es obligatorio."`;
+exports[`createProductionCampaignAction > el nombre es obligatorio > resultado 1`] = `"error: El nombre de la campaña es obligatorio."`;
 
 exports[`createProductionCampaignAction > el nombre no supera 100 caracteres > llamadas 1`] = `
 [
@@ -2565,7 +2407,7 @@ exports[`createProductionCampaignAction > el nombre no supera 100 caracteres > l
 ]
 `;
 
-exports[`createProductionCampaignAction > el nombre no supera 100 caracteres > resultado 1`] = `"error: El nombre de la campania no debe superar 100 caracteres."`;
+exports[`createProductionCampaignAction > el nombre no supera 100 caracteres > resultado 1`] = `"error: El nombre de la campaña no debe superar 100 caracteres."`;
 
 exports[`createProductionCampaignAction > fin y objetivo ausentes cuentan como vacios > llamadas 1`] = `
 [
@@ -2873,7 +2715,7 @@ exports[`createProductionCampaignAction > un POST sin campos se rechaza sin toca
 ]
 `;
 
-exports[`createProductionCampaignAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null"`;
+exports[`createProductionCampaignAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: El nombre de la campaña es obligatorio."`;
 
 exports[`createProductionCampaignAction > un estado desconocido se rechaza > llamadas 1`] = `
 [
@@ -2887,7 +2729,7 @@ exports[`createProductionCampaignAction > un estado desconocido se rechaza > lla
 ]
 `;
 
-exports[`createProductionCampaignAction > un estado desconocido se rechaza > resultado 1`] = `"error: Invalid option: expected one of "planificada"|"activa"|"finalizada"|"anulada""`;
+exports[`createProductionCampaignAction > un estado desconocido se rechaza > resultado 1`] = `"error: Selecciona un estado válido."`;
 
 exports[`createProductionCampaignAction > una fecha de fin imposible se rechaza > llamadas 1`] = `
 [
@@ -2901,7 +2743,7 @@ exports[`createProductionCampaignAction > una fecha de fin imposible se rechaza 
 ]
 `;
 
-exports[`createProductionCampaignAction > una fecha de fin imposible se rechaza > resultado 1`] = `"error: La fecha de fin no es valida."`;
+exports[`createProductionCampaignAction > una fecha de fin imposible se rechaza > resultado 1`] = `"error: La fecha de fin no es válida."`;
 
 exports[`createProductionCampaignAction > una fecha de inicio imposible se rechaza > llamadas 1`] = `
 [
@@ -2915,7 +2757,7 @@ exports[`createProductionCampaignAction > una fecha de inicio imposible se recha
 ]
 `;
 
-exports[`createProductionCampaignAction > una fecha de inicio imposible se rechaza > resultado 1`] = `"error: La fecha de inicio no es valida."`;
+exports[`createProductionCampaignAction > una fecha de inicio imposible se rechaza > resultado 1`] = `"error: La fecha de inicio no es válida."`;
 
 exports[`updateProductionCampaignAction > ADMIN actualiza la campana > llamadas 1`] = `
 [
@@ -3113,7 +2955,7 @@ exports[`updateProductionCampaignAction > datos invalidos se rechazan sin tocar 
 ]
 `;
 
-exports[`updateProductionCampaignAction > datos invalidos se rechazan sin tocar Prisma > resultado 1`] = `"error: El nombre de la campania es obligatorio."`;
+exports[`updateProductionCampaignAction > datos invalidos se rechazan sin tocar Prisma > resultado 1`] = `"error: El nombre de la campaña es obligatorio."`;
 
 exports[`updateProductionCampaignAction > editar anula sin fijar la fecha de fin y la bitacora dice actualizar > llamadas 1`] = `
 [
