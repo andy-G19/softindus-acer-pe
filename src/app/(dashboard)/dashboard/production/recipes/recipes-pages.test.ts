@@ -1,15 +1,24 @@
-import { vi } from "vitest";
-
-import { describe, expect, it } from "vitest";
+import { createElement, type ReactNode } from "react";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   characterizePage,
   definePageSuite,
+  expectAuthorizesBeforePrisma,
   generatedRow,
+  preloadPages,
+  runWithRejectedAuth,
   type DataOverride,
 } from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
+// RouteSheet pinta su contenido en un portal, que no existe en el render de
+// servidor: el HTML de un panel sale vacio. El doble lo deja en linea para que la
+// prueba vea el titulo y el formulario del panel.
+vi.mock("@/components/navigation/route-sheet", () => ({
+  RouteSheet: ({ title, description, children }: { title: string; description?: string; children: ReactNode }) =>
+    createElement("section", null, createElement("h2", null, title), createElement("p", null, description), children),
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock(),
 );
@@ -304,5 +313,71 @@ describe("el stock disponible de los requerimientos", () => {
 
     expect(html).toContain("Suficiente");
     expect(html).not.toContain("Insuficiente");
+  });
+});
+
+// B4: el alta de receta en panel lateral, interceptada desde el listado. Mismos
+// permisos, misma consulta y mismo formulario que la pagina completa; la URL
+// directa o la recarga no pasan por aqui.
+const LIST_ROUTE = "/dashboard/production/recipes";
+const loadNew = () => import("./new/page");
+const loadNewPanel = () => import("./@panel/(.)new/page");
+
+preloadPages(loadNewPanel);
+
+describe("panel lateral de recetas", () => {
+  it("el alta en panel autoriza y consulta igual que la pagina y muestra el formulario", async () => {
+    const panel = await characterizePage(loadNewPanel, { name: "panel nuevo" }, `${LIST_ROUTE}/new`);
+    const page = await characterizePage(loadNew, { name: "nuevo" }, `${LIST_ROUTE}/new`);
+
+    expectAuthorizesBeforePrisma(panel.calls);
+    expect(panel.calls).toEqual(page.calls);
+    expect(panel.html).toContain("Nueva receta técnica");
+    expect(panel.html).toContain("Nombre de la receta");
+    expect(panel.html).toMatchSnapshot();
+  });
+
+  it("un acceso rechazado al panel no consulta Prisma", async () => {
+    const calls = await runWithRejectedAuth(loadNewPanel, { name: "rechazo" }, LIST_ROUTE);
+
+    expect(calls).toEqual([{ authz: "requireRole", roles: ["ADMIN", "WORKSHOP_MASTER"] }]);
+  });
+
+  it("fuera del alta interceptada, la ranura del panel no muestra nada", async () => {
+    const { default: PanelDefault } = await import("./@panel/default");
+    const { default: PanelOnList } = await import("./@panel/page");
+
+    expect(PanelDefault()).toBeNull();
+    expect(PanelOnList()).toBeNull();
+  });
+});
+
+describe("la lista de recetas", () => {
+  it("Nueva receta conserva los filtros en el returnTo", async () => {
+    const { html } = await characterizePage(() => import("./page"), {
+      name: "con filtros",
+      searchParams: { q: "reja", status: "activa" },
+    });
+
+    expect(html).toContain(`${LIST_ROUTE}/new?returnTo=`);
+    expect(html).toContain("q%3Dreja");
+  });
+
+  it.each([
+    ["la lista", () => import("./page")],
+    ["la pagina de alta", () => import("./new/page")],
+  ])("%s no abre otro main dentro del shell", async (_name, load) => {
+    const { html } = await characterizePage(load, { name: "sin main" });
+
+    expect(html).not.toContain("<main");
+  });
+
+  it("la pagina de alta valida el returnTo", async () => {
+    const { html } = await characterizePage(() => import("./new/page"), {
+      name: "returnTo ajeno",
+      searchParams: { returnTo: "https://evil.example" },
+    });
+
+    expect(html).not.toContain("evil.example");
   });
 });

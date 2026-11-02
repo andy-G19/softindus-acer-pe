@@ -63,7 +63,7 @@ exports[`/dashboard/production/recipes > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/production/recipes > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -92,11 +92,11 @@ exports[`/dashboard/production/recipes > sin filtros > resultado 1`] = `
 <div>
 <button type="button" aria-label="Volver a producción">
 <svg/>Volver a producción</button>
-<a data-variant="default" href="/dashboard/production/recipes/new">Nueva receta</a>
+<a data-variant="default" href="/dashboard/production/recipes/new?returnTo=%2Fdashboard%2Fproduction%2Frecipes">Nueva receta</a>
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de recetas" action="/dashboard/production/recipes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar receta, código o producto..." name="q" value=""/>
@@ -119,8 +119,6 @@ exports[`/dashboard/production/recipes > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/production/recipes">Limpiar filtros</a>
 </div>
 </form>
@@ -223,11 +221,7 @@ exports[`/dashboard/production/recipes > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/recipes/id_receta-1/versions">Ver historial</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-1"/>
-<input type="hidden" name="estado" value="estado-1"/>
-<button data-variant="link" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -255,19 +249,14 @@ exports[`/dashboard/production/recipes > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/recipes/id_receta-2/versions">Ver historial</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-2"/>
-<input type="hidden" name="estado" value="estado-2"/>
-<button data-variant="link" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -335,7 +324,7 @@ exports[`/dashboard/production/recipes > sin recetas > llamadas 1`] = `
 
 exports[`/dashboard/production/recipes > sin recetas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -364,11 +353,11 @@ exports[`/dashboard/production/recipes > sin recetas > resultado 1`] = `
 <div>
 <button type="button" aria-label="Volver a producción">
 <svg/>Volver a producción</button>
-<a data-variant="default" href="/dashboard/production/recipes/new">Nueva receta</a>
+<a data-variant="default" href="/dashboard/production/recipes/new?returnTo=%2Fdashboard%2Fproduction%2Frecipes">Nueva receta</a>
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de recetas" action="/dashboard/production/recipes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar receta, código o producto..." name="q" value=""/>
@@ -391,8 +380,6 @@ exports[`/dashboard/production/recipes > sin recetas > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/production/recipes">Limpiar filtros</a>
 </div>
 </form>
@@ -482,7 +469,7 @@ exports[`/dashboard/production/recipes > sin recetas > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -583,7 +570,7 @@ exports[`/dashboard/production/recipes > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/production/recipes > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -612,11 +599,11 @@ exports[`/dashboard/production/recipes > todos los filtros > resultado 1`] = `
 <div>
 <button type="button" aria-label="Volver a producción">
 <svg/>Volver a producción</button>
-<a data-variant="default" href="/dashboard/production/recipes/new">Nueva receta</a>
+<a data-variant="default" href="/dashboard/production/recipes/new?returnTo=%2Fdashboard%2Fproduction%2Frecipes%3Fq%3Dreja%26product%3DPRO00000001%26status%3Dactiva">Nueva receta</a>
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de recetas" action="/dashboard/production/recipes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar receta, código o producto..." name="q" value="reja"/>
@@ -639,8 +626,6 @@ exports[`/dashboard/production/recipes > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/production/recipes">Limpiar filtros</a>
 </div>
 </form>
@@ -743,11 +728,7 @@ exports[`/dashboard/production/recipes > todos los filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/recipes/id_receta-1/versions">Ver historial</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-1"/>
-<input type="hidden" name="estado" value="estado-1"/>
-<button data-variant="link" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -775,19 +756,14 @@ exports[`/dashboard/production/recipes > todos los filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/recipes/id_receta-2/versions">Ver historial</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-2"/>
-<input type="hidden" name="estado" value="estado-2"/>
-<button data-variant="link" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -6077,7 +6053,7 @@ exports[`/dashboard/production/recipes/new > formulario > llamadas 1`] = `
 
 exports[`/dashboard/production/recipes/new > formulario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -6116,32 +6092,33 @@ exports[`/dashboard/production/recipes/new > formulario > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_producto-_R_17_">Producto *</label>
+<label for="id_producto">Producto *</label>
 <input type="hidden" name="id_producto" value=""/>
 <div>
-<input id="id_producto-_R_17_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-_R_17_-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value=""/>
+<input id="id_producto" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value=""/>
 </div>
 </div>
 <p>Puedes tener más de una receta por producto siempre que el nombre de la receta sea diferente.</p>
 </div>
 <div>
-<label>Nombre de la receta *</label>
-<input required="" maxLength="100" placeholder="Ej. Receta técnica estándar para lampa" name="nombre_receta"/>
+<label for="nombre_receta">Nombre de la receta<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_receta" required="" maxLength="100" placeholder="Ej. Receta técnica estándar para lampa" name="nombre_receta" value=""/>
 </div>
 <div>
-<label>Descripción técnica</label>
-<textarea name="descripcion" rows="5" maxLength="700" placeholder="Ej. Receta base para fabricar lampas metálicas considerando materiales principales, consumibles y procesos estándar.">
+<label for="descripcion">Descripción técnica</label>
+<textarea id="descripcion" name="descripcion" rows="5" maxLength="700" placeholder="Ej. Receta base para fabricar lampas metálicas considerando materiales principales, consumibles y procesos estándar.">
 </textarea>
 </div>
 <div role="alert">
 <div>En esta pantalla solo registramos la cabecera de la receta técnica. Luego agregarás la versión inicial y registrarás los materiales, cantidades, unidad de medida, tipo de consumo y merma estimada.</div>
 </div>
 <div>
-<a data-variant="link" href="/dashboard/production/recipes">Cancelar</a>
 <button data-variant="default" type="submit">Guardar receta</button>
+<a data-variant="outline" href="/dashboard/production/recipes">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -6186,7 +6163,7 @@ exports[`/dashboard/production/recipes/new > sin productos activos > llamadas 1`
 
 exports[`/dashboard/production/recipes/new > sin productos activos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -6222,39 +6199,77 @@ exports[`/dashboard/production/recipes/new > sin productos activos > resultado 1
 </div>
 </div>
 </section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div role="alert">
 <div>No hay productos activos registrados. Primero registra productos en el módulo comercial para poder crear recetas técnicas.</div>
 </div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_producto-_R_17_">Producto *</label>
+<label for="id_producto">Producto *</label>
 <input type="hidden" name="id_producto" value=""/>
 <div>
-<input id="id_producto-_R_17_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-_R_17_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar producto..." value=""/>
+<input id="id_producto" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar producto..." value=""/>
 </div>
 </div>
 <p>Puedes tener más de una receta por producto siempre que el nombre de la receta sea diferente.</p>
 </div>
 <div>
-<label>Nombre de la receta *</label>
-<input required="" maxLength="100" placeholder="Ej. Receta técnica estándar para lampa" name="nombre_receta"/>
+<label for="nombre_receta">Nombre de la receta<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_receta" required="" maxLength="100" placeholder="Ej. Receta técnica estándar para lampa" name="nombre_receta" value=""/>
 </div>
 <div>
-<label>Descripción técnica</label>
-<textarea name="descripcion" rows="5" maxLength="700" placeholder="Ej. Receta base para fabricar lampas metálicas considerando materiales principales, consumibles y procesos estándar.">
+<label for="descripcion">Descripción técnica</label>
+<textarea id="descripcion" name="descripcion" rows="5" maxLength="700" placeholder="Ej. Receta base para fabricar lampas metálicas considerando materiales principales, consumibles y procesos estándar.">
 </textarea>
 </div>
 <div role="alert">
 <div>En esta pantalla solo registramos la cabecera de la receta técnica. Luego agregarás la versión inicial y registrarás los materiales, cantidades, unidad de medida, tipo de consumo y merma estimada.</div>
 </div>
 <div>
-<a data-variant="link" href="/dashboard/production/recipes">Cancelar</a>
 <button data-variant="default" type="submit" disabled="">Guardar receta</button>
+<a data-variant="outline" href="/dashboard/production/recipes">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
+`;
+
+exports[`panel lateral de recetas > el alta en panel autoriza y consulta igual que la pagina y muestra el formulario 1`] = `
+"<section>
+<h2>Nueva receta técnica</h2>
+<p>Registra la receta técnica base de un producto. Luego agregaremos versiones y materiales requeridos.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_producto">Producto *</label>
+<input type="hidden" name="id_producto" value=""/>
+<div>
+<input id="id_producto" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value=""/>
+</div>
+</div>
+<p>Puedes tener más de una receta por producto siempre que el nombre de la receta sea diferente.</p>
+</div>
+<div>
+<label for="nombre_receta">Nombre de la receta<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_receta" required="" maxLength="100" placeholder="Ej. Receta técnica estándar para lampa" name="nombre_receta" value=""/>
+</div>
+<div>
+<label for="descripcion">Descripción técnica</label>
+<textarea id="descripcion" name="descripcion" rows="5" maxLength="700" placeholder="Ej. Receta base para fabricar lampas metálicas considerando materiales principales, consumibles y procesos estándar.">
+</textarea>
+</div>
+<div role="alert">
+<div>En esta pantalla solo registramos la cabecera de la receta técnica. Luego agregarás la versión inicial y registrarás los materiales, cantidades, unidad de medida, tipo de consumo y merma estimada.</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar receta</button>
+<a data-variant="outline" href="/dashboard/production/recipes">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
 `;

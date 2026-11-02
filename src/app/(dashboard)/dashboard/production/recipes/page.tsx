@@ -1,13 +1,14 @@
 import { CheckCircle2, FlaskConical, XCircle } from "lucide-react";
 import Link from "next/link";
 import { requireRole } from "@/lib/authz";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -18,9 +19,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDate } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
+import { productionNotifications } from "@/modules/production/notifications";
 import { toggleTechnicalRecipeStatusAction } from "@/modules/production/recipes/actions";
 import { getTechnicalRecipeListData } from "@/modules/production/recipes/queries";
+import { RecipeStatusButton } from "@/modules/production/recipes/recipe-status-button";
 
 type RecipesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -46,6 +54,7 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
   const q = getSearchParam(params, "q");
   const product = getSearchParam(params, "product");
   const status = getSearchParam(params, "status");
+  const returnTo = createReturnToHref(navigationHrefs.recipes, params);
   const { recipes, products } = await getTechnicalRecipeListData({
     q,
     product,
@@ -60,7 +69,7 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     recipes.length - recipesWithCurrentVersion.length;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Recetas técnicas"
         description="Administra recetas por producto, versión vigente e historial de materiales requeridos para producción."
@@ -72,55 +81,45 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/production/recipes/new">Nueva receta</Link>
+            <Link href={withReturnTo(`${navigationHrefs.recipes}/new`, returnTo)}>Nueva receta</Link>
           </Button>
         }
       />
 
-      <form className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-[1.5fr_1fr_1fr_auto_auto]">
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input
-            id="q"
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar receta, código o producto..."
-          />
-        </div>
+      <FilterBar
+        action={navigationHrefs.recipes}
+        label="Filtros de recetas"
+        clearHref={navigationHrefs.recipes}
+      >
+        <Field id="q" label="Buscar">
+          {(control) => (
+            <Input {...control} name="q" defaultValue={q} placeholder="Buscar receta, código o producto..." />
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="product">Producto</Label>
-          <NativeSelect id="product" name="product" defaultValue={product}>
-            <option value="">Todos los productos</option>
-            {products.map((item) => (
-              <option key={item.id_producto} value={item.id_producto}>
-                {item.nombre_producto}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="product" label="Producto">
+          {(control) => (
+            <NativeSelect {...control} name="product" defaultValue={product}>
+              <option value="">Todos los productos</option>
+              {products.map((item) => (
+                <option key={item.id_producto} value={item.id_producto}>
+                  {item.nombre_producto}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="activa">Activa</option>
-            <option value="inactiva">Inactiva</option>
-          </NativeSelect>
-        </div>
-
-        <div className="flex items-end">
-          <Button type="submit" className="w-full">
-            Filtrar
-          </Button>
-        </div>
-
-        <div className="flex items-end">
-          <Button variant="clear" className="w-full" asChild>
-            <Link href="/dashboard/production/recipes">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="activa">Activa</option>
+              <option value="inactiva">Inactiva</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
       <section className="grid gap-4 md:grid-cols-4">
         <KpiCard title="Recetas registradas" value={recipes.length.toString()} description="Total en el sistema." tone="info" icon={FlaskConical} />
@@ -211,17 +210,12 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
                       </Link>
                     </Button>
 
-                    <form action={toggleTechnicalRecipeStatusAction}>
-                      <input
-                        type="hidden"
-                        name="id_receta"
-                        value={recipe.id_receta}
-                      />
-                      <input type="hidden" name="estado" value={recipe.estado} />
-                      <Button type="submit" variant="link" className="h-auto p-0">
-                        {recipe.estado === "activa" ? "Inactivar" : "Activar"}
-                      </Button>
-                    </form>
+                    <RecipeStatusButton
+                      recipe={recipe}
+                      action={toggleTechnicalRecipeStatusAction}
+                      activatedNotification={productionNotifications["recipe-activated"]}
+                      deactivatedNotification={productionNotifications["recipe-deactivated"]}
+                    />
                   </div>
                 </TableCell>
               </TableRow>
@@ -240,6 +234,6 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
           ) : null}
         </TableBody>
       </Table>
-    </main>
+    </div>
   );
 }
