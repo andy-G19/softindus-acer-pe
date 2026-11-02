@@ -3214,6 +3214,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/[detail
       "select": {
         "categoria": true,
         "costo_unitario_actual": true,
+        "estado": true,
         "id_material": true,
         "nombre_material": true,
         "stock_actual": true,
@@ -4871,7 +4872,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </div>
 </div>
 <div>
-<p>0</p>
+<p>2</p>
 <p>Listos para producir.</p>
 </div>
 </div>
@@ -4890,9 +4891,6 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </div>
 </div>
 </section>
-<div role="alert">
-<div>Hay 2 material(es) sin stock suficiente para esta producción. Revisa la columna de faltante antes de crear una orden de trabajo.</div>
-</div>
 <div>
 <table>
 <thead>
@@ -4926,7 +4924,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <td>0.00 unidad_medida-1</td>
 <td>S/ 2.30</td>
 <td>
-<span data-variant="destructive">Insuficiente</span>
+<span data-variant="success">Suficiente</span>
 </td>
 </tr>
 <tr>
@@ -4944,7 +4942,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <td>0.00 unidad_medida-2</td>
 <td>S/ 4.50</td>
 <td>
-<span data-variant="destructive">Insuficiente</span>
+<span data-variant="success">Suficiente</span>
 </td>
 </tr>
 </tbody>

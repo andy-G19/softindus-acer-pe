@@ -1,6 +1,13 @@
 import { vi } from "vitest";
 
-import { definePageSuite, generatedRow, type DataOverride } from "@/testing/page-characterization";
+import { describe, expect, it } from "vitest";
+
+import {
+  characterizePage,
+  definePageSuite,
+  generatedRow,
+  type DataOverride,
+} from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
 vi.mock("@/lib/db", async () =>
@@ -284,3 +291,18 @@ definePageSuite([
     ],
   },
 ]);
+
+// B3 (hallazgo 5 de la auditoria de la 10.6): 0.3 - 0.1 da 0.19999999999999998, y
+// sin redondear marcaba «Insuficiente» con un faltante de 0.00.
+describe("el stock disponible de los requerimientos", () => {
+  it("un stock que alcanza justo no se marca insuficiente", async () => {
+    const { html } = await characterizePage(() => import("./[id]/versions/[versionId]/requirements/page"), {
+      name: "stock que alcanza justo",
+      params: { id: "REC00000001", versionId: "VER00000001" },
+      data: { "version_receta.findFirst": versionWith("findFirst", justEnoughStock) },
+    });
+
+    expect(html).toContain("Suficiente");
+    expect(html).not.toContain("Insuficiente");
+  });
+});

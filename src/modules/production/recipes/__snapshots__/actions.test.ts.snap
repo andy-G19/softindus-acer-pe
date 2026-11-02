@@ -421,7 +421,7 @@ exports[`createTechnicalRecipeAction > un POST sin campos lanza sin tocar Prisma
 ]
 `;
 
-exports[`createTechnicalRecipeAction > un POST sin campos lanza sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null"`;
+exports[`createTechnicalRecipeAction > un POST sin campos lanza sin tocar Prisma > resultado 1`] = `"error: Seleccione un producto."`;
 
 exports[`createTechnicalRecipeAction > un fallo al crear revierte y deja el error > llamadas 1`] = `
 [

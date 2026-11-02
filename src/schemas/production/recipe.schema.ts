@@ -2,12 +2,12 @@ import { z } from "zod";
 
 export const technicalRecipeSchema = z.object({
   id_producto: z
-    .string()
+    .string({ error: "Seleccione un producto." })
     .trim()
     .min(1, "Seleccione un producto."),
 
   nombre_receta: z
-    .string()
+    .string({ error: "El nombre de la receta debe tener al menos 3 caracteres." })
     .trim()
     .min(3, "El nombre de la receta debe tener al menos 3 caracteres.")
     .max(100, "El nombre de la receta no debe superar 100 caracteres."),

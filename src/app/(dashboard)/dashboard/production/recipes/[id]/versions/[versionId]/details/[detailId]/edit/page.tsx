@@ -2,10 +2,10 @@ import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateRecipeDetailAction } from "@/modules/production/recipe-details/actions";
 import { RecipeDetailForm } from "@/modules/production/recipe-details/recipe-detail-form";
+import { buildRecipeMaterialOptions } from "@/modules/production/recipe-details/recipe-material-options";
 import { getRecipeDetailEditData } from "@/modules/production/recipe-details/queries";
 
 type EditRecipeDetailPageProps = {
@@ -15,14 +15,6 @@ type EditRecipeDetailPageProps = {
     detailId: string;
   }>;
 };
-
-function formatDecimal(value: unknown) {
-  if (value === null || value === undefined) {
-    return "0.00";
-  }
-
-  return Number(value.toString()).toFixed(2);
-}
 
 function formatInputNumber(value: unknown) {
   if (value === null || value === undefined) {
@@ -57,16 +49,7 @@ export default async function EditRecipeDetailPage({
     version.receta_tecnica.estado === "activa" &&
     version._count.orden_trabajo === 0;
 
-  const materialItems = materials.map((material) => ({
-    id: material.id_material,
-    label: material.nombre_material,
-    description: `${material.categoria} - Stock: ${formatDecimal(
-      material.stock_actual,
-    )} ${material.unidad_medida} - ${formatMoney(
-      material.costo_unitario_actual,
-    )}`,
-    unidad_medida: material.unidad_medida,
-  }));
+  const materialItems = buildRecipeMaterialOptions(materials);
 
   const detailsHref = `/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details`;
 

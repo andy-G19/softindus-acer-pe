@@ -1822,7 +1822,7 @@ exports[`createRecipeVersionAction > varios errores se unen en un mensaje > llam
 ]
 `;
 
-exports[`createRecipeVersionAction > varios errores se unen en un mensaje > resultado 1`] = `"error: La cantidad requerida debe ser mayor a 0. Seleccione un tipo de consumo válido. La cantidad requerida debe ser mayor a 0."`;
+exports[`createRecipeVersionAction > varios errores se unen en un mensaje > resultado 1`] = `"error: La cantidad requerida debe ser de al menos 0.01. Seleccione un tipo de consumo válido. La cantidad requerida debe ser de al menos 0.01."`;
 
 exports[`setCurrentRecipeVersionAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
 [
@@ -2097,7 +2097,7 @@ exports[`setCurrentRecipeVersionAction > sin receta lanza su mensaje sin tocar P
 ]
 `;
 
-exports[`setCurrentRecipeVersionAction > sin receta lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null"`;
+exports[`setCurrentRecipeVersionAction > sin receta lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La receta técnica es obligatoria."`;
 
 exports[`setCurrentRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > llamadas 1`] = `
 [
@@ -2111,7 +2111,7 @@ exports[`setCurrentRecipeVersionAction > sin version lanza su mensaje sin tocar 
 ]
 `;
 
-exports[`setCurrentRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null"`;
+exports[`setCurrentRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La versión de receta es obligatoria."`;
 
 exports[`setCurrentRecipeVersionAction > un fallo al escribir revierte y deja el error > llamadas 1`] = `
 [
@@ -2770,7 +2770,7 @@ exports[`voidRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma
 ]
 `;
 
-exports[`voidRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null"`;
+exports[`voidRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La versión de receta es obligatoria."`;
 
 exports[`voidRecipeVersionAction > un fallo al promover revierte y deja el error > llamadas 1`] = `
 [

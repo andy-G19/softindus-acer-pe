@@ -200,6 +200,7 @@ const detail = (idVersion: string | null = VERSION): DataOverrides => ({
       : {
           id_detalle_receta: DETALLE,
           id_version_receta: idVersion,
+          id_material: MATERIAL,
           material: { nombre_material: "Plancha de acero" },
         },
 });
@@ -262,7 +263,7 @@ defineCases("updateRecipeDetailAction", withState(updateRecipeDetailAction), [
   { name: "la version no existe o no esta vigente", ...updateWith({}, version({ exists: false })) },
   { name: "la receta no esta activa", ...updateWith({}, version({ receta: "inactiva" })) },
   { name: "la version ya la usan ordenes", ...updateWith({}, version({ orders: 1 })) },
-  { name: "un material inactivo se rechaza, aunque sea el de la linea", ...updateWith({}, material(false)) },
+  { name: "un material que ya no existe se rechaza", ...updateWith({}, material(false)) },
   { name: "otra linea ya usa ese material", ...updateWith({}, duplicate) },
   {
     name: "una carrera (P2002) deja el error de Prisma",
@@ -350,5 +351,43 @@ describe("las acciones de detalles deciden con la receta bloqueada", () => {
 
     expect(result).toBe(LINEA_INEXISTENTE);
     expect(calls).not.toContainEqual(expect.objectContaining({ prisma: "detalle_receta.delete" }));
+  });
+});
+
+// B3 (hallazgo 3 de la auditoria de la 10.6): la consulta ofrece el material de la
+// linea aunque este inactivo, y la accion lo rechazaba: no se podia corregir ni la
+// cantidad. Como en pedidos, el actual se conserva y uno nuevo debe estar activo.
+describe("el material inactivo al editar", () => {
+  const OTRO_MATERIAL = "MAT00000002";
+  const INACTIVO = "El material seleccionado no existe o está inactivo.";
+
+  const inactiveMaterial: DataOverrides = {
+    "material.findFirst": (args) =>
+      (args as { where: { estado?: boolean } }).where.estado === true
+        ? null
+        : { id_material: MATERIAL, nombre_material: "Plancha de acero", unidad_medida: "kg" },
+  };
+
+  it("el de la linea se conserva y se puede guardar", async () => {
+    const { calls, result } = await runCase(withState(updateRecipeDetailAction), updateWith({}, inactiveMaterial));
+
+    expect(result).toContain("toast=recipe-detail-updated");
+    expect(calls).toContainEqual(expect.objectContaining({ prisma: "detalle_receta.update" }));
+  });
+
+  it("cambiar a otro inactivo se rechaza", async () => {
+    const { calls, result } = await runCase(
+      withState(updateRecipeDetailAction),
+      updateWith({ id_material: OTRO_MATERIAL }, inactiveMaterial),
+    );
+
+    expect(result).toEqual({ estado: { error: INACTIVO, fieldErrors: { id_material: [INACTIVO] } } });
+    expect(calls).not.toContainEqual(expect.objectContaining({ prisma: "detalle_receta.update" }));
+  });
+
+  it("el alta sigue exigiendo un material activo", async () => {
+    const { result } = await runCase(withState(createRecipeDetailAction), createWith({}, inactiveMaterial));
+
+    expect(result).toEqual({ estado: { error: INACTIVO, fieldErrors: { id_material: [INACTIVO] } } });
   });
 });

@@ -76,7 +76,8 @@ export default async function MaterialRequirementsPage({
 
     const currentStock = toNumber(detail.material.stock_actual);
     const reservedStock = toNumber(detail.material.stock_reservado);
-    const availableStock = currentStock - reservedStock;
+    // Tambien redondeado: 0.3 - 0.1 da 0.19999999999999998 y no alcanzaria para 0.2.
+    const availableStock = roundQuantity(currentStock - reservedStock);
 
     const shortage = Math.max(requiredWithWaste - availableStock, 0);
     const hasEnoughStock = availableStock >= requiredWithWaste;

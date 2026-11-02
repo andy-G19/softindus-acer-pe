@@ -108,11 +108,17 @@ function parseRecipeDetailFormData(formData: FormData) {
   });
 }
 
-async function loadActiveMaterial(tx: Prisma.TransactionClient, idMaterial: string) {
+// El material actual de la linea se conserva aunque hoy este inactivo, como en
+// pedidos; uno nuevo debe estar activo.
+async function loadSelectableMaterial(
+  tx: Prisma.TransactionClient,
+  idMaterial: string,
+  currentMaterial?: string,
+) {
   return tx.material.findFirst({
     where: {
       id_material: idMaterial,
-      estado: true,
+      ...(idMaterial === currentMaterial ? {} : { estado: true }),
     },
     select: {
       id_material: true,
@@ -166,7 +172,7 @@ export async function createRecipeDetailAction(
       return versionResult;
     }
 
-    const material = await loadActiveMaterial(tx, data.id_material);
+    const material = await loadSelectableMaterial(tx, data.id_material);
 
     if (!material) {
       return materialProblem("El material seleccionado no existe o está inactivo.");
@@ -265,6 +271,7 @@ export async function updateRecipeDetailAction(
       select: {
         id_detalle_receta: true,
         id_version_receta: true,
+        id_material: true,
       },
     });
 
@@ -282,7 +289,7 @@ export async function updateRecipeDetailAction(
       return versionResult;
     }
 
-    const material = await loadActiveMaterial(tx, data.id_material);
+    const material = await loadSelectableMaterial(tx, data.id_material, detail.id_material);
 
     if (!material) {
       return materialProblem("El material seleccionado no existe o está inactivo.");

@@ -1,20 +1,26 @@
 import { z } from "zod";
 
+// La columna tiene 2 decimales: por debajo de esto la base guardaria 0.00.
+const MIN_CANTIDAD_REQUERIDA = 0.01;
+
+/** Cantidad de una linea de receta: la misma regla en una linea suelta y en una version. */
+export const cantidadRequeridaSchema = z.coerce
+  .number({ error: "La cantidad requerida debe ser numérica." })
+  .min(MIN_CANTIDAD_REQUERIDA, `La cantidad requerida debe ser de al menos ${MIN_CANTIDAD_REQUERIDA}.`)
+  .max(999999.99, "La cantidad requerida es demasiado alta.");
+
 export const recipeDetailSchema = z.object({
   id_version_receta: z
-    .string()
+    .string({ error: "La versión de receta es obligatoria." })
     .trim()
     .min(1, "La versión de receta es obligatoria."),
 
   id_material: z
-    .string()
+    .string({ error: "Seleccione un material o insumo." })
     .trim()
     .min(1, "Seleccione un material o insumo."),
 
-  cantidad_requerida: z.coerce
-    .number()
-    .positive("La cantidad requerida debe ser mayor a 0.")
-    .max(999999.99, "La cantidad requerida es demasiado alta."),
+  cantidad_requerida: cantidadRequeridaSchema,
 
   tipo_consumo: z.enum(["materia_prima", "consumible", "auxiliar"], {
     message: "Seleccione un tipo de consumo válido.",

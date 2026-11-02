@@ -302,7 +302,7 @@ exports[`createRecipeDetailAction > datos invalidos devuelven errores por campo 
     "error": "Revisa los datos del material.",
     "fieldErrors": {
       "cantidad_requerida": [
-        "La cantidad requerida debe ser mayor a 0.",
+        "La cantidad requerida debe ser de al menos 0.01.",
       ],
       "tipo_consumo": [
         "Seleccione un tipo de consumo válido.",
@@ -1624,6 +1624,7 @@ exports[`updateRecipeDetailAction > ADMIN actualiza la linea con la unidad del i
     "args": {
       "select": {
         "id_detalle_receta": true,
+        "id_material": true,
         "id_version_receta": true,
       },
       "where": {
@@ -1657,7 +1658,6 @@ exports[`updateRecipeDetailAction > ADMIN actualiza la linea con la unidad del i
         "unidad_medida": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000001",
       },
     },
@@ -1782,6 +1782,7 @@ exports[`updateRecipeDetailAction > WORKSHOP_MASTER tambien actualiza > llamadas
     "args": {
       "select": {
         "id_detalle_receta": true,
+        "id_material": true,
         "id_version_receta": true,
       },
       "where": {
@@ -1815,7 +1816,6 @@ exports[`updateRecipeDetailAction > WORKSHOP_MASTER tambien actualiza > llamadas
         "unidad_medida": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000001",
       },
     },
@@ -1907,7 +1907,7 @@ exports[`updateRecipeDetailAction > datos invalidos devuelven errores por campo 
     "error": "Revisa los datos del material.",
     "fieldErrors": {
       "cantidad_requerida": [
-        "La cantidad requerida debe ser mayor a 0.",
+        "La cantidad requerida debe ser de al menos 0.01.",
       ],
     },
   },
@@ -1951,6 +1951,7 @@ exports[`updateRecipeDetailAction > la linea es de otra version > llamadas 1`] =
     "args": {
       "select": {
         "id_detalle_receta": true,
+        "id_material": true,
         "id_version_receta": true,
       },
       "where": {
@@ -2011,6 +2012,7 @@ exports[`updateRecipeDetailAction > la linea no existe > llamadas 1`] = `
     "args": {
       "select": {
         "id_detalle_receta": true,
+        "id_material": true,
         "id_version_receta": true,
       },
       "where": {
@@ -2071,6 +2073,7 @@ exports[`updateRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
     "args": {
       "select": {
         "id_detalle_receta": true,
+        "id_material": true,
         "id_version_receta": true,
       },
       "where": {
@@ -2139,6 +2142,7 @@ exports[`updateRecipeDetailAction > la version no existe o no esta vigente > lla
     "args": {
       "select": {
         "id_detalle_receta": true,
+        "id_material": true,
         "id_version_receta": true,
       },
       "where": {
@@ -2216,6 +2220,7 @@ exports[`updateRecipeDetailAction > la version ya la usan ordenes > llamadas 1`]
     "args": {
       "select": {
         "id_detalle_receta": true,
+        "id_material": true,
         "id_version_receta": true,
       },
       "where": {
@@ -2293,6 +2298,7 @@ exports[`updateRecipeDetailAction > otra linea ya usa ese material > llamadas 1`
     "args": {
       "select": {
         "id_detalle_receta": true,
+        "id_material": true,
         "id_version_receta": true,
       },
       "where": {
@@ -2326,7 +2332,6 @@ exports[`updateRecipeDetailAction > otra linea ya usa ese material > llamadas 1`
         "unidad_medida": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000001",
       },
     },
@@ -2384,7 +2389,7 @@ exports[`updateRecipeDetailAction > sin id devuelve su mensaje sin tocar Prisma 
 }
 `;
 
-exports[`updateRecipeDetailAction > un material inactivo se rechaza, aunque sea el de la linea > llamadas 1`] = `
+exports[`updateRecipeDetailAction > un material que ya no existe se rechaza > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -2421,6 +2426,7 @@ exports[`updateRecipeDetailAction > un material inactivo se rechaza, aunque sea 
     "args": {
       "select": {
         "id_detalle_receta": true,
+        "id_material": true,
         "id_version_receta": true,
       },
       "where": {
@@ -2454,7 +2460,6 @@ exports[`updateRecipeDetailAction > un material inactivo se rechaza, aunque sea 
         "unidad_medida": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000001",
       },
     },
@@ -2467,7 +2472,7 @@ exports[`updateRecipeDetailAction > un material inactivo se rechaza, aunque sea 
 ]
 `;
 
-exports[`updateRecipeDetailAction > un material inactivo se rechaza, aunque sea el de la linea > resultado 1`] = `
+exports[`updateRecipeDetailAction > un material que ya no existe se rechaza > resultado 1`] = `
 {
   "estado": {
     "error": "El material seleccionado no existe o está inactivo.",
@@ -2517,6 +2522,7 @@ exports[`updateRecipeDetailAction > una carrera (P2002) deja el error de Prisma 
     "args": {
       "select": {
         "id_detalle_receta": true,
+        "id_material": true,
         "id_version_receta": true,
       },
       "where": {
@@ -2550,7 +2556,6 @@ exports[`updateRecipeDetailAction > una carrera (P2002) deja el error de Prisma 
         "unidad_medida": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000001",
       },
     },

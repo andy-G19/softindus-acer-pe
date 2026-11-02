@@ -1,12 +1,11 @@
 import { z } from "zod";
 
+import { cantidadRequeridaSchema } from "@/schemas/production/recipe-detail.schema";
+
 const recipeVersionDetailSchema = z.object({
   id_material: z.string().trim().min(1, "Seleccione un material."),
 
-  cantidad_requerida: z.coerce
-    .number()
-    .positive("La cantidad requerida debe ser mayor a 0.")
-    .max(999999.99, "La cantidad requerida es demasiado alta."),
+  cantidad_requerida: cantidadRequeridaSchema,
 
   tipo_consumo: z.enum(["materia_prima", "consumible", "auxiliar"], {
     message: "Seleccione un tipo de consumo válido.",
@@ -28,7 +27,10 @@ const recipeVersionDetailSchema = z.object({
 });
 
 export const recipeVersionSchema = z.object({
-  id_receta: z.string().trim().min(1, "La receta técnica es obligatoria."),
+  id_receta: z
+    .string({ error: "La receta técnica es obligatoria." })
+    .trim()
+    .min(1, "La receta técnica es obligatoria."),
 
   numero_version: z
     .string()
@@ -65,9 +67,12 @@ export const recipeVersionSchema = z.object({
 });
 
 export const recipeVersionStatusSchema = z.object({
-  id_receta: z.string().trim().min(1, "La receta técnica es obligatoria."),
+  id_receta: z
+    .string({ error: "La receta técnica es obligatoria." })
+    .trim()
+    .min(1, "La receta técnica es obligatoria."),
   id_version_receta: z
-    .string()
+    .string({ error: "La versión de receta es obligatoria." })
     .trim()
     .min(1, "La versión de receta es obligatoria."),
 });
