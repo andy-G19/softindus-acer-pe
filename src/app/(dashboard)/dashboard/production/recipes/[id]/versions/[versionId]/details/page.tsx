@@ -2,7 +2,6 @@ import { CircleDollarSign, Package } from "lucide-react";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { RowActions, RowEditLink } from "@/components/table/row-actions";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,10 @@ import {
 import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { applyWaste } from "@/lib/recipe-quantities";
+import { productionNotifications } from "@/modules/production/notifications";
 import { deleteRecipeDetailAction } from "@/modules/production/recipe-details/actions";
+import { RecipeDetailDeleteButton } from "@/modules/production/recipe-details/recipe-detail-delete-button";
+import { canEditRecipeDetails, hasUnitDrift } from "@/modules/production/recipe-details/recipe-detail-rules";
 import { getRecipeVersionDetails } from "@/modules/production/recipe-details/queries";
 import Link from "next/link";
 
@@ -36,15 +38,6 @@ function formatDecimal(value: unknown) {
   }
 
   return Number(value.toString()).toFixed(2);
-}
-
-/**
- * La unidad del detalle se copia del material al crearlo. Si alguien cambia después la
- * unidad del material, la receta queda expresada en la unidad vieja y el cálculo deja de
- * ser comparable con el inventario.
- */
-function hasUnitDrift(detailUnit: string, materialUnit: string) {
-  return detailUnit.trim().toLowerCase() !== materialUnit.trim().toLowerCase();
 }
 
 export default async function RecipeDetailsPage({
@@ -71,18 +64,14 @@ export default async function RecipeDetailsPage({
     return total + requiredWithWaste * unitCost;
   }, 0);
 
-  // Solo se puede corregir mientras ninguna orden haya usado la versión.
-  const canEditDetails =
-    version.estado === "vigente" &&
-    version.receta_tecnica.estado === "activa" &&
-    version._count.orden_trabajo === 0;
+  const canEditDetails = canEditRecipeDetails(version);
 
   const driftedDetails = version.detalle_receta.filter((detail) =>
     hasUnitDrift(detail.unidad_medida, detail.material.unidad_medida),
   );
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Detalle de receta"
         description={`Receta: ${version.receta_tecnica.nombre_receta} · Versión: ${version.numero_version} · Producto: ${version.receta_tecnica.producto.nombre_producto}`}
@@ -103,8 +92,7 @@ export default async function RecipeDetailsPage({
               </Link>
             </Button>
 
-            {version.estado === "vigente" &&
-            version._count.orden_trabajo === 0 ? (
+            {canEditDetails ? (
               <Button asChild>
                 <Link
                   href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details/new`}
@@ -240,21 +228,11 @@ export default async function RecipeDetailsPage({
                         href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details/${detail.id_detalle_receta}/edit`}
                       />
 
-                      <form action={deleteRecipeDetailAction}>
-                        <input
-                          type="hidden"
-                          name="id_detalle_receta"
-                          value={detail.id_detalle_receta}
-                        />
-                        <ConfirmDeleteButton
-                          title="¿Eliminar material de la receta?"
-                          description={`Se quitará ${detail.material.nombre_material} de esta versión.`}
-                          confirmText="Eliminar"
-                          entityName="material"
-                        >
-                          Eliminar
-                        </ConfirmDeleteButton>
-                      </form>
+                      <RecipeDetailDeleteButton
+                        detail={detail}
+                        action={deleteRecipeDetailAction}
+                        deletedNotification={productionNotifications["recipe-detail-deleted"]}
+                      />
                     </RowActions>
                   </TableCell>
                 ) : null}
@@ -309,6 +287,6 @@ export default async function RecipeDetailsPage({
           </AlertDescription>
         </Alert>
       ) : null}
-    </main>
+    </div>
   );
 }

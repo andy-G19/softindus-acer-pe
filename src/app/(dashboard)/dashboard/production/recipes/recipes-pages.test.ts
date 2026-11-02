@@ -381,3 +381,141 @@ describe("la lista de recetas", () => {
     expect(html).not.toContain("evil.example");
   });
 });
+
+// B5: las lineas de una version en panel lateral. Esta ranura vive debajo de la de
+// recetas, como la de etapas debajo de la de rutas.
+const DETAILS_ROUTE = "/dashboard/production/recipes/REC00000001/versions/VER00000001/details";
+const newDetailCase = { params: { id: "REC00000001", versionId: "VER00000001" } };
+const editDetailCase = { params: { id: "id_receta-1", versionId: "VER00000001", detailId: "DRE00000001" } };
+const loadNewDetail = () => import("./[id]/versions/[versionId]/details/new/page");
+const loadEditDetail = () => import("./[id]/versions/[versionId]/details/[detailId]/edit/page");
+const loadNewDetailPanel = () => import("./[id]/versions/[versionId]/details/@panel/(.)new/page");
+const loadEditDetailPanel = () => import("./[id]/versions/[versionId]/details/@panel/(.)[detailId]/edit/page");
+
+preloadPages(loadNewDetailPanel, loadEditDetailPanel);
+
+describe("panel lateral de los materiales de una version", () => {
+  it("el alta en panel consulta igual que la pagina y muestra sus avisos", async () => {
+    const panel = await characterizePage(loadNewDetailPanel, { name: "panel", ...newDetailCase }, `${DETAILS_ROUTE}/new`);
+    const page = await characterizePage(loadNewDetail, { name: "pagina", ...newDetailCase }, `${DETAILS_ROUTE}/new`);
+
+    expectAuthorizesBeforePrisma(panel.calls);
+    expect(panel.calls).toEqual(page.calls);
+    expect(panel.html).toContain("Agregar material a receta");
+    expect(panel.html).toContain("Esta versión no está vigente.");
+    expect(panel.html).toMatchSnapshot();
+  });
+
+  it("la edicion en panel consulta igual que la pagina y muestra el formulario", async () => {
+    const panel = await characterizePage(loadEditDetailPanel, { name: "panel", ...editDetailCase }, `${DETAILS_ROUTE}/DRE00000001/edit`);
+    const page = await characterizePage(loadEditDetail, { name: "pagina", ...editDetailCase }, `${DETAILS_ROUTE}/DRE00000001/edit`);
+
+    expectAuthorizesBeforePrisma(panel.calls);
+    expect(panel.calls).toEqual(page.calls);
+    expect(panel.html).toContain("Editar material de receta");
+    expect(panel.html).toMatchSnapshot();
+  });
+
+  it("la edicion avisa si la receta esta inactiva", async () => {
+    const { html } = await characterizePage(loadEditDetail, {
+      name: "receta inactiva",
+      ...editDetailCase,
+      data: {
+        "detalle_receta.findFirst": (args) => {
+          const row = generatedRow("detalle_receta", "findFirst", args) as Row;
+
+          return { ...row, version_receta: inactiveRecipe(row.version_receta as Row) };
+        },
+      },
+    });
+
+    expect(html).toContain("Esta receta no está activa.");
+  });
+
+  it.each([
+    ["alta", loadNewDetailPanel, newDetailCase],
+    ["edicion", loadEditDetailPanel, editDetailCase],
+  ] as const)("un acceso rechazado al panel de %s no consulta Prisma", async (_name, load, extra) => {
+    const calls = await runWithRejectedAuth(load, { name: "rechazo", ...extra }, DETAILS_ROUTE);
+
+    expect(calls).toEqual([{ authz: "requireRole", roles: ["ADMIN", "WORKSHOP_MASTER"] }]);
+  });
+
+  it("un panel responde notFound si el registro no existe", async () => {
+    const newPanel = await characterizePage(
+      loadNewDetailPanel,
+      { name: "alta", ...newDetailCase, data: { "version_receta.findFirst": null } },
+      DETAILS_ROUTE,
+    );
+    const editPanel = await characterizePage(
+      loadEditDetailPanel,
+      { name: "edicion", ...editDetailCase, data: { "detalle_receta.findFirst": null } },
+      DETAILS_ROUTE,
+    );
+
+    expect(newPanel.outcome).toBe("notFound");
+    expect(editPanel.outcome).toBe("notFound");
+  });
+
+  it("sin materiales disponibles el alta no deja escribir, aunque la version sea editable", async () => {
+    const data = {
+      "version_receta.findFirst": versionWith("findFirst", (version) => ({
+        ...editableVersion(version),
+        estado: "vigente",
+        receta_tecnica: { ...((version.receta_tecnica as Row) ?? {}), estado: "activa" },
+      })),
+      "material.findMany": [],
+    };
+
+    const page = await characterizePage(loadNewDetail, { name: "pagina", ...newDetailCase, data }, `${DETAILS_ROUTE}/new`);
+    const panel = await characterizePage(loadNewDetailPanel, { name: "panel", ...newDetailCase, data }, `${DETAILS_ROUTE}/new`);
+
+    expect(page.html).toMatch(/<input[^>]*id="cantidad_requerida"[^>]*disabled/);
+    expect(panel.html).toMatch(/<input[^>]*id="cantidad_requerida"[^>]*disabled/);
+  });
+
+  it("fuera del alta y la edicion interceptadas, la ranura no muestra nada", async () => {
+    const { default: PanelDefault } = await import("./[id]/versions/[versionId]/details/@panel/default");
+    const { default: PanelOnList } = await import("./[id]/versions/[versionId]/details/@panel/page");
+
+    expect(PanelDefault()).toBeNull();
+    expect(PanelOnList()).toBeNull();
+  });
+});
+
+describe("la lista de materiales de una version", () => {
+  const loadDetails = () => import("./[id]/versions/[versionId]/details/page");
+  const params = { id: "REC00000001", versionId: "VER00000001" };
+
+  // Hallazgo 8: el enlace seguia la regla de la version, no la de editar.
+  it("con la receta inactiva no ofrece agregar material", async () => {
+    const { html } = await characterizePage(loadDetails, {
+      name: "receta inactiva",
+      params,
+      data: { "version_receta.findFirst": versionWith("findFirst", (version) => inactiveRecipe(editableVersion(version))) },
+    });
+
+    expect(html).not.toContain("Agregar material");
+  });
+
+  it("con la version editable ofrece agregar material y eliminar", async () => {
+    const { html } = await characterizePage(loadDetails, {
+      name: "editable",
+      params,
+      data: { "version_receta.findFirst": versionWith("findFirst", editableVersion) },
+    });
+
+    expect(html).toContain("Agregar material");
+    expect(html).toContain("Eliminar");
+  });
+
+  it.each([
+    ["la lista", loadDetails, params],
+    ["el alta", loadNewDetail, newDetailCase.params],
+    ["la edicion", loadEditDetail, editDetailCase.params],
+  ] as const)("%s no abre otro main dentro del shell", async (_name, load, pageParams) => {
+    const { html } = await characterizePage(load, { name: "sin main", params: pageParams });
+
+    expect(html).not.toContain("<main");
+  });
+});

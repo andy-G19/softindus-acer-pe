@@ -3,7 +3,7 @@
 exports[`createRecipeDetailAction > ADMIN agrega el material con la unidad del inventario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -133,12 +133,29 @@ exports[`createRecipeDetailAction > ADMIN agrega el material con la unidad del i
 ]
 `;
 
-exports[`createRecipeDetailAction > ADMIN agrega el material con la unidad del inventario > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-created"`;
+exports[`createRecipeDetailAction > ADMIN agrega el material con la unidad del inventario > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_detalle_receta": "DRE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
+  },
+}
+`;
 
-exports[`createRecipeDetailAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+exports[`createRecipeDetailAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -147,12 +164,28 @@ exports[`createRecipeDetailAction > SELLER: se redirige sin tocar Prisma > llama
 ]
 `;
 
-exports[`createRecipeDetailAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createRecipeDetailAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar recetas técnicas.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
+  },
+}
+`;
 
 exports[`createRecipeDetailAction > WORKSHOP_MASTER tambien agrega > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -282,12 +315,29 @@ exports[`createRecipeDetailAction > WORKSHOP_MASTER tambien agrega > llamadas 1`
 ]
 `;
 
-exports[`createRecipeDetailAction > WORKSHOP_MASTER tambien agrega > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-created"`;
+exports[`createRecipeDetailAction > WORKSHOP_MASTER tambien agrega > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_detalle_receta": "DRE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
+  },
+}
+`;
 
 exports[`createRecipeDetailAction > datos invalidos devuelven errores por campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -308,6 +358,15 @@ exports[`createRecipeDetailAction > datos invalidos devuelven errores por campo 
         "Seleccione un tipo de consumo válido.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "0",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "otro",
+    },
   },
 }
 `;
@@ -315,7 +374,7 @@ exports[`createRecipeDetailAction > datos invalidos devuelven errores por campo 
 exports[`createRecipeDetailAction > el material no existe o esta inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -392,6 +451,15 @@ exports[`createRecipeDetailAction > el material no existe o esta inactivo > resu
         "El material seleccionado no existe o está inactivo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -399,7 +467,7 @@ exports[`createRecipeDetailAction > el material no existe o esta inactivo > resu
 exports[`createRecipeDetailAction > el material ya esta en la version > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -485,6 +553,15 @@ exports[`createRecipeDetailAction > el material ya esta en la version > resultad
         "Este material ya está registrado en esta versión de receta.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -492,7 +569,7 @@ exports[`createRecipeDetailAction > el material ya esta en la version > resultad
 exports[`createRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -550,6 +627,16 @@ exports[`createRecipeDetailAction > la receta no esta activa > resultado 1`] = `
 {
   "estado": {
     "error": "La receta técnica no está activa.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -557,7 +644,7 @@ exports[`createRecipeDetailAction > la receta no esta activa > resultado 1`] = `
 exports[`createRecipeDetailAction > la version no existe o no esta vigente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -606,6 +693,16 @@ exports[`createRecipeDetailAction > la version no existe o no esta vigente > res
 {
   "estado": {
     "error": "La versión de receta no existe o no está vigente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -613,7 +710,7 @@ exports[`createRecipeDetailAction > la version no existe o no esta vigente > res
 exports[`createRecipeDetailAction > la version ya la usan ordenes > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -671,6 +768,16 @@ exports[`createRecipeDetailAction > la version ya la usan ordenes > resultado 1`
 {
   "estado": {
     "error": "No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -678,7 +785,7 @@ exports[`createRecipeDetailAction > la version ya la usan ordenes > resultado 1`
 exports[`createRecipeDetailAction > sin merma ni observaciones se guarda null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -808,12 +915,29 @@ exports[`createRecipeDetailAction > sin merma ni observaciones se guarda null > 
 ]
 `;
 
-exports[`createRecipeDetailAction > sin merma ni observaciones se guarda null > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-created"`;
+exports[`createRecipeDetailAction > sin merma ni observaciones se guarda null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_detalle_receta": "DRE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "",
+      "observaciones": "",
+      "tipo_consumo": "materia_prima",
+    },
+  },
+}
+`;
 
-exports[`createRecipeDetailAction > una carrera (P2002) deja el error de Prisma > llamadas 1`] = `
+exports[`createRecipeDetailAction > una carrera (P2002) responde como el duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -912,12 +1036,32 @@ exports[`createRecipeDetailAction > una carrera (P2002) deja el error de Prisma 
 ]
 `;
 
-exports[`createRecipeDetailAction > una carrera (P2002) deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;
+exports[`createRecipeDetailAction > una carrera (P2002) responde como el duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este material ya está registrado en esta versión de receta.",
+    "fieldErrors": {
+      "id_material": [
+        "Este material ya está registrado en esta versión de receta.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
+  },
+}
+`;
 
 exports[`createRecipeDetailAction > una merma fuera de rango devuelve su error > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -935,6 +1079,15 @@ exports[`createRecipeDetailAction > una merma fuera de rango devuelve su error >
         "La merma estimada debe estar entre 0 y 100%.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "101",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -942,7 +1095,7 @@ exports[`createRecipeDetailAction > una merma fuera de rango devuelve su error >
 exports[`deleteRecipeDetailAction > ADMIN elimina la linea > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1061,12 +1214,25 @@ exports[`deleteRecipeDetailAction > ADMIN elimina la linea > llamadas 1`] = `
 ]
 `;
 
-exports[`deleteRecipeDetailAction > ADMIN elimina la linea > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-deleted"`;
+exports[`deleteRecipeDetailAction > ADMIN elimina la linea > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_detalle_receta": "DRE00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id_detalle_receta": "DRE00000007",
+    },
+  },
+}
+`;
 
-exports[`deleteRecipeDetailAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+exports[`deleteRecipeDetailAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1075,12 +1241,23 @@ exports[`deleteRecipeDetailAction > SELLER: se redirige sin tocar Prisma > llama
 ]
 `;
 
-exports[`deleteRecipeDetailAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`deleteRecipeDetailAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar recetas técnicas.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id_detalle_receta": "DRE00000007",
+    },
+  },
+}
+`;
 
 exports[`deleteRecipeDetailAction > WORKSHOP_MASTER tambien elimina > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1199,12 +1376,25 @@ exports[`deleteRecipeDetailAction > WORKSHOP_MASTER tambien elimina > llamadas 1
 ]
 `;
 
-exports[`deleteRecipeDetailAction > WORKSHOP_MASTER tambien elimina > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-deleted"`;
+exports[`deleteRecipeDetailAction > WORKSHOP_MASTER tambien elimina > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_detalle_receta": "DRE00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id_detalle_receta": "DRE00000007",
+    },
+  },
+}
+`;
 
 exports[`deleteRecipeDetailAction > la linea no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1232,12 +1422,23 @@ exports[`deleteRecipeDetailAction > la linea no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`deleteRecipeDetailAction > la linea no existe > resultado 1`] = `"error: El material de la receta no existe."`;
+exports[`deleteRecipeDetailAction > la linea no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material de la receta no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id_detalle_receta": "DRE00000007",
+    },
+  },
+}
+`;
 
 exports[`deleteRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1317,12 +1518,23 @@ exports[`deleteRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
 ]
 `;
 
-exports[`deleteRecipeDetailAction > la receta no esta activa > resultado 1`] = `"error: La receta técnica no está activa."`;
+exports[`deleteRecipeDetailAction > la receta no esta activa > resultado 1`] = `
+{
+  "estado": {
+    "error": "La receta técnica no está activa.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id_detalle_receta": "DRE00000007",
+    },
+  },
+}
+`;
 
 exports[`deleteRecipeDetailAction > la version no existe o no esta vigente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1393,12 +1605,23 @@ exports[`deleteRecipeDetailAction > la version no existe o no esta vigente > lla
 ]
 `;
 
-exports[`deleteRecipeDetailAction > la version no existe o no esta vigente > resultado 1`] = `"error: La versión de receta no existe o no está vigente."`;
+exports[`deleteRecipeDetailAction > la version no existe o no esta vigente > resultado 1`] = `
+{
+  "estado": {
+    "error": "La versión de receta no existe o no está vigente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id_detalle_receta": "DRE00000007",
+    },
+  },
+}
+`;
 
 exports[`deleteRecipeDetailAction > la version ya la usan ordenes > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1478,12 +1701,23 @@ exports[`deleteRecipeDetailAction > la version ya la usan ordenes > llamadas 1`]
 ]
 `;
 
-exports[`deleteRecipeDetailAction > la version ya la usan ordenes > resultado 1`] = `"error: No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad."`;
+exports[`deleteRecipeDetailAction > la version ya la usan ordenes > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id_detalle_receta": "DRE00000007",
+    },
+  },
+}
+`;
 
-exports[`deleteRecipeDetailAction > sin id lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+exports[`deleteRecipeDetailAction > sin id devuelve su error sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1492,12 +1726,23 @@ exports[`deleteRecipeDetailAction > sin id lanza su mensaje sin tocar Prisma > l
 ]
 `;
 
-exports[`deleteRecipeDetailAction > sin id lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: No se recibió el material de la receta."`;
+exports[`deleteRecipeDetailAction > sin id devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió el material de la receta.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id_detalle_receta": "",
+    },
+  },
+}
+`;
 
-exports[`deleteRecipeDetailAction > un fallo al borrar revierte y deja el error > llamadas 1`] = `
+exports[`deleteRecipeDetailAction > un fallo al borrar revierte y responde con un error general > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1585,12 +1830,23 @@ exports[`deleteRecipeDetailAction > un fallo al borrar revierte y deja el error 
 ]
 `;
 
-exports[`deleteRecipeDetailAction > un fallo al borrar revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
+exports[`deleteRecipeDetailAction > un fallo al borrar revierte y responde con un error general > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo eliminar el material. Intenta nuevamente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id_detalle_receta": "DRE00000007",
+    },
+  },
+}
+`;
 
 exports[`updateRecipeDetailAction > ADMIN actualiza la linea con la unidad del inventario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1729,12 +1985,29 @@ exports[`updateRecipeDetailAction > ADMIN actualiza la linea con la unidad del i
 ]
 `;
 
-exports[`updateRecipeDetailAction > ADMIN actualiza la linea con la unidad del inventario > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-updated"`;
+exports[`updateRecipeDetailAction > ADMIN actualiza la linea con la unidad del inventario > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_detalle_receta": "DRE00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
+  },
+}
+`;
 
-exports[`updateRecipeDetailAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+exports[`updateRecipeDetailAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1743,12 +2016,28 @@ exports[`updateRecipeDetailAction > SELLER: se redirige sin tocar Prisma > llama
 ]
 `;
 
-exports[`updateRecipeDetailAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateRecipeDetailAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar recetas técnicas.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
+  },
+}
+`;
 
 exports[`updateRecipeDetailAction > WORKSHOP_MASTER tambien actualiza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1887,12 +2176,29 @@ exports[`updateRecipeDetailAction > WORKSHOP_MASTER tambien actualiza > llamadas
 ]
 `;
 
-exports[`updateRecipeDetailAction > WORKSHOP_MASTER tambien actualiza > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions/VER00000005/details?toast=recipe-detail-updated"`;
+exports[`updateRecipeDetailAction > WORKSHOP_MASTER tambien actualiza > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_detalle_receta": "DRE00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
+  },
+}
+`;
 
 exports[`updateRecipeDetailAction > datos invalidos devuelven errores por campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1910,6 +2216,15 @@ exports[`updateRecipeDetailAction > datos invalidos devuelven errores por campo 
         "La cantidad requerida debe ser de al menos 0.01.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "0",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -1917,7 +2232,7 @@ exports[`updateRecipeDetailAction > datos invalidos devuelven errores por campo 
 exports[`updateRecipeDetailAction > la linea es de otra version > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1971,6 +2286,16 @@ exports[`updateRecipeDetailAction > la linea es de otra version > resultado 1`] 
 {
   "estado": {
     "error": "El material no pertenece a la versión indicada.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -1978,7 +2303,7 @@ exports[`updateRecipeDetailAction > la linea es de otra version > resultado 1`] 
 exports[`updateRecipeDetailAction > la linea no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2032,6 +2357,16 @@ exports[`updateRecipeDetailAction > la linea no existe > resultado 1`] = `
 {
   "estado": {
     "error": "El material de la receta no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -2039,7 +2374,7 @@ exports[`updateRecipeDetailAction > la linea no existe > resultado 1`] = `
 exports[`updateRecipeDetailAction > la receta no esta activa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2110,6 +2445,16 @@ exports[`updateRecipeDetailAction > la receta no esta activa > resultado 1`] = `
 {
   "estado": {
     "error": "La receta técnica no está activa.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -2117,7 +2462,7 @@ exports[`updateRecipeDetailAction > la receta no esta activa > resultado 1`] = `
 exports[`updateRecipeDetailAction > la version no existe o no esta vigente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2179,6 +2524,16 @@ exports[`updateRecipeDetailAction > la version no existe o no esta vigente > res
 {
   "estado": {
     "error": "La versión de receta no existe o no está vigente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -2186,7 +2541,7 @@ exports[`updateRecipeDetailAction > la version no existe o no esta vigente > res
 exports[`updateRecipeDetailAction > la version ya la usan ordenes > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2257,6 +2612,16 @@ exports[`updateRecipeDetailAction > la version ya la usan ordenes > resultado 1`
 {
   "estado": {
     "error": "No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -2264,7 +2629,7 @@ exports[`updateRecipeDetailAction > la version ya la usan ordenes > resultado 1`
 exports[`updateRecipeDetailAction > otra linea ya usa ese material > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2365,6 +2730,15 @@ exports[`updateRecipeDetailAction > otra linea ya usa ese material > resultado 1
         "Este material ya está registrado en esta versión de receta.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -2372,7 +2746,7 @@ exports[`updateRecipeDetailAction > otra linea ya usa ese material > resultado 1
 exports[`updateRecipeDetailAction > sin id devuelve su mensaje sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2385,6 +2759,16 @@ exports[`updateRecipeDetailAction > sin id devuelve su mensaje sin tocar Prisma 
 {
   "estado": {
     "error": "No se recibió el material de la receta.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
@@ -2392,7 +2776,7 @@ exports[`updateRecipeDetailAction > sin id devuelve su mensaje sin tocar Prisma 
 exports[`updateRecipeDetailAction > un material que ya no existe se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2481,14 +2865,23 @@ exports[`updateRecipeDetailAction > un material que ya no existe se rechaza > re
         "El material seleccionado no existe o está inactivo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
   },
 }
 `;
 
-exports[`updateRecipeDetailAction > una carrera (P2002) deja el error de Prisma > llamadas 1`] = `
+exports[`updateRecipeDetailAction > una carrera (P2002) responde como el duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2596,4 +2989,24 @@ exports[`updateRecipeDetailAction > una carrera (P2002) deja el error de Prisma 
 ]
 `;
 
-exports[`updateRecipeDetailAction > una carrera (P2002) deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;
+exports[`updateRecipeDetailAction > una carrera (P2002) responde como el duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este material ya está registrado en esta versión de receta.",
+    "fieldErrors": {
+      "id_material": [
+        "Este material ya está registrado en esta versión de receta.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad_requerida": "2.5",
+      "id_material": "MAT00000001",
+      "merma_estimada_porcentaje": "5",
+      "observaciones": "Plancha entera",
+      "tipo_consumo": "materia_prima",
+    },
+  },
+}
+`;

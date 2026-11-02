@@ -5,6 +5,8 @@ import {
   createRecipeDetailAction,
   deleteRecipeDetailAction,
   updateRecipeDetailAction,
+  type RecipeDetailDeleteState,
+  type RecipeDetailFormState,
 } from "@/modules/production/recipe-details/actions";
 import {
   characterizeHandler,
@@ -21,12 +23,21 @@ import {
 // la bitacora y los correlativos simulados, y fija en un snapshot, en orden: la
 // autorizacion con sus roles, las lecturas, la transaccion con sus escrituras y
 // su final, los correlativos, la bitacora, las revalidaciones y el resultado.
+//
+// Desde el panel lateral (B5), las tres acciones autorizan con getAuthorizedSession
+// y devuelven el resultado en lugar de lanzar y redirigir: sin permiso responden con
+// un error.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -220,18 +231,20 @@ const deleteWith = (data: DataOverrides = {}) => ({
   data: { ...detail(), ...version(), ...data },
 });
 
-const withState =
-  (action: (state: { error: string }, formData: FormData) => Promise<unknown>) => (formData: FormData) =>
-    action({ error: "" }, formData);
+const idle: RecipeDetailFormState = { status: "idle" };
+const idleDelete: RecipeDetailDeleteState = { status: "idle" };
+const create = (formData: FormData) => createRecipeDetailAction(idle, formData);
+const update = (formData: FormData) => updateRecipeDetailAction(idle, formData);
+const remove = (formData: FormData) => deleteRecipeDetailAction(idleDelete, formData);
 
 // ---------------------------------------------------------------------------
 // Casos
 // ---------------------------------------------------------------------------
 
-defineCases("createRecipeDetailAction", withState(createRecipeDetailAction), [
+defineCases("createRecipeDetailAction", create, [
   { name: "ADMIN agrega el material con la unidad del inventario", ...createWith() },
   { name: "WORKSHOP_MASTER tambien agrega", ...createWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: se redirige sin tocar Prisma", ...createWith(), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...createWith(), role: "SELLER" },
   {
     name: "sin merma ni observaciones se guarda null",
     ...createWith({ merma_estimada_porcentaje: "", observaciones: "" }),
@@ -247,15 +260,15 @@ defineCases("createRecipeDetailAction", withState(createRecipeDetailAction), [
   { name: "el material no existe o esta inactivo", ...createWith({}, material(false)) },
   { name: "el material ya esta en la version", ...createWith({}, duplicate) },
   {
-    name: "una carrera (P2002) deja el error de Prisma",
+    name: "una carrera (P2002) responde como el duplicado",
     ...createWith({}, { "detalle_receta.create": failWith(uniqueViolation()) }),
   },
 ]);
 
-defineCases("updateRecipeDetailAction", withState(updateRecipeDetailAction), [
+defineCases("updateRecipeDetailAction", update, [
   { name: "ADMIN actualiza la linea con la unidad del inventario", ...updateWith() },
   { name: "WORKSHOP_MASTER tambien actualiza", ...updateWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: se redirige sin tocar Prisma", ...updateWith(), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...updateWith(), role: "SELLER" },
   { name: "sin id devuelve su mensaje sin tocar Prisma", ...updateWith({ id_detalle_receta: "" }) },
   { name: "datos invalidos devuelven errores por campo", ...updateWith({ cantidad_requerida: "0" }) },
   { name: "la linea no existe", ...updateWith({}, detail(null)) },
@@ -266,22 +279,22 @@ defineCases("updateRecipeDetailAction", withState(updateRecipeDetailAction), [
   { name: "un material que ya no existe se rechaza", ...updateWith({}, material(false)) },
   { name: "otra linea ya usa ese material", ...updateWith({}, duplicate) },
   {
-    name: "una carrera (P2002) deja el error de Prisma",
+    name: "una carrera (P2002) responde como el duplicado",
     ...updateWith({}, { "detalle_receta.update": failWith(uniqueViolation()) }),
   },
 ]);
 
-defineCases("deleteRecipeDetailAction", deleteRecipeDetailAction, [
+defineCases("deleteRecipeDetailAction", remove, [
   { name: "ADMIN elimina la linea", ...deleteWith() },
   { name: "WORKSHOP_MASTER tambien elimina", ...deleteWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: se redirige sin tocar Prisma", ...deleteWith(), role: "SELLER" },
-  { name: "sin id lanza su mensaje sin tocar Prisma", form: {} },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...deleteWith(), role: "SELLER" },
+  { name: "sin id devuelve su error sin tocar Prisma", form: {} },
   { name: "la linea no existe", ...deleteWith(detail(null)) },
   { name: "la version no existe o no esta vigente", ...deleteWith(version({ exists: false })) },
   { name: "la receta no esta activa", ...deleteWith(version({ receta: "inactiva" })) },
   { name: "la version ya la usan ordenes", ...deleteWith(version({ orders: 1 })) },
   {
-    name: "un fallo al borrar revierte y deja el error",
+    name: "un fallo al borrar revierte y responde con un error general",
     ...deleteWith({ "detalle_receta.delete": failWith(new Error("conexion perdida")) }),
   },
 ]);
@@ -290,8 +303,6 @@ defineCases("deleteRecipeDetailAction", deleteRecipeDetailAction, [
 // se bloquea la receta de su version, que no cambia, y todo lo que decide se lee
 // despues. Asi agregar, editar y borrar se ordenan con marcar vigente y anular.
 describe("las acciones de detalles deciden con la receta bloqueada", () => {
-  const LINEA_INEXISTENTE = "error: El material de la receta no existe.";
-
   const protectedRead = (call: { prisma: string }) =>
     call.prisma === "version_receta.findFirst" ||
     call.prisma === "detalle_receta.findFirst" ||
@@ -304,11 +315,11 @@ describe("las acciones de detalles deciden con la receta bloqueada", () => {
     (call.prisma === "detalle_receta.findUnique" && (call.args as { include?: unknown }).include !== undefined);
 
   it.each([
-    ["el alta que acepta", withState(createRecipeDetailAction), createWith()],
-    ["el alta de un duplicado", withState(createRecipeDetailAction), createWith({}, duplicate)],
-    ["el alta en una version usada", withState(createRecipeDetailAction), createWith({}, version({ orders: 1 }))],
-    ["la edicion que acepta", withState(updateRecipeDetailAction), updateWith()],
-    ["la edicion en una version usada", withState(updateRecipeDetailAction), updateWith({}, version({ orders: 1 }))],
+    ["el alta que acepta", create, createWith()],
+    ["el alta de un duplicado", create, createWith({}, duplicate)],
+    ["el alta en una version usada", create, createWith({}, version({ orders: 1 }))],
+    ["la edicion que acepta", update, updateWith()],
+    ["la edicion en una version usada", update, updateWith({}, version({ orders: 1 }))],
   ])("%s bloquea antes de leer", async (_name, run, actionCase) => {
     const { calls } = await runCase(run, actionCase);
 
@@ -316,7 +327,7 @@ describe("las acciones de detalles deciden con la receta bloqueada", () => {
   });
 
   it("la edicion lee la linea con la receta ya bloqueada", async () => {
-    const { calls } = await runCase(withState(updateRecipeDetailAction), updateWith());
+    const { calls } = await runCase(update, updateWith());
 
     expectRowLockedBefore(calls, {
       table: "receta_tecnica",
@@ -329,7 +340,7 @@ describe("las acciones de detalles deciden con la receta bloqueada", () => {
     ["que acepta", deleteWith()],
     ["en una version usada", deleteWith(version({ orders: 1 }))],
   ])("el borrado %s bloquea antes de decidir", async (_name, actionCase) => {
-    const { calls } = await runCase(deleteRecipeDetailAction, actionCase);
+    const { calls } = await runCase(remove, actionCase);
 
     expectRowLockedBefore(calls, { table: "receta_tecnica", id: RECETA, reads: deciding });
   });
@@ -337,7 +348,7 @@ describe("las acciones de detalles deciden con la receta bloqueada", () => {
   it("si otro borro la linea mientras esperaba, responde que no existe y no borra", async () => {
     let reads = 0;
     const { calls, result } = await runCase(
-      deleteRecipeDetailAction,
+      remove,
       deleteWith({
         "detalle_receta.findUnique": () => {
           reads += 1;
@@ -349,7 +360,7 @@ describe("las acciones de detalles deciden con la receta bloqueada", () => {
       }),
     );
 
-    expect(result).toBe(LINEA_INEXISTENTE);
+    expect(result).toMatchObject({ estado: { status: "error", error: "El material de la receta no existe." } });
     expect(calls).not.toContainEqual(expect.objectContaining({ prisma: "detalle_receta.delete" }));
   });
 });
@@ -369,25 +380,109 @@ describe("el material inactivo al editar", () => {
   };
 
   it("el de la linea se conserva y se puede guardar", async () => {
-    const { calls, result } = await runCase(withState(updateRecipeDetailAction), updateWith({}, inactiveMaterial));
+    const { calls, result } = await runCase(update, updateWith({}, inactiveMaterial));
 
-    expect(result).toContain("toast=recipe-detail-updated");
+    expect(result).toMatchObject({ estado: { status: "success", data: { id_detalle_receta: DETALLE } } });
     expect(calls).toContainEqual(expect.objectContaining({ prisma: "detalle_receta.update" }));
   });
 
   it("cambiar a otro inactivo se rechaza", async () => {
     const { calls, result } = await runCase(
-      withState(updateRecipeDetailAction),
+      update,
       updateWith({ id_material: OTRO_MATERIAL }, inactiveMaterial),
     );
 
-    expect(result).toEqual({ estado: { error: INACTIVO, fieldErrors: { id_material: [INACTIVO] } } });
+    expect(result).toMatchObject({ estado: { error: INACTIVO, fieldErrors: { id_material: [INACTIVO] } } });
     expect(calls).not.toContainEqual(expect.objectContaining({ prisma: "detalle_receta.update" }));
   });
 
   it("el alta sigue exigiendo un material activo", async () => {
-    const { result } = await runCase(withState(createRecipeDetailAction), createWith({}, inactiveMaterial));
+    const { result } = await runCase(create, createWith({}, inactiveMaterial));
 
-    expect(result).toEqual({ estado: { error: INACTIVO, fieldErrors: { id_material: [INACTIVO] } } });
+    expect(result).toMatchObject({ estado: { error: INACTIVO, fieldErrors: { id_material: [INACTIVO] } } });
+  });
+});
+
+// B5: cada mensaje llega al formulario, junto a su campo y con lo escrito.
+describe("el alta y la edicion devuelven el resultado al formulario", () => {
+  const DUPLICADO = "Este material ya está registrado en esta versión de receta.";
+
+  const stateOf = async (run: (formData: FormData) => Promise<unknown>, actionCase: Omit<ActionCase, "name">) =>
+    ((await runCase(run, actionCase)).result as { estado: RecipeDetailFormState }).estado;
+
+  it("con exito devuelve el id y no redirige", async () => {
+    expect(await stateOf(create, createWith())).toMatchObject({
+      status: "success",
+      data: { id_detalle_receta: "DRE00000012" },
+    });
+    expect(await stateOf(update, updateWith())).toMatchObject({
+      status: "success",
+      data: { id_detalle_receta: DETALLE },
+    });
+  });
+
+  it.each([
+    ["el alta", create, createWith({}, { "detalle_receta.create": failWith(uniqueViolation()) })],
+    ["la edicion", update, updateWith({}, { "detalle_receta.update": failWith(uniqueViolation()) })],
+  ])("una carrera en %s responde como el duplicado", async (_name, run, actionCase) => {
+    expect(await stateOf(run, actionCase)).toMatchObject({
+      status: "error",
+      error: DUPLICADO,
+      fieldErrors: { id_material: [DUPLICADO] },
+    });
+  });
+
+  it("otro fallo no muestra el error interno", async () => {
+    expect(
+      await stateOf(create, createWith({}, { "detalle_receta.create": failWith(new Error("conexion perdida")) })),
+    ).toMatchObject({ status: "error", error: "No se pudo guardar el material. Intenta nuevamente." });
+  });
+
+  it("un rechazo conserva lo escrito", async () => {
+    expect(await stateOf(create, createWith({}, duplicate))).toMatchObject({
+      status: "error",
+      values: {
+        id_material: MATERIAL,
+        cantidad_requerida: "2.5",
+        merma_estimada_porcentaje: "5",
+        tipo_consumo: "materia_prima",
+        observaciones: "Plancha entera",
+      },
+    });
+  });
+
+  it("los errores de validacion quedan por campo", async () => {
+    expect(await stateOf(create, createWith({ cantidad_requerida: "0.001" }))).toMatchObject({
+      status: "error",
+      error: "Revisa los datos del material.",
+      fieldErrors: { cantidad_requerida: ["La cantidad requerida debe ser de al menos 0.01."] },
+    });
+  });
+});
+
+describe("eliminar una linea devuelve el resultado", () => {
+  it("con exito devuelve el id", async () => {
+    const { result } = await runCase(remove, deleteWith());
+
+    expect(result).toMatchObject({
+      estado: { status: "success", data: { id_detalle_receta: DETALLE }, values: { id_detalle_receta: DETALLE } },
+    });
+  });
+
+  it("un rechazo deja su mensaje", async () => {
+    const { result } = await runCase(remove, deleteWith(version({ receta: "inactiva" })));
+
+    expect(result).toMatchObject({ estado: { status: "error", error: "La receta técnica no está activa." } });
+  });
+
+  it("un fallo no muestra el error interno", async () => {
+    const { result } = await runCase(
+      remove,
+      deleteWith({ "detalle_receta.delete": failWith(new Error("conexion perdida")) }),
+    );
+
+    expect(result).toMatchObject({
+      estado: { status: "error", error: "No se pudo eliminar el material. Intenta nuevamente." },
+    });
   });
 });
