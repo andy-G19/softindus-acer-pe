@@ -86,7 +86,7 @@ exports[`/dashboard/production/campaigns > acciones de cada estado > resultado 1
 <div>
 <button type="button" aria-label="Volver a producción">
 <svg/>Volver a producción</button>
-<a data-variant="default" href="/dashboard/production/campaigns/new">Nueva campaña</a>
+<a data-variant="default" href="/dashboard/production/campaigns/new?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns">Nueva campaña</a>
 </div>
 </div>
 </section>
@@ -222,7 +222,7 @@ exports[`/dashboard/production/campaigns > acciones de cada estado > resultado 1
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/campaigns/CAM00000001">Ver detalle</a>
-<a data-variant="link" href="/dashboard/production/campaigns/CAM00000001/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/campaigns/CAM00000001/edit?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_campania" value="CAM00000001"/>
 <input type="hidden" name="estado" value="activa"/>
@@ -256,7 +256,7 @@ exports[`/dashboard/production/campaigns > acciones de cada estado > resultado 1
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/campaigns/CAM00000002">Ver detalle</a>
-<a data-variant="link" href="/dashboard/production/campaigns/CAM00000002/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/campaigns/CAM00000002/edit?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_campania" value="CAM00000002"/>
 <input type="hidden" name="estado" value="finalizada"/>
@@ -290,7 +290,7 @@ exports[`/dashboard/production/campaigns > acciones de cada estado > resultado 1
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/campaigns/CAM00000003">Ver detalle</a>
-<a data-variant="link" href="/dashboard/production/campaigns/CAM00000003/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/campaigns/CAM00000003/edit?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns">Editar</a>
 </div>
 </td>
 </tr>
@@ -412,7 +412,7 @@ exports[`/dashboard/production/campaigns > sin campanas > resultado 1`] = `
 <div>
 <button type="button" aria-label="Volver a producción">
 <svg/>Volver a producción</button>
-<a data-variant="default" href="/dashboard/production/campaigns/new">Nueva campaña</a>
+<a data-variant="default" href="/dashboard/production/campaigns/new?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns">Nueva campaña</a>
 </div>
 </div>
 </section>
@@ -631,7 +631,7 @@ exports[`/dashboard/production/campaigns > sin filtros > resultado 1`] = `
 <div>
 <button type="button" aria-label="Volver a producción">
 <svg/>Volver a producción</button>
-<a data-variant="default" href="/dashboard/production/campaigns/new">Nueva campaña</a>
+<a data-variant="default" href="/dashboard/production/campaigns/new?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns">Nueva campaña</a>
 </div>
 </div>
 </section>
@@ -767,7 +767,7 @@ exports[`/dashboard/production/campaigns > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/campaigns/id_campania-1">Ver detalle</a>
-<a data-variant="link" href="/dashboard/production/campaigns/id_campania-1/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/campaigns/id_campania-1/edit?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_campania" value="id_campania-1"/>
 <input type="hidden" name="estado" value="anulada"/>
@@ -795,7 +795,7 @@ exports[`/dashboard/production/campaigns > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/campaigns/id_campania-2">Ver detalle</a>
-<a data-variant="link" href="/dashboard/production/campaigns/id_campania-2/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/campaigns/id_campania-2/edit?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_campania" value="id_campania-2"/>
 <input type="hidden" name="estado" value="anulada"/>
@@ -907,7 +907,7 @@ exports[`/dashboard/production/campaigns > solo hasta > resultado 1`] = `
 <div>
 <button type="button" aria-label="Volver a producción">
 <svg/>Volver a producción</button>
-<a data-variant="default" href="/dashboard/production/campaigns/new">Nueva campaña</a>
+<a data-variant="default" href="/dashboard/production/campaigns/new?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns%3Fto%3D2026-07-31">Nueva campaña</a>
 </div>
 </div>
 </section>
@@ -1043,7 +1043,7 @@ exports[`/dashboard/production/campaigns > solo hasta > resultado 1`] = `
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/campaigns/id_campania-1">Ver detalle</a>
-<a data-variant="link" href="/dashboard/production/campaigns/id_campania-1/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/campaigns/id_campania-1/edit?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns%3Fto%3D2026-07-31">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_campania" value="id_campania-1"/>
 <input type="hidden" name="estado" value="anulada"/>
@@ -1071,7 +1071,7 @@ exports[`/dashboard/production/campaigns > solo hasta > resultado 1`] = `
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/campaigns/id_campania-2">Ver detalle</a>
-<a data-variant="link" href="/dashboard/production/campaigns/id_campania-2/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/campaigns/id_campania-2/edit?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns%3Fto%3D2026-07-31">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_campania" value="id_campania-2"/>
 <input type="hidden" name="estado" value="anulada"/>
@@ -1210,7 +1210,7 @@ exports[`/dashboard/production/campaigns > todos los filtros > resultado 1`] = `
 <div>
 <button type="button" aria-label="Volver a producción">
 <svg/>Volver a producción</button>
-<a data-variant="default" href="/dashboard/production/campaigns/new">Nueva campaña</a>
+<a data-variant="default" href="/dashboard/production/campaigns/new?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns%3Fq%3Dlote%26product%3DPRO00000001%26status%3Dactiva%26from%3D2026-07-01%26to%3D2026-07-31">Nueva campaña</a>
 </div>
 </div>
 </section>
@@ -1346,7 +1346,7 @@ exports[`/dashboard/production/campaigns > todos los filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/campaigns/id_campania-1">Ver detalle</a>
-<a data-variant="link" href="/dashboard/production/campaigns/id_campania-1/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/campaigns/id_campania-1/edit?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns%3Fq%3Dlote%26product%3DPRO00000001%26status%3Dactiva%26from%3D2026-07-01%26to%3D2026-07-31">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_campania" value="id_campania-1"/>
 <input type="hidden" name="estado" value="anulada"/>
@@ -1374,7 +1374,7 @@ exports[`/dashboard/production/campaigns > todos los filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/campaigns/id_campania-2">Ver detalle</a>
-<a data-variant="link" href="/dashboard/production/campaigns/id_campania-2/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/campaigns/id_campania-2/edit?returnTo=%2Fdashboard%2Fproduction%2Fcampaigns%3Fq%3Dlote%26product%3DPRO00000001%26status%3Dactiva%26from%3D2026-07-01%26to%3D2026-07-31">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_campania" value="id_campania-2"/>
 <input type="hidden" name="estado" value="anulada"/>
@@ -1387,6 +1387,149 @@ exports[`/dashboard/production/campaigns > todos los filtros > resultado 1`] = `
 </table>
 </div>
 </main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/campaigns/@panel/(.)[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_campania": "CAM99999999",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/production/campaigns/@panel/(.)[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/production/campaigns/@panel/(.)[id]/edit > panel de edicion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_campania": "CAM00000001",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/production/campaigns/@panel/(.)[id]/edit > panel de edicion > resultado 1`] = `
+{
+  "html": "<section>
+<h2>Editar campaña</h2>
+<p>nombre_campania-1 · id_campania-1</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_campania" value="id_campania-1"/>
+<div>
+<label for="nombre_campania">Nombre de la campaña<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_campania" required="" maxLength="100" placeholder="Ej. Campaña escolar agosto" name="nombre_campania" value="nombre_campania-1"/>
+</div>
+<div>
+<div>
+<label for="fecha_inicio">Fecha de inicio<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_inicio" required="" name="fecha_inicio" value="2026-07-01"/>
+</div>
+<div>
+<label for="fecha_fin">Fecha de fin</label>
+<input type="date" id="fecha_fin" name="fecha_fin" value="2026-07-01"/>
+</div>
+</div>
+<div>
+<label for="objetivo_general">Objetivo general</label>
+<textarea id="objetivo_general" name="objetivo_general" rows="4" placeholder="Ej. Fabricar lote de herramientas para reposición de stock.">objetivo_general-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/production/campaigns">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/campaigns/@panel/(.)new > panel de alta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/production/campaigns/@panel/(.)new > panel de alta > resultado 1`] = `
+{
+  "html": "<section>
+<h2>Nueva campaña de producción</h2>
+<p>Registra una campaña para agrupar objetivos de producción por producto y asociarla luego a órdenes de trabajo.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_campania">Nombre de la campaña<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_campania" required="" maxLength="100" placeholder="Ej. Campaña escolar agosto" name="nombre_campania" value=""/>
+</div>
+<div>
+<div>
+<label for="fecha_inicio">Fecha de inicio<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_inicio" required="" name="fecha_inicio" value="2026-07-15"/>
+</div>
+<div>
+<label for="fecha_fin">Fecha de fin</label>
+<input type="date" id="fecha_fin" name="fecha_fin" value=""/>
+</div>
+</div>
+<div>
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
+<option value="planificada" selected="">Planificada</option>
+<option value="activa">Activa</option>
+</select>
+</div>
+<div>
+<label for="objetivo_general">Objetivo general</label>
+<textarea id="objetivo_general" name="objetivo_general" rows="4" maxLength="700" placeholder="Ej. Fabricar lote de herramientas para reposición de stock.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar campaña</button>
+<a data-variant="outline" href="/dashboard/production/campaigns">Cancelar</a>
+</div>
+</form>
+</section>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -2251,7 +2394,7 @@ exports[`/dashboard/production/campaigns/[id]/edit > anulada queda bloqueada > l
 
 exports[`/dashboard/production/campaigns/[id]/edit > anulada queda bloqueada > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2282,40 +2425,42 @@ exports[`/dashboard/production/campaigns/[id]/edit > anulada queda bloqueada > r
 </div>
 </div>
 <div>
-<button type="button" aria-label="Volver a detalle">
-<svg/>Volver a detalle</button>
+<button type="button" aria-label="Volver a campañas">
+<svg/>Volver a campañas</button>
 </div>
 </div>
 </section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_campania" value="id_campania-1"/>
 <div role="alert">
 <div>Esta campaña está anulada y ya no puede modificarse.</div>
 </div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_campania" value="id_campania-1"/>
-<div>
-<label>Nombre *</label>
-<input required="" maxLength="100" disabled="" name="nombre_campania" value="nombre_campania-1"/>
+<div data-disabled="true">
+<label for="nombre_campania">Nombre de la campaña<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_campania" required="" disabled="" maxLength="100" placeholder="Ej. Campaña escolar agosto" name="nombre_campania" value="nombre_campania-1"/>
 </div>
 <div>
-<div>
-<label>Fecha de inicio *</label>
-<input type="date" required="" disabled="" name="fecha_inicio" value="2026-07-01"/>
+<div data-disabled="true">
+<label for="fecha_inicio">Fecha de inicio<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_inicio" required="" disabled="" name="fecha_inicio" value="2026-07-01"/>
+</div>
+<div data-disabled="true">
+<label for="fecha_fin">Fecha de fin</label>
+<input type="date" id="fecha_fin" disabled="" name="fecha_fin" value="2026-07-01"/>
+</div>
+</div>
+<div data-disabled="true">
+<label for="objetivo_general">Objetivo general</label>
+<textarea id="objetivo_general" disabled="" name="objetivo_general" rows="4" placeholder="Ej. Fabricar lote de herramientas para reposición de stock.">objetivo_general-1</textarea>
 </div>
 <div>
-<label>Fecha de fin</label>
-<input type="date" disabled="" name="fecha_fin" value="2026-07-01"/>
-</div>
-</div>
-<div>
-<label>Objetivo general</label>
-<textarea name="objetivo_general" rows="4" disabled="">objetivo_general-1</textarea>
-</div>
-<div>
-<a data-variant="link" href="/dashboard/production/campaigns/id_campania-1">Volver a detalle</a>
 <button data-variant="default" type="submit" disabled="">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/production/campaigns">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -2343,7 +2488,7 @@ exports[`/dashboard/production/campaigns/[id]/edit > editar > llamadas 1`] = `
 
 exports[`/dashboard/production/campaigns/[id]/edit > editar > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2374,37 +2519,39 @@ exports[`/dashboard/production/campaigns/[id]/edit > editar > resultado 1`] = `
 </div>
 </div>
 <div>
-<button type="button" aria-label="Volver a detalle">
-<svg/>Volver a detalle</button>
+<button type="button" aria-label="Volver a campañas">
+<svg/>Volver a campañas</button>
 </div>
 </div>
 </section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_campania" value="id_campania-1"/>
 <div>
-<label>Nombre *</label>
-<input required="" maxLength="100" name="nombre_campania" value="nombre_campania-1"/>
+<label for="nombre_campania">Nombre de la campaña<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_campania" required="" maxLength="100" placeholder="Ej. Campaña escolar agosto" name="nombre_campania" value="nombre_campania-1"/>
 </div>
 <div>
 <div>
-<label>Fecha de inicio *</label>
-<input type="date" required="" name="fecha_inicio" value="2026-07-01"/>
+<label for="fecha_inicio">Fecha de inicio<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_inicio" required="" name="fecha_inicio" value="2026-07-01"/>
 </div>
 <div>
-<label>Fecha de fin</label>
-<input type="date" name="fecha_fin" value="2026-07-01"/>
+<label for="fecha_fin">Fecha de fin</label>
+<input type="date" id="fecha_fin" name="fecha_fin" value="2026-07-01"/>
 </div>
 </div>
 <div>
-<label>Objetivo general</label>
-<textarea name="objetivo_general" rows="4">objetivo_general-1</textarea>
+<label for="objetivo_general">Objetivo general</label>
+<textarea id="objetivo_general" name="objetivo_general" rows="4" placeholder="Ej. Fabricar lote de herramientas para reposición de stock.">objetivo_general-1</textarea>
 </div>
 <div>
-<a data-variant="link" href="/dashboard/production/campaigns/id_campania-1">Volver a detalle</a>
 <button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/production/campaigns">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -2434,5 +2581,278 @@ exports[`/dashboard/production/campaigns/[id]/edit > inexistente > resultado 1`]
 {
   "html": null,
   "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/production/campaigns/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/production/campaigns/new > formulario > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/campaigns">Campañas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva campaña</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nueva campaña de producción</h1>
+<p>Registra una campaña para agrupar objetivos de producción por producto y asociarla luego a órdenes de trabajo.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a campañas">
+<svg/>Volver a campañas</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_campania">Nombre de la campaña<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_campania" required="" maxLength="100" placeholder="Ej. Campaña escolar agosto" name="nombre_campania" value=""/>
+</div>
+<div>
+<div>
+<label for="fecha_inicio">Fecha de inicio<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_inicio" required="" name="fecha_inicio" value="2026-07-15"/>
+</div>
+<div>
+<label for="fecha_fin">Fecha de fin</label>
+<input type="date" id="fecha_fin" name="fecha_fin" value=""/>
+</div>
+</div>
+<div>
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
+<option value="planificada" selected="">Planificada</option>
+<option value="activa">Activa</option>
+</select>
+</div>
+<div>
+<label for="objetivo_general">Objetivo general</label>
+<textarea id="objetivo_general" name="objetivo_general" rows="4" maxLength="700" placeholder="Ej. Fabricar lote de herramientas para reposición de stock.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar campaña</button>
+<a data-variant="outline" href="/dashboard/production/campaigns">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/campaigns/new > un returnTo ajeno vuelve a la lista > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/production/campaigns/new > un returnTo ajeno vuelve a la lista > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/campaigns">Campañas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva campaña</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nueva campaña de producción</h1>
+<p>Registra una campaña para agrupar objetivos de producción por producto y asociarla luego a órdenes de trabajo.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a campañas">
+<svg/>Volver a campañas</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_campania">Nombre de la campaña<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_campania" required="" maxLength="100" placeholder="Ej. Campaña escolar agosto" name="nombre_campania" value=""/>
+</div>
+<div>
+<div>
+<label for="fecha_inicio">Fecha de inicio<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_inicio" required="" name="fecha_inicio" value="2026-07-15"/>
+</div>
+<div>
+<label for="fecha_fin">Fecha de fin</label>
+<input type="date" id="fecha_fin" name="fecha_fin" value=""/>
+</div>
+</div>
+<div>
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
+<option value="planificada" selected="">Planificada</option>
+<option value="activa">Activa</option>
+</select>
+</div>
+<div>
+<label for="objetivo_general">Objetivo general</label>
+<textarea id="objetivo_general" name="objetivo_general" rows="4" maxLength="700" placeholder="Ej. Fabricar lote de herramientas para reposición de stock.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar campaña</button>
+<a data-variant="outline" href="/dashboard/production/campaigns">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/campaigns/new > vuelve al returnTo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/production/campaigns/new > vuelve al returnTo > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/campaigns?status=activa">Campañas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva campaña</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nueva campaña de producción</h1>
+<p>Registra una campaña para agrupar objetivos de producción por producto y asociarla luego a órdenes de trabajo.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a campañas">
+<svg/>Volver a campañas</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_campania">Nombre de la campaña<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_campania" required="" maxLength="100" placeholder="Ej. Campaña escolar agosto" name="nombre_campania" value=""/>
+</div>
+<div>
+<div>
+<label for="fecha_inicio">Fecha de inicio<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_inicio" required="" name="fecha_inicio" value="2026-07-15"/>
+</div>
+<div>
+<label for="fecha_fin">Fecha de fin</label>
+<input type="date" id="fecha_fin" name="fecha_fin" value=""/>
+</div>
+</div>
+<div>
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
+<option value="planificada" selected="">Planificada</option>
+<option value="activa">Activa</option>
+</select>
+</div>
+<div>
+<label for="objetivo_general">Objetivo general</label>
+<textarea id="objetivo_general" name="objetivo_general" rows="4" maxLength="700" placeholder="Ej. Fabricar lote de herramientas para reposición de stock.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar campaña</button>
+<a data-variant="outline" href="/dashboard/production/campaigns?status=activa">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
 }
 `;

@@ -2132,7 +2132,7 @@ exports[`changeProductionCampaignStatusAction > una finalizada se puede anular y
 exports[`createProductionCampaignAction > ADMIN crea la campana con su correlativo y la bitacora en la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2197,12 +2197,29 @@ exports[`createProductionCampaignAction > ADMIN crea la campana con su correlati
 ]
 `;
 
-exports[`createProductionCampaignAction > ADMIN crea la campana con su correlativo y la bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+exports[`createProductionCampaignAction > ADMIN crea la campana con su correlativo y la bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania": "CAM00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
-exports[`createProductionCampaignAction > SELLER no puede crear > llamadas 1`] = `
+exports[`createProductionCampaignAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2211,12 +2228,28 @@ exports[`createProductionCampaignAction > SELLER no puede crear > llamadas 1`] =
 ]
 `;
 
-exports[`createProductionCampaignAction > SELLER no puede crear > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createProductionCampaignAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar campañas de producción.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > WORKSHOP_MASTER tambien crea campanas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2281,12 +2314,29 @@ exports[`createProductionCampaignAction > WORKSHOP_MASTER tambien crea campanas 
 ]
 `;
 
-exports[`createProductionCampaignAction > WORKSHOP_MASTER tambien crea campanas > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+exports[`createProductionCampaignAction > WORKSHOP_MASTER tambien crea campanas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania": "CAM00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > el 30 de febrero se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2295,12 +2345,32 @@ exports[`createProductionCampaignAction > el 30 de febrero se rechaza > llamadas
 ]
 `;
 
-exports[`createProductionCampaignAction > el 30 de febrero se rechaza > resultado 1`] = `"error: La fecha de inicio no es válida."`;
+exports[`createProductionCampaignAction > el 30 de febrero se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "fecha_inicio": [
+        "La fecha de inicio no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "",
+      "fecha_inicio": "2026-02-30",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > el fin no puede ser anterior al inicio > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2309,12 +2379,32 @@ exports[`createProductionCampaignAction > el fin no puede ser anterior al inicio
 ]
 `;
 
-exports[`createProductionCampaignAction > el fin no puede ser anterior al inicio > resultado 1`] = `"error: La fecha de fin no puede ser anterior a la fecha de inicio."`;
+exports[`createProductionCampaignAction > el fin no puede ser anterior al inicio > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "fecha_fin": [
+        "La fecha de fin no puede ser anterior a la fecha de inicio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-07-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > el fin puede ser el mismo dia del inicio > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2379,12 +2469,29 @@ exports[`createProductionCampaignAction > el fin puede ser el mismo dia del inic
 ]
 `;
 
-exports[`createProductionCampaignAction > el fin puede ser el mismo dia del inicio > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+exports[`createProductionCampaignAction > el fin puede ser el mismo dia del inicio > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania": "CAM00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-01",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > el nombre es obligatorio > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2393,12 +2500,32 @@ exports[`createProductionCampaignAction > el nombre es obligatorio > llamadas 1`
 ]
 `;
 
-exports[`createProductionCampaignAction > el nombre es obligatorio > resultado 1`] = `"error: El nombre de la campaña es obligatorio."`;
+exports[`createProductionCampaignAction > el nombre es obligatorio > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "nombre_campania": [
+        "El nombre de la campaña es obligatorio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > el nombre no supera 100 caracteres > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2407,12 +2534,32 @@ exports[`createProductionCampaignAction > el nombre no supera 100 caracteres > l
 ]
 `;
 
-exports[`createProductionCampaignAction > el nombre no supera 100 caracteres > resultado 1`] = `"error: El nombre de la campaña no debe superar 100 caracteres."`;
+exports[`createProductionCampaignAction > el nombre no supera 100 caracteres > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "nombre_campania": [
+        "El nombre de la campaña no debe superar 100 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > fin y objetivo ausentes cuentan como vacios > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2477,12 +2624,29 @@ exports[`createProductionCampaignAction > fin y objetivo ausentes cuentan como v
 ]
 `;
 
-exports[`createProductionCampaignAction > fin y objetivo ausentes cuentan como vacios > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+exports[`createProductionCampaignAction > fin y objetivo ausentes cuentan como vacios > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania": "CAM00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > fin y objetivo vacios se guardan como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2547,12 +2711,29 @@ exports[`createProductionCampaignAction > fin y objetivo vacios se guardan como 
 ]
 `;
 
-exports[`createProductionCampaignAction > fin y objetivo vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+exports[`createProductionCampaignAction > fin y objetivo vacios se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania": "CAM00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > la fecha de inicio es obligatoria > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2561,12 +2742,32 @@ exports[`createProductionCampaignAction > la fecha de inicio es obligatoria > ll
 ]
 `;
 
-exports[`createProductionCampaignAction > la fecha de inicio es obligatoria > resultado 1`] = `"error: La fecha de inicio es obligatoria."`;
+exports[`createProductionCampaignAction > la fecha de inicio es obligatoria > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "fecha_inicio": [
+        "La fecha de inicio es obligatoria.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2575,12 +2776,38 @@ exports[`createProductionCampaignAction > un POST sin campos se rechaza sin toca
 ]
 `;
 
-exports[`createProductionCampaignAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: El nombre de la campaña es obligatorio."`;
+exports[`createProductionCampaignAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "estado": [
+        "Selecciona un estado válido.",
+      ],
+      "fecha_inicio": [
+        "La fecha de inicio es obligatoria.",
+      ],
+      "nombre_campania": [
+        "El nombre de la campaña es obligatorio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "",
+      "fecha_fin": "",
+      "fecha_inicio": "",
+      "nombre_campania": "",
+      "objetivo_general": "",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > un estado desconocido se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2589,12 +2816,91 @@ exports[`createProductionCampaignAction > un estado desconocido se rechaza > lla
 ]
 `;
 
-exports[`createProductionCampaignAction > un estado desconocido se rechaza > resultado 1`] = `"error: Selecciona un estado válido."`;
+exports[`createProductionCampaignAction > un estado desconocido se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "estado": [
+        "Selecciona un estado válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "cerrada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
+
+exports[`createProductionCampaignAction > un fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_produccion",
+      "prefijo": "CAM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "planificada",
+        "fecha_fin": 2026-08-31T00:00:00.000Z,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "id_campania": "CAM00000012",
+        "id_usuario_registro": "USU00000001",
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+    },
+    "prisma": "campania_produccion.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > un fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la campaña. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > una campana no nace anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2603,12 +2909,32 @@ exports[`createProductionCampaignAction > una campana no nace anulada > llamadas
 ]
 `;
 
-exports[`createProductionCampaignAction > una campana no nace anulada > resultado 1`] = `"error: Selecciona un estado válido."`;
+exports[`createProductionCampaignAction > una campana no nace anulada > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "estado": [
+        "Selecciona un estado válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "anulada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > una campana no nace finalizada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2617,12 +2943,32 @@ exports[`createProductionCampaignAction > una campana no nace finalizada > llama
 ]
 `;
 
-exports[`createProductionCampaignAction > una campana no nace finalizada > resultado 1`] = `"error: Selecciona un estado válido."`;
+exports[`createProductionCampaignAction > una campana no nace finalizada > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "estado": [
+        "Selecciona un estado válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "finalizada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > una campana puede nacer activa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2687,12 +3033,29 @@ exports[`createProductionCampaignAction > una campana puede nacer activa > llama
 ]
 `;
 
-exports[`createProductionCampaignAction > una campana puede nacer activa > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+exports[`createProductionCampaignAction > una campana puede nacer activa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania": "CAM00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado": "activa",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > una fecha de fin imposible se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2701,12 +3064,32 @@ exports[`createProductionCampaignAction > una fecha de fin imposible se rechaza 
 ]
 `;
 
-exports[`createProductionCampaignAction > una fecha de fin imposible se rechaza > resultado 1`] = `"error: La fecha de fin no es válida."`;
+exports[`createProductionCampaignAction > una fecha de fin imposible se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "fecha_fin": [
+        "La fecha de fin no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-13-01",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`createProductionCampaignAction > una fecha de inicio imposible se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2715,12 +3098,32 @@ exports[`createProductionCampaignAction > una fecha de inicio imposible se recha
 ]
 `;
 
-exports[`createProductionCampaignAction > una fecha de inicio imposible se rechaza > resultado 1`] = `"error: La fecha de inicio no es válida."`;
+exports[`createProductionCampaignAction > una fecha de inicio imposible se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "fecha_inicio": [
+        "La fecha de inicio no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-13-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`updateProductionCampaignAction > ADMIN actualiza la campana > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2799,12 +3202,29 @@ exports[`updateProductionCampaignAction > ADMIN actualiza la campana > llamadas 
 ]
 `;
 
-exports[`updateProductionCampaignAction > ADMIN actualiza la campana > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+exports[`updateProductionCampaignAction > ADMIN actualiza la campana > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania": "CAM00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
-exports[`updateProductionCampaignAction > SELLER no puede actualizar > llamadas 1`] = `
+exports[`updateProductionCampaignAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2813,12 +3233,28 @@ exports[`updateProductionCampaignAction > SELLER no puede actualizar > llamadas 
 ]
 `;
 
-exports[`updateProductionCampaignAction > SELLER no puede actualizar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateProductionCampaignAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar campañas de producción.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`updateProductionCampaignAction > WORKSHOP_MASTER tambien actualiza campanas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2897,12 +3333,29 @@ exports[`updateProductionCampaignAction > WORKSHOP_MASTER tambien actualiza camp
 ]
 `;
 
-exports[`updateProductionCampaignAction > WORKSHOP_MASTER tambien actualiza campanas > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+exports[`updateProductionCampaignAction > WORKSHOP_MASTER tambien actualiza campanas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania": "CAM00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`updateProductionCampaignAction > datos invalidos se rechazan sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2911,12 +3364,32 @@ exports[`updateProductionCampaignAction > datos invalidos se rechazan sin tocar 
 ]
 `;
 
-exports[`updateProductionCampaignAction > datos invalidos se rechazan sin tocar Prisma > resultado 1`] = `"error: El nombre de la campaña es obligatorio."`;
+exports[`updateProductionCampaignAction > datos invalidos se rechazan sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "nombre_campania": [
+        "El nombre de la campaña es obligatorio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`updateProductionCampaignAction > editar no anula: el estado enviado se ignora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2995,12 +3468,29 @@ exports[`updateProductionCampaignAction > editar no anula: el estado enviado se 
 ]
 `;
 
-exports[`updateProductionCampaignAction > editar no anula: el estado enviado se ignora > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+exports[`updateProductionCampaignAction > editar no anula: el estado enviado se ignora > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania": "CAM00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado": "anulada",
+      "fecha_fin": "",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`updateProductionCampaignAction > editar no reabre una campana finalizada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3079,12 +3569,29 @@ exports[`updateProductionCampaignAction > editar no reabre una campana finalizad
 ]
 `;
 
-exports[`updateProductionCampaignAction > editar no reabre una campana finalizada > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+exports[`updateProductionCampaignAction > editar no reabre una campana finalizada > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania": "CAM00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado": "activa",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`updateProductionCampaignAction > el fin no puede ser anterior al inicio > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3093,12 +3600,32 @@ exports[`updateProductionCampaignAction > el fin no puede ser anterior al inicio
 ]
 `;
 
-exports[`updateProductionCampaignAction > el fin no puede ser anterior al inicio > resultado 1`] = `"error: La fecha de fin no puede ser anterior a la fecha de inicio."`;
+exports[`updateProductionCampaignAction > el fin no puede ser anterior al inicio > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la campaña.",
+    "fieldErrors": {
+      "fecha_fin": [
+        "La fecha de fin no puede ser anterior a la fecha de inicio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-07-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`updateProductionCampaignAction > la campana no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3130,18 +3657,34 @@ exports[`updateProductionCampaignAction > la campana no existe > llamadas 1`] = 
     "prisma": "campania_produccion.findUnique",
   },
   {
-    "args": "La campania seleccionada no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateProductionCampaignAction > la campana no existe > resultado 1`] = `"error: La campania seleccionada no existe."`;
+exports[`updateProductionCampaignAction > la campana no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La campaña seleccionada no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`updateProductionCampaignAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3150,12 +3693,28 @@ exports[`updateProductionCampaignAction > sin id se rechaza sin tocar Prisma > l
 ]
 `;
 
-exports[`updateProductionCampaignAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `"error: No se recibio la campania."`;
+exports[`updateProductionCampaignAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió la campaña.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
-exports[`updateProductionCampaignAction > una campana anulada no se modifica > llamadas 1`] = `
+exports[`updateProductionCampaignAction > un fallo al actualizar revierte con el mensaje generico > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3187,18 +3746,107 @@ exports[`updateProductionCampaignAction > una campana anulada no se modifica > l
     "prisma": "campania_produccion.findUnique",
   },
   {
-    "args": "No se puede modificar una campania anulada.",
+    "args": {
+      "data": {
+        "fecha_fin": 2026-08-31T00:00:00.000Z,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": "conexion perdida",
     "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
 
-exports[`updateProductionCampaignAction > una campana anulada no se modifica > resultado 1`] = `"error: No se puede modificar una campania anulada."`;
+exports[`updateProductionCampaignAction > un fallo al actualizar revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la campaña. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
+
+exports[`updateProductionCampaignAction > una campana anulada no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateProductionCampaignAction > una campana anulada no se modifica > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una campaña anulada.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado": "planificada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;
 
 exports[`updateProductionCampaignAction > una campana finalizada conserva sus datos editables > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3277,4 +3925,21 @@ exports[`updateProductionCampaignAction > una campana finalizada conserva sus da
 ]
 `;
 
-exports[`updateProductionCampaignAction > una campana finalizada conserva sus datos editables > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+exports[`updateProductionCampaignAction > una campana finalizada conserva sus datos editables > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_campania": "CAM00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado": "finalizada",
+      "fecha_fin": "2026-08-31",
+      "fecha_inicio": "2026-08-01",
+      "nombre_campania": "Campana escolar",
+      "objetivo_general": "Reponer stock",
+    },
+  },
+}
+`;

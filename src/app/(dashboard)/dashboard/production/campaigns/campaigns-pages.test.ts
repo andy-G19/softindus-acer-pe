@@ -1,8 +1,16 @@
+import { createElement, type ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { characterizePage, definePageSuite, generatedRow, isPrismaCall } from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
+// RouteSheet pinta su contenido en un portal, que no existe en el render de
+// servidor: el HTML de un panel sale vacio. El doble lo deja en linea para que la
+// prueba vea el titulo, los avisos y el formulario del panel.
+vi.mock("@/components/navigation/route-sheet", () => ({
+  RouteSheet: ({ title, description, children }: { title: string; description?: string; children: ReactNode }) =>
+    createElement("section", null, createElement("h2", null, title), createElement("p", null, description), children),
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock(),
 );
@@ -75,6 +83,32 @@ definePageSuite([
         params: { id: "CAM00000001" },
         data: { "campania_produccion.findUnique": campaignInState("finalizada") },
       },
+      {
+        name: "inexistente",
+        params: { id: "CAM99999999" },
+        data: { "campania_produccion.findUnique": null },
+      },
+    ],
+  },
+  {
+    route: "/dashboard/production/campaigns/new",
+    load: () => import("./new/page"),
+    cases: [
+      { name: "formulario" },
+      { name: "vuelve al returnTo", searchParams: { returnTo: "/dashboard/production/campaigns?status=activa" } },
+      { name: "un returnTo ajeno vuelve a la lista", searchParams: { returnTo: "https://otro.example/x" } },
+    ],
+  },
+  {
+    route: "/dashboard/production/campaigns/@panel/(.)new",
+    load: () => import("./@panel/(.)new/page"),
+    cases: [{ name: "panel de alta" }],
+  },
+  {
+    route: "/dashboard/production/campaigns/@panel/(.)[id]/edit",
+    load: () => import("./@panel/(.)[id]/edit/page"),
+    cases: [
+      { name: "panel de edicion", params: { id: "CAM00000001" } },
       {
         name: "inexistente",
         params: { id: "CAM99999999" },

@@ -19,7 +19,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDate } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { parseDateParam } from "@/lib/search-params";
 import { changeProductionCampaignStatusAction } from "@/modules/production/campaigns/actions";
@@ -79,6 +84,7 @@ export default async function ProductionCampaignsPage({
   const to = getSearchParam(params, "to");
   const fromDate = parseDateParam(params, "from");
   const toDate = parseDateParam(params, "to");
+  const returnTo = createReturnToHref(navigationHrefs.campaigns, params);
   const { campaigns, products } = await getProductionCampaignListData({
     q,
     product,
@@ -124,7 +130,7 @@ export default async function ProductionCampaignsPage({
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/production/campaigns/new">
+            <Link href={withReturnTo(`${navigationHrefs.campaigns}/new`, returnTo)}>
               Nueva campaña
             </Link>
           </Button>
@@ -264,7 +270,7 @@ export default async function ProductionCampaignsPage({
                     {campaign.estado !== "anulada" ? (
                       <Button variant="link" className="h-auto justify-start p-0" asChild>
                         <Link
-                          href={`/dashboard/production/campaigns/${campaign.id_campania}/edit`}
+                          href={withReturnTo(`${navigationHrefs.campaigns}/${campaign.id_campania}/edit`, returnTo)}
                         >
                           Editar
                         </Link>

@@ -6,6 +6,7 @@ import {
   changeProductionCampaignStatusAction,
   createProductionCampaignAction,
   updateProductionCampaignAction,
+  type ProductionCampaignFormState,
 } from "@/modules/production/campaigns/actions";
 import {
   characterizeHandler,
@@ -27,12 +28,21 @@ import {
 //
 // Varios casos fijan defectos (hallazgos de plan-10-7.md): cambian a proposito en
 // sus commits fix. Desde A2, la campana se bloquea antes de leer lo que decide.
+//
+// Desde el panel lateral (A6), el alta y la edicion autorizan con
+// getAuthorizedSession y devuelven el resultado (FormActionState) en lugar de
+// lanzar y redirigir: sin permiso responden con un error dentro del formulario.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -142,6 +152,10 @@ function defineCases(name: string, run: (formData: FormData) => Promise<unknown>
 const CAMPANIA = "CAM00000003";
 const PRODUCTO = "PRO00000004";
 
+const initialState: ProductionCampaignFormState = { status: "idle" };
+const create = (formData: FormData) => createProductionCampaignAction(initialState, formData);
+const update = (formData: FormData) => updateProductionCampaignAction(initialState, formData);
+
 const failWith = (error: Error) => () => {
   throw error;
 };
@@ -203,10 +217,10 @@ const statusWith = (estadoActual: string, estado: string | null, fields: FormFie
 // Casos
 // ---------------------------------------------------------------------------
 
-defineCases("createProductionCampaignAction", createProductionCampaignAction, [
+defineCases("createProductionCampaignAction", create, [
   { name: "ADMIN crea la campana con su correlativo y la bitacora en la transaccion", ...createWith() },
   { name: "WORKSHOP_MASTER tambien crea campanas", ...createWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER no puede crear", ...createWith(), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...createWith(), role: "SELLER" },
   { name: "fin y objetivo vacios se guardan como null", ...createWith({ fecha_fin: "", objetivo_general: "" }) },
   { name: "fin y objetivo ausentes cuentan como vacios", ...createWith({ fecha_fin: null, objetivo_general: null }) },
   { name: "el nombre es obligatorio", ...createWith({ nombre_campania: "" }) },
@@ -222,6 +236,11 @@ defineCases("createProductionCampaignAction", createProductionCampaignAction, [
   { name: "una campana no nace anulada", ...createWith({ estado: "anulada" }) },
   { name: "una campana puede nacer activa", ...createWith({ estado: "activa" }) },
   { name: "un POST sin campos se rechaza sin tocar Prisma", form: {} },
+  {
+    name: "un fallo al crear revierte con el mensaje generico",
+    ...createWith(),
+    data: { "campania_produccion.create": failWith(new Error("conexion perdida")) },
+  },
 ]);
 
 defineCases("addCampaignDetailAction", addCampaignDetailAction, [
@@ -251,15 +270,19 @@ defineCases("addCampaignDetailAction", addCampaignDetailAction, [
   { name: "un POST sin campos se rechaza sin tocar Prisma", form: {} },
 ]);
 
-defineCases("updateProductionCampaignAction", updateProductionCampaignAction, [
+defineCases("updateProductionCampaignAction", update, [
   { name: "ADMIN actualiza la campana", ...updateWith() },
   { name: "WORKSHOP_MASTER tambien actualiza campanas", ...updateWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER no puede actualizar", ...updateWith(), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...updateWith(), role: "SELLER" },
   { name: "sin id se rechaza sin tocar Prisma", ...updateWith({ id_campania: "" }) },
   { name: "datos invalidos se rechazan sin tocar Prisma", ...updateWith({ nombre_campania: "" }) },
   { name: "el fin no puede ser anterior al inicio", ...updateWith({ fecha_fin: "2026-07-31" }) },
   { name: "la campana no existe", ...updateWith({}, noCampaign) },
   { name: "una campana anulada no se modifica", ...updateWith({}, campaign("anulada")) },
+  {
+    name: "un fallo al actualizar revierte con el mensaje generico",
+    ...updateWith({}, { "campania_produccion.update": failWith(new Error("conexion perdida")) }),
+  },
   { name: "una campana finalizada conserva sus datos editables", ...updateWith({ estado: "finalizada" }, campaign("finalizada")) },
   {
     name: "editar no reabre una campana finalizada",
@@ -300,14 +323,11 @@ describe("el estado no se cambia desde el formulario", () => {
   type Recorded = { prisma?: string; args?: { data?: Record<string, unknown> } };
 
   it.each(["activa", "anulada", "planificada"])("editar con estado %s no lo escribe", async (estado) => {
-    const { calls, result } = await runCase(
-      updateProductionCampaignAction,
-      updateWith({ estado }, campaign("finalizada")),
-    );
-    const update = (calls as Recorded[]).find((call) => call.prisma === "campania_produccion.update");
+    const { calls, result } = await runCase(update, updateWith({ estado }, campaign("finalizada")));
+    const written = (calls as Recorded[]).find((call) => call.prisma === "campania_produccion.update");
 
-    expect(result).toEqual(expect.stringContaining("toast=campaign-updated"));
-    expect(update?.args?.data).toEqual({
+    expect(result).toEqual({ estado: expect.objectContaining({ status: "success" }) });
+    expect(written?.args?.data).toEqual({
       nombre_campania: campaignForm.nombre_campania,
       fecha_inicio: new Date("2026-08-01T00:00:00"),
       fecha_fin: new Date("2026-08-31T00:00:00"),
@@ -316,15 +336,20 @@ describe("el estado no se cambia desde el formulario", () => {
   });
 
   it("editar sin el campo estado funciona", async () => {
-    const { result } = await runCase(updateProductionCampaignAction, updateWith({ estado: null }));
+    const { result } = await runCase(update, updateWith({ estado: null }));
 
-    expect(result).toEqual(expect.stringContaining("toast=campaign-updated"));
+    expect(result).toEqual({ estado: expect.objectContaining({ status: "success" }) });
   });
 
   it.each(["finalizada", "anulada"])("el alta rechaza nacer %s", async (estado) => {
-    const { result } = await runCase(createProductionCampaignAction, createWith({ estado }));
+    const { result } = await runCase(create, createWith({ estado }));
 
-    expect(result).toBe("error: Selecciona un estado válido.");
+    expect(result).toEqual({
+      estado: expect.objectContaining({
+        status: "error",
+        fieldErrors: { estado: ["Selecciona un estado válido."] },
+      }),
+    });
   });
 });
 
@@ -336,7 +361,7 @@ describe("las decisiones se toman con la campana bloqueada", () => {
 
   const CASES = [
     { name: "agregar producto", run: addCampaignDetailAction, actionCase: addWith() },
-    { name: "editar", run: updateProductionCampaignAction, actionCase: updateWith() },
+    { name: "editar", run: update, actionCase: updateWith() },
     {
       name: "cambiar el estado",
       run: changeProductionCampaignStatusAction,

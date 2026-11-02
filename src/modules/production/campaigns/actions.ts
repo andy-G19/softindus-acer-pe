@@ -3,10 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { FieldErrors } from "@/lib/errors";
 import { lockCampaignRow } from "@/lib/row-locks";
 import {
   campaignDetailSchema,
@@ -16,6 +18,46 @@ import {
 
 const CLOSED_CAMPAIGN_STATES = ["finalizada", "anulada"];
 const DUPLICATED_DETAIL = "Ese producto ya esta registrado en la campania.";
+const PERMISSION_ERROR = "No tienes permisos para gestionar campañas de producción.";
+const INVALID_DATA = "Revisa los datos de la campaña.";
+const SAVE_ERROR = "No se pudo guardar la campaña. Intenta nuevamente.";
+
+/** Lo que el formulario de campana envio, tal cual, para volver a mostrarlo. */
+export type ProductionCampaignFormValues = {
+  nombre_campania: string;
+  fecha_inicio: string;
+  fecha_fin: string;
+  objetivo_general: string;
+  estado: string;
+};
+
+// Entrega 10.7a: el alta y la edicion se usan desde el panel lateral y devuelven el
+// resultado; sin permiso responden con un error, no redirigen.
+export type ProductionCampaignFormState = FormActionState<ProductionCampaignFormValues, { id_campania: string }>;
+
+function getCampaignFormValues(formData: FormData): ProductionCampaignFormValues {
+  const text = (name: keyof ProductionCampaignFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    nombre_campania: text("nombre_campania"),
+    fecha_inicio: text("fecha_inicio"),
+    fecha_fin: text("fecha_fin"),
+    objetivo_general: text("objetivo_general"),
+    estado: text("estado"),
+  };
+}
+
+function campaignError(
+  values: ProductionCampaignFormValues,
+  error: string,
+  fieldErrors?: FieldErrors,
+): ProductionCampaignFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function campaignSaved(values: ProductionCampaignFormValues, idCampania: string): ProductionCampaignFormState {
+  return { status: "success", data: { id_campania: idCampania }, values, operationId: newOperationId() };
+}
 
 function parseDate(value: string) {
   return new Date(`${value}T00:00:00`);
@@ -25,8 +67,16 @@ function parseNullableDate(value: string | null) {
   return value ? parseDate(value) : null;
 }
 
-export async function createProductionCampaignAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+export async function createProductionCampaignAction(
+  _prevState: ProductionCampaignFormState,
+  formData: FormData,
+): Promise<ProductionCampaignFormState> {
+  const values = getCampaignFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
+
+  if (!session) {
+    return campaignError(values, PERMISSION_ERROR);
+  }
 
   const parsed = productionCampaignSchema.safeParse({
     nombre_campania: formData.get("nombre_campania"),
@@ -37,49 +87,55 @@ export async function createProductionCampaignAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+    return campaignError(values, INVALID_DATA, parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
   const fechaInicio = parseDate(data.fecha_inicio);
   const fechaFin = parseNullableDate(data.fecha_fin);
 
-  let idCampania = "";
+  let idCampania: string;
 
-  await prisma.$transaction(async (tx) => {
-    idCampania = await getNextCorrelativeId(tx, {
-      codigoEntidad: "campania_produccion",
-      prefijo: "CAM",
-    });
+  try {
+    idCampania = await prisma.$transaction(async (tx) => {
+      const idNuevo = await getNextCorrelativeId(tx, {
+        codigoEntidad: "campania_produccion",
+        prefijo: "CAM",
+      });
 
-    await tx.campania_produccion.create({
-      data: {
-        id_campania: idCampania,
-        nombre_campania: data.nombre_campania,
-        fecha_inicio: fechaInicio,
-        fecha_fin: fechaFin,
-        objetivo_general: data.objetivo_general,
-        estado: data.estado,
-        id_usuario_registro: session.user.id,
-      },
-    });
+      await tx.campania_produccion.create({
+        data: {
+          id_campania: idNuevo,
+          nombre_campania: data.nombre_campania,
+          fecha_inicio: fechaInicio,
+          fecha_fin: fechaFin,
+          objetivo_general: data.objetivo_general,
+          estado: data.estado,
+          id_usuario_registro: session.user.id,
+        },
+      });
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "campania_produccion",
-      id_registro_afectado: idCampania,
-      accion: "crear",
-      detalle: `Campania de produccion creada: ${data.nombre_campania}.`,
-      tx,
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "campania_produccion",
+        id_registro_afectado: idNuevo,
+        accion: "crear",
+        detalle: `Campania de produccion creada: ${data.nombre_campania}.`,
+        tx,
+      });
+
+      return idNuevo;
     });
-  });
+  } catch {
+    return campaignError(values, SAVE_ERROR);
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/campaigns");
   revalidatePath("/dashboard/production/work-orders/new");
 
-  redirect(`/dashboard/production/campaigns/${idCampania}?toast=campaign-created`);
+  return campaignSaved(values, idCampania);
 }
 
 export async function addCampaignDetailAction(formData: FormData) {
@@ -195,13 +251,21 @@ export async function addCampaignDetailAction(formData: FormData) {
   );
 }
 
-export async function updateProductionCampaignAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+export async function updateProductionCampaignAction(
+  _prevState: ProductionCampaignFormState,
+  formData: FormData,
+): Promise<ProductionCampaignFormState> {
+  const values = getCampaignFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
+
+  if (!session) {
+    return campaignError(values, PERMISSION_ERROR);
+  }
 
   const idCampania = String(formData.get("id_campania") ?? "");
 
   if (!idCampania) {
-    throw new Error("No se recibio la campania.");
+    return campaignError(values, "No se recibió la campaña.");
   }
 
   const parsed = updateProductionCampaignSchema.safeParse({
@@ -212,60 +276,73 @@ export async function updateProductionCampaignAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+    return campaignError(values, INVALID_DATA, parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
 
-  await prisma.$transaction(async (tx) => {
-    await lockCampaignRow(tx, idCampania);
+  let problem: string | null;
 
-    const campaign = await tx.campania_produccion.findUnique({
-      where: {
-        id_campania: idCampania,
-      },
-      select: {
-        id_campania: true,
-        estado: true,
-      },
+  try {
+    // Un rechazo vuelve del callback sin escribir nada y la transaccion termina.
+    problem = await prisma.$transaction(async (tx) => {
+      await lockCampaignRow(tx, idCampania);
+
+      const campaign = await tx.campania_produccion.findUnique({
+        where: {
+          id_campania: idCampania,
+        },
+        select: {
+          id_campania: true,
+          estado: true,
+        },
+      });
+
+      if (!campaign) {
+        return "La campaña seleccionada no existe.";
+      }
+
+      if (campaign.estado === "anulada") {
+        return "No se puede modificar una campaña anulada.";
+      }
+
+      await tx.campania_produccion.update({
+        where: {
+          id_campania: idCampania,
+        },
+        data: {
+          nombre_campania: data.nombre_campania,
+          fecha_inicio: parseDate(data.fecha_inicio),
+          fecha_fin: parseNullableDate(data.fecha_fin),
+          objetivo_general: data.objetivo_general,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "campania_produccion",
+        id_registro_afectado: idCampania,
+        accion: "actualizar",
+        detalle: `Campania actualizada: ${data.nombre_campania}.`,
+        tx,
+      });
+
+      return null;
     });
+  } catch {
+    problem = SAVE_ERROR;
+  }
 
-    if (!campaign) {
-      throw new Error("La campania seleccionada no existe.");
-    }
-
-    if (campaign.estado === "anulada") {
-      throw new Error("No se puede modificar una campania anulada.");
-    }
-
-    await tx.campania_produccion.update({
-      where: {
-        id_campania: idCampania,
-      },
-      data: {
-        nombre_campania: data.nombre_campania,
-        fecha_inicio: parseDate(data.fecha_inicio),
-        fecha_fin: parseNullableDate(data.fecha_fin),
-        objetivo_general: data.objetivo_general,
-      },
-    });
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "campania_produccion",
-      id_registro_afectado: idCampania,
-      accion: "actualizar",
-      detalle: `Campania actualizada: ${data.nombre_campania}.`,
-      tx,
-    });
-  });
+  if (problem) {
+    return campaignError(values, problem);
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/campaigns");
   revalidatePath(`/dashboard/production/campaigns/${idCampania}`);
 
-  redirect(`/dashboard/production/campaigns/${idCampania}?toast=campaign-updated`);
+  return campaignSaved(values, idCampania);
 }
 
 export async function changeProductionCampaignStatusAction(formData: FormData) {

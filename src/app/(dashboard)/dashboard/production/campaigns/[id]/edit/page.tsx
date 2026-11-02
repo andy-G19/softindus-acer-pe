@@ -1,36 +1,28 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
 import { updateProductionCampaignAction } from "@/modules/production/campaigns/actions";
+import { CampaignForm } from "@/modules/production/campaigns/campaign-form";
+import { campaignEditFormValues } from "@/modules/production/campaigns/campaign-form-values";
 import { getProductionCampaignForEdit } from "@/modules/production/campaigns/queries";
+import { productionNotifications } from "@/modules/production/notifications";
 
 type EditProductionCampaignPageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatDateInput(value: Date | null | undefined) {
-  if (!value) {
-    return "";
-  }
-
-  return value.toISOString().slice(0, 10);
-}
 
 export default async function EditProductionCampaignPage({
   params,
+  searchParams,
 }: EditProductionCampaignPageProps) {
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const { id } = await params;
+  const queryParams = (await searchParams) ?? {};
 
   const campaign = await getProductionCampaignForEdit(id);
 
@@ -38,92 +30,29 @@ export default async function EditProductionCampaignPage({
     notFound();
   }
 
-  const isVoided = campaign.estado === "anulada";
+  const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.campaigns);
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6">
       <PageHeader
         title="Editar campaña"
         description="Actualiza los datos generales de la campaña."
-        backHref={`${navigationHrefs.campaigns}/${campaign.id_campania}`}
-        backLabel="Volver a detalle"
+        backHref={backHref}
+        backLabel="Volver a campañas"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Producción", href: navigationHrefs.production },
-          { label: "Campañas", href: navigationHrefs.campaigns },
+          { label: "Campañas", href: backHref },
           { label: "Editar campaña" },
         ])}
       />
 
-      {isVoided ? (
-        <Alert variant="destructive">
-          <AlertDescription>
-            Esta campaña está anulada y ya no puede modificarse.
-          </AlertDescription>
-        </Alert>
-      ) : null}
-
-      <form
+      <CampaignForm
         action={updateProductionCampaignAction}
-        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
-      >
-        <input type="hidden" name="id_campania" value={campaign.id_campania} />
-
-        <div className="space-y-2">
-          <Label>Nombre *</Label>
-          <Input
-            name="nombre_campania"
-            required
-            maxLength={100}
-            defaultValue={campaign.nombre_campania}
-            disabled={isVoided}
-          />
-        </div>
-
-        <div className="grid gap-5 md:grid-cols-2">
-          <div className="space-y-2">
-            <Label>Fecha de inicio *</Label>
-            <Input
-              name="fecha_inicio"
-              type="date"
-              required
-              defaultValue={formatDateInput(campaign.fecha_inicio)}
-              disabled={isVoided}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Fecha de fin</Label>
-            <Input
-              name="fecha_fin"
-              type="date"
-              defaultValue={formatDateInput(campaign.fecha_fin)}
-              disabled={isVoided}
-            />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Objetivo general</Label>
-          <Textarea
-            name="objetivo_general"
-            rows={4}
-            defaultValue={campaign.objetivo_general ?? ""}
-            disabled={isVoided}
-          />
-        </div>
-
-        <div className="flex items-center justify-between pt-4">
-          <Button variant="link" className="h-auto p-0" asChild>
-            <Link href={`/dashboard/production/campaigns/${campaign.id_campania}`}>
-              Volver a detalle
-            </Link>
-          </Button>
-
-          <Button type="submit" disabled={isVoided}>
-            Guardar cambios
-          </Button>
-        </div>
-      </form>
-    </main>
+        defaultValues={campaignEditFormValues(campaign)}
+        submitLabel="Guardar cambios"
+        successNotification={productionNotifications["campaign-updated"]}
+        returnTo={backHref}
+      />
+    </div>
   );
 }

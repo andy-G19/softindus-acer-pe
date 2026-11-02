@@ -237,6 +237,7 @@ const MODULOS: ModuloDeAcciones[] = [
       "updateProductionCampaignAction",
       "changeProductionCampaignStatusAction",
     ],
+    rechazanConResultado: ["createProductionCampaignAction", "updateProductionCampaignAction"],
   },
   {
     ruta: "production/recipe-details/actions",
