@@ -11,6 +11,8 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
+  isRowLock,
   type DataOverrides,
   type Role,
 } from "@/testing/page-characterization";
@@ -23,8 +25,8 @@ import {
 // correlativos, la bitacora, las revalidaciones y la redireccion o el error con
 // su mensaje exacto.
 //
-// Hoy las reglas se deciden fuera de la transaccion y varios casos fijan defectos
-// (hallazgos de plan-10-7.md): cambian a proposito en sus commits fix.
+// Varios casos fijan defectos (hallazgos de plan-10-7.md): cambian a proposito en
+// sus commits fix. Desde A2, la campana se bloquea antes de leer lo que decide.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -242,7 +244,7 @@ defineCases("addCampaignDetailAction", addCampaignDetailAction, [
     ...addWith({}, { "campania_detalle.findFirst": { id_campania_detalle: "CPD00000009" } }),
   },
   {
-    name: "una carrera por el producto (P2002) llega sin tratar",
+    name: "una carrera por el producto (P2002) responde como el duplicado",
     ...addWith({}, { "campania_detalle.create": failWith(uniqueViolation()) }),
   },
   { name: "un POST sin campos se rechaza sin tocar Prisma", form: {} },
@@ -285,5 +287,65 @@ defineCases("changeProductionCampaignStatusAction", changeProductionCampaignStat
   { name: "anular dos veces se rechaza", ...statusWith("anulada", "anulada") },
   { name: "una finalizada no vuelve a activa", ...statusWith("finalizada", "activa") },
   { name: "finalizar dos veces se rechaza", ...statusWith("finalizada", "finalizada") },
-  { name: "activar dos veces escribe otra vez y deja otra bitacora", ...statusWith("activa", "activa") },
+  { name: "activar dos veces no escribe ni deja otra bitacora", ...statusWith("activa", "activa") },
 ]);
+
+// Dos operaciones simultaneas sobre la misma campana se ponen en fila: la segunda
+// espera y lee lo que escribio la primera (hallazgo 1 de la 10.7).
+describe("las decisiones se toman con la campana bloqueada", () => {
+  const reads = (call: { prisma: string }) =>
+    call.prisma.startsWith("campania_produccion.find") ||
+    call.prisma.startsWith("campania_detalle.find") ||
+    call.prisma === "producto.findFirst";
+
+  const CASES = [
+    { name: "agregar producto", run: addCampaignDetailAction, actionCase: addWith() },
+    { name: "editar", run: updateProductionCampaignAction, actionCase: updateWith() },
+    {
+      name: "cambiar el estado",
+      run: changeProductionCampaignStatusAction,
+      actionCase: statusWith("activa", "finalizada"),
+    },
+  ];
+
+  it.each(CASES)("$name bloquea la fila antes de leer", async ({ run, actionCase }) => {
+    const { calls } = await runCase(run, actionCase);
+
+    expectRowLockedBefore(calls, { table: "campania_produccion", id: CAMPANIA, reads });
+  });
+
+  it("el correlativo del producto se reserva despues del bloqueo", async () => {
+    const { calls } = await runCase(addCampaignDetailAction, addWith());
+    const lock = calls.findIndex((call) => isRowLock(call, "campania_produccion", CAMPANIA));
+    const correlative = calls.findIndex((call) => "effect" in call && call.effect === "getNextCorrelativeId");
+
+    expect(lock).toBeGreaterThanOrEqual(0);
+    expect(correlative).toBeGreaterThan(lock);
+  });
+
+  it("una carrera por el producto da el mensaje del duplicado", async () => {
+    const { result } = await runCase(
+      addCampaignDetailAction,
+      addWith({}, { "campania_detalle.create": failWith(uniqueViolation()) }),
+    );
+
+    expect(result).toBe("error: Ese producto ya esta registrado en la campania.");
+  });
+
+  it("cualquier otro fallo al agregar no se disfraza de duplicado", async () => {
+    const { result } = await runCase(
+      addCampaignDetailAction,
+      addWith({}, { "campania_detalle.create": failWith(new Error("conexion perdida")) }),
+    );
+
+    expect(result).toBe("error: conexion perdida");
+  });
+
+  it("pedir el estado que ya tiene no escribe ni registra bitacora", async () => {
+    const { calls, result } = await runCase(changeProductionCampaignStatusAction, statusWith("activa", "activa"));
+
+    expect(result).toBe("error: La campania ya estaba en ese estado.");
+    expect(calls.some((call) => "prisma" in call && call.prisma === "campania_produccion.update")).toBe(false);
+    expect(calls.some((call) => "effect" in call && call.effect === "registerAuditLog")).toBe(false);
+  });
+});

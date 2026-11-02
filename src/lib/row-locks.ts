@@ -67,6 +67,15 @@ export async function lockRecipeRow(tx: RowLockClient, idReceta: string) {
   `);
 }
 
+export async function lockCampaignRow(tx: RowLockClient, idCampania: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_campania
+    FROM aceros.campania_produccion
+    WHERE id_campania = ${idCampania}
+    FOR NO KEY UPDATE
+  `);
+}
+
 export async function lockMachineRow(tx: RowLockClient, idMaquina: string) {
   await tx.$queryRaw(Prisma.sql`
     SELECT id_maquina

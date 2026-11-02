@@ -2,16 +2,19 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockCampaignRow } from "@/lib/row-locks";
 import {
   campaignDetailSchema,
   productionCampaignSchema,
 } from "@/schemas/production/campaign.schema";
 
 const CLOSED_CAMPAIGN_STATES = ["finalizada", "anulada"];
+const DUPLICATED_DETAIL = "Ese producto ya esta registrado en la campania.";
 
 function parseDate(value: string) {
   return new Date(`${value}T00:00:00`);
@@ -94,88 +97,100 @@ export async function addCampaignDetailAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const [campaign, product, duplicatedDetail] = await Promise.all([
-    prisma.campania_produccion.findUnique({
-      where: {
-        id_campania: data.id_campania,
-      },
-      select: {
-        id_campania: true,
-        nombre_campania: true,
-        estado: true,
-      },
-    }),
-    prisma.producto.findFirst({
-      where: {
-        id_producto: data.id_producto,
-        estado: true,
-      },
-      select: {
-        id_producto: true,
-        nombre_producto: true,
-      },
-    }),
-    prisma.campania_detalle.findFirst({
-      where: {
-        id_campania: data.id_campania,
-        id_producto: data.id_producto,
-      },
-      select: {
-        id_campania_detalle: true,
-      },
-    }),
-  ]);
+  try {
+    await prisma.$transaction(async (tx) => {
+      await lockCampaignRow(tx, data.id_campania);
 
-  if (!campaign) {
-    throw new Error("La campania seleccionada no existe.");
-  }
+      const [campaign, product, duplicatedDetail] = await Promise.all([
+        tx.campania_produccion.findUnique({
+          where: {
+            id_campania: data.id_campania,
+          },
+          select: {
+            id_campania: true,
+            nombre_campania: true,
+            estado: true,
+          },
+        }),
+        tx.producto.findFirst({
+          where: {
+            id_producto: data.id_producto,
+            estado: true,
+          },
+          select: {
+            id_producto: true,
+            nombre_producto: true,
+          },
+        }),
+        tx.campania_detalle.findFirst({
+          where: {
+            id_campania: data.id_campania,
+            id_producto: data.id_producto,
+          },
+          select: {
+            id_campania_detalle: true,
+          },
+        }),
+      ]);
 
-  if (CLOSED_CAMPAIGN_STATES.includes(campaign.estado)) {
-    throw new Error("No se pueden agregar productos a una campania finalizada o anulada.");
-  }
+      if (!campaign) {
+        throw new Error("La campania seleccionada no existe.");
+      }
 
-  if (!product) {
-    throw new Error("El producto seleccionado no existe o esta inactivo.");
-  }
+      if (CLOSED_CAMPAIGN_STATES.includes(campaign.estado)) {
+        throw new Error("No se pueden agregar productos a una campania finalizada o anulada.");
+      }
 
-  if (duplicatedDetail) {
-    throw new Error("Ese producto ya esta registrado en la campania.");
-  }
+      if (!product) {
+        throw new Error("El producto seleccionado no existe o esta inactivo.");
+      }
 
-  await prisma.$transaction(async (tx) => {
-    const idCampaniaDetalle = await getNextCorrelativeId(tx, {
-      codigoEntidad: "campania_detalle",
-      prefijo: "CPD",
+      if (duplicatedDetail) {
+        throw new Error(DUPLICATED_DETAIL);
+      }
+
+      const idCampaniaDetalle = await getNextCorrelativeId(tx, {
+        codigoEntidad: "campania_detalle",
+        prefijo: "CPD",
+      });
+
+      await tx.campania_detalle.create({
+        data: {
+          id_campania_detalle: idCampaniaDetalle,
+          id_campania: campaign.id_campania,
+          id_producto: product.id_producto,
+          cantidad_objetivo: data.cantidad_objetivo,
+          cantidad_producida: 0,
+          observaciones: data.observaciones,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "campania_detalle",
+        id_registro_afectado: idCampaniaDetalle,
+        accion: "crear",
+        detalle: `Producto ${product.nombre_producto} agregado a la campania ${campaign.nombre_campania}.`,
+        tx,
+      });
     });
+  } catch (error) {
+    // uq_campania_producto: el bloqueo pone en fila las altas, y esta restriccion
+    // sigue siendo la ultima defensa de la regla.
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      throw new Error(DUPLICATED_DETAIL);
+    }
 
-    await tx.campania_detalle.create({
-      data: {
-        id_campania_detalle: idCampaniaDetalle,
-        id_campania: campaign.id_campania,
-        id_producto: product.id_producto,
-        cantidad_objetivo: data.cantidad_objetivo,
-        cantidad_producida: 0,
-        observaciones: data.observaciones,
-      },
-    });
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "campania_detalle",
-      id_registro_afectado: idCampaniaDetalle,
-      accion: "crear",
-      detalle: `Producto ${product.nombre_producto} agregado a la campania ${campaign.nombre_campania}.`,
-      tx,
-    });
-  });
+    throw error;
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/campaigns");
-  revalidatePath(`/dashboard/production/campaigns/${campaign.id_campania}`);
+  revalidatePath(`/dashboard/production/campaigns/${data.id_campania}`);
 
   redirect(
-    `/dashboard/production/campaigns/${campaign.id_campania}?toast=campaign-detail-created`,
+    `/dashboard/production/campaigns/${data.id_campania}?toast=campaign-detail-created`,
   );
 }
 
@@ -201,25 +216,28 @@ export async function updateProductionCampaignAction(formData: FormData) {
   }
 
   const data = parsed.data;
-  const campaign = await prisma.campania_produccion.findUnique({
-    where: {
-      id_campania: idCampania,
-    },
-    select: {
-      id_campania: true,
-      estado: true,
-    },
-  });
-
-  if (!campaign) {
-    throw new Error("La campania seleccionada no existe.");
-  }
-
-  if (campaign.estado === "anulada") {
-    throw new Error("No se puede modificar una campania anulada.");
-  }
 
   await prisma.$transaction(async (tx) => {
+    await lockCampaignRow(tx, idCampania);
+
+    const campaign = await tx.campania_produccion.findUnique({
+      where: {
+        id_campania: idCampania,
+      },
+      select: {
+        id_campania: true,
+        estado: true,
+      },
+    });
+
+    if (!campaign) {
+      throw new Error("La campania seleccionada no existe.");
+    }
+
+    if (campaign.estado === "anulada") {
+      throw new Error("No se puede modificar una campania anulada.");
+    }
+
     await tx.campania_produccion.update({
       where: {
         id_campania: idCampania,
@@ -265,30 +283,37 @@ export async function changeProductionCampaignStatusAction(formData: FormData) {
     throw new Error("Estado de campania invalido.");
   }
 
-  const campaign = await prisma.campania_produccion.findUnique({
-    where: {
-      id_campania: idCampania,
-    },
-    select: {
-      id_campania: true,
-      nombre_campania: true,
-      estado: true,
-    },
-  });
-
-  if (!campaign) {
-    throw new Error("La campania seleccionada no existe.");
-  }
-
-  if (campaign.estado === "anulada") {
-    throw new Error("La campania ya esta anulada.");
-  }
-
-  if (campaign.estado === "finalizada" && nextStatus !== "anulada") {
-    throw new Error("Una campania finalizada solo puede anularse con trazabilidad.");
-  }
-
   await prisma.$transaction(async (tx) => {
+    await lockCampaignRow(tx, idCampania);
+
+    const campaign = await tx.campania_produccion.findUnique({
+      where: {
+        id_campania: idCampania,
+      },
+      select: {
+        id_campania: true,
+        nombre_campania: true,
+        estado: true,
+      },
+    });
+
+    if (!campaign) {
+      throw new Error("La campania seleccionada no existe.");
+    }
+
+    // Un doble clic o una lista desactualizada no escriben ni dejan otra bitacora.
+    if (campaign.estado === nextStatus) {
+      throw new Error("La campania ya estaba en ese estado.");
+    }
+
+    if (campaign.estado === "anulada") {
+      throw new Error("La campania ya esta anulada.");
+    }
+
+    if (campaign.estado === "finalizada" && nextStatus !== "anulada") {
+      throw new Error("Una campania finalizada solo puede anularse con trazabilidad.");
+    }
+
     await tx.campania_produccion.update({
       where: {
         id_campania: idCampania,

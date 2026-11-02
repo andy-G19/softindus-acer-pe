@@ -10,6 +10,19 @@ exports[`addCampaignDetailAction > 0.004 pasa y se guarda como cero > llamadas 1
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -46,10 +59,6 @@ exports[`addCampaignDetailAction > 0.004 pasa y se guarda como cero > llamadas 1
       },
     },
     "prisma": "campania_detalle.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -117,6 +126,19 @@ exports[`addCampaignDetailAction > ADMIN agrega el producto con la cantidad prod
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -153,10 +175,6 @@ exports[`addCampaignDetailAction > ADMIN agrega el producto con la cantidad prod
       },
     },
     "prisma": "campania_detalle.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -238,6 +256,19 @@ exports[`addCampaignDetailAction > WORKSHOP_MASTER tambien agrega productos > ll
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -274,10 +305,6 @@ exports[`addCampaignDetailAction > WORKSHOP_MASTER tambien agrega productos > ll
       },
     },
     "prisma": "campania_detalle.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -345,6 +372,19 @@ exports[`addCampaignDetailAction > el producto no existe o esta inactivo > llama
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -381,6 +421,10 @@ exports[`addCampaignDetailAction > el producto no existe o esta inactivo > llama
       },
     },
     "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": "El producto seleccionado no existe o esta inactivo.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -397,6 +441,19 @@ exports[`addCampaignDetailAction > el producto ya esta en la campana > llamadas 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -433,6 +490,10 @@ exports[`addCampaignDetailAction > el producto ya esta en la campana > llamadas 
       },
     },
     "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": "Ese producto ya esta registrado en la campania.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -449,6 +510,19 @@ exports[`addCampaignDetailAction > la campana no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -485,6 +559,10 @@ exports[`addCampaignDetailAction > la campana no existe > llamadas 1`] = `
       },
     },
     "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": "La campania seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -529,6 +607,19 @@ exports[`addCampaignDetailAction > la cantidad se redondea a dos decimales > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -565,10 +656,6 @@ exports[`addCampaignDetailAction > la cantidad se redondea a dos decimales > lla
       },
     },
     "prisma": "campania_detalle.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -636,6 +723,19 @@ exports[`addCampaignDetailAction > las observaciones ausentes cuentan como vacia
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -672,10 +772,6 @@ exports[`addCampaignDetailAction > las observaciones ausentes cuentan como vacia
       },
     },
     "prisma": "campania_detalle.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -743,6 +839,19 @@ exports[`addCampaignDetailAction > las observaciones vacias se guardan como null
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -779,10 +888,6 @@ exports[`addCampaignDetailAction > las observaciones vacias se guardan como null
       },
     },
     "prisma": "campania_detalle.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -878,6 +983,19 @@ exports[`addCampaignDetailAction > una campana anulada no admite productos > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -914,6 +1032,10 @@ exports[`addCampaignDetailAction > una campana anulada no admite productos > lla
       },
     },
     "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": "No se pueden agregar productos a una campania finalizada o anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -930,6 +1052,19 @@ exports[`addCampaignDetailAction > una campana finalizada no admite productos > 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -966,6 +1101,10 @@ exports[`addCampaignDetailAction > una campana finalizada no admite productos > 
       },
     },
     "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": "No se pueden agregar productos a una campania finalizada o anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -982,6 +1121,19 @@ exports[`addCampaignDetailAction > una campana planificada admite productos > ll
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1018,10 +1170,6 @@ exports[`addCampaignDetailAction > una campana planificada admite productos > ll
       },
     },
     "prisma": "campania_detalle.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1079,7 +1227,7 @@ exports[`addCampaignDetailAction > una campana planificada admite productos > ll
 
 exports[`addCampaignDetailAction > una campana planificada admite productos > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
 
-exports[`addCampaignDetailAction > una carrera por el producto (P2002) llega sin tratar > llamadas 1`] = `
+exports[`addCampaignDetailAction > una carrera por el producto (P2002) responde como el duplicado > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1087,6 +1235,19 @@ exports[`addCampaignDetailAction > una carrera por el producto (P2002) llega sin
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1127,10 +1288,6 @@ exports[`addCampaignDetailAction > una carrera por el producto (P2002) llega sin
     "prisma": "campania_detalle.findFirst",
   },
   {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
     "args": {
       "codigoEntidad": "campania_detalle",
       "prefijo": "CPD",
@@ -1157,7 +1314,7 @@ exports[`addCampaignDetailAction > una carrera por el producto (P2002) llega sin
 ]
 `;
 
-exports[`addCampaignDetailAction > una carrera por el producto (P2002) llega sin tratar > resultado 1`] = `"error: Unique constraint failed"`;
+exports[`addCampaignDetailAction > una carrera por el producto (P2002) responde como el duplicado > resultado 1`] = `"error: Ese producto ya esta registrado en la campania."`;
 
 exports[`changeProductionCampaignStatusAction > SELLER no puede cambiar el estado > llamadas 1`] = `
 [
@@ -1183,6 +1340,19 @@ exports[`changeProductionCampaignStatusAction > WORKSHOP_MASTER tambien cambia e
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1194,10 +1364,6 @@ exports[`changeProductionCampaignStatusAction > WORKSHOP_MASTER tambien cambia e
       },
     },
     "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1247,7 +1413,7 @@ exports[`changeProductionCampaignStatusAction > WORKSHOP_MASTER tambien cambia e
 
 exports[`changeProductionCampaignStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-finalizada"`;
 
-exports[`changeProductionCampaignStatusAction > activar dos veces escribe otra vez y deja otra bitacora > llamadas 1`] = `
+exports[`changeProductionCampaignStatusAction > activar dos veces no escribe ni deja otra bitacora > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1255,6 +1421,19 @@ exports[`changeProductionCampaignStatusAction > activar dos veces escribe otra v
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1270,56 +1449,13 @@ exports[`changeProductionCampaignStatusAction > activar dos veces escribe otra v
     "prisma": "campania_produccion.findUnique",
   },
   {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "activa",
-        "fecha_fin": undefined,
-      },
-      "where": {
-        "id_campania": "CAM00000003",
-      },
-    },
-    "prisma": "campania_produccion.update",
-  },
-  {
-    "args": {
-      "accion": "activa",
-      "detalle": "Campania activa: Campana escolar.",
-      "enTransaccion": true,
-      "entidad_afectada": "campania_produccion",
-      "id_registro_afectado": "CAM00000003",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/campaigns",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/campaigns/CAM00000003",
-    "effect": "revalidatePath",
+    "args": "La campania ya estaba en ese estado.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > activar dos veces escribe otra vez y deja otra bitacora > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-activa"`;
+exports[`changeProductionCampaignStatusAction > activar dos veces no escribe ni deja otra bitacora > resultado 1`] = `"error: La campania ya estaba en ese estado."`;
 
 exports[`changeProductionCampaignStatusAction > activar una planificada no fija la fecha de fin > llamadas 1`] = `
 [
@@ -1331,6 +1467,19 @@ exports[`changeProductionCampaignStatusAction > activar una planificada no fija 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1342,10 +1491,6 @@ exports[`changeProductionCampaignStatusAction > activar una planificada no fija 
       },
     },
     "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1405,6 +1550,19 @@ exports[`changeProductionCampaignStatusAction > anular dos veces se rechaza > ll
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1417,10 +1575,14 @@ exports[`changeProductionCampaignStatusAction > anular dos veces se rechaza > ll
     },
     "prisma": "campania_produccion.findUnique",
   },
+  {
+    "args": "La campania ya estaba en ese estado.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > anular dos veces se rechaza > resultado 1`] = `"error: La campania ya esta anulada."`;
+exports[`changeProductionCampaignStatusAction > anular dos veces se rechaza > resultado 1`] = `"error: La campania ya estaba en ese estado."`;
 
 exports[`changeProductionCampaignStatusAction > anular una activa fija la fecha de fin > llamadas 1`] = `
 [
@@ -1432,6 +1594,19 @@ exports[`changeProductionCampaignStatusAction > anular una activa fija la fecha 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1443,10 +1618,6 @@ exports[`changeProductionCampaignStatusAction > anular una activa fija la fecha 
       },
     },
     "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1506,6 +1677,19 @@ exports[`changeProductionCampaignStatusAction > anular una planificada > llamada
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1517,10 +1701,6 @@ exports[`changeProductionCampaignStatusAction > anular una planificada > llamada
       },
     },
     "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1580,6 +1760,19 @@ exports[`changeProductionCampaignStatusAction > finalizar dos veces se rechaza >
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1592,10 +1785,14 @@ exports[`changeProductionCampaignStatusAction > finalizar dos veces se rechaza >
     },
     "prisma": "campania_produccion.findUnique",
   },
+  {
+    "args": "La campania ya estaba en ese estado.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
-exports[`changeProductionCampaignStatusAction > finalizar dos veces se rechaza > resultado 1`] = `"error: Una campania finalizada solo puede anularse con trazabilidad."`;
+exports[`changeProductionCampaignStatusAction > finalizar dos veces se rechaza > resultado 1`] = `"error: La campania ya estaba en ese estado."`;
 
 exports[`changeProductionCampaignStatusAction > finalizar una activa fija la fecha de fin > llamadas 1`] = `
 [
@@ -1607,6 +1804,19 @@ exports[`changeProductionCampaignStatusAction > finalizar una activa fija la fec
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1618,10 +1828,6 @@ exports[`changeProductionCampaignStatusAction > finalizar una activa fija la fec
       },
     },
     "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1681,6 +1887,19 @@ exports[`changeProductionCampaignStatusAction > finalizar una planificada se per
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1692,10 +1911,6 @@ exports[`changeProductionCampaignStatusAction > finalizar una planificada se per
       },
     },
     "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1755,6 +1970,19 @@ exports[`changeProductionCampaignStatusAction > la campana no existe > llamadas 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1766,6 +1994,10 @@ exports[`changeProductionCampaignStatusAction > la campana no existe > llamadas 
       },
     },
     "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": "La campania seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1838,6 +2070,19 @@ exports[`changeProductionCampaignStatusAction > una anulada ya no cambia > llama
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1849,6 +2094,10 @@ exports[`changeProductionCampaignStatusAction > una anulada ya no cambia > llama
       },
     },
     "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": "La campania ya esta anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1865,6 +2114,19 @@ exports[`changeProductionCampaignStatusAction > una finalizada no vuelve a activ
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1876,6 +2138,10 @@ exports[`changeProductionCampaignStatusAction > una finalizada no vuelve a activ
       },
     },
     "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": "Una campania finalizada solo puede anularse con trazabilidad.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1892,6 +2158,19 @@ exports[`changeProductionCampaignStatusAction > una finalizada se puede anular y
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1903,10 +2182,6 @@ exports[`changeProductionCampaignStatusAction > una finalizada se puede anular y
       },
     },
     "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2652,6 +2927,19 @@ exports[`updateProductionCampaignAction > ADMIN actualiza la campana > llamadas 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -2662,10 +2950,6 @@ exports[`updateProductionCampaignAction > ADMIN actualiza la campana > llamadas 
       },
     },
     "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2742,6 +3026,19 @@ exports[`updateProductionCampaignAction > WORKSHOP_MASTER tambien actualiza camp
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -2752,10 +3049,6 @@ exports[`updateProductionCampaignAction > WORKSHOP_MASTER tambien actualiza camp
       },
     },
     "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2832,6 +3125,19 @@ exports[`updateProductionCampaignAction > editar anula sin fijar la fecha de fin
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -2842,10 +3148,6 @@ exports[`updateProductionCampaignAction > editar anula sin fijar la fecha de fin
       },
     },
     "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2908,6 +3210,19 @@ exports[`updateProductionCampaignAction > editar reabre una campana finalizada, 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -2918,10 +3233,6 @@ exports[`updateProductionCampaignAction > editar reabre una campana finalizada, 
       },
     },
     "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2984,6 +3295,19 @@ exports[`updateProductionCampaignAction > la campana no existe > llamadas 1`] = 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -2994,6 +3318,10 @@ exports[`updateProductionCampaignAction > la campana no existe > llamadas 1`] = 
       },
     },
     "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": "La campania seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3024,6 +3352,19 @@ exports[`updateProductionCampaignAction > una campana anulada no se modifica > l
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -3034,6 +3375,10 @@ exports[`updateProductionCampaignAction > una campana anulada no se modifica > l
       },
     },
     "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": "No se puede modificar una campania anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3050,6 +3395,19 @@ exports[`updateProductionCampaignAction > una campana finalizada se puede editar
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -3060,10 +3418,6 @@ exports[`updateProductionCampaignAction > una campana finalizada se puede editar
       },
     },
     "prisma": "campania_produccion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
