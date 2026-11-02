@@ -3,7 +3,9 @@ import { describe, expect, it, vi } from "vitest";
 import {
   AuthRejected,
   characterizePage,
+  generatedRow,
   preloadPages,
+  type DataOverrides,
   type PageLoader,
   type Role,
 } from "@/testing/page-characterization";
@@ -25,7 +27,7 @@ vi.mock("next/navigation", async (importOriginal) =>
 // puede abrir. Las que migra esta sub-entrega ganaron paneles y enlaces con
 // returnTo; la prueba abre cada enlace con el mismo rol: si el requireRole de la
 // pantalla lo rechaza, falla aqui, asi que los enlaces no pueden quedar desfasados
-// de las paginas.
+// de las paginas. La 10.6b suma Recetas, con sus versiones, materiales y requerimientos.
 
 // Pantalla de cada enlace, por su ruta sin la consulta; gana la primera que
 // coincide. Los grupos con nombre son los parametros de la ruta. Un enlace sin
@@ -42,6 +44,25 @@ const PAGES: [RegExp, PageLoader][] = [
     () => import("./routes/[id]/stages/[stageId]/edit/page"),
   ],
   [/^\/dashboard\/production\/recipes$/, () => import("./recipes/page")],
+  [/^\/dashboard\/production\/recipes\/new$/, () => import("./recipes/new/page")],
+  [/^\/dashboard\/production\/recipes\/(?<id>[^/]+)\/versions$/, () => import("./recipes/[id]/versions/page")],
+  [/^\/dashboard\/production\/recipes\/(?<id>[^/]+)\/versions\/new$/, () => import("./recipes/[id]/versions/new/page")],
+  [
+    /^\/dashboard\/production\/recipes\/(?<id>[^/]+)\/versions\/(?<versionId>[^/]+)\/details$/,
+    () => import("./recipes/[id]/versions/[versionId]/details/page"),
+  ],
+  [
+    /^\/dashboard\/production\/recipes\/(?<id>[^/]+)\/versions\/(?<versionId>[^/]+)\/details\/new$/,
+    () => import("./recipes/[id]/versions/[versionId]/details/new/page"),
+  ],
+  [
+    /^\/dashboard\/production\/recipes\/(?<id>[^/]+)\/versions\/(?<versionId>[^/]+)\/details\/(?<detailId>[^/]+)\/edit$/,
+    () => import("./recipes/[id]/versions/[versionId]/details/[detailId]/edit/page"),
+  ],
+  [
+    /^\/dashboard\/production\/recipes\/(?<id>[^/]+)\/versions\/(?<versionId>[^/]+)\/requirements$/,
+    () => import("./recipes/[id]/versions/[versionId]/requirements/page"),
+  ],
   [/^\/dashboard\/production\/campaigns$/, () => import("./campaigns/page")],
   [/^\/dashboard\/production\/bottlenecks$/, () => import("./bottlenecks/page")],
   [/^\/dashboard\/production\/work-orders$/, () => import("./work-orders/page")],
@@ -50,7 +71,39 @@ const PAGES: [RegExp, PageLoader][] = [
   [/^\/dashboard\/production\/work-orders\/(?<id>[^/]+)\/progress$/, () => import("./work-orders/[id]/progress/page")],
 ];
 
-const SOURCES: { name: string; route: string; load: PageLoader; params?: Record<string, string> }[] = [
+type Row = Record<string, unknown>;
+
+// El arnes genera contadores altos: sin ordenes la version muestra sus enlaces de edicion.
+const editableVersion: DataOverrides = {
+  "version_receta.findFirst": (args) => {
+    const version = generatedRow("version_receta", "findFirst", args) as Row;
+
+    return {
+      ...version,
+      estado: "vigente",
+      receta_tecnica: { ...(version.receta_tecnica as Row), estado: "activa" },
+      _count: { ...(version._count as Row), orden_trabajo: 0 },
+    };
+  },
+};
+
+const activeRecipe: DataOverrides = {
+  "receta_tecnica.findUnique": (args) => ({
+    ...(generatedRow("receta_tecnica", "findUnique", args) as Row),
+    estado: "activa",
+  }),
+};
+
+const VERSION_ROUTE = "/dashboard/production/recipes/REC00000001/versions/VER00000001";
+const VERSION_PARAMS = { id: "REC00000001", versionId: "VER00000001" };
+
+const SOURCES: {
+  name: string;
+  route: string;
+  load: PageLoader;
+  params?: Record<string, string>;
+  data?: DataOverrides;
+}[] = [
   { name: "el inicio", route: "/dashboard/production", load: () => import("./page") },
   { name: "la lista de rutas", route: "/dashboard/production/routes", load: () => import("./routes/page") },
   {
@@ -58,6 +111,27 @@ const SOURCES: { name: string; route: string; load: PageLoader; params?: Record<
     route: "/dashboard/production/routes/RUT00000001/stages",
     load: () => import("./routes/[id]/stages/page"),
     params: { id: "RUT00000001" },
+  },
+  { name: "la lista de recetas", route: "/dashboard/production/recipes", load: () => import("./recipes/page") },
+  {
+    name: "las versiones de una receta",
+    route: "/dashboard/production/recipes/REC00000001/versions",
+    load: () => import("./recipes/[id]/versions/page"),
+    params: { id: "REC00000001" },
+    data: activeRecipe,
+  },
+  {
+    name: "los materiales de una version",
+    route: `${VERSION_ROUTE}/details`,
+    load: () => import("./recipes/[id]/versions/[versionId]/details/page"),
+    params: VERSION_PARAMS,
+    data: editableVersion,
+  },
+  {
+    name: "los requerimientos de una version",
+    route: `${VERSION_ROUTE}/requirements`,
+    load: () => import("./recipes/[id]/versions/[versionId]/requirements/page"),
+    params: VERSION_PARAMS,
   },
   { name: "la lista de ordenes", route: "/dashboard/production/work-orders", load: () => import("./work-orders/page") },
   { name: "cuellos de botella", route: "/dashboard/production/bottlenecks", load: () => import("./bottlenecks/page") },
@@ -93,8 +167,8 @@ async function opens(href: string, role: Role) {
 preloadPages(...PAGES.map(([, load]) => load));
 
 describe.each(["ADMIN", "WORKSHOP_MASTER"] as const)("enlaces de Produccion con %s", (role) => {
-  it.each(SOURCES)("$name solo enlaza pantallas que el rol puede abrir", async ({ route, load, params }) => {
-    const { outcome, html } = await characterizePage(load, { name: route, role, params }, route);
+  it.each(SOURCES)("$name solo enlaza pantallas que el rol puede abrir", async ({ route, load, params, data }) => {
+    const { outcome, html } = await characterizePage(load, { name: route, role, params, data }, route);
 
     expect(outcome).toBe("render");
 
@@ -110,6 +184,22 @@ describe.each(["ADMIN", "WORKSHOP_MASTER"] as const)("enlaces de Produccion con 
     }
 
     expect(rejected).toEqual([]);
+  });
+});
+
+describe("enlaces de una version editable", () => {
+  it("los materiales enlazan el alta, la edicion y los requerimientos", async () => {
+    const route = `${VERSION_ROUTE}/details`;
+    const { html } = await characterizePage(
+      () => import("./recipes/[id]/versions/[versionId]/details/page"),
+      { name: route, params: VERSION_PARAMS, data: editableVersion },
+      route,
+    );
+    const links = productionLinks(html ?? "");
+
+    for (const ending of ["/details/new", "/edit", "/requirements"]) {
+      expect(links.some((href) => href.endsWith(ending)), ending).toBe(true);
+    }
   });
 });
 

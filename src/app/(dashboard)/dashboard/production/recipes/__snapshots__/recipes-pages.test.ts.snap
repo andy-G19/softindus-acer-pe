@@ -4232,7 +4232,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 
 exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > cantidad elegida > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -4277,9 +4277,10 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <section>
 <form>
 <div>
-<label for="quantity">Cantidad a fabricar *</label>
-<input type="number" id="quantity" min="0.01" step="0.01" name="quantity" value="25"/>
-<p>El sistema multiplicará los materiales de la receta por esta cantidad.</p>
+<label for="quantity">Cantidad a fabricar<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" min="0.01" step="0.01" name="quantity" value="25"/>
+<p id="quantity-ayuda">El sistema multiplicará los materiales de la receta por esta cantidad.</p>
 </div>
 <button data-variant="default" type="submit">Calcular</button>
 </form>
@@ -4405,7 +4406,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <div role="alert">
 <div>El sistema usa el stock disponible, es decir, stock actual menos stock reservado. Si la cantidad requerida total supera el stock disponible, se marca como insuficiente y se muestra el faltante.</div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -4448,7 +4449,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 
 exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > cantidad invalida > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -4496,9 +4497,10 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <section>
 <form>
 <div>
-<label for="quantity">Cantidad a fabricar *</label>
-<input type="number" id="quantity" min="0.01" step="0.01" name="quantity" value="1"/>
-<p>El sistema multiplicará los materiales de la receta por esta cantidad.</p>
+<label for="quantity">Cantidad a fabricar<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" min="0.01" step="0.01" name="quantity" value="1"/>
+<p id="quantity-ayuda">El sistema multiplicará los materiales de la receta por esta cantidad.</p>
 </div>
 <button data-variant="default" type="submit">Calcular</button>
 </form>
@@ -4624,7 +4626,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <div role="alert">
 <div>El sistema usa el stock disponible, es decir, stock actual menos stock reservado. Si la cantidad requerida total supera el stock disponible, se marca como insuficiente y se muestra el faltante.</div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -4710,7 +4712,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 
 exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > stock que alcanza justo > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -4755,9 +4757,10 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <section>
 <form>
 <div>
-<label for="quantity">Cantidad a fabricar *</label>
-<input type="number" id="quantity" min="0.01" step="0.01" name="quantity" value="1"/>
-<p>El sistema multiplicará los materiales de la receta por esta cantidad.</p>
+<label for="quantity">Cantidad a fabricar<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" min="0.01" step="0.01" name="quantity" value="1"/>
+<p id="quantity-ayuda">El sistema multiplicará los materiales de la receta por esta cantidad.</p>
 </div>
 <button data-variant="default" type="submit">Calcular</button>
 </form>
@@ -4880,7 +4883,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <div role="alert">
 <div>El sistema usa el stock disponible, es decir, stock actual menos stock reservado. Si la cantidad requerida total supera el stock disponible, se marca como insuficiente y se muestra el faltante.</div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -4923,7 +4926,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 
 exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > una unidad > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -4968,9 +4971,10 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <section>
 <form>
 <div>
-<label for="quantity">Cantidad a fabricar *</label>
-<input type="number" id="quantity" min="0.01" step="0.01" name="quantity" value="1"/>
-<p>El sistema multiplicará los materiales de la receta por esta cantidad.</p>
+<label for="quantity">Cantidad a fabricar<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" min="0.01" step="0.01" name="quantity" value="1"/>
+<p id="quantity-ayuda">El sistema multiplicará los materiales de la receta por esta cantidad.</p>
 </div>
 <button data-variant="default" type="submit">Calcular</button>
 </form>
@@ -5096,7 +5100,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <div role="alert">
 <div>El sistema usa el stock disponible, es decir, stock actual menos stock reservado. Si la cantidad requerida total supera el stock disponible, se marca como insuficiente y se muestra el faltante.</div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -5139,7 +5143,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 
 exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > version reemplazada de una receta inactiva > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -5184,9 +5188,10 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <section>
 <form>
 <div>
-<label for="quantity">Cantidad a fabricar *</label>
-<input type="number" id="quantity" min="0.01" step="0.01" name="quantity" value="1"/>
-<p>El sistema multiplicará los materiales de la receta por esta cantidad.</p>
+<label for="quantity">Cantidad a fabricar<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="quantity" required="" aria-describedby="quantity-ayuda" min="0.01" step="0.01" name="quantity" value="1"/>
+<p id="quantity-ayuda">El sistema multiplicará los materiales de la receta por esta cantidad.</p>
 </div>
 <button data-variant="default" type="submit">Calcular</button>
 </form>
@@ -5312,7 +5317,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <div role="alert">
 <div>El sistema usa el stock disponible, es decir, stock actual menos stock reservado. Si la cantidad requerida total supera el stock disponible, se marca como insuficiente y se muestra el faltante.</div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
