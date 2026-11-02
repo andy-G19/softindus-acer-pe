@@ -27,6 +27,10 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -139,6 +143,10 @@ function defineCases(name: string, run: (formData: FormData) => Promise<unknown>
     }
   });
 }
+
+const IDLE = { status: "idle" } as const;
+const setCurrent = (formData: FormData) => setCurrentRecipeVersionAction(IDLE, formData);
+const voidVersion = (formData: FormData) => voidRecipeVersionAction(IDLE, formData);
 
 const failWith = (error: Error) => () => {
   throw error;
@@ -267,20 +275,20 @@ defineCases("createRecipeVersionAction", createRecipeVersionAction, [
   },
 ]);
 
-defineCases("setCurrentRecipeVersionAction", setCurrentRecipeVersionAction, [
+defineCases("setCurrentRecipeVersionAction", setCurrent, [
   {
     name: "una reemplazada pasa a vigente y la vigente queda reemplazada",
     form: statusForm,
     data: versions("reemplazada"),
   },
   { name: "WORKSHOP_MASTER tambien la marca", form: statusForm, data: versions("reemplazada"), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: se redirige sin tocar Prisma", form: statusForm, data: versions("reemplazada"), role: "SELLER" },
-  { name: "sin receta lanza su mensaje sin tocar Prisma", form: { id_version_receta: VERSION } },
-  { name: "sin version lanza su mensaje sin tocar Prisma", form: { id_receta: RECETA } },
+  { name: "SELLER: responde con un error sin tocar Prisma", form: statusForm, data: versions("reemplazada"), role: "SELLER" },
+  { name: "sin receta responde su mensaje sin tocar Prisma", form: { id_version_receta: VERSION } },
+  { name: "sin version responde su mensaje sin tocar Prisma", form: { id_receta: RECETA } },
   { name: "la version no existe", form: statusForm, data: versions(null) },
   { name: "la receta no esta activa", form: statusForm, data: versions("reemplazada", { receta: "inactiva" }) },
   { name: "una anulada no se puede marcar", form: statusForm, data: versions("anulada") },
-  { name: "la que ya es vigente redirige sin escribir", form: statusForm, data: versions("vigente") },
+  { name: "la que ya es vigente responde sin escribir", form: statusForm, data: versions("vigente") },
   {
     name: "un fallo al escribir revierte y deja el error",
     form: statusForm,
@@ -288,12 +296,12 @@ defineCases("setCurrentRecipeVersionAction", setCurrentRecipeVersionAction, [
   },
 ]);
 
-defineCases("voidRecipeVersionAction", voidRecipeVersionAction, [
+defineCases("voidRecipeVersionAction", voidVersion, [
   { name: "una reemplazada se anula", form: statusForm, data: versions("reemplazada") },
   { name: "la vigente se anula y promueve la mas reciente no anulada", form: statusForm, data: versions("vigente") },
   { name: "WORKSHOP_MASTER tambien anula", form: statusForm, data: versions("reemplazada"), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: se redirige sin tocar Prisma", form: statusForm, data: versions("reemplazada"), role: "SELLER" },
-  { name: "sin version lanza su mensaje sin tocar Prisma", form: { id_receta: RECETA } },
+  { name: "SELLER: responde con un error sin tocar Prisma", form: statusForm, data: versions("reemplazada"), role: "SELLER" },
+  { name: "sin version responde su mensaje sin tocar Prisma", form: { id_receta: RECETA } },
   { name: "la version no existe", form: statusForm, data: versions(null) },
   { name: "ya estaba anulada", form: statusForm, data: versions("anulada") },
   { name: "usada por ordenes no se anula", form: statusForm, data: versions("reemplazada", { orders: 2 }) },
@@ -340,14 +348,14 @@ describe("el orden de las escrituras respeta la unica vigente", () => {
   });
 
   it("marcar vigente reemplaza antes de promover", async () => {
-    expect(await written(setCurrentRecipeVersionAction, { form: statusForm, data: versions("reemplazada") })).toEqual([
+    expect(await written(setCurrent, { form: statusForm, data: versions("reemplazada") })).toEqual([
       "version_receta.updateMany:reemplazada",
       "version_receta.update:vigente",
     ]);
   });
 
   it("anular la vigente anula antes de promover", async () => {
-    expect(await written(voidRecipeVersionAction, { form: statusForm, data: versions("vigente") })).toEqual([
+    expect(await written(voidVersion, { form: statusForm, data: versions("vigente") })).toEqual([
       "version_receta.update:anulada",
       "version_receta.update:vigente",
     ]);
@@ -370,12 +378,12 @@ describe("las acciones de versiones deciden con la receta bloqueada", () => {
     ["el alta que acepta", createRecipeVersionAction, createWith()],
     ["el alta de una receta inactiva", createRecipeVersionAction, createWith({}, activeRecipe(false))],
     ["el alta con un numero repetido", createRecipeVersionAction, repeatedNumber],
-    ["marcar una reemplazada", setCurrentRecipeVersionAction, { form: statusForm, data: versions("reemplazada") }],
-    ["marcar la que ya es vigente", setCurrentRecipeVersionAction, { form: statusForm, data: versions("vigente") }],
-    ["marcar una anulada", setCurrentRecipeVersionAction, { form: statusForm, data: versions("anulada") }],
-    ["anular la vigente", voidRecipeVersionAction, { form: statusForm, data: versions("vigente") }],
-    ["anular una reemplazada", voidRecipeVersionAction, { form: statusForm, data: versions("reemplazada") }],
-    ["anular una que no existe", voidRecipeVersionAction, { form: statusForm, data: versions(null) }],
+    ["marcar una reemplazada", setCurrent, { form: statusForm, data: versions("reemplazada") }],
+    ["marcar la que ya es vigente", setCurrent, { form: statusForm, data: versions("vigente") }],
+    ["marcar una anulada", setCurrent, { form: statusForm, data: versions("anulada") }],
+    ["anular la vigente", voidVersion, { form: statusForm, data: versions("vigente") }],
+    ["anular una reemplazada", voidVersion, { form: statusForm, data: versions("reemplazada") }],
+    ["anular una que no existe", voidVersion, { form: statusForm, data: versions(null) }],
   ];
 
   it.each(cases)("%s", async (_name, run, actionCase) => {
@@ -403,11 +411,83 @@ describe("las acciones de versiones deciden con la receta bloqueada", () => {
   });
 });
 
+// B6: marcar y anular se usan desde la fila con ConfirmActionButton: responden con
+// un resultado, nunca redirigen ni lanzan, y un fallo interno no llega a la pantalla.
+describe("marcar vigente y anular responden con resultado", () => {
+  const writes = (calls: unknown[]) =>
+    (calls as { prisma?: string }[]).filter((call) => /\.(update|updateMany|create)/.test(call.prisma ?? ""));
+  const revalidations = (calls: unknown[]) =>
+    (calls as { effect?: string }[]).filter((call) => call.effect === "revalidatePath");
+  const failure = (mensaje: string) => ({
+    estado: { status: "error", error: mensaje, values: { id: VERSION }, operationId: "operacion-de-prueba" },
+  });
+
+  it("marcar deja el estado que quedo y revalida", async () => {
+    const { calls, result } = await runCase(setCurrent, { form: statusForm, data: versions("reemplazada") });
+
+    expect(result).toEqual({
+      estado: { status: "success", data: { estado: "vigente" }, values: { id: VERSION }, operationId: "operacion-de-prueba" },
+    });
+    expect(revalidations(calls).length).toBeGreaterThan(0);
+  });
+
+  it("anular deja el estado que quedo y revalida", async () => {
+    const { calls, result } = await runCase(voidVersion, { form: statusForm, data: versions("reemplazada") });
+
+    expect(result).toEqual({
+      estado: { status: "success", data: { estado: "anulada" }, values: { id: VERSION }, operationId: "operacion-de-prueba" },
+    });
+    expect(revalidations(calls).length).toBeGreaterThan(0);
+  });
+
+  it.each([
+    ["marcar", setCurrent],
+    ["anular", voidVersion],
+  ])("%s sin permiso responde con un error", async (_name, run) => {
+    const { result } = await runCase(run, { form: statusForm, data: versions("reemplazada"), role: "SELLER" });
+
+    expect(result).toEqual(failure("No tienes permisos para cambiar las versiones de receta."));
+  });
+
+  it("la que ya es vigente lo dice y no escribe", async () => {
+    const { calls, result } = await runCase(setCurrent, { form: statusForm, data: versions("vigente") });
+
+    expect(result).toEqual(failure("La versión ya estaba vigente."));
+    expect(writes(calls)).toEqual([]);
+    expect(revalidations(calls)).toEqual([]);
+  });
+
+  it("un rechazo no revalida", async () => {
+    const { calls, result } = await runCase(voidVersion, { form: statusForm, data: versions("anulada") });
+
+    expect(result).toEqual(failure("La versión ya se encuentra anulada."));
+    expect(revalidations(calls)).toEqual([]);
+  });
+
+  it("un fallo al marcar no muestra el error interno", async () => {
+    const { result } = await runCase(setCurrent, {
+      form: statusForm,
+      data: { ...versions("reemplazada"), "version_receta.update": failWith(new Error("conexion perdida")) },
+    });
+
+    expect(result).toEqual(failure("No se pudo marcar la versión como vigente. Intenta nuevamente."));
+  });
+
+  it("un fallo al anular no muestra el error interno", async () => {
+    const { result } = await runCase(voidVersion, {
+      form: statusForm,
+      data: { ...versions("reemplazada"), "version_receta.update": failWith(new Error("conexion perdida")) },
+    });
+
+    expect(result).toEqual(failure("No se pudo anular la versión. Intenta nuevamente."));
+  });
+});
+
 // B2 (hallazgo 4 de la auditoria de la 10.6): fecha_version es @db.Date, asi que
 // dos versiones del mismo dia empatan; decide el correlativo, que siempre crece.
 describe("el reemplazo de la vigente anulada", () => {
   it("con la misma fecha promueve la de correlativo mas alto", async () => {
-    const { calls } = await runCase(voidRecipeVersionAction, { form: statusForm, data: versions("vigente") });
+    const { calls } = await runCase(voidVersion, { form: statusForm, data: versions("vigente") });
     const replacementRead = calls.find(
       (call) =>
         "prisma" in call &&

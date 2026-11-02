@@ -825,7 +825,7 @@ exports[`/dashboard/production/recipes/[id]/versions > historial con cada estado
 
 exports[`/dashboard/production/recipes/[id]/versions > historial con cada estado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -954,11 +954,7 @@ exports[`/dashboard/production/recipes/[id]/versions > historial con cada estado
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/recipes/id_receta-1/versions/VER00000014/details">Ver materiales</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-1"/>
-<input type="hidden" name="id_version_receta" value="VER00000014"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
 </tr>
@@ -980,16 +976,8 @@ exports[`/dashboard/production/recipes/[id]/versions > historial con cada estado
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/recipes/id_receta-1/versions/VER00000013/details">Ver materiales</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-1"/>
-<input type="hidden" name="id_version_receta" value="VER00000013"/>
-<button data-variant="link" type="submit">Marcar vigente</button>
-</form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-1"/>
-<input type="hidden" name="id_version_receta" value="VER00000013"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="outline" type="button">Marcar vigente</button>
+<button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
 </tr>
@@ -1011,11 +999,7 @@ exports[`/dashboard/production/recipes/[id]/versions > historial con cada estado
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/recipes/id_receta-1/versions/VER00000012/details">Ver materiales</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-1"/>
-<input type="hidden" name="id_version_receta" value="VER00000012"/>
-<button data-variant="link" type="submit">Marcar vigente</button>
-</form>
+<button data-variant="outline" type="button">Marcar vigente</button>
 <span>Usada en órdenes</span>
 </div>
 </td>
@@ -1044,8 +1028,7 @@ exports[`/dashboard/production/recipes/[id]/versions > historial con cada estado
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1169,7 +1152,7 @@ exports[`/dashboard/production/recipes/[id]/versions > receta inactiva con histo
 
 exports[`/dashboard/production/recipes/[id]/versions > receta inactiva con historial > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1297,11 +1280,7 @@ exports[`/dashboard/production/recipes/[id]/versions > receta inactiva con histo
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/recipes/id_receta-1/versions/VER00000014/details">Ver materiales</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-1"/>
-<input type="hidden" name="id_version_receta" value="VER00000014"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
 </tr>
@@ -1323,16 +1302,7 @@ exports[`/dashboard/production/recipes/[id]/versions > receta inactiva con histo
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/recipes/id_receta-1/versions/VER00000013/details">Ver materiales</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-1"/>
-<input type="hidden" name="id_version_receta" value="VER00000013"/>
-<button data-variant="link" type="submit">Marcar vigente</button>
-</form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-1"/>
-<input type="hidden" name="id_version_receta" value="VER00000013"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
 </tr>
@@ -1354,11 +1324,6 @@ exports[`/dashboard/production/recipes/[id]/versions > receta inactiva con histo
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/recipes/id_receta-1/versions/VER00000012/details">Ver materiales</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-1"/>
-<input type="hidden" name="id_version_receta" value="VER00000012"/>
-<button data-variant="link" type="submit">Marcar vigente</button>
-</form>
 <span>Usada en órdenes</span>
 </div>
 </td>
@@ -1387,8 +1352,7 @@ exports[`/dashboard/production/recipes/[id]/versions > receta inactiva con histo
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1450,7 +1414,7 @@ exports[`/dashboard/production/recipes/[id]/versions > sin versiones > llamadas 
 
 exports[`/dashboard/production/recipes/[id]/versions > sin versiones > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1576,7 +1540,7 @@ exports[`/dashboard/production/recipes/[id]/versions > sin versiones > resultado
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1638,7 +1602,7 @@ exports[`/dashboard/production/recipes/[id]/versions > versiones > llamadas 1`] 
 
 exports[`/dashboard/production/recipes/[id]/versions > versiones > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1771,11 +1735,6 @@ exports[`/dashboard/production/recipes/[id]/versions > versiones > resultado 1`]
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details">Ver materiales</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-1"/>
-<input type="hidden" name="id_version_receta" value="id_version_receta-1"/>
-<button data-variant="link" type="submit">Marcar vigente</button>
-</form>
 <span>Usada en órdenes</span>
 </div>
 </td>
@@ -1800,11 +1759,6 @@ exports[`/dashboard/production/recipes/[id]/versions > versiones > resultado 1`]
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-2/details">Ver materiales</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_receta" value="id_receta-1"/>
-<input type="hidden" name="id_version_receta" value="id_version_receta-2"/>
-<button data-variant="link" type="submit">Marcar vigente</button>
-</form>
 <span>Usada en órdenes</span>
 </div>
 </td>
@@ -1812,8 +1766,7 @@ exports[`/dashboard/production/recipes/[id]/versions > versiones > resultado 1`]
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;

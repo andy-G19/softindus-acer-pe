@@ -3,9 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockRecipeRow } from "@/lib/row-locks";
 import {
   recipeVersionSchema,
@@ -13,6 +14,8 @@ import {
 } from "@/schemas/production/recipe-version.schema";
 
 type VersionProblem = { error: string };
+
+const PERMISSION_ERROR = "No tienes permisos para cambiar las versiones de receta.";
 
 function getFormDataValues(formData: FormData, name: string) {
   return formData.getAll(name).map((value) => String(value).trim());
@@ -231,8 +234,16 @@ export async function createRecipeVersionAction(formData: FormData) {
   redirect(`/dashboard/production/recipes/${data.id_receta}/versions?toast=recipe-version-created`);
 }
 
-export async function setCurrentRecipeVersionAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+export async function setCurrentRecipeVersionAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
+  const id = formData.get("id_version_receta")?.toString() ?? "";
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
+
+  if (!session) {
+    return rowStatusError(id, PERMISSION_ERROR);
+  }
 
   const parsed = recipeVersionStatusSchema.safeParse({
     id_receta: formData.get("id_receta"),
@@ -240,13 +251,15 @@ export async function setCurrentRecipeVersionAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos inválidos.");
+    return rowStatusError(id, parsed.error.issues[0]?.message ?? "Datos inválidos.");
   }
 
   const data = parsed.data;
 
-  const outcome = await prisma.$transaction(
-    async (tx): Promise<VersionProblem | "ya_vigente" | null> => {
+  let problem: VersionProblem | null = null;
+
+  try {
+    problem = await prisma.$transaction(async (tx): Promise<VersionProblem | null> => {
       await lockRecipeRow(tx, data.id_receta);
 
       const version = await tx.version_receta.findFirst({
@@ -272,7 +285,7 @@ export async function setCurrentRecipeVersionAction(formData: FormData) {
       }
 
       if (version.estado === "vigente") {
-        return "ya_vigente";
+        return { error: "La versión ya estaba vigente." };
       }
 
       await tx.version_receta.updateMany({
@@ -305,27 +318,30 @@ export async function setCurrentRecipeVersionAction(formData: FormData) {
       });
 
       return null;
-    },
-  );
-
-  if (outcome === "ya_vigente") {
-    revalidateRecipePaths(data.id_receta);
-    redirect(`/dashboard/production/recipes/${data.id_receta}/versions`);
+    });
+  } catch {
+    return rowStatusError(id, "No se pudo marcar la versión como vigente. Intenta nuevamente.");
   }
 
-  if (outcome) {
-    throw new Error(outcome.error);
+  if (problem) {
+    return rowStatusError(id, problem.error);
   }
 
   revalidateRecipePaths(data.id_receta);
 
-  redirect(
-    `/dashboard/production/recipes/${data.id_receta}/versions?toast=recipe-version-set-current`,
-  );
+  return rowStatusDone(id, "vigente");
 }
 
-export async function voidRecipeVersionAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+export async function voidRecipeVersionAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
+  const id = formData.get("id_version_receta")?.toString() ?? "";
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
+
+  if (!session) {
+    return rowStatusError(id, PERMISSION_ERROR);
+  }
 
   const parsed = recipeVersionStatusSchema.safeParse({
     id_receta: formData.get("id_receta"),
@@ -333,126 +349,130 @@ export async function voidRecipeVersionAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos inválidos.");
+    return rowStatusError(id, parsed.error.issues[0]?.message ?? "Datos inválidos.");
   }
 
   const data = parsed.data;
 
-  const problem = await prisma.$transaction(async (tx): Promise<VersionProblem | null> => {
-    await lockRecipeRow(tx, data.id_receta);
+  let problem: VersionProblem | null = null;
 
-    const version = await tx.version_receta.findFirst({
-      where: {
-        id_version_receta: data.id_version_receta,
-        id_receta: data.id_receta,
-      },
-      include: {
-        orden_trabajo: {
-          select: {
-            id_orden_trabajo: true,
-          },
-        },
-      },
-    });
+  try {
+    problem = await prisma.$transaction(async (tx): Promise<VersionProblem | null> => {
+      await lockRecipeRow(tx, data.id_receta);
 
-    if (!version) {
-      return { error: "La versión seleccionada no existe." };
-    }
-
-    if (version.estado === "anulada") {
-      return { error: "La versión ya se encuentra anulada." };
-    }
-
-    if (version.orden_trabajo.length > 0) {
-      return {
-        error:
-          "No se puede anular una versión usada por órdenes de trabajo. Se conserva como histórica.",
-      };
-    }
-
-    if (version.estado === "vigente") {
-      // fecha_version no guarda la hora: entre versiones del mismo dia decide el
-      // correlativo, que siempre crece.
-      const replacement = await tx.version_receta.findFirst({
+      const version = await tx.version_receta.findFirst({
         where: {
+          id_version_receta: data.id_version_receta,
           id_receta: data.id_receta,
-          id_version_receta: {
-            not: data.id_version_receta,
-          },
-          estado: {
-            not: "anulada",
-          },
         },
-        orderBy: [{ fecha_version: "desc" }, { id_version_receta: "desc" }],
-        select: {
-          id_version_receta: true,
+        include: {
+          orden_trabajo: {
+            select: {
+              id_orden_trabajo: true,
+            },
+          },
         },
       });
 
-      if (!replacement) {
+      if (!version) {
+        return { error: "La versión seleccionada no existe." };
+      }
+
+      if (version.estado === "anulada") {
+        return { error: "La versión ya se encuentra anulada." };
+      }
+
+      if (version.orden_trabajo.length > 0) {
         return {
           error:
-            "No se puede anular la única versión vigente sin otra versión válida para reemplazarla.",
+            "No se puede anular una versión usada por órdenes de trabajo. Se conserva como histórica.",
         };
       }
 
-      await tx.version_receta.update({
-        where: {
-          id_version_receta: data.id_version_receta,
-        },
-        data: {
-          estado: "anulada",
-        },
-      });
+      if (version.estado === "vigente") {
+        // fecha_version no guarda la hora: entre versiones del mismo dia decide el
+        // correlativo, que siempre crece.
+        const replacement = await tx.version_receta.findFirst({
+          where: {
+            id_receta: data.id_receta,
+            id_version_receta: {
+              not: data.id_version_receta,
+            },
+            estado: {
+              not: "anulada",
+            },
+          },
+          orderBy: [{ fecha_version: "desc" }, { id_version_receta: "desc" }],
+          select: {
+            id_version_receta: true,
+          },
+        });
 
-      await tx.version_receta.update({
-        where: {
-          id_version_receta: replacement.id_version_receta,
-        },
-        data: {
-          estado: "vigente",
-          id_usuario_aprueba: session.user.id,
-        },
-      });
+        if (!replacement) {
+          return {
+            error:
+              "No se puede anular la única versión vigente sin otra versión válida para reemplazarla.",
+          };
+        }
 
-      await registerAuditLog({
-        userId: session.user.id,
-        entidad_afectada: "version_receta",
-        id_registro_afectado: data.id_version_receta,
-        accion: "ANULAR_VERSION_RECETA",
-        detalle: `Versión ${version.numero_version} anulada y reemplazada por ${replacement.id_version_receta}.`,
-        tx,
-      });
-    } else {
-      await tx.version_receta.update({
-        where: {
-          id_version_receta: data.id_version_receta,
-        },
-        data: {
-          estado: "anulada",
-        },
-      });
+        await tx.version_receta.update({
+          where: {
+            id_version_receta: data.id_version_receta,
+          },
+          data: {
+            estado: "anulada",
+          },
+        });
 
-      await registerAuditLog({
-        userId: session.user.id,
-        entidad_afectada: "version_receta",
-        id_registro_afectado: data.id_version_receta,
-        accion: "ANULAR_VERSION_RECETA",
-        detalle: `Versión ${version.numero_version} anulada para la receta ${data.id_receta}.`,
-        tx,
-      });
-    }
+        await tx.version_receta.update({
+          where: {
+            id_version_receta: replacement.id_version_receta,
+          },
+          data: {
+            estado: "vigente",
+            id_usuario_aprueba: session.user.id,
+          },
+        });
 
-    return null;
-  });
+        await registerAuditLog({
+          userId: session.user.id,
+          entidad_afectada: "version_receta",
+          id_registro_afectado: data.id_version_receta,
+          accion: "ANULAR_VERSION_RECETA",
+          detalle: `Versión ${version.numero_version} anulada y reemplazada por ${replacement.id_version_receta}.`,
+          tx,
+        });
+      } else {
+        await tx.version_receta.update({
+          where: {
+            id_version_receta: data.id_version_receta,
+          },
+          data: {
+            estado: "anulada",
+          },
+        });
+
+        await registerAuditLog({
+          userId: session.user.id,
+          entidad_afectada: "version_receta",
+          id_registro_afectado: data.id_version_receta,
+          accion: "ANULAR_VERSION_RECETA",
+          detalle: `Versión ${version.numero_version} anulada para la receta ${data.id_receta}.`,
+          tx,
+        });
+      }
+
+      return null;
+    });
+  } catch {
+    return rowStatusError(id, "No se pudo anular la versión. Intenta nuevamente.");
+  }
 
   if (problem) {
-    throw new Error(problem.error);
+    return rowStatusError(id, problem.error);
   }
 
   revalidateRecipePaths(data.id_receta);
 
-  redirect(
-    `/dashboard/production/recipes/${data.id_receta}/versions?toast=recipe-version-annulled`,
-  );
+  return rowStatusDone(id, "anulada");
 }

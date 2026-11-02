@@ -384,6 +384,36 @@ describe("la lista de recetas", () => {
 
 // B5: las lineas de una version en panel lateral. Esta ranura vive debajo de la de
 // recetas, como la de etapas debajo de la de rutas.
+// B6: la fila ofrece lo que la accion acepta (D8) y la pagina vive dentro del main del shell.
+describe("acciones de la fila de versiones", () => {
+  const loadVersions = () => import("./[id]/versions/page");
+  const historyOf = (estado: string) => ({
+    params: { id: "REC00000001" },
+    data: { "receta_tecnica.findUnique": recipeInVersions(estado, fullHistory(versionBase)) },
+  });
+  const route = "/dashboard/production/recipes/REC00000001/versions";
+
+  it("con la receta activa ofrece marcar vigente las reemplazadas", async () => {
+    const { html } = await characterizePage(loadVersions, { name: "activa", ...historyOf("activa") }, route);
+
+    expect(html?.match(/>Marcar vigente</g)).toHaveLength(2);
+    expect(html?.match(/>Anular</g)).toHaveLength(2);
+  });
+
+  it("con la receta inactiva no ofrece marcar vigente y anular sigue", async () => {
+    const { html } = await characterizePage(loadVersions, { name: "inactiva", ...historyOf("inactiva") }, route);
+
+    expect(html).not.toContain("Marcar vigente");
+    expect(html?.match(/>Anular</g)).toHaveLength(2);
+  });
+
+  it("no abre otro main", async () => {
+    const { html } = await characterizePage(loadVersions, { name: "activa", ...historyOf("activa") }, route);
+
+    expect(html).not.toContain("<main");
+  });
+});
+
 const DETAILS_ROUTE = "/dashboard/production/recipes/REC00000001/versions/VER00000001/details";
 const newDetailCase = { params: { id: "REC00000001", versionId: "VER00000001" } };
 const editDetailCase = { params: { id: "id_receta-1", versionId: "VER00000001", detailId: "DRE00000001" } };

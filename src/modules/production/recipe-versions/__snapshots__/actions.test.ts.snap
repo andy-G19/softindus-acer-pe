@@ -1824,10 +1824,10 @@ exports[`createRecipeVersionAction > varios errores se unen en un mensaje > llam
 
 exports[`createRecipeVersionAction > varios errores se unen en un mensaje > resultado 1`] = `"error: La cantidad requerida debe ser de al menos 0.01. Seleccione un tipo de consumo válido. La cantidad requerida debe ser de al menos 0.01."`;
 
-exports[`setCurrentRecipeVersionAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+exports[`setCurrentRecipeVersionAction > SELLER: responde con un error sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1836,12 +1836,23 @@ exports[`setCurrentRecipeVersionAction > SELLER: se redirige sin tocar Prisma > 
 ]
 `;
 
-exports[`setCurrentRecipeVersionAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`setCurrentRecipeVersionAction > SELLER: responde con un error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para cambiar las versiones de receta.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`setCurrentRecipeVersionAction > WORKSHOP_MASTER tambien la marca > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1934,12 +1945,25 @@ exports[`setCurrentRecipeVersionAction > WORKSHOP_MASTER tambien la marca > llam
 ]
 `;
 
-exports[`setCurrentRecipeVersionAction > WORKSHOP_MASTER tambien la marca > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-set-current"`;
+exports[`setCurrentRecipeVersionAction > WORKSHOP_MASTER tambien la marca > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "vigente",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
-exports[`setCurrentRecipeVersionAction > la que ya es vigente redirige sin escribir > llamadas 1`] = `
+exports[`setCurrentRecipeVersionAction > la que ya es vigente responde sin escribir > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1974,35 +1998,26 @@ exports[`setCurrentRecipeVersionAction > la que ya es vigente redirige sin escri
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
-  {
-    "args": "/dashboard",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/recipes",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/recipes/REC00000003/versions",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/work-orders",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`setCurrentRecipeVersionAction > la que ya es vigente redirige sin escribir > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions"`;
+exports[`setCurrentRecipeVersionAction > la que ya es vigente responde sin escribir > resultado 1`] = `
+{
+  "estado": {
+    "error": "La versión ya estaba vigente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`setCurrentRecipeVersionAction > la receta no esta activa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2040,12 +2055,23 @@ exports[`setCurrentRecipeVersionAction > la receta no esta activa > llamadas 1`]
 ]
 `;
 
-exports[`setCurrentRecipeVersionAction > la receta no esta activa > resultado 1`] = `"error: La receta técnica no está activa."`;
+exports[`setCurrentRecipeVersionAction > la receta no esta activa > resultado 1`] = `
+{
+  "estado": {
+    "error": "La receta técnica no está activa.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`setCurrentRecipeVersionAction > la version no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2083,12 +2109,23 @@ exports[`setCurrentRecipeVersionAction > la version no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`setCurrentRecipeVersionAction > la version no existe > resultado 1`] = `"error: La versión seleccionada no existe."`;
+exports[`setCurrentRecipeVersionAction > la version no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La versión seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
-exports[`setCurrentRecipeVersionAction > sin receta lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+exports[`setCurrentRecipeVersionAction > sin receta responde su mensaje sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2097,12 +2134,23 @@ exports[`setCurrentRecipeVersionAction > sin receta lanza su mensaje sin tocar P
 ]
 `;
 
-exports[`setCurrentRecipeVersionAction > sin receta lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La receta técnica es obligatoria."`;
+exports[`setCurrentRecipeVersionAction > sin receta responde su mensaje sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "La receta técnica es obligatoria.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
-exports[`setCurrentRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+exports[`setCurrentRecipeVersionAction > sin version responde su mensaje sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2111,12 +2159,23 @@ exports[`setCurrentRecipeVersionAction > sin version lanza su mensaje sin tocar 
 ]
 `;
 
-exports[`setCurrentRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La versión de receta es obligatoria."`;
+exports[`setCurrentRecipeVersionAction > sin version responde su mensaje sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "La versión de receta es obligatoria.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`setCurrentRecipeVersionAction > un fallo al escribir revierte y deja el error > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2178,12 +2237,23 @@ exports[`setCurrentRecipeVersionAction > un fallo al escribir revierte y deja el
 ]
 `;
 
-exports[`setCurrentRecipeVersionAction > un fallo al escribir revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
+exports[`setCurrentRecipeVersionAction > un fallo al escribir revierte y deja el error > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo marcar la versión como vigente. Intenta nuevamente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`setCurrentRecipeVersionAction > una anulada no se puede marcar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2221,12 +2291,23 @@ exports[`setCurrentRecipeVersionAction > una anulada no se puede marcar > llamad
 ]
 `;
 
-exports[`setCurrentRecipeVersionAction > una anulada no se puede marcar > resultado 1`] = `"error: No se puede marcar como vigente una versión anulada."`;
+exports[`setCurrentRecipeVersionAction > una anulada no se puede marcar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede marcar como vigente una versión anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`setCurrentRecipeVersionAction > una reemplazada pasa a vigente y la vigente queda reemplazada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2319,12 +2400,25 @@ exports[`setCurrentRecipeVersionAction > una reemplazada pasa a vigente y la vig
 ]
 `;
 
-exports[`setCurrentRecipeVersionAction > una reemplazada pasa a vigente y la vigente queda reemplazada > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-set-current"`;
+exports[`setCurrentRecipeVersionAction > una reemplazada pasa a vigente y la vigente queda reemplazada > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "vigente",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
-exports[`voidRecipeVersionAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+exports[`voidRecipeVersionAction > SELLER: responde con un error sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2333,12 +2427,23 @@ exports[`voidRecipeVersionAction > SELLER: se redirige sin tocar Prisma > llamad
 ]
 `;
 
-exports[`voidRecipeVersionAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`voidRecipeVersionAction > SELLER: responde con un error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para cambiar las versiones de receta.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`voidRecipeVersionAction > WORKSHOP_MASTER tambien anula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2422,12 +2527,25 @@ exports[`voidRecipeVersionAction > WORKSHOP_MASTER tambien anula > llamadas 1`] 
 ]
 `;
 
-exports[`voidRecipeVersionAction > WORKSHOP_MASTER tambien anula > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-annulled"`;
+exports[`voidRecipeVersionAction > WORKSHOP_MASTER tambien anula > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`voidRecipeVersionAction > con la receta inactiva tambien se anula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2511,12 +2629,25 @@ exports[`voidRecipeVersionAction > con la receta inactiva tambien se anula > lla
 ]
 `;
 
-exports[`voidRecipeVersionAction > con la receta inactiva tambien se anula > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-annulled"`;
+exports[`voidRecipeVersionAction > con la receta inactiva tambien se anula > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`voidRecipeVersionAction > la version no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2558,12 +2689,23 @@ exports[`voidRecipeVersionAction > la version no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`voidRecipeVersionAction > la version no existe > resultado 1`] = `"error: La versión seleccionada no existe."`;
+exports[`voidRecipeVersionAction > la version no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La versión seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`voidRecipeVersionAction > la vigente se anula y promueve la mas reciente no anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2684,12 +2826,25 @@ exports[`voidRecipeVersionAction > la vigente se anula y promueve la mas recient
 ]
 `;
 
-exports[`voidRecipeVersionAction > la vigente se anula y promueve la mas reciente no anulada > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-annulled"`;
+exports[`voidRecipeVersionAction > la vigente se anula y promueve la mas reciente no anulada > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`voidRecipeVersionAction > la vigente sin otra version valida no se anula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2756,12 +2911,23 @@ exports[`voidRecipeVersionAction > la vigente sin otra version valida no se anul
 ]
 `;
 
-exports[`voidRecipeVersionAction > la vigente sin otra version valida no se anula > resultado 1`] = `"error: No se puede anular la única versión vigente sin otra versión válida para reemplazarla."`;
+exports[`voidRecipeVersionAction > la vigente sin otra version valida no se anula > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede anular la única versión vigente sin otra versión válida para reemplazarla.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
-exports[`voidRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+exports[`voidRecipeVersionAction > sin version responde su mensaje sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2770,12 +2936,23 @@ exports[`voidRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma
 ]
 `;
 
-exports[`voidRecipeVersionAction > sin version lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La versión de receta es obligatoria."`;
+exports[`voidRecipeVersionAction > sin version responde su mensaje sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "La versión de receta es obligatoria.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`voidRecipeVersionAction > un fallo al promover revierte y deja el error > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2865,12 +3042,23 @@ exports[`voidRecipeVersionAction > un fallo al promover revierte y deja el error
 ]
 `;
 
-exports[`voidRecipeVersionAction > un fallo al promover revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
+exports[`voidRecipeVersionAction > un fallo al promover revierte y deja el error > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo anular la versión. Intenta nuevamente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`voidRecipeVersionAction > una reemplazada se anula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2954,12 +3142,25 @@ exports[`voidRecipeVersionAction > una reemplazada se anula > llamadas 1`] = `
 ]
 `;
 
-exports[`voidRecipeVersionAction > una reemplazada se anula > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-annulled"`;
+exports[`voidRecipeVersionAction > una reemplazada se anula > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`voidRecipeVersionAction > usada por ordenes no se anula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3001,12 +3202,23 @@ exports[`voidRecipeVersionAction > usada por ordenes no se anula > llamadas 1`] 
 ]
 `;
 
-exports[`voidRecipeVersionAction > usada por ordenes no se anula > resultado 1`] = `"error: No se puede anular una versión usada por órdenes de trabajo. Se conserva como histórica."`;
+exports[`voidRecipeVersionAction > usada por ordenes no se anula > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede anular una versión usada por órdenes de trabajo. Se conserva como histórica.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;
 
 exports[`voidRecipeVersionAction > ya estaba anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3048,4 +3260,15 @@ exports[`voidRecipeVersionAction > ya estaba anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`voidRecipeVersionAction > ya estaba anulada > resultado 1`] = `"error: La versión ya se encuentra anulada."`;
+exports[`voidRecipeVersionAction > ya estaba anulada > resultado 1`] = `
+{
+  "estado": {
+    "error": "La versión ya se encuentra anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "VER00000005",
+    },
+  },
+}
+`;

@@ -239,6 +239,7 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/production/recipe-versions/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createRecipeVersionAction", "setCurrentRecipeVersionAction", "voidRecipeVersionAction"],
+    rechazanConResultado: ["setCurrentRecipeVersionAction", "voidRecipeVersionAction"],
   },
   {
     ruta: "production/recipes/actions",
