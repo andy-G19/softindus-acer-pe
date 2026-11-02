@@ -6514,10 +6514,10 @@ Datos leídos de la API de GitHub el 2026-11-02 (UTC) y comparados con git:
 
 ### Sub-entrega 10.6b — Recetas, versiones y detalles
 
-Fecha: del 2026-11-01 al 2026-11-02 (Lima). Estado: verificada en staging, pendiente de
-integrar. El paso C0 (`8a35cd9`) registró la integración de la 10.6a. 9 commits de código
-y pruebas, de `077cd6c` a `e876ac2`, el registro `71b02dc`, el arreglo `e8d77ae` y el
-cierre.
+Fecha: del 2026-11-01 al 2026-11-02 (Lima). Estado: cerrada e integrada en `main` con el
+PR #34 (merge commit `6c4e605`, CI #127 en verde). El paso C0 (`8a35cd9`) registró la
+integración de la 10.6a. 9 commits de código y pruebas, de `077cd6c` a `e876ac2`, el
+registro `71b02dc`, el arreglo `e8d77ae` y el cierre `d4c20d4`.
 Plan en `tmp/e10-diff/plan-10-6b.md`, sobre los pasos y las decisiones D1 a D7 de
 `plan-10-6.md`.
 
@@ -6535,6 +6535,7 @@ Plan en `tmp/e10-diff/plan-10-6b.md`, sobre los pasos y las decisiones D1 a D7 d
 | e876ac2 | feat | Requerimientos con `Field` y `key`; `production-links.test.ts` suma recetas. El hallazgo 9 no quedó resuelto (hallazgo 36). |
 | 71b02dc | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
 | e8d77ae | fix | `autoComplete="off"` en la cantidad: el arreglo real del hallazgo 9. |
+| d4c20d4 | docs | Cierre: verificación en staging y capítulo de recetas del manual. |
 
 Ajustes al plan:
 
@@ -6708,6 +6709,24 @@ Hallazgos de la verificación:
 
 El manual suma el capítulo de recetas, versiones, materiales y requerimientos.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-02 (UTC) y comparados con git:
+
+- El cierre `d4c20d4` se publicó en `staging`: CI #125 en verde (4m 52s, de
+  15:51:32 a 15:56:24 UTC del 2026-11-02), y Vercel lo desplegó (`success` a las
+  15:54:19 UTC).
+- PR #34, abierto a las 16:09:54 UTC y fusionado con merge commit a las
+  16:21:55 UTC del 2026-11-02: 13 commits, de `8a35cd9` a `d4c20d4`, y 68
+  archivos (+19.036 −2.186). Su CI, el #126, sobre `d4c20d4`, terminó en
+  verde (4m 34s).
+- El merge commit `6c4e605` tiene como padres `59f288e` (`main`) y `d4c20d4`
+  (`staging`), y su árbol es el de `d4c20d4` (`49ca98e1`): `main` y `staging`
+  tienen el mismo contenido. CI #127 en verde (4m 10s).
+- Vercel desplegó `6c4e605` en producción con un solo despliegue (`success` a
+  las 16:23:30 UTC). La sub-entrega no trae migraciones (sin cambios en
+  `prisma/`).
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -6732,7 +6751,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, verificada en staging con CI #124 verde, pendiente de integrar) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
