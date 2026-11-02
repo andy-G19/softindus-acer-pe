@@ -3206,9 +3206,9 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Reparaciones | Mantenimiento | ADMIN | Página con varios repuestos, lanza | Superficie amplia en página completa (D6) | 10.5b | Migrado |
 | Rutas de fabricación | Producción | ADMIN, WORKSHOP_MASTER | Páginas de alta y edición, lanza | Panel lateral (D1 de la 10.6) | 10.6a | Migrado |
 | Etapas de ruta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6a | Migrado |
-| Recetas técnicas | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral (D1 de la 10.6) | 10.6b | Pendiente |
-| Versiones de receta | Producción | ADMIN, WORKSHOP_MASTER | Página con líneas, lanza | Superficie amplia | 10.6b | Pendiente |
-| Detalles de receta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6b | Pendiente |
+| Recetas técnicas | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral (D1 de la 10.6) | 10.6b | Migrado |
+| Versiones de receta | Producción | ADMIN, WORKSHOP_MASTER | Página con líneas, lanza | Superficie amplia | 10.6b | Migrado |
+| Detalles de receta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6b | Migrado |
 | Campañas de producción | Producción | ADMIN, WORKSHOP_MASTER | Páginas de alta y edición, lanza | Panel lateral | 10.7 | Pendiente |
 | Detalle de campaña | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Modal breve | 10.7 | Pendiente |
 | Chatarra | Mermas | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.7 | Pendiente |
@@ -3232,7 +3232,7 @@ destructivas confirman:
 | 10.3 | Inactivar material y atender alerta de stock (10.3a, migradas); inactivar proveedor y material de proveedor (10.3b, migradas) |
 | 10.4 | Inactivar cliente, producto y categoría de producto (10.4a, migradas) |
 | 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
-| 10.6 | Inactivar ruta y etapa (10.6a, migradas); inactivar receta; marcar versión vigente; anular versión; borrar detalle de receta (10.6b) |
+| 10.6 | Inactivar ruta y etapa (10.6a, migradas); inactivar receta; marcar versión vigente; anular versión; borrar detalle de receta (10.6b, migradas) |
 | 10.7 | Cambiar el estado de campaña y de retazo; activar y desactivar usuario |
 | 10.8 | Inactivar operario; cancelar tarea; generar costeo desde una orden; recalcular costeo; anular costo indirecto |
 
@@ -6271,8 +6271,9 @@ Datos leídos de la API de GitHub el 2026-11-01 (UTC) y comparados con git:
 
 Fecha: del 2026-10-31 al 2026-11-01 (Lima). Estado: cerrada el 2026-11-01 (Lima). El
 paso 0 (`94392a8`) registró la integración de la 10.5b en `main`. 9 commits, de
-`9e8475f` a `0c506e0`, el registro `0e4bd6c` (CI #119 en verde) y este cierre. Plan en
-`tmp/e10-diff/plan-10-6.md`.
+`9e8475f` a `0c506e0`, el registro `0e4bd6c` (CI #119 en verde) y el cierre `26e788d`
+(CI #120 en verde). Integrada en `main` con el PR #33 (merge commit `59f288e`, CI #122
+en verde). Plan en `tmp/e10-diff/plan-10-6.md`.
 
 La auditoría partió la 10.6 en dos, aprobado por el responsable: la 10.6a
 (rutas, etapas y listados) y la 10.6b (recetas, versiones y detalles).
@@ -6290,7 +6291,7 @@ La auditoría partió la 10.6 en dos, aprobado por el responsable: la 10.6a
 | efeadc0 | feat | `FilterBar` y `DateRangeFields` en cuellos de botella y órdenes. |
 | 0c506e0 | feat | Sin `<main>` en el inicio y las páginas de órdenes; `production-links.test.ts`. |
 | 0e4bd6c | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
-| este | docs | Cierre: verificación en staging y capítulo de Producción del manual. |
+| 26e788d | docs | Cierre: verificación en staging y capítulo de Producción del manual. |
 
 Ajustes al plan, aprobados por el responsable:
 
@@ -6493,6 +6494,220 @@ Hallazgos de la verificación:
 El manual suma el capítulo de Producción (rutas, etapas, cuellos de botella y la lista
 de órdenes), escrito con lo verificado.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-02 (UTC) y comparados con git:
+
+- El cierre `26e788d` se publicó en `staging`: CI #120 en verde (4m 10s, de
+  00:42:59 a 00:47:09 UTC del 2026-11-02), y Vercel lo desplegó (`pending` a las
+  00:42:59 UTC y `success` a las 00:44:32 UTC).
+- PR #33, abierto a las 00:48:21 UTC y fusionado con merge commit a las
+  00:54:22 UTC del 2026-11-02: 12 commits, de `94392a8` a `26e788d`, y 62
+  archivos (+12.623 −1.539). Su CI, el #121, sobre `26e788d`, terminó en
+  verde (2m 42s).
+- El merge commit `59f288e` tiene como padres `27070b0` (`main`) y `26e788d`
+  (`staging`), y su árbol es el de `26e788d` (`3573deb3`): `main` y `staging`
+  tienen el mismo contenido. CI #122 en verde (3m 28s).
+- Vercel desplegó `59f288e` en producción con un solo despliegue (`pending` a
+  las 00:54:26 UTC y `success` a las 00:55:49 UTC). La sub-entrega no trae
+  migraciones (sin cambios en `prisma/`).
+
+### Sub-entrega 10.6b — Recetas, versiones y detalles
+
+Fecha: del 2026-11-01 al 2026-11-02 (Lima). Estado: verificada en staging, pendiente de
+integrar. El paso C0 (`8a35cd9`) registró la integración de la 10.6a. 9 commits de código
+y pruebas, de `077cd6c` a `e876ac2`, el registro `71b02dc`, el arreglo `e8d77ae` y el
+cierre.
+Plan en `tmp/e10-diff/plan-10-6b.md`, sobre los pasos y las decisiones D1 a D7 de
+`plan-10-6.md`.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 8a35cd9 | docs | C0: integración de la 10.6a en `main`. |
+| 077cd6c | test | D9: tiempo propio de 15 s para el Excel de 5.000 filas (hallazgo 26 de la 10.6a). |
+| 7fe41c2 | test | Caracterización de las 8 acciones de recetas, versiones y detalles y casos de página. |
+| 1300f1e | fix | `lockRecipeRow`, decidir dentro de la transacción, P2002 en recetas y desempate por `id_version_receta desc` (hallazgos 1 y 4). |
+| a3df11f | fix | Material inactivo editable y marcado, stock disponible redondeado y mínimo de 0.01 con sus mensajes (hallazgos 3, 5 y 10). |
+| cfb8ec1 | feat | Recetas en panel, inactivar con compare-and-set y `FilterBar`. |
+| 04e5392 | feat | Materiales en panel anidado, eliminar con `ConfirmActionButton`; el simulador no cuenta como cambio (hallazgo 8). |
+| 97dd5b4 | feat | Marcar vigente y anular con `RowStatusState` y confirmación (D4 y D8). |
+| 4d808a2 | feat | Alta de versión como superficie amplia, con errores `detalles.<posición>.<campo>`. |
+| e876ac2 | feat | Requerimientos con `Field` y `key`; `production-links.test.ts` suma recetas. El hallazgo 9 no quedó resuelto (hallazgo 36). |
+| 71b02dc | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| e8d77ae | fix | `autoComplete="off"` en la cantidad: el arreglo real del hallazgo 9. |
+
+Ajustes al plan:
+
+- D8, aprobada por el responsable: con la receta inactiva no se ofrece «Marcar vigente»,
+  porque la acción la rechaza siempre. «Anular» se sigue ofreciendo (R3).
+- Recetas no tiene edición: su ranura solo lleva `(.)new`.
+- Añadidos que el plan no nombraba, con su motivo:
+  - editar un material con la receta inactiva avisa «Esta receta no está activa»: el
+    formulario quedaba deshabilitado sin explicación;
+  - eliminar un material añade «Para recuperarlo tendrás que volver a agregarlo»,
+    porque el borrado es físico;
+  - el material del alta de versión ya no lleva `required` (hallazgo 28);
+  - la cantidad de los requerimientos pasa a ser obligatoria en el navegador, porque
+    `Field` pone `required` junto al asterisco que la etiqueta ya mostraba.
+
+Diseño:
+
+- `lockRecipeRow` protege una receta, sus versiones y sus detalles. El detalle lee antes
+  el `id_receta` de su versión para tomar el candado de la raíz.
+- Inactivar una receta es un compare-and-set: no toma el candado. El resto de los
+  escritores sí.
+- Marcar vigente y anular no usan `RowStatusSelect`: son dos acciones con significado
+  propio, no valores de un estado. Usan `ConfirmActionButton` con `RowStatusState`
+  (`recipe-version-status-actions.tsx`). La confirmación nombra la consecuencia comprobada
+  en la acción: la versión que queda reemplazada, o que la no anulada más reciente pasa a
+  vigente.
+- Un rechazo no revalida, como en Fallas: el repintado quitaría el botón y el mensaje
+  se iría con la confirmación (hallazgo 29).
+- Las claves de error del alta de versión salen de la ruta de cada problema de Zod. La
+  regla de material repetido marca cada línea que lo usa.
+- Las ranuras se anidan: `recipes/@panel` y
+  `recipes/[id]/versions/[versionId]/details/@panel`.
+
+Evidencia:
+
+1. Pruebas rojas antes de cada arreglo. En B5 el primer intento no valió (hallazgo 31) y
+   se repitió: 40 fallos. En B6, 40 fallos y una suite sin cargar; en B7, 34 y una; en
+   B8, el hallazgo 9 falla con `25` en el campo y `7` en la URL.
+2. Comparación de llamadas con `tmp/e10-diff/cmp_snap_b2.py`: en B2, B5, B6 y B7 no
+   cambian escrituras, bitácora, correlativos ni revalidaciones; cambian la autorización,
+   los resultados y, en B2, el candado y su orden.
+3. Mutaciones: B1 41 de 41, B2 39 de 39, B3 22 de 22, B4 39 de 39, B5 44 de 44, B6 30
+   de 30, B7 42 de 42 y B8 7 de 7; en total, 264 de 264 (hallazgo 32 sobre las que
+   sobrevivieron primero). En B6 y B7, `mut_106b_b6.txt` y `mut_106b_b7.txt` solo
+   guardan la repetición de la mutación corregida; el resultado completo consta aquí.
+4. CSS compilado: igual en C0 a B3, B5, B7 y B8. En B4 sale
+   `md:grid-cols-[1.5fr_1fr_1fr_auto_auto]` y en B6 `.hover:text-chart-3:hover`, que no
+   tienen otros consumidores: de 112.785 a 112.648 bytes y 1.237 reglas.
+5. `npm run check` terminó con código 0 antes de cada commit, hasta 3.822 pruebas en
+   215 archivos. `npm run refactor:inventory` analiza 164 páginas y 72 formularios JSX.
+
+Tiempo de preparación, aproximado: del primer guion de cada paso al último
+`npm run check` en verde, leído de la fecha de esos archivos (Lima). Las esperas al
+responsable y la lectura previa quedan fuera:
+
+| Commit | 7fe41c2 | 1300f1e | a3df11f | cfb8ec1 | 04e5392 | 97dd5b4 | 4d808a2 | e876ac2 |
+|---|---|---|---|---|---|---|---|---|
+| Inicio | 21:15 | 22:37 | 23:07 | 23:20 | 00:04 | 07:08 | 07:41 | 08:15 |
+| Check en verde | 21:25 | 22:46 | 23:14 | 23:34 | 00:45 | 07:22 | 08:02 | 08:22 |
+| Minutos | 10 | 9 | 7 | 14 | 41 | 14 | 21 | 7 |
+
+Suman 123 minutos frente a 420 estimados en bruto: un factor de 0,29.
+
+Hallazgos de la auditoría corregidos: 1 y 10 en recetas, 3, 4, 5, 8 y 9. R1 a R6 se
+mantienen sin tocar; de R4, la línea de un material inactivo ahora da su error en la
+línea (hallazgo 28). Hallazgos de la implementación:
+
+27. `work-orders/[id]/page.tsx` resta el stock reservado sin redondear en las líneas 108
+    y 147: el mismo error del hallazgo 5, que marcaría «Insuficiente» con un faltante de
+    0.00. No se cambió: las órdenes no son de esta sub-entrega.
+28. `SearchableSelect` con `required` pone el atributo en su buscador, y un valor que no
+    está entre las opciones lo deja vacío: el navegador frenaba el envío sin decir por
+    qué, y la acción nunca respondía. Una prueba lo descubrió. El alta de versión lo
+    quita y lleva el asterisco en la etiqueta. Pedidos y Reparaciones siguen como
+    estaban: Pedidos conserva sus inactivos como opciones marcadas y Reparaciones no
+    exige la línea.
+29. Con la lista desactualizada, «La versión ya estaba vigente.» se muestra sin
+    revalidar, y la fila sigue ofreciendo el botón hasta la siguiente navegación.
+    Antes redirigía en silencio y revalidaba.
+30. Los errores de línea se guardan por posición, como en Reparaciones: quitar una línea
+    tras un error desplaza los mensajes hasta el siguiente envío. No se cambió.
+31. Método: en B5 las pruebas y el código se lanzaron en paralelo, y el guion de pruebas
+    paró antes de escribir. El código se apartó, se restauró `HEAD`, se corrió el rojo
+    válido y se restauró. Rojo primero y código después, en mensajes separados.
+32. Método: sobrevivieron primero, por huecos reales, la regla de vigencia, la merma nula
+    y el alta sin materiales (B5); pasar la versión vigente a la fila (B6, una
+    confirmación cerrada no pinta en servidor; ahora `versions-confirmation.test.ts`
+    dobla el diálogo); y «sin receta» (B7). En B8, `rawQuantity` frente a
+    `quantityToProduce` como `key` resultó equivalente: quedó el valor calculado.
+33. Método: en B6, muchas pruebas de acción fallaron solo porque la acción vieja recibía
+    otros argumentos. Ese rojo prueba poco: lo que valida son las mutaciones.
+34. Método: Vitest no comprueba tipos. Un `html` que podía ser `null` pasó las pruebas y
+    las mutaciones de B6 y paró `npm run check` en typecheck. En B7, un fragmento mal
+    sangrado detuvo las mutaciones antes de mutar nada.
+35. Método: la prueba de la `key` pinta la página real dos veces sobre la misma raíz en
+    jsdom. Un snapshot de HTML no puede ver una `key`. Esa prueba no representa una
+    navegación de documento (hallazgo 36).
+
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e106b-huella`) y etiquetas `e106b/`, generadas por
+  `c-e106b-guiones.py`, que se niega a sobrescribir un archivo. Los 5 guiones comprobaron
+  su SHA-256 contra `e106b-guiones.sha256`. Plan en `plan-verificacion-10-6b.md`.
+- 16 capturas por fase: 13 de pantallas que cambian y 3 de control (rutas, campañas y
+  galería), con los datos elegidos solo leyendo: REC00000004, VER00000007 y DRE00000008.
+- Predicción antes del push en `prediccion-10-6b.md`; notas en `e106b-antes-notas.md` y
+  `e106b-despues-notas.md`; registro en `registro-10-6b.tsv` (32 filas).
+- Solo ADMIN: el responsable omitió T92, el maestro de taller; lo cubren
+  `production-links.test.ts` y las pruebas de acceso.
+
+Publicación y medición, todo el 2026-11-02 UTC:
+
+- «Antes» sobre `26e788d` (CSS servido `1poyo02240o5e.css`).
+- Push de 11 commits (de `8a35cd9` a `71b02dc`): CI #123 en verde, de 15:23 a 15:27 UTC, y
+  Vercel `success`. CSS servido `3cqkf7ly4slgj.css`, 112.647 bytes, como se predijo.
+- T86 falló y se publicó `e8d77ae`: CI #124 en verde, de 15:36 a 15:40 UTC.
+- Los 3 controles dieron hash igual. Las 8 pantallas a 1281 px cambian como se predijo,
+  revisadas con el comparador. Las 5 a 376 px no se revisaron una a una: tienen el mismo
+  número de elementos que sus parejas de 1281 px.
+
+Tareas (ADMIN):
+
+| Tarea | Antes (`26e788d`) | Después |
+|---|---|---|
+| T80 Receta con nombre repetido | Página de error; se pierde lo escrito | Panel; error junto al nombre, con el foco; todo conservado; sin toast |
+| T81 Cancelar con cambios | Sale sin preguntar en receta, material y versión | Pregunta en las tres |
+| T82 Versión con material repetido | Alerta general del cliente, sin marcar líneas, foco en el botón | «Revisa los datos de la versión.»; error en cada línea; foco en la primera |
+| T83 Tipo tras un error | Se conserva: nunca iba al servidor | Se conserva tras ir al servidor |
+| T85 Simulador | No había panel | Cerrar no pregunta y el foco vuelve a «Editar» |
+| T86 Atrás en requerimientos | Campo 7 y KPI 25 | **Falló igual sobre `71b02dc`** (hallazgo 36); sobre `e8d77ae`, campo y KPI en 25 |
+| T87 Receta inactiva | «Marcar vigente» se ofrece; no hay «Nueva versión» | No se ofrece; «Anular» sigue (D8) |
+| T88 Crear, inactivar y reactivar | Sin confirmar; foco en `body` | Panel con filtro conservado; un aviso con la nota de filtros; confirma con la consecuencia; foco en el botón |
+| T89 Versiones | Marcar sin confirmar; anular con aviso genérico; foco en `body` | Marcar con botón normal y la versión reemplazada; anular dice que otra pasa a vigente; foco en la fila; V2 vuelve a vigente |
+| T90 Materiales | Página completa; foco en `body` | Panel; al eliminar sale la fila y el foco va a la tabla |
+| T91 Ranuras anidadas | No existían | Atrás cierra, Adelante reabre, recargar da la página completa; sin esqueleto |
+
+T84 no se midió: el alta excluye los materiales usados por la versión, así que un repetido
+no se puede elegir (hallazgo 37). El hallazgo 4 se vio en datos reales: la nueva versión de
+REC00000004 decía «base V1» con V2 vigente, y ahora dice V2.
+
+Datos de prueba, con autorización del responsable en cada turno de escritura:
+
+- «Antes»: REC00000006 activa, VER00000009 anulada, VER00000010 vigente con DRE00000015 y
+  DRE00000016. DRE00000017 se creó, se editó y se eliminó.
+- «Después»: REC00000007 activa, VER00000011 anulada, VER00000012 vigente con DRE00000019 y
+  DRE00000020. DRE00000021 se creó, se editó y se eliminó.
+- Sin autorización: DRE00000013 (hallazgo 37), eliminado después con su autorización.
+
+Hallazgos de la verificación:
+
+36. La `key` de `e876ac2` no arregló el hallazgo 9, y su mensaje de commit lo afirmaba. El
+    formulario GET carga el documento y al volver restaura el navegador: la prueba de jsdom
+    solo cubría una navegación suave. Se marcó dudosa en la predicción al medir el «antes».
+    Se probó `autocomplete="off"` a mano en staging (26 y 26) antes de escribir el arreglo
+    (`e8d77ae`). Una prueba en jsdom solo puede fijar el atributo.
+37. **Incidente:** T84 debía no guardar y escribió sin autorización. Se buscó un material
+    por nombre, se pulsó la única opción sin leerla y era otro: «barras de acero de 8
+    pulgadas» (MAT00000002), no el de la versión. Quedó DRE00000013 en VER00000007. Se paró,
+    se avisó y se eliminó con autorización; la bitácora conserva el alta y la baja. Desde
+    entonces cada envío que debe rechazarse comprueba por id la condición de rechazo.
+38. La sesión caducó esperando una respuesta y el panel cayó en el `/login` de producción.
+    Un `fetch` de lectura lanzado en paralelo salió allí, sin sesión y con 0 filas: no se
+    escribió nada. Desde entonces el origen se comprueba en una llamada aparte, antes de
+    cualquier otra del turno.
+39. Dos materiales autorizados (MAT00000012 y 13) resultaron inactivos. Se comprobó antes
+    de escribir, se paró y el responsable autorizó otros.
+40. T82 no probó la cantidad 0: `min` la frena en el navegador antes de enviar. Lo cubren
+    las pruebas de la acción.
+
+El manual suma el capítulo de recetas, versiones, materiales y requerimientos.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -6517,7 +6732,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #119 verde en `staging`, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, verificada en staging con CI #124 verde, pendiente de integrar) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -6541,7 +6756,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 128 / 128 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 198 / 3.472 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 215 / 3.822 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -6560,12 +6775,12 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
-| Copias locales de `FieldError` | 16 | 5 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 47 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 10 (11 formularios) | 9 y 10 |
+| Copias locales de `FieldError` | 16 | 4 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 39 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 9 (10 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
-| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 8 | 10 |
-| Acciones de activar e inactivar que leen el estado y escriben el contrario | 12 | 1 (recetas) | 10 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 6 | 10 |
+| Acciones de activar e inactivar que leen el estado y escriben el contrario | 12 | 0 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
 | Pantallas con rango de fechas sin `DateRangeFields` | 27 | 5 | 10 |
@@ -6581,7 +6796,8 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Acciones de fallas, preventivos y reparaciones que deciden fuera de la transacción | 5 | 0 | 10 |
 | Acciones de fallas, preventivos y reparaciones que lanzan en lugar de devolver el error | 6 | 0 | 10 |
 | Enlaces de Mantenimiento que un rol ve y su pantalla rechaza | 4 | 0 | 10 |
-| Acciones de Producción sin caracterizar (rutas, etapas, recetas, versiones y detalles) | 14 | 8 | 10 |
+| Acciones de Producción sin caracterizar (rutas, etapas, recetas, versiones y detalles) | 14 | 0 | 10 |
+| Acciones de recetas, versiones y detalles que deciden fuera de la transacción | 8 | 0 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -6917,6 +7133,19 @@ Actualizado en la sub-entrega 10.6a (2026-10-31) sobre `0c506e0`:
 - Los toggles que leen y escriben el contrario: la línea base contaba 11 y eran
   12, porque el patrón no veía el de recetas (hallazgo 12 de la 10.6a).
 - La fila de acciones de Producción se midió sobre `411077f`, su línea base.
+
+Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e8d77ae`:
+
+- Pruebas: 215 / 3.822.
+- La desviación baja a 6: salida de inventario, operarios (2) y usuarios (3). Las copias
+  locales de `FieldError` bajan a 4, en esos mismos tres módulos y el restablecimiento
+  de clave, y el `<main>` anidado a 39.
+- Los formularios GET bajan a 10, con 9 combinaciones de clases
+  (`count_105b_get_forms.py`). Las pantallas con rango de fechas sin `DateRangeFields`
+  siguen en 5 según ese guion.
+- Los toggles que leen y escriben el contrario llegan a 0, y las 14 acciones de
+  Producción quedan caracterizadas. La fila de decisiones fuera de la transacción se
+  midió sobre `26e788d`, su línea base.
 
 Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de

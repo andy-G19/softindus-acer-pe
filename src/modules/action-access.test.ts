@@ -228,6 +228,27 @@ const MODULOS: ModuloDeAcciones[] = [
     acciones: ["annulPettyCashMovementAction"],
   },
   {
+    ruta: "production/recipe-details/actions",
+    cargar: () => import("@/modules/production/recipe-details/actions"),
+    roles: ADMIN_Y_TALLER,
+    acciones: ["createRecipeDetailAction", "updateRecipeDetailAction", "deleteRecipeDetailAction"],
+    rechazanConResultado: ["createRecipeDetailAction", "updateRecipeDetailAction", "deleteRecipeDetailAction"],
+  },
+  {
+    ruta: "production/recipe-versions/actions",
+    cargar: () => import("@/modules/production/recipe-versions/actions"),
+    roles: ADMIN_Y_TALLER,
+    acciones: ["createRecipeVersionAction", "setCurrentRecipeVersionAction", "voidRecipeVersionAction"],
+    rechazanConResultado: ["createRecipeVersionAction", "setCurrentRecipeVersionAction", "voidRecipeVersionAction"],
+  },
+  {
+    ruta: "production/recipes/actions",
+    cargar: () => import("@/modules/production/recipes/actions"),
+    roles: ADMIN_Y_TALLER,
+    acciones: ["createTechnicalRecipeAction", "toggleTechnicalRecipeStatusAction"],
+    rechazanConResultado: ["createTechnicalRecipeAction", "toggleTechnicalRecipeStatusAction"],
+  },
+  {
     ruta: "production/routes/actions",
     cargar: () => import("@/modules/production/routes/actions"),
     roles: ADMIN_Y_TALLER,

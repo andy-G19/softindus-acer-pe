@@ -1,12 +1,12 @@
 import { Calculator, CheckCircle2, CircleDollarSign, Package } from "lucide-react";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
+import { Field } from "@/components/forms/field";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { KpiCard } from "@/components/ui/kpi-card";
 import {
   Table,
@@ -76,7 +76,8 @@ export default async function MaterialRequirementsPage({
 
     const currentStock = toNumber(detail.material.stock_actual);
     const reservedStock = toNumber(detail.material.stock_reservado);
-    const availableStock = currentStock - reservedStock;
+    // Tambien redondeado: 0.3 - 0.1 da 0.19999999999999998 y no alcanzaria para 0.2.
+    const availableStock = roundQuantity(currentStock - reservedStock);
 
     const shortage = Math.max(requiredWithWaste - availableStock, 0);
     const hasEnoughStock = availableStock >= requiredWithWaste;
@@ -120,7 +121,7 @@ export default async function MaterialRequirementsPage({
   );
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Cálculo de materiales requeridos"
         description={`Receta: ${version.receta_tecnica.nombre_receta} · Versión: ${version.numero_version} · Producto: ${version.receta_tecnica.producto.nombre_producto}`}
@@ -162,21 +163,29 @@ export default async function MaterialRequirementsPage({
 
       <section className="rounded-xl border border-border/80 bg-card p-6 shadow-sm">
         <form className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
-          <div className="space-y-2">
-            <Label htmlFor="quantity">Cantidad a fabricar *</Label>
-            <Input
-              id="quantity"
-              name="quantity"
-              type="number"
-              min="0.01"
-              step="0.01"
-              defaultValue={quantityToProduce}
-            />
-            <p className="text-xs text-muted-foreground">
-              El sistema multiplicará los materiales de la receta por esta
-              cantidad.
-            </p>
-          </div>
+          <Field
+            id="quantity"
+            label="Cantidad a fabricar"
+            required
+            description="El sistema multiplicará los materiales de la receta por esta cantidad."
+          >
+            {(control) => (
+              // Next no remonta la pagina al cambiar la consulta y un input solo lee
+              // defaultValue al montarse: sin key, Atras dejaria la cantidad vieja. Este
+              // formulario GET carga el documento: al volver es el navegador quien
+              // restauraria lo escrito, y autoComplete off lo evita.
+              <Input
+                {...control}
+                key={quantityToProduce}
+                name="quantity"
+                type="number"
+                autoComplete="off"
+                min="0.01"
+                step="0.01"
+                defaultValue={quantityToProduce}
+              />
+            )}
+          </Field>
 
           <Button type="submit">Calcular</Button>
         </form>
@@ -298,6 +307,6 @@ export default async function MaterialRequirementsPage({
           disponible, se marca como insuficiente y se muestra el faltante.
         </AlertDescription>
       </Alert>
-    </main>
+    </div>
   );
 }

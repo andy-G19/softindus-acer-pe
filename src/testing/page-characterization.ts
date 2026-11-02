@@ -469,6 +469,7 @@ const WRITE_METHODS = new Set([
   "update",
   "updateMany",
   "updateManyAndReturn",
+  "delete",
   "deleteMany",
 ]);
 

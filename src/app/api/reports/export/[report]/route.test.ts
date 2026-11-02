@@ -134,6 +134,10 @@ function sessionFor(exportCase: ExportCase) {
   };
 }
 
+// Esta prueba comprueba el recorte, no la velocidad: recorre 6000 filas y, con la
+// maquina cargada, supero los 5 s del limite global sin que fallara nada.
+const TIEMPO_EXPORTACION_GRANDE = 15_000;
+
 async function runExport(exportCase: ExportCase) {
   const { GET } = await loadRoute();
   const search = new URLSearchParams(exportCase.query).toString();
@@ -704,6 +708,6 @@ describe("GET /api/reports/export/[report]", () => {
       expect(excel.rows[2999]?.slice(0, 2)).toEqual(["Falla", "FAL00003000"]);
       expect(excel.rows[4999]?.slice(0, 2)).toEqual(["Preventivo", "MPR00002000"]);
       expect(excel.metadata).toContain("Total exportado: 5000 | Límite aplicado: 5000");
-    });
+    }, TIEMPO_EXPORTACION_GRANDE);
   });
 });

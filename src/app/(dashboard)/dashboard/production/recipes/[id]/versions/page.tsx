@@ -6,7 +6,6 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
 import {
@@ -24,6 +23,8 @@ import {
   voidRecipeVersionAction,
 } from "@/modules/production/recipe-versions/actions";
 import { getRecipeVersionsData } from "@/modules/production/recipe-versions/queries";
+import { RecipeVersionStatusActions } from "@/modules/production/recipe-versions/recipe-version-status-actions";
+import { productionNotifications } from "@/modules/production/notifications";
 
 type RecipeVersionsPageProps = {
   params: Promise<{
@@ -77,7 +78,7 @@ export default async function RecipeVersionsPage({
   }, 0);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Versiones de receta"
         description={`Receta: ${recipe.nombre_receta} · Producto: ${recipe.producto.nombre_producto}${recipe.descripcion ? ` · ${recipe.descripcion}` : ""}`}
@@ -195,53 +196,15 @@ export default async function RecipeVersionsPage({
                     </Link>
                   </Button>
 
-                  {version.estado !== "vigente" &&
-                  version.estado !== "anulada" ? (
-                    <form action={setCurrentRecipeVersionAction}>
-                      <input
-                        type="hidden"
-                        name="id_receta"
-                        value={recipe.id_receta}
-                      />
-                      <input
-                        type="hidden"
-                        name="id_version_receta"
-                        value={version.id_version_receta}
-                      />
-                      <Button
-                        type="submit"
-                        variant="link"
-                        className="h-auto p-0 text-chart-3 hover:text-chart-3"
-                      >
-                        Marcar vigente
-                      </Button>
-                    </form>
-                  ) : null}
-
-                  {version.estado !== "anulada" &&
-                  version._count.orden_trabajo === 0 ? (
-                    <form action={voidRecipeVersionAction}>
-                      <input
-                        type="hidden"
-                        name="id_receta"
-                        value={recipe.id_receta}
-                      />
-                      <input
-                        type="hidden"
-                        name="id_version_receta"
-                        value={version.id_version_receta}
-                      />
-                      <ConfirmDeleteButton
-                        title="¿Anular versión de receta?"
-                        description="Esta acción anulará la versión de la receta y no se puede deshacer."
-                        confirmText="Confirmar anulación"
-                        entityName="versión de receta"
-                        className="rounded-none border-0 bg-transparent px-0 py-0 hover:bg-transparent"
-                      >
-                        Anular
-                      </ConfirmDeleteButton>
-                    </form>
-                  ) : null}
+                  <RecipeVersionStatusActions
+                    recipe={recipe}
+                    version={version}
+                    currentVersionNumber={currentVersion?.numero_version}
+                    setCurrentAction={setCurrentRecipeVersionAction}
+                    voidAction={voidRecipeVersionAction}
+                    setCurrentNotification={productionNotifications["recipe-version-set-current"]}
+                    annulledNotification={productionNotifications["recipe-version-annulled"]}
+                  />
 
                   {version._count.orden_trabajo > 0 ? (
                     <span className="text-xs text-muted-foreground">
@@ -265,6 +228,6 @@ export default async function RecipeVersionsPage({
           ) : null}
         </TableBody>
       </Table>
-    </main>
+    </div>
   );
 }

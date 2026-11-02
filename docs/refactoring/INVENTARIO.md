@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 769 |
-| Páginas | 159 |
-| Páginas en ranuras paralelas (@ranura) | 31 |
-| Páginas que interceptan una ruta | 20 |
-| Declaraciones JSX de formulario | 80 |
+| Archivos fuente analizados | 803 |
+| Páginas | 164 |
+| Páginas en ranuras paralelas (@ranura) | 36 |
+| Páginas que interceptan una ruta | 23 |
+| Declaraciones JSX de formulario | 72 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 112 |
 
@@ -28,7 +28,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | inventory | 29 |
 | maintenance | 24 |
 | petty-cash | 9 |
-| production | 32 |
+| production | 37 |
 | reports | 10 |
 | staff | 12 |
 | users | 4 |
@@ -141,14 +141,19 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/production/campaigns/new` | — | `src/app/(dashboard)/dashboard/production/campaigns/new/page.tsx` | 1 | — |
 | `/dashboard/production/campaigns` | — | `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 4 | — |
 | `/dashboard/production` | — | `src/app/(dashboard)/dashboard/production/page.tsx` | 0 | — |
+| `/dashboard/production/recipes/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/production/recipes/@panel/(.)new/page.tsx` | 0 | RecipeForm |
+| `/dashboard/production/recipes` | `@panel` | `src/app/(dashboard)/dashboard/production/recipes/@panel/page.tsx` | 0 | — |
+| `/dashboard/production/recipes/[id]/versions/[versionId]/details/[detailId]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/@panel/(.)[detailId]/edit/page.tsx` | 0 | RecipeDetailForm |
+| `/dashboard/production/recipes/[id]/versions/[versionId]/details/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/@panel/(.)new/page.tsx` | 0 | RecipeDetailForm |
+| `/dashboard/production/recipes/[id]/versions/[versionId]/details` | `@panel` | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/@panel/page.tsx` | 0 | — |
 | `/dashboard/production/recipes/[id]/versions/[versionId]/details/[detailId]/edit` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/[detailId]/edit/page.tsx` | 0 | RecipeDetailForm |
 | `/dashboard/production/recipes/[id]/versions/[versionId]/details/new` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/new/page.tsx` | 0 | RecipeDetailForm |
-| `/dashboard/production/recipes/[id]/versions/[versionId]/details` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/page.tsx` | 1 | — |
+| `/dashboard/production/recipes/[id]/versions/[versionId]/details` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/page.tsx` | 0 | — |
 | `/dashboard/production/recipes/[id]/versions/[versionId]/requirements` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 1 | — |
 | `/dashboard/production/recipes/[id]/versions/new` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/new/page.tsx` | 0 | RecipeVersionForm |
-| `/dashboard/production/recipes/[id]/versions` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 2 | — |
-| `/dashboard/production/recipes/new` | — | `src/app/(dashboard)/dashboard/production/recipes/new/page.tsx` | 1 | — |
-| `/dashboard/production/recipes` | — | `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 2 | — |
+| `/dashboard/production/recipes/[id]/versions` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 0 | — |
+| `/dashboard/production/recipes/new` | — | `src/app/(dashboard)/dashboard/production/recipes/new/page.tsx` | 0 | RecipeForm |
+| `/dashboard/production/recipes` | — | `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 0 | — |
 | `/dashboard/production/routes/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/production/routes/@panel/(.)[id]/edit/page.tsx` | 0 | RouteForm |
 | `/dashboard/production/routes/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/production/routes/@panel/(.)new/page.tsx` | 0 | RouteForm |
 | `/dashboard/production/routes` | `@panel` | `src/app/(dashboard)/dashboard/production/routes/@panel/page.tsx` | 0 | — |
@@ -225,13 +230,7 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 284 | `{changeProductionCampaignStatusAction}` |
 | `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 298 | `{changeProductionCampaignStatusAction}` |
 | `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 312 | `{changeProductionCampaignStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/page.tsx` | 243 | `{deleteRecipeDetailAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 164 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 200 | `{setCurrentRecipeVersionAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 223 | `{voidRecipeVersionAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/new/page.tsx` | 48 | `{createTechnicalRecipeAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 80 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 214 | `{toggleTechnicalRecipeStatusAction}` |
+| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 165 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 263 | `{deliverWorkOrderMaterialsAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 557 | `{reopenWorkOrderMaterialsAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign/page.tsx` | 102 | `{reassignWorkOrderProgressAction}` |
@@ -276,8 +275,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/modules/costs/profitability/profitability-section.tsx` | 149 | `{createProfitabilityAction}` |
 | `src/modules/gallery/dialog-demo.tsx` | 72 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/modules/inventory/movements/inventory-output-form.tsx` | 62 | `{formAction}` |
-| `src/modules/production/recipe-details/recipe-detail-form.tsx` | 107 | `{formAction}` |
-| `src/modules/production/recipes/components/recipe-version-form.tsx` | 151 | `{createRecipeVersionAction}` |
 | `src/modules/production/work-orders/close-materials-form.tsx` | 60 | `{closeWorkOrderMaterialsAction}` |
 | `src/modules/production/work-orders/components/work-order-form.tsx` | 295 | `{createWorkOrderAction}` |
 | `src/modules/production/work-orders/material-movement-form.tsx` | 52 | `{ isReturn ? returnWorkOrderMaterialAction : deliverAdditionalMaterialAction }` |

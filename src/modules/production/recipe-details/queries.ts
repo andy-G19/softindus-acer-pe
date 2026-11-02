@@ -171,6 +171,7 @@ export async function getRecipeDetailEditData(
       unidad_medida: true,
       stock_actual: true,
       costo_unitario_actual: true,
+      estado: true,
     },
   });
 

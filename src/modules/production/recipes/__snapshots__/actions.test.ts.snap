@@ -1,0 +1,1255 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createTechnicalRecipeAction > ADMIN crea la receta activa con su correlativo y la bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "receta_tecnica",
+      "prefijo": "REC",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Materiales principales",
+        "estado": "activa",
+        "id_producto": "PRO00000004",
+        "id_receta": "REC00000012",
+        "id_usuario_creacion": "USU00000001",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.create",
+  },
+  {
+    "args": {
+      "accion": "CREAR_RECETA",
+      "detalle": "Receta técnica creada para el producto Lampa.",
+      "enTransaccion": true,
+      "entidad_afectada": "receta_tecnica",
+      "id_registro_afectado": "REC00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createTechnicalRecipeAction > ADMIN crea la receta activa con su correlativo y la bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_receta": "REC00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Materiales principales",
+      "id_producto": "PRO00000004",
+      "nombre_receta": "Receta estandar de lampa",
+    },
+  },
+}
+`;
+
+exports[`createTechnicalRecipeAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createTechnicalRecipeAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar recetas técnicas.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Materiales principales",
+      "id_producto": "PRO00000004",
+      "nombre_receta": "Receta estandar de lampa",
+    },
+  },
+}
+`;
+
+exports[`createTechnicalRecipeAction > WORKSHOP_MASTER tambien crea recetas > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "receta_tecnica",
+      "prefijo": "REC",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Materiales principales",
+        "estado": "activa",
+        "id_producto": "PRO00000004",
+        "id_receta": "REC00000012",
+        "id_usuario_creacion": "USU00000001",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.create",
+  },
+  {
+    "args": {
+      "accion": "CREAR_RECETA",
+      "detalle": "Receta técnica creada para el producto Lampa.",
+      "enTransaccion": true,
+      "entidad_afectada": "receta_tecnica",
+      "id_registro_afectado": "REC00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createTechnicalRecipeAction > WORKSHOP_MASTER tambien crea recetas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_receta": "REC00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Materiales principales",
+      "id_producto": "PRO00000004",
+      "nombre_receta": "Receta estandar de lampa",
+    },
+  },
+}
+`;
+
+exports[`createTechnicalRecipeAction > datos invalidos devuelven errores por campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createTechnicalRecipeAction > datos invalidos devuelven errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la receta.",
+    "fieldErrors": {
+      "nombre_receta": [
+        "El nombre de la receta debe tener al menos 3 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Materiales principales",
+      "id_producto": "PRO00000004",
+      "nombre_receta": "ab",
+    },
+  },
+}
+`;
+
+exports[`createTechnicalRecipeAction > el producto no existe o esta inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createTechnicalRecipeAction > el producto no existe o esta inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "El producto seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_producto": [
+        "El producto seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Materiales principales",
+      "id_producto": "PRO00000004",
+      "nombre_receta": "Receta estandar de lampa",
+    },
+  },
+}
+`;
+
+exports[`createTechnicalRecipeAction > la descripcion ausente cuenta como vacia > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "receta_tecnica",
+      "prefijo": "REC",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": null,
+        "estado": "activa",
+        "id_producto": "PRO00000004",
+        "id_receta": "REC00000012",
+        "id_usuario_creacion": "USU00000001",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.create",
+  },
+  {
+    "args": {
+      "accion": "CREAR_RECETA",
+      "detalle": "Receta técnica creada para el producto Lampa.",
+      "enTransaccion": true,
+      "entidad_afectada": "receta_tecnica",
+      "id_registro_afectado": "REC00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createTechnicalRecipeAction > la descripcion ausente cuenta como vacia > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_receta": "REC00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "",
+      "id_producto": "PRO00000004",
+      "nombre_receta": "Receta estandar de lampa",
+    },
+  },
+}
+`;
+
+exports[`createTechnicalRecipeAction > la descripcion vacia se guarda como null > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "receta_tecnica",
+      "prefijo": "REC",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": null,
+        "estado": "activa",
+        "id_producto": "PRO00000004",
+        "id_receta": "REC00000012",
+        "id_usuario_creacion": "USU00000001",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.create",
+  },
+  {
+    "args": {
+      "accion": "CREAR_RECETA",
+      "detalle": "Receta técnica creada para el producto Lampa.",
+      "enTransaccion": true,
+      "entidad_afectada": "receta_tecnica",
+      "id_registro_afectado": "REC00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createTechnicalRecipeAction > la descripcion vacia se guarda como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_receta": "REC00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "",
+      "id_producto": "PRO00000004",
+      "nombre_receta": "Receta estandar de lampa",
+    },
+  },
+}
+`;
+
+exports[`createTechnicalRecipeAction > sin producto devuelve su error > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createTechnicalRecipeAction > sin producto devuelve su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la receta.",
+    "fieldErrors": {
+      "id_producto": [
+        "Seleccione un producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Materiales principales",
+      "id_producto": "",
+      "nombre_receta": "Receta estandar de lampa",
+    },
+  },
+}
+`;
+
+exports[`createTechnicalRecipeAction > un POST sin campos devuelve errores sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createTechnicalRecipeAction > un POST sin campos devuelve errores sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la receta.",
+    "fieldErrors": {
+      "id_producto": [
+        "Seleccione un producto.",
+      ],
+      "nombre_receta": [
+        "El nombre de la receta debe tener al menos 3 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "",
+      "id_producto": "",
+      "nombre_receta": "",
+    },
+  },
+}
+`;
+
+exports[`createTechnicalRecipeAction > un fallo al crear revierte y responde con un error general > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "receta_tecnica",
+      "prefijo": "REC",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Materiales principales",
+        "estado": "activa",
+        "id_producto": "PRO00000004",
+        "id_receta": "REC00000012",
+        "id_usuario_creacion": "USU00000001",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createTechnicalRecipeAction > un fallo al crear revierte y responde con un error general > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la receta. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Materiales principales",
+      "id_producto": "PRO00000004",
+      "nombre_receta": "Receta estandar de lampa",
+    },
+  },
+}
+`;
+
+exports[`createTechnicalRecipeAction > una carrera por el nombre (P2002) responde como el duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "receta_tecnica",
+      "prefijo": "REC",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Materiales principales",
+        "estado": "activa",
+        "id_producto": "PRO00000004",
+        "id_receta": "REC00000012",
+        "id_usuario_creacion": "USU00000001",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.create",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createTechnicalRecipeAction > una carrera por el nombre (P2002) responde como el duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una receta con ese nombre para este producto.",
+    "fieldErrors": {
+      "nombre_receta": [
+        "Ya existe una receta con ese nombre para este producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Materiales principales",
+      "id_producto": "PRO00000004",
+      "nombre_receta": "Receta estandar de lampa",
+    },
+  },
+}
+`;
+
+exports[`createTechnicalRecipeAction > ya existe una receta con ese nombre para el producto > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_receta": "Receta estandar de lampa",
+      },
+    },
+    "prisma": "receta_tecnica.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createTechnicalRecipeAction > ya existe una receta con ese nombre para el producto > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una receta con ese nombre para este producto.",
+    "fieldErrors": {
+      "nombre_receta": [
+        "Ya existe una receta con ese nombre para este producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Materiales principales",
+      "id_producto": "PRO00000004",
+      "nombre_receta": "Receta estandar de lampa",
+    },
+  },
+}
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar recetas técnicas.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REC00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > WORKSHOP_MASTER tambien cambia el estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactiva",
+      },
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "ACTUALIZAR_RECETA",
+      "detalle": "Estado de receta técnica cambiado a inactiva.",
+      "enTransaccion": true,
+      "entidad_afectada": "receta_tecnica",
+      "id_registro_afectado": "REC00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "REC00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > la receta no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactiva",
+      },
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > la receta no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La receta técnica seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REC00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > sin estado pedido devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > sin estado pedido devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REC00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > sin id devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > sin id devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió la receta técnica.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > un fallo al escribir revierte y responde con un error general > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactiva",
+      },
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.updateManyAndReturn",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > un fallo al escribir revierte y responde con un error general > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo cambiar el estado de la receta. Intenta nuevamente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REC00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > una receta activa se inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactiva",
+      },
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "ACTUALIZAR_RECETA",
+      "detalle": "Estado de receta técnica cambiado a inactiva.",
+      "enTransaccion": true,
+      "entidad_afectada": "receta_tecnica",
+      "id_registro_afectado": "REC00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > una receta activa se inactiva > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "REC00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > una receta inactiva se activa > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activa",
+      },
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "estado": "inactiva",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "ACTUALIZAR_RECETA",
+      "detalle": "Estado de receta técnica cambiado a activa.",
+      "enTransaccion": true,
+      "entidad_afectada": "receta_tecnica",
+      "id_registro_afectado": "REC00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/recipes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > una receta inactiva se activa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "REC00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > ya tenia ese estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactiva",
+      },
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "estado": "activa",
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_receta": "REC00000003",
+      },
+    },
+    "prisma": "receta_tecnica.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`toggleTechnicalRecipeStatusAction > ya tenia ese estado > resultado 1`] = `
+{
+  "estado": {
+    "error": "La receta ya estaba inactiva.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REC00000003",
+    },
+  },
+}
+`;

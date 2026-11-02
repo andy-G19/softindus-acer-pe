@@ -1,12 +1,11 @@
 import { z } from "zod";
 
+import { cantidadRequeridaSchema } from "@/schemas/production/recipe-detail.schema";
+
 const recipeVersionDetailSchema = z.object({
   id_material: z.string().trim().min(1, "Seleccione un material."),
 
-  cantidad_requerida: z.coerce
-    .number()
-    .positive("La cantidad requerida debe ser mayor a 0.")
-    .max(999999.99, "La cantidad requerida es demasiado alta."),
+  cantidad_requerida: cantidadRequeridaSchema,
 
   tipo_consumo: z.enum(["materia_prima", "consumible", "auxiliar"], {
     message: "Seleccione un tipo de consumo válido.",
@@ -28,7 +27,10 @@ const recipeVersionDetailSchema = z.object({
 });
 
 export const recipeVersionSchema = z.object({
-  id_receta: z.string().trim().min(1, "La receta técnica es obligatoria."),
+  id_receta: z
+    .string({ error: "La receta técnica es obligatoria." })
+    .trim()
+    .min(1, "La receta técnica es obligatoria."),
 
   numero_version: z
     .string()
@@ -48,26 +50,27 @@ export const recipeVersionSchema = z.object({
     .array(recipeVersionDetailSchema)
     .min(1, "Debe registrar al menos un material en la versión.")
     .superRefine((details, ctx) => {
-      const materialIds = new Set<string>();
-
       details.forEach((detail, index) => {
-        if (materialIds.has(detail.id_material)) {
+        const uses = details.filter((other) => other.id_material === detail.id_material).length;
+
+        if (detail.id_material && uses > 1) {
           ctx.addIssue({
             code: "custom",
             path: [index, "id_material"],
             message: "No se permite duplicar materiales dentro de la versión.",
           });
         }
-
-        materialIds.add(detail.id_material);
       });
     }),
 });
 
 export const recipeVersionStatusSchema = z.object({
-  id_receta: z.string().trim().min(1, "La receta técnica es obligatoria."),
+  id_receta: z
+    .string({ error: "La receta técnica es obligatoria." })
+    .trim()
+    .min(1, "La receta técnica es obligatoria."),
   id_version_receta: z
-    .string()
+    .string({ error: "La versión de receta es obligatoria." })
     .trim()
     .min(1, "La versión de receta es obligatoria."),
 });

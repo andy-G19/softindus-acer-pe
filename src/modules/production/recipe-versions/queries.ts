@@ -4,7 +4,8 @@ import { prisma } from "@/lib/db";
 
 // Consultas de lectura de las paginas de versiones de receta (listado, nueva
 // version y requerimientos de materiales). No autorizan: la pagina que las
-// llama ya verifico el rol con requireRole.
+// llama ya verifico el rol con requireRole. fecha_version no guarda la hora: entre
+// versiones del mismo dia decide el correlativo, que siempre crece.
 
 export async function getRecipeVersionsData(idReceta: string) {
   return prisma.receta_tecnica.findUnique({
@@ -36,9 +37,7 @@ export async function getRecipeVersionsData(idReceta: string) {
             },
           },
         },
-        orderBy: {
-          fecha_version: "desc",
-        },
+        orderBy: [{ fecha_version: "desc" }, { id_version_receta: "desc" }],
       },
     },
   });
@@ -63,9 +62,7 @@ export async function getNewRecipeVersionData(idReceta: string) {
               },
             },
           },
-          orderBy: {
-            fecha_version: "desc",
-          },
+          orderBy: [{ fecha_version: "desc" }, { id_version_receta: "desc" }],
           take: 1,
         },
       },

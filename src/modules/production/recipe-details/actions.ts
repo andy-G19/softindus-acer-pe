@@ -1,24 +1,105 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import type { ActionErrorState } from "@/lib/errors";
+import type { FieldErrors } from "@/lib/errors";
+import { lockRecipeRow } from "@/lib/row-locks";
 import { recipeDetailSchema } from "@/schemas/production/recipe-detail.schema";
 
-export type RecipeDetailFormState = ActionErrorState;
+/** Lo que el formulario de la linea envio, tal cual, para volver a mostrarlo. */
+export type RecipeDetailFormValues = {
+  id_material: string;
+  cantidad_requerida: string;
+  merma_estimada_porcentaje: string;
+  tipo_consumo: string;
+  observaciones: string;
+};
+
+// Entrega 10.6b: el alta y la edicion se usan desde el panel lateral y devuelven el
+// resultado; sin permiso responden con un error, no redirigen.
+export type RecipeDetailFormState = FormActionState<RecipeDetailFormValues, { id_detalle_receta: string }>;
+
+export type RecipeDetailDeleteState = FormActionState<{ id_detalle_receta: string }, { id_detalle_receta: string }>;
 
 type EditableVersion = {
   id_version_receta: string;
   id_receta: string;
 };
 
+type DetailProblem = { error: string; fieldErrors?: FieldErrors };
+
+// Un rechazo vuelve del callback sin escribir nada y la transaccion termina.
 type EditableVersionResult =
   | { ok: true; version: EditableVersion }
-  | { ok: false; error: string };
+  | { ok: false; problem: DetailProblem };
+
+const DUPLICATED_MATERIAL = "Este material ya está registrado en esta versión de receta.";
+const INACTIVE_MATERIAL = "El material seleccionado no existe o está inactivo.";
+const MISSING_DETAIL = "El material de la receta no existe.";
+const PERMISSION_ERROR = "No tienes permisos para gestionar recetas técnicas.";
+
+function getDetailFormValues(formData: FormData): RecipeDetailFormValues {
+  const text = (name: keyof RecipeDetailFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    id_material: text("id_material"),
+    cantidad_requerida: text("cantidad_requerida"),
+    merma_estimada_porcentaje: text("merma_estimada_porcentaje"),
+    tipo_consumo: text("tipo_consumo"),
+    observaciones: text("observaciones"),
+  };
+}
+
+function detailError(
+  values: RecipeDetailFormValues,
+  error: string,
+  fieldErrors?: FieldErrors,
+): RecipeDetailFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function deleteError(idDetalleReceta: string, error: string): RecipeDetailDeleteState {
+  return { status: "error", error, values: { id_detalle_receta: idDetalleReceta }, operationId: newOperationId() };
+}
+
+function materialProblem(message: string): EditableVersionResult {
+  return { ok: false, problem: { error: message, fieldErrors: { id_material: [message] } } };
+}
+
+// Con el candado de la receta una carrera por el material no deberia llegar a
+// uq_detalle_receta_material; si llega, se responde como el duplicado.
+function detailSaveProblem(error: unknown): EditableVersionResult {
+  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+    return materialProblem(DUPLICATED_MATERIAL);
+  }
+
+  return { ok: false, problem: { error: "No se pudo guardar el material. Intenta nuevamente." } };
+}
+
+/**
+ * Una linea no tiene candado propio: la protege el de su receta, el mismo que toman
+ * marcar vigente y anular. La version no cambia de receta, asi que se puede leer su
+ * id_receta sin candado; lo que decide se lee despues, ya bloqueado.
+ */
+async function lockVersionRecipe(tx: Prisma.TransactionClient, idVersionReceta: string) {
+  const version = await tx.version_receta.findUnique({
+    where: {
+      id_version_receta: idVersionReceta,
+    },
+    select: {
+      id_receta: true,
+    },
+  });
+
+  if (version) {
+    await lockRecipeRow(tx, version.id_receta);
+  }
+}
 
 /**
  * Una version de receta solo se puede editar mientras sea vigente, su receta este activa
@@ -29,9 +110,10 @@ type EditableVersionResult =
  * eso la receta todavia se esta escribiendo, y ahi si tiene sentido corregir.
  */
 async function loadEditableVersion(
+  tx: Prisma.TransactionClient,
   idVersionReceta: string,
 ): Promise<EditableVersionResult> {
-  const version = await prisma.version_receta.findFirst({
+  const version = await tx.version_receta.findFirst({
     where: {
       id_version_receta: idVersionReceta,
       estado: "vigente",
@@ -47,18 +129,20 @@ async function loadEditableVersion(
   });
 
   if (!version) {
-    return { ok: false, error: "La versión de receta no existe o no está vigente." };
+    return { ok: false, problem: { error: "La versión de receta no existe o no está vigente." } };
   }
 
   if (version.receta_tecnica.estado !== "activa") {
-    return { ok: false, error: "La receta técnica no está activa." };
+    return { ok: false, problem: { error: "La receta técnica no está activa." } };
   }
 
   if (version.orden_trabajo.length > 0) {
     return {
       ok: false,
-      error:
-        "No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad.",
+      problem: {
+        error:
+          "No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad.",
+      },
     };
   }
 
@@ -82,11 +166,17 @@ function parseRecipeDetailFormData(formData: FormData) {
   });
 }
 
-async function loadActiveMaterial(idMaterial: string) {
-  return prisma.material.findFirst({
+// El material actual de la linea se conserva aunque hoy este inactivo, como en
+// pedidos; uno nuevo debe estar activo.
+async function loadSelectableMaterial(
+  tx: Prisma.TransactionClient,
+  idMaterial: string,
+  currentMaterial?: string,
+) {
+  return tx.material.findFirst({
     where: {
       id_material: idMaterial,
-      estado: true,
+      ...(idMaterial === currentMaterial ? {} : { estado: true }),
     },
     select: {
       id_material: true,
@@ -106,266 +196,306 @@ function revalidateRecipeDetailPaths(idReceta: string, idVersion: string) {
   );
 }
 
-function detailsPath(idReceta: string, idVersion: string, toast: string) {
-  return `/dashboard/production/recipes/${idReceta}/versions/${idVersion}/details?toast=${toast}`;
-}
-
 export async function createRecipeDetailAction(
   _prevState: RecipeDetailFormState,
   formData: FormData,
 ): Promise<RecipeDetailFormState> {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+  const values = getDetailFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
+
+  if (!session) {
+    return detailError(values, PERMISSION_ERROR);
+  }
 
   const parsed = parseRecipeDetailFormData(formData);
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del material.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return detailError(values, "Revisa los datos del material.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
-  const versionResult = await loadEditableVersion(data.id_version_receta);
 
-  if (!versionResult.ok) {
-    return { error: versionResult.error };
+  let idDetalleReceta = "";
+  let result: EditableVersionResult;
+
+  try {
+    result = await prisma.$transaction(async (tx): Promise<EditableVersionResult> => {
+      await lockVersionRecipe(tx, data.id_version_receta);
+
+      const versionResult = await loadEditableVersion(tx, data.id_version_receta);
+
+      if (!versionResult.ok) {
+        return versionResult;
+      }
+
+      const material = await loadSelectableMaterial(tx, data.id_material);
+
+      if (!material) {
+        return materialProblem(INACTIVE_MATERIAL);
+      }
+
+      const duplicatedMaterial = await tx.detalle_receta.findFirst({
+        where: {
+          id_version_receta: data.id_version_receta,
+          id_material: data.id_material,
+        },
+      });
+
+      if (duplicatedMaterial) {
+        return materialProblem(DUPLICATED_MATERIAL);
+      }
+
+      idDetalleReceta = await getNextCorrelativeId(tx, {
+        codigoEntidad: "detalle_receta",
+        prefijo: "DRE",
+      });
+
+      await tx.detalle_receta.create({
+        data: {
+          id_detalle_receta: idDetalleReceta,
+          id_version_receta: data.id_version_receta,
+          id_material: data.id_material,
+          cantidad_requerida: data.cantidad_requerida,
+          // La unidad se copia del material: el usuario nunca la escribe, para que no pueda
+          // quedar una receta expresada en una unidad distinta a la del inventario.
+          unidad_medida: material.unidad_medida,
+          tipo_consumo: data.tipo_consumo,
+          merma_estimada_porcentaje: data.merma_estimada_porcentaje,
+          observaciones: data.observaciones,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "detalle_receta",
+        id_registro_afectado: idDetalleReceta,
+        accion: "MODIFICAR_DETALLE_RECETA",
+        detalle: `Material ${material.nombre_material} agregado a la versión ${data.id_version_receta}.`,
+        tx,
+      });
+
+      return versionResult;
+    });
+  } catch (error) {
+    result = detailSaveProblem(error);
   }
 
-  const { version } = versionResult;
-  const material = await loadActiveMaterial(data.id_material);
-
-  if (!material) {
-    const message = "El material seleccionado no existe o está inactivo.";
-
-    return { error: message, fieldErrors: { id_material: [message] } };
+  if (!result.ok) {
+    return detailError(values, result.problem.error, result.problem.fieldErrors);
   }
 
-  const duplicatedMaterial = await prisma.detalle_receta.findFirst({
-    where: {
-      id_version_receta: data.id_version_receta,
-      id_material: data.id_material,
-    },
-  });
+  revalidateRecipeDetailPaths(result.version.id_receta, result.version.id_version_receta);
 
-  if (duplicatedMaterial) {
-    const message = "Este material ya está registrado en esta versión de receta.";
-
-    return { error: message, fieldErrors: { id_material: [message] } };
-  }
-
-  await prisma.$transaction(async (tx) => {
-    const idDetalleReceta = await getNextCorrelativeId(tx, {
-      codigoEntidad: "detalle_receta",
-      prefijo: "DRE",
-    });
-
-    await tx.detalle_receta.create({
-      data: {
-        id_detalle_receta: idDetalleReceta,
-        id_version_receta: data.id_version_receta,
-        id_material: data.id_material,
-        cantidad_requerida: data.cantidad_requerida,
-        // La unidad se copia del material: el usuario nunca la escribe, para que no pueda
-        // quedar una receta expresada en una unidad distinta a la del inventario.
-        unidad_medida: material.unidad_medida,
-        tipo_consumo: data.tipo_consumo,
-        merma_estimada_porcentaje: data.merma_estimada_porcentaje,
-        observaciones: data.observaciones,
-      },
-    });
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "detalle_receta",
-      id_registro_afectado: idDetalleReceta,
-      accion: "MODIFICAR_DETALLE_RECETA",
-      detalle: `Material ${material.nombre_material} agregado a la versión ${data.id_version_receta}.`,
-      tx,
-    });
-  });
-
-  revalidateRecipeDetailPaths(version.id_receta, version.id_version_receta);
-
-  redirect(
-    detailsPath(
-      version.id_receta,
-      version.id_version_receta,
-      "recipe-detail-created",
-    ),
-  );
+  return { status: "success", data: { id_detalle_receta: idDetalleReceta }, values, operationId: newOperationId() };
 }
 
 export async function updateRecipeDetailAction(
   _prevState: RecipeDetailFormState,
   formData: FormData,
 ): Promise<RecipeDetailFormState> {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+  const values = getDetailFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
+
+  if (!session) {
+    return detailError(values, PERMISSION_ERROR);
+  }
 
   const idDetalleReceta = formData.get("id_detalle_receta")?.toString().trim();
 
   if (!idDetalleReceta) {
-    return { error: "No se recibió el material de la receta." };
+    return detailError(values, "No se recibió el material de la receta.");
   }
 
   const parsed = parseRecipeDetailFormData(formData);
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del material.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return detailError(values, "Revisa los datos del material.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
 
-  const detail = await prisma.detalle_receta.findUnique({
-    where: {
-      id_detalle_receta: idDetalleReceta,
-    },
-    select: {
-      id_detalle_receta: true,
-      id_version_receta: true,
-    },
-  });
+  let result: EditableVersionResult;
 
-  if (!detail) {
-    return { error: "El material de la receta no existe." };
-  }
+  try {
+    result = await prisma.$transaction(async (tx): Promise<EditableVersionResult> => {
+      await lockVersionRecipe(tx, data.id_version_receta);
 
-  if (detail.id_version_receta !== data.id_version_receta) {
-    return { error: "El material no pertenece a la versión indicada." };
-  }
+      const detail = await tx.detalle_receta.findUnique({
+        where: {
+          id_detalle_receta: idDetalleReceta,
+        },
+        select: {
+          id_detalle_receta: true,
+          id_version_receta: true,
+          id_material: true,
+        },
+      });
 
-  const versionResult = await loadEditableVersion(data.id_version_receta);
+      if (!detail) {
+        return { ok: false, problem: { error: MISSING_DETAIL } };
+      }
 
-  if (!versionResult.ok) {
-    return { error: versionResult.error };
-  }
+      if (detail.id_version_receta !== data.id_version_receta) {
+        return { ok: false, problem: { error: "El material no pertenece a la versión indicada." } };
+      }
 
-  const { version } = versionResult;
-  const material = await loadActiveMaterial(data.id_material);
+      const versionResult = await loadEditableVersion(tx, data.id_version_receta);
 
-  if (!material) {
-    const message = "El material seleccionado no existe o está inactivo.";
+      if (!versionResult.ok) {
+        return versionResult;
+      }
 
-    return { error: message, fieldErrors: { id_material: [message] } };
-  }
+      const material = await loadSelectableMaterial(tx, data.id_material, detail.id_material);
 
-  // Se permite cambiar el material de la linea; hay que revalidar el duplicado
-  // excluyendo la propia fila.
-  const duplicatedMaterial = await prisma.detalle_receta.findFirst({
-    where: {
-      id_version_receta: data.id_version_receta,
-      id_material: data.id_material,
-      id_detalle_receta: {
-        not: idDetalleReceta,
-      },
-    },
-  });
+      if (!material) {
+        return materialProblem(INACTIVE_MATERIAL);
+      }
 
-  if (duplicatedMaterial) {
-    const message = "Este material ya está registrado en esta versión de receta.";
+      // Se permite cambiar el material de la linea; hay que revalidar el duplicado
+      // excluyendo la propia fila.
+      const duplicatedMaterial = await tx.detalle_receta.findFirst({
+        where: {
+          id_version_receta: data.id_version_receta,
+          id_material: data.id_material,
+          id_detalle_receta: {
+            not: idDetalleReceta,
+          },
+        },
+      });
 
-    return { error: message, fieldErrors: { id_material: [message] } };
-  }
+      if (duplicatedMaterial) {
+        return materialProblem(DUPLICATED_MATERIAL);
+      }
 
-  await prisma.$transaction(async (tx) => {
-    await tx.detalle_receta.update({
-      where: {
-        id_detalle_receta: idDetalleReceta,
-      },
-      data: {
-        id_material: data.id_material,
-        cantidad_requerida: data.cantidad_requerida,
-        unidad_medida: material.unidad_medida,
-        tipo_consumo: data.tipo_consumo,
-        merma_estimada_porcentaje: data.merma_estimada_porcentaje,
-        observaciones: data.observaciones,
-      },
+      await tx.detalle_receta.update({
+        where: {
+          id_detalle_receta: idDetalleReceta,
+        },
+        data: {
+          id_material: data.id_material,
+          cantidad_requerida: data.cantidad_requerida,
+          unidad_medida: material.unidad_medida,
+          tipo_consumo: data.tipo_consumo,
+          merma_estimada_porcentaje: data.merma_estimada_porcentaje,
+          observaciones: data.observaciones,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "detalle_receta",
+        id_registro_afectado: idDetalleReceta,
+        accion: "MODIFICAR_DETALLE_RECETA",
+        detalle: `Material ${material.nombre_material} actualizado en la versión ${data.id_version_receta}.`,
+        tx,
+      });
+
+      return versionResult;
     });
+  } catch (error) {
+    result = detailSaveProblem(error);
+  }
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "detalle_receta",
-      id_registro_afectado: idDetalleReceta,
-      accion: "MODIFICAR_DETALLE_RECETA",
-      detalle: `Material ${material.nombre_material} actualizado en la versión ${data.id_version_receta}.`,
-      tx,
-    });
-  });
+  if (!result.ok) {
+    return detailError(values, result.problem.error, result.problem.fieldErrors);
+  }
 
-  revalidateRecipeDetailPaths(version.id_receta, version.id_version_receta);
+  revalidateRecipeDetailPaths(result.version.id_receta, result.version.id_version_receta);
 
-  redirect(
-    detailsPath(
-      version.id_receta,
-      version.id_version_receta,
-      "recipe-detail-updated",
-    ),
-  );
+  return { status: "success", data: { id_detalle_receta: idDetalleReceta }, values, operationId: newOperationId() };
 }
 
-export async function deleteRecipeDetailAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+export async function deleteRecipeDetailAction(
+  _prevState: RecipeDetailDeleteState,
+  formData: FormData,
+): Promise<RecipeDetailDeleteState> {
+  const idDetalleReceta = formData.get("id_detalle_receta")?.toString().trim() ?? "";
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
 
-  const idDetalleReceta = formData.get("id_detalle_receta")?.toString().trim();
+  if (!session) {
+    return deleteError(idDetalleReceta, PERMISSION_ERROR);
+  }
 
   if (!idDetalleReceta) {
-    throw new Error("No se recibió el material de la receta.");
+    return deleteError(idDetalleReceta, "No se recibió el material de la receta.");
   }
 
-  const detail = await prisma.detalle_receta.findUnique({
-    where: {
-      id_detalle_receta: idDetalleReceta,
-    },
-    include: {
-      material: {
-        select: {
-          nombre_material: true,
+  let result: EditableVersionResult;
+
+  try {
+    result = await prisma.$transaction(async (tx): Promise<EditableVersionResult> => {
+      const owner = await tx.detalle_receta.findUnique({
+        where: {
+          id_detalle_receta: idDetalleReceta,
         },
-      },
-    },
-  });
+        select: {
+          id_version_receta: true,
+        },
+      });
 
-  if (!detail) {
-    throw new Error("El material de la receta no existe.");
+      if (!owner) {
+        return { ok: false, problem: { error: MISSING_DETAIL } };
+      }
+
+      await lockVersionRecipe(tx, owner.id_version_receta);
+
+      // Otra operacion pudo borrar o cambiar la linea mientras esta esperaba el candado.
+      const detail = await tx.detalle_receta.findUnique({
+        where: {
+          id_detalle_receta: idDetalleReceta,
+        },
+        include: {
+          material: {
+            select: {
+              nombre_material: true,
+            },
+          },
+        },
+      });
+
+      if (!detail) {
+        return { ok: false, problem: { error: MISSING_DETAIL } };
+      }
+
+      const versionResult = await loadEditableVersion(tx, detail.id_version_receta);
+
+      if (!versionResult.ok) {
+        return versionResult;
+      }
+
+      // Borrado fisico: detalle_receta no tiene columna de estado, y la guarda anterior
+      // asegura que ninguna orden de trabajo referencia esta version.
+      await tx.detalle_receta.delete({
+        where: {
+          id_detalle_receta: idDetalleReceta,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "detalle_receta",
+        id_registro_afectado: idDetalleReceta,
+        accion: "MODIFICAR_DETALLE_RECETA",
+        detalle: `Material ${detail.material.nombre_material} eliminado de la versión ${detail.id_version_receta}.`,
+        tx,
+      });
+
+      return versionResult;
+    });
+  } catch {
+    result = { ok: false, problem: { error: "No se pudo eliminar el material. Intenta nuevamente." } };
   }
 
-  const versionResult = await loadEditableVersion(detail.id_version_receta);
-
-  if (!versionResult.ok) {
-    throw new Error(versionResult.error);
+  if (!result.ok) {
+    return deleteError(idDetalleReceta, result.problem.error);
   }
 
-  const { version } = versionResult;
+  revalidateRecipeDetailPaths(result.version.id_receta, result.version.id_version_receta);
 
-  // Borrado fisico: detalle_receta no tiene columna de estado, y la guarda anterior
-  // asegura que ninguna orden de trabajo referencia esta version.
-  await prisma.$transaction(async (tx) => {
-    await tx.detalle_receta.delete({
-      where: {
-        id_detalle_receta: idDetalleReceta,
-      },
-    });
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "detalle_receta",
-      id_registro_afectado: idDetalleReceta,
-      accion: "MODIFICAR_DETALLE_RECETA",
-      detalle: `Material ${detail.material.nombre_material} eliminado de la versión ${detail.id_version_receta}.`,
-      tx,
-    });
-  });
-
-  revalidateRecipeDetailPaths(version.id_receta, version.id_version_receta);
-
-  redirect(
-    detailsPath(
-      version.id_receta,
-      version.id_version_receta,
-      "recipe-detail-deleted",
-    ),
-  );
+  return {
+    status: "success",
+    data: { id_detalle_receta: idDetalleReceta },
+    values: { id_detalle_receta: idDetalleReceta },
+    operationId: newOperationId(),
+  };
 }

@@ -424,6 +424,26 @@ describe("dbModuleMock con transacciones", () => {
     ]);
   });
 
+  it("registra delete dentro de la transaccion y lo rechaza fuera", async () => {
+    const { prisma } = dbModuleMock({ transactions: true }) as {
+      prisma: {
+        cliente: { delete: (args: object) => Promise<unknown> };
+        $transaction: (run: (tx: never) => Promise<unknown>) => Promise<unknown>;
+      };
+    };
+    const args = { where: { id_cliente: "CLI00000001" } };
+
+    expect(() => prisma.cliente.delete).toThrow("solo leen");
+
+    const { calls } = await characterizeHandler(() =>
+      prisma.$transaction((tx: { cliente: { delete: (args: object) => Promise<unknown> } }) =>
+        tx.cliente.delete(args),
+      ),
+    );
+
+    expect(calls).toContainEqual({ prisma: "cliente.delete", args });
+  });
+
   // Grupo 2 de fixes (H2): la entrega de material toma el stock que deja su
   // propia escritura con updateManyAndReturn.
   it("registra updateManyAndReturn: afecta una fila generada segun su select, o lo que fije el caso", async () => {

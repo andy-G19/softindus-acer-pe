@@ -103,6 +103,82 @@ desde ahora, no se ofrece en tareas nuevas y deja de sumar en los minutos por un
 de la ruta. Si es la última activa, la ruta no sirve para órdenes nuevas. Los avances
 y tareas ya registrados se conservan. **Activar** se aplica al pulsar.
 
+## Recetas técnicas
+
+**Dónde:** Producción → Recetas técnicas.
+**Quién:** el administrador y el maestro de taller.
+
+Una receta dice qué materiales lleva un producto. Se organiza en versiones: la **vigente**
+es la que usan las órdenes de trabajo nuevas, y las demás quedan como historial.
+
+**Filtros:** buscar por receta, código o producto; producto; estado.
+
+### Registrar una receta
+
+1. Pulsa **Nueva receta**. Se abre un panel sobre la lista.
+2. Elige el **producto** y escribe el **nombre de la receta**. La descripción es opcional.
+3. Pulsa **Guardar receta**.
+
+Un producto no puede tener dos recetas con el mismo nombre: si se repite, el error sale
+junto al nombre y lo escrito se conserva. La receta nace sin versión: después crea la
+primera con **Ver historial** → **Nueva versión**.
+
+### Inactivar una receta
+
+Pulsa **Inactivar** y confirma. La receta deja de ofrecerse en las órdenes de trabajo
+nuevas, no admite versiones nuevas ni cambios en sus materiales y sale de los conteos de
+Producción. Sus versiones y las órdenes ya creadas se conservan. **Activar** se aplica al
+pulsar.
+
+## Versiones de una receta
+
+**Dónde:** en la lista de recetas, **Ver historial**.
+
+### Crear una versión
+
+1. Pulsa **Nueva versión**. El formulario parte de los materiales de la versión más
+   reciente.
+2. Ajusta los materiales con **Agregar material** y **Quitar**. Cada línea lleva material,
+   cantidad, tipo y merma; las observaciones son opcionales.
+3. Pulsa **Crear versión vigente**. La nueva versión queda vigente y reemplaza a la
+   anterior.
+
+Si un material se repite, se marca en cada línea que lo usa. Si un material de la base ya
+no está activo, su línea se ve vacía y hay que elegir otro. Con cambios, **Cancelar**
+pregunta antes de salir.
+
+### Marcar vigente y anular
+
+- **Marcar vigente** vuelve a poner en uso una versión anterior; la vigente queda
+  reemplazada. No se ofrece si la receta está inactiva ni en una versión anulada.
+- **Anular** retira una versión sin órdenes asociadas y no se puede deshacer. Si anulas la
+  vigente, la versión no anulada más reciente pasa a ser la vigente. Si no hay otra, el
+  sistema no te deja anularla.
+
+Las dos acciones piden confirmar. Una versión usada por órdenes muestra «Usada en órdenes»
+y se conserva como histórica.
+
+## Materiales de una versión
+
+**Dónde:** en una versión, **Ver materiales**.
+
+Solo se pueden cambiar los materiales de una versión vigente, de una receta activa y sin
+órdenes asociadas. En los demás casos la pantalla es de consulta.
+
+- **Agregar material** abre un panel. La lista no ofrece los materiales que la versión ya
+  tiene. Elige el material, la cantidad por unidad, la merma y el tipo de consumo.
+- **Editar** abre el mismo panel. **Simular para una orden de** es solo un cálculo: no se
+  guarda y no cuenta como cambio.
+- **Eliminar** pide confirmar y borra la línea. Para recuperarla hay que volver a agregarla.
+
+## Calcular materiales
+
+**Dónde:** en los materiales de una versión, **Calcular materiales**.
+
+Escribe la **cantidad a fabricar** y pulsa **Calcular**. La tabla multiplica la receta,
+suma la merma y compara con el stock disponible, que es el stock actual menos el reservado.
+Marca **Insuficiente** y el faltante si no alcanza. Es solo una consulta: no reserva nada.
+
 ## Cuellos de botella
 
 **Dónde:** Producción → Cuellos de botella.
