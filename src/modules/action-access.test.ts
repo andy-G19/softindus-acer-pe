@@ -228,6 +228,17 @@ const MODULOS: ModuloDeAcciones[] = [
     acciones: ["annulPettyCashMovementAction"],
   },
   {
+    ruta: "production/campaigns/actions",
+    cargar: () => import("@/modules/production/campaigns/actions"),
+    roles: ADMIN_Y_TALLER,
+    acciones: [
+      "createProductionCampaignAction",
+      "addCampaignDetailAction",
+      "updateProductionCampaignAction",
+      "changeProductionCampaignStatusAction",
+    ],
+  },
+  {
     ruta: "production/recipe-details/actions",
     cargar: () => import("@/modules/production/recipe-details/actions"),
     roles: ADMIN_Y_TALLER,

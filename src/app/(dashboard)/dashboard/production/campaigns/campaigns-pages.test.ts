@@ -24,6 +24,21 @@ const campaignWithoutDetails = (args: Parameters<typeof generatedRow>[2]) => ({
   campania_detalle: [],
 });
 
+// Una campana por estado: cada uno ofrece sus acciones de fila.
+const campaignsIn =
+  (...estados: string[]) =>
+  (args: Parameters<typeof generatedRow>[2]) =>
+    estados.map((estado, index) => ({
+      ...generatedRow("campania_produccion", "findUnique", args),
+      id_campania: `CAM0000000${index + 1}`,
+      estado,
+    }));
+
+const campaignInState = (estado: string) => (args: Parameters<typeof generatedRow>[2]) => ({
+  ...generatedRow("campania_produccion", "findUnique", args),
+  estado,
+});
+
 definePageSuite([
   {
     route: "/dashboard/production/campaigns",
@@ -41,6 +56,13 @@ definePageSuite([
         },
       },
       { name: "solo hasta", searchParams: { to: "2026-07-31" } },
+      {
+        name: "acciones de cada estado",
+        data: {
+          "campania_produccion.findMany": campaignsIn("planificada", "activa", "finalizada", "anulada"),
+        },
+      },
+      { name: "sin campanas", data: { "campania_produccion.findMany": [] } },
     ],
   },
   {
@@ -48,6 +70,11 @@ definePageSuite([
     load: () => import("./[id]/page"),
     cases: [
       { name: "detalle", params: { id: "CAM00000001" } },
+      {
+        name: "finalizada no ofrece agregar producto",
+        params: { id: "CAM00000001" },
+        data: { "campania_produccion.findUnique": campaignInState("finalizada") },
+      },
       {
         name: "inexistente",
         params: { id: "CAM99999999" },
@@ -60,6 +87,11 @@ definePageSuite([
     load: () => import("./[id]/edit/page"),
     cases: [
       { name: "editar", params: { id: "CAM00000001" } },
+      {
+        name: "anulada queda bloqueada",
+        params: { id: "CAM00000001" },
+        data: { "campania_produccion.findUnique": campaignInState("anulada") },
+      },
       {
         name: "inexistente",
         params: { id: "CAM99999999" },

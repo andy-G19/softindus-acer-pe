@@ -1,0 +1,3117 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`addCampaignDetailAction > 0.004 pasa y se guarda como cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_detalle",
+      "prefijo": "CPD",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_objetivo": 0,
+        "cantidad_producida": 0,
+        "id_campania": "CAM00000003",
+        "id_campania_detalle": "CPD00000012",
+        "id_producto": "PRO00000004",
+        "observaciones": "Primera semana",
+      },
+    },
+    "prisma": "campania_detalle.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Producto Lampa agregado a la campania Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_detalle",
+      "id_registro_afectado": "CPD00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > 0.004 pasa y se guarda como cero > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+
+exports[`addCampaignDetailAction > ADMIN agrega el producto con la cantidad producida en cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_detalle",
+      "prefijo": "CPD",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_objetivo": 100,
+        "cantidad_producida": 0,
+        "id_campania": "CAM00000003",
+        "id_campania_detalle": "CPD00000012",
+        "id_producto": "PRO00000004",
+        "observaciones": "Primera semana",
+      },
+    },
+    "prisma": "campania_detalle.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Producto Lampa agregado a la campania Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_detalle",
+      "id_registro_afectado": "CPD00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > ADMIN agrega el producto con la cantidad producida en cero > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+
+exports[`addCampaignDetailAction > SELLER no puede agregar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > SELLER no puede agregar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`addCampaignDetailAction > WORKSHOP_MASTER tambien agrega productos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_detalle",
+      "prefijo": "CPD",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_objetivo": 100,
+        "cantidad_producida": 0,
+        "id_campania": "CAM00000003",
+        "id_campania_detalle": "CPD00000012",
+        "id_producto": "PRO00000004",
+        "observaciones": "Primera semana",
+      },
+    },
+    "prisma": "campania_detalle.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Producto Lampa agregado a la campania Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_detalle",
+      "id_registro_afectado": "CPD00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > WORKSHOP_MASTER tambien agrega productos > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+
+exports[`addCampaignDetailAction > el producto no existe o esta inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > el producto no existe o esta inactivo > resultado 1`] = `"error: El producto seleccionado no existe o esta inactivo."`;
+
+exports[`addCampaignDetailAction > el producto ya esta en la campana > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > el producto ya esta en la campana > resultado 1`] = `"error: Ese producto ya esta registrado en la campania."`;
+
+exports[`addCampaignDetailAction > la campana no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > la campana no existe > resultado 1`] = `"error: La campania seleccionada no existe."`;
+
+exports[`addCampaignDetailAction > la cantidad cero se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > la cantidad cero se rechaza > resultado 1`] = `"error: La cantidad objetivo debe ser mayor a cero."`;
+
+exports[`addCampaignDetailAction > la cantidad no numerica se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > la cantidad no numerica se rechaza > resultado 1`] = `"error: Invalid input: expected number, received NaN"`;
+
+exports[`addCampaignDetailAction > la cantidad se redondea a dos decimales > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_detalle",
+      "prefijo": "CPD",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_objetivo": 10.13,
+        "cantidad_producida": 0,
+        "id_campania": "CAM00000003",
+        "id_campania_detalle": "CPD00000012",
+        "id_producto": "PRO00000004",
+        "observaciones": "Primera semana",
+      },
+    },
+    "prisma": "campania_detalle.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Producto Lampa agregado a la campania Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_detalle",
+      "id_registro_afectado": "CPD00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > la cantidad se redondea a dos decimales > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+
+exports[`addCampaignDetailAction > las observaciones ausentes cuentan como vacias > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_detalle",
+      "prefijo": "CPD",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_objetivo": 100,
+        "cantidad_producida": 0,
+        "id_campania": "CAM00000003",
+        "id_campania_detalle": "CPD00000012",
+        "id_producto": "PRO00000004",
+        "observaciones": null,
+      },
+    },
+    "prisma": "campania_detalle.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Producto Lampa agregado a la campania Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_detalle",
+      "id_registro_afectado": "CPD00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > las observaciones ausentes cuentan como vacias > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+
+exports[`addCampaignDetailAction > las observaciones vacias se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_detalle",
+      "prefijo": "CPD",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_objetivo": 100,
+        "cantidad_producida": 0,
+        "id_campania": "CAM00000003",
+        "id_campania_detalle": "CPD00000012",
+        "id_producto": "PRO00000004",
+        "observaciones": null,
+      },
+    },
+    "prisma": "campania_detalle.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Producto Lampa agregado a la campania Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_detalle",
+      "id_registro_afectado": "CPD00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > las observaciones vacias se guardan como null > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+
+exports[`addCampaignDetailAction > sin producto se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > sin producto se rechaza > resultado 1`] = `"error: El producto es obligatorio."`;
+
+exports[`addCampaignDetailAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null"`;
+
+exports[`addCampaignDetailAction > una campana anulada no admite productos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > una campana anulada no admite productos > resultado 1`] = `"error: No se pueden agregar productos a una campania finalizada o anulada."`;
+
+exports[`addCampaignDetailAction > una campana finalizada no admite productos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > una campana finalizada no admite productos > resultado 1`] = `"error: No se pueden agregar productos a una campania finalizada o anulada."`;
+
+exports[`addCampaignDetailAction > una campana planificada admite productos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_detalle",
+      "prefijo": "CPD",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_objetivo": 100,
+        "cantidad_producida": 0,
+        "id_campania": "CAM00000003",
+        "id_campania_detalle": "CPD00000012",
+        "id_producto": "PRO00000004",
+        "observaciones": "Primera semana",
+      },
+    },
+    "prisma": "campania_detalle.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Producto Lampa agregado a la campania Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_detalle",
+      "id_registro_afectado": "CPD00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > una campana planificada admite productos > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-detail-created"`;
+
+exports[`addCampaignDetailAction > una carrera por el producto (P2002) llega sin tratar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_campania_detalle": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "campania_detalle.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_detalle",
+      "prefijo": "CPD",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_objetivo": 100,
+        "cantidad_producida": 0,
+        "id_campania": "CAM00000003",
+        "id_campania_detalle": "CPD00000012",
+        "id_producto": "PRO00000004",
+        "observaciones": "Primera semana",
+      },
+    },
+    "prisma": "campania_detalle.create",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`addCampaignDetailAction > una carrera por el producto (P2002) llega sin tratar > resultado 1`] = `"error: Unique constraint failed"`;
+
+exports[`changeProductionCampaignStatusAction > SELLER no puede cambiar el estado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > SELLER no puede cambiar el estado > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`changeProductionCampaignStatusAction > WORKSHOP_MASTER tambien cambia el estado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "finalizada",
+        "fecha_fin": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "finalizada",
+      "detalle": "Campania finalizada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-finalizada"`;
+
+exports[`changeProductionCampaignStatusAction > activar dos veces escribe otra vez y deja otra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activa",
+        "fecha_fin": undefined,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "activa",
+      "detalle": "Campania activa: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > activar dos veces escribe otra vez y deja otra bitacora > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-activa"`;
+
+exports[`changeProductionCampaignStatusAction > activar una planificada no fija la fecha de fin > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activa",
+        "fecha_fin": undefined,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "activa",
+      "detalle": "Campania activa: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > activar una planificada no fija la fecha de fin > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-activa"`;
+
+exports[`changeProductionCampaignStatusAction > anular dos veces se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > anular dos veces se rechaza > resultado 1`] = `"error: La campania ya esta anulada."`;
+
+exports[`changeProductionCampaignStatusAction > anular una activa fija la fecha de fin > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+        "fecha_fin": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "anulada",
+      "detalle": "Campania anulada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > anular una activa fija la fecha de fin > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-anulada"`;
+
+exports[`changeProductionCampaignStatusAction > anular una planificada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+        "fecha_fin": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "anulada",
+      "detalle": "Campania anulada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > anular una planificada > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-anulada"`;
+
+exports[`changeProductionCampaignStatusAction > finalizar dos veces se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > finalizar dos veces se rechaza > resultado 1`] = `"error: Una campania finalizada solo puede anularse con trazabilidad."`;
+
+exports[`changeProductionCampaignStatusAction > finalizar una activa fija la fecha de fin > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "finalizada",
+        "fecha_fin": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "finalizada",
+      "detalle": "Campania finalizada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > finalizar una activa fija la fecha de fin > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-finalizada"`;
+
+exports[`changeProductionCampaignStatusAction > finalizar una planificada se permite > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "finalizada",
+        "fecha_fin": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "finalizada",
+      "detalle": "Campania finalizada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > finalizar una planificada se permite > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-finalizada"`;
+
+exports[`changeProductionCampaignStatusAction > la campana no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > la campana no existe > resultado 1`] = `"error: La campania seleccionada no existe."`;
+
+exports[`changeProductionCampaignStatusAction > planificada no es un estado de destino > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > planificada no es un estado de destino > resultado 1`] = `"error: Estado de campania invalido."`;
+
+exports[`changeProductionCampaignStatusAction > sin estado se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > sin estado se rechaza > resultado 1`] = `"error: Estado de campania invalido."`;
+
+exports[`changeProductionCampaignStatusAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `"error: No se recibio la campania."`;
+
+exports[`changeProductionCampaignStatusAction > un estado desconocido se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > un estado desconocido se rechaza > resultado 1`] = `"error: Estado de campania invalido."`;
+
+exports[`changeProductionCampaignStatusAction > una anulada ya no cambia > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > una anulada ya no cambia > resultado 1`] = `"error: La campania ya esta anulada."`;
+
+exports[`changeProductionCampaignStatusAction > una finalizada no vuelve a activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > una finalizada no vuelve a activa > resultado 1`] = `"error: Una campania finalizada solo puede anularse con trazabilidad."`;
+
+exports[`changeProductionCampaignStatusAction > una finalizada se puede anular y pierde su fecha de fin > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+        "nombre_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+        "fecha_fin": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "anulada",
+      "detalle": "Campania anulada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`changeProductionCampaignStatusAction > una finalizada se puede anular y pierde su fecha de fin > resultado 1`] = `"redirect:/dashboard/production/campaigns?toast=campaign-status-anulada"`;
+
+exports[`createProductionCampaignAction > ADMIN crea la campana con su correlativo y la bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_produccion",
+      "prefijo": "CAM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "planificada",
+        "fecha_fin": 2026-08-31T00:00:00.000Z,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "id_campania": "CAM00000012",
+        "id_usuario_registro": "USU00000001",
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+    },
+    "prisma": "campania_produccion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Campania de produccion creada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/new",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > ADMIN crea la campana con su correlativo y la bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+
+exports[`createProductionCampaignAction > SELLER no puede crear > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > SELLER no puede crear > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createProductionCampaignAction > WORKSHOP_MASTER tambien crea campanas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_produccion",
+      "prefijo": "CAM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "planificada",
+        "fecha_fin": 2026-08-31T00:00:00.000Z,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "id_campania": "CAM00000012",
+        "id_usuario_registro": "USU00000001",
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+    },
+    "prisma": "campania_produccion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Campania de produccion creada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/new",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > WORKSHOP_MASTER tambien crea campanas > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+
+exports[`createProductionCampaignAction > el 30 de febrero pasa como 2 de marzo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_produccion",
+      "prefijo": "CAM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "planificada",
+        "fecha_fin": null,
+        "fecha_inicio": 2026-03-02T00:00:00.000Z,
+        "id_campania": "CAM00000012",
+        "id_usuario_registro": "USU00000001",
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+    },
+    "prisma": "campania_produccion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Campania de produccion creada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/new",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > el 30 de febrero pasa como 2 de marzo > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+
+exports[`createProductionCampaignAction > el fin no puede ser anterior al inicio > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > el fin no puede ser anterior al inicio > resultado 1`] = `"error: La fecha de fin no puede ser anterior a la fecha de inicio."`;
+
+exports[`createProductionCampaignAction > el fin puede ser el mismo dia del inicio > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_produccion",
+      "prefijo": "CAM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "planificada",
+        "fecha_fin": 2026-08-01T00:00:00.000Z,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "id_campania": "CAM00000012",
+        "id_usuario_registro": "USU00000001",
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+    },
+    "prisma": "campania_produccion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Campania de produccion creada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/new",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > el fin puede ser el mismo dia del inicio > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+
+exports[`createProductionCampaignAction > el nombre es obligatorio > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > el nombre es obligatorio > resultado 1`] = `"error: El nombre de la campania es obligatorio."`;
+
+exports[`createProductionCampaignAction > el nombre no supera 100 caracteres > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > el nombre no supera 100 caracteres > resultado 1`] = `"error: El nombre de la campania no debe superar 100 caracteres."`;
+
+exports[`createProductionCampaignAction > fin y objetivo ausentes cuentan como vacios > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_produccion",
+      "prefijo": "CAM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "planificada",
+        "fecha_fin": null,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "id_campania": "CAM00000012",
+        "id_usuario_registro": "USU00000001",
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": null,
+      },
+    },
+    "prisma": "campania_produccion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Campania de produccion creada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/new",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > fin y objetivo ausentes cuentan como vacios > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+
+exports[`createProductionCampaignAction > fin y objetivo vacios se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_produccion",
+      "prefijo": "CAM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "planificada",
+        "fecha_fin": null,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "id_campania": "CAM00000012",
+        "id_usuario_registro": "USU00000001",
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": null,
+      },
+    },
+    "prisma": "campania_produccion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Campania de produccion creada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/new",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > fin y objetivo vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+
+exports[`createProductionCampaignAction > la fecha de inicio es obligatoria > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > la fecha de inicio es obligatoria > resultado 1`] = `"error: La fecha de inicio es obligatoria."`;
+
+exports[`createProductionCampaignAction > se puede crear una campana anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_produccion",
+      "prefijo": "CAM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+        "fecha_fin": 2026-08-31T00:00:00.000Z,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "id_campania": "CAM00000012",
+        "id_usuario_registro": "USU00000001",
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+    },
+    "prisma": "campania_produccion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Campania de produccion creada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/new",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > se puede crear una campana anulada > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+
+exports[`createProductionCampaignAction > se puede crear una campana finalizada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "campania_produccion",
+      "prefijo": "CAM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "finalizada",
+        "fecha_fin": 2026-08-31T00:00:00.000Z,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "id_campania": "CAM00000012",
+        "id_usuario_registro": "USU00000001",
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+    },
+    "prisma": "campania_produccion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Campania de produccion creada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/new",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > se puede crear una campana finalizada > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000012?toast=campaign-created"`;
+
+exports[`createProductionCampaignAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null"`;
+
+exports[`createProductionCampaignAction > un estado desconocido se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > un estado desconocido se rechaza > resultado 1`] = `"error: Invalid option: expected one of "planificada"|"activa"|"finalizada"|"anulada""`;
+
+exports[`createProductionCampaignAction > una fecha de fin imposible se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > una fecha de fin imposible se rechaza > resultado 1`] = `"error: La fecha de fin no es valida."`;
+
+exports[`createProductionCampaignAction > una fecha de inicio imposible se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createProductionCampaignAction > una fecha de inicio imposible se rechaza > resultado 1`] = `"error: La fecha de inicio no es valida."`;
+
+exports[`updateProductionCampaignAction > ADMIN actualiza la campana > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "planificada",
+        "fecha_fin": 2026-08-31T00:00:00.000Z,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Campania actualizada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateProductionCampaignAction > ADMIN actualiza la campana > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+
+exports[`updateProductionCampaignAction > SELLER no puede actualizar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateProductionCampaignAction > SELLER no puede actualizar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`updateProductionCampaignAction > WORKSHOP_MASTER tambien actualiza campanas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "planificada",
+        "fecha_fin": 2026-08-31T00:00:00.000Z,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Campania actualizada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateProductionCampaignAction > WORKSHOP_MASTER tambien actualiza campanas > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+
+exports[`updateProductionCampaignAction > datos invalidos se rechazan sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateProductionCampaignAction > datos invalidos se rechazan sin tocar Prisma > resultado 1`] = `"error: El nombre de la campania es obligatorio."`;
+
+exports[`updateProductionCampaignAction > editar anula sin fijar la fecha de fin y la bitacora dice actualizar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+        "fecha_fin": null,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Campania actualizada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateProductionCampaignAction > editar anula sin fijar la fecha de fin y la bitacora dice actualizar > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+
+exports[`updateProductionCampaignAction > editar reabre una campana finalizada, aunque la accion de fila lo prohibe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activa",
+        "fecha_fin": 2026-08-31T00:00:00.000Z,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Campania actualizada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateProductionCampaignAction > editar reabre una campana finalizada, aunque la accion de fila lo prohibe > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;
+
+exports[`updateProductionCampaignAction > la campana no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+]
+`;
+
+exports[`updateProductionCampaignAction > la campana no existe > resultado 1`] = `"error: La campania seleccionada no existe."`;
+
+exports[`updateProductionCampaignAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateProductionCampaignAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `"error: No se recibio la campania."`;
+
+exports[`updateProductionCampaignAction > una campana anulada no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+]
+`;
+
+exports[`updateProductionCampaignAction > una campana anulada no se modifica > resultado 1`] = `"error: No se puede modificar una campania anulada."`;
+
+exports[`updateProductionCampaignAction > una campana finalizada se puede editar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_campania": true,
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "finalizada",
+        "fecha_fin": 2026-08-31T00:00:00.000Z,
+        "fecha_inicio": 2026-08-01T00:00:00.000Z,
+        "nombre_campania": "Campana escolar",
+        "objetivo_general": "Reponer stock",
+      },
+      "where": {
+        "id_campania": "CAM00000003",
+      },
+    },
+    "prisma": "campania_produccion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Campania actualizada: Campana escolar.",
+      "enTransaccion": true,
+      "entidad_afectada": "campania_produccion",
+      "id_registro_afectado": "CAM00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/campaigns/CAM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateProductionCampaignAction > una campana finalizada se puede editar > resultado 1`] = `"redirect:/dashboard/production/campaigns/CAM00000003?toast=campaign-updated"`;

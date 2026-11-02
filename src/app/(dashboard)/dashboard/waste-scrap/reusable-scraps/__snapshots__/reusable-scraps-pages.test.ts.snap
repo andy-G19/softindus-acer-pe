@@ -1,5 +1,323 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "producto": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "where": {},
+    },
+    "prisma": "retazo_reutilizable.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "disponible",
+      },
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "reutilizado",
+      },
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "descartado",
+      },
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap">Mermas y chatarra</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Retazos reutilizables</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Retazos reutilizables</h1>
+<p>Consulta los retazos aprovechables registrados durante producción. Puedes filtrar por estado, material de origen o buscar por código, medida, ubicación u orden de trabajo. Desde este listado también puedes marcar retazos disponibles como reutilizados o descartados.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/waste-scrap/reusable-scraps/new">Registrar retazo</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total registrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>42 según filtros</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Disponibles</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Listos para reutilizar</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reutilizados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Aprovechados en producción</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Descartados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>No aprovechables</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="" selected="">Todos</option>
+<option value="disponible">Disponible</option>
+<option value="reutilizado">Reutilizado</option>
+<option value="descartado">Descartado</option>
+</select>
+</div>
+<div>
+<label for="material">Material</label>
+<select id="material" name="material">
+<option value="" selected="">Todos</option>
+<option value="id_material-1">nombre_material-1 · categoria-1</option>
+<option value="id_material-2">nombre_material-2 · categoria-2</option>
+</select>
+</div>
+<div>
+<label for="q">Buscar</label>
+<input type="search" id="q" placeholder="Código, medida, ubicación u orden" name="q" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Listado de retazos</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Material</th>
+<th>Cantidad</th>
+<th>Medida</th>
+<th>Ubicación</th>
+<th>Orden</th>
+<th>Estado</th>
+<th>Fecha</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RET00000001</td>
+<td>
+<p>nombre_material-1</p>
+<p>tipo_material-1</p>
+</td>
+<td>11.50 unidad_medida-1</td>
+<td>medida_aproximada-1</td>
+<td>ubicacion-1</td>
+<td>
+<div>
+<p>id_orden_trabajo-1</p>
+<p>nombre_producto-1</p>
+</div>
+</td>
+<td>
+<span data-variant="success">disponible</span>
+</td>
+<td>01/07/2026</td>
+<td>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_retazo" value="RET00000001"/>
+<input type="hidden" name="estado" value="reutilizado"/>
+<button data-variant="link" type="submit">Reutilizar →</button>
+</form>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_retazo" value="RET00000001"/>
+<input type="hidden" name="estado" value="descartado"/>
+<button data-variant="link" type="submit">Descartar →</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>RET00000002</td>
+<td>
+<p>nombre_material-1</p>
+<p>tipo_material-1</p>
+</td>
+<td>11.50 unidad_medida-1</td>
+<td>medida_aproximada-1</td>
+<td>ubicacion-1</td>
+<td>
+<div>
+<p>id_orden_trabajo-1</p>
+<p>nombre_producto-1</p>
+</div>
+</td>
+<td>
+<span data-variant="info">reutilizado</span>
+</td>
+<td>01/07/2026</td>
+<td>
+<span>Sin acción</span>
+</td>
+</tr>
+<tr>
+<td>RET00000003</td>
+<td>
+<p>nombre_material-1</p>
+<p>tipo_material-1</p>
+</td>
+<td>11.50 unidad_medida-1</td>
+<td>medida_aproximada-1</td>
+<td>ubicacion-1</td>
+<td>
+<div>
+<p>id_orden_trabajo-1</p>
+<p>nombre_producto-1</p>
+</div>
+</td>
+<td>
+<span data-variant="destructive">descartado</span>
+</td>
+<td>01/07/2026</td>
+<td>
+<span>Sin acción</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
 exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > llamadas 1`] = `
 [
   {
@@ -275,6 +593,229 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > resultado 1`] = 
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps > sin retazos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "producto": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "where": {},
+    },
+    "prisma": "retazo_reutilizable.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "disponible",
+      },
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "reutilizado",
+      },
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "descartado",
+      },
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps > sin retazos > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap">Mermas y chatarra</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Retazos reutilizables</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Retazos reutilizables</h1>
+<p>Consulta los retazos aprovechables registrados durante producción. Puedes filtrar por estado, material de origen o buscar por código, medida, ubicación u orden de trabajo. Desde este listado también puedes marcar retazos disponibles como reutilizados o descartados.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/waste-scrap/reusable-scraps/new">Registrar retazo</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total registrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>42 según filtros</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Disponibles</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Listos para reutilizar</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reutilizados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Aprovechados en producción</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Descartados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>No aprovechables</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="" selected="">Todos</option>
+<option value="disponible">Disponible</option>
+<option value="reutilizado">Reutilizado</option>
+<option value="descartado">Descartado</option>
+</select>
+</div>
+<div>
+<label for="material">Material</label>
+<select id="material" name="material">
+<option value="" selected="">Todos</option>
+<option value="id_material-1">nombre_material-1 · categoria-1</option>
+<option value="id_material-2">nombre_material-2 · categoria-2</option>
+</select>
+</div>
+<div>
+<label for="q">Buscar</label>
+<input type="search" id="q" placeholder="Código, medida, ubicación u orden" name="q" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Listado de retazos</div>
+</div>
+<div>
+<div>
+<div>
+<p>No se encontraron retazos con los filtros seleccionados.</p>
+</div>
 </div>
 </div>
 </div>

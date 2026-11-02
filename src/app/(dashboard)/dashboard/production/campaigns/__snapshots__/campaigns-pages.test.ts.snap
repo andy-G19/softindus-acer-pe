@@ -1,5 +1,550 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`/dashboard/production/campaigns > acciones de cada estado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "campania_detalle": true,
+            "orden_trabajo": true,
+          },
+        },
+        "campania_detalle": {
+          "select": {
+            "cantidad_objetivo": true,
+            "cantidad_producida": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_inicio": "desc",
+        },
+        {
+          "id_campania": "desc",
+        },
+      ],
+      "where": {},
+    },
+    "prisma": "campania_produccion.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/campaigns > acciones de cada estado > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Campañas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Campañas de producción</h1>
+<p>Planifica lotes de producción por campaña y consulta el avance por producto.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a producción">
+<svg/>Volver a producción</button>
+<a data-variant="default" href="/dashboard/production/campaigns/new">Nueva campaña</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar campaña..." name="q" value=""/>
+</div>
+<div>
+<label for="product">Producto</label>
+<select id="product" name="product">
+<option value="" selected="">Todos los productos</option>
+<option value="id_producto-1">nombre_producto-1</option>
+<option value="id_producto-2">nombre_producto-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="planificada">Planificada</option>
+<option value="activa">Activa</option>
+<option value="finalizada">Finalizada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/production/campaigns">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Campañas registradas</div>
+</div>
+</div>
+<div>
+<p>4</p>
+<p>Total histórico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Planificadas o activas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>En ejecución o por iniciar.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Objetivo total</div>
+</div>
+</div>
+<div>
+<p>136.00</p>
+<p>Suma de cantidades objetivo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Producido total</div>
+</div>
+</div>
+<div>
+<p>136.00</p>
+<p>Suma de cantidades producidas.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Campaña</th>
+<th>Fechas</th>
+<th>Productos</th>
+<th>Objetivo</th>
+<th>Producido</th>
+<th>Órdenes</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CAM00000001</td>
+<td>
+<div>nombre_campania-1</div>
+<p>objetivo_general-1</p>
+</td>
+<td>
+<div>Inicio: 1 jul. 2026</div>
+<p>Fin: 1 jul. 2026</p>
+</td>
+<td>2</td>
+<td>34.00</td>
+<td>34.00</td>
+<td>2</td>
+<td>
+<span data-variant="info">planificada</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/campaigns/CAM00000001">Ver detalle</a>
+<a data-variant="link" href="/dashboard/production/campaigns/CAM00000001/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_campania" value="CAM00000001"/>
+<input type="hidden" name="estado" value="activa"/>
+<button data-variant="link" type="submit">Activar</button>
+</form>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_campania" value="CAM00000001"/>
+<input type="hidden" name="estado" value="anulada"/>
+<button type="submit">Anular</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>CAM00000002</td>
+<td>
+<div>nombre_campania-1</div>
+<p>objetivo_general-1</p>
+</td>
+<td>
+<div>Inicio: 1 jul. 2026</div>
+<p>Fin: 1 jul. 2026</p>
+</td>
+<td>2</td>
+<td>34.00</td>
+<td>34.00</td>
+<td>2</td>
+<td>
+<span data-variant="success">activa</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/campaigns/CAM00000002">Ver detalle</a>
+<a data-variant="link" href="/dashboard/production/campaigns/CAM00000002/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_campania" value="CAM00000002"/>
+<input type="hidden" name="estado" value="finalizada"/>
+<button data-variant="link" type="submit">Finalizar</button>
+</form>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_campania" value="CAM00000002"/>
+<input type="hidden" name="estado" value="anulada"/>
+<button type="submit">Anular</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>CAM00000003</td>
+<td>
+<div>nombre_campania-1</div>
+<p>objetivo_general-1</p>
+</td>
+<td>
+<div>Inicio: 1 jul. 2026</div>
+<p>Fin: 1 jul. 2026</p>
+</td>
+<td>2</td>
+<td>34.00</td>
+<td>34.00</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">finalizada</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/campaigns/CAM00000003">Ver detalle</a>
+<a data-variant="link" href="/dashboard/production/campaigns/CAM00000003/edit">Editar</a>
+</div>
+</td>
+</tr>
+<tr>
+<td>CAM00000004</td>
+<td>
+<div>nombre_campania-1</div>
+<p>objetivo_general-1</p>
+</td>
+<td>
+<div>Inicio: 1 jul. 2026</div>
+<p>Fin: 1 jul. 2026</p>
+</td>
+<td>2</td>
+<td>34.00</td>
+<td>34.00</td>
+<td>2</td>
+<td>
+<span data-variant="destructive">anulada</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/campaigns/CAM00000004">Ver detalle</a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/campaigns > sin campanas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "campania_detalle": true,
+            "orden_trabajo": true,
+          },
+        },
+        "campania_detalle": {
+          "select": {
+            "cantidad_objetivo": true,
+            "cantidad_producida": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_inicio": "desc",
+        },
+        {
+          "id_campania": "desc",
+        },
+      ],
+      "where": {},
+    },
+    "prisma": "campania_produccion.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/campaigns > sin campanas > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Campañas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Campañas de producción</h1>
+<p>Planifica lotes de producción por campaña y consulta el avance por producto.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a producción">
+<svg/>Volver a producción</button>
+<a data-variant="default" href="/dashboard/production/campaigns/new">Nueva campaña</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar campaña..." name="q" value=""/>
+</div>
+<div>
+<label for="product">Producto</label>
+<select id="product" name="product">
+<option value="" selected="">Todos los productos</option>
+<option value="id_producto-1">nombre_producto-1</option>
+<option value="id_producto-2">nombre_producto-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="planificada">Planificada</option>
+<option value="activa">Activa</option>
+<option value="finalizada">Finalizada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/production/campaigns">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Campañas registradas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Total histórico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Planificadas o activas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>En ejecución o por iniciar.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Objetivo total</div>
+</div>
+</div>
+<div>
+<p>0.00</p>
+<p>Suma de cantidades objetivo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Producido total</div>
+</div>
+</div>
+<div>
+<p>0.00</p>
+<p>Suma de cantidades producidas.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Campaña</th>
+<th>Fechas</th>
+<th>Productos</th>
+<th>Objetivo</th>
+<th>Producido</th>
+<th>Órdenes</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colSpan="9">
+<div>
+<div>
+<p>Todavía no hay campañas de producción registradas.</p>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
 exports[`/dashboard/production/campaigns > sin filtros > llamadas 1`] = `
 [
   {
@@ -1101,6 +1646,262 @@ exports[`/dashboard/production/campaigns/[id] > detalle > resultado 1`] = `
 }
 `;
 
+exports[`/dashboard/production/campaigns/[id] > finalizada no ofrece agregar producto > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "campania_detalle": {
+          "include": {
+            "producto": true,
+          },
+          "orderBy": {
+            "id_campania_detalle": "asc",
+          },
+        },
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+          "take": 8,
+        },
+      },
+      "where": {
+        "id_campania": "CAM00000001",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/production/campaigns/[id] > finalizada no ofrece agregar producto > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/campaigns">Campañas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Detalle de campaña</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>nombre_campania-1</h1>
+<p>objetivo_general-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a campañas">
+<svg/>Volver a campañas</button>
+<a data-variant="default" href="/dashboard/production/work-orders/new">Crear orden</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Productos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Productos en la campaña.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cantidad objetivo</div>
+</div>
+</div>
+<div>
+<p>34.00</p>
+<p>Meta total planificada.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cantidad producida</div>
+</div>
+</div>
+<div>
+<p>34.00</p>
+<p>Avance real registrado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pendiente estimado</div>
+</div>
+</div>
+<div>
+<p>0.00</p>
+<p>Restante por producir.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>
+<div>
+<div>Avance general</div>
+<p>Calculado con las cantidades producidas registradas por producto.</p>
+</div>
+<span>100.00%</span>
+</div>
+</div>
+<div>
+<div>
+<div>
+</div>
+</div>
+</div>
+</div>
+<div role="alert">
+<div>Esta campaña está finalizada o anulada. No se pueden agregar nuevos productos.</div>
+</div>
+<div>
+<div>
+<div>Productos de la campaña</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Producto</th>
+<th>Categoría</th>
+<th>Unidad</th>
+<th>Objetivo</th>
+<th>Producido</th>
+<th>Pendiente</th>
+<th>Observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div>nombre_producto-1</div>
+<p>id_campania_detalle-1</p>
+</td>
+<td>categoria-1</td>
+<td>unidad_medida-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>0.00</td>
+<td>observaciones-1</td>
+</tr>
+<tr>
+<td>
+<div>nombre_producto-2</div>
+<p>id_campania_detalle-2</p>
+</td>
+<td>categoria-2</td>
+<td>unidad_medida-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>0.00</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Órdenes asociadas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Producto</th>
+<th>Cantidad</th>
+<th>Inicio</th>
+<th>Estado</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_orden_trabajo-1</td>
+<td>nombre_producto-1</td>
+<td>11.50 unidad_medida-1</td>
+<td>1 jul. 2026</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1">Ver orden</a>
+</td>
+</tr>
+<tr>
+<td>id_orden_trabajo-2</td>
+<td>nombre_producto-2</td>
+<td>22.50 unidad_medida-2</td>
+<td>2 jul. 2026</td>
+<td>
+<span data-variant="secondary">estado-2</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-2">Ver orden</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
 exports[`/dashboard/production/campaigns/[id] > inexistente > llamadas 1`] = `
 [
   {
@@ -1425,6 +2226,107 @@ exports[`/dashboard/production/campaigns/[id]/details/new > inexistente > result
 {
   "html": null,
   "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/production/campaigns/[id]/edit > anulada queda bloqueada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_campania": "CAM00000001",
+      },
+    },
+    "prisma": "campania_produccion.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/production/campaigns/[id]/edit > anulada queda bloqueada > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/campaigns">Campañas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar campaña</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar campaña</h1>
+<p>Actualiza los datos generales y el estado operativo de la campaña.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a detalle">
+<svg/>Volver a detalle</button>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>Esta campaña está anulada y ya no puede modificarse.</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_campania" value="id_campania-1"/>
+<div>
+<label>Nombre *</label>
+<input required="" maxLength="100" disabled="" name="nombre_campania" value="nombre_campania-1"/>
+</div>
+<div>
+<div>
+<label>Fecha de inicio *</label>
+<input type="date" required="" disabled="" name="fecha_inicio" value="2026-07-01"/>
+</div>
+<div>
+<label>Fecha de fin</label>
+<input type="date" disabled="" name="fecha_fin" value="2026-07-01"/>
+</div>
+</div>
+<div>
+<label>Estado</label>
+<select name="estado" disabled="">
+<option value="planificada">Planificada</option>
+<option value="activa">Activa</option>
+<option value="finalizada">Finalizada</option>
+<option value="anulada" selected="">Anulada</option>
+</select>
+</div>
+<div>
+<label>Objetivo general</label>
+<textarea name="objetivo_general" rows="4" disabled="">objetivo_general-1</textarea>
+</div>
+<div>
+<a data-variant="link" href="/dashboard/production/campaigns/id_campania-1">Volver a detalle</a>
+<button data-variant="default" type="submit" disabled="">Guardar cambios</button>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
 }
 `;
 
