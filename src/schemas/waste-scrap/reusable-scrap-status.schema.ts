@@ -4,7 +4,7 @@ const validReusableScrapStatuses = ["reutilizado", "descartado"] as const;
 
 export const reusableScrapStatusSchema = z.object({
   id_retazo: z
-    .string()
+    .string({ error: "Debe seleccionar un retazo." })
     .trim()
     .min(1, "Debe seleccionar un retazo.")
     .max(11, "El identificador del retazo no debe superar 11 caracteres."),

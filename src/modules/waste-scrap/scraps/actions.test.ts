@@ -5,6 +5,8 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
+  isRowLock,
   type DataOverrides,
   type Role,
 } from "@/testing/page-characterization";
@@ -106,6 +108,25 @@ const scrapWith = (fields: FormFields = {}, data: DataOverrides = {}) => ({
   data: { ...material(true), ...workOrder("en_proceso"), ...data },
 });
 
+async function runCase(run: (formData: FormData) => Promise<unknown>, { form: fields, data, role }: Omit<ActionCase, "name">) {
+  mocks.correlatives.clear();
+
+  return characterizeHandler(
+    async () => {
+      try {
+        return { estado: await run(formOf(fields)) };
+      } catch (error) {
+        return (
+          describeNavigationError(error) ??
+          `error: ${error instanceof Error ? error.message : String(error)}`
+        );
+      }
+    },
+    data,
+    { role },
+  );
+}
+
 const CASES: ActionCase[] = [
   { name: "ADMIN registra la chatarra acumulada con la bitacora en la transaccion", ...scrapWith() },
   { name: "WORKSHOP_MASTER tambien registra chatarra", ...scrapWith(), role: "WORKSHOP_MASTER" },
@@ -119,7 +140,7 @@ const CASES: ActionCase[] = [
   { name: "el tipo no supera 50 caracteres", ...scrapWith({ tipo_material: "x".repeat(51) }) },
   { name: "el peso negativo se rechaza", ...scrapWith({ peso_kg: "-1" }) },
   { name: "el peso no numerico se rechaza", ...scrapWith({ peso_kg: "abc" }) },
-  { name: "un peso de 0.001 pasa sin redondear", ...scrapWith({ peso_kg: "0.001", cantidad: "" }) },
+  { name: "un peso de 0.001 se rechaza porque se guardaria como cero", ...scrapWith({ peso_kg: "0.001", cantidad: "" }) },
   { name: "el material no existe", ...scrapWith({}, material(null)) },
   { name: "el material esta inactivo", ...scrapWith({}, material(false)) },
   { name: "la orden no existe", ...scrapWith({}, workOrder(null)) },
@@ -129,28 +150,48 @@ const CASES: ActionCase[] = [
 ];
 
 describe("createScrapAction", () => {
-  for (const { name, form: fields, data, role } of CASES) {
+  for (const { name, ...actionCase } of CASES) {
     it(name, async () => {
-      mocks.correlatives.clear();
-
-      const { calls, result } = await characterizeHandler(
-        async () => {
-          try {
-            return { estado: await createScrapAction(formOf(fields)) };
-          } catch (error) {
-            return (
-              describeNavigationError(error) ??
-              `error: ${error instanceof Error ? error.message : String(error)}`
-            );
-          }
-        },
-        data,
-        { role },
-      );
+      const { calls, result } = await runCase(createScrapAction, actionCase);
 
       expectAuthorizesBeforePrisma(calls);
       expect(calls).toMatchSnapshot("llamadas");
       expect(result).toMatchSnapshot("resultado");
     });
   }
+});
+
+// La orden se bloquea antes de leerla (hallazgo 12 de la 10.7): anularla a la vez ya no
+// deja un registro colgado de una orden anulada.
+describe("las decisiones se toman con la orden bloqueada", () => {
+  const ORDEN = "OTR00000003";
+
+  it("bloquea la orden antes de leer lo que decide", async () => {
+    const { calls } = await runCase(createScrapAction, scrapWith());
+
+    expectRowLockedBefore(calls, {
+      table: "orden_trabajo",
+      id: ORDEN,
+      reads: (call) => call.prisma === "orden_trabajo.findUnique" || call.prisma === "material.findUnique",
+    });
+  });
+
+  it("el correlativo se reserva despues del bloqueo", async () => {
+    const { calls } = await runCase(createScrapAction, scrapWith());
+    const lock = calls.findIndex((call) => isRowLock(call, "orden_trabajo", ORDEN));
+    const correlative = calls.findIndex((call) => "effect" in call && call.effect === "getNextCorrelativeId");
+
+    expect(lock).toBeGreaterThanOrEqual(0);
+    expect(correlative).toBeGreaterThan(lock);
+  });
+
+  it("sin orden no hay nada que bloquear y el material se lee en la transaccion", async () => {
+    const { calls } = await runCase(createScrapAction, scrapWith({ id_orden_trabajo: "" }));
+    const begin = calls.findIndex((call) => "effect" in call && call.effect === "prisma.$transaction");
+    const material = calls.findIndex((call) => "prisma" in call && call.prisma === "material.findUnique");
+
+    expect(calls.some((call) => "prisma" in call && call.prisma === "$queryRaw")).toBe(false);
+    expect(begin).toBeGreaterThanOrEqual(0);
+    expect(material).toBeGreaterThan(begin);
+  });
 });

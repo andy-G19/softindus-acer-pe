@@ -6,6 +6,8 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
+  isRowLock,
   type DataOverrides,
   type Role,
 } from "@/testing/page-characterization";
@@ -87,26 +89,30 @@ function formOf(fields: FormFields) {
   return formData;
 }
 
+async function runCase(run: (formData: FormData) => Promise<unknown>, { form, data, role }: Omit<ActionCase, "name">) {
+  mocks.correlatives.clear();
+
+  return characterizeHandler(
+    async () => {
+      try {
+        return { estado: await run(formOf(form)) };
+      } catch (error) {
+        return (
+          describeNavigationError(error) ??
+          `error: ${error instanceof Error ? error.message : String(error)}`
+        );
+      }
+    },
+    data,
+    { role },
+  );
+}
+
 function defineCases(name: string, run: (formData: FormData) => Promise<unknown>, cases: ActionCase[]) {
   describe(name, () => {
-    for (const { name: caseName, form, data, role } of cases) {
+    for (const { name: caseName, ...actionCase } of cases) {
       it(caseName, async () => {
-        mocks.correlatives.clear();
-
-        const { calls, result } = await characterizeHandler(
-          async () => {
-            try {
-              return { estado: await run(formOf(form)) };
-            } catch (error) {
-              return (
-                describeNavigationError(error) ??
-                `error: ${error instanceof Error ? error.message : String(error)}`
-              );
-            }
-          },
-          data,
-          { role },
-        );
+        const { calls, result } = await runCase(run, actionCase);
 
         expectAuthorizesBeforePrisma(calls);
         expect(calls).toMatchSnapshot("llamadas");
@@ -165,7 +171,7 @@ defineCases("createReusableScrapAction", createReusableScrapAction, [
   { name: "sin orden se rechaza", ...scrapWith({ id_orden_trabajo: "" }) },
   { name: "la cantidad cero se rechaza", ...scrapWith({ cantidad: "0" }) },
   { name: "la cantidad no numerica se rechaza", ...scrapWith({ cantidad: "abc" }) },
-  { name: "una cantidad de 0.001 pasa sin redondear", ...scrapWith({ cantidad: "0.001" }) },
+  { name: "una cantidad de 0.001 se rechaza porque se guardaria como cero", ...scrapWith({ cantidad: "0.001" }) },
   { name: "sin unidad se rechaza", ...scrapWith({ unidad_medida: "" }) },
   { name: "la medida no supera 80 caracteres", ...scrapWith({ medida_aproximada: "x".repeat(81) }) },
   { name: "la ubicacion no supera 100 caracteres", ...scrapWith({ ubicacion: "x".repeat(101) }) },
@@ -189,3 +195,28 @@ defineCases("updateReusableScrapStatusAction", updateReusableScrapStatusAction, 
   { name: "un retazo reutilizado ya no cambia", ...statusWith("reutilizado", "descartado") },
   { name: "un retazo descartado ya no cambia", ...statusWith("descartado", "reutilizado") },
 ]);
+
+// La orden se bloquea antes de leerla (hallazgo 12 de la 10.7): anularla a la vez ya no
+// deja un registro colgado de una orden anulada.
+describe("las decisiones se toman con la orden bloqueada", () => {
+  const ORDEN = "OTR00000003";
+
+  it("bloquea la orden antes de leer lo que decide", async () => {
+    const { calls } = await runCase(createReusableScrapAction, scrapWith());
+
+    expectRowLockedBefore(calls, {
+      table: "orden_trabajo",
+      id: ORDEN,
+      reads: (call) => call.prisma === "orden_trabajo.findUnique" || call.prisma === "material.findUnique",
+    });
+  });
+
+  it("el correlativo se reserva despues del bloqueo", async () => {
+    const { calls } = await runCase(createReusableScrapAction, scrapWith());
+    const lock = calls.findIndex((call) => isRowLock(call, "orden_trabajo", ORDEN));
+    const correlative = calls.findIndex((call) => "effect" in call && call.effect === "getNextCorrelativeId");
+
+    expect(lock).toBeGreaterThanOrEqual(0);
+    expect(correlative).toBeGreaterThan(lock);
+  });
+});

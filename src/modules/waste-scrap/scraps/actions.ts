@@ -6,6 +6,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockWorkOrderRow } from "@/lib/row-locks";
 import { scrapSchema } from "@/schemas/waste-scrap/scrap.schema";
 
 async function requireWasteScrapAccess() {
@@ -34,47 +35,52 @@ export async function createScrapAction(formData: FormData) {
 
   const data = parsedData.data;
 
-  if (data.id_material) {
-    const material = await prisma.material.findUnique({
-      where: {
-        id_material: data.id_material,
-      },
-      select: {
-        id_material: true,
-        estado: true,
-      },
-    });
-
-    if (!material) {
-      throw new Error("El material de origen seleccionado no existe.");
-    }
-
-    if (!material.estado) {
-      throw new Error("No se puede registrar chatarra de un material inactivo.");
-    }
-  }
-
-  if (data.id_orden_trabajo) {
-    const workOrder = await prisma.orden_trabajo.findUnique({
-      where: {
-        id_orden_trabajo: data.id_orden_trabajo,
-      },
-      select: {
-        id_orden_trabajo: true,
-        estado: true,
-      },
-    });
-
-    if (!workOrder) {
-      throw new Error("La orden de trabajo seleccionada no existe.");
-    }
-
-    if (workOrder.estado === "anulada") {
-      throw new Error("No se puede asociar chatarra a una orden anulada.");
-    }
-  }
-
   await prisma.$transaction(async (tx) => {
+    // La orden se bloquea antes de leerla: anularla a la vez queda en fila.
+    if (data.id_orden_trabajo) {
+      await lockWorkOrderRow(tx, data.id_orden_trabajo);
+    }
+
+    if (data.id_material) {
+      const material = await tx.material.findUnique({
+        where: {
+          id_material: data.id_material,
+        },
+        select: {
+          id_material: true,
+          estado: true,
+        },
+      });
+
+      if (!material) {
+        throw new Error("El material de origen seleccionado no existe.");
+      }
+
+      if (!material.estado) {
+        throw new Error("No se puede registrar chatarra de un material inactivo.");
+      }
+    }
+
+    if (data.id_orden_trabajo) {
+      const workOrder = await tx.orden_trabajo.findUnique({
+        where: {
+          id_orden_trabajo: data.id_orden_trabajo,
+        },
+        select: {
+          id_orden_trabajo: true,
+          estado: true,
+        },
+      });
+
+      if (!workOrder) {
+        throw new Error("La orden de trabajo seleccionada no existe.");
+      }
+
+      if (workOrder.estado === "anulada") {
+        throw new Error("No se puede asociar chatarra a una orden anulada.");
+      }
+    }
+
     const idChatarra = await getNextCorrelativeId(tx, {
       codigoEntidad: "chatarra",
       prefijo: "CHA",

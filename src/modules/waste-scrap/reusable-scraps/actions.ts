@@ -6,6 +6,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockWorkOrderRow } from "@/lib/row-locks";
 import { reusableScrapSchema } from "@/schemas/waste-scrap/reusable-scrap.schema";
 
 async function requireWasteScrapAccess() {
@@ -34,46 +35,49 @@ export async function createReusableScrapAction(formData: FormData) {
 
   const data = parsedData.data;
 
-  const material = await prisma.material.findUnique({
-    where: {
-      id_material: data.id_material,
-    },
-    select: {
-      id_material: true,
-      nombre_material: true,
-      categoria: true,
-      unidad_medida: true,
-      estado: true,
-    },
-  });
-
-  if (!material) {
-    throw new Error("El material seleccionado no existe.");
-  }
-
-  if (!material.estado) {
-    throw new Error("No se puede registrar retazos de un material inactivo.");
-  }
-
-  const workOrder = await prisma.orden_trabajo.findUnique({
-    where: {
-      id_orden_trabajo: data.id_orden_trabajo,
-    },
-    select: {
-      id_orden_trabajo: true,
-      estado: true,
-    },
-  });
-
-  if (!workOrder) {
-    throw new Error("La orden de trabajo seleccionada no existe.");
-  }
-
-  if (workOrder.estado === "anulada") {
-    throw new Error("No se puede asociar un retazo a una orden anulada.");
-  }
-
   await prisma.$transaction(async (tx) => {
+    // La orden se bloquea antes de leerla: anularla a la vez queda en fila.
+    await lockWorkOrderRow(tx, data.id_orden_trabajo);
+
+    const material = await tx.material.findUnique({
+      where: {
+        id_material: data.id_material,
+      },
+      select: {
+        id_material: true,
+        nombre_material: true,
+        categoria: true,
+        unidad_medida: true,
+        estado: true,
+      },
+    });
+
+    if (!material) {
+      throw new Error("El material seleccionado no existe.");
+    }
+
+    if (!material.estado) {
+      throw new Error("No se puede registrar retazos de un material inactivo.");
+    }
+
+    const workOrder = await tx.orden_trabajo.findUnique({
+      where: {
+        id_orden_trabajo: data.id_orden_trabajo,
+      },
+      select: {
+        id_orden_trabajo: true,
+        estado: true,
+      },
+    });
+
+    if (!workOrder) {
+      throw new Error("La orden de trabajo seleccionada no existe.");
+    }
+
+    if (workOrder.estado === "anulada") {
+      throw new Error("No se puede asociar un retazo a una orden anulada.");
+    }
+
     const idRetazo = await getNextCorrelativeId(tx, {
       codigoEntidad: "retazo_reutilizable",
       prefijo: "RET",

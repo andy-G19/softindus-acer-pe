@@ -10,6 +10,19 @@ exports[`createScrapAction > ADMIN registra la chatarra acumulada con la bitacor
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -32,10 +45,6 @@ exports[`createScrapAction > ADMIN registra la chatarra acumulada con la bitacor
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -111,6 +120,19 @@ exports[`createScrapAction > WORKSHOP_MASTER tambien registra chatarra > llamada
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -133,10 +155,6 @@ exports[`createScrapAction > WORKSHOP_MASTER tambien registra chatarra > llamada
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -198,6 +216,19 @@ exports[`createScrapAction > el material esta inactivo > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -208,6 +239,10 @@ exports[`createScrapAction > el material esta inactivo > llamadas 1`] = `
       },
     },
     "prisma": "material.findUnique",
+  },
+  {
+    "args": "No se puede registrar chatarra de un material inactivo.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -224,6 +259,19 @@ exports[`createScrapAction > el material no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -234,6 +282,10 @@ exports[`createScrapAction > el material no existe > llamadas 1`] = `
       },
     },
     "prisma": "material.findUnique",
+  },
+  {
+    "args": "El material de origen seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -306,6 +358,19 @@ exports[`createScrapAction > la orden esta anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -328,6 +393,10 @@ exports[`createScrapAction > la orden esta anulada > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se puede asociar chatarra a una orden anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -344,6 +413,19 @@ exports[`createScrapAction > la orden no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -366,6 +448,10 @@ exports[`createScrapAction > la orden no existe > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -382,6 +468,19 @@ exports[`createScrapAction > las observaciones vacias se guardan como null > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -404,10 +503,6 @@ exports[`createScrapAction > las observaciones vacias se guardan como null > lla
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -546,6 +641,19 @@ exports[`createScrapAction > solo con cantidad > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -568,10 +676,6 @@ exports[`createScrapAction > solo con cantidad > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -633,6 +737,19 @@ exports[`createScrapAction > solo con peso > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -655,10 +772,6 @@ exports[`createScrapAction > solo con peso > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -722,9 +835,9 @@ exports[`createScrapAction > un POST sin campos se rechaza sin tocar Prisma > ll
 ]
 `;
 
-exports[`createScrapAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null Invalid input: expected string, received null Invalid input: expected string, received null Invalid input: expected string, received null"`;
+exports[`createScrapAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: El tipo de material es obligatorio."`;
 
-exports[`createScrapAction > un peso de 0.001 pasa sin redondear > llamadas 1`] = `
+exports[`createScrapAction > un peso de 0.001 se rechaza porque se guardaria como cero > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -733,83 +846,10 @@ exports[`createScrapAction > un peso de 0.001 pasa sin redondear > llamadas 1`] 
       "WORKSHOP_MASTER",
     ],
   },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_material": true,
-      },
-      "where": {
-        "id_material": "MAT00000002",
-      },
-    },
-    "prisma": "material.findUnique",
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_orden_trabajo": true,
-      },
-      "where": {
-        "id_orden_trabajo": "OTR00000003",
-      },
-    },
-    "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "chatarra",
-      "prefijo": "CHA",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "cantidad": null,
-        "estado": "acumulada",
-        "id_chatarra": "CHA00000012",
-        "id_material": "MAT00000002",
-        "id_orden_trabajo": "OTR00000003",
-        "observaciones": "Corte de planchas",
-        "peso_kg": 0.001,
-        "tipo_material": "Acero",
-      },
-    },
-    "prisma": "chatarra.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Chatarra registrada: Acero",
-      "enTransaccion": true,
-      "entidad_afectada": "chatarra",
-      "id_registro_afectado": "CHA00000012",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/waste-scrap",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createScrapAction > un peso de 0.001 pasa sin redondear > resultado 1`] = `"redirect:/dashboard/waste-scrap?toast=scrap-created"`;
+exports[`createScrapAction > un peso de 0.001 se rechaza porque se guardaria como cero > resultado 1`] = `"error: El valor debe ser mayor que cero."`;
 
 exports[`createScrapAction > una orden finalizada se admite > llamadas 1`] = `
 [
@@ -821,6 +861,19 @@ exports[`createScrapAction > una orden finalizada se admite > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -843,10 +896,6 @@ exports[`createScrapAction > una orden finalizada se admite > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {

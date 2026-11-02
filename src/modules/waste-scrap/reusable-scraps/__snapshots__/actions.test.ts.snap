@@ -10,6 +10,19 @@ exports[`createReusableScrapAction > ADMIN registra el retazo disponible con el 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "categoria": true,
@@ -35,10 +48,6 @@ exports[`createReusableScrapAction > ADMIN registra el retazo disponible con el 
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -116,6 +125,19 @@ exports[`createReusableScrapAction > WORKSHOP_MASTER tambien registra retazos > 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "categoria": true,
@@ -141,10 +163,6 @@ exports[`createReusableScrapAction > WORKSHOP_MASTER tambien registra retazos > 
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -208,6 +226,19 @@ exports[`createReusableScrapAction > el material esta inactivo > llamadas 1`] = 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "categoria": true,
@@ -221,6 +252,10 @@ exports[`createReusableScrapAction > el material esta inactivo > llamadas 1`] = 
       },
     },
     "prisma": "material.findUnique",
+  },
+  {
+    "args": "No se puede registrar retazos de un material inactivo.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -237,6 +272,19 @@ exports[`createReusableScrapAction > el material no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "categoria": true,
@@ -250,6 +298,10 @@ exports[`createReusableScrapAction > el material no existe > llamadas 1`] = `
       },
     },
     "prisma": "material.findUnique",
+  },
+  {
+    "args": "El material seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -308,6 +360,19 @@ exports[`createReusableScrapAction > la orden esta anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "categoria": true,
@@ -333,6 +398,10 @@ exports[`createReusableScrapAction > la orden esta anulada > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se puede asociar un retazo a una orden anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -349,6 +418,19 @@ exports[`createReusableScrapAction > la orden no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "categoria": true,
@@ -374,6 +456,10 @@ exports[`createReusableScrapAction > la orden no existe > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -404,6 +490,19 @@ exports[`createReusableScrapAction > medida y ubicacion vacias se guardan como n
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "categoria": true,
@@ -429,10 +528,6 @@ exports[`createReusableScrapAction > medida y ubicacion vacias se guardan como n
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -540,9 +635,9 @@ exports[`createReusableScrapAction > un POST sin campos se rechaza sin tocar Pri
 ]
 `;
 
-exports[`createReusableScrapAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null Invalid input: expected string, received null Invalid input: expected string, received null La cantidad debe ser mayor que cero. Invalid input: expected string, received null Invalid input: expected string, received null"`;
+exports[`createReusableScrapAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: Debe seleccionar un material de origen. Debe seleccionar la orden de trabajo que generó el retazo. La cantidad debe ser mayor que cero. La unidad de medida es obligatoria."`;
 
-exports[`createReusableScrapAction > una cantidad de 0.001 pasa sin redondear > llamadas 1`] = `
+exports[`createReusableScrapAction > una cantidad de 0.001 se rechaza porque se guardaria como cero > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -551,88 +646,10 @@ exports[`createReusableScrapAction > una cantidad de 0.001 pasa sin redondear > 
       "WORKSHOP_MASTER",
     ],
   },
-  {
-    "args": {
-      "select": {
-        "categoria": true,
-        "estado": true,
-        "id_material": true,
-        "nombre_material": true,
-        "unidad_medida": true,
-      },
-      "where": {
-        "id_material": "MAT00000002",
-      },
-    },
-    "prisma": "material.findUnique",
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_orden_trabajo": true,
-      },
-      "where": {
-        "id_orden_trabajo": "OTR00000003",
-      },
-    },
-    "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "retazo_reutilizable",
-      "prefijo": "RET",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "cantidad": 0.001,
-        "estado": "disponible",
-        "id_material": "MAT00000002",
-        "id_orden_trabajo": "OTR00000003",
-        "id_retazo": "RET00000012",
-        "id_usuario_registro": "USU00000001",
-        "medida_aproximada": "30 cm x 15 cm",
-        "tipo_material": "planchas",
-        "ubicacion": "Estante A",
-        "unidad_medida": "pieza",
-      },
-    },
-    "prisma": "retazo_reutilizable.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Retazo reutilizable creado para el material MAT00000002.",
-      "enTransaccion": true,
-      "entidad_afectada": "retazo_reutilizable",
-      "id_registro_afectado": "RET00000012",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/waste-scrap",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createReusableScrapAction > una cantidad de 0.001 pasa sin redondear > resultado 1`] = `"redirect:/dashboard/waste-scrap?toast=reusable-scrap-created"`;
+exports[`createReusableScrapAction > una cantidad de 0.001 se rechaza porque se guardaria como cero > resultado 1`] = `"error: La cantidad debe ser mayor que cero."`;
 
 exports[`createReusableScrapAction > una orden finalizada se admite > llamadas 1`] = `
 [
@@ -644,6 +661,19 @@ exports[`createReusableScrapAction > una orden finalizada se admite > llamadas 1
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "categoria": true,
@@ -669,10 +699,6 @@ exports[`createReusableScrapAction > una orden finalizada se admite > llamadas 1
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
