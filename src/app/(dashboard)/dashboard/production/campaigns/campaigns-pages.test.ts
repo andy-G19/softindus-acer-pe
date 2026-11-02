@@ -1,6 +1,6 @@
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { definePageSuite, generatedRow } from "@/testing/page-characterization";
+import { characterizePage, definePageSuite, generatedRow, isPrismaCall } from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
 vi.mock("@/lib/db", async () =>
@@ -117,3 +117,42 @@ definePageSuite([
     ],
   },
 ]);
+
+// A4 de la 10.7a: el rango de la lista es el de buildDateRangeFilter, como en los demas
+// listados: el ultimo dia se incluye con lt el dia siguiente, no con lte a las 23:59:59.
+describe("rango de fechas de la lista de campanas", () => {
+  async function dateCondition(searchParams: Record<string, string>) {
+    const { calls } = await characterizePage(
+      () => import("./page"),
+      { name: "rango", searchParams },
+      "/dashboard/production/campaigns",
+    );
+    const list = calls.filter(isPrismaCall).find((call) => call.prisma === "campania_produccion.findMany");
+    const where = (list?.args as { where: { AND?: { fecha_inicio?: unknown }[] } }).where;
+
+    return where.AND?.find((condition) => condition.fecha_inicio)?.fecha_inicio;
+  }
+
+  it("desde y hasta incluyen el ultimo dia con lt el dia siguiente", async () => {
+    expect(await dateCondition({ from: "2026-07-01", to: "2026-07-31" })).toEqual({
+      gte: new Date("2026-07-01T00:00:00"),
+      lt: new Date("2026-08-01T00:00:00"),
+    });
+  });
+
+  it("solo hasta no tiene limite inferior", async () => {
+    expect(await dateCondition({ to: "2026-07-31" })).toEqual({ lt: new Date("2026-08-01T00:00:00") });
+  });
+
+  it("solo desde no tiene limite superior", async () => {
+    expect(await dateCondition({ from: "2026-07-01" })).toEqual({ gte: new Date("2026-07-01T00:00:00") });
+  });
+
+  it("sin fechas no filtra", async () => {
+    expect(await dateCondition({})).toBeUndefined();
+  });
+
+  it("una fecha que no se entiende no filtra", async () => {
+    expect(await dateCondition({ from: "no-es-fecha" })).toBeUndefined();
+  });
+});

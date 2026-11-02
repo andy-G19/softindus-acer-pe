@@ -21,6 +21,7 @@ import {
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
+import { parseDateParam } from "@/lib/search-params";
 import { changeProductionCampaignStatusAction } from "@/modules/production/campaigns/actions";
 import { getProductionCampaignListData } from "@/modules/production/campaigns/queries";
 
@@ -65,16 +66,6 @@ function getSearchParam(
   return value?.trim() ?? "";
 }
 
-function parseDate(value: string, endOfDay = false) {
-  if (!value) {
-    return null;
-  }
-
-  const date = new Date(`${value}T${endOfDay ? "23:59:59" : "00:00:00"}`);
-
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
 export default async function ProductionCampaignsPage({
   searchParams,
 }: ProductionCampaignsPageProps) {
@@ -86,8 +77,8 @@ export default async function ProductionCampaignsPage({
   const status = getSearchParam(params, "status");
   const from = getSearchParam(params, "from");
   const to = getSearchParam(params, "to");
-  const fromDate = parseDate(from);
-  const toDate = parseDate(to, true);
+  const fromDate = parseDateParam(params, "from");
+  const toDate = parseDateParam(params, "to");
   const { campaigns, products } = await getProductionCampaignListData({
     q,
     product,

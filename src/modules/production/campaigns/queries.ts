@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { buildDateRangeFilter } from "@/lib/search-params";
 import { findActiveProductFilterOptions } from "@/modules/commercial/products/queries";
 
 // Consultas de lectura de las paginas de Campanas de produccion. No autorizan:
@@ -20,6 +21,7 @@ function buildProductionCampaignListWhere(
 ): Prisma.campania_produccionWhereInput {
   const { q, product, status, fromDate, toDate } = filters;
   const conditions: Prisma.campania_produccionWhereInput[] = [];
+  const dateRange = buildDateRangeFilter(fromDate, toDate);
 
   if (q) {
     conditions.push({
@@ -56,12 +58,9 @@ function buildProductionCampaignListWhere(
     });
   }
 
-  if (fromDate || toDate) {
+  if (dateRange) {
     conditions.push({
-      fecha_inicio: {
-        ...(fromDate ? { gte: fromDate } : {}),
-        ...(toDate ? { lte: toDate } : {}),
-      },
+      fecha_inicio: dateRange,
     });
   }
 
