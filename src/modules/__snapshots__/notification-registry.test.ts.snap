@@ -104,5 +104,7 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/production/routes/new/page.tsx [successNotification] -> route-created",
   "src/app/(dashboard)/dashboard/production/routes/page.tsx [activatedNotification] -> route-activated",
   "src/app/(dashboard)/dashboard/production/routes/page.tsx [deactivatedNotification] -> route-deactivated",
+  "src/app/(dashboard)/dashboard/waste-scrap/scraps/@panel/(.)new/page.tsx [successNotification] -> scrap-created",
+  "src/app/(dashboard)/dashboard/waste-scrap/scraps/new/page.tsx [successNotification] -> scrap-created",
 ]
 `;

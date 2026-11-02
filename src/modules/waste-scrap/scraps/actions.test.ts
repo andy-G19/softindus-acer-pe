@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { createScrapAction } from "@/modules/waste-scrap/scraps/actions";
+import { createScrapAction, type ScrapFormState } from "@/modules/waste-scrap/scraps/actions";
 import {
   characterizeHandler,
   describeNavigationError,
@@ -14,13 +14,19 @@ import {
 // Caracterizacion del alta de chatarra (entrega 10.7a), escrita antes de llevarla
 // al bloqueo de fila, al resultado de accion y al panel lateral. Fija en un
 // snapshot, en orden: la autorizacion, las lecturas, la transaccion, el
-// correlativo, la bitacora, las revalidaciones y la redireccion o el error.
+// correlativo, la bitacora, las revalidaciones y el resultado. Desde el panel (A11)
+// devuelve FormActionState: sin permiso responde con un error, sin redirigir.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -108,6 +114,9 @@ const scrapWith = (fields: FormFields = {}, data: DataOverrides = {}) => ({
   data: { ...material(true), ...workOrder("en_proceso"), ...data },
 });
 
+const initialState: ScrapFormState = { status: "idle" };
+const create = (formData: FormData) => createScrapAction(initialState, formData);
+
 async function runCase(run: (formData: FormData) => Promise<unknown>, { form: fields, data, role }: Omit<ActionCase, "name">) {
   mocks.correlatives.clear();
 
@@ -130,7 +139,7 @@ async function runCase(run: (formData: FormData) => Promise<unknown>, { form: fi
 const CASES: ActionCase[] = [
   { name: "ADMIN registra la chatarra acumulada con la bitacora en la transaccion", ...scrapWith() },
   { name: "WORKSHOP_MASTER tambien registra chatarra", ...scrapWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER no puede registrar", ...scrapWith(), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...scrapWith(), role: "SELLER" },
   { name: "sin material ni orden no se leen", ...scrapWith({ id_material: "", id_orden_trabajo: "" }) },
   { name: "solo con peso", ...scrapWith({ cantidad: "" }) },
   { name: "solo con cantidad", ...scrapWith({ peso_kg: "" }) },
@@ -147,12 +156,16 @@ const CASES: ActionCase[] = [
   { name: "la orden esta anulada", ...scrapWith({}, workOrder("anulada")) },
   { name: "una orden finalizada se admite", ...scrapWith({}, workOrder("finalizada")) },
   { name: "un POST sin campos se rechaza sin tocar Prisma", form: {} },
+  {
+    name: "un fallo al crear revierte con el mensaje generico",
+    ...scrapWith({}, { "chatarra.create": () => { throw new Error("conexion perdida"); } }),
+  },
 ];
 
 describe("createScrapAction", () => {
   for (const { name, ...actionCase } of CASES) {
     it(name, async () => {
-      const { calls, result } = await runCase(createScrapAction, actionCase);
+      const { calls, result } = await runCase(create, actionCase);
 
       expectAuthorizesBeforePrisma(calls);
       expect(calls).toMatchSnapshot("llamadas");
@@ -167,7 +180,7 @@ describe("las decisiones se toman con la orden bloqueada", () => {
   const ORDEN = "OTR00000003";
 
   it("bloquea la orden antes de leer lo que decide", async () => {
-    const { calls } = await runCase(createScrapAction, scrapWith());
+    const { calls } = await runCase(create, scrapWith());
 
     expectRowLockedBefore(calls, {
       table: "orden_trabajo",
@@ -177,7 +190,7 @@ describe("las decisiones se toman con la orden bloqueada", () => {
   });
 
   it("el correlativo se reserva despues del bloqueo", async () => {
-    const { calls } = await runCase(createScrapAction, scrapWith());
+    const { calls } = await runCase(create, scrapWith());
     const lock = calls.findIndex((call) => isRowLock(call, "orden_trabajo", ORDEN));
     const correlative = calls.findIndex((call) => "effect" in call && call.effect === "getNextCorrelativeId");
 
@@ -186,7 +199,7 @@ describe("las decisiones se toman con la orden bloqueada", () => {
   });
 
   it("sin orden no hay nada que bloquear y el material se lee en la transaccion", async () => {
-    const { calls } = await runCase(createScrapAction, scrapWith({ id_orden_trabajo: "" }));
+    const { calls } = await runCase(create, scrapWith({ id_orden_trabajo: "" }));
     const begin = calls.findIndex((call) => "effect" in call && call.effect === "prisma.$transaction");
     const material = calls.findIndex((call) => "prisma" in call && call.prisma === "material.findUnique");
 

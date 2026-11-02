@@ -363,6 +363,7 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/waste-scrap/scraps/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createScrapAction"],
+    rechazanConResultado: ["createScrapAction"],
   },
 ];
 
