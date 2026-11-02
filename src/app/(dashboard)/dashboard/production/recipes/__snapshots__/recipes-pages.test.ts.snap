@@ -5450,7 +5450,7 @@ exports[`/dashboard/production/recipes/[id]/versions/new > nueva version > llama
 
 exports[`/dashboard/production/recipes/[id]/versions/new > nueva version > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -5494,9 +5494,9 @@ exports[`/dashboard/production/recipes/[id]/versions/new > nueva version > resul
 </div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_receta" value="id_receta-1"/>
-<div>
-<label>Motivo o descripción</label>
-<textarea name="motivo_cambio" rows="4" maxLength="700" placeholder="Ej. Ajuste de materiales por cambio de proveedor o mejora de proceso." disabled="">Nueva versión de receta técnica.</textarea>
+<div data-disabled="true">
+<label for="motivo_cambio">Motivo o descripción</label>
+<textarea id="motivo_cambio" disabled="" name="motivo_cambio" rows="4" maxLength="700" placeholder="Ej. Ajuste de materiales por cambio de proveedor o mejora de proceso.">Nueva versión de receta técnica.</textarea>
 </div>
 <section>
 <div>
@@ -5514,33 +5514,37 @@ exports[`/dashboard/production/recipes/[id]/versions/new > nueva version > resul
 </div>
 <div>
 <div>
-<label for="id_material-_R_6d5_">Material *</label>
+<div>
+<label for="id_material-id_detalle_receta-1">Material *</label>
 <input type="hidden" name="id_material" value="id_material-1"/>
 <div>
-<input id="id_material-_R_6d5_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-_R_6d5_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value="nombre_material-1"/>
+<input id="id_material-id_detalle_receta-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-id_detalle_receta-1-listbox" aria-expanded="false" disabled="" placeholder="Buscar material..." value="nombre_material-1"/>
 <button type="button" disabled="">Limpiar</button>
 </div>
 </div>
-<div>
-<label>Cantidad *</label>
-<input type="number" min="0.01" step="0.01" required="" disabled="" name="cantidad_requerida" value="11.5"/>
 </div>
-<div>
-<label>Tipo *</label>
-<select name="tipo_consumo" required="" disabled="">
+<div data-disabled="true">
+<label for="cantidad_requerida-id_detalle_receta-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad_requerida-id_detalle_receta-1" required="" disabled="" min="0.01" step="0.01" name="cantidad_requerida" value="11.5"/>
+</div>
+<div data-disabled="true">
+<label for="tipo_consumo-id_detalle_receta-1">Tipo<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_consumo-id_detalle_receta-1" required="" disabled="" name="tipo_consumo">
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
 </div>
-<div>
-<label>Merma %</label>
-<input type="number" min="0" max="100" step="0.01" disabled="" name="merma_estimada_porcentaje" value="11.5"/>
+<div data-disabled="true">
+<label for="merma_estimada_porcentaje-id_detalle_receta-1">Merma %</label>
+<input type="number" id="merma_estimada_porcentaje-id_detalle_receta-1" disabled="" min="0" max="100" step="0.01" name="merma_estimada_porcentaje" value="11.5"/>
 </div>
 </div>
-<div>
-<label>Observaciones</label>
-<input disabled="" placeholder="Observación opcional del material." name="observaciones_detalle" value="observaciones-1"/>
+<div data-disabled="true">
+<label for="observaciones_detalle-id_detalle_receta-1">Observaciones</label>
+<input id="observaciones_detalle-id_detalle_receta-1" disabled="" placeholder="Observación opcional del material." name="observaciones_detalle" value="observaciones-1"/>
 </div>
 </div>
 <div>
@@ -5550,33 +5554,37 @@ exports[`/dashboard/production/recipes/[id]/versions/new > nueva version > resul
 </div>
 <div>
 <div>
-<label for="id_material-_R_6l5_">Material *</label>
+<div>
+<label for="id_material-id_detalle_receta-2">Material *</label>
 <input type="hidden" name="id_material" value="id_material-2"/>
 <div>
-<input id="id_material-_R_6l5_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-_R_6l5_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value="nombre_material-2"/>
+<input id="id_material-id_detalle_receta-2" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-id_detalle_receta-2-listbox" aria-expanded="false" disabled="" placeholder="Buscar material..." value="nombre_material-2"/>
 <button type="button" disabled="">Limpiar</button>
 </div>
 </div>
-<div>
-<label>Cantidad *</label>
-<input type="number" min="0.01" step="0.01" required="" disabled="" name="cantidad_requerida" value="22.5"/>
 </div>
-<div>
-<label>Tipo *</label>
-<select name="tipo_consumo" required="" disabled="">
+<div data-disabled="true">
+<label for="cantidad_requerida-id_detalle_receta-2">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad_requerida-id_detalle_receta-2" required="" disabled="" min="0.01" step="0.01" name="cantidad_requerida" value="22.5"/>
+</div>
+<div data-disabled="true">
+<label for="tipo_consumo-id_detalle_receta-2">Tipo<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_consumo-id_detalle_receta-2" required="" disabled="" name="tipo_consumo">
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
 </div>
-<div>
-<label>Merma %</label>
-<input type="number" min="0" max="100" step="0.01" disabled="" name="merma_estimada_porcentaje" value="0"/>
+<div data-disabled="true">
+<label for="merma_estimada_porcentaje-id_detalle_receta-2">Merma %</label>
+<input type="number" id="merma_estimada_porcentaje-id_detalle_receta-2" disabled="" min="0" max="100" step="0.01" name="merma_estimada_porcentaje" value="0"/>
 </div>
 </div>
-<div>
-<label>Observaciones</label>
-<input disabled="" placeholder="Observación opcional del material." name="observaciones_detalle" value=""/>
+<div data-disabled="true">
+<label for="observaciones_detalle-id_detalle_receta-2">Observaciones</label>
+<input id="observaciones_detalle-id_detalle_receta-2" disabled="" placeholder="Observación opcional del material." name="observaciones_detalle" value=""/>
 </div>
 </div>
 </div>
@@ -5586,7 +5594,7 @@ exports[`/dashboard/production/recipes/[id]/versions/new > nueva version > resul
 <button data-variant="default" type="submit" disabled="">Crear versión vigente</button>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -5656,7 +5664,7 @@ exports[`/dashboard/production/recipes/[id]/versions/new > receta inactiva > lla
 
 exports[`/dashboard/production/recipes/[id]/versions/new > receta inactiva > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -5697,9 +5705,9 @@ exports[`/dashboard/production/recipes/[id]/versions/new > receta inactiva > res
 </div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_receta" value="id_receta-1"/>
-<div>
-<label>Motivo o descripción</label>
-<textarea name="motivo_cambio" rows="4" maxLength="700" placeholder="Ej. Ajuste de materiales por cambio de proveedor o mejora de proceso." disabled="">Nueva versión de receta técnica.</textarea>
+<div data-disabled="true">
+<label for="motivo_cambio">Motivo o descripción</label>
+<textarea id="motivo_cambio" disabled="" name="motivo_cambio" rows="4" maxLength="700" placeholder="Ej. Ajuste de materiales por cambio de proveedor o mejora de proceso.">Nueva versión de receta técnica.</textarea>
 </div>
 <section>
 <div>
@@ -5717,32 +5725,36 @@ exports[`/dashboard/production/recipes/[id]/versions/new > receta inactiva > res
 </div>
 <div>
 <div>
-<label for="id_material-_R_3d5_">Material *</label>
+<div>
+<label for="id_material-row-1">Material *</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
-<input id="id_material-_R_3d5_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-_R_3d5_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value=""/>
+<input id="id_material-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-row-1-listbox" aria-expanded="false" disabled="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
-<div>
-<label>Cantidad *</label>
-<input type="number" min="0.01" step="0.01" required="" disabled="" name="cantidad_requerida" value="1"/>
 </div>
-<div>
-<label>Tipo *</label>
-<select name="tipo_consumo" required="" disabled="">
+<div data-disabled="true">
+<label for="cantidad_requerida-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad_requerida-row-1" required="" disabled="" min="0.01" step="0.01" name="cantidad_requerida" value="1"/>
+</div>
+<div data-disabled="true">
+<label for="tipo_consumo-row-1">Tipo<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_consumo-row-1" required="" disabled="" name="tipo_consumo">
 <option value="materia_prima" selected="">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
 </div>
-<div>
-<label>Merma %</label>
-<input type="number" min="0" max="100" step="0.01" disabled="" name="merma_estimada_porcentaje" value="0"/>
+<div data-disabled="true">
+<label for="merma_estimada_porcentaje-row-1">Merma %</label>
+<input type="number" id="merma_estimada_porcentaje-row-1" disabled="" min="0" max="100" step="0.01" name="merma_estimada_porcentaje" value="0"/>
 </div>
 </div>
-<div>
-<label>Observaciones</label>
-<input disabled="" placeholder="Observación opcional del material." name="observaciones_detalle" value=""/>
+<div data-disabled="true">
+<label for="observaciones_detalle-row-1">Observaciones</label>
+<input id="observaciones_detalle-row-1" disabled="" placeholder="Observación opcional del material." name="observaciones_detalle" value=""/>
 </div>
 </div>
 </div>
@@ -5752,7 +5764,7 @@ exports[`/dashboard/production/recipes/[id]/versions/new > receta inactiva > res
 <button data-variant="default" type="submit" disabled="">Crear versión vigente</button>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -5822,7 +5834,7 @@ exports[`/dashboard/production/recipes/[id]/versions/new > sin materiales activo
 
 exports[`/dashboard/production/recipes/[id]/versions/new > sin materiales activos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -5869,9 +5881,9 @@ exports[`/dashboard/production/recipes/[id]/versions/new > sin materiales activo
 </div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_receta" value="id_receta-1"/>
-<div>
-<label>Motivo o descripción</label>
-<textarea name="motivo_cambio" rows="4" maxLength="700" placeholder="Ej. Ajuste de materiales por cambio de proveedor o mejora de proceso." disabled="">Nueva versión de receta técnica.</textarea>
+<div data-disabled="true">
+<label for="motivo_cambio">Motivo o descripción</label>
+<textarea id="motivo_cambio" disabled="" name="motivo_cambio" rows="4" maxLength="700" placeholder="Ej. Ajuste de materiales por cambio de proveedor o mejora de proceso.">Nueva versión de receta técnica.</textarea>
 </div>
 <section>
 <div>
@@ -5889,33 +5901,37 @@ exports[`/dashboard/production/recipes/[id]/versions/new > sin materiales activo
 </div>
 <div>
 <div>
-<label for="id_material-_R_6d5_">Material *</label>
+<div>
+<label for="id_material-id_detalle_receta-1">Material *</label>
 <input type="hidden" name="id_material" value="id_material-1"/>
 <div>
-<input id="id_material-_R_6d5_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-_R_6d5_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value=""/>
+<input id="id_material-id_detalle_receta-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-id_detalle_receta-1-listbox" aria-expanded="false" disabled="" placeholder="Buscar material..." value=""/>
 <button type="button" disabled="">Limpiar</button>
 </div>
 </div>
-<div>
-<label>Cantidad *</label>
-<input type="number" min="0.01" step="0.01" required="" disabled="" name="cantidad_requerida" value="11.5"/>
 </div>
-<div>
-<label>Tipo *</label>
-<select name="tipo_consumo" required="" disabled="">
+<div data-disabled="true">
+<label for="cantidad_requerida-id_detalle_receta-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad_requerida-id_detalle_receta-1" required="" disabled="" min="0.01" step="0.01" name="cantidad_requerida" value="11.5"/>
+</div>
+<div data-disabled="true">
+<label for="tipo_consumo-id_detalle_receta-1">Tipo<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_consumo-id_detalle_receta-1" required="" disabled="" name="tipo_consumo">
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
 </div>
-<div>
-<label>Merma %</label>
-<input type="number" min="0" max="100" step="0.01" disabled="" name="merma_estimada_porcentaje" value="11.5"/>
+<div data-disabled="true">
+<label for="merma_estimada_porcentaje-id_detalle_receta-1">Merma %</label>
+<input type="number" id="merma_estimada_porcentaje-id_detalle_receta-1" disabled="" min="0" max="100" step="0.01" name="merma_estimada_porcentaje" value="11.5"/>
 </div>
 </div>
-<div>
-<label>Observaciones</label>
-<input disabled="" placeholder="Observación opcional del material." name="observaciones_detalle" value="observaciones-1"/>
+<div data-disabled="true">
+<label for="observaciones_detalle-id_detalle_receta-1">Observaciones</label>
+<input id="observaciones_detalle-id_detalle_receta-1" disabled="" placeholder="Observación opcional del material." name="observaciones_detalle" value="observaciones-1"/>
 </div>
 </div>
 <div>
@@ -5925,33 +5941,37 @@ exports[`/dashboard/production/recipes/[id]/versions/new > sin materiales activo
 </div>
 <div>
 <div>
-<label for="id_material-_R_6l5_">Material *</label>
+<div>
+<label for="id_material-id_detalle_receta-2">Material *</label>
 <input type="hidden" name="id_material" value="id_material-2"/>
 <div>
-<input id="id_material-_R_6l5_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-_R_6l5_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value=""/>
+<input id="id_material-id_detalle_receta-2" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-id_detalle_receta-2-listbox" aria-expanded="false" disabled="" placeholder="Buscar material..." value=""/>
 <button type="button" disabled="">Limpiar</button>
 </div>
 </div>
-<div>
-<label>Cantidad *</label>
-<input type="number" min="0.01" step="0.01" required="" disabled="" name="cantidad_requerida" value="22.5"/>
 </div>
-<div>
-<label>Tipo *</label>
-<select name="tipo_consumo" required="" disabled="">
+<div data-disabled="true">
+<label for="cantidad_requerida-id_detalle_receta-2">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad_requerida-id_detalle_receta-2" required="" disabled="" min="0.01" step="0.01" name="cantidad_requerida" value="22.5"/>
+</div>
+<div data-disabled="true">
+<label for="tipo_consumo-id_detalle_receta-2">Tipo<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_consumo-id_detalle_receta-2" required="" disabled="" name="tipo_consumo">
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
 </div>
-<div>
-<label>Merma %</label>
-<input type="number" min="0" max="100" step="0.01" disabled="" name="merma_estimada_porcentaje" value="0"/>
+<div data-disabled="true">
+<label for="merma_estimada_porcentaje-id_detalle_receta-2">Merma %</label>
+<input type="number" id="merma_estimada_porcentaje-id_detalle_receta-2" disabled="" min="0" max="100" step="0.01" name="merma_estimada_porcentaje" value="0"/>
 </div>
 </div>
-<div>
-<label>Observaciones</label>
-<input disabled="" placeholder="Observación opcional del material." name="observaciones_detalle" value=""/>
+<div data-disabled="true">
+<label for="observaciones_detalle-id_detalle_receta-2">Observaciones</label>
+<input id="observaciones_detalle-id_detalle_receta-2" disabled="" placeholder="Observación opcional del material." name="observaciones_detalle" value=""/>
 </div>
 </div>
 </div>
@@ -5961,7 +5981,7 @@ exports[`/dashboard/production/recipes/[id]/versions/new > sin materiales activo
 <button data-variant="default" type="submit" disabled="">Crear versión vigente</button>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

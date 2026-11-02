@@ -3,7 +3,7 @@
 exports[`createRecipeVersionAction > ADMIN crea la version vigente y reemplaza la anterior > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -184,12 +184,43 @@ exports[`createRecipeVersionAction > ADMIN crea la version vigente y reemplaza l
 ]
 `;
 
-exports[`createRecipeVersionAction > ADMIN crea la version vigente y reemplaza la anterior > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+exports[`createRecipeVersionAction > ADMIN crea la version vigente y reemplaza la anterior > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_version_receta": "VER00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
-exports[`createRecipeVersionAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+exports[`createRecipeVersionAction > SELLER: responde con un error sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -198,12 +229,42 @@ exports[`createRecipeVersionAction > SELLER: se redirige sin tocar Prisma > llam
 ]
 `;
 
-exports[`createRecipeVersionAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createRecipeVersionAction > SELLER: responde con un error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para cambiar las versiones de receta.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
 exports[`createRecipeVersionAction > WORKSHOP_MASTER tambien crea versiones > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -384,12 +445,97 @@ exports[`createRecipeVersionAction > WORKSHOP_MASTER tambien crea versiones > ll
 ]
 `;
 
-exports[`createRecipeVersionAction > WORKSHOP_MASTER tambien crea versiones > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+exports[`createRecipeVersionAction > WORKSHOP_MASTER tambien crea versiones > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_version_receta": "VER00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
+
+exports[`createRecipeVersionAction > cada error va a su linea > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRecipeVersionAction > cada error va a su linea > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la versión.",
+    "fieldErrors": {
+      "detalles.0.cantidad_requerida": [
+        "La cantidad requerida debe ser de al menos 0.01.",
+      ],
+      "detalles.0.tipo_consumo": [
+        "Seleccione un tipo de consumo válido.",
+      ],
+      "detalles.1.cantidad_requerida": [
+        "La cantidad requerida debe ser de al menos 0.01.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "0",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "otro",
+        },
+        {
+          "cantidad_requerida": "-1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
 exports[`createRecipeVersionAction > el numero sigue al mayor, no al ultimo ni a los que no tienen digitos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -570,12 +716,43 @@ exports[`createRecipeVersionAction > el numero sigue al mayor, no al ultimo ni a
 ]
 `;
 
-exports[`createRecipeVersionAction > el numero sigue al mayor, no al ultimo ni a los que no tienen digitos > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+exports[`createRecipeVersionAction > el numero sigue al mayor, no al ultimo ni a los que no tienen digitos > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_version_receta": "VER00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
 exports[`createRecipeVersionAction > la primera version es la V1 > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -756,12 +933,43 @@ exports[`createRecipeVersionAction > la primera version es la V1 > llamadas 1`] 
 ]
 `;
 
-exports[`createRecipeVersionAction > la primera version es la V1 > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+exports[`createRecipeVersionAction > la primera version es la V1 > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_version_receta": "VER00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
 exports[`createRecipeVersionAction > la receta no existe o esta inactiva > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -799,12 +1007,42 @@ exports[`createRecipeVersionAction > la receta no existe o esta inactiva > llama
 ]
 `;
 
-exports[`createRecipeVersionAction > la receta no existe o esta inactiva > resultado 1`] = `"error: La receta técnica no existe o está inactiva."`;
+exports[`createRecipeVersionAction > la receta no existe o esta inactiva > resultado 1`] = `
+{
+  "estado": {
+    "error": "La receta técnica no existe o está inactiva.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
-exports[`createRecipeVersionAction > sin lineas une su mensaje > llamadas 1`] = `
+exports[`createRecipeVersionAction > sin lineas responde su mensaje > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -813,12 +1051,31 @@ exports[`createRecipeVersionAction > sin lineas une su mensaje > llamadas 1`] = 
 ]
 `;
 
-exports[`createRecipeVersionAction > sin lineas une su mensaje > resultado 1`] = `"error: Debe registrar al menos un material en la versión."`;
+exports[`createRecipeVersionAction > sin lineas responde su mensaje > resultado 1`] = `
+{
+  "estado": {
+    "error": "Debe registrar al menos un material en la versión.",
+    "fieldErrors": {
+      "detalles": [
+        "Debe registrar al menos un material en la versión.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "detalles": [],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
 exports[`createRecipeVersionAction > sin motivo se guarda null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -999,12 +1256,43 @@ exports[`createRecipeVersionAction > sin motivo se guarda null > llamadas 1`] = 
 ]
 `;
 
-exports[`createRecipeVersionAction > sin motivo se guarda null > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+exports[`createRecipeVersionAction > sin motivo se guarda null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_version_receta": "VER00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
-exports[`createRecipeVersionAction > un fallo en las lineas revierte y deja el error > llamadas 1`] = `
+exports[`createRecipeVersionAction > un fallo en las lineas revierte y responde sin el error interno > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1150,12 +1438,42 @@ exports[`createRecipeVersionAction > un fallo en las lineas revierte y deja el e
 ]
 `;
 
-exports[`createRecipeVersionAction > un fallo en las lineas revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
+exports[`createRecipeVersionAction > un fallo en las lineas revierte y responde sin el error interno > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo crear la versión. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
 exports[`createRecipeVersionAction > un material no existe o esta inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1211,12 +1529,46 @@ exports[`createRecipeVersionAction > un material no existe o esta inactivo > lla
 ]
 `;
 
-exports[`createRecipeVersionAction > un material no existe o esta inactivo > resultado 1`] = `"error: Uno o más materiales seleccionados no existen o están inactivos."`;
+exports[`createRecipeVersionAction > un material no existe o esta inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Uno o más materiales seleccionados no existen o están inactivos.",
+    "fieldErrors": {
+      "detalles.1.id_material": [
+        "El material seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
 exports[`createRecipeVersionAction > un material repetido se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1225,12 +1577,49 @@ exports[`createRecipeVersionAction > un material repetido se rechaza > llamadas 
 ]
 `;
 
-exports[`createRecipeVersionAction > un material repetido se rechaza > resultado 1`] = `"error: No se permite duplicar materiales dentro de la versión."`;
+exports[`createRecipeVersionAction > un material repetido se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la versión.",
+    "fieldErrors": {
+      "detalles.0.id_material": [
+        "No se permite duplicar materiales dentro de la versión.",
+      ],
+      "detalles.1.id_material": [
+        "No se permite duplicar materiales dentro de la versión.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
 exports[`createRecipeVersionAction > un material vacio se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1239,12 +1628,46 @@ exports[`createRecipeVersionAction > un material vacio se rechaza > llamadas 1`]
 ]
 `;
 
-exports[`createRecipeVersionAction > un material vacio se rechaza > resultado 1`] = `"error: Seleccione un material."`;
+exports[`createRecipeVersionAction > un material vacio se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la versión.",
+    "fieldErrors": {
+      "detalles.1.id_material": [
+        "Seleccione un material.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
 exports[`createRecipeVersionAction > un numero enviado que ya existe se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1323,12 +1746,42 @@ exports[`createRecipeVersionAction > un numero enviado que ya existe se rechaza 
 ]
 `;
 
-exports[`createRecipeVersionAction > un numero enviado que ya existe se rechaza > resultado 1`] = `"error: Ya existe una versión con ese número para esta receta."`;
+exports[`createRecipeVersionAction > un numero enviado que ya existe se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una versión con ese número para esta receta.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "V2",
+    },
+  },
+}
+`;
 
 exports[`createRecipeVersionAction > un numero enviado se respeta > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1509,12 +1962,43 @@ exports[`createRecipeVersionAction > un numero enviado se respeta > llamadas 1`]
 ]
 `;
 
-exports[`createRecipeVersionAction > un numero enviado se respeta > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
+exports[`createRecipeVersionAction > un numero enviado se respeta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_version_receta": "VER00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "V9-B",
+    },
+  },
+}
+`;
 
-exports[`createRecipeVersionAction > una carrera (P2002) deja el error de Prisma > llamadas 1`] = `
+exports[`createRecipeVersionAction > una carrera (P2002) responde sin el error interno > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1633,12 +2117,42 @@ exports[`createRecipeVersionAction > una carrera (P2002) deja el error de Prisma
 ]
 `;
 
-exports[`createRecipeVersionAction > una carrera (P2002) deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;
+exports[`createRecipeVersionAction > una carrera (P2002) responde sin el error interno > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo crear la versión. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2.5",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "5",
+          "observaciones": "",
+          "tipo_consumo": "materia_prima",
+        },
+        {
+          "cantidad_requerida": "1",
+          "id_material": "MAT00000002",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "Solo primera mano",
+          "tipo_consumo": "consumible",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
+  },
+}
+`;
 
 exports[`createRecipeVersionAction > una linea sin merma ni observaciones > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1808,21 +2322,31 @@ exports[`createRecipeVersionAction > una linea sin merma ni observaciones > llam
 ]
 `;
 
-exports[`createRecipeVersionAction > una linea sin merma ni observaciones > resultado 1`] = `"redirect:/dashboard/production/recipes/REC00000003/versions?toast=recipe-version-created"`;
-
-exports[`createRecipeVersionAction > varios errores se unen en un mensaje > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
+exports[`createRecipeVersionAction > una linea sin merma ni observaciones > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_version_receta": "VER00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "detalles": [
+        {
+          "cantidad_requerida": "2",
+          "id_material": "MAT00000001",
+          "merma_estimada_porcentaje": "0",
+          "observaciones": "",
+          "tipo_consumo": "auxiliar",
+        },
+      ],
+      "id_receta": "REC00000003",
+      "motivo_cambio": "Cambio de proveedor",
+      "numero_version": "",
+    },
   },
-]
+}
 `;
-
-exports[`createRecipeVersionAction > varios errores se unen en un mensaje > resultado 1`] = `"error: La cantidad requerida debe ser de al menos 0.01. Seleccione un tipo de consumo válido. La cantidad requerida debe ser de al menos 0.01."`;
 
 exports[`setCurrentRecipeVersionAction > SELLER: responde con un error sin tocar Prisma > llamadas 1`] = `
 [

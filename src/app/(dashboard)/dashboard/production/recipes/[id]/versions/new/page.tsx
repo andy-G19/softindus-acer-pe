@@ -3,6 +3,8 @@ import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { productionNotifications } from "@/modules/production/notifications";
+import { createRecipeVersionAction } from "@/modules/production/recipe-versions/actions";
 import { RecipeVersionForm } from "@/modules/production/recipes/components/recipe-version-form";
 import { getNewRecipeVersionData } from "@/modules/production/recipe-versions/queries";
 
@@ -43,7 +45,7 @@ export default async function NewRecipeVersionPage({
   }));
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6">
       <PageHeader
         title="Nueva versión de receta"
         description={`Receta: ${recipe.nombre_receta} · Producto: ${recipe.producto.nombre_producto}`}
@@ -87,12 +89,14 @@ export default async function NewRecipeVersionPage({
       ) : null}
 
       <RecipeVersionForm
+        action={createRecipeVersionAction}
         idReceta={recipe.id_receta}
-        backHref={backHref}
+        returnTo={backHref}
         materials={materialOptions}
         initialDetails={initialDetails}
         canCreateVersion={canCreateVersion}
+        successNotification={productionNotifications["recipe-version-created"]}
       />
-    </main>
+    </div>
   );
 }

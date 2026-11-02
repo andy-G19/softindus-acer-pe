@@ -147,6 +147,7 @@ function defineCases(name: string, run: (formData: FormData) => Promise<unknown>
 const IDLE = { status: "idle" } as const;
 const setCurrent = (formData: FormData) => setCurrentRecipeVersionAction(IDLE, formData);
 const voidVersion = (formData: FormData) => voidRecipeVersionAction(IDLE, formData);
+const create = (formData: FormData) => createRecipeVersionAction(IDLE, formData);
 
 const failWith = (error: Error) => () => {
   throw error;
@@ -231,10 +232,10 @@ const versions = (
 // Casos
 // ---------------------------------------------------------------------------
 
-defineCases("createRecipeVersionAction", createRecipeVersionAction, [
+defineCases("createRecipeVersionAction", create, [
   { name: "ADMIN crea la version vigente y reemplaza la anterior", ...createWith() },
   { name: "WORKSHOP_MASTER tambien crea versiones", ...createWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: se redirige sin tocar Prisma", ...createWith(), role: "SELLER" },
+  { name: "SELLER: responde con un error sin tocar Prisma", ...createWith(), role: "SELLER" },
   { name: "la primera version es la V1", ...createWith({}, history()) },
   {
     name: "el numero sigue al mayor, no al ultimo ni a los que no tienen digitos",
@@ -256,9 +257,9 @@ defineCases("createRecipeVersionAction", createRecipeVersionAction, [
       observaciones_detalle: null,
     }),
   },
-  { name: "sin lineas une su mensaje", ...createWith({ id_material: null }) },
+  { name: "sin lineas responde su mensaje", ...createWith({ id_material: null }) },
   {
-    name: "varios errores se unen en un mensaje",
+    name: "cada error va a su linea",
     ...createWith({ cantidad_requerida: ["0", "-1"], tipo_consumo: ["otro", "consumible"] }),
   },
   { name: "un material repetido se rechaza", ...createWith({ id_material: [ACERO, ACERO] }) },
@@ -266,11 +267,11 @@ defineCases("createRecipeVersionAction", createRecipeVersionAction, [
   { name: "la receta no existe o esta inactiva", ...createWith({}, activeRecipe(false)) },
   { name: "un material no existe o esta inactivo", ...createWith({}, materials(ACERO)) },
   {
-    name: "una carrera (P2002) deja el error de Prisma",
+    name: "una carrera (P2002) responde sin el error interno",
     ...createWith({}, { "version_receta.create": failWith(uniqueViolation()) }),
   },
   {
-    name: "un fallo en las lineas revierte y deja el error",
+    name: "un fallo en las lineas revierte y responde sin el error interno",
     ...createWith({}, { "detalle_receta.createMany": failWith(new Error("conexion perdida")) }),
   },
 ]);
@@ -341,7 +342,7 @@ describe("el orden de las escrituras respeta la unica vigente", () => {
       .map((call) => `${call.prisma}:${call.args?.data?.estado}`);
 
   it("el alta reemplaza antes de crear", async () => {
-    expect(await written(createRecipeVersionAction, createWith())).toEqual([
+    expect(await written(create, createWith())).toEqual([
       "version_receta.updateMany:reemplazada",
       "version_receta.create:vigente",
     ]);
@@ -375,9 +376,9 @@ describe("las acciones de versiones deciden con la receta bloqueada", () => {
   );
 
   const cases: [string, (formData: FormData) => Promise<unknown>, Omit<ActionCase, "name">][] = [
-    ["el alta que acepta", createRecipeVersionAction, createWith()],
-    ["el alta de una receta inactiva", createRecipeVersionAction, createWith({}, activeRecipe(false))],
-    ["el alta con un numero repetido", createRecipeVersionAction, repeatedNumber],
+    ["el alta que acepta", create, createWith()],
+    ["el alta de una receta inactiva", create, createWith({}, activeRecipe(false))],
+    ["el alta con un numero repetido", create, repeatedNumber],
     ["marcar una reemplazada", setCurrent, { form: statusForm, data: versions("reemplazada") }],
     ["marcar la que ya es vigente", setCurrent, { form: statusForm, data: versions("vigente") }],
     ["marcar una anulada", setCurrent, { form: statusForm, data: versions("anulada") }],
@@ -393,7 +394,7 @@ describe("las acciones de versiones deciden con la receta bloqueada", () => {
   });
 
   it("el bloqueo va antes de reservar los correlativos", async () => {
-    const { calls } = await runCase(createRecipeVersionAction, createWith());
+    const { calls } = await runCase(create, createWith());
     const position = (name: string) =>
       calls.findIndex((call) => ("prisma" in call && call.prisma === name) || ("effect" in call && call.effect === name));
 
@@ -402,7 +403,7 @@ describe("las acciones de versiones deciden con la receta bloqueada", () => {
   });
 
   it("el alta no pide las versiones de la receta que ya no usa", async () => {
-    const { calls } = await runCase(createRecipeVersionAction, createWith());
+    const { calls } = await runCase(create, createWith());
     const recipeRead = calls.find((call) => "prisma" in call && call.prisma === "receta_tecnica.findFirst") as
       | { args: { include?: unknown } }
       | undefined;
@@ -480,6 +481,124 @@ describe("marcar vigente y anular responden con resultado", () => {
     });
 
     expect(result).toEqual(failure("No se pudo anular la versión. Intenta nuevamente."));
+  });
+});
+
+// B7: el alta devuelve el resultado al formulario, con cada error en su linea por su
+// posicion (detalles.<posicion>.<campo>) y lo enviado, para no perderlo.
+describe("el alta responde con resultado", () => {
+  const stateOf = async (actionCase: Omit<ActionCase, "name">) =>
+    ((await runCase(create, actionCase)).result as { estado: Record<string, unknown> }).estado;
+  const writes = (calls: unknown[]) =>
+    (calls as { prisma?: string }[]).filter((call) => /\.(update|updateMany|create|createMany)$/.test(call.prisma ?? ""));
+
+  it("con exito devuelve el id y revalida tambien los materiales de la version", async () => {
+    const { calls, result } = await runCase(create, createWith());
+
+    expect((result as { estado: unknown }).estado).toMatchObject({
+      status: "success",
+      data: { id_version_receta: "VER00000012" },
+    });
+    expect(calls).toContainEqual(
+      expect.objectContaining({
+        effect: "revalidatePath",
+        args: "/dashboard/production/recipes/REC00000003/versions/VER00000012/details",
+      }),
+    );
+  });
+
+  it("sin permiso responde con un error y lo enviado", async () => {
+    expect(await stateOf({ ...createWith(), role: "SELLER" })).toMatchObject({
+      status: "error",
+      error: "No tienes permisos para cambiar las versiones de receta.",
+      values: { id_receta: RECETA, motivo_cambio: "Cambio de proveedor" },
+    });
+  });
+
+  it("devuelve las lineas tal como se enviaron", async () => {
+    const state = await stateOf(createWith({ cantidad_requerida: ["abc", "1"] }));
+
+    expect(state.values).toMatchObject({
+      detalles: [
+        {
+          id_material: ACERO,
+          cantidad_requerida: "abc",
+          tipo_consumo: "materia_prima",
+          merma_estimada_porcentaje: "5",
+          observaciones: "",
+        },
+        {
+          id_material: PINTURA,
+          cantidad_requerida: "1",
+          tipo_consumo: "consumible",
+          merma_estimada_porcentaje: "0",
+          observaciones: "Solo primera mano",
+        },
+      ],
+    });
+  });
+
+  it("cada error lleva la posicion de su linea", async () => {
+    const state = await stateOf(createWith({ cantidad_requerida: ["0", "-1"], tipo_consumo: ["otro", "consumible"] }));
+
+    expect(state).toMatchObject({
+      status: "error",
+      error: "Revisa los datos de la versión.",
+      fieldErrors: {
+        "detalles.0.cantidad_requerida": ["La cantidad requerida debe ser de al menos 0.01."],
+        "detalles.0.tipo_consumo": ["Seleccione un tipo de consumo válido."],
+        "detalles.1.cantidad_requerida": ["La cantidad requerida debe ser de al menos 0.01."],
+      },
+    });
+  });
+
+  it("un material repetido se marca en cada linea que lo usa", async () => {
+    const message = "No se permite duplicar materiales dentro de la versión.";
+    const state = await stateOf(createWith({ id_material: [ACERO, ACERO] }));
+
+    expect(state.fieldErrors).toEqual({
+      "detalles.0.id_material": [message],
+      "detalles.1.id_material": [message],
+    });
+  });
+
+  it("sin lineas el mensaje de la lista sale como error general", async () => {
+    expect(await stateOf(createWith({ id_material: null }))).toMatchObject({
+      error: "Debe registrar al menos un material en la versión.",
+    });
+  });
+
+  it("sin receta el mensaje del campo oculto sale como error general", async () => {
+    expect(await stateOf(createWith({ id_receta: null }))).toMatchObject({
+      error: "La receta técnica es obligatoria.",
+    });
+  });
+
+  it("un material inactivo o inexistente se marca en su linea y no escribe (R4)", async () => {
+    const { calls, result } = await runCase(create, createWith({}, materials(ACERO)));
+
+    expect((result as { estado: unknown }).estado).toMatchObject({
+      status: "error",
+      error: "Uno o más materiales seleccionados no existen o están inactivos.",
+      fieldErrors: { "detalles.1.id_material": ["El material seleccionado no existe o está inactivo."] },
+    });
+    expect(writes(calls)).toEqual([]);
+  });
+
+  it("una decision con la receta bloqueada responde y no escribe", async () => {
+    const { calls, result } = await runCase(create, createWith({}, activeRecipe(false)));
+
+    expect((result as { estado: unknown }).estado).toMatchObject({
+      status: "error",
+      error: "La receta técnica no existe o está inactiva.",
+    });
+    expect(writes(calls)).toEqual([]);
+  });
+
+  it("un fallo interno no llega a la pantalla", async () => {
+    const state = await stateOf(createWith({}, { "version_receta.create": failWith(uniqueViolation()) }));
+
+    expect(state.error).toBe("No se pudo crear la versión. Intenta nuevamente.");
   });
 });
 

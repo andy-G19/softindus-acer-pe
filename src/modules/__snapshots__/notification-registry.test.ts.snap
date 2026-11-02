@@ -78,6 +78,7 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/[detailId]/edit/page.tsx [successNotification] -> recipe-detail-updated",
   "src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/new/page.tsx [successNotification] -> recipe-detail-created",
   "src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/page.tsx [deletedNotification] -> recipe-detail-deleted",
+  "src/app/(dashboard)/dashboard/production/recipes/[id]/versions/new/page.tsx [successNotification] -> recipe-version-created",
   "src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx [annulledNotification] -> recipe-version-annulled",
   "src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx [setCurrentNotification] -> recipe-version-set-current",
   "src/app/(dashboard)/dashboard/production/recipes/new/page.tsx [successNotification] -> recipe-created",

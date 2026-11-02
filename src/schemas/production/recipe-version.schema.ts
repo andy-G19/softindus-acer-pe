@@ -50,18 +50,16 @@ export const recipeVersionSchema = z.object({
     .array(recipeVersionDetailSchema)
     .min(1, "Debe registrar al menos un material en la versión.")
     .superRefine((details, ctx) => {
-      const materialIds = new Set<string>();
-
       details.forEach((detail, index) => {
-        if (materialIds.has(detail.id_material)) {
+        const uses = details.filter((other) => other.id_material === detail.id_material).length;
+
+        if (detail.id_material && uses > 1) {
           ctx.addIssue({
             code: "custom",
             path: [index, "id_material"],
             message: "No se permite duplicar materiales dentro de la versión.",
           });
         }
-
-        materialIds.add(detail.id_material);
       });
     }),
 });

@@ -414,6 +414,19 @@ describe("acciones de la fila de versiones", () => {
   });
 });
 
+// B7: el alta de version es una pagina completa dentro del main del shell.
+describe("alta de version", () => {
+  it("no abre otro main", async () => {
+    const { html } = await characterizePage(
+      () => import("./[id]/versions/new/page"),
+      { name: "alta", params: { id: "REC00000001" } },
+      "/dashboard/production/recipes/REC00000001/versions/new",
+    );
+
+    expect(html).not.toContain("<main");
+  });
+});
+
 const DETAILS_ROUTE = "/dashboard/production/recipes/REC00000001/versions/VER00000001/details";
 const newDetailCase = { params: { id: "REC00000001", versionId: "VER00000001" } };
 const editDetailCase = { params: { id: "id_receta-1", versionId: "VER00000001", detailId: "DRE00000001" } };

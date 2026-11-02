@@ -46,6 +46,34 @@ describe("recipeVersionSchema", () => {
   });
 });
 
+describe("recipeVersionSchema: materiales repetidos", () => {
+  const withMaterials = (...ids: string[]) =>
+    recipeVersionSchema.safeParse({
+      id_receta: "REC00000001",
+      detalles: ids.map((id_material) => ({
+        id_material,
+        cantidad_requerida: "1",
+        tipo_consumo: "consumible",
+        merma_estimada_porcentaje: "0",
+      })),
+    });
+  const repeatedPaths = (result: ReturnType<typeof withMaterials>) =>
+    result.error?.issues
+      .filter((issue) => issue.message === "No se permite duplicar materiales dentro de la versión.")
+      .map((issue) => issue.path.join("."));
+
+  it("marca cada linea que lo usa, no solo la segunda", () => {
+    expect(repeatedPaths(withMaterials("MAT00000001", "MAT00000002", "MAT00000001"))).toEqual([
+      "detalles.0.id_material",
+      "detalles.2.id_material",
+    ]);
+  });
+
+  it("dos lineas vacias no cuentan como repetidas", () => {
+    expect(repeatedPaths(withMaterials("", ""))).toEqual([]);
+  });
+});
+
 describe("recipeVersionStatusSchema", () => {
   it("campos ausentes responden en espanol", () => {
     const parsed = recipeVersionStatusSchema.safeParse({ id_receta: null, id_version_receta: null });
