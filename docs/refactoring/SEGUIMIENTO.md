@@ -6269,9 +6269,9 @@ Datos leídos de la API de GitHub el 2026-11-01 (UTC) y comparados con git:
 
 ### Sub-entrega 10.6a — Rutas, etapas y listados
 
-Fecha: 2026-10-31 (Lima). Estado: en preparación; falta la verificación en
-staging. El paso 0 (`94392a8`) registró la integración de la 10.5b en `main`. 9
-commits, de `9e8475f` a `0c506e0`, y este registro. Plan en
+Fecha: del 2026-10-31 al 2026-11-01 (Lima). Estado: cerrada el 2026-11-01 (Lima). El
+paso 0 (`94392a8`) registró la integración de la 10.5b en `main`. 9 commits, de
+`9e8475f` a `0c506e0`, el registro `0e4bd6c` (CI #119 en verde) y este cierre. Plan en
 `tmp/e10-diff/plan-10-6.md`.
 
 La auditoría partió la 10.6 en dos, aprobado por el responsable: la 10.6a
@@ -6289,7 +6289,8 @@ La auditoría partió la 10.6 en dos, aprobado por el responsable: la 10.6a
 | 914672a | fix | Cuellos de botella y órdenes con `buildDateRangeFilter` (hallazgo 6 de la 10.3a). |
 | efeadc0 | feat | `FilterBar` y `DateRangeFields` en cuellos de botella y órdenes. |
 | 0c506e0 | feat | Sin `<main>` en el inicio y las páginas de órdenes; `production-links.test.ts`. |
-| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 0e4bd6c | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| este | docs | Cierre: verificación en staging y capítulo de Producción del manual. |
 
 Ajustes al plan, aprobados por el responsable:
 
@@ -6404,6 +6405,94 @@ Hallazgos de la implementación:
 21. Conteo: la auditoría dijo 26 `<main>` en Producción, 6 de campañas. Eran 25, 5
     de campañas. Tras esta sub-entrega quedan 13: 8 de recetas y 5 de campañas.
 
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e106-huella`) y etiquetas `e106/`
+  (`tmp/e10-diff/e106-*.js`, generados por `c-e106-guiones.py`). **Los 5 guiones**
+  comprobaron su SHA-256 contra `e106-guiones.sha256`, también el comparador, que en
+  la 10.5b no se comprobó. Plan en `tmp/e10-diff/plan-verificacion-10-6a.md`.
+- 1281 × 800 y el preset móvil (376 px), con cada captura tras cargar el documento
+  con `navigate`; las tareas, al ancho natural del panel (576 px), con
+  `requestAnimationFrame` comprobado antes.
+- La predicción se escribió antes del push (`tmp/e10-diff/prediccion-10-6a.md`),
+  con los datos de prueba del «antes» y la separación de `Field`.
+- Registros exportados al terminar cada fase, con sus `textHash`, a
+  `e106-registros/` y `registro-10-6a.tsv` (40 filas). Una salida grande de
+  `javascript_tool` se guarda en un archivo: `e106-importar2.py` la convierte y
+  comprueba el número de registros.
+- Datos de prueba, con autorización del responsable en cada turno: RUT00000007 y
+  ETA00000014 en el «antes»; RUT00000008 y su etapa en el «después». Las cuatro
+  quedan activas. No se exportó nada ni se borró nada.
+- Solo ADMIN: el responsable omitió T79, el maestro de taller; lo cubren
+  `production-links.test.ts` y las pruebas de acceso.
+
+Publicación y medición:
+
+- «Antes» sobre `411077f` (CSS servido `1poyo02240o5e.css`), el 2026-11-01 UTC.
+  Datos elegidos solo leyendo: RUT00000003, ETA00000007 y OTR00000009.
+- Push de 11 commits (de `94392a8` a `0e4bd6c`): CI #119 en verde (3m 17s, de
+  03:48:56 a 03:52:13 UTC) y Vercel `success` a las 03:49:59 UTC. CSS servido igual:
+  mismo archivo y 112.785 bytes, como se predijo.
+- «Después» el mismo día UTC, salvo T76 (hallazgo 23).
+
+Huella: 20 explicadas.
+
+- **Como se predijo (18):**
+  - Los 3 controles (recetas, campañas y galería): hash completo igual.
+  - El alta, el detalle y los avances de órdenes: solo `main` → `div`, mismos textos,
+    ningún cambio de propiedad ni de posición.
+  - El inicio: `main` → `div` y dos KPI por datos, 6 → 7 rutas y 13 → 14 etapas.
+  - Listas de rutas y etapas: `FilterBar` y `ConfirmActionButton`, con filas 6,33 px
+    más altas; RUT7 en la lista.
+  - Altas y ediciones de ruta y etapa, a 1281 y 376 px: `Field`, separación de 8 a 4
+    px, `space-y` de 20 a 16 px, avisos dentro del formulario.
+  - Filtros de órdenes a 376 px.
+- **Con un detalle que no se nombró (2):** en cuellos de botella la ruta y la etapa de
+  prueba entran en los selectores de filtro, a 1281 y 376 px, y las fechas se apilan a
+  ese ancho (46 px más). En órdenes a 1281 px, la rejilla pasa de 4 a 5 columnas y la
+  página baja 44 px. Son consecuencia de los datos y de la rejilla automática de
+  `FilterBar`.
+
+Tareas (ADMIN):
+
+| Tarea | Antes (`411077f`) | Después (`0e4bd6c`) |
+|---|---|---|
+| T70 Ruta con nombre repetido | Página de error con el aviso técnico en inglés; se pierde lo escrito | Panel; error en la alerta y junto al nombre, con el foco; todo conservado; sin toast |
+| T71 Cancelar con cambios | Sale sin preguntar, en rutas y etapas; recargar no avisa | «¿Descartar la ruta nueva?» y «¿Descartar la etapa nueva?»; al descartar, el foco vuelve a «Nueva ruta» |
+| T72 Rango invertido | Sin aviso; órdenes dice «Todavía no hay órdenes de trabajo registradas» | «La fecha inicial no puede ser mayor que la fecha final.»; «Limpiar filtros» deja la URL sin parámetros |
+| T73 Cambiar solo el modo | No se reproduce | Vista previa de 140 a 80 min y pregunta al cancelar (hallazgo 14) |
+| T74 Crear, editar e inactivar una ruta | Redirecciones que pierden `?status=active`; inactivar sin confirmar; foco en `body` | Panel; un aviso con la nota de filtros; el filtro se conserva; confirmación con la consecuencia; la fila sale y el foco va a la tabla |
+| T75 Etapa con máquina | Vista previa 140 min; inactivar sin confirmar | Igual vista previa, en panel; inactivar confirma y el foco sigue en el botón; estado vacío de 9 columnas |
+| T76 Orden repetido con máquina | **Hallazgo 13:** «Sin máquina» con «6» en sus minutos; se pierden nombre, orden y operario; error doble; foco en `body` | Se conservan máquina, minutos, modo, nombre y orden; vista previa 140 min; un solo error junto al orden, con el foco; sin toast |
+| T77 Ranuras anidadas | No existían | Atrás cierra, Adelante reabre, recargar da la página completa; sin esqueleto de `loading.tsx`; sin panel residual entre rutas y etapas; parejas en 2 columnas de 248 px |
+
+Riesgos de la predicción, medidos: las ranuras anidadas funcionan; el panel de 576 px
+mantiene las parejas en 2 columnas; `production/loading.tsx` no pinta sobre la lista.
+
+Hallazgos de la verificación:
+
+22. Con un filtro sin resultados, las listas dicen que no hay registros: «Todavía no
+    hay rutas de fabricación registradas» con `?status=inactive`, y lo mismo en
+    órdenes. Es texto anterior; no se cambió.
+23. Excepción al «mismo día UTC»: T76 se hizo al empezar el 2026-11-02 UTC, por un corte
+    de la sesión, con la decisión del responsable. No guarda ni usa fechas, así que no
+    afecta a lo comparado.
+24. Método: T71 de rutas no aísla elegir sin escribir, porque buscar el producto ya
+    cuenta como cambio. Lo cubre la prueba de `SearchableSelect` de la 10.5a. En etapas
+    se midió con solo la máquina.
+25. Método: al reabrirse el panel pidió entrar a Vercel y se perdieron su IndexedDB y
+    su `localStorage`, como en la 10.5b. Esta vez los registros ya estaban exportados.
+26. Método: `route.test.ts`, «el excel combinado de mantenimiento se recorta a 5000
+    filas», falló dos veces en `npm run check` del cierre por tiempo de espera y pasó
+    a la tercera sin cambios. Dentro de la suite tardó 5.236 ms, sobre el límite de
+    5.000; sola pasa. Depende de la carga de la máquina, no de esta sub-entrega, que en
+    ese commit solo cambia documentos. No se tocó el límite: decide el responsable.
+
+El manual suma el capítulo de Producción (rutas, etapas, cuellos de botella y la lista
+de órdenes), escrito con lo verificado.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -6428,7 +6517,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b, con la 10.6a preparada y sin verificar) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #119 verde en `staging`, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)

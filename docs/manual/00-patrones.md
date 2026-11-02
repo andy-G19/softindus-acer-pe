@@ -14,6 +14,8 @@ Pantallas renovadas hasta ahora:
   crítico, entradas, salidas, compras (la lista) y pagos a proveedores.
 - Caja chica: categorías de gasto.
 - Mantenimiento: todas sus pantallas.
+- Producción: rutas de fabricación, etapas, cuellos de botella y la lista de
+  órdenes de trabajo.
 - Reportes: los ocho reportes con filtros, el historial de exportaciones y
   la bitácora de auditoría.
 
