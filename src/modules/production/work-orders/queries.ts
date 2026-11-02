@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { buildDateRangeFilter } from "@/lib/search-params";
 import {
   findActiveProductFilterOptions,
   findActiveProductsByCategory,
@@ -39,8 +40,8 @@ export type WorkOrderListFilters = {
   type: string;
   status: string;
   priority: string;
-  fromDate: Date | null;
-  toDate: Date | null;
+  from: Date | null;
+  to: Date | null;
 };
 
 function buildWorkOrderListWhere({
@@ -51,9 +52,10 @@ function buildWorkOrderListWhere({
   type,
   status,
   priority,
-  fromDate,
-  toDate,
+  from,
+  to,
 }: WorkOrderListFilters): Prisma.orden_trabajoWhereInput {
+  const dateRange = buildDateRangeFilter(from, to);
   const filters: Prisma.orden_trabajoWhereInput[] = [];
 
   if (q) {
@@ -144,12 +146,9 @@ function buildWorkOrderListWhere({
     });
   }
 
-  if (fromDate || toDate) {
+  if (dateRange) {
     filters.push({
-      fecha_inicio: {
-        ...(fromDate ? { gte: fromDate } : {}),
-        ...(toDate ? { lte: toDate } : {}),
-      },
+      fecha_inicio: dateRange,
     });
   }
 

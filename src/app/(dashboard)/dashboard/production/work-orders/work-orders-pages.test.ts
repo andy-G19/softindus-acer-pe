@@ -1,10 +1,12 @@
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
 import {
+  characterizePage,
   definePageSuite,
   generatedResult,
   generatedRow,
+  isPrismaCall,
 } from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
@@ -350,3 +352,33 @@ definePageSuite([
     ],
   },
 ]);
+
+// Hallazgo 6 de la 10.3a: el rango corta en el dia siguiente, no a las 23:59:59.
+describe("rango de fechas de ordenes de trabajo", () => {
+  async function dateCondition(searchParams: Record<string, string>) {
+    const { calls } = await characterizePage(
+      () => import("./page"),
+      { name: "rango", searchParams },
+      "/dashboard/production/work-orders",
+    );
+    const query = calls.filter(isPrismaCall).find((call) => call.prisma === "orden_trabajo.findMany");
+    const conditions = (query?.args as { where: { AND?: Record<string, unknown>[] } }).where.AND ?? [];
+
+    return conditions.find((condition) => "fecha_inicio" in condition)?.fecha_inicio;
+  }
+
+  it("incluye todo el ultimo dia, hasta el comienzo del siguiente", async () => {
+    expect(await dateCondition({ from: "2026-07-01", to: "2026-07-31" })).toEqual({
+      gte: new Date("2026-07-01T00:00:00"),
+      lt: new Date("2026-08-01T00:00:00"),
+    });
+  });
+
+  it("solo hasta", async () => {
+    expect(await dateCondition({ to: "2026-07-31" })).toEqual({ lt: new Date("2026-08-01T00:00:00") });
+  });
+
+  it("una fecha que no es fecha no filtra", async () => {
+    expect(await dateCondition({ from: "2026-13-45" })).toBeUndefined();
+  });
+});

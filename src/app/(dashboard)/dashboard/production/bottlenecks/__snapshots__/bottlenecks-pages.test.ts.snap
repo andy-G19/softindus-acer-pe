@@ -92,7 +92,7 @@ exports[`/dashboard/production/bottlenecks > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -124,12 +124,12 @@ exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de cuellos de botella" action="/dashboard/production/bottlenecks" method="GET">
 <div>
-<label for="product-_R_a_">Producto</label>
+<label for="product-_R_1a_">Producto</label>
 <input type="hidden" name="product" value=""/>
 <div>
-<input id="product-_R_a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="product-_R_a_-listbox" aria-expanded="false" placeholder="Todos los productos" value=""/>
+<input id="product-_R_1a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="product-_R_1a_-listbox" aria-expanded="false" placeholder="Todos los productos" value=""/>
 </div>
 </div>
 <div>
@@ -157,19 +157,20 @@ exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
 <option value="pausada">Pausada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/production/bottlenecks">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/bottlenecks">Limpiar filtros</a>
 </div>
 </form>
 <section>
@@ -318,7 +319,7 @@ exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -420,7 +421,7 @@ exports[`/dashboard/production/bottlenecks > solo desde > llamadas 1`] = `
 
 exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -452,12 +453,12 @@ exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de cuellos de botella" action="/dashboard/production/bottlenecks" method="GET">
 <div>
-<label for="product-_R_a_">Producto</label>
+<label for="product-_R_1a_">Producto</label>
 <input type="hidden" name="product" value=""/>
 <div>
-<input id="product-_R_a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="product-_R_a_-listbox" aria-expanded="false" placeholder="Todos los productos" value=""/>
+<input id="product-_R_1a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="product-_R_1a_-listbox" aria-expanded="false" placeholder="Todos los productos" value=""/>
 </div>
 </div>
 <div>
@@ -485,19 +486,20 @@ exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
 <option value="pausada">Pausada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/production/bottlenecks">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/bottlenecks">Limpiar filtros</a>
 </div>
 </form>
 <section>
@@ -646,7 +648,7 @@ exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -713,7 +715,7 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > llamadas 1`] = 
           {
             "fecha_inicio_etapa": {
               "gte": 2026-07-01T00:00:00.000Z,
-              "lte": 2026-07-31T23:59:59.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
           },
         ],
@@ -767,7 +769,7 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > llamadas 1`] = 
 
 exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -799,12 +801,12 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] =
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de cuellos de botella" action="/dashboard/production/bottlenecks" method="GET">
 <div>
-<label for="product-_R_a_">Producto</label>
+<label for="product-_R_1a_">Producto</label>
 <input type="hidden" name="product" value="PRO00000001"/>
 <div>
-<input id="product-_R_a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="product-_R_a_-listbox" aria-expanded="false" placeholder="Todos los productos" value=""/>
+<input id="product-_R_1a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="product-_R_1a_-listbox" aria-expanded="false" placeholder="Todos los productos" value=""/>
 <button type="button">Limpiar</button>
 </div>
 </div>
@@ -833,19 +835,20 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] =
 <option value="pausada">Pausada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/production/bottlenecks">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/bottlenecks">Limpiar filtros</a>
 </div>
 </form>
 <section>
@@ -994,7 +997,7 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] =
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;

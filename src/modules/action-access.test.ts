@@ -228,6 +228,28 @@ const MODULOS: ModuloDeAcciones[] = [
     acciones: ["annulPettyCashMovementAction"],
   },
   {
+    ruta: "production/routes/actions",
+    cargar: () => import("@/modules/production/routes/actions"),
+    roles: ADMIN_Y_TALLER,
+    acciones: [
+      "createFabricationRouteAction",
+      "updateFabricationRouteAction",
+      "toggleFabricationRouteStatusAction",
+    ],
+    rechazanConResultado: [
+      "createFabricationRouteAction",
+      "updateFabricationRouteAction",
+      "toggleFabricationRouteStatusAction",
+    ],
+  },
+  {
+    ruta: "production/stages/actions",
+    cargar: () => import("@/modules/production/stages/actions"),
+    roles: ADMIN_Y_TALLER,
+    acciones: ["createRouteStageAction", "updateRouteStageAction", "toggleRouteStageStatusAction"],
+    rechazanConResultado: ["createRouteStageAction", "updateRouteStageAction", "toggleRouteStageStatusAction"],
+  },
+  {
     ruta: "production/work-orders/actions",
     cargar: () => import("@/modules/production/work-orders/actions"),
     roles: ADMIN_Y_TALLER,

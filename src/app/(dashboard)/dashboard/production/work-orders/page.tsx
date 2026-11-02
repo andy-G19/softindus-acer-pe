@@ -1,6 +1,9 @@
 import { Activity, CheckCircle2, ClipboardList, Clock } from "lucide-react";
 import Link from "next/link";
 import { requireRole } from "@/lib/authz";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +12,6 @@ import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-b
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -27,6 +29,7 @@ import {
   withReturnTo,
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { parseDateParam } from "@/lib/search-params";
 import { getWorkOrderListData } from "@/modules/production/work-orders/queries";
 import {
   annulWorkOrderAction,
@@ -90,16 +93,6 @@ function getSearchParam(
   return value?.trim() ?? "";
 }
 
-function parseDate(value: string, endOfDay = false) {
-  if (!value) {
-    return null;
-  }
-
-  const date = new Date(`${value}T${endOfDay ? "23:59:59" : "00:00:00"}`);
-
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
 export default async function WorkOrdersPage({
   searchParams,
 }: WorkOrdersPageProps) {
@@ -116,8 +109,6 @@ export default async function WorkOrdersPage({
   const from = getSearchParam(params, "from");
   const to = getSearchParam(params, "to");
   const returnTo = createReturnToHref(navigationHrefs.workOrders, params);
-  const fromDate = parseDate(from);
-  const toDate = parseDate(to, true);
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
   const {
@@ -130,14 +121,24 @@ export default async function WorkOrdersPage({
     clients,
     campaigns,
   } = await getWorkOrderListData(
-    { q, product, client, campaign, type, status, priority, fromDate, toDate },
+    {
+      q,
+      product,
+      client,
+      campaign,
+      type,
+      status,
+      priority,
+      from: parseDateParam(params, "from"),
+      to: parseDateParam(params, "to"),
+    },
     { skip, take },
   );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Órdenes de trabajo"
         description="Registra y consulta órdenes de producción por pedido, campaña o reposición de stock."
@@ -163,105 +164,93 @@ export default async function WorkOrdersPage({
         <KpiCard title="Finalizadas" value={totalFinished.toString()} description="Órdenes completadas." tone="success" icon={CheckCircle2} />
       </section>
 
-      <form className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-4">
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input
-            id="q"
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar orden, cliente o producto..."
-          />
-        </div>
+      <FilterBar
+        action={navigationHrefs.workOrders}
+        label="Filtros de órdenes de trabajo"
+        clearHref={navigationHrefs.workOrders}
+      >
+        <Field id="q" label="Buscar">
+          {(control) => (
+            <Input {...control} name="q" defaultValue={q} placeholder="Buscar orden, cliente o producto..." />
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="product">Producto</Label>
-          <NativeSelect id="product" name="product" defaultValue={product}>
-            <option value="">Todos los productos</option>
-            {products.map((item) => (
-              <option key={item.id_producto} value={item.id_producto}>
-                {item.nombre_producto}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="product" label="Producto">
+          {(control) => (
+            <NativeSelect {...control} name="product" defaultValue={product}>
+              <option value="">Todos los productos</option>
+              {products.map((item) => (
+                <option key={item.id_producto} value={item.id_producto}>
+                  {item.nombre_producto}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="client">Cliente</Label>
-          <NativeSelect id="client" name="client" defaultValue={client}>
-            <option value="">Todos los clientes</option>
-            {clients.map((item) => (
-              <option key={item.id_cliente} value={item.id_cliente}>
-                {item.nombre_razon_social}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="client" label="Cliente">
+          {(control) => (
+            <NativeSelect {...control} name="client" defaultValue={client}>
+              <option value="">Todos los clientes</option>
+              {clients.map((item) => (
+                <option key={item.id_cliente} value={item.id_cliente}>
+                  {item.nombre_razon_social}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="campaign">Campaña</Label>
-          <NativeSelect id="campaign" name="campaign" defaultValue={campaign}>
-            <option value="">Todas las campañas</option>
-            {campaigns.map((item) => (
-              <option key={item.id_campania} value={item.id_campania}>
-                {item.nombre_campania}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="campaign" label="Campaña">
+          {(control) => (
+            <NativeSelect {...control} name="campaign" defaultValue={campaign}>
+              <option value="">Todas las campañas</option>
+              {campaigns.map((item) => (
+                <option key={item.id_campania} value={item.id_campania}>
+                  {item.nombre_campania}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="type">Tipo</Label>
-          <NativeSelect id="type" name="type" defaultValue={type}>
-            <option value="">Todos los tipos</option>
-            <option value="pedido">Pedido</option>
-            <option value="campania">Campaña</option>
-            <option value="reposicion_stock">Reposición de stock</option>
-          </NativeSelect>
-        </div>
+        <Field id="type" label="Tipo">
+          {(control) => (
+            <NativeSelect {...control} name="type" defaultValue={type}>
+              <option value="">Todos los tipos</option>
+              <option value="pedido">Pedido</option>
+              <option value="campania">Campaña</option>
+              <option value="reposicion_stock">Reposición de stock</option>
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="en_proceso">En proceso</option>
-            <option value="pausada">Pausada</option>
-            <option value="finalizada">Finalizada</option>
-            <option value="anulada">Anulada</option>
-          </NativeSelect>
-        </div>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="en_proceso">En proceso</option>
+              <option value="pausada">Pausada</option>
+              <option value="finalizada">Finalizada</option>
+              <option value="anulada">Anulada</option>
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="priority">Prioridad</Label>
-          <NativeSelect id="priority" name="priority" defaultValue={priority}>
-            <option value="">Todas las prioridades</option>
-            <option value="alta">Alta</option>
-            <option value="media">Media</option>
-            <option value="baja">Baja</option>
-          </NativeSelect>
-        </div>
+        <Field id="priority" label="Prioridad">
+          {(control) => (
+            <NativeSelect {...control} name="priority" defaultValue={priority}>
+              <option value="">Todas las prioridades</option>
+              <option value="alta">Alta</option>
+              <option value="media">Media</option>
+              <option value="baja">Baja</option>
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="grid grid-cols-2 gap-2">
-          <div className="space-y-2">
-            <Label htmlFor="from">Desde</Label>
-            <Input id="from" name="from" type="date" defaultValue={from} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="to">Hasta</Label>
-            <Input id="to" name="to" type="date" defaultValue={to} />
-          </div>
-        </div>
-
-        <div className="flex items-end gap-2 md:col-span-4">
-          <Button type="submit">Filtrar</Button>
-          <Button variant="outline" asChild>
-            <Link href="/dashboard/production/work-orders">
-              Limpiar filtros
-            </Link>
-          </Button>
-        </div>
-      </form>
+        <DateRangeFields id="fecha" defaultFrom={from} defaultTo={to} />
+      </FilterBar>
 
       <Table>
         <TableHeader>
@@ -438,6 +427,6 @@ export default async function WorkOrdersPage({
         searchParams={params}
         itemLabel="órdenes"
       />
-    </main>
+    </div>
   );
 }

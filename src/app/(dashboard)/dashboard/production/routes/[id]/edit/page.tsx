@@ -1,28 +1,28 @@
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
-import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
+import { productionNotifications } from "@/modules/production/notifications";
 import { updateFabricationRouteAction } from "@/modules/production/routes/actions";
 import { getFabricationRouteEditData } from "@/modules/production/routes/queries";
-import Link from "next/link";
+import { getRouteEditFormProps } from "@/modules/production/routes/route-edit-props";
+import { RouteForm } from "@/modules/production/routes/route-form";
 
 type EditFabricationRoutePageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export default async function EditFabricationRoutePage({
   params,
+  searchParams,
 }: EditFabricationRoutePageProps) {
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const { id } = await params;
+  const queryParams = (await searchParams) ?? {};
 
   const { route, products } = await getFabricationRouteEditData(id);
 
@@ -30,89 +30,29 @@ export default async function EditFabricationRoutePage({
     notFound();
   }
 
-  const productItems = products.map((product) => ({
-    id: product.id_producto,
-    label: product.nombre_producto,
-    description: `${product.categoria} - ${product.unidad_medida}`,
-  }));
-
-  const productLocked = route._count.orden_trabajo > 0;
+  const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.routes);
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6">
       <PageHeader
         title="Editar ruta de fabricación"
         description="Actualiza los datos generales de la ruta. Si ya tiene órdenes asociadas, el producto queda protegido para conservar trazabilidad."
-        backHref={navigationHrefs.routes}
+        backHref={backHref}
         backLabel="Volver a rutas"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Producción", href: navigationHrefs.production },
-          { label: "Rutas", href: navigationHrefs.routes },
+          { label: "Rutas", href: backHref },
           { label: "Editar ruta" },
         ])}
       />
 
-      <form
+      <RouteForm
         action={updateFabricationRouteAction}
-        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
-      >
-        <input type="hidden" name="id_ruta" value={route.id_ruta} />
-
-        {productLocked ? (
-          <>
-            <input type="hidden" name="id_producto" value={route.id_producto} />
-
-            <div className="space-y-2">
-              <Label>Producto</Label>
-              <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm">
-                {route.producto.nombre_producto}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Esta ruta tiene órdenes asociadas; el producto no se puede
-                cambiar desde datos maestros productivos.
-              </p>
-            </div>
-          </>
-        ) : (
-          <SearchableSelect
-            name="id_producto"
-            label="Producto"
-            placeholder="Buscar producto..."
-            items={productItems}
-            value={route.id_producto}
-            required
-            emptyMessage="No hay productos activos disponibles."
-          />
-        )}
-
-        <div className="space-y-2">
-          <Label>Nombre de la ruta *</Label>
-          <Input
-            name="nombre_ruta"
-            required
-            maxLength={100}
-            defaultValue={route.nombre_ruta}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label>Descripción</Label>
-          <Textarea
-            name="descripcion"
-            rows={4}
-            maxLength={500}
-            defaultValue={route.descripcion ?? ""}
-          />
-        </div>
-
-        <div className="flex items-center justify-between pt-4">
-          <Button variant="link" className="h-auto p-0" asChild>
-            <Link href="/dashboard/production/routes">Volver a rutas</Link>
-          </Button>
-
-          <Button type="submit">Guardar cambios</Button>
-        </div>
-      </form>
-    </main>
+        {...getRouteEditFormProps(route, products)}
+        submitLabel="Guardar cambios"
+        successNotification={productionNotifications["route-updated"]}
+        returnTo={backHref}
+      />
+    </div>
   );
 }

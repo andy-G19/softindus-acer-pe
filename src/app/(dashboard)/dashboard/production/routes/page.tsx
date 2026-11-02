@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { requireRole } from "@/lib/authz";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -15,9 +16,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
+import { productionNotifications } from "@/modules/production/notifications";
 import { toggleFabricationRouteStatusAction } from "@/modules/production/routes/actions";
 import { getFabricationRouteListData } from "@/modules/production/routes/queries";
+import { RouteStatusButton } from "@/modules/production/routes/route-status-button";
 
 type FabricationRoutesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -45,6 +53,7 @@ export default async function FabricationRoutesPage({
   const q = getSearchParam(params, "q");
   const product = getSearchParam(params, "product");
   const status = getSearchParam(params, "status");
+  const returnTo = createReturnToHref(navigationHrefs.routes, params);
   const { routes, products } = await getFabricationRouteListData({
     q,
     product,
@@ -52,7 +61,7 @@ export default async function FabricationRoutesPage({
   });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Rutas de fabricación"
         description="Consulta las rutas productivas definidas para cada producto del taller."
@@ -64,55 +73,45 @@ export default async function FabricationRoutesPage({
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/production/routes/new">Nueva ruta</Link>
+            <Link href={withReturnTo(`${navigationHrefs.routes}/new`, returnTo)}>Nueva ruta</Link>
           </Button>
         }
       />
 
-      <form className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-[1.5fr_1fr_1fr_auto_auto]">
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input
-            id="q"
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar ruta, código o producto..."
-          />
-        </div>
+      <FilterBar
+        action={navigationHrefs.routes}
+        label="Filtros de rutas"
+        clearHref={navigationHrefs.routes}
+      >
+        <Field id="q" label="Buscar">
+          {(control) => (
+            <Input {...control} name="q" defaultValue={q} placeholder="Buscar ruta, código o producto..." />
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="product">Producto</Label>
-          <NativeSelect id="product" name="product" defaultValue={product}>
-            <option value="">Todos los productos</option>
-            {products.map((item) => (
-              <option key={item.id_producto} value={item.id_producto}>
-                {item.nombre_producto}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="product" label="Producto">
+          {(control) => (
+            <NativeSelect {...control} name="product" defaultValue={product}>
+              <option value="">Todos los productos</option>
+              {products.map((item) => (
+                <option key={item.id_producto} value={item.id_producto}>
+                  {item.nombre_producto}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="active">Activas</option>
-            <option value="inactive">Inactivas</option>
-          </NativeSelect>
-        </div>
-
-        <div className="flex items-end">
-          <Button type="submit" className="w-full">
-            Filtrar
-          </Button>
-        </div>
-
-        <div className="flex items-end">
-          <Button variant="clear" className="w-full" asChild>
-            <Link href="/dashboard/production/routes">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="active">Activas</option>
+              <option value="inactive">Inactivas</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
       <Table>
         <TableHeader>
@@ -161,7 +160,7 @@ export default async function FabricationRoutesPage({
               <TableCell>
                 <div className="flex flex-col gap-2">
                   <Button variant="link" className="h-auto justify-start p-0" asChild>
-                    <Link href={`/dashboard/production/routes/${route.id_ruta}/edit`}>
+                    <Link href={withReturnTo(`${navigationHrefs.routes}/${route.id_ruta}/edit`, returnTo)}>
                       Editar
                     </Link>
                   </Button>
@@ -174,17 +173,12 @@ export default async function FabricationRoutesPage({
                     </Link>
                   </Button>
 
-                  <form action={toggleFabricationRouteStatusAction}>
-                    <input type="hidden" name="id_ruta" value={route.id_ruta} />
-
-                    <Button
-                      type="submit"
-                      variant="link"
-                      className="h-auto justify-start p-0"
-                    >
-                      {route.estado ? "Inactivar" : "Activar"}
-                    </Button>
-                  </form>
+                  <RouteStatusButton
+                    route={route}
+                    action={toggleFabricationRouteStatusAction}
+                    activatedNotification={productionNotifications["route-activated"]}
+                    deactivatedNotification={productionNotifications["route-deactivated"]}
+                  />
                 </div>
               </TableCell>
             </TableRow>
@@ -202,6 +196,6 @@ export default async function FabricationRoutesPage({
           ) : null}
         </TableBody>
       </Table>
-    </main>
+    </div>
   );
 }

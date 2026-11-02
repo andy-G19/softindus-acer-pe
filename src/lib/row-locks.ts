@@ -49,6 +49,15 @@ export async function lockIndirectCostRow(tx: RowLockClient, idCostoIndirecto: s
   `);
 }
 
+export async function lockRouteRow(tx: RowLockClient, idRuta: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_ruta
+    FROM aceros.ruta_fabricacion
+    WHERE id_ruta = ${idRuta}
+    FOR NO KEY UPDATE
+  `);
+}
+
 export async function lockMachineRow(tx: RowLockClient, idMaquina: string) {
   await tx.$queryRaw(Prisma.sql`
     SELECT id_maquina

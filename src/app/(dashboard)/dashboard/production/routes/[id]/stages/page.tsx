@@ -2,13 +2,14 @@ import { Clock, Layers, Wrench } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -18,13 +19,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import {
   STAGE_TIME_MODES,
   getStageDurationPerUnit,
 } from "@/lib/production-times";
+import { productionNotifications } from "@/modules/production/notifications";
 import { toggleRouteStageStatusAction } from "@/modules/production/stages/actions";
 import { getRouteStagesData } from "@/modules/production/stages/queries";
+import { StageStatusButton } from "@/modules/production/stages/stage-status-button";
 
 type RouteStagesPageProps = {
   params: Promise<{
@@ -93,12 +101,15 @@ export default async function RouteStagesPage({
     );
   }, 0);
 
+  const stagesHref = `${navigationHrefs.routes}/${route.id_ruta}/stages`;
+  const returnTo = createReturnToHref(stagesHref, queryParams);
+
   const stagesPendingCapture = route.etapa_ruta.filter(
     (stage) => stage.tiempo_operario_minutos_unidad === null,
   ).length;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Etapas de la ruta"
         description={`Ruta: ${route.nombre_ruta} · Producto: ${route.producto.nombre_producto}${route.descripcion ? ` · ${route.descripcion}` : ""}`}
@@ -111,55 +122,38 @@ export default async function RouteStagesPage({
         ])}
         actions={
           <Button asChild>
-            <Link href={`/dashboard/production/routes/${route.id_ruta}/stages/new`}>
+            <Link href={withReturnTo(`${stagesHref}/new`, returnTo)}>
               Nueva etapa
             </Link>
           </Button>
         }
       />
 
-      <form className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-[1.5fr_1fr_1fr_auto_auto]">
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Buscar etapa..." />
-        </div>
+      <FilterBar action={stagesHref} label="Filtros de etapas" clearHref={stagesHref}>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar etapa..." />}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="requiresMachine">Máquina</Label>
-          <NativeSelect
-            id="requiresMachine"
-            name="requiresMachine"
-            defaultValue={requiresMachine}
-          >
-            <option value="">Máquina: todos</option>
-            <option value="yes">Requiere máquina</option>
-            <option value="no">No requiere máquina</option>
-          </NativeSelect>
-        </div>
+        <Field id="requiresMachine" label="Máquina">
+          {(control) => (
+            <NativeSelect {...control} name="requiresMachine" defaultValue={requiresMachine}>
+              <option value="">Máquina: todos</option>
+              <option value="yes">Requiere máquina</option>
+              <option value="no">No requiere máquina</option>
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="active">Activas</option>
-            <option value="inactive">Inactivas</option>
-          </NativeSelect>
-        </div>
-
-        <div className="flex items-end">
-          <Button type="submit" className="w-full">
-            Filtrar
-          </Button>
-        </div>
-
-        <div className="flex items-end">
-          <Button variant="outline" className="w-full" asChild>
-            <Link href={`/dashboard/production/routes/${route.id_ruta}/stages`}>
-              Limpiar filtros
-            </Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="active">Activas</option>
+              <option value="inactive">Inactivas</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
       <section className="grid gap-4 md:grid-cols-4">
         <KpiCard title="Etapas registradas" value={route.etapa_ruta.length.toString()} description="Total en esta ruta." tone="info" icon={Layers} />
@@ -279,27 +273,18 @@ export default async function RouteStagesPage({
                 <div className="flex flex-col gap-2">
                   <Button variant="link" className="h-auto justify-start p-0" asChild>
                     <Link
-                      href={`/dashboard/production/routes/${route.id_ruta}/stages/${stage.id_etapa_ruta}/edit`}
+                      href={withReturnTo(`${stagesHref}/${stage.id_etapa_ruta}/edit`, returnTo)}
                     >
                       Editar
                     </Link>
                   </Button>
 
-                  <form action={toggleRouteStageStatusAction}>
-                    <input
-                      type="hidden"
-                      name="id_etapa_ruta"
-                      value={stage.id_etapa_ruta}
-                    />
-
-                    <Button
-                      type="submit"
-                      variant="link"
-                      className="h-auto justify-start p-0"
-                    >
-                      {stage.estado ? "Inactivar" : "Activar"}
-                    </Button>
-                  </form>
+                  <StageStatusButton
+                    stage={stage}
+                    action={toggleRouteStageStatusAction}
+                    activatedNotification={productionNotifications["route-stage-activated"]}
+                    deactivatedNotification={productionNotifications["route-stage-deactivated"]}
+                  />
                 </div>
               </TableCell>
             </TableRow>
@@ -307,7 +292,7 @@ export default async function RouteStagesPage({
 
           {route.etapa_ruta.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={8} className="p-0">
+              <TableCell colSpan={9} className="p-0">
                 <EmptyState
                   className="border-0"
                   label="Esta ruta todavía no tiene etapas registradas."
@@ -317,6 +302,6 @@ export default async function RouteStagesPage({
           ) : null}
         </TableBody>
       </Table>
-    </main>
+    </div>
   );
 }

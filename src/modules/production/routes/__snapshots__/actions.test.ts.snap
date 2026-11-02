@@ -1,0 +1,2413 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createFabricationRouteAction > ADMIN crea la ruta activa con su correlativo y la bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "ruta_fabricacion",
+      "prefijo": "RUT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "estado": true,
+        "id_producto": "PRO00000004",
+        "id_ruta": "RUT00000012",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Ruta creada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFabricationRouteAction > ADMIN crea la ruta activa con su correlativo y la bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`createFabricationRouteAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFabricationRouteAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar rutas de fabricación.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`createFabricationRouteAction > WORKSHOP_MASTER tambien crea rutas > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "ruta_fabricacion",
+      "prefijo": "RUT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "estado": true,
+        "id_producto": "PRO00000004",
+        "id_ruta": "RUT00000012",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Ruta creada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFabricationRouteAction > WORKSHOP_MASTER tambien crea rutas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`createFabricationRouteAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFabricationRouteAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la ruta.",
+    "fieldErrors": {
+      "nombre_ruta": [
+        "El nombre de la ruta debe tener al menos 3 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "ab",
+    },
+  },
+}
+`;
+
+exports[`createFabricationRouteAction > el producto no existe o esta inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+]
+`;
+
+exports[`createFabricationRouteAction > el producto no existe o esta inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "El producto seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_producto": [
+        "El producto seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`createFabricationRouteAction > la descripcion ausente cuenta como vacia > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "ruta_fabricacion",
+      "prefijo": "RUT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": null,
+        "estado": true,
+        "id_producto": "PRO00000004",
+        "id_ruta": "RUT00000012",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Ruta creada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFabricationRouteAction > la descripcion ausente cuenta como vacia > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`createFabricationRouteAction > la descripcion vacia se guarda como null > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "ruta_fabricacion",
+      "prefijo": "RUT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": null,
+        "estado": true,
+        "id_producto": "PRO00000004",
+        "id_ruta": "RUT00000012",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Ruta creada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFabricationRouteAction > la descripcion vacia se guarda como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`createFabricationRouteAction > sin producto devuelve su error > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFabricationRouteAction > sin producto devuelve su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la ruta.",
+    "fieldErrors": {
+      "id_producto": [
+        "Seleccione un producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`createFabricationRouteAction > un POST sin campos devuelve sus errores sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFabricationRouteAction > un POST sin campos devuelve sus errores sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la ruta.",
+    "fieldErrors": {
+      "id_producto": [
+        "Seleccione un producto.",
+      ],
+      "nombre_ruta": [
+        "El nombre de la ruta debe tener al menos 3 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "",
+      "id_producto": "",
+      "nombre_ruta": "",
+    },
+  },
+}
+`;
+
+exports[`createFabricationRouteAction > un fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "ruta_fabricacion",
+      "prefijo": "RUT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "estado": true,
+        "id_producto": "PRO00000004",
+        "id_ruta": "RUT00000012",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createFabricationRouteAction > un fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la ruta. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`createFabricationRouteAction > una carrera por el nombre (P2002) responde como el duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "ruta_fabricacion",
+      "prefijo": "RUT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "estado": true,
+        "id_producto": "PRO00000004",
+        "id_ruta": "RUT00000012",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.create",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createFabricationRouteAction > una carrera por el nombre (P2002) responde como el duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una ruta con ese nombre para este producto.",
+    "fieldErrors": {
+      "nombre_ruta": [
+        "Ya existe una ruta con ese nombre para este producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`createFabricationRouteAction > ya existe una ruta con ese nombre para el producto > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+]
+`;
+
+exports[`createFabricationRouteAction > ya existe una ruta con ese nombre para el producto > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una ruta con ese nombre para este producto.",
+    "fieldErrors": {
+      "nombre_ruta": [
+        "Ya existe una ruta con ese nombre para este producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`toggleFabricationRouteStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`toggleFabricationRouteStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar rutas de fabricación.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleFabricationRouteStatusAction > WORKSHOP_MASTER tambien cambia el estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "select": {
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Ruta inactivada: Ruta de lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleFabricationRouteStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleFabricationRouteStatusAction > la ruta no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "select": {
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`toggleFabricationRouteStatusAction > la ruta no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La ruta seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleFabricationRouteStatusAction > sin estado pedido devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`toggleFabricationRouteStatusAction > sin estado pedido devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleFabricationRouteStatusAction > sin id devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`toggleFabricationRouteStatusAction > sin id devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió la ruta de fabricación.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`toggleFabricationRouteStatusAction > una ruta activa se inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "select": {
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Ruta inactivada: Ruta de lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleFabricationRouteStatusAction > una ruta activa se inactiva > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleFabricationRouteStatusAction > una ruta inactiva se activa > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "select": {
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": false,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Ruta activada: Ruta de lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleFabricationRouteStatusAction > una ruta inactiva se activa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleFabricationRouteStatusAction > ya tenia ese estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "select": {
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`toggleFabricationRouteStatusAction > ya tenia ese estado > resultado 1`] = `
+{
+  "estado": {
+    "error": "La ruta ya estaba inactiva.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > ADMIN actualiza la ruta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "id_ruta": {
+          "not": "RUT00000003",
+        },
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Ruta actualizada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > ADMIN actualiza la ruta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar rutas de fabricación.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > WORKSHOP_MASTER tambien actualiza rutas > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "id_ruta": {
+          "not": "RUT00000003",
+        },
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Ruta actualizada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > WORKSHOP_MASTER tambien actualiza rutas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > con ordenes no se puede cambiar el producto > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > con ordenes no se puede cambiar el producto > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede cambiar el producto de una ruta con órdenes asociadas.",
+    "fieldErrors": {
+      "id_producto": [
+        "No se puede cambiar el producto de una ruta con órdenes asociadas.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000005",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > con ordenes se puede editar lo demas > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "id_ruta": {
+          "not": "RUT00000003",
+        },
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Ruta actualizada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > con ordenes se puede editar lo demas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > con ordenes y el producto inactivo se puede editar lo demas > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "id_ruta": {
+          "not": "RUT00000003",
+        },
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Ruta actualizada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > con ordenes y el producto inactivo se puede editar lo demas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la ruta.",
+    "fieldErrors": {
+      "nombre_ruta": [
+        "El nombre de la ruta debe tener al menos 3 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "ab",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > el producto actual inactivo se conserva al editar lo demas > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "id_ruta": {
+          "not": "RUT00000003",
+        },
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Ruta actualizada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > el producto actual inactivo se conserva al editar lo demas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > la descripcion vacia se guarda como null > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "id_ruta": {
+          "not": "RUT00000003",
+        },
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": null,
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Ruta actualizada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > la descripcion vacia se guarda como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > la ruta no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > la ruta no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La ruta seleccionada no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > otra ruta del producto ya usa ese nombre > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "id_ruta": {
+          "not": "RUT00000003",
+        },
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > otra ruta del producto ya usa ese nombre > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una ruta con ese nombre para este producto.",
+    "fieldErrors": {
+      "nombre_ruta": [
+        "Ya existe una ruta con ese nombre para este producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > sin id devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > sin id devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió la ruta de fabricación.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > sin ordenes se puede cambiar el producto > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000005",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000005",
+        "id_ruta": {
+          "not": "RUT00000003",
+        },
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "id_producto": "PRO00000005",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Ruta actualizada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > sin ordenes se puede cambiar el producto > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000005",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > un producto nuevo que no existe o esta inactivo se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000005",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > un producto nuevo que no existe o esta inactivo se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "El producto seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_producto": [
+        "El producto seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000005",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
+
+exports[`updateFabricationRouteAction > una carrera por el nombre (P2002) responde como el duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_producto": "PRO00000004",
+        "id_ruta": {
+          "not": "RUT00000003",
+        },
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.update",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > una carrera por el nombre (P2002) responde como el duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una ruta con ese nombre para este producto.",
+    "fieldErrors": {
+      "nombre_ruta": [
+        "Ya existe una ruta con ese nombre para este producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;

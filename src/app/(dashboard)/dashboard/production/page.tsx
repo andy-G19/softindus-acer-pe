@@ -148,7 +148,7 @@ export default async function ProductionDashboardPage() {
   ];
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Producción"
         description="Gestiona rutas de fabricación, etapas, recetas técnicas, versiones, materiales requeridos, órdenes de trabajo y avances de producción."
@@ -246,6 +246,6 @@ export default async function ProductionDashboardPage() {
           </Badge>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

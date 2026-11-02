@@ -147,7 +147,7 @@ export default async function WorkOrderProgressPage({
     workOrder.estado !== "anulada" && workOrder.estado !== "finalizada";
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Avances de producción"
         description={`Orden: ${workOrder.id_orden_trabajo} · Producto: ${workOrder.producto.nombre_producto} · Cantidad: ${formatDecimal(workOrder.cantidad)} ${workOrder.producto.unidad_medida}`}
@@ -423,6 +423,6 @@ export default async function WorkOrderProgressPage({
           })}
         </section>
       ) : null}
-    </main>
+    </div>
   );
 }
