@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 803 |
-| Páginas | 164 |
-| Páginas en ranuras paralelas (@ranura) | 36 |
-| Páginas que interceptan una ruta | 23 |
-| Declaraciones JSX de formulario | 72 |
+| Archivos fuente analizados | 839 |
+| Páginas | 170 |
+| Páginas en ranuras paralelas (@ranura) | 43 |
+| Páginas que interceptan una ruta | 27 |
+| Declaraciones JSX de formulario | 59 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 112 |
 
@@ -28,11 +28,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | inventory | 29 |
 | maintenance | 24 |
 | petty-cash | 9 |
-| production | 37 |
+| production | 39 |
 | reports | 10 |
 | staff | 12 |
 | users | 4 |
-| waste-scrap | 6 |
+| waste-scrap | 10 |
 
 ## Rutas y formularios candidatos
 
@@ -135,11 +135,13 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/petty-cash/movements` | — | `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 2 | — |
 | `/dashboard/petty-cash` | — | `src/app/(dashboard)/dashboard/petty-cash/page.tsx` | 0 | — |
 | `/dashboard/production/bottlenecks` | — | `src/app/(dashboard)/dashboard/production/bottlenecks/page.tsx` | 0 | — |
-| `/dashboard/production/campaigns/[id]/details/new` | — | `src/app/(dashboard)/dashboard/production/campaigns/[id]/details/new/page.tsx` | 1 | — |
-| `/dashboard/production/campaigns/[id]/edit` | — | `src/app/(dashboard)/dashboard/production/campaigns/[id]/edit/page.tsx` | 1 | — |
+| `/dashboard/production/campaigns/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/production/campaigns/@panel/(.)[id]/edit/page.tsx` | 0 | CampaignForm |
+| `/dashboard/production/campaigns/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/production/campaigns/@panel/(.)new/page.tsx` | 0 | CampaignForm |
+| `/dashboard/production/campaigns` | `@panel` | `src/app/(dashboard)/dashboard/production/campaigns/@panel/page.tsx` | 0 | — |
+| `/dashboard/production/campaigns/[id]/edit` | — | `src/app/(dashboard)/dashboard/production/campaigns/[id]/edit/page.tsx` | 0 | CampaignForm |
 | `/dashboard/production/campaigns/[id]` | — | `src/app/(dashboard)/dashboard/production/campaigns/[id]/page.tsx` | 0 | — |
-| `/dashboard/production/campaigns/new` | — | `src/app/(dashboard)/dashboard/production/campaigns/new/page.tsx` | 1 | — |
-| `/dashboard/production/campaigns` | — | `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 4 | — |
+| `/dashboard/production/campaigns/new` | — | `src/app/(dashboard)/dashboard/production/campaigns/new/page.tsx` | 0 | CampaignForm |
+| `/dashboard/production/campaigns` | — | `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 0 | — |
 | `/dashboard/production` | — | `src/app/(dashboard)/dashboard/production/page.tsx` | 0 | — |
 | `/dashboard/production/recipes/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/production/recipes/@panel/(.)new/page.tsx` | 0 | RecipeForm |
 | `/dashboard/production/recipes` | `@panel` | `src/app/(dashboard)/dashboard/production/recipes/@panel/page.tsx` | 0 | — |
@@ -198,11 +200,15 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/users/new` | — | `src/app/(dashboard)/dashboard/users/new/page.tsx` | 0 | UserForm |
 | `/dashboard/users` | — | `src/app/(dashboard)/dashboard/users/page.tsx` | 3 | — |
 | `/dashboard/waste-scrap` | — | `src/app/(dashboard)/dashboard/waste-scrap/page.tsx` | 0 | — |
-| `/dashboard/waste-scrap/reusable-scraps/new` | — | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/new/page.tsx` | 1 | — |
-| `/dashboard/waste-scrap/reusable-scraps` | — | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 3 | — |
+| `/dashboard/waste-scrap/reusable-scraps/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/@panel/(.)new/page.tsx` | 0 | ReusableScrapForm |
+| `/dashboard/waste-scrap/reusable-scraps` | `@panel` | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/@panel/page.tsx` | 0 | — |
+| `/dashboard/waste-scrap/reusable-scraps/new` | — | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/new/page.tsx` | 0 | ReusableScrapForm |
+| `/dashboard/waste-scrap/reusable-scraps` | — | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 0 | — |
 | `/dashboard/waste-scrap/scrap-sales/new` | — | `src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx` | 1 | — |
-| `/dashboard/waste-scrap/scraps/new` | — | `src/app/(dashboard)/dashboard/waste-scrap/scraps/new/page.tsx` | 1 | — |
-| `/dashboard/waste-scrap/scraps` | — | `src/app/(dashboard)/dashboard/waste-scrap/scraps/page.tsx` | 1 | — |
+| `/dashboard/waste-scrap/scraps/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/waste-scrap/scraps/@panel/(.)new/page.tsx` | 0 | ScrapForm |
+| `/dashboard/waste-scrap/scraps` | `@panel` | `src/app/(dashboard)/dashboard/waste-scrap/scraps/@panel/page.tsx` | 0 | — |
+| `/dashboard/waste-scrap/scraps/new` | — | `src/app/(dashboard)/dashboard/waste-scrap/scraps/new/page.tsx` | 0 | ScrapForm |
+| `/dashboard/waste-scrap/scraps` | — | `src/app/(dashboard)/dashboard/waste-scrap/scraps/page.tsx` | 0 | — |
 | `/` | — | `src/app/page.tsx` | 0 | — |
 
 ## Declaraciones de formularios
@@ -223,13 +229,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 253 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 177 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 335 | `{annulPettyCashMovementAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/[id]/details/new/page.tsx` | 70 | `{addCampaignDetailAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/[id]/edit/page.tsx` | 66 | `{updateProductionCampaignAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/new/page.tsx` | 33 | `{createProductionCampaignAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 143 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 284 | `{changeProductionCampaignStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 298 | `{changeProductionCampaignStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 312 | `{changeProductionCampaignStatusAction}` |
 | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 165 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 263 | `{deliverWorkOrderMaterialsAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 557 | `{reopenWorkOrderMaterialsAction}` |
@@ -250,13 +249,7 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/users/page.tsx` | 111 | `{navigationHrefs.users}` |
 | `src/app/(dashboard)/dashboard/users/page.tsx` | 237 | `{deactivateUserAction}` |
 | `src/app/(dashboard)/dashboard/users/page.tsx` | 253 | `{activateUserAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/new/page.tsx` | 67 | `{createReusableScrapAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 126 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 250 | `{updateReusableScrapStatusAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 258 | `{updateReusableScrapStatusAction}` |
 | `src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx` | 82 | `{createScrapSaleAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/scraps/new/page.tsx` | 59 | `{createScrapAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/scraps/page.tsx` | 132 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/components/commercial/payment-form.tsx` | 31 | `{createPaymentAction}` |
 | `src/components/commercial/quote-form.tsx` | 66 | `{createQuoteAction}` |
 | `src/components/commercial/receipt-form.tsx` | 54 | `{createReceiptAction}` |

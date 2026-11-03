@@ -3161,7 +3161,7 @@ Límite con la entrega 11:
 | 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge`. Partida el 2026-10-23 en 10.4a (productos, estados e inicio), 10.4b (listados con fechas y `Badge`) y 10.4c (pedidos, la superficie amplia) | 5 h; recalibrada a 6,3 h, 3,5 h y 6,6 h, y la 10.4b a 5 h |
 | 10.5 | Mantenimiento | ADMIN; fallas, también WORKSHOP_MASTER | Máquinas, repuestos, fallas, preventivos y reparaciones; cambios de estado. Partida el 2026-10-29 en 10.5a (máquinas, repuestos e inicio) y 10.5b (fallas, preventivos y reparaciones) | 8 h; recalibrada a 6 h y 6,7 h |
 | 10.6 | Producción: rutas, etapas y recetas | ADMIN y WORKSHOP_MASTER | Rutas, etapas, recetas, versiones y detalles; requerimientos y cuellos de botella; listado de órdenes. Partida el 2026-10-31 en 10.6a (rutas, etapas y listados) y 10.6b (recetas, versiones y detalles) | 7 h; recalibrada a 6,4 h y 7 h en bruto |
-| 10.7 | Campañas, mermas y usuarios | ADMIN y WORKSHOP_MASTER; usuarios, solo ADMIN | Campañas y su detalle, chatarra, retazos, usuarios y restablecer contraseña | 8 h |
+| 10.7 | Campañas, mermas y usuarios | ADMIN y WORKSHOP_MASTER; usuarios, solo ADMIN | Campañas y su detalle, chatarra, retazos, usuarios y restablecer contraseña. Partida el 2026-11-02 en 10.7a (campañas y mermas) y 10.7b (usuarios) | 8 h; recalibrada a 6,4 h y 3,6 h en bruto |
 | 10.8 | Personal y Costos | ADMIN; asistencia y tareas, también WORKSHOP_MASTER | Operarios, asistencia y tareas; secciones del detalle del costeo; listados | 8 h |
 
 La estimación suma unas 48 horas de preparación y verificación, sin contar
@@ -3209,12 +3209,12 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Recetas técnicas | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral (D1 de la 10.6) | 10.6b | Migrado |
 | Versiones de receta | Producción | ADMIN, WORKSHOP_MASTER | Página con líneas, lanza | Superficie amplia | 10.6b | Migrado |
 | Detalles de receta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6b | Migrado |
-| Campañas de producción | Producción | ADMIN, WORKSHOP_MASTER | Páginas de alta y edición, lanza | Panel lateral | 10.7 | Pendiente |
-| Detalle de campaña | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Modal breve | 10.7 | Pendiente |
-| Chatarra | Mermas | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.7 | Pendiente |
-| Retazos reutilizables | Mermas | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.7 | Pendiente |
-| Usuarios | Usuarios | ADMIN | Páginas, desviación; el `Label` de rol sin control al editarse a sí mismo | Panel lateral | 10.7 | Pendiente |
-| Restablecer contraseña | Usuarios | ADMIN | Página, desviación | Modal breve | 10.7 | Pendiente |
+| Campañas de producción | Producción | ADMIN, WORKSHOP_MASTER | Páginas de alta y edición, lanza | Panel lateral | 10.7a | Migrado |
+| Detalle de campaña | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Modal breve; se retira la página (D3) | 10.7a | Migrado |
+| Chatarra | Mermas | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.7a | Migrado |
+| Retazos reutilizables | Mermas | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.7a | Migrado |
+| Usuarios | Usuarios | ADMIN | Páginas, desviación; el `Label` de rol sin control al editarse a sí mismo | Panel lateral | 10.7b | Pendiente |
+| Restablecer contraseña | Usuarios | ADMIN | Página, desviación | Modal breve | 10.7b | Pendiente |
 | Operarios | Personal | ADMIN | Páginas, desviación | Panel lateral | 10.8 | Pendiente |
 | Asistencia | Personal | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.8 | Pendiente |
 | Tareas de operario | Personal | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.8 | Pendiente |
@@ -3233,7 +3233,7 @@ destructivas confirman:
 | 10.4 | Inactivar cliente, producto y categoría de producto (10.4a, migradas) |
 | 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
 | 10.6 | Inactivar ruta y etapa (10.6a, migradas); inactivar receta; marcar versión vigente; anular versión; borrar detalle de receta (10.6b, migradas) |
-| 10.7 | Cambiar el estado de campaña y de retazo; activar y desactivar usuario |
+| 10.7 | Cambiar el estado de campaña y de retazo (10.7a, migradas); activar y desactivar usuario (10.7b) |
 | 10.8 | Inactivar operario; cancelar tarea; generar costeo desde una orden; recalcular costeo; anular costo indirecto |
 
 ### Sub-entrega 10.1 — Bases y catálogos breves
@@ -6727,6 +6727,123 @@ Datos leídos de la API de GitHub el 2026-11-02 (UTC) y comparados con git:
   las 16:23:30 UTC). La sub-entrega no trae migraciones (sin cambios en
   `prisma/`).
 
+### Sub-entrega 10.7a — Campañas y mermas
+
+Fecha: 2026-11-02 (Lima). Estado: código y registro hechos, pendiente de verificar en
+staging. El paso C0 (`1bc49e8`) registró la integración de la 10.6b. 13 commits de código
+y pruebas, de `5955d7e` a `5dc9924`, y este registro. Plan en `tmp/e10-diff/plan-10-7.md`,
+aprobado con D1 a D9. La 10.7 se partió en 10.7a y 10.7b (usuarios), porque usuarios lleva
+revisión de seguridad y escribe credenciales en staging.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 1bc49e8 | docs | C0: integración de la 10.6b en `main`. |
+| 5955d7e | test | Caracterización de las 7 acciones; campañas entra en `action-access.test.ts`. |
+| a4c5529 | fix | `lockCampaignRow`, decidir dentro de la transacción, mismo estado sin escribir y P2002 del detalle (hallazgos 1, 4 y 8). |
+| a0deae3 | fix | Esquema de campaña: fecha real, mínimo, tope de `numeric(10,2)` y español (5, 6 y 7). |
+| 4bc38a4 | fix | Rango con `parseDateParam` y `buildDateRangeFilter`; fuera la copia local con `lte`. |
+| 6c51940 | fix | D2: el estado solo cambia desde la fila; el alta ofrece Planificada y Activa (2 y 3). |
+| d747ee1 | feat | Campañas en panel con `FormActionState`. |
+| b235f86 | feat | Agregar producto en `FormDialog`; se retira `details/new` (D3). |
+| 8e944ca | feat | Activar, Finalizar y Anular con `ConfirmActionButton`; `FilterBar`, `DateRangeFields` y `<div>`. |
+| 0b22b26 | fix | Mermas: decidir con `lockWorkOrderRow` y validar cantidades (12 y 14). |
+| 17b8ff1 | fix | Estado de retazo con compare-and-set y bitácora (13). |
+| 581aa56 | feat | Chatarra en panel con `FilterBar`; `form-options.ts`. |
+| 1cdaecd | feat | Retazos en panel, Reutilizar y Descartar con confirmación; 2 claves nuevas. |
+| 5dc9924 | feat | Inicio y venta sin `<main>`; `waste-scrap-links.test.ts`; textos del hallazgo 16. |
+
+Ajustes al plan:
+
+- Sin tope nuevo en `objetivo_general` ni `observaciones`: son `text`, no fallan en la base
+  y un tope podría bloquear la edición de un valor guardado. Por eso no hizo falta la
+  lectura en staging prevista. Solo el alta conserva su `maxLength` de 700.
+- Mermas no redondea en JavaScript (hallazgo 28).
+- La edición de campaña dice «Volver a campañas»: se abre desde la lista y el detalle no
+  tiene enlace a ella.
+- Tras guardar, chatarra y retazos vuelven a su lista; si se abrieron desde el inicio de
+  Mermas, al inicio. Antes siempre iban al inicio.
+- Las altas ganan `maxLength` donde el esquema ya tenía tope (tipo, medida y ubicación).
+
+Diseño:
+
+- Decisiones de negocio: campañas bloquea su fila porque varias reglas dependen del estado
+  anterior; el retazo usa compare-and-set porque una sola condición («sigue disponible»)
+  cabe en el `WHERE`.
+- Chatarra y retazo toman `lockWorkOrderRow`, que ya existía: el candado es de la orden, que
+  es lo que otra operación puede anular. El material se lee en la transacción sin candado,
+  como en recetas.
+- Un rechazo vuelve del callback y la transacción confirma sin haber escrito: los snapshots
+  pasan de `rollback` a `commit` en esos casos.
+- Un rechazo de estado no revalida, como en Fallas y Recetas.
+- `CampaignForm`, `ScrapForm` y `ReusableScrapForm` sirven al panel y a la página.
+- Agregar producto no tiene URL: la ventana sustituye su único enlace (D3). Los productos solo
+  se consultan si la campaña los admite.
+
+Evidencia:
+
+1. Rojo antes de cada paso, guardado en `rojo-107a-<paso>.txt`. En A6, A7, A8, A11 y A12 el
+   rojo prueba poco porque cambia la firma: lo que valida son las mutaciones (hallazgo 33 de
+   la 10.6b).
+2. `cmp_snap_107.py --detalle` compara clave por clave; `snap-107a-<paso>.txt`. Ningún paso
+   perdió escrituras, bitácora, correlativos ni revalidaciones.
+3. Mutaciones: A1 49 de 49, A2 14 de 14, A3 14 de 14, A4 6 de 6, A5 8 de 8, A6 33 de 33, A7 24
+   de 24, A8 26 de 26, A9 24 de 24, A10 9 de 9, A11 28 de 28, A12 38 de 38 y A13 9 de 9; en
+   total, 282 de 282 (hallazgos 29 y 32 sobre las que sobrevivieron primero).
+4. CSS compilado comparado por reglas con `css_107.py`: igual de C0 a A7, A9 a A11 y A13. En
+   A8 sale `md:col-span-4` y en A12 `md:grid-cols-[1fr_1fr_1.2fr_auto]`: de 112.648 a 112.526
+   bytes, 2 reglas menos.
+5. `npm run check` terminó con código 0 antes de cada commit, hasta 4.140 pruebas en 231
+   archivos. A7 falló la primera vez (hallazgo 30). `npm run refactor:inventory` analiza
+   170 páginas y 59 formularios JSX.
+
+Tiempo de preparación, aproximado: del rojo de cada paso al último `npm run check` en verde,
+leído de la fecha de esos archivos (Lima). Las esperas al responsable quedan fuera y la lectura
+previa también. A1 se estima desde su primera prueba:
+
+| Paso | A1 | A2 | A3 | A4 | A5 | A6 | A7 | A8 | A9 | A10 | A11 | A12 | A13 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Minutos | 21 | 6 | 6 | 5 | 5 | 15 | 13 | 19 | 8 | 6 | 17 | 14 | 6 |
+
+Suman 141 minutos frente a 384 estimados en bruto: un factor de 0,37.
+
+Hallazgos de la auditoría corregidos: 1 a 8, 12, 13, 14 y 16. Se registran y no se cambian:
+
+- 9. **`campania_detalle.cantidad_producida` no la escribe nadie**: solo se crea en 0 y no hay
+  trigger. «Producido» y «Avance» de campañas dan siempre 0. Necesita regla de negocio antes
+  de la entrega 11 (D5).
+- 10. Finalizar o anular pisa `fecha_fin`: la real de una finalizada se pierde al anularla, y
+  finalizar antes del inicio deja el fin antes que el inicio.
+- 11. `createWorkOrder` lee la campaña fuera de su transacción: una campaña finalizada en ese
+  instante puede recibir la orden. Es de la entrega 11.
+- 15. El filtro de chatarra ofrece «Disponible», y la chatarra solo es acumulada o vendida.
+
+Los hallazgos 17 a 26 son de usuarios y pasan a la 10.7b. Hallazgos de la implementación:
+
+27. A3: con una fecha de fin inexistente, la regla «fin anterior al inicio» también corría y
+    sumaba un mensaje falso. Ahora solo compara dos fechas reales, como texto.
+28. A9: `(3.005).toFixed(2)` da `3.00` y la base guarda `3.01`: copiar el redondeo de campañas
+    habría cambiado lo guardado. Una prueba lo detectó. Mermas deja redondear a la base y solo
+    rechaza lo menor que 0.005. **Campañas conserva su `toFixed`**, que ya estaba: 1.005 se
+    guarda como 1.00. No se cambió.
+29. Método: en A1, el doble rechaza las escrituras con el cliente global, y el snapshot del
+    estado de retazo fijó ese error del arnés, no la acción. Dos mutaciones sobrevivieron y lo
+    destaparon; se corrigió con `writesOutsideTransaction`.
+30. Método: A7 se predijo mal. Retirar una página rompió typecheck por `.next/dev/types`, un resto
+    de un `next dev` del 3 de agosto que `tsconfig.json` incluye y `next typegen` no actualiza. Se
+    borró esa carpeta. El CI no la tiene.
+31. Método: en A8, una prueba con el texto `bg-destructive` metió esa clase en el CSS de
+    producción. La comparación por reglas lo detectó; la prueba pasó a `data-variant`.
+32. Método: en A11, tres mutaciones sobrevivieron porque un snapshot no ve lo que el servidor no
+    pinta: las descripciones de `SearchableSelect` y el `returnTo` del panel. Se sumaron
+    `form-options.test.ts` y una prueba que dobla el formulario.
+33. `SearchableSelect` con `required` usa `setCustomValidity`: exige una opción elegida, no texto
+    en el buscador. Una prueba debe elegirla como una persona.
+34. Desde el inicio de Mermas, el alta dice «Volver a chatarra» aunque vuelve al inicio. Es
+    cosmético y no se cambió.
+35. Método: en A6, dos `Write` fallaron porque las páginas habían cambiado en A5 y hubo que
+    releerlas. Las listas de mutaciones se editan con Edit: los heredoc se comen las barras
+    invertidas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -6751,7 +6868,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, con el código y el registro hechos, pendiente de verificar en staging) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -6773,9 +6890,9 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` o `react-toastify` | 2 | 2, solo la fachada y el proveedor (regla de ESLint) | 7 |
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
-| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 128 / 128 | 7, G3, 9 y 10 |
+| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 130 / 130 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 215 / 3.822 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 231 / 4.140 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -6795,22 +6912,23 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
 | Copias locales de `FieldError` | 16 | 4 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 39 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 9 (10 formularios) | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 28 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 7 (7 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
 | Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 6 | 10 |
 | Acciones de activar e inactivar que leen el estado y escriben el contrario | 12 | 0 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
-| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 5 | 10 |
+| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 4 | 10 |
 | Archivos de acciones de inventario sin caracterizar (materiales, alertas, proveedores y materiales de proveedor) | 4 | 0 | 10 |
 | Altas que deciden el kárdex o la alerta con los números del formulario y no con la fila escrita | 1 | 0 | 10 |
-| Listados que cortan el último día con `lte` (con `buildDateRangeFilter` o con una copia local) | 17 | 2 (copias locales) | 10 |
+| Listados que cortan el último día con `lte` (con `buildDateRangeFilter` o con una copia local) | 17 | 1 (copia local) | 10 |
 | Enlaces de Inventario que un rol ve y su pantalla rechaza / pantallas de Inventario sin ningún enlace en la app | 4 / 3 | 0 / 0 | 10 |
 | Acciones de Comercial sin caracterizar: el cambio de estado de clientes; el alta, la edición y el cambio de estado de productos; el de categorías | 5 | 0 | 10 |
 | Listas de Comercial sin tarjeta en su inicio (el vendedor no llegaba a ellas) / enlaces de Comercial que un rol ve y su pantalla rechaza | 2 / 0 | 0 / 0 | 10 |
 | Pantallas con `DateRangeFields` que pierden las fechas elegidas antes de hidratar | 14 | 0 | 10 |
 | Pantallas de Comercial con `StatusBadge` | 5 | 0 | 10 |
+| Acciones de campañas y mermas sin caracterizar / que lanzan su rechazo | 7 / 7 | 0 / 0 | 10 |
 | Archivos de acciones de Mantenimiento sin caracterizar (máquinas, repuestos, fallas, preventivos y reparaciones) | 5 | 0 | 10 |
 | Acciones de fallas, preventivos y reparaciones que deciden fuera de la transacción | 5 | 0 | 10 |
 | Acciones de fallas, preventivos y reparaciones que lanzan en lugar de devolver el error | 6 | 0 | 10 |
@@ -7169,6 +7287,20 @@ Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e8d77ae`:
 Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de
 `FieldError` en 6; y los cambios de estado que voltean en 2.
+
+Actualizado en la sub-entrega 10.7a (2026-11-02) sobre `5dc9924`:
+
+- Pruebas: 231 / 4.140.
+- El `<main>` anidado baja a 28 (salen 11: 5 de campañas y 6 de mermas; una de ellas, la
+  página `details/new`, se retira).
+- Los formularios GET bajan a 7, con 7 combinaciones de clases
+  (`count_105b_get_forms.py`), y las pantallas con rango de fechas sin `DateRangeFields`
+  a 4.
+- Los listados con copia local a `lte` bajan a 1: movimientos de caja.
+- Las claves `?toast=` suben a 130 con las 2 de retazos.
+- La desviación y las copias de `FieldError` no cambian: estas acciones lanzaban y no
+  usaban `useActionState`. Bajan en la 10.7b.
+- `ConfirmDeleteButton` deja de usarse en campañas.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
