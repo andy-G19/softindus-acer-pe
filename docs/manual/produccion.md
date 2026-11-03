@@ -1,7 +1,7 @@
 # Manual de usuario — Producción
 
 Este capítulo describe las pantallas de Producción que ya se renovaron: rutas de
-fabricación, etapas, cuellos de botella y la lista de órdenes de trabajo. Las
+fabricación, etapas, recetas, campañas, cuellos de botella y la lista de órdenes de trabajo. Las
 reglas comunes (ventanas, guardar, cancelar, inactivar y filtros) están en
 [Cómo funcionan las pantallas](00-patrones.md).
 
@@ -178,6 +178,45 @@ Solo se pueden cambiar los materiales de una versión vigente, de una receta act
 Escribe la **cantidad a fabricar** y pulsa **Calcular**. La tabla multiplica la receta,
 suma la merma y compara con el stock disponible, que es el stock actual menos el reservado.
 Marca **Insuficiente** y el faltante si no alcanza. Es solo una consulta: no reserva nada.
+
+## Campañas
+
+**Dónde:** Producción → Campañas.
+**Quién:** el administrador y el maestro de taller.
+
+Una campaña agrupa objetivos de producción por producto. Nace **planificada** o **activa**,
+puede **finalizarse** y, mientras no esté anulada, **anularse**.
+
+**Filtros:** búsqueda por código o nombre, producto, estado y rango de fechas de inicio.
+
+### Registrar una campaña
+
+1. Pulsa **Nueva campaña**. Se abre un panel sobre la lista.
+2. Escribe el **nombre** y la **fecha de inicio**. La fecha de fin y el objetivo son
+   opcionales; el fin no puede ser anterior al inicio.
+3. Elige el estado inicial: **Planificada** o **Activa**.
+4. Pulsa **Guardar campaña**. Vuelves a la lista con sus filtros.
+
+### Editar una campaña
+
+**Editar** abre el panel con el nombre, las fechas y el objetivo. El estado no se cambia aquí:
+se cambia desde la fila. Una campaña anulada no se puede editar.
+
+### Agregar productos
+
+En el detalle (**Ver detalle**), pulsa **Agregar producto**. Se abre una ventana con los
+productos activos que la campaña todavía no tiene. Elige el producto, escribe la cantidad
+objetivo y, si quieres, observaciones, y pulsa **Agregar producto**. El producto aparece en la
+tabla sin salir del detalle. Una campaña finalizada o anulada no ofrece este botón.
+
+### Cambiar el estado
+
+- **Activar**, en una campaña planificada, se aplica al pulsar.
+- **Finalizar**, en una campaña activa, pide confirmar: después no se pueden agregar productos
+  ni crear órdenes de trabajo para ella, y solo se puede anular. Una campaña finalizada no se
+  reabre.
+- **Anular**, en una campaña planificada o activa, pide confirmar con el botón rojo: no se puede
+  deshacer y las órdenes ya creadas se conservan.
 
 ## Cuellos de botella
 

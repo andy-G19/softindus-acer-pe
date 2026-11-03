@@ -6729,9 +6729,9 @@ Datos leídos de la API de GitHub el 2026-11-02 (UTC) y comparados con git:
 
 ### Sub-entrega 10.7a — Campañas y mermas
 
-Fecha: 2026-11-02 (Lima). Estado: código y registro hechos, pendiente de verificar en
-staging. El paso C0 (`1bc49e8`) registró la integración de la 10.6b. 13 commits de código
-y pruebas, de `5955d7e` a `5dc9924`, y este registro. Plan en `tmp/e10-diff/plan-10-7.md`,
+Fecha: del 2026-11-02 al 2026-11-03 (Lima). Estado: verificada en staging, pendiente de
+integrar. El paso C0 (`1bc49e8`) registró la integración de la 10.6b. 13 commits de código
+y pruebas, de `5955d7e` a `5dc9924`, el registro `8c0ec46` y el cierre. Plan en `tmp/e10-diff/plan-10-7.md`,
 aprobado con D1 a D9. La 10.7 se partió en 10.7a y 10.7b (usuarios), porque usuarios lleva
 revisión de seguridad y escribe credenciales en staging.
 
@@ -6751,6 +6751,8 @@ revisión de seguridad y escribe credenciales en staging.
 | 581aa56 | feat | Chatarra en panel con `FilterBar`; `form-options.ts`. |
 | 1cdaecd | feat | Retazos en panel, Reutilizar y Descartar con confirmación; 2 claves nuevas. |
 | 5dc9924 | feat | Inicio y venta sin `<main>`; `waste-scrap-links.test.ts`; textos del hallazgo 16. |
+| 8c0ec46 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| este | docs | Cierre: verificación en staging y manual de Campañas y Mermas. |
 
 Ajustes al plan:
 
@@ -6844,6 +6846,77 @@ Los hallazgos 17 a 26 son de usuarios y pasan a la 10.7b. Hallazgos de la implem
     releerlas. Las listas de mutaciones se editan con Edit: los heredoc se comen las barras
     invertidas.
 
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e107-huella`) y etiquetas `e107/`, generadas por
+  `c-e107-guiones.py`, que se niega a sobrescribir. Los guiones cargados comprobaron su SHA-256
+  contra `e107-guiones.sha256`. Plan en `plan-verificacion-10-7a.md`.
+- 17 capturas por fase: 14 de pantallas que cambian (10 a 1281 px y 4 a 376 px) y 3 de control
+  (rutas, recetas y galería).
+- Predicción antes del push en `prediccion-10-7a.md`; notas en `e107-antes-notas.md` y
+  `e107-despues-notas.md`; registro en `registro-10-7a.tsv` (34 filas).
+- Solo ADMIN: el responsable omitió el maestro de taller; lo cubren `waste-scrap-links.test.ts`,
+  `production-links.test.ts` y `action-access.test.ts`.
+
+Publicación y medición, todo el 2026-11-03 UTC:
+
+- «Antes» sobre `d4c20d4` (CSS servido `3cqkf7ly4slgj.css`).
+- Push de 15 commits (de `1bc49e8` a `8c0ec46`): CI #128 en verde, de 02:18:57 a 02:23:39 UTC, y
+  Vercel `success` a las 02:20:19 UTC. CSS servido `33d76ftdzcx_9.css`, 112.525 bytes, como se
+  predijo.
+- Los 3 controles dieron hash igual. Las 14 pantallas cambian como se predijo.
+
+Tareas (ADMIN):
+
+| Tarea | Antes (`d4c20d4`) | Después |
+|---|---|---|
+| T93 Campaña con fin anterior al inicio | Página de error; se pierde lo escrito | Panel; error en Fecha de fin con el foco; todo conservado, también el estado; sin toast |
+| T94 Chatarra sin peso ni cantidad | «This page couldn't load»: Mermas no tiene `error.tsx` | Panel; error en Peso con el foco; todo conservado |
+| T95 Cancelar con cambios | Sale sin preguntar en campaña, producto, chatarra y retazo | Pregunta en las cuatro |
+| T96 Atrás tras filtrar | URL sin filtros y barra con los anteriores | **Igual** (hallazgo 36) |
+| T97 Rango invertido | Filtra sin aviso | Mensaje bajo Hasta; no envía |
+| T98 Estados | Alta y edición con 4 | Alta con 2; edición sin campo |
+| T99 Ranuras | No había panel | Panel sobre la lista filtrada; Descartar devuelve el foco a «Nueva campaña»; Adelante reabre; recargar da la página completa |
+| T100 `details/new` | Página | 404 |
+| T101 Campaña A | Va al detalle; agregar producto en otra página; activar y **finalizar sin confirmar**; foco en `body` | Se queda en la lista; agregar producto en ventana; finalizar confirma con la consecuencia; foco en la fila |
+| T102 Campaña B | SweetAlert genérico | Confirmación destructiva: «Las órdenes ya creadas se conservan.» |
+| T103 Chatarra | Vuelve al inicio | Panel; vuelve a la lista |
+| T104 y T105 Retazos | Sin confirmar, **sin aviso**, pierde el filtro, sin bitácora | Confirman con su variante; un aviso; conservan el filtro; bitácora con quien lo hizo |
+
+Datos de prueba, con autorización del responsable en cada turno de escritura:
+
+- «Antes»: CAM00000001 finalizada con CPD00000001 (PRO00000002 × 10); CAM00000002 anulada; una
+  chatarra acumulada con MAT00000001; RET00000005 reutilizado y RET00000006 descartado.
+- «Después»: CAM00000003 finalizada con CPD00000002; CAM00000004 anulada; CHA00000005 acumulada;
+  RET00000007 reutilizado y RET00000008 descartado. La bitácora registra el estado de los dos
+  últimos; los del «antes» no lo tenían.
+
+Hallazgos de la verificación:
+
+36. **T96: los filtros GET.** Tras **Filtrar**, que carga el documento, **Atrás** vuelve a la lista
+    sin filtros y el navegador restaura en la barra lo que se había escrito. Pasa en todas las
+    listas con `FilterBar`, no solo en las de esta sub-entrega, y `FilterBar` no puede evitarlo con
+    una `key`. Es el fenómeno del hallazgo 36 de la 10.6b. Se registra y no se cambia: el
+    responsable decidió un `fix` propio, con `autoComplete="off"` y verificación en navegador. El
+    manual de patrones avisa del caso.
+37. La predicción decía que tras activar, finalizar o anular el foco iría a un botón de la fila. Va
+    a la fila, porque el botón desaparece: es el diseño de `ConfirmActionButton` (hallazgo 13 de la
+    10.3a). El código hizo lo correcto; la predicción fue imprecisa.
+38. Método: staging no tenía campañas. Las capturas de detalle y edición se tomaron sobre
+    CAM00000001 ya finalizada, en las dos fases; el botón «Agregar producto» se midió en T101.
+39. Método: en el «antes», un objetivo escrito por script antes de que la página oculta hidratara
+    no se guardó, y la edición se repitió esperando la hidratación. Por eso CAM00000001 tiene una
+    línea de bitácora de más.
+40. Método: el panel del navegador se cerró y, al reabrirlo, la sesión cayó en el `/login` de
+    producción. Se detectó en la llamada aparte de origen y no se hizo nada allí.
+41. Método: con el panel abierto sobre la lista, el nombre de un material aparecía 6 veces en la
+    página. Se eligió la opción del panel y se comprobó el id oculto antes de guardar.
+
+El manual suma el capítulo de Mermas y la sección de Campañas en Producción, y el de patrones
+explica el caso de T96.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -6868,7 +6941,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, con el código y el registro hechos, pendiente de verificar en staging) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, verificada en staging con CI #128 verde, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos, pendiente de integrar) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
