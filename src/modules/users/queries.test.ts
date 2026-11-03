@@ -3,7 +3,6 @@ import { describe, expect, it, vi } from "vitest";
 import {
   findActiveUserOptions,
   getUserForEdit,
-  getUserForPasswordReset,
   getUserListData,
 } from "@/modules/users/queries";
 import { characterizeHandler, isPrismaCall } from "@/testing/page-characterization";
@@ -20,7 +19,6 @@ vi.mock("@/lib/db", async () =>
 const CONSULTAS: [string, () => Promise<unknown>][] = [
   ["getUserListData", () => getUserListData({ q: "ana", rol: "SELLER", estado: "activo" }, { skip: 0, take: 10 })],
   ["getUserForEdit", () => getUserForEdit("USU00000002")],
-  ["getUserForPasswordReset", () => getUserForPasswordReset("USU00000002")],
   ["findActiveUserOptions", () => findActiveUserOptions()],
 ];
 

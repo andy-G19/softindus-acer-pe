@@ -186,8 +186,8 @@ function defineCases(name: string, run: (formData: FormData) => Promise<unknown>
   });
 }
 
-// El alta y la edicion parten del estado inicial del panel; el restablecer, del
-// estado de error clasico hasta su ventana (B6).
+// El alta y la edicion parten del estado inicial del panel, y el restablecer del
+// de su ventana.
 const withState =
   (action: (prev: UserFormState, formData: FormData) => Promise<UserFormState>) =>
   (formData: FormData) =>
@@ -196,7 +196,7 @@ const withState =
 const withResetState =
   (action: (prev: ResetPasswordFormState, formData: FormData) => Promise<ResetPasswordFormState>) =>
   (formData: FormData) =>
-    action({ error: "" }, formData);
+    action({ status: "idle" }, formData);
 
 // ---------------------------------------------------------------------------
 // Datos
@@ -485,7 +485,7 @@ describe("restablecer escribe el hash con updateMany en la transaccion", () => {
     const { calls, result } = await runCase(reset, resetWith({}, noUser));
 
     expect(auditLogs(calls)).toEqual([]);
-    expect(result).toEqual({ estado: { error: "El usuario no existe." } });
+    expect(result).toEqual({ estado: expect.objectContaining({ status: "error", error: "El usuario no existe." }) });
   });
 });
 
@@ -553,5 +553,48 @@ describe("el alta y la edicion devuelven el resultado", () => {
     expect((write?.args as { data: Record<string, unknown> }).data).not.toHaveProperty("estado");
     expect(auditLogs(calls).map((log) => log.accion)).toEqual(["actualizar"]);
     expect(result).toEqual({ estado: expect.objectContaining({ status: "success", data: { id_usuario: OTHER } }) });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Restablecer en ventana (B6, D3 y D6)
+// ---------------------------------------------------------------------------
+
+// Desde la ventana de la fila, el restablecer autoriza con getAuthorizedSession y
+// devuelve el resultado en lugar de redirigir. No devuelve ningun valor: lo unico
+// que se escribe son las contrasenas, que nunca vuelven al navegador.
+describe("el restablecer devuelve el resultado", () => {
+  const reset = withResetState(resetUserPasswordAction);
+
+  it("sin permiso responde con un error, sin redirigir ni tocar Prisma", async () => {
+    const { calls, result } = await runCase(reset, { ...resetWith(), role: "SELLER" });
+
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+    expect(result).toEqual({
+      estado: {
+        status: "error",
+        error: "No tienes permisos para gestionar usuarios.",
+        values: {},
+        operationId: "operacion-de-prueba",
+      },
+    });
+  });
+
+  it("guardado devuelve el id, sin valores, y revalida la lista", async () => {
+    const { calls, result } = await runCase(reset, resetWith());
+
+    expect(result).toEqual({
+      estado: { status: "success", data: { id_usuario: OTHER }, values: {}, operationId: "operacion-de-prueba" },
+    });
+    expect(calls.some((call) => "effect" in call && call.effect === "revalidatePath")).toBe(true);
+  });
+
+  it.each([
+    { name: "una contrasena debil", actionCase: resetWith({ password: "debil", confirmPassword: "debil" }) },
+    { name: "un usuario inexistente", actionCase: resetWith({}, noUser) },
+  ])("$name devuelve el error sin valores", async ({ actionCase }) => {
+    const { result } = await runCase(reset, actionCase);
+
+    expect(result).toEqual({ estado: expect.objectContaining({ status: "error", values: {} }) });
   });
 });

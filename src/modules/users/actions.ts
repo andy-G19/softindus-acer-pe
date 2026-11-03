@@ -11,7 +11,7 @@ import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { lockUserRow } from "@/lib/row-locks";
-import type { ActionErrorState, FieldErrors } from "@/lib/errors";
+import type { FieldErrors } from "@/lib/errors";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   createUserSchema,
@@ -36,8 +36,9 @@ export type UserFormValues = {
 // el resultado; sin permiso responden con un error, no redirigen.
 export type UserFormState = FormActionState<UserFormValues, { id_usuario: string }>;
 
-// El restablecer sigue con el estado de error clasico hasta su ventana (B6).
-export type ResetPasswordFormState = ActionErrorState;
+// Entrega 10.7b: el restablecer se usa desde la ventana de la fila y devuelve el
+// resultado. No devuelve valores: solo recibe contrasenas, que nunca vuelven (D6).
+export type ResetPasswordFormState = FormActionState<Record<string, never>, { id_usuario: string }>;
 
 const USERS_PATH = "/dashboard/users";
 // Mismo costo usado en prisma/seed.ts y en src/auth.ts al validar login.
@@ -70,6 +71,10 @@ function userError(values: UserFormValues, error: string, fieldErrors?: FieldErr
 
 function userSaved(values: UserFormValues, idUsuario: string): UserFormState {
   return { status: "success", data: { id_usuario: idUsuario }, values, operationId: newOperationId() };
+}
+
+function resetError(error: string, fieldErrors?: FieldErrors): ResetPasswordFormState {
+  return { status: "error", error, fieldErrors, values: {}, operationId: newOperationId() };
 }
 
 /** Un problema que el formulario muestra: mensaje general y, si aplica, el del campo. */
@@ -431,17 +436,18 @@ export async function resetUserPasswordAction(
   _prevState: ResetPasswordFormState,
   formData: FormData,
 ): Promise<ResetPasswordFormState> {
-  const session = await requireRole([APP_ROLES.ADMIN]);
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return resetError(PERMISSION_ERROR);
+  }
 
   const parsed = resetUserPasswordSchema.safeParse(
     getResetPasswordFormData(formData),
   );
 
   if (!parsed.success) {
-    return {
-      error: "Revisa la contraseña ingresada.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return resetError("Revisa la contraseña ingresada.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -477,9 +483,15 @@ export async function resetUserPasswordAction(
   });
 
   if (!updated) {
-    return { error: "El usuario no existe." };
+    return resetError("El usuario no existe.");
   }
 
   revalidatePath(USERS_PATH);
-  redirect(`${USERS_PATH}?toast=user-password-reset`);
+
+  return {
+    status: "success",
+    data: { id_usuario: data.id_usuario },
+    values: {},
+    operationId: newOperationId(),
+  };
 }

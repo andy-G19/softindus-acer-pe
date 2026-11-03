@@ -1,7 +1,7 @@
 import { createElement, type ReactNode } from "react";
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { definePageSuite, generatedRow } from "@/testing/page-characterization";
+import { characterizePage, definePageSuite, generatedRow } from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
 // RouteSheet pinta su contenido en un portal, que no existe en el render de
@@ -98,16 +98,15 @@ definePageSuite([
       },
     ],
   },
-  {
-    route: "/dashboard/users/[id]/reset-password",
-    load: () => import("./[id]/reset-password/page"),
-    cases: [
-      { name: "restablecer", params: { id: "USU00000002" } },
-      {
-        name: "inexistente",
-        params: { id: "USU99999999" },
-        data: { "usuario.findUnique": null },
-      },
-    ],
-  },
 ]);
+
+// D3 de la 10.7: restablecer la contrasena es una ventana de la fila, sin pagina
+// propia.
+describe("restablecer desde la lista", () => {
+  it("la fila abre la ventana y no enlaza a la pagina retirada", async () => {
+    const { html } = await characterizePage(() => import("./page"), { name: "lista" }, "/dashboard/users");
+
+    expect(html).toContain("Resetear contraseña");
+    expect(html).not.toContain("/reset-password");
+  });
+});

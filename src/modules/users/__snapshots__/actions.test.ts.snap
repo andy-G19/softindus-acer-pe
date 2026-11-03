@@ -1222,7 +1222,7 @@ exports[`deactivateUserAction > sin id vuelve a la lista sin tocar Prisma > resu
 exports[`resetUserPasswordAction > ADMIN restablece la contrasena con su bitacora en la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1271,12 +1271,23 @@ exports[`resetUserPasswordAction > ADMIN restablece la contrasena con su bitacor
 ]
 `;
 
-exports[`resetUserPasswordAction > ADMIN restablece la contrasena con su bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/users?toast=user-password-reset"`;
+exports[`resetUserPasswordAction > ADMIN restablece la contrasena con su bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_usuario": "USU00000002",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {},
+  },
+}
+`;
 
 exports[`resetUserPasswordAction > SELLER no puede restablecer > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1284,12 +1295,22 @@ exports[`resetUserPasswordAction > SELLER no puede restablecer > llamadas 1`] = 
 ]
 `;
 
-exports[`resetUserPasswordAction > SELLER no puede restablecer > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`resetUserPasswordAction > SELLER no puede restablecer > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar usuarios.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {},
+  },
+}
+`;
 
 exports[`resetUserPasswordAction > el restablecer de uno mismo se permite > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1338,12 +1359,23 @@ exports[`resetUserPasswordAction > el restablecer de uno mismo se permite > llam
 ]
 `;
 
-exports[`resetUserPasswordAction > el restablecer de uno mismo se permite > resultado 1`] = `"redirect:/dashboard/users?toast=user-password-reset"`;
+exports[`resetUserPasswordAction > el restablecer de uno mismo se permite > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_usuario": "USU00000001",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {},
+  },
+}
+`;
 
 exports[`resetUserPasswordAction > el usuario no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1381,6 +1413,10 @@ exports[`resetUserPasswordAction > el usuario no existe > resultado 1`] = `
 {
   "estado": {
     "error": "El usuario no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {},
   },
 }
 `;
@@ -1388,7 +1424,7 @@ exports[`resetUserPasswordAction > el usuario no existe > resultado 1`] = `
 exports[`resetUserPasswordAction > las contrasenas que no coinciden se rechazan > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1405,6 +1441,9 @@ exports[`resetUserPasswordAction > las contrasenas que no coinciden se rechazan 
         "Las contraseñas no coinciden.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {},
   },
 }
 `;
@@ -1412,7 +1451,7 @@ exports[`resetUserPasswordAction > las contrasenas que no coinciden se rechazan 
 exports[`resetUserPasswordAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1429,6 +1468,9 @@ exports[`resetUserPasswordAction > sin id se rechaza sin tocar Prisma > resultad
         "El usuario no existe.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {},
   },
 }
 `;
@@ -1436,7 +1478,7 @@ exports[`resetUserPasswordAction > sin id se rechaza sin tocar Prisma > resultad
 exports[`resetUserPasswordAction > una contrasena de 73 bytes se rechaza: bcrypt ignoraria el ultimo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1453,6 +1495,9 @@ exports[`resetUserPasswordAction > una contrasena de 73 bytes se rechaza: bcrypt
         "La contraseña no debe superar los 72 caracteres; las tildes y la ñ cuentan doble.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {},
   },
 }
 `;
@@ -1460,7 +1505,7 @@ exports[`resetUserPasswordAction > una contrasena de 73 bytes se rechaza: bcrypt
 exports[`resetUserPasswordAction > una contrasena debil se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1480,6 +1525,9 @@ exports[`resetUserPasswordAction > una contrasena debil se rechaza > resultado 1
         "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {},
   },
 }
 `;

@@ -192,6 +192,7 @@ describe("UserForm", () => {
     await renderForm(success);
 
     expect(field<HTMLInputElement>("password").type).toBe("password");
+    expect(field<HTMLInputElement>("confirmPassword").type).toBe("password");
     expect(field<HTMLInputElement>("password").autocomplete).toBe("new-password");
     expect(field<HTMLInputElement>("confirmPassword").autocomplete).toBe("new-password");
     expect(field<HTMLInputElement>("usuario").autocomplete).toBe("off");

@@ -212,7 +212,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers%3Festado%3Dtodos">Editar</a>
-<a data-variant="outline" href="/dashboard/users/id_usuario-1/reset-password">Resetear contraseña</a>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_usuario" value="id_usuario-1"/>
 <button data-variant="outline" type="submit">Activar</button>
@@ -237,7 +237,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers%3Festado%3Dtodos">Editar</a>
-<a data-variant="outline" href="/dashboard/users/id_usuario-2/reset-password">Resetear contraseña</a>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_usuario" value="id_usuario-2"/>
 <button data-variant="outline" type="submit">Activar</button>
@@ -477,7 +477,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers">Editar</a>
-<a data-variant="outline" href="/dashboard/users/id_usuario-1/reset-password">Resetear contraseña</a>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_usuario" value="id_usuario-1"/>
 <button data-variant="outline" type="submit">Activar</button>
@@ -502,7 +502,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers">Editar</a>
-<a data-variant="outline" href="/dashboard/users/id_usuario-2/reset-password">Resetear contraseña</a>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_usuario" value="id_usuario-2"/>
 <button data-variant="outline" type="submit">Activar</button>
@@ -820,7 +820,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers%3Fq%3Dana%26rol%3DSELLER%26estado%3Dactivo%26page%3D2">Editar</a>
-<a data-variant="outline" href="/dashboard/users/id_usuario-1/reset-password">Resetear contraseña</a>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_usuario" value="id_usuario-1"/>
 <button data-variant="outline" type="submit">Activar</button>
@@ -845,7 +845,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers%3Fq%3Dana%26rol%3DSELLER%26estado%3Dactivo%26page%3D2">Editar</a>
-<a data-variant="outline" href="/dashboard/users/id_usuario-2/reset-password">Resetear contraseña</a>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_usuario" value="id_usuario-2"/>
 <button data-variant="outline" type="submit">Activar</button>
@@ -1519,127 +1519,6 @@ exports[`/dashboard/users/[id]/edit > vuelve al returnTo > resultado 1`] = `
 </div>
 </form>
 </div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
-  "outcome": "render",
-}
-`;
-
-exports[`/dashboard/users/[id]/reset-password > inexistente > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "apellidos": true,
-        "correo": true,
-        "id_usuario": true,
-        "nombres": true,
-      },
-      "where": {
-        "id_usuario": "USU99999999",
-      },
-    },
-    "prisma": "usuario.findUnique",
-  },
-]
-`;
-
-exports[`/dashboard/users/[id]/reset-password > inexistente > resultado 1`] = `
-{
-  "html": null,
-  "outcome": "notFound",
-}
-`;
-
-exports[`/dashboard/users/[id]/reset-password > restablecer > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "apellidos": true,
-        "correo": true,
-        "id_usuario": true,
-        "nombres": true,
-      },
-      "where": {
-        "id_usuario": "USU00000002",
-      },
-    },
-    "prisma": "usuario.findUnique",
-  },
-]
-`;
-
-exports[`/dashboard/users/[id]/reset-password > restablecer > resultado 1`] = `
-{
-  "html": "<main>
-<section>
-<nav aria-label="Ruta de navegación">
-<ol>
-<li>
-<a href="/dashboard">Dashboard</a>
-</li>
-<li>
-<svg/>
-<a href="/dashboard/users">Usuarios</a>
-</li>
-<li>
-<svg/>
-<span aria-current="page">Reiniciar contraseña</span>
-</li>
-</ol>
-</nav>
-<div>
-<div>
-<div aria-hidden="true">
-</div>
-<div>
-<h1>Reiniciar contraseña</h1>
-<p>Define una nueva contraseña para nombres-1 apellidos-1 (correo-1). La contraseña anterior dejará de funcionar de inmediato.</p>
-</div>
-</div>
-<div>
-<button type="button" aria-label="Volver a usuarios">
-<svg/>Volver a usuarios</button>
-<span data-variant="default">Solo ADMIN</span>
-</div>
-</div>
-</section>
-<div>
-<div>
-<div>Nueva contraseña</div>
-</div>
-<div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-1"/>
-<div>
-<label for="password">Nueva contraseña</label>
-<input type="password" id="password" required="" name="password"/>
-<p>Mínimo 8 caracteres, con mayúscula, minúscula, número y carácter especial.</p>
-</div>
-<div>
-<label for="confirmPassword">Confirmar nueva contraseña</label>
-<input type="password" id="confirmPassword" required="" name="confirmPassword"/>
-</div>
-<div>
-<button data-variant="default" type="submit">Reiniciar contraseña</button>
-<a data-variant="outline" href="/dashboard/users">Cancelar</a>
-</div>
-</form>
-</div>
-</div>
-</main>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

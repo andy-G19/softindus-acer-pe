@@ -44,8 +44,11 @@ import { parseStringParam, type SearchParamsRecord } from "@/lib/search-params";
 import {
   activateUserAction,
   deactivateUserAction,
+  resetUserPasswordAction,
 } from "@/modules/users/actions";
+import { usersNotifications } from "@/modules/users/notifications";
 import { getUserListData } from "@/modules/users/queries";
+import { ResetPasswordDialog } from "@/modules/users/reset-password-dialog";
 
 const ROLE_OPTIONS = [
   APP_ROLES.ADMIN,
@@ -232,13 +235,13 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
                             href={withReturnTo(`${navigationHrefs.users}/${user.id_usuario}/edit`, returnTo)}
                           />
 
-                          <Button variant="outline" size="sm" asChild>
-                            <Link
-                              href={`${navigationHrefs.users}/${user.id_usuario}/reset-password`}
-                            >
-                              Resetear contraseña
-                            </Link>
-                          </Button>
+                          <ResetPasswordDialog
+                            action={resetUserPasswordAction}
+                            idUsuario={user.id_usuario}
+                            nombre={`${user.nombres} ${user.apellidos}`}
+                            correo={user.correo ?? user.id_usuario}
+                            successNotification={usersNotifications["user-password-reset"]}
+                          />
 
                           {user.estado === "activo" ? (
                             <form action={deactivateUserAction}>
