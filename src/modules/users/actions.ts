@@ -9,6 +9,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockUserRow } from "@/lib/row-locks";
 import type { ActionErrorState } from "@/lib/errors";
 import { APP_ROLES } from "@/lib/permissions";
 import {
@@ -55,16 +56,19 @@ function getResetPasswordFormData(formData: FormData) {
   };
 }
 
+type UserReadClient = Pick<Prisma.TransactionClient, "usuario">;
+
 /**
  * Busca si correo o usuario ya estan en uso por OTRO registro. Devuelve cual
  * de los dos campos esta duplicado, o null si no hay conflicto.
  */
 async function findDuplicateUserField(
+  client: UserReadClient,
   correo: string,
   usuario: string,
   currentUserId?: string,
 ): Promise<"correo" | "usuario" | null> {
-  const existing = await prisma.usuario.findFirst({
+  const existing = await client.usuario.findFirst({
     where: {
       OR: [{ correo }, { usuario }],
       ...(currentUserId ? { id_usuario: { not: currentUserId } } : {}),
@@ -128,7 +132,7 @@ export async function createUserAction(
     };
   }
 
-  const duplicateField = await findDuplicateUserField(data.correo, data.usuario);
+  const duplicateField = await findDuplicateUserField(prisma, data.correo, data.usuario);
 
   if (duplicateField === "correo") {
     return {
@@ -212,78 +216,87 @@ export async function updateUserAction(
 
   const data = parsed.data;
 
-  const currentUser = await prisma.usuario.findUnique({
-    where: { id_usuario: data.id_usuario },
-    select: {
-      id_usuario: true,
-      estado: true,
-      rol: { select: { nombre_rol: true } },
-    },
-  });
-
-  if (!currentUser) {
-    return { error: "El usuario no existe." };
-  }
-
-  const role = await prisma.rol.findUnique({
-    where: { nombre_rol: data.rol },
-    select: { id_rol: true },
-  });
-
-  if (!role) {
-    return {
-      error: "El rol seleccionado no es válido.",
-      fieldErrors: { rol: ["El rol seleccionado no es válido."] },
-    };
-  }
-
-  const isSelf = data.id_usuario === session.user.id;
-
-  // Un ADMIN no puede quitarse a si mismo el rol ADMIN (se quedaria sin
-  // acceso al propio modulo de usuarios) ni desactivarse a si mismo.
-  if (isSelf && currentUser.rol.nombre_rol === APP_ROLES.ADMIN && data.rol !== APP_ROLES.ADMIN) {
-    return {
-      error: "No puedes quitarte tu propio rol de administrador.",
-      fieldErrors: {
-        rol: ["No puedes quitarte tu propio rol de administrador."],
-      },
-    };
-  }
-
-  if (isSelf && data.estado !== "activo") {
-    return {
-      error: "No puedes desactivar tu propio usuario.",
-      fieldErrors: { estado: ["No puedes desactivar tu propio usuario."] },
-    };
-  }
-
-  const duplicateField = await findDuplicateUserField(
-    data.correo,
-    data.usuario,
-    data.id_usuario,
-  );
-
-  if (duplicateField === "correo") {
-    return {
-      error: "Ya existe otro usuario con ese correo.",
-      fieldErrors: { correo: ["Ya existe otro usuario con ese correo."] },
-    };
-  }
-
-  if (duplicateField === "usuario") {
-    return {
-      error: "Ya existe otro usuario con ese nombre de usuario.",
-      fieldErrors: {
-        usuario: ["Ya existe otro usuario con ese nombre de usuario."],
-      },
-    };
-  }
-
-  const roleChanged = currentUser.rol.nombre_rol !== data.rol;
-  const statusChanged = currentUser.estado !== data.estado;
+  // La fila del usuario se bloquea antes de leer su rol y su estado: las reglas
+  // de uno mismo y las bitacoras de cambio deciden con lo guardado, y dos
+  // ediciones simultaneas se ponen en fila (hallazgo 21 de la 10.7). Un rechazo
+  // se devuelve desde la transaccion, que no llego a escribir.
+  let rejection: UserFormState | null;
 
   try {
-    await prisma.$transaction(async (tx) => {
+    rejection = await prisma.$transaction(async (tx): Promise<UserFormState | null> => {
+      await lockUserRow(tx, data.id_usuario);
+
+      const currentUser = await tx.usuario.findUnique({
+        where: { id_usuario: data.id_usuario },
+        select: {
+          id_usuario: true,
+          estado: true,
+          rol: { select: { nombre_rol: true } },
+        },
+      });
+
+      if (!currentUser) {
+        return { error: "El usuario no existe." };
+      }
+
+      const role = await tx.rol.findUnique({
+        where: { nombre_rol: data.rol },
+        select: { id_rol: true },
+      });
+
+      if (!role) {
+        return {
+          error: "El rol seleccionado no es válido.",
+          fieldErrors: { rol: ["El rol seleccionado no es válido."] },
+        };
+      }
+
+      const isSelf = data.id_usuario === session.user.id;
+
+      // Un ADMIN no puede quitarse a si mismo el rol ADMIN (se quedaria sin
+      // acceso al propio modulo de usuarios) ni desactivarse a si mismo.
+      if (isSelf && currentUser.rol.nombre_rol === APP_ROLES.ADMIN && data.rol !== APP_ROLES.ADMIN) {
+        return {
+          error: "No puedes quitarte tu propio rol de administrador.",
+          fieldErrors: {
+            rol: ["No puedes quitarte tu propio rol de administrador."],
+          },
+        };
+      }
+
+      if (isSelf && data.estado !== "activo") {
+        return {
+          error: "No puedes desactivar tu propio usuario.",
+          fieldErrors: { estado: ["No puedes desactivar tu propio usuario."] },
+        };
+      }
+
+      const duplicateField = await findDuplicateUserField(
+        tx,
+        data.correo,
+        data.usuario,
+        data.id_usuario,
+      );
+
+      if (duplicateField === "correo") {
+        return {
+          error: "Ya existe otro usuario con ese correo.",
+          fieldErrors: { correo: ["Ya existe otro usuario con ese correo."] },
+        };
+      }
+
+      if (duplicateField === "usuario") {
+        return {
+          error: "Ya existe otro usuario con ese nombre de usuario.",
+          fieldErrors: {
+            usuario: ["Ya existe otro usuario con ese nombre de usuario."],
+          },
+        };
+      }
+
+      const roleChanged = currentUser.rol.nombre_rol !== data.rol;
+      const statusChanged = currentUser.estado !== data.estado;
+
       await tx.usuario.update({
         where: { id_usuario: data.id_usuario },
         data: {
@@ -326,6 +339,8 @@ export async function updateUserAction(
           tx,
         });
       }
+
+      return null;
     });
   } catch (error) {
     const uniqueErrorState = getPrismaUniqueErrorState(error);
@@ -335,6 +350,10 @@ export async function updateUserAction(
     }
 
     throw error;
+  }
+
+  if (rejection) {
+    return rejection;
   }
 
   revalidatePath(USERS_PATH);

@@ -1433,6 +1433,19 @@ exports[`updateUserAction > ADMIN actualiza los datos sin cambiar rol ni estado:
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1481,10 +1494,6 @@ exports[`updateUserAction > ADMIN actualiza los datos sin cambiar rol ni estado:
       },
     },
     "prisma": "usuario.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1548,6 +1557,19 @@ exports[`updateUserAction > activar desde la edicion deja la bitacora de activar
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1596,10 +1618,6 @@ exports[`updateUserAction > activar desde la edicion deja la bitacora de activar
       },
     },
     "prisma": "usuario.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1661,6 +1679,19 @@ exports[`updateUserAction > cambiar el rol deja la bitacora del cambio > llamada
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1709,10 +1740,6 @@ exports[`updateUserAction > cambiar el rol deja la bitacora del cambio > llamada
       },
     },
     "prisma": "usuario.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1774,6 +1801,19 @@ exports[`updateUserAction > cambiar rol y estado deja tres bitacoras > llamadas 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1822,10 +1862,6 @@ exports[`updateUserAction > cambiar rol y estado deja tres bitacoras > llamadas 
       },
     },
     "prisma": "usuario.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1898,6 +1934,19 @@ exports[`updateUserAction > desactivar desde la edicion deja la bitacora de inac
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1946,10 +1995,6 @@ exports[`updateUserAction > desactivar desde la edicion deja la bitacora de inac
       },
     },
     "prisma": "usuario.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2011,6 +2056,19 @@ exports[`updateUserAction > el administrador edita sus propios datos > llamadas 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -2061,10 +2119,6 @@ exports[`updateUserAction > el administrador edita sus propios datos > llamadas 
     "prisma": "usuario.findFirst",
   },
   {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
     "args": {
       "data": {
         "apellidos": "Quispe",
@@ -2113,6 +2167,19 @@ exports[`updateUserAction > el administrador no puede desactivarse > llamadas 1`
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -2140,6 +2207,10 @@ exports[`updateUserAction > el administrador no puede desactivarse > llamadas 1`
     },
     "prisma": "rol.findUnique",
   },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
 ]
 `;
 
@@ -2163,6 +2234,19 @@ exports[`updateUserAction > el administrador no puede quitarse el rol > llamadas
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2192,6 +2276,10 @@ exports[`updateUserAction > el administrador no puede quitarse el rol > llamadas
     },
     "prisma": "rol.findUnique",
   },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
 ]
 `;
 
@@ -2215,6 +2303,19 @@ exports[`updateUserAction > el correo ya esta en uso por otro > llamadas 1`] = `
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2265,6 +2366,10 @@ exports[`updateUserAction > el correo ya esta en uso por otro > llamadas 1`] = `
       },
     },
     "prisma": "usuario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -2291,6 +2396,19 @@ exports[`updateUserAction > el rol no existe en la base > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -2318,6 +2436,10 @@ exports[`updateUserAction > el rol no existe en la base > llamadas 1`] = `
     },
     "prisma": "rol.findUnique",
   },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
 ]
 `;
 
@@ -2343,6 +2465,19 @@ exports[`updateUserAction > el usuario no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -2358,6 +2493,10 @@ exports[`updateUserAction > el usuario no existe > llamadas 1`] = `
       },
     },
     "prisma": "usuario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -2377,6 +2516,19 @@ exports[`updateUserAction > el usuario ya esta en uso por otro > llamadas 1`] = 
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2427,6 +2579,10 @@ exports[`updateUserAction > el usuario ya esta en uso por otro > llamadas 1`] = 
       },
     },
     "prisma": "usuario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -2525,6 +2681,19 @@ exports[`updateUserAction > una carrera por el correo (P2002) responde como dupl
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -2573,10 +2742,6 @@ exports[`updateUserAction > una carrera por el correo (P2002) responde como dupl
       },
     },
     "prisma": "usuario.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {

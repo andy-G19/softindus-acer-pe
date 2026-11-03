@@ -13,8 +13,11 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   isPrismaCall,
+  isRowLock,
   type DataOverrides,
+  type PrismaCall,
   type RecordedCall,
   type Role,
 } from "@/testing/page-characterization";
@@ -358,3 +361,35 @@ defineCases("resetUserPasswordAction", withState(resetUserPasswordAction), [
   { name: "el usuario no existe", ...resetWith({}, noUser) },
   { name: "el restablecer de uno mismo se permite", ...resetWith({ id_usuario: SELF }, { "usuario.findUnique": { id_usuario: SELF } }) },
 ]);
+
+// ---------------------------------------------------------------------------
+// Bloqueo de fila (B2, hallazgo 21)
+// ---------------------------------------------------------------------------
+
+// La edicion decide con el rol y el estado guardados (reglas de uno mismo y
+// bitacoras de cambio): bloquea la fila del usuario antes de leerlos, dentro de
+// la transaccion que escribe, para que dos ediciones simultaneas no registren
+// cambios que no hubo.
+describe("updateUserAction bloquea la fila del usuario", () => {
+  const update = withState(updateUserAction);
+  const reads = (call: PrismaCall) => call.prisma === "usuario.findUnique";
+
+  it.each([
+    { name: "editar otro usuario", id: OTHER, actionCase: updateWith({ rol: "WORKSHOP_MASTER" }) },
+    { name: "editar el propio usuario", id: SELF, actionCase: updateSelfWith() },
+    { name: "quitarse el rol de administrador", id: SELF, actionCase: updateSelfWith({ rol: "SELLER" }) },
+  ])("$name: bloquea antes de leer", async ({ id, actionCase }) => {
+    const { calls } = await runCase(update, actionCase);
+
+    expectRowLockedBefore(calls, { table: "usuario", id, reads });
+  });
+
+  it("un usuario inexistente se decide dentro de la transaccion y no escribe", async () => {
+    const { calls, result } = await runCase(update, updateWith({}, noUser));
+    const lock = calls.findIndex((call) => isRowLock(call, "usuario", OTHER));
+
+    expect(lock).toBeGreaterThanOrEqual(0);
+    expect(calls.filter(isPrismaCall).map((call) => call.prisma)).not.toContain("usuario.update");
+    expect(result).toEqual({ estado: { error: "El usuario no existe." } });
+  });
+});
