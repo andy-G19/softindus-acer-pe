@@ -6,13 +6,13 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 839 |
-| Páginas | 170 |
-| Páginas en ranuras paralelas (@ranura) | 43 |
-| Páginas que interceptan una ruta | 27 |
-| Declaraciones JSX de formulario | 59 |
+| Archivos fuente analizados | 850 |
+| Páginas | 172 |
+| Páginas en ranuras paralelas (@ranura) | 46 |
+| Páginas que interceptan una ruta | 29 |
+| Declaraciones JSX de formulario | 54 |
 | Archivos con directiva use server | 48 |
-| Funciones exportadas en esos archivos | 112 |
+| Funciones exportadas en esos archivos | 111 |
 
 ## Páginas por área
 
@@ -31,7 +31,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | production | 39 |
 | reports | 10 |
 | staff | 12 |
-| users | 4 |
+| users | 6 |
 | waste-scrap | 10 |
 
 ## Rutas y formularios candidatos
@@ -195,10 +195,12 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/staff/payrolls` | — | `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 2 | — |
 | `/dashboard/staff/tasks/new` | — | `src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx` | 1 | — |
 | `/dashboard/staff/tasks` | — | `src/app/(dashboard)/dashboard/staff/tasks/page.tsx` | 1 | — |
+| `/dashboard/users/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/users/@panel/(.)[id]/edit/page.tsx` | 0 | UserForm |
+| `/dashboard/users/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/users/@panel/(.)new/page.tsx` | 0 | UserForm |
+| `/dashboard/users` | `@panel` | `src/app/(dashboard)/dashboard/users/@panel/page.tsx` | 0 | — |
 | `/dashboard/users/[id]/edit` | — | `src/app/(dashboard)/dashboard/users/[id]/edit/page.tsx` | 0 | UserForm |
-| `/dashboard/users/[id]/reset-password` | — | `src/app/(dashboard)/dashboard/users/[id]/reset-password/page.tsx` | 0 | ResetPasswordForm |
 | `/dashboard/users/new` | — | `src/app/(dashboard)/dashboard/users/new/page.tsx` | 0 | UserForm |
-| `/dashboard/users` | — | `src/app/(dashboard)/dashboard/users/page.tsx` | 3 | — |
+| `/dashboard/users` | — | `src/app/(dashboard)/dashboard/users/page.tsx` | 0 | — |
 | `/dashboard/waste-scrap` | — | `src/app/(dashboard)/dashboard/waste-scrap/page.tsx` | 0 | — |
 | `/dashboard/waste-scrap/reusable-scraps/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/@panel/(.)new/page.tsx` | 0 | ReusableScrapForm |
 | `/dashboard/waste-scrap/reusable-scraps` | `@panel` | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/@panel/page.tsx` | 0 | — |
@@ -246,9 +248,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 280 | `{cancelPayrollAction}` |
 | `src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx` | 92 | `{createOperatorTaskAction}` |
 | `src/app/(dashboard)/dashboard/staff/tasks/page.tsx` | 198 | `{cancelOperatorTaskAction}` |
-| `src/app/(dashboard)/dashboard/users/page.tsx` | 111 | `{navigationHrefs.users}` |
-| `src/app/(dashboard)/dashboard/users/page.tsx` | 237 | `{deactivateUserAction}` |
-| `src/app/(dashboard)/dashboard/users/page.tsx` | 253 | `{activateUserAction}` |
 | `src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx` | 82 | `{createScrapSaleAction}` |
 | `src/components/commercial/payment-form.tsx` | 31 | `{createPaymentAction}` |
 | `src/components/commercial/quote-form.tsx` | 66 | `{createQuoteAction}` |
@@ -272,8 +271,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/modules/production/work-orders/components/work-order-form.tsx` | 295 | `{createWorkOrderAction}` |
 | `src/modules/production/work-orders/material-movement-form.tsx` | 52 | `{ isReturn ? returnWorkOrderMaterialAction : deliverAdditionalMaterialAction }` |
 | `src/modules/staff/operators/operator-form.tsx` | 79 | `{formAction}` |
-| `src/modules/users/reset-password-form.tsx` | 50 | `{formAction}` |
-| `src/modules/users/user-form.tsx` | 86 | `{formAction}` |
 
 ## Entradas de servidor
 
@@ -322,7 +319,7 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/modules/staff/payment-history/actions.ts` | registerOperatorPaymentAction |
 | `src/modules/staff/payrolls/actions.ts` | generatePayrollAction, cancelPayrollAction |
 | `src/modules/staff/tasks/actions.ts` | createOperatorTaskAction, cancelOperatorTaskAction |
-| `src/modules/users/actions.ts` | createUserAction, updateUserAction, activateUserAction, deactivateUserAction, resetUserPasswordAction |
+| `src/modules/users/actions.ts` | createUserAction, updateUserAction, updateUserStatusAction, resetUserPasswordAction |
 | `src/modules/waste-scrap/reusable-scraps/actions.ts` | createReusableScrapAction |
 | `src/modules/waste-scrap/reusable-scraps/status-actions.ts` | updateReusableScrapStatusAction |
 | `src/modules/waste-scrap/scrap-sales/actions.ts` | createScrapSaleAction |

@@ -3213,8 +3213,8 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Detalle de campaña | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Modal breve; se retira la página (D3) | 10.7a | Migrado |
 | Chatarra | Mermas | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.7a | Migrado |
 | Retazos reutilizables | Mermas | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.7a | Migrado |
-| Usuarios | Usuarios | ADMIN | Páginas, desviación; el `Label` de rol sin control al editarse a sí mismo | Panel lateral | 10.7b | Pendiente |
-| Restablecer contraseña | Usuarios | ADMIN | Página, desviación | Modal breve | 10.7b | Pendiente |
+| Usuarios | Usuarios | ADMIN | Páginas, desviación; el `Label` de rol sin control al editarse a sí mismo | Panel lateral | 10.7b | Migrado |
+| Restablecer contraseña | Usuarios | ADMIN | Página, desviación | Modal breve; se retira la página (D3) | 10.7b | Migrado |
 | Operarios | Personal | ADMIN | Páginas, desviación | Panel lateral | 10.8 | Pendiente |
 | Asistencia | Personal | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.8 | Pendiente |
 | Tareas de operario | Personal | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.8 | Pendiente |
@@ -3233,7 +3233,7 @@ destructivas confirman:
 | 10.4 | Inactivar cliente, producto y categoría de producto (10.4a, migradas) |
 | 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
 | 10.6 | Inactivar ruta y etapa (10.6a, migradas); inactivar receta; marcar versión vigente; anular versión; borrar detalle de receta (10.6b, migradas) |
-| 10.7 | Cambiar el estado de campaña y de retazo (10.7a, migradas); activar y desactivar usuario (10.7b) |
+| 10.7 | Cambiar el estado de campaña y de retazo (10.7a); activar y desactivar usuario (10.7b); todas migradas |
 | 10.8 | Inactivar operario; cancelar tarea; generar costeo desde una orden; recalcular costeo; anular costo indirecto |
 
 ### Sub-entrega 10.1 — Bases y catálogos breves
@@ -6936,6 +6936,104 @@ Datos leídos de la API de GitHub el 2026-11-03 (UTC) y comparados con git:
   las 12:40:54 UTC). La sub-entrega no trae migraciones (sin cambios en
   `prisma/`).
 
+### Sub-entrega 10.7b — Usuarios
+
+Fecha: 2026-11-03 (Lima). Estado: código y registro hechos, pendiente de verificar en
+staging. El paso B0 (`34764ae`) registró la integración de la 10.7a. 7 commits de código y
+pruebas, de `f6598c8` a `48a24b1`, y este registro. Plan en `tmp/e10-diff/plan-10-7b.md`,
+sobre los pasos y las decisiones D1 a D9 de `plan-10-7.md`.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 34764ae | docs | B0: integración de la 10.7a en `main`. |
+| f6598c8 | test | Caracterización de las 5 acciones con `bcrypt` doblado; ninguna contraseña en llamadas ni respuestas y ninguna lectura de `usuario` con `clave_hash`; usuarios entra en `action-access.test.ts`. |
+| e185467 | fix | `lockUserRow`; la edición decide dentro de la transacción (hallazgo 21). |
+| d7c16c2 | fix | Estado con compare-and-set y restablecer con `updateMany`, con la bitácora en la transacción (18 y 22). |
+| 0e38b03 | fix | Límite de 72 bytes en el alta y el restablecer (19, D7). |
+| 5f655e2 | feat | Alta y edición en panel con `FormActionState` sin contraseñas (D6), `autoComplete` y sin Estado (D2). |
+| 79c188e | feat | Restablecer en `FormDialog` desde la fila; se retiran la página, su formulario y su consulta (D3). |
+| 48a24b1 | feat | Activar y desactivar con `ConfirmActionButton`, `FilterBar` y `<div>`; se retira `user-self-deactivate-blocked`. |
+
+Ajustes al plan:
+
+- La ventana de restablecer no cita la duración de la sesión. La sesión JWT se renueva
+  con `updateAge` de 5 minutos, así que una sesión en uso no caduca a las 8 h: el texto
+  dice que las sesiones abiertas no se cierran y que desactivar al usuario sí las corta.
+- La escritura de la edición pasa a `select: { id_usuario: true }`: un `update` sin `select`
+  también devolvía la fila con `clave_hash` (hallazgo 44).
+- El rol propio se muestra en un campo de solo lectura, sin `name` y asociado a su
+  etiqueta, en lugar de un texto suelto; viaja en un campo oculto.
+- La lista pasa de «Limpiar» a «Limpiar filtros», el texto de `FilterBar`.
+- Las ayudas de contraseña suman el máximo de 72 y que las tildes y la ñ cuentan doble.
+
+Diseño:
+
+- La edición bloquea la fila porque varias reglas dependen de lo guardado (rol propio y
+  bitácora del cambio). El estado usa compare-and-set porque una sola condición («no tiene
+  ya ese estado») cabe en el `WHERE`; con `count` 0 lee el usuario solo para explicar el
+  rechazo.
+- El restablecer calcula el hash antes de abrir la transacción: bcrypt tarda unos 70 ms.
+  Con un usuario inexistente se calcula y no se escribe nada.
+- Ninguna acción de usuarios redirige: las cuatro devuelven el resultado. `UserFormValues` no
+  tiene contraseñas y el restablecer devuelve `values: {}`.
+- La ventana de restablecer solo monta su formulario mientras está abierta: lo escrito sale
+  del DOM al cerrarla.
+- `UserForm` sirve al panel y a la página. Activar y desactivar son una sola acción con el
+  estado pedido.
+
+Evidencia:
+
+1. Rojo antes de cada paso, guardado en `rojo-107b-<paso>.txt` (B1 es la caracterización).
+2. `cmp_snap_107.py --detalle` y un resumen por programa de cada paso: ningún paso perdió
+   escrituras, bitácora, correlativos ni revalidaciones; B2 y B3 no cambiaron ningún
+   resultado.
+3. Mutaciones: B1 22 de 22, B2 8 de 8, B3 11 de 11, B4 5 de 5, B5 18 de 18, B6 11 de 11 y B7 15
+   de 15; en total, 90 de 90. En B6 y B7 sobrevivieron tres primero (hallazgo 46).
+4. CSS compilado comparado por reglas con `css_107.py`: igual byte a byte en todos los pasos,
+   112.526 bytes.
+5. `npm run check` terminó con código 0 antes de cada commit, hasta 4.271 pruebas en 236
+   archivos. B2 falló primero por una prueba ajena (hallazgo 42).
+
+Tiempo de preparación, aproximado: del rojo de cada paso al último `npm run check` en verde,
+leído de la fecha de esos archivos (Lima). Las esperas al responsable quedan fuera, también la
+del equipo cargado en B2:
+
+| Paso | B1 | B2 | B3 | B4 | B5 | B6 | B7 |
+|---|---|---|---|---|---|---|---|
+| Minutos | 9 | 9 | 7 | 5 | 26 | 11 | 12 |
+
+Suman 79 minutos frente a 216 estimados en bruto: un factor de 0,37, como la 10.7a.
+
+Hallazgos de la auditoría corregidos: 17 a 22 y 26. Se registran y no se cambian:
+
+- 23. **Restablecer no cierra las sesiones abiertas.** Cerrarlas exige una columna nueva
+  (migración). La ventana lo dice y aconseja desactivar.
+- 24. Sin protección del último administrador: dos ADMIN pueden desactivarse a la vez.
+  Requiere regla de negocio.
+- 25. `usuario` distingue mayúsculas: «Ana» y «ana» conviven.
+
+Hallazgos de la implementación:
+
+42. Método: en B2, `production/recipes/versions-confirmation.test.ts` agotó sus 5 s (5,2 a
+    5,4 s), también sobre HEAD sin los cambios: su primer `import` de la página de versiones
+    roza el límite. Con el equipo liberado pasó. Candidato a un `fix` propio con un límite
+    mayor para esa prueba.
+43. Método: la sesión JWT se renueva con el uso, así que no tiene una duración fija que citar.
+44. B5: `tx.usuario.update` sin `select` devolvía la fila con `clave_hash` al servidor; ahora
+    elige solo el id.
+45. Método: en B6, `git rm` dejó los borrados ya preparados y un `git add` con esas rutas
+    falló entero (`fatal` cancela todo el comando). En adelante se borra sin `git rm`.
+46. Método: en B6 y B7 sobrevivieron tres mutaciones: una confirmación de contraseña en
+    texto plano, el botón de la fila sin el color destructivo y la fila propia sin
+    deshabilitar en la página real. Se reforzaron las pruebas del formulario, la ventana, la
+    fila y la lista.
+47. Métrica: `count_105b_get_forms.py` no cuenta los formularios con `action={variable}`. El de
+    usuarios nunca entró en la cuenta, por eso los GET siguen en 7; ningún otro sin
+    `FilterBar` está en esa situación.
+48. Método: un heredoc largo con rutas `(.)` falló entero sin ejecutar nada; las páginas se
+    escribieron con Write.
+49. El plan predijo 25 `<main>` anidados y quedan 24: no contó el de la página retirada.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -6960,7 +7058,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, cerrada, con CI #131 verde en main, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos; la 10.7b, en curso) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, cerrada, con CI #131 verde en main, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos; la 10.7b, con el código y el registro hechos, pendiente de verificar en staging) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -6982,9 +7080,9 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` o `react-toastify` | 2 | 2, solo la fachada y el proveedor (regla de ESLint) | 7 |
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
-| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 130 / 130 | 7, G3, 9 y 10 |
+| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 231 / 4.140 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 236 / 4.271 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -7003,11 +7101,11 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
-| Copias locales de `FieldError` | 16 | 4 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 28 | 9 y 10 |
+| Copias locales de `FieldError` | 16 | 2 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 24 | 9 y 10 |
 | Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 7 (7 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
-| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 6 | 10 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 3 | 10 |
 | Acciones de activar e inactivar que leen el estado y escriben el contrario | 12 | 0 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
@@ -7021,6 +7119,8 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Pantallas con `DateRangeFields` que pierden las fechas elegidas antes de hidratar | 14 | 0 | 10 |
 | Pantallas de Comercial con `StatusBadge` | 5 | 0 | 10 |
 | Acciones de campañas y mermas sin caracterizar / que lanzan su rechazo | 7 / 7 | 0 / 0 | 10 |
+| Acciones de usuarios caracterizadas / que redirigen | 0 / 5 | 4 / 0 | 10 |
+| Respuestas de acción que podrían devolver una contraseña / lecturas de `usuario` sin `select` | sin control | 0 / 0, comprobado por prueba | 10 |
 | Archivos de acciones de Mantenimiento sin caracterizar (máquinas, repuestos, fallas, preventivos y reparaciones) | 5 | 0 | 10 |
 | Acciones de fallas, preventivos y reparaciones que deciden fuera de la transacción | 5 | 0 | 10 |
 | Acciones de fallas, preventivos y reparaciones que lanzan en lugar de devolver el error | 6 | 0 | 10 |
@@ -7379,6 +7479,17 @@ Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e8d77ae`:
 Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de
 `FieldError` en 6; y los cambios de estado que voltean en 2.
+
+Actualizado en la sub-entrega 10.7b (2026-11-03) sobre `48a24b1`:
+
+- Pruebas: 236 / 4.271.
+- El `<main>` anidado baja a 24 (salen los 4 de usuarios; uno, la página de restablecer,
+  se retira).
+- La desviación baja a 3 (operarios 2 y salida de inventario 1) y las copias locales de
+  `FieldError` a 2 (operarios y salida).
+- Las claves `?toast=` bajan a 129: se retira `user-self-deactivate-blocked`.
+- Los formularios GET siguen en 7: el de usuarios no entraba en la cuenta (hallazgo 47).
+- `ConfirmDeleteButton` deja de usarse en usuarios: quedan 10 páginas.
 
 Actualizado en la sub-entrega 10.7a (2026-11-02) sobre `5dc9924`:
 
