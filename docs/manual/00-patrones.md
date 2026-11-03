@@ -17,6 +17,7 @@ Pantallas renovadas hasta ahora:
 - Producción: rutas de fabricación, etapas, recetas, campañas, cuellos de
   botella y la lista de órdenes de trabajo.
 - Mermas y chatarra: el inicio, la chatarra y los retazos reutilizables.
+- Usuarios: toda la pantalla.
 - Reportes: los ocho reportes con filtros, el historial de exportaciones y
   la bitácora de auditoría.
 

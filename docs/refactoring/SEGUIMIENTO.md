@@ -6938,9 +6938,9 @@ Datos leídos de la API de GitHub el 2026-11-03 (UTC) y comparados con git:
 
 ### Sub-entrega 10.7b — Usuarios
 
-Fecha: 2026-11-03 (Lima). Estado: código y registro hechos, pendiente de verificar en
-staging. El paso B0 (`34764ae`) registró la integración de la 10.7a. 7 commits de código y
-pruebas, de `f6598c8` a `48a24b1`, y este registro. Plan en `tmp/e10-diff/plan-10-7b.md`,
+Fecha: 2026-11-03 (Lima). Estado: verificada en staging, pendiente de integrar. El paso B0
+(`34764ae`) registró la integración de la 10.7a. 7 commits de código y pruebas, de
+`f6598c8` a `48a24b1`, el registro `f1d30cc` y el cierre. Plan en `tmp/e10-diff/plan-10-7b.md`,
 sobre los pasos y las decisiones D1 a D9 de `plan-10-7.md`.
 
 | Commit | Tipo | Cambio |
@@ -6953,6 +6953,8 @@ sobre los pasos y las decisiones D1 a D9 de `plan-10-7.md`.
 | 5f655e2 | feat | Alta y edición en panel con `FormActionState` sin contraseñas (D6), `autoComplete` y sin Estado (D2). |
 | 79c188e | feat | Restablecer en `FormDialog` desde la fila; se retiran la página, su formulario y su consulta (D3). |
 | 48a24b1 | feat | Activar y desactivar con `ConfirmActionButton`, `FilterBar` y `<div>`; se retira `user-self-deactivate-blocked`. |
+| f1d30cc | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| este | docs | Cierre: verificación en staging y manual de Usuarios. |
 
 Ajustes al plan:
 
@@ -7034,6 +7036,89 @@ Hallazgos de la implementación:
     escribieron con Write.
 49. El plan predijo 25 `<main>` anidados y quedan 24: no contó el de la página retirada.
 
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e107b-huella`) y etiquetas `e107b/`, copiadas de las de la 10.7a
+  por `c-e107b-guiones.py`, que se niega a sobrescribir. Antes de cargarlo se corrigió
+  `e107b-form.js`: su lector de formularios devolvía el valor de todos los campos, también el de
+  las contraseñas (hallazgo 53). Los guiones se cargaron desde el texto exacto de sus archivos y
+  la página comprobó su SHA-256. Plan en `plan-verificacion-10-7b.md`.
+- 10 capturas en el «antes»: 7 de pantallas (5 a 1281 px y 2 a 376 px) y 3 de control (campañas,
+  clientes y galería). En el «después», 9: la página de restablecer da 404.
+- Predicción antes del push en `prediccion-10-7b.md`; notas en `e107b-antes-notas.md` y
+  `e107b-despues-notas.md`; registro en `registro-10-7b.tsv` (19 filas).
+- Solo ADMIN, por decisión del responsable: el vendedor y el maestro de taller solo ven el acceso
+  denegado, que fijan la prueba de rutas y `action-access.test.ts`. Por eso no se entró con la
+  cuenta de prueba y el hallazgo 23 no se midió en staging.
+- Credenciales (D9): el responsable escribió todas las contraseñas, también las de los rechazos.
+  Antes de cada envío, `__claves()` dijo solo si los campos estaban vacíos, si coincidían y
+  cuántos bytes tenían; ningún guion leyó su valor.
+
+Publicación y medición, todo el 2026-11-03 UTC:
+
+- «Antes» sobre `8e282d7` (CSS servido `33d76ftdzcx_9.css`, 112.525 bytes).
+- Push de 9 commits (de `34764ae` a `f1d30cc`): CI #132 en verde, de 19:51:49 a 19:56:31 UTC, y
+  Vercel `success` a las 19:53:59 UTC. El CSS servido conservó nombre y tamaño, como se predijo.
+- Los 3 controles dieron hash y texto iguales. Las 6 pantallas de usuarios cambian como se
+  predijo, sin scroll horizontal a 376 px.
+
+Tareas (ADMIN):
+
+| Tarea | Antes (`8e282d7`) | Después |
+|---|---|---|
+| T106 Contraseñas distintas | Se pierde todo; error sin `aria-invalid`; toast de error; foco en `body` | Panel; error en Confirmar con el foco; todo conservado salvo las contraseñas; sin toast |
+| T107 Más de 72 bytes | Sin límite: se crearía la cuenta, no se probó | Error en Contraseña con el foco (80 bytes en 42 caracteres); nada guardado |
+| T108 Cancelar con cambios | Sale sin preguntar | «¿Descartar el usuario nuevo?»; descartar devuelve el foco a «Nuevo usuario» |
+| T109 El propio administrador | Desactivar con `disabled`; la edición oculta rol y estado con dos textos | Desactivar con `aria-disabled`; la edición muestra el rol en un campo de solo lectura con su etiqueta |
+| T110 Ranuras | No había panel | Alta y edición en panel; Atrás cierra, Adelante reabre, recargar da la página completa |
+| T111 URL de restablecer | Página | 404 |
+| T112 Atrás tras filtrar | URL sin filtros y barra con «zzz» | **Igual** (hallazgo 36 de la 10.7a) |
+| T113 Alta | Recarga la lista con toast; foco en `body` | Panel; un aviso; foco en «Nuevo usuario» |
+| T114 Correo repetido | Se pierde todo; toast de error | Error en Correo con el foco; todo conservado salvo las contraseñas; sin toast |
+| T115 Edición | Página con Estado | Panel sin Estado; un aviso; foco en su «Editar» |
+| T116 Restablecer | Página aparte, sin nada de las sesiones | Ventana desde la fila con el aviso de las sesiones abiertas; un aviso; foco en su botón |
+| T117 Desactivar y activar | SweetAlert genérico; foco en `body` | Confirmación destructiva con la consecuencia real; activar sin confirmar; foco en el botón de la fila |
+| T118 Bitácora | 6 entradas | 6 entradas con las mismas acciones y detalles |
+
+Datos de prueba, con autorización del responsable en cada turno de escritura (D9):
+
+- «Antes»: USU00000005 (`prueba107b_antes`, SELLER), editada, restablecida, desactivada, activada y
+  desactivada otra vez. Queda inactiva.
+- «Después»: USU00000006 (`prueba107b_despues`, SELLER), con los mismos pasos. Queda inactiva.
+- Correos `@ejemplo.test` (dominio reservado), sin inicio de sesión. Los rechazos de T106, T107 y
+  T114 no crearon cuentas ni gastaron correlativo. Ninguna cuenta real se editó, restableció ni
+  desactivó.
+
+Hallazgos de la verificación:
+
+50. T109: el botón deshabilitado de `ConfirmActionButton` tiene `pointer-events: none`. Un clic
+    del ratón lo atraviesa y el foco queda en `body`; con el teclado recibe el foco y Enter no hace
+    nada. La predicción decía que con el clic el foco quedaba en el botón: era imprecisa, el código
+    hace lo diseñado.
+51. T108: al seguir editando tras «Cancelar» en la confirmación, el foco vuelve al último elemento
+    enfocado dentro del panel, su botón Cancelar, no al campo escrito. Es el `trackFocus` del
+    hallazgo 8 de la 10.1; la predicción fue imprecisa.
+52. Método: en T116 el responsable envió la ventana al terminar de escribir, antes de la
+    comprobación de `__claves()`. Era la escritura autorizada y el servidor la aceptó, así que las
+    contraseñas coincidían. En adelante, la instrucción de escribir contraseñas debe decir también
+    «sin pulsar Enter».
+53. Método: el lector de formularios heredado (`__formEstado`) devolvía el valor de cada campo,
+    contraseñas incluidas. Se corrigió antes de cargarlo en staging: da «(escrita)» o vacío, y
+    `__claves()` añade solo vacío, coincidencia y bytes.
+54. Método: una «observación» sobre la zona horaria de la lista resultó un error propio: se supuso
+    la hora de Lima sin leer el reloj. Las horas mostradas eran correctas y se retiró de la
+    predicción con una nota.
+55. Método: `e107b-registro-tsv.py` exige todas las capturas del plan y falló en el «después», que
+    no tiene la de restablecer (404). Las 9 filas se añadieron con un script en línea.
+56. Método: en el «antes», el primer clic de la última desactivación no dejó el SweetAlert a la
+    vista, porque el responsable tocó la página a la vez. Nada cambió (sin aviso ni bitácora) y el
+    segundo clic sí. En T114 del «antes», nombres y apellidos escritos antes de hidratar se
+    perdieron y se reescribieron, como en el hallazgo 39 de la 10.7a.
+
+El manual suma el capítulo de Usuarios, y el de patrones lo cuenta entre las pantallas renovadas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -7058,7 +7143,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, cerrada, con CI #131 verde en main, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos; la 10.7b, con el código y el registro hechos, pendiente de verificar en staging) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, cerrada, con CI #131 verde en main, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos; la 10.7b, verificada en staging con CI #132 verde, 9 huellas del «después» (3 controles iguales y 6 como se predijo) y los hallazgos 17 a 22 y 26 corregidos, pendiente de integrar) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
