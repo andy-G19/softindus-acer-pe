@@ -5,12 +5,13 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { lockUserRow } from "@/lib/row-locks";
-import type { ActionErrorState } from "@/lib/errors";
+import type { ActionErrorState, FieldErrors } from "@/lib/errors";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   createUserSchema,
@@ -18,35 +19,61 @@ import {
   updateUserSchema,
 } from "@/schemas/users/user.schema";
 
-export type UserFormState = ActionErrorState;
+/**
+ * Lo que el formulario de usuario envio, para volver a mostrarlo. Nunca lleva la
+ * contrasena ni su confirmacion: el resultado viaja al navegador y no debe
+ * devolverlas (D6 de la 10.7); tras un error el usuario las vuelve a escribir.
+ */
+export type UserFormValues = {
+  nombres: string;
+  apellidos: string;
+  usuario: string;
+  correo: string;
+  rol: string;
+};
+
+// Entrega 10.7b: el alta y la edicion se usan desde el panel lateral y devuelven
+// el resultado; sin permiso responden con un error, no redirigen.
+export type UserFormState = FormActionState<UserFormValues, { id_usuario: string }>;
+
+// El restablecer sigue con el estado de error clasico hasta su ventana (B6).
+export type ResetPasswordFormState = ActionErrorState;
 
 const USERS_PATH = "/dashboard/users";
 // Mismo costo usado en prisma/seed.ts y en src/auth.ts al validar login.
 const BCRYPT_COST = 10;
+const PERMISSION_ERROR = "No tienes permisos para gestionar usuarios.";
+const INVALID_DATA = "Revisa los datos del usuario.";
 
-function getCreateUserFormData(formData: FormData) {
+function getUserFormValues(formData: FormData): UserFormValues {
+  const text = (name: keyof UserFormValues) => formData.get(name)?.toString() ?? "";
+
   return {
-    nombres: formData.get("nombres")?.toString() ?? "",
-    apellidos: formData.get("apellidos")?.toString() ?? "",
-    usuario: formData.get("usuario")?.toString() ?? "",
-    correo: formData.get("correo")?.toString() ?? "",
-    rol: formData.get("rol")?.toString() ?? "",
+    nombres: text("nombres"),
+    apellidos: text("apellidos"),
+    usuario: text("usuario"),
+    correo: text("correo"),
+    rol: text("rol"),
+  };
+}
+
+function getPasswordFormData(formData: FormData) {
+  return {
     password: formData.get("password")?.toString() ?? "",
     confirmPassword: formData.get("confirmPassword")?.toString() ?? "",
   };
 }
 
-function getUpdateUserFormData(formData: FormData) {
-  return {
-    id_usuario: formData.get("id_usuario")?.toString() ?? "",
-    nombres: formData.get("nombres")?.toString() ?? "",
-    apellidos: formData.get("apellidos")?.toString() ?? "",
-    usuario: formData.get("usuario")?.toString() ?? "",
-    correo: formData.get("correo")?.toString() ?? "",
-    rol: formData.get("rol")?.toString() ?? "",
-    estado: formData.get("estado")?.toString() ?? "",
-  };
+function userError(values: UserFormValues, error: string, fieldErrors?: FieldErrors): UserFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
 }
+
+function userSaved(values: UserFormValues, idUsuario: string): UserFormState {
+  return { status: "success", data: { id_usuario: idUsuario }, values, operationId: newOperationId() };
+}
+
+/** Un problema que el formulario muestra: mensaje general y, si aplica, el del campo. */
+type UserProblem = { error: string; fieldErrors?: FieldErrors };
 
 function getResetPasswordFormData(formData: FormData) {
   return {
@@ -90,7 +117,7 @@ async function findDuplicateUserField(
   return "usuario";
 }
 
-function getPrismaUniqueErrorState(error: unknown): UserFormState | null {
+function getPrismaUniqueProblem(error: unknown): UserProblem | null {
   if (
     error instanceof Prisma.PrismaClientKnownRequestError &&
     error.code === "P2002"
@@ -107,15 +134,17 @@ export async function createUserAction(
   _prevState: UserFormState,
   formData: FormData,
 ): Promise<UserFormState> {
-  const session = await requireRole([APP_ROLES.ADMIN]);
+  const values = getUserFormValues(formData);
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
 
-  const parsed = createUserSchema.safeParse(getCreateUserFormData(formData));
+  if (!session) {
+    return userError(values, PERMISSION_ERROR);
+  }
+
+  const parsed = createUserSchema.safeParse({ ...values, ...getPasswordFormData(formData) });
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del usuario.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return userError(values, INVALID_DATA, parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -126,28 +155,23 @@ export async function createUserAction(
   });
 
   if (!role) {
-    return {
-      error: "El rol seleccionado no es válido.",
-      fieldErrors: { rol: ["El rol seleccionado no es válido."] },
-    };
+    return userError(values, "El rol seleccionado no es válido.", {
+      rol: ["El rol seleccionado no es válido."],
+    });
   }
 
   const duplicateField = await findDuplicateUserField(prisma, data.correo, data.usuario);
 
   if (duplicateField === "correo") {
-    return {
-      error: "Ya existe un usuario con ese correo.",
-      fieldErrors: { correo: ["Ya existe un usuario con ese correo."] },
-    };
+    return userError(values, "Ya existe un usuario con ese correo.", {
+      correo: ["Ya existe un usuario con ese correo."],
+    });
   }
 
   if (duplicateField === "usuario") {
-    return {
-      error: "Ya existe un usuario con ese nombre de usuario.",
-      fieldErrors: {
-        usuario: ["Ya existe un usuario con ese nombre de usuario."],
-      },
-    };
+    return userError(values, "Ya existe un usuario con ese nombre de usuario.", {
+      usuario: ["Ya existe un usuario con ese nombre de usuario."],
+    });
   }
 
   // La contraseña en texto plano nunca se persiste ni se audita: solo se
@@ -186,51 +210,57 @@ export async function createUserAction(
       });
     });
   } catch (error) {
-    const uniqueErrorState = getPrismaUniqueErrorState(error);
+    const uniqueProblem = getPrismaUniqueProblem(error);
 
-    if (uniqueErrorState) {
-      return uniqueErrorState;
+    if (uniqueProblem) {
+      return userError(values, uniqueProblem.error);
     }
 
     throw error;
   }
 
   revalidatePath(USERS_PATH);
-  redirect(`${USERS_PATH}?toast=user-created`);
+
+  return userSaved(values, idUsuario);
 }
 
 export async function updateUserAction(
   _prevState: UserFormState,
   formData: FormData,
 ): Promise<UserFormState> {
-  const session = await requireRole([APP_ROLES.ADMIN]);
+  const values = getUserFormValues(formData);
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
 
-  const parsed = updateUserSchema.safeParse(getUpdateUserFormData(formData));
+  if (!session) {
+    return userError(values, PERMISSION_ERROR);
+  }
+
+  const parsed = updateUserSchema.safeParse({
+    ...values,
+    id_usuario: formData.get("id_usuario")?.toString() ?? "",
+  });
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del usuario.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return userError(values, INVALID_DATA, parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
 
-  // La fila del usuario se bloquea antes de leer su rol y su estado: las reglas
-  // de uno mismo y las bitacoras de cambio deciden con lo guardado, y dos
+  // La fila del usuario se bloquea antes de leer su rol: la regla de no quitarse
+  // el rol propio y la bitacora del cambio deciden con lo guardado, y dos
   // ediciones simultaneas se ponen en fila (hallazgo 21 de la 10.7). Un rechazo
-  // se devuelve desde la transaccion, que no llego a escribir.
-  let rejection: UserFormState | null;
+  // se devuelve desde la transaccion, que no llego a escribir. El estado no se
+  // edita aqui: cambia desde la fila (D2).
+  let problem: UserProblem | null;
 
   try {
-    rejection = await prisma.$transaction(async (tx): Promise<UserFormState | null> => {
+    problem = await prisma.$transaction(async (tx): Promise<UserProblem | null> => {
       await lockUserRow(tx, data.id_usuario);
 
       const currentUser = await tx.usuario.findUnique({
         where: { id_usuario: data.id_usuario },
         select: {
           id_usuario: true,
-          estado: true,
           rol: { select: { nombre_rol: true } },
         },
       });
@@ -251,23 +281,18 @@ export async function updateUserAction(
         };
       }
 
-      const isSelf = data.id_usuario === session.user.id;
-
-      // Un ADMIN no puede quitarse a si mismo el rol ADMIN (se quedaria sin
-      // acceso al propio modulo de usuarios) ni desactivarse a si mismo.
-      if (isSelf && currentUser.rol.nombre_rol === APP_ROLES.ADMIN && data.rol !== APP_ROLES.ADMIN) {
+      // Un ADMIN no puede quitarse a si mismo el rol ADMIN: se quedaria sin
+      // acceso al propio modulo de usuarios.
+      if (
+        data.id_usuario === session.user.id &&
+        currentUser.rol.nombre_rol === APP_ROLES.ADMIN &&
+        data.rol !== APP_ROLES.ADMIN
+      ) {
         return {
           error: "No puedes quitarte tu propio rol de administrador.",
           fieldErrors: {
             rol: ["No puedes quitarte tu propio rol de administrador."],
           },
-        };
-      }
-
-      if (isSelf && data.estado !== "activo") {
-        return {
-          error: "No puedes desactivar tu propio usuario.",
-          fieldErrors: { estado: ["No puedes desactivar tu propio usuario."] },
         };
       }
 
@@ -294,9 +319,6 @@ export async function updateUserAction(
         };
       }
 
-      const roleChanged = currentUser.rol.nombre_rol !== data.rol;
-      const statusChanged = currentUser.estado !== data.estado;
-
       await tx.usuario.update({
         where: { id_usuario: data.id_usuario },
         data: {
@@ -305,8 +327,8 @@ export async function updateUserAction(
           usuario: data.usuario,
           correo: data.correo,
           id_rol: role.id_rol,
-          estado: data.estado,
         },
+        select: { id_usuario: true },
       });
 
       await registerAuditLog({
@@ -318,7 +340,7 @@ export async function updateUserAction(
         tx,
       });
 
-      if (roleChanged) {
+      if (currentUser.rol.nombre_rol !== data.rol) {
         await registerAuditLog({
           userId: session.user.id,
           entidad_afectada: "usuario",
@@ -329,35 +351,23 @@ export async function updateUserAction(
         });
       }
 
-      if (statusChanged) {
-        await registerAuditLog({
-          userId: session.user.id,
-          entidad_afectada: "usuario",
-          id_registro_afectado: data.id_usuario,
-          accion: data.estado === "activo" ? "activar" : "inactivar",
-          detalle: `Usuario ${data.estado === "activo" ? "activado" : "desactivado"}: ${data.id_usuario}`,
-          tx,
-        });
-      }
-
       return null;
     });
   } catch (error) {
-    const uniqueErrorState = getPrismaUniqueErrorState(error);
+    problem = getPrismaUniqueProblem(error);
 
-    if (uniqueErrorState) {
-      return uniqueErrorState;
+    if (!problem) {
+      throw error;
     }
-
-    throw error;
   }
 
-  if (rejection) {
-    return rejection;
+  if (problem) {
+    return userError(values, problem.error, problem.fieldErrors);
   }
 
   revalidatePath(USERS_PATH);
-  redirect(`${USERS_PATH}?toast=user-updated`);
+
+  return userSaved(values, data.id_usuario);
 }
 
 async function setUserStatus(formData: FormData, nextStatus: "activo" | "inactivo") {
@@ -418,9 +428,9 @@ export async function deactivateUserAction(formData: FormData) {
 }
 
 export async function resetUserPasswordAction(
-  _prevState: UserFormState,
+  _prevState: ResetPasswordFormState,
   formData: FormData,
-): Promise<UserFormState> {
+): Promise<ResetPasswordFormState> {
   const session = await requireRole([APP_ROLES.ADMIN]);
 
   const parsed = resetUserPasswordSchema.safeParse(

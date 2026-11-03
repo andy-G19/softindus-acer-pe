@@ -91,7 +91,7 @@ describe("createUserSchema", () => {
 });
 
 describe("updateUserSchema", () => {
-  it("acepta datos validos incluyendo estado", () => {
+  it("acepta datos validos", () => {
     const result = updateUserSchema.safeParse({
       id_usuario: "USU00000002",
       nombres: "Ana",
@@ -99,13 +99,13 @@ describe("updateUserSchema", () => {
       usuario: "atorres",
       correo: "ana.torres@acerosperu.com",
       rol: "WORKSHOP_MASTER",
-      estado: "activo",
     });
 
     expect(result.success).toBe(true);
   });
 
-  it("rechaza un estado que no sea activo/inactivo", () => {
+  // D2 de la 10.7: el estado cambia desde la fila, no en la edicion.
+  it("descarta el estado: la edicion no lo cambia", () => {
     const result = updateUserSchema.safeParse({
       id_usuario: "USU00000002",
       nombres: "Ana",
@@ -113,10 +113,11 @@ describe("updateUserSchema", () => {
       usuario: "atorres",
       correo: "ana.torres@acerosperu.com",
       rol: "SELLER",
-      estado: "bloqueado",
+      estado: "inactivo",
     });
 
-    expect(result.success).toBe(false);
+    expect(result.success).toBe(true);
+    expect(result.data).not.toHaveProperty("estado");
   });
 });
 

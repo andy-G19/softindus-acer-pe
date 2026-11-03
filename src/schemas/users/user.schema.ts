@@ -3,7 +3,6 @@ import { z } from "zod";
 import { APP_ROLES } from "@/lib/permissions";
 
 const ROLE_VALUES = Object.values(APP_ROLES) as [string, ...string[]];
-const USER_STATUSES = ["activo", "inactivo"] as const;
 
 const PASSWORD_RULES_MESSAGE =
   "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.";
@@ -64,14 +63,6 @@ const rolSchema = z
     "Seleccione un rol válido.",
   );
 
-const estadoSchema = z
-  .string()
-  .trim()
-  .refine(
-    (value) => USER_STATUSES.includes(value as (typeof USER_STATUSES)[number]),
-    "Seleccione un estado válido.",
-  );
-
 export const createUserSchema = z
   .object({
     nombres: nombresSchema,
@@ -89,6 +80,8 @@ export const createUserSchema = z
 
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 
+// El estado no se edita aqui: cambia desde la fila, con su confirmacion y su
+// regla de no desactivarse a uno mismo (D2 de la 10.7).
 export const updateUserSchema = z.object({
   id_usuario: z.string().trim().min(1, "El usuario no existe."),
   nombres: nombresSchema,
@@ -96,7 +89,6 @@ export const updateUserSchema = z.object({
   usuario: usuarioSchema,
   correo: correoSchema,
   rol: rolSchema,
-  estado: estadoSchema,
 });
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;

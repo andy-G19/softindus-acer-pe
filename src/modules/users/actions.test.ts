@@ -7,6 +7,7 @@ import {
   deactivateUserAction,
   resetUserPasswordAction,
   updateUserAction,
+  type ResetPasswordFormState,
   type UserFormState,
 } from "@/modules/users/actions";
 import {
@@ -44,6 +45,11 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -180,8 +186,15 @@ function defineCases(name: string, run: (formData: FormData) => Promise<unknown>
   });
 }
 
+// El alta y la edicion parten del estado inicial del panel; el restablecer, del
+// estado de error clasico hasta su ventana (B6).
 const withState =
   (action: (prev: UserFormState, formData: FormData) => Promise<UserFormState>) =>
+  (formData: FormData) =>
+    action({ status: "idle" }, formData);
+
+const withResetState =
+  (action: (prev: ResetPasswordFormState, formData: FormData) => Promise<ResetPasswordFormState>) =>
   (formData: FormData) =>
     action({ error: "" }, formData);
 
@@ -253,7 +266,6 @@ const updateForm: FormFields = {
   usuario: "aquispe",
   correo: "ana.quispe@example.com",
   rol: "SELLER",
-  estado: "activo",
 };
 
 const updateWith = (fields: FormFields = {}, data: DataOverrides = {}) => ({
@@ -315,23 +327,14 @@ defineCases("createUserAction", withState(createUserAction), [
 ]);
 
 defineCases("updateUserAction", withState(updateUserAction), [
-  { name: "ADMIN actualiza los datos sin cambiar rol ni estado: una bitacora", ...updateWith() },
+  { name: "ADMIN actualiza los datos sin cambiar el rol: una bitacora", ...updateWith() },
   { name: "cambiar el rol deja la bitacora del cambio", ...updateWith({ rol: "WORKSHOP_MASTER" }) },
-  { name: "desactivar desde la edicion deja la bitacora de inactivar", ...updateWith({ estado: "inactivo" }) },
-  {
-    name: "activar desde la edicion deja la bitacora de activar",
-    ...updateWith({}, storedUser(OTHER, "inactivo", "SELLER")),
-  },
-  { name: "cambiar rol y estado deja tres bitacoras", ...updateWith({ rol: "ADMIN", estado: "inactivo" }) },
   { name: "SELLER no puede actualizar", ...updateWith(), role: "SELLER" },
   { name: "sin id se rechaza sin tocar Prisma", ...updateWith({ id_usuario: "" }) },
-  { name: "un estado desconocido se rechaza", ...updateWith({ estado: "bloqueado" }) },
-  { name: "sin estado se rechaza", ...updateWith({ estado: null }) },
   { name: "el usuario no existe", ...updateWith({}, noUser) },
   { name: "el rol no existe en la base", ...updateWith({}, noRole) },
   { name: "el administrador edita sus propios datos", ...updateSelfWith() },
   { name: "el administrador no puede quitarse el rol", ...updateSelfWith({ rol: "SELLER" }) },
-  { name: "el administrador no puede desactivarse", ...updateSelfWith({ estado: "inactivo" }) },
   {
     name: "el correo ya esta en uso por otro",
     ...updateWith({}, duplicate("ana.quispe@example.com", "otro")),
@@ -364,7 +367,7 @@ defineCases("deactivateUserAction", deactivateUserAction, [
   { name: "WORKSHOP_MASTER no puede desactivar", ...statusWith("activo"), role: "WORKSHOP_MASTER" },
 ]);
 
-defineCases("resetUserPasswordAction", withState(resetUserPasswordAction), [
+defineCases("resetUserPasswordAction", withResetState(resetUserPasswordAction), [
   { name: "ADMIN restablece la contrasena con su bitacora en la transaccion", ...resetWith() },
   { name: "SELLER no puede restablecer", ...resetWith(), role: "SELLER" },
   { name: "sin id se rechaza sin tocar Prisma", ...resetWith({ id_usuario: "" }) },
@@ -406,7 +409,9 @@ describe("updateUserAction bloquea la fila del usuario", () => {
 
     expect(lock).toBeGreaterThanOrEqual(0);
     expect(calls.filter(isPrismaCall).map((call) => call.prisma)).not.toContain("usuario.update");
-    expect(result).toEqual({ estado: { error: "El usuario no existe." } });
+    expect(result).toEqual({
+      estado: expect.objectContaining({ status: "error", error: "El usuario no existe." }),
+    });
   });
 });
 
@@ -459,7 +464,7 @@ describe("activar y desactivar escriben con compare-and-set", () => {
 });
 
 describe("restablecer escribe el hash con updateMany en la transaccion", () => {
-  const reset = withState(resetUserPasswordAction);
+  const reset = withResetState(resetUserPasswordAction);
 
   it("no lee el usuario ni recibe su fila", async () => {
     const { calls } = await runCase(reset, resetWith());
@@ -481,5 +486,72 @@ describe("restablecer escribe el hash con updateMany en la transaccion", () => {
 
     expect(auditLogs(calls)).toEqual([]);
     expect(result).toEqual({ estado: { error: "El usuario no existe." } });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Resultado de accion (B5, D2 y D6)
+// ---------------------------------------------------------------------------
+
+// Desde el panel lateral, el alta y la edicion autorizan con getAuthorizedSession
+// y devuelven el resultado (FormActionState) en lugar de redirigir. Los valores
+// devueltos son los campos de texto y el rol: nunca las contrasenas, que no deben
+// volver al navegador (D6). La edicion ya no recibe el estado (D2).
+const TEXT_VALUES = {
+  nombres: "Ana",
+  apellidos: "Quispe",
+  usuario: "aquispe",
+  correo: "ana.quispe@example.com",
+  rol: "SELLER",
+};
+
+describe("el alta y la edicion devuelven el resultado", () => {
+  const create = withState(createUserAction);
+  const update = withState(updateUserAction);
+
+  it.each([
+    { name: "el alta", run: create, actionCase: createWith() },
+    { name: "la edicion", run: update, actionCase: updateWith() },
+  ])("$name sin permiso responde con un error, sin redirigir", async ({ run, actionCase }) => {
+    const { calls, result } = await runCase(run, { ...actionCase, role: "SELLER" });
+
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+    expect(result).toEqual({
+      estado: expect.objectContaining({ status: "error", error: "No tienes permisos para gestionar usuarios." }),
+    });
+  });
+
+  it("el alta guardada devuelve el id y los valores sin contrasenas", async () => {
+    const { result } = await runCase(create, createWith());
+
+    expect(result).toEqual({
+      estado: {
+        status: "success",
+        data: { id_usuario: "USU00000012" },
+        values: TEXT_VALUES,
+        operationId: "operacion-de-prueba",
+      },
+    });
+  });
+
+  it.each([
+    { name: "un error del esquema", actionCase: createWith({ confirmPassword: "Clave#Segura2" }) },
+    { name: "un duplicado", actionCase: createWith({}, duplicate("ana.quispe@example.com", "otro")) },
+    { name: "una carrera P2002", actionCase: createWith({}, { "usuario.create": failWith(uniqueViolation()) }) },
+  ])("$name devuelve los valores sin contrasenas", async ({ actionCase }) => {
+    const { result } = await runCase(create, actionCase);
+    const estado = (result as { estado: { status: string; values: Record<string, string> } }).estado;
+
+    expect(estado.status).toBe("error");
+    expect(estado.values).toEqual(TEXT_VALUES);
+  });
+
+  it("la edicion ignora el estado: solo cambia desde la fila", async () => {
+    const { calls, result } = await runCase(update, updateWith({ estado: "inactivo" }));
+    const write = calls.filter(isPrismaCall).find((call) => call.prisma === "usuario.update");
+
+    expect((write?.args as { data: Record<string, unknown> }).data).not.toHaveProperty("estado");
+    expect(auditLogs(calls).map((log) => log.accion)).toEqual(["actualizar"]);
+    expect(result).toEqual({ estado: expect.objectContaining({ status: "success", data: { id_usuario: OTHER } }) });
   });
 });

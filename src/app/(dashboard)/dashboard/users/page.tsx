@@ -28,7 +28,12 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { formatDateTime } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   APP_ROLES,
@@ -65,6 +70,8 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
     await getUserListData({ q, rol, estado }, { skip, take });
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
+  // El panel de alta o edicion vuelve a la lista con sus filtros y su pagina.
+  const returnTo = createReturnToHref(navigationHrefs.users, params);
 
   return (
     <main className="space-y-6">
@@ -74,7 +81,7 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
         breadcrumbs={dashboardBreadcrumbs([{ label: "Usuarios" }])}
         actions={
           <Button asChild>
-            <Link href={`${navigationHrefs.users}/new`}>Nuevo usuario</Link>
+            <Link href={withReturnTo(`${navigationHrefs.users}/new`, returnTo)}>Nuevo usuario</Link>
           </Button>
         }
       />
@@ -222,7 +229,7 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
                       <TableCell>
                         <div className="flex flex-wrap justify-end gap-2">
                           <RowEditLink
-                            href={`${navigationHrefs.users}/${user.id_usuario}/edit`}
+                            href={withReturnTo(`${navigationHrefs.users}/${user.id_usuario}/edit`, returnTo)}
                           />
 
                           <Button variant="outline" size="sm" asChild>

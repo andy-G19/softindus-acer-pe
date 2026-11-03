@@ -352,6 +352,7 @@ const MODULOS: ModuloDeAcciones[] = [
       "deactivateUserAction",
       "resetUserPasswordAction",
     ],
+    rechazanConResultado: ["createUserAction", "updateUserAction"],
   },
   {
     ruta: "waste-scrap/reusable-scraps/actions",

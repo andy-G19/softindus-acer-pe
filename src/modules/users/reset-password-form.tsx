@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { showError } from "@/lib/notifications";
 import {
   resetUserPasswordAction,
-  type UserFormState,
+  type ResetPasswordFormState,
 } from "@/modules/users/actions";
 
 type ResetPasswordFormProps = {
@@ -18,7 +18,7 @@ type ResetPasswordFormProps = {
   cancelHref?: string;
 };
 
-const initialState: UserFormState = { error: "" };
+const initialState: ResetPasswordFormState = { error: "" };
 
 function FieldError({ messages }: { messages?: string[] }) {
   if (!messages?.length) {
