@@ -1,14 +1,15 @@
 import { Calculator, CalendarClock, Layers } from "lucide-react";
 import Link from "next/link";
 import { requireRole } from "@/lib/authz";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -19,10 +20,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDate } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
+import { parseDateParam, parseStringParam } from "@/lib/search-params";
 import { changeProductionCampaignStatusAction } from "@/modules/production/campaigns/actions";
+import { CampaignStatusActions } from "@/modules/production/campaigns/campaign-status-actions";
 import { getProductionCampaignListData } from "@/modules/production/campaigns/queries";
+import { productionNotifications } from "@/modules/production/notifications";
 
 type ProductionCampaignsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -52,42 +61,20 @@ function getCampaignBadgeVariant(status: string) {
   return "secondary" as const;
 }
 
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0]?.trim() ?? "";
-  }
-
-  return value?.trim() ?? "";
-}
-
-function parseDate(value: string, endOfDay = false) {
-  if (!value) {
-    return null;
-  }
-
-  const date = new Date(`${value}T${endOfDay ? "23:59:59" : "00:00:00"}`);
-
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
 export default async function ProductionCampaignsPage({
   searchParams,
 }: ProductionCampaignsPageProps) {
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const params = (await searchParams) ?? {};
-  const q = getSearchParam(params, "q");
-  const product = getSearchParam(params, "product");
-  const status = getSearchParam(params, "status");
-  const from = getSearchParam(params, "from");
-  const to = getSearchParam(params, "to");
-  const fromDate = parseDate(from);
-  const toDate = parseDate(to, true);
+  const q = parseStringParam(params, "q");
+  const product = parseStringParam(params, "product");
+  const status = parseStringParam(params, "status");
+  const from = parseStringParam(params, "from");
+  const to = parseStringParam(params, "to");
+  const fromDate = parseDateParam(params, "from");
+  const toDate = parseDateParam(params, "to");
+  const returnTo = createReturnToHref(navigationHrefs.campaigns, params);
   const { campaigns, products } = await getProductionCampaignListData({
     q,
     product,
@@ -121,7 +108,7 @@ export default async function ProductionCampaignsPage({
   }, 0);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Campañas de producción"
         description="Planifica lotes de producción por campaña y consulta el avance por producto."
@@ -133,60 +120,49 @@ export default async function ProductionCampaignsPage({
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/production/campaigns/new">
+            <Link href={withReturnTo(`${navigationHrefs.campaigns}/new`, returnTo)}>
               Nueva campaña
             </Link>
           </Button>
         }
       />
 
-      <form className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-4">
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Buscar campaña..." />
-        </div>
+      <FilterBar
+        action={navigationHrefs.campaigns}
+        label="Filtros de campañas"
+        clearHref={navigationHrefs.campaigns}
+      >
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar campaña..." />}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="product">Producto</Label>
-          <NativeSelect id="product" name="product" defaultValue={product}>
-            <option value="">Todos los productos</option>
-            {products.map((item) => (
-              <option key={item.id_producto} value={item.id_producto}>
-                {item.nombre_producto}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="product" label="Producto">
+          {(control) => (
+            <NativeSelect {...control} name="product" defaultValue={product}>
+              <option value="">Todos los productos</option>
+              {products.map((item) => (
+                <option key={item.id_producto} value={item.id_producto}>
+                  {item.nombre_producto}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="planificada">Planificada</option>
-            <option value="activa">Activa</option>
-            <option value="finalizada">Finalizada</option>
-            <option value="anulada">Anulada</option>
-          </NativeSelect>
-        </div>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="planificada">Planificada</option>
+              <option value="activa">Activa</option>
+              <option value="finalizada">Finalizada</option>
+              <option value="anulada">Anulada</option>
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="grid grid-cols-2 gap-2">
-          <div className="space-y-2">
-            <Label htmlFor="from">Desde</Label>
-            <Input id="from" name="from" type="date" defaultValue={from} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="to">Hasta</Label>
-            <Input id="to" name="to" type="date" defaultValue={to} />
-          </div>
-        </div>
-
-        <div className="flex items-end gap-2 md:col-span-4">
-          <Button type="submit">Filtrar</Button>
-          <Button variant="clear" asChild>
-            <Link href="/dashboard/production/campaigns">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <DateRangeFields id="fecha" defaultFrom={from} defaultTo={to} />
+      </FilterBar>
 
       <section className="grid gap-4 md:grid-cols-4">
         <KpiCard title="Campañas registradas" value={campaigns.length.toString()} description="Total histórico." tone="info" icon={Layers} />
@@ -273,60 +249,20 @@ export default async function ProductionCampaignsPage({
                     {campaign.estado !== "anulada" ? (
                       <Button variant="link" className="h-auto justify-start p-0" asChild>
                         <Link
-                          href={`/dashboard/production/campaigns/${campaign.id_campania}/edit`}
+                          href={withReturnTo(`${navigationHrefs.campaigns}/${campaign.id_campania}/edit`, returnTo)}
                         >
                           Editar
                         </Link>
                       </Button>
                     ) : null}
 
-                    {campaign.estado === "planificada" ? (
-                      <form action={changeProductionCampaignStatusAction}>
-                        <input
-                          type="hidden"
-                          name="id_campania"
-                          value={campaign.id_campania}
-                        />
-                        <input type="hidden" name="estado" value="activa" />
-                        <Button type="submit" variant="link" className="h-auto justify-start p-0">
-                          Activar
-                        </Button>
-                      </form>
-                    ) : null}
-
-                    {campaign.estado === "activa" ? (
-                      <form action={changeProductionCampaignStatusAction}>
-                        <input
-                          type="hidden"
-                          name="id_campania"
-                          value={campaign.id_campania}
-                        />
-                        <input type="hidden" name="estado" value="finalizada" />
-                        <Button type="submit" variant="link" className="h-auto justify-start p-0">
-                          Finalizar
-                        </Button>
-                      </form>
-                    ) : null}
-
-                    {!["anulada", "finalizada"].includes(campaign.estado) ? (
-                      <form action={changeProductionCampaignStatusAction}>
-                        <input
-                          type="hidden"
-                          name="id_campania"
-                          value={campaign.id_campania}
-                        />
-                        <input type="hidden" name="estado" value="anulada" />
-                        <ConfirmDeleteButton
-                          title="¿Anular campaña?"
-                          description="Esta acción anulará la campaña de producción y no se puede deshacer."
-                          confirmText="Confirmar anulación"
-                          entityName="campaña"
-                          className="rounded-none border-0 bg-transparent px-0 py-0 hover:bg-transparent"
-                        >
-                          Anular
-                        </ConfirmDeleteButton>
-                      </form>
-                    ) : null}
+                    <CampaignStatusActions
+                      campaign={campaign}
+                      action={changeProductionCampaignStatusAction}
+                      activatedNotification={productionNotifications["campaign-status-activa"]}
+                      finishedNotification={productionNotifications["campaign-status-finalizada"]}
+                      annulledNotification={productionNotifications["campaign-status-anulada"]}
+                    />
                   </div>
                 </TableCell>
               </TableRow>
@@ -345,6 +281,6 @@ export default async function ProductionCampaignsPage({
           ) : null}
         </TableBody>
       </Table>
-    </main>
+    </div>
   );
 }

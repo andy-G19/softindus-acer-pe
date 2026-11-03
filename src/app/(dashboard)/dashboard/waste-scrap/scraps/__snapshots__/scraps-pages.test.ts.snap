@@ -163,7 +163,7 @@ exports[`/dashboard/waste-scrap/scraps > filtros y maestro de taller > llamadas 
 
 exports[`/dashboard/waste-scrap/scraps > filtros y maestro de taller > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -190,7 +190,7 @@ exports[`/dashboard/waste-scrap/scraps > filtros y maestro de taller > resultado
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/waste-scrap/scraps/new">Registrar chatarra</a>
+<a data-variant="default" href="/dashboard/waste-scrap/scraps/new?returnTo=%2Fdashboard%2Fwaste-scrap%2Fscraps%3Festado%3Dacumulada%26material%3DMAT00000001%26q%3Dviruta">Registrar chatarra</a>
 </div>
 </div>
 </section>
@@ -252,12 +252,7 @@ exports[`/dashboard/waste-scrap/scraps > filtros y maestro de taller > resultado
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de chatarra" action="/dashboard/waste-scrap/scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -284,8 +279,6 @@ exports[`/dashboard/waste-scrap/scraps > filtros y maestro de taller > resultado
 <a data-variant="clear" href="/dashboard/waste-scrap/scraps">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Listado de chatarra</div>
@@ -371,7 +364,7 @@ exports[`/dashboard/waste-scrap/scraps > filtros y maestro de taller > resultado
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -470,7 +463,7 @@ exports[`/dashboard/waste-scrap/scraps > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/waste-scrap/scraps > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -497,7 +490,7 @@ exports[`/dashboard/waste-scrap/scraps > sin filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/waste-scrap/scraps/new">Registrar chatarra</a>
+<a data-variant="default" href="/dashboard/waste-scrap/scraps/new?returnTo=%2Fdashboard%2Fwaste-scrap%2Fscraps">Registrar chatarra</a>
 <a data-variant="outline" href="/dashboard/waste-scrap/scrap-sales/new">Registrar venta</a>
 </div>
 </div>
@@ -560,12 +553,7 @@ exports[`/dashboard/waste-scrap/scraps > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de chatarra" action="/dashboard/waste-scrap/scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -589,10 +577,9 @@ exports[`/dashboard/waste-scrap/scraps > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/waste-scrap/scraps">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Listado de chatarra</div>
@@ -678,7 +665,231 @@ exports[`/dashboard/waste-scrap/scraps > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/scraps/@panel/(.)new > maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 50,
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/scraps/@panel/(.)new > maestro de taller > resultado 1`] = `
+{
+  "html": "<section>
+<h2>Registrar chatarra generada</h2>
+<p>Registra sobrantes no reutilizables generados durante el corte, fabricación o limpieza del área productiva.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_material">Material de origen</label>
+<input type="hidden" name="id_material" value=""/>
+<div>
+<input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" placeholder="Buscar material..." value=""/>
+</div>
+</div>
+<p>Selecciona el material si se conoce el origen. Si la chatarra está mezclada, puedes dejarlo como no identificado.</p>
+</div>
+<div>
+<div>
+<label for="id_orden_trabajo">Orden de trabajo relacionada</label>
+<input type="hidden" name="id_orden_trabajo" value=""/>
+<div>
+<input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" placeholder="Buscar orden..." value=""/>
+</div>
+</div>
+<p>Indica la orden que generó la chatarra. Déjalo vacío si proviene de limpieza de taller o de un origen no productivo.</p>
+</div>
+<div>
+<label for="tipo_material">Tipo de material<span aria-hidden="true">*</span>
+</label>
+<input id="tipo_material" required="" aria-describedby="tipo_material-ayuda" maxLength="50" placeholder="Ejemplo: acero, fierro, plancha, tubo, mixto" name="tipo_material" value=""/>
+<p id="tipo_material-ayuda">Este campo ayuda a clasificar la chatarra cuando se venda o se consulte el historial.</p>
+</div>
+<div>
+<div>
+<label for="peso_kg">Peso en kg</label>
+<input type="number" id="peso_kg" aria-describedby="peso_kg-ayuda" min="0.01" step="0.01" placeholder="Ejemplo: 12.50" name="peso_kg" value=""/>
+<p id="peso_kg-ayuda">Recomendado cuando la chatarra se controla por peso.</p>
+</div>
+<div>
+<label for="cantidad">Cantidad aproximada</label>
+<input type="number" id="cantidad" aria-describedby="cantidad-ayuda" min="0.01" step="0.01" placeholder="Ejemplo: 3" name="cantidad" value=""/>
+<p id="cantidad-ayuda">Útil cuando se registra por bolsas, piezas, baldes o grupos.</p>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: chatarra generada durante corte de planchas para lampas">
+</textarea>
+</div>
+<div>
+<p>Estado inicial de la chatarra</p>
+<p>Todo registro de chatarra se guardará inicialmente con estado <span>acumulada</span>. Cuando se registre una venta, el estado cambiará a <span>vendida</span>.</p>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar chatarra</button>
+<a data-variant="outline" href="/dashboard/waste-scrap/scraps">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/scraps/@panel/(.)new > panel de alta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 50,
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/scraps/@panel/(.)new > panel de alta > resultado 1`] = `
+{
+  "html": "<section>
+<h2>Registrar chatarra generada</h2>
+<p>Registra sobrantes no reutilizables generados durante el corte, fabricación o limpieza del área productiva.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_material">Material de origen</label>
+<input type="hidden" name="id_material" value=""/>
+<div>
+<input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" placeholder="Buscar material..." value=""/>
+</div>
+</div>
+<p>Selecciona el material si se conoce el origen. Si la chatarra está mezclada, puedes dejarlo como no identificado.</p>
+</div>
+<div>
+<div>
+<label for="id_orden_trabajo">Orden de trabajo relacionada</label>
+<input type="hidden" name="id_orden_trabajo" value=""/>
+<div>
+<input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" placeholder="Buscar orden..." value=""/>
+</div>
+</div>
+<p>Indica la orden que generó la chatarra. Déjalo vacío si proviene de limpieza de taller o de un origen no productivo.</p>
+</div>
+<div>
+<label for="tipo_material">Tipo de material<span aria-hidden="true">*</span>
+</label>
+<input id="tipo_material" required="" aria-describedby="tipo_material-ayuda" maxLength="50" placeholder="Ejemplo: acero, fierro, plancha, tubo, mixto" name="tipo_material" value=""/>
+<p id="tipo_material-ayuda">Este campo ayuda a clasificar la chatarra cuando se venda o se consulte el historial.</p>
+</div>
+<div>
+<div>
+<label for="peso_kg">Peso en kg</label>
+<input type="number" id="peso_kg" aria-describedby="peso_kg-ayuda" min="0.01" step="0.01" placeholder="Ejemplo: 12.50" name="peso_kg" value=""/>
+<p id="peso_kg-ayuda">Recomendado cuando la chatarra se controla por peso.</p>
+</div>
+<div>
+<label for="cantidad">Cantidad aproximada</label>
+<input type="number" id="cantidad" aria-describedby="cantidad-ayuda" min="0.01" step="0.01" placeholder="Ejemplo: 3" name="cantidad" value=""/>
+<p id="cantidad-ayuda">Útil cuando se registra por bolsas, piezas, baldes o grupos.</p>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: chatarra generada durante corte de planchas para lampas">
+</textarea>
+</div>
+<div>
+<p>Estado inicial de la chatarra</p>
+<p>Todo registro de chatarra se guardará inicialmente con estado <span>acumulada</span>. Cuando se registre una venta, el estado cambiará a <span>vendida</span>.</p>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar chatarra</button>
+<a data-variant="outline" href="/dashboard/waste-scrap/scraps">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
 `;
@@ -733,7 +944,7 @@ exports[`/dashboard/waste-scrap/scraps/new > formulario > llamadas 1`] = `
 
 exports[`/dashboard/waste-scrap/scraps/new > formulario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -769,66 +980,350 @@ exports[`/dashboard/waste-scrap/scraps/new > formulario > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Datos de la chatarra</div>
-</div>
-<div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<div>
-<label for="id_material-_R_2ba_">Material de origen</label>
+<label for="id_material">Material de origen</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
-<input id="id_material-_R_2ba_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-_R_2ba_-listbox" aria-expanded="false" placeholder="Buscar material..." value=""/>
+<input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" placeholder="Buscar material..." value=""/>
 </div>
 </div>
 <p>Selecciona el material si se conoce el origen. Si la chatarra está mezclada, puedes dejarlo como no identificado.</p>
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo-_R_2ja_">Orden de trabajo relacionada</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
-<input id="id_orden_trabajo-_R_2ja_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-_R_2ja_-listbox" aria-expanded="false" placeholder="Buscar orden..." value=""/>
+<input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
 <p>Indica la orden que generó la chatarra. Déjalo vacío si proviene de limpieza de taller o de un origen no productivo.</p>
 </div>
 <div>
-<label for="tipo_material">Tipo de material *</label>
-<input type="text" id="tipo_material" required="" placeholder="Ejemplo: acero, fierro, plancha, tubo, mixto" name="tipo_material"/>
-<p>Este campo ayuda a clasificar la chatarra cuando se venda o se consulte el historial.</p>
+<label for="tipo_material">Tipo de material<span aria-hidden="true">*</span>
+</label>
+<input id="tipo_material" required="" aria-describedby="tipo_material-ayuda" maxLength="50" placeholder="Ejemplo: acero, fierro, plancha, tubo, mixto" name="tipo_material" value=""/>
+<p id="tipo_material-ayuda">Este campo ayuda a clasificar la chatarra cuando se venda o se consulte el historial.</p>
 </div>
 <div>
+<div>
 <label for="peso_kg">Peso en kg</label>
-<input type="number" id="peso_kg" min="0.01" step="0.01" placeholder="Ejemplo: 12.50" name="peso_kg"/>
-<p>Recomendado cuando la chatarra se controla por peso.</p>
+<input type="number" id="peso_kg" aria-describedby="peso_kg-ayuda" min="0.01" step="0.01" placeholder="Ejemplo: 12.50" name="peso_kg" value=""/>
+<p id="peso_kg-ayuda">Recomendado cuando la chatarra se controla por peso.</p>
 </div>
 <div>
 <label for="cantidad">Cantidad aproximada</label>
-<input type="number" id="cantidad" min="0.01" step="0.01" placeholder="Ejemplo: 3" name="cantidad"/>
-<p>Útil cuando se registra por bolsas, piezas, baldes o grupos.</p>
+<input type="number" id="cantidad" aria-describedby="cantidad-ayuda" min="0.01" step="0.01" placeholder="Ejemplo: 3" name="cantidad" value=""/>
+<p id="cantidad-ayuda">Útil cuando se registra por bolsas, piezas, baldes o grupos.</p>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
 <textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: chatarra generada durante corte de planchas para lampas">
 </textarea>
 </div>
+<div>
+<p>Estado inicial de la chatarra</p>
+<p>Todo registro de chatarra se guardará inicialmente con estado <span>acumulada</span>. Cuando se registre una venta, el estado cambiará a <span>vendida</span>.</p>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar chatarra</button>
+<a data-variant="outline" href="/dashboard/waste-scrap/scraps">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/scraps/new > un returnTo ajeno vuelve a la lista > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 50,
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/scraps/new > un returnTo ajeno vuelve a la lista > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap">Mermas y chatarra</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap/scraps">Chatarra</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva chatarra</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar chatarra generada</h1>
+<p>Registra sobrantes no reutilizables generados durante el corte, fabricación o limpieza del área productiva. La chatarra quedará acumulada hasta que se registre su venta.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a chatarra">
+<svg/>Volver a chatarra</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_material">Material de origen</label>
+<input type="hidden" name="id_material" value=""/>
+<div>
+<input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" placeholder="Buscar material..." value=""/>
+</div>
+</div>
+<p>Selecciona el material si se conoce el origen. Si la chatarra está mezclada, puedes dejarlo como no identificado.</p>
+</div>
+<div>
+<div>
+<label for="id_orden_trabajo">Orden de trabajo relacionada</label>
+<input type="hidden" name="id_orden_trabajo" value=""/>
+<div>
+<input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" placeholder="Buscar orden..." value=""/>
+</div>
+</div>
+<p>Indica la orden que generó la chatarra. Déjalo vacío si proviene de limpieza de taller o de un origen no productivo.</p>
+</div>
+<div>
+<label for="tipo_material">Tipo de material<span aria-hidden="true">*</span>
+</label>
+<input id="tipo_material" required="" aria-describedby="tipo_material-ayuda" maxLength="50" placeholder="Ejemplo: acero, fierro, plancha, tubo, mixto" name="tipo_material" value=""/>
+<p id="tipo_material-ayuda">Este campo ayuda a clasificar la chatarra cuando se venda o se consulte el historial.</p>
+</div>
+<div>
+<div>
+<label for="peso_kg">Peso en kg</label>
+<input type="number" id="peso_kg" aria-describedby="peso_kg-ayuda" min="0.01" step="0.01" placeholder="Ejemplo: 12.50" name="peso_kg" value=""/>
+<p id="peso_kg-ayuda">Recomendado cuando la chatarra se controla por peso.</p>
+</div>
+<div>
+<label for="cantidad">Cantidad aproximada</label>
+<input type="number" id="cantidad" aria-describedby="cantidad-ayuda" min="0.01" step="0.01" placeholder="Ejemplo: 3" name="cantidad" value=""/>
+<p id="cantidad-ayuda">Útil cuando se registra por bolsas, piezas, baldes o grupos.</p>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: chatarra generada durante corte de planchas para lampas">
+</textarea>
 </div>
 <div>
 <p>Estado inicial de la chatarra</p>
 <p>Todo registro de chatarra se guardará inicialmente con estado <span>acumulada</span>. Cuando se registre una venta, el estado cambiará a <span>vendida</span>.</p>
 </div>
 <div>
-<a data-variant="outline" href="/dashboard/waste-scrap">Cancelar</a>
 <button data-variant="default" type="submit">Guardar chatarra</button>
+<a data-variant="outline" href="/dashboard/waste-scrap/scraps">Cancelar</a>
 </div>
 </form>
 </div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/scraps/new > vuelve al returnTo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 50,
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/scraps/new > vuelve al returnTo > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap">Mermas y chatarra</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap/scraps">Chatarra</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva chatarra</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
 </div>
-</main>
+<div>
+<h1>Registrar chatarra generada</h1>
+<p>Registra sobrantes no reutilizables generados durante el corte, fabricación o limpieza del área productiva. La chatarra quedará acumulada hasta que se registre su venta.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a chatarra">
+<svg/>Volver a chatarra</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_material">Material de origen</label>
+<input type="hidden" name="id_material" value=""/>
+<div>
+<input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" placeholder="Buscar material..." value=""/>
+</div>
+</div>
+<p>Selecciona el material si se conoce el origen. Si la chatarra está mezclada, puedes dejarlo como no identificado.</p>
+</div>
+<div>
+<div>
+<label for="id_orden_trabajo">Orden de trabajo relacionada</label>
+<input type="hidden" name="id_orden_trabajo" value=""/>
+<div>
+<input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" placeholder="Buscar orden..." value=""/>
+</div>
+</div>
+<p>Indica la orden que generó la chatarra. Déjalo vacío si proviene de limpieza de taller o de un origen no productivo.</p>
+</div>
+<div>
+<label for="tipo_material">Tipo de material<span aria-hidden="true">*</span>
+</label>
+<input id="tipo_material" required="" aria-describedby="tipo_material-ayuda" maxLength="50" placeholder="Ejemplo: acero, fierro, plancha, tubo, mixto" name="tipo_material" value=""/>
+<p id="tipo_material-ayuda">Este campo ayuda a clasificar la chatarra cuando se venda o se consulte el historial.</p>
+</div>
+<div>
+<div>
+<label for="peso_kg">Peso en kg</label>
+<input type="number" id="peso_kg" aria-describedby="peso_kg-ayuda" min="0.01" step="0.01" placeholder="Ejemplo: 12.50" name="peso_kg" value=""/>
+<p id="peso_kg-ayuda">Recomendado cuando la chatarra se controla por peso.</p>
+</div>
+<div>
+<label for="cantidad">Cantidad aproximada</label>
+<input type="number" id="cantidad" aria-describedby="cantidad-ayuda" min="0.01" step="0.01" placeholder="Ejemplo: 3" name="cantidad" value=""/>
+<p id="cantidad-ayuda">Útil cuando se registra por bolsas, piezas, baldes o grupos.</p>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: chatarra generada durante corte de planchas para lampas">
+</textarea>
+</div>
+<div>
+<p>Estado inicial de la chatarra</p>
+<p>Todo registro de chatarra se guardará inicialmente con estado <span>acumulada</span>. Cuando se registre una venta, el estado cambiará a <span>vendida</span>.</p>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar chatarra</button>
+<a data-variant="outline" href="/dashboard/waste-scrap/scraps?estado=vendida">Cancelar</a>
+</div>
+</form>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

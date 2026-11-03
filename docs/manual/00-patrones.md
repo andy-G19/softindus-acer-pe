@@ -14,8 +14,9 @@ Pantallas renovadas hasta ahora:
   crítico, entradas, salidas, compras (la lista) y pagos a proveedores.
 - Caja chica: categorías de gasto.
 - Mantenimiento: todas sus pantallas.
-- Producción: rutas de fabricación, etapas, cuellos de botella y la lista de
-  órdenes de trabajo.
+- Producción: rutas de fabricación, etapas, recetas, campañas, cuellos de
+  botella y la lista de órdenes de trabajo.
+- Mermas y chatarra: el inicio, la chatarra y los retazos reutilizables.
 - Reportes: los ocho reportes con filtros, el historial de exportaciones y
   la bitácora de auditoría.
 
@@ -127,6 +128,11 @@ campos y listas desplegables toman los valores de la dirección. Si cambiaste
 un campo y no pulsaste **Filtrar**, ese cambio se pierde en ese momento. En
 cambio, abrir y cerrar una ventana o un panel desde la lista no cambia lo
 que elegiste en la barra.
+
+Hay una excepción conocida: **Filtrar** vuelve a cargar la página, y si
+luego pulsas **Atrás** el navegador puede devolver a la barra lo que habías
+escrito, aunque la lista ya no lo esté aplicando. Si la barra y la lista no
+coinciden, pulsa **Filtrar** o **Limpiar**.
 
 Si la barra tiene un rango de fechas (**Desde** y **Hasta**), los dos días
 se incluyen completos. **Hasta** no ofrece días anteriores a **Desde**; si

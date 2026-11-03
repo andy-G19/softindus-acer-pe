@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { buildDateRangeFilter } from "@/lib/search-params";
 import { findActiveProductFilterOptions } from "@/modules/commercial/products/queries";
 
 // Consultas de lectura de las paginas de Campanas de produccion. No autorizan:
@@ -20,6 +21,7 @@ function buildProductionCampaignListWhere(
 ): Prisma.campania_produccionWhereInput {
   const { q, product, status, fromDate, toDate } = filters;
   const conditions: Prisma.campania_produccionWhereInput[] = [];
+  const dateRange = buildDateRangeFilter(fromDate, toDate);
 
   if (q) {
     conditions.push({
@@ -56,12 +58,9 @@ function buildProductionCampaignListWhere(
     });
   }
 
-  if (fromDate || toDate) {
+  if (dateRange) {
     conditions.push({
-      fecha_inicio: {
-        ...(fromDate ? { gte: fromDate } : {}),
-        ...(toDate ? { lte: toDate } : {}),
-      },
+      fecha_inicio: dateRange,
     });
   }
 
@@ -140,31 +139,10 @@ export async function getProductionCampaignForEdit(idCampania: string) {
   });
 }
 
-// Devuelve null si la campana no existe; los productos excluyen los que la
-// campana ya tiene.
-export async function getNewCampaignDetailData(idCampania: string) {
-  const campaign = await prisma.campania_produccion.findUnique({
-    where: {
-      id_campania: idCampania,
-    },
-    include: {
-      campania_detalle: {
-        select: {
-          id_producto: true,
-        },
-      },
-    },
-  });
-
-  if (!campaign) {
-    return null;
-  }
-
-  const existingProductIds = campaign.campania_detalle.map(
-    (detail) => detail.id_producto,
-  );
-
-  const products = await prisma.producto.findMany({
+// Productos activos que la campana todavia no tiene, para la ventana de agregar
+// producto de su detalle.
+export function findCampaignProductOptions(existingProductIds: string[]) {
+  return prisma.producto.findMany({
     where: {
       estado: true,
       id_producto:
@@ -189,6 +167,4 @@ export async function getNewCampaignDetailData(idCampania: string) {
       unidad_medida: true,
     },
   });
-
-  return { campaign, products };
 }

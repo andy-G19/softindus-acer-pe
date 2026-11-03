@@ -16,7 +16,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -26,11 +25,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { getScrapListData } from "@/modules/waste-scrap/scraps/queries";
 import { formatDate } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 
@@ -87,10 +93,10 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
     filteredTotals,
   } = await getScrapListData({ estado, material, query });
 
-  const hasFilters = Boolean(estado || material || query);
+  const returnTo = createReturnToHref(navigationHrefs.scraps, params);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Chatarra generada"
         description="Consulta los materiales no reutilizables acumulados durante la producción. Puedes filtrar por estado, material de origen o buscar por código, tipo de material u observación."
@@ -101,7 +107,7 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
         actions={
           <>
             <Button asChild>
-              <Link href={`${navigationHrefs.scraps}/new`}>
+              <Link href={withReturnTo(`${navigationHrefs.scraps}/new`, returnTo)}>
                 Registrar chatarra
               </Link>
             </Button>
@@ -124,56 +130,48 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
         <KpiCard title="Peso filtrado" value={`${formatNumber(filteredTotals._sum.peso_kg)} kg`} description={`Cantidad: ${formatNumber(filteredTotals._sum.cantidad)}`} tone="info" icon={Scale} />
       </section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form className="grid gap-4 md:grid-cols-[1fr_1fr_1.2fr_auto]">
-            <div className="space-y-2">
-              <Label htmlFor="estado">Estado</Label>
-              <NativeSelect id="estado" name="estado" defaultValue={estado}>
-                <option value="">Todos</option>
-                <option value="acumulada">Acumulada</option>
-                <option value="disponible">Disponible</option>
-                <option value="vendida">Vendida</option>
-              </NativeSelect>
-            </div>
+      <FilterBar
+        action={navigationHrefs.scraps}
+        label="Filtros de chatarra"
+        clearHref={navigationHrefs.scraps}
+        clearLabel="Limpiar"
+      >
+        <Field id="estado" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="estado" defaultValue={estado}>
+              <option value="">Todos</option>
+              <option value="acumulada">Acumulada</option>
+              <option value="disponible">Disponible</option>
+              <option value="vendida">Vendida</option>
+            </NativeSelect>
+          )}
+        </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="material">Material</Label>
-              <NativeSelect id="material" name="material" defaultValue={material}>
-                <option value="">Todos</option>
-                {materials.map((item) => (
-                  <option key={item.id_material} value={item.id_material}>
-                    {item.nombre_material} | {item.categoria}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
+        <Field id="material" label="Material">
+          {(control) => (
+            <NativeSelect {...control} name="material" defaultValue={material}>
+              <option value="">Todos</option>
+              {materials.map((item) => (
+                <option key={item.id_material} value={item.id_material}>
+                  {item.nombre_material} | {item.categoria}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="q">Buscar</Label>
-              <Input
-                id="q"
-                name="q"
-                type="search"
-                defaultValue={query}
-                placeholder="Código, tipo u observación"
-              />
-            </div>
-
-            <div className="flex items-end gap-2">
-              <Button type="submit">Filtrar</Button>
-              {hasFilters ? (
-                <Button variant="clear" asChild>
-                  <Link href="/dashboard/waste-scrap/scraps">Limpiar</Link>
-                </Button>
-              ) : null}
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+        <Field id="q" label="Buscar">
+          {(control) => (
+            <Input
+              {...control}
+              name="q"
+              type="search"
+              defaultValue={query}
+              placeholder="Código, tipo u observación"
+            />
+          )}
+        </Field>
+      </FilterBar>
 
       <Card>
         <CardHeader>
@@ -294,6 +292,6 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

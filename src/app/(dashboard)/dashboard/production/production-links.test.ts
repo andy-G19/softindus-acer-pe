@@ -27,7 +27,8 @@ vi.mock("next/navigation", async (importOriginal) =>
 // puede abrir. Las que migra esta sub-entrega ganaron paneles y enlaces con
 // returnTo; la prueba abre cada enlace con el mismo rol: si el requireRole de la
 // pantalla lo rechaza, falla aqui, asi que los enlaces no pueden quedar desfasados
-// de las paginas. La 10.6b suma Recetas, con sus versiones, materiales y requerimientos.
+// de las paginas. La 10.6b suma Recetas, con sus versiones, materiales y requerimientos,
+// y la 10.7a, Campanas con su detalle.
 
 // Pantalla de cada enlace, por su ruta sin la consulta; gana la primera que
 // coincide. Los grupos con nombre son los parametros de la ruta. Un enlace sin
@@ -64,6 +65,9 @@ const PAGES: [RegExp, PageLoader][] = [
     () => import("./recipes/[id]/versions/[versionId]/requirements/page"),
   ],
   [/^\/dashboard\/production\/campaigns$/, () => import("./campaigns/page")],
+  [/^\/dashboard\/production\/campaigns\/new$/, () => import("./campaigns/new/page")],
+  [/^\/dashboard\/production\/campaigns\/(?<id>[^/]+)$/, () => import("./campaigns/[id]/page")],
+  [/^\/dashboard\/production\/campaigns\/(?<id>[^/]+)\/edit$/, () => import("./campaigns/[id]/edit/page")],
   [/^\/dashboard\/production\/bottlenecks$/, () => import("./bottlenecks/page")],
   [/^\/dashboard\/production\/work-orders$/, () => import("./work-orders/page")],
   [/^\/dashboard\/production\/work-orders\/new$/, () => import("./work-orders/new/page")],
@@ -132,6 +136,13 @@ const SOURCES: {
     route: `${VERSION_ROUTE}/requirements`,
     load: () => import("./recipes/[id]/versions/[versionId]/requirements/page"),
     params: VERSION_PARAMS,
+  },
+  { name: "la lista de campanas", route: "/dashboard/production/campaigns", load: () => import("./campaigns/page") },
+  {
+    name: "el detalle de una campana",
+    route: "/dashboard/production/campaigns/CAM00000001",
+    load: () => import("./campaigns/[id]/page"),
+    params: { id: "CAM00000001" },
   },
   { name: "la lista de ordenes", route: "/dashboard/production/work-orders", load: () => import("./work-orders/page") },
   { name: "cuellos de botella", route: "/dashboard/production/bottlenecks", load: () => import("./bottlenecks/page") },

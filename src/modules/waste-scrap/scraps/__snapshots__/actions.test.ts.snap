@@ -1,0 +1,1444 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createScrapAction > ADMIN registra la chatarra acumulada con la bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000003",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "chatarra",
+      "prefijo": "CHA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 3,
+        "estado": "acumulada",
+        "id_chatarra": "CHA00000012",
+        "id_material": "MAT00000002",
+        "id_orden_trabajo": "OTR00000003",
+        "observaciones": "Corte de planchas",
+        "peso_kg": 12.5,
+        "tipo_material": "Acero",
+      },
+    },
+    "prisma": "chatarra.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Chatarra registrada: Acero",
+      "enTransaccion": true,
+      "entidad_afectada": "chatarra",
+      "id_registro_afectado": "CHA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scraps",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createScrapAction > ADMIN registra la chatarra acumulada con la bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_chatarra": "CHA00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createScrapAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar chatarra.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > WORKSHOP_MASTER tambien registra chatarra > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000003",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "chatarra",
+      "prefijo": "CHA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 3,
+        "estado": "acumulada",
+        "id_chatarra": "CHA00000012",
+        "id_material": "MAT00000002",
+        "id_orden_trabajo": "OTR00000003",
+        "observaciones": "Corte de planchas",
+        "peso_kg": 12.5,
+        "tipo_material": "Acero",
+      },
+    },
+    "prisma": "chatarra.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Chatarra registrada: Acero",
+      "enTransaccion": true,
+      "entidad_afectada": "chatarra",
+      "id_registro_afectado": "CHA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scraps",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createScrapAction > WORKSHOP_MASTER tambien registra chatarra > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_chatarra": "CHA00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > el material esta inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createScrapAction > el material esta inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede registrar chatarra de un material inactivo.",
+    "fieldErrors": {
+      "id_material": [
+        "No se puede registrar chatarra de un material inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > el material no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createScrapAction > el material no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material de origen seleccionado no existe.",
+    "fieldErrors": {
+      "id_material": [
+        "El material de origen seleccionado no existe.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > el peso negativo se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createScrapAction > el peso negativo se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la chatarra.",
+    "fieldErrors": {
+      "peso_kg": [
+        "El valor debe ser mayor que cero.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "-1",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > el peso no numerico se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createScrapAction > el peso no numerico se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la chatarra.",
+    "fieldErrors": {
+      "peso_kg": [
+        "El valor debe ser numérico.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "abc",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > el tipo es obligatorio > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createScrapAction > el tipo es obligatorio > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la chatarra.",
+    "fieldErrors": {
+      "tipo_material": [
+        "El tipo de material es obligatorio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > el tipo no supera 50 caracteres > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createScrapAction > el tipo no supera 50 caracteres > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la chatarra.",
+    "fieldErrors": {
+      "tipo_material": [
+        "El tipo de material no debe superar 50 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > la orden esta anulada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000003",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createScrapAction > la orden esta anulada > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede asociar chatarra a una orden anulada.",
+    "fieldErrors": {
+      "id_orden_trabajo": [
+        "No se puede asociar chatarra a una orden anulada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > la orden no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000003",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createScrapAction > la orden no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La orden de trabajo seleccionada no existe.",
+    "fieldErrors": {
+      "id_orden_trabajo": [
+        "La orden de trabajo seleccionada no existe.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > las observaciones vacias se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000003",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "chatarra",
+      "prefijo": "CHA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 3,
+        "estado": "acumulada",
+        "id_chatarra": "CHA00000012",
+        "id_material": "MAT00000002",
+        "id_orden_trabajo": "OTR00000003",
+        "observaciones": null,
+        "peso_kg": 12.5,
+        "tipo_material": "Acero",
+      },
+    },
+    "prisma": "chatarra.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Chatarra registrada: Acero",
+      "enTransaccion": true,
+      "entidad_afectada": "chatarra",
+      "id_registro_afectado": "CHA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scraps",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createScrapAction > las observaciones vacias se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_chatarra": "CHA00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "",
+      "peso_kg": "12.5",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > sin material ni orden no se leen > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "chatarra",
+      "prefijo": "CHA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 3,
+        "estado": "acumulada",
+        "id_chatarra": "CHA00000012",
+        "id_material": null,
+        "id_orden_trabajo": null,
+        "observaciones": "Corte de planchas",
+        "peso_kg": 12.5,
+        "tipo_material": "Acero",
+      },
+    },
+    "prisma": "chatarra.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Chatarra registrada: Acero",
+      "enTransaccion": true,
+      "entidad_afectada": "chatarra",
+      "id_registro_afectado": "CHA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scraps",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createScrapAction > sin material ni orden no se leen > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_chatarra": "CHA00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad": "3",
+      "id_material": "",
+      "id_orden_trabajo": "",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > sin peso ni cantidad se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createScrapAction > sin peso ni cantidad se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la chatarra.",
+    "fieldErrors": {
+      "peso_kg": [
+        "Debe registrar al menos peso en kg o cantidad aproximada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > solo con cantidad > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000003",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "chatarra",
+      "prefijo": "CHA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 3,
+        "estado": "acumulada",
+        "id_chatarra": "CHA00000012",
+        "id_material": "MAT00000002",
+        "id_orden_trabajo": "OTR00000003",
+        "observaciones": "Corte de planchas",
+        "peso_kg": null,
+        "tipo_material": "Acero",
+      },
+    },
+    "prisma": "chatarra.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Chatarra registrada: Acero",
+      "enTransaccion": true,
+      "entidad_afectada": "chatarra",
+      "id_registro_afectado": "CHA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scraps",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createScrapAction > solo con cantidad > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_chatarra": "CHA00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > solo con peso > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000003",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "chatarra",
+      "prefijo": "CHA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": null,
+        "estado": "acumulada",
+        "id_chatarra": "CHA00000012",
+        "id_material": "MAT00000002",
+        "id_orden_trabajo": "OTR00000003",
+        "observaciones": "Corte de planchas",
+        "peso_kg": 12.5,
+        "tipo_material": "Acero",
+      },
+    },
+    "prisma": "chatarra.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Chatarra registrada: Acero",
+      "enTransaccion": true,
+      "entidad_afectada": "chatarra",
+      "id_registro_afectado": "CHA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scraps",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createScrapAction > solo con peso > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_chatarra": "CHA00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad": "",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createScrapAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la chatarra.",
+    "fieldErrors": {
+      "tipo_material": [
+        "El tipo de material es obligatorio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "",
+      "id_material": "",
+      "id_orden_trabajo": "",
+      "observaciones": "",
+      "peso_kg": "",
+      "tipo_material": "",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > un fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000003",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "chatarra",
+      "prefijo": "CHA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 3,
+        "estado": "acumulada",
+        "id_chatarra": "CHA00000012",
+        "id_material": "MAT00000002",
+        "id_orden_trabajo": "OTR00000003",
+        "observaciones": "Corte de planchas",
+        "peso_kg": 12.5,
+        "tipo_material": "Acero",
+      },
+    },
+    "prisma": "chatarra.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createScrapAction > un fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo registrar la chatarra. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > un peso de 0.001 se rechaza porque se guardaria como cero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createScrapAction > un peso de 0.001 se rechaza porque se guardaria como cero > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la chatarra.",
+    "fieldErrors": {
+      "peso_kg": [
+        "El valor debe ser mayor que cero.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "0.001",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;
+
+exports[`createScrapAction > una orden finalizada se admite > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000003",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "chatarra",
+      "prefijo": "CHA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 3,
+        "estado": "acumulada",
+        "id_chatarra": "CHA00000012",
+        "id_material": "MAT00000002",
+        "id_orden_trabajo": "OTR00000003",
+        "observaciones": "Corte de planchas",
+        "peso_kg": 12.5,
+        "tipo_material": "Acero",
+      },
+    },
+    "prisma": "chatarra.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Chatarra registrada: Acero",
+      "enTransaccion": true,
+      "entidad_afectada": "chatarra",
+      "id_registro_afectado": "CHA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scraps",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createScrapAction > una orden finalizada se admite > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_chatarra": "CHA00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad": "3",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "observaciones": "Corte de planchas",
+      "peso_kg": "12.5",
+      "tipo_material": "Acero",
+    },
+  },
+}
+`;

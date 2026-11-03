@@ -228,6 +228,23 @@ const MODULOS: ModuloDeAcciones[] = [
     acciones: ["annulPettyCashMovementAction"],
   },
   {
+    ruta: "production/campaigns/actions",
+    cargar: () => import("@/modules/production/campaigns/actions"),
+    roles: ADMIN_Y_TALLER,
+    acciones: [
+      "createProductionCampaignAction",
+      "addCampaignDetailAction",
+      "updateProductionCampaignAction",
+      "changeProductionCampaignStatusAction",
+    ],
+    rechazanConResultado: [
+      "createProductionCampaignAction",
+      "addCampaignDetailAction",
+      "updateProductionCampaignAction",
+      "changeProductionCampaignStatusAction",
+    ],
+  },
+  {
     ruta: "production/recipe-details/actions",
     cargar: () => import("@/modules/production/recipe-details/actions"),
     roles: ADMIN_Y_TALLER,
@@ -328,12 +345,14 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/waste-scrap/reusable-scraps/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createReusableScrapAction"],
+    rechazanConResultado: ["createReusableScrapAction"],
   },
   {
     ruta: "waste-scrap/reusable-scraps/status-actions",
     cargar: () => import("@/modules/waste-scrap/reusable-scraps/status-actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["updateReusableScrapStatusAction"],
+    rechazanConResultado: ["updateReusableScrapStatusAction"],
   },
   {
     ruta: "waste-scrap/scrap-sales/actions",
@@ -346,6 +365,7 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/waste-scrap/scraps/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createScrapAction"],
+    rechazanConResultado: ["createScrapAction"],
   },
 ];
 

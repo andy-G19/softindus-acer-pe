@@ -53,7 +53,7 @@ export default async function NewScrapSalePage({
   );
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Registrar venta de chatarra"
         description="Registra el ingreso obtenido por vender chatarra acumulada. Si seleccionas una caja chica abierta, el sistema también generará un movimiento de caja de tipo ingreso."
@@ -255,6 +255,6 @@ export default async function NewScrapSalePage({
           </form>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

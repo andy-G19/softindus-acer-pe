@@ -1360,6 +1360,38 @@ exports[`cada clave del catalogo > reusable-scrap-created: muestra su toast y li
 ]
 `;
 
+exports[`cada clave del catalogo > reusable-scrap-discarded: muestra su toast y limpia la URL 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Retazo descartado</p></div>",
+    "options": {
+      "className": "toast-industrial-warning",
+      "progressClassName": "toast-industrial-progress-warning",
+    },
+    "toast": "warning",
+  },
+  {
+    "effect": "router.replace /dashboard {"scroll":false}",
+  },
+]
+`;
+
+exports[`cada clave del catalogo > reusable-scrap-reused: muestra su toast y limpia la URL 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Retazo marcado como reutilizado</p></div>",
+    "options": {
+      "className": "toast-industrial-success",
+      "progressClassName": "toast-industrial-progress-success",
+    },
+    "toast": "success",
+  },
+  {
+    "effect": "router.replace /dashboard {"scroll":false}",
+  },
+]
+`;
+
 exports[`cada clave del catalogo > route-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
