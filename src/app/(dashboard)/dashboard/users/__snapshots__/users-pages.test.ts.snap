@@ -70,7 +70,7 @@ exports[`/dashboard/users > estado desconocido no filtra > llamadas 1`] = `
 
 exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -93,7 +93,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/users/new">Nuevo usuario</a>
+<a data-variant="default" href="/dashboard/users/new?returnTo=%2Fdashboard%2Fusers%3Festado%3Dtodos">Nuevo usuario</a>
 </div>
 </div>
 </section>
@@ -141,12 +141,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form action="/dashboard/users">
+<form role="search" aria-label="Filtros de usuarios" action="/dashboard/users" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Nombre, usuario o correo" name="q" value=""/>
@@ -170,11 +165,9 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="clear" href="/dashboard/users">Limpiar</a>
+<a data-variant="clear" href="/dashboard/users">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Usuarios registrados</div>
@@ -211,12 +204,9 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 <td>30 jun. 2026, 7:00 p. m.</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit">Editar</a>
-<a data-variant="outline" href="/dashboard/users/id_usuario-1/reset-password">Resetear contraseña</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-1"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers%3Festado%3Dtodos">Editar</a>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -236,12 +226,9 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 <td>1 jul. 2026, 7:00 p. m.</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit">Editar</a>
-<a data-variant="outline" href="/dashboard/users/id_usuario-2/reset-password">Resetear contraseña</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-2"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers%3Festado%3Dtodos">Editar</a>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -259,8 +246,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -335,7 +321,7 @@ exports[`/dashboard/users > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/users > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -358,7 +344,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/users/new">Nuevo usuario</a>
+<a data-variant="default" href="/dashboard/users/new?returnTo=%2Fdashboard%2Fusers">Nuevo usuario</a>
 </div>
 </div>
 </section>
@@ -406,12 +392,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form action="/dashboard/users">
+<form role="search" aria-label="Filtros de usuarios" action="/dashboard/users" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Nombre, usuario o correo" name="q" value=""/>
@@ -435,11 +416,9 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="clear" href="/dashboard/users">Limpiar</a>
+<a data-variant="clear" href="/dashboard/users">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Usuarios registrados</div>
@@ -476,12 +455,9 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 <td>30 jun. 2026, 7:00 p. m.</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit">Editar</a>
-<a data-variant="outline" href="/dashboard/users/id_usuario-1/reset-password">Resetear contraseña</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-1"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers">Editar</a>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -501,12 +477,9 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 <td>1 jul. 2026, 7:00 p. m.</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit">Editar</a>
-<a data-variant="outline" href="/dashboard/users/id_usuario-2/reset-password">Resetear contraseña</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-2"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers">Editar</a>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -524,8 +497,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -678,7 +650,7 @@ exports[`/dashboard/users > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -701,7 +673,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/users/new">Nuevo usuario</a>
+<a data-variant="default" href="/dashboard/users/new?returnTo=%2Fdashboard%2Fusers%3Fq%3Dana%26rol%3DSELLER%26estado%3Dactivo%26page%3D2">Nuevo usuario</a>
 </div>
 </div>
 </section>
@@ -749,12 +721,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form action="/dashboard/users">
+<form role="search" aria-label="Filtros de usuarios" action="/dashboard/users" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Nombre, usuario o correo" name="q" value="ana"/>
@@ -778,11 +745,9 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="clear" href="/dashboard/users">Limpiar</a>
+<a data-variant="clear" href="/dashboard/users">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Usuarios registrados</div>
@@ -819,12 +784,9 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 <td>30 jun. 2026, 7:00 p. m.</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit">Editar</a>
-<a data-variant="outline" href="/dashboard/users/id_usuario-1/reset-password">Resetear contraseña</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-1"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers%3Fq%3Dana%26rol%3DSELLER%26estado%3Dactivo%26page%3D2">Editar</a>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -844,12 +806,9 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 <td>1 jul. 2026, 7:00 p. m.</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit">Editar</a>
-<a data-variant="outline" href="/dashboard/users/id_usuario-2/reset-password">Resetear contraseña</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-2"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers%3Fq%3Dana%26rol%3DSELLER%26estado%3Dactivo%26page%3D2">Editar</a>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -867,7 +826,282 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/users/@panel/(.)[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "correo": true,
+        "estado": true,
+        "id_usuario": true,
+        "nombres": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+        "usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU99999999",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/users/@panel/(.)[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/users/@panel/(.)[id]/edit > panel de edicion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "correo": true,
+        "estado": true,
+        "id_usuario": true,
+        "nombres": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+        "usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/users/@panel/(.)[id]/edit > panel de edicion > resultado 1`] = `
+{
+  "html": "<section>
+<h2>Editar usuario</h2>
+<p>nombres-1 apellidos-1 · id_usuario-1</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_usuario" value="id_usuario-1"/>
+<div>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value="nombres-1"/>
+</div>
+<div>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value="apellidos-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="usuario">Usuario<span aria-hidden="true">*</span>
+</label>
+<input id="usuario" required="" maxLength="50" autoComplete="off" name="usuario" value="usuario-1"/>
+</div>
+<div>
+<label for="correo">Correo electrónico<span aria-hidden="true">*</span>
+</label>
+<input type="email" id="correo" required="" maxLength="100" autoComplete="off" name="correo" value="correo-1"/>
+</div>
+</div>
+<div>
+<label for="rol">Rol<span aria-hidden="true">*</span>
+</label>
+<select id="rol" required="" name="rol">
+<option value="ADMIN">Administrador</option>
+<option value="SELLER">Vendedor</option>
+<option value="WORKSHOP_MASTER">Maestro de taller</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/users">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/users/@panel/(.)[id]/edit > panel del propio usuario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "correo": true,
+        "estado": true,
+        "id_usuario": true,
+        "nombres": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+        "usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000001",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/users/@panel/(.)[id]/edit > panel del propio usuario > resultado 1`] = `
+{
+  "html": "<section>
+<h2>Editar usuario</h2>
+<p>nombres-1 apellidos-1 · USU00000001</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_usuario" value="USU00000001"/>
+<div>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value="nombres-1"/>
+</div>
+<div>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value="apellidos-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="usuario">Usuario<span aria-hidden="true">*</span>
+</label>
+<input id="usuario" required="" maxLength="50" autoComplete="off" name="usuario" value="usuario-1"/>
+</div>
+<div>
+<label for="correo">Correo electrónico<span aria-hidden="true">*</span>
+</label>
+<input type="email" id="correo" required="" maxLength="100" autoComplete="off" name="correo" value="correo-1"/>
+</div>
+</div>
+<input type="hidden" name="rol" value="nombre_rol-1"/>
+<div>
+<label for="rol">Rol</label>
+<input id="rol" readOnly="" aria-describedby="rol-ayuda" value="nombre_rol-1"/>
+<p id="rol-ayuda">No puedes cambiar tu propio rol.</p>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/users">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/users/@panel/(.)new > panel de alta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/users/@panel/(.)new > panel de alta > resultado 1`] = `
+{
+  "html": "<section>
+<h2>Nuevo usuario</h2>
+<p>Registra una cuenta de acceso al sistema con su rol correspondiente.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value=""/>
+</div>
+<div>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="usuario">Usuario<span aria-hidden="true">*</span>
+</label>
+<input id="usuario" required="" maxLength="50" autoComplete="off" name="usuario" value=""/>
+</div>
+<div>
+<label for="correo">Correo electrónico<span aria-hidden="true">*</span>
+</label>
+<input type="email" id="correo" required="" maxLength="100" autoComplete="off" name="correo" value=""/>
+</div>
+</div>
+<div>
+<label for="rol">Rol<span aria-hidden="true">*</span>
+</label>
+<select id="rol" required="" name="rol">
+<option value="ADMIN">Administrador</option>
+<option value="SELLER" selected="">Vendedor</option>
+<option value="WORKSHOP_MASTER">Maestro de taller</option>
+</select>
+</div>
+<div>
+<div>
+<label for="password">Contraseña<span aria-hidden="true">*</span>
+</label>
+<input type="password" id="password" required="" aria-describedby="password-ayuda" autoComplete="new-password" name="password"/>
+<p id="password-ayuda">Mínimo 8 caracteres, con mayúscula, minúscula, número y carácter especial; máximo 72 (las tildes y la ñ cuentan doble).</p>
+</div>
+<div>
+<label for="confirmPassword">Confirmar contraseña<span aria-hidden="true">*</span>
+</label>
+<input type="password" id="confirmPassword" required="" autoComplete="new-password" name="confirmPassword"/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar usuario</button>
+<a data-variant="outline" href="/dashboard/users">Cancelar</a>
+</div>
+</form>
+</section>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -907,7 +1141,7 @@ exports[`/dashboard/users/[id]/edit > editar el propio usuario > llamadas 1`] = 
 
 exports[`/dashboard/users/[id]/edit > editar el propio usuario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -930,7 +1164,7 @@ exports[`/dashboard/users/[id]/edit > editar el propio usuario > resultado 1`] =
 </div>
 <div>
 <h1>Editar usuario</h1>
-<p>Actualiza los datos, el rol o el estado de la cuenta.</p>
+<p>Actualiza los datos y el rol de la cuenta. El estado se cambia desde la lista.</p>
 </div>
 </div>
 <div>
@@ -940,46 +1174,37 @@ exports[`/dashboard/users/[id]/edit > editar el propio usuario > resultado 1`] =
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Datos de la cuenta</div>
-</div>
-<div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_usuario" value="USU00000001"/>
 <div>
 <div>
-<label for="nombres">Nombres</label>
-<input id="nombres" required="" name="nombres" value="nombres-1"/>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value="nombres-1"/>
 </div>
 <div>
-<label for="apellidos">Apellidos</label>
-<input id="apellidos" required="" name="apellidos" value="apellidos-1"/>
-</div>
-</div>
-<div>
-<div>
-<label for="usuario">Usuario</label>
-<input id="usuario" required="" name="usuario" value="usuario-1"/>
-</div>
-<div>
-<label for="correo">Correo electrónico</label>
-<input type="email" id="correo" required="" name="correo" value="correo-1"/>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value="apellidos-1"/>
 </div>
 </div>
 <div>
+<div>
+<label for="usuario">Usuario<span aria-hidden="true">*</span>
+</label>
+<input id="usuario" required="" maxLength="50" autoComplete="off" name="usuario" value="usuario-1"/>
+</div>
+<div>
+<label for="correo">Correo electrónico<span aria-hidden="true">*</span>
+</label>
+<input type="email" id="correo" required="" maxLength="100" autoComplete="off" name="correo" value="correo-1"/>
+</div>
+</div>
+<input type="hidden" name="rol" value="nombre_rol-1"/>
 <div>
 <label for="rol">Rol</label>
-<input type="hidden" name="rol" value="nombre_rol-1"/>
-<div>nombre_rol-1</div>
-<p>No puedes cambiar tu propio rol.</p>
-</div>
-<div>
-<label for="estado">Estado</label>
-<input type="hidden" name="estado" value="activo"/>
-<div>Activo</div>
-<p>No puedes desactivar tu propio usuario.</p>
-</div>
+<input id="rol" readOnly="" aria-describedby="rol-ayuda" value="nombre_rol-1"/>
+<p id="rol-ayuda">No puedes cambiar tu propio rol.</p>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
@@ -987,8 +1212,6 @@ exports[`/dashboard/users/[id]/edit > editar el propio usuario > resultado 1`] =
 </div>
 </form>
 </div>
-</div>
-</main>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -1028,7 +1251,7 @@ exports[`/dashboard/users/[id]/edit > editar otro usuario > llamadas 1`] = `
 
 exports[`/dashboard/users/[id]/edit > editar otro usuario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1051,7 +1274,7 @@ exports[`/dashboard/users/[id]/edit > editar otro usuario > resultado 1`] = `
 </div>
 <div>
 <h1>Editar usuario</h1>
-<p>Actualiza los datos, el rol o el estado de la cuenta.</p>
+<p>Actualiza los datos y el rol de la cuenta. El estado se cambia desde la lista.</p>
 </div>
 </div>
 <div>
@@ -1061,49 +1284,40 @@ exports[`/dashboard/users/[id]/edit > editar otro usuario > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Datos de la cuenta</div>
-</div>
-<div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_usuario" value="id_usuario-1"/>
 <div>
 <div>
-<label for="nombres">Nombres</label>
-<input id="nombres" required="" name="nombres" value="nombres-1"/>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value="nombres-1"/>
 </div>
 <div>
-<label for="apellidos">Apellidos</label>
-<input id="apellidos" required="" name="apellidos" value="apellidos-1"/>
-</div>
-</div>
-<div>
-<div>
-<label for="usuario">Usuario</label>
-<input id="usuario" required="" name="usuario" value="usuario-1"/>
-</div>
-<div>
-<label for="correo">Correo electrónico</label>
-<input type="email" id="correo" required="" name="correo" value="correo-1"/>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value="apellidos-1"/>
 </div>
 </div>
 <div>
 <div>
-<label for="rol">Rol</label>
-<select id="rol" name="rol" required="">
+<label for="usuario">Usuario<span aria-hidden="true">*</span>
+</label>
+<input id="usuario" required="" maxLength="50" autoComplete="off" name="usuario" value="usuario-1"/>
+</div>
+<div>
+<label for="correo">Correo electrónico<span aria-hidden="true">*</span>
+</label>
+<input type="email" id="correo" required="" maxLength="100" autoComplete="off" name="correo" value="correo-1"/>
+</div>
+</div>
+<div>
+<label for="rol">Rol<span aria-hidden="true">*</span>
+</label>
+<select id="rol" required="" name="rol">
 <option value="ADMIN">Administrador</option>
 <option value="SELLER">Vendedor</option>
 <option value="WORKSHOP_MASTER">Maestro de taller</option>
 </select>
-</div>
-<div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado" required="">
-<option value="activo">Activo</option>
-<option value="inactivo">Inactivo</option>
-</select>
-</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
@@ -1111,8 +1325,6 @@ exports[`/dashboard/users/[id]/edit > editar otro usuario > resultado 1`] = `
 </div>
 </form>
 </div>
-</div>
-</main>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -1157,7 +1369,7 @@ exports[`/dashboard/users/[id]/edit > inexistente > resultado 1`] = `
 }
 `;
 
-exports[`/dashboard/users/[id]/reset-password > inexistente > llamadas 1`] = `
+exports[`/dashboard/users/[id]/edit > vuelve al returnTo > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1170,40 +1382,15 @@ exports[`/dashboard/users/[id]/reset-password > inexistente > llamadas 1`] = `
       "select": {
         "apellidos": true,
         "correo": true,
+        "estado": true,
         "id_usuario": true,
         "nombres": true,
-      },
-      "where": {
-        "id_usuario": "USU99999999",
-      },
-    },
-    "prisma": "usuario.findUnique",
-  },
-]
-`;
-
-exports[`/dashboard/users/[id]/reset-password > inexistente > resultado 1`] = `
-{
-  "html": null,
-  "outcome": "notFound",
-}
-`;
-
-exports[`/dashboard/users/[id]/reset-password > restablecer > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "apellidos": true,
-        "correo": true,
-        "id_usuario": true,
-        "nombres": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+        "usuario": true,
       },
       "where": {
         "id_usuario": "USU00000002",
@@ -1214,9 +1401,101 @@ exports[`/dashboard/users/[id]/reset-password > restablecer > llamadas 1`] = `
 ]
 `;
 
-exports[`/dashboard/users/[id]/reset-password > restablecer > resultado 1`] = `
+exports[`/dashboard/users/[id]/edit > vuelve al returnTo > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/users?rol=SELLER">Usuarios</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar usuario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar usuario</h1>
+<p>Actualiza los datos y el rol de la cuenta. El estado se cambia desde la lista.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a usuarios">
+<svg/>Volver a usuarios</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_usuario" value="id_usuario-1"/>
+<div>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value="nombres-1"/>
+</div>
+<div>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value="apellidos-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="usuario">Usuario<span aria-hidden="true">*</span>
+</label>
+<input id="usuario" required="" maxLength="50" autoComplete="off" name="usuario" value="usuario-1"/>
+</div>
+<div>
+<label for="correo">Correo electrónico<span aria-hidden="true">*</span>
+</label>
+<input type="email" id="correo" required="" maxLength="100" autoComplete="off" name="correo" value="correo-1"/>
+</div>
+</div>
+<div>
+<label for="rol">Rol<span aria-hidden="true">*</span>
+</label>
+<select id="rol" required="" name="rol">
+<option value="ADMIN">Administrador</option>
+<option value="SELLER">Vendedor</option>
+<option value="WORKSHOP_MASTER">Maestro de taller</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/users?rol=SELLER">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/users/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/users/new > formulario > resultado 1`] = `
+{
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1229,7 +1508,7 @@ exports[`/dashboard/users/[id]/reset-password > restablecer > resultado 1`] = `
 </li>
 <li>
 <svg/>
-<span aria-current="page">Reiniciar contraseña</span>
+<span aria-current="page">Nuevo usuario</span>
 </li>
 </ol>
 </nav>
@@ -1238,8 +1517,8 @@ exports[`/dashboard/users/[id]/reset-password > restablecer > resultado 1`] = `
 <div aria-hidden="true">
 </div>
 <div>
-<h1>Reiniciar contraseña</h1>
-<p>Define una nueva contraseña para nombres-1 apellidos-1 (correo-1). La contraseña anterior dejará de funcionar de inmediato.</p>
+<h1>Nuevo usuario</h1>
+<p>Registra una cuenta de acceso al sistema con su rol correspondiente.</p>
 </div>
 </div>
 <div>
@@ -1249,30 +1528,267 @@ exports[`/dashboard/users/[id]/reset-password > restablecer > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Nueva contraseña</div>
-</div>
-<div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-1"/>
 <div>
-<label for="password">Nueva contraseña</label>
-<input type="password" id="password" required="" name="password"/>
-<p>Mínimo 8 caracteres, con mayúscula, minúscula, número y carácter especial.</p>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value=""/>
 </div>
 <div>
-<label for="confirmPassword">Confirmar nueva contraseña</label>
-<input type="password" id="confirmPassword" required="" name="confirmPassword"/>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value=""/>
+</div>
 </div>
 <div>
-<button data-variant="default" type="submit">Reiniciar contraseña</button>
+<div>
+<label for="usuario">Usuario<span aria-hidden="true">*</span>
+</label>
+<input id="usuario" required="" maxLength="50" autoComplete="off" name="usuario" value=""/>
+</div>
+<div>
+<label for="correo">Correo electrónico<span aria-hidden="true">*</span>
+</label>
+<input type="email" id="correo" required="" maxLength="100" autoComplete="off" name="correo" value=""/>
+</div>
+</div>
+<div>
+<label for="rol">Rol<span aria-hidden="true">*</span>
+</label>
+<select id="rol" required="" name="rol">
+<option value="ADMIN">Administrador</option>
+<option value="SELLER" selected="">Vendedor</option>
+<option value="WORKSHOP_MASTER">Maestro de taller</option>
+</select>
+</div>
+<div>
+<div>
+<label for="password">Contraseña<span aria-hidden="true">*</span>
+</label>
+<input type="password" id="password" required="" aria-describedby="password-ayuda" autoComplete="new-password" name="password"/>
+<p id="password-ayuda">Mínimo 8 caracteres, con mayúscula, minúscula, número y carácter especial; máximo 72 (las tildes y la ñ cuentan doble).</p>
+</div>
+<div>
+<label for="confirmPassword">Confirmar contraseña<span aria-hidden="true">*</span>
+</label>
+<input type="password" id="confirmPassword" required="" autoComplete="new-password" name="confirmPassword"/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar usuario</button>
 <a data-variant="outline" href="/dashboard/users">Cancelar</a>
 </div>
 </form>
 </div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/users/new > un returnTo ajeno vuelve a la lista > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/users/new > un returnTo ajeno vuelve a la lista > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/users">Usuarios</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo usuario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
 </div>
-</main>
+<div>
+<h1>Nuevo usuario</h1>
+<p>Registra una cuenta de acceso al sistema con su rol correspondiente.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a usuarios">
+<svg/>Volver a usuarios</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value=""/>
+</div>
+<div>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="usuario">Usuario<span aria-hidden="true">*</span>
+</label>
+<input id="usuario" required="" maxLength="50" autoComplete="off" name="usuario" value=""/>
+</div>
+<div>
+<label for="correo">Correo electrónico<span aria-hidden="true">*</span>
+</label>
+<input type="email" id="correo" required="" maxLength="100" autoComplete="off" name="correo" value=""/>
+</div>
+</div>
+<div>
+<label for="rol">Rol<span aria-hidden="true">*</span>
+</label>
+<select id="rol" required="" name="rol">
+<option value="ADMIN">Administrador</option>
+<option value="SELLER" selected="">Vendedor</option>
+<option value="WORKSHOP_MASTER">Maestro de taller</option>
+</select>
+</div>
+<div>
+<div>
+<label for="password">Contraseña<span aria-hidden="true">*</span>
+</label>
+<input type="password" id="password" required="" aria-describedby="password-ayuda" autoComplete="new-password" name="password"/>
+<p id="password-ayuda">Mínimo 8 caracteres, con mayúscula, minúscula, número y carácter especial; máximo 72 (las tildes y la ñ cuentan doble).</p>
+</div>
+<div>
+<label for="confirmPassword">Confirmar contraseña<span aria-hidden="true">*</span>
+</label>
+<input type="password" id="confirmPassword" required="" autoComplete="new-password" name="confirmPassword"/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar usuario</button>
+<a data-variant="outline" href="/dashboard/users">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/users/new > vuelve al returnTo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/users/new > vuelve al returnTo > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/users?estado=inactivo">Usuarios</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo usuario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nuevo usuario</h1>
+<p>Registra una cuenta de acceso al sistema con su rol correspondiente.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a usuarios">
+<svg/>Volver a usuarios</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value=""/>
+</div>
+<div>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="usuario">Usuario<span aria-hidden="true">*</span>
+</label>
+<input id="usuario" required="" maxLength="50" autoComplete="off" name="usuario" value=""/>
+</div>
+<div>
+<label for="correo">Correo electrónico<span aria-hidden="true">*</span>
+</label>
+<input type="email" id="correo" required="" maxLength="100" autoComplete="off" name="correo" value=""/>
+</div>
+</div>
+<div>
+<label for="rol">Rol<span aria-hidden="true">*</span>
+</label>
+<select id="rol" required="" name="rol">
+<option value="ADMIN">Administrador</option>
+<option value="SELLER" selected="">Vendedor</option>
+<option value="WORKSHOP_MASTER">Maestro de taller</option>
+</select>
+</div>
+<div>
+<div>
+<label for="password">Contraseña<span aria-hidden="true">*</span>
+</label>
+<input type="password" id="password" required="" aria-describedby="password-ayuda" autoComplete="new-password" name="password"/>
+<p id="password-ayuda">Mínimo 8 caracteres, con mayúscula, minúscula, número y carácter especial; máximo 72 (las tildes y la ñ cuentan doble).</p>
+</div>
+<div>
+<label for="confirmPassword">Confirmar contraseña<span aria-hidden="true">*</span>
+</label>
+<input type="password" id="confirmPassword" required="" autoComplete="new-password" name="confirmPassword"/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar usuario</button>
+<a data-variant="outline" href="/dashboard/users?estado=inactivo">Cancelar</a>
+</div>
+</form>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

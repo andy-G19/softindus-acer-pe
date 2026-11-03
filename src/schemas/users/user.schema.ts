@@ -3,10 +3,16 @@ import { z } from "zod";
 import { APP_ROLES } from "@/lib/permissions";
 
 const ROLE_VALUES = Object.values(APP_ROLES) as [string, ...string[]];
-const USER_STATUSES = ["activo", "inactivo"] as const;
 
 const PASSWORD_RULES_MESSAGE =
   "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.";
+
+// bcrypt solo usa los primeros 72 bytes: dos contraseñas con el mismo principio
+// servirian igual. Se cuentan bytes en UTF-8, donde una tilde o la ñ ocupan 2.
+// Solo rige en el alta y el restablecer; no toca el login ni lo ya guardado.
+const PASSWORD_MAX_BYTES = 72;
+const PASSWORD_MAX_BYTES_MESSAGE =
+  "La contraseña no debe superar los 72 caracteres; las tildes y la ñ cuentan doble.";
 
 // Reglas de contraseña: minimo 8 caracteres, al menos una mayuscula, una
 // minuscula, un numero y un caracter especial. Nunca se acepta clave_hash
@@ -18,7 +24,11 @@ const passwordSchema = z
   .refine((value) => /[A-Z]/.test(value), PASSWORD_RULES_MESSAGE)
   .refine((value) => /[a-z]/.test(value), PASSWORD_RULES_MESSAGE)
   .refine((value) => /[0-9]/.test(value), PASSWORD_RULES_MESSAGE)
-  .refine((value) => /[^A-Za-z0-9]/.test(value), PASSWORD_RULES_MESSAGE);
+  .refine((value) => /[^A-Za-z0-9]/.test(value), PASSWORD_RULES_MESSAGE)
+  .refine(
+    (value) => new TextEncoder().encode(value).length <= PASSWORD_MAX_BYTES,
+    PASSWORD_MAX_BYTES_MESSAGE,
+  );
 
 const nombresSchema = z
   .string()
@@ -53,14 +63,6 @@ const rolSchema = z
     "Seleccione un rol válido.",
   );
 
-const estadoSchema = z
-  .string()
-  .trim()
-  .refine(
-    (value) => USER_STATUSES.includes(value as (typeof USER_STATUSES)[number]),
-    "Seleccione un estado válido.",
-  );
-
 export const createUserSchema = z
   .object({
     nombres: nombresSchema,
@@ -78,6 +80,8 @@ export const createUserSchema = z
 
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 
+// El estado no se edita aqui: cambia desde la fila, con su confirmacion y su
+// regla de no desactivarse a uno mismo (D2 de la 10.7).
 export const updateUserSchema = z.object({
   id_usuario: z.string().trim().min(1, "El usuario no existe."),
   nombres: nombresSchema,
@@ -85,7 +89,6 @@ export const updateUserSchema = z.object({
   usuario: usuarioSchema,
   correo: correoSchema,
   rol: rolSchema,
-  estado: estadoSchema,
 });
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;

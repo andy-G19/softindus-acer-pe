@@ -92,18 +92,6 @@ export async function getUserForEdit(idUsuario: string) {
   });
 }
 
-export async function getUserForPasswordReset(idUsuario: string) {
-  return prisma.usuario.findUnique({
-    where: { id_usuario: idUsuario },
-    select: {
-      id_usuario: true,
-      nombres: true,
-      apellidos: true,
-      correo: true,
-    },
-  });
-}
-
 // Usuarios activos por apellidos y nombres, para los filtros de otras areas.
 // Solo las columnas de la opcion: nunca la fila completa, que trae clave_hash.
 export function findActiveUserOptions() {

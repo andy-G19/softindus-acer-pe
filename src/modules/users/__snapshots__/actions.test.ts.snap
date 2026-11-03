@@ -1,0 +1,2700 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createUserAction > ADMIN crea el usuario activo con su hash, correlativo y bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "SELLER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "correo": true,
+        "usuario": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "correo": "ana.quispe@example.com",
+          },
+          {
+            "usuario": "aquispe",
+          },
+        ],
+      },
+    },
+    "prisma": "usuario.findFirst",
+  },
+  {
+    "args": {
+      "bytes": 13,
+      "cost": 10,
+    },
+    "effect": "bcrypt.hash",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "usuario",
+      "prefijo": "USU",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Quispe",
+        "clave_hash": "$2b$10$hash-de-prueba",
+        "correo": "ana.quispe@example.com",
+        "estado": "activo",
+        "id_rol": "id_rol-1",
+        "id_usuario": "USU00000012",
+        "nombres": "Ana",
+        "usuario": "aquispe",
+      },
+    },
+    "prisma": "usuario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Usuario creado: ana.quispe@example.com",
+      "enTransaccion": true,
+      "entidad_afectada": "usuario",
+      "id_registro_afectado": "USU00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/users",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createUserAction > ADMIN crea el usuario activo con su hash, correlativo y bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_usuario": "USU00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > SELLER no puede crear > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createUserAction > SELLER no puede crear > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar usuarios.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > WORKSHOP_MASTER no puede crear > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createUserAction > WORKSHOP_MASTER no puede crear > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar usuarios.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > el correo se guarda en minusculas y sin espacios > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "SELLER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "correo": true,
+        "usuario": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "correo": "ana.quispe@example.com",
+          },
+          {
+            "usuario": "aquispe",
+          },
+        ],
+      },
+    },
+    "prisma": "usuario.findFirst",
+  },
+  {
+    "args": {
+      "bytes": 13,
+      "cost": 10,
+    },
+    "effect": "bcrypt.hash",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "usuario",
+      "prefijo": "USU",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Quispe",
+        "clave_hash": "$2b$10$hash-de-prueba",
+        "correo": "ana.quispe@example.com",
+        "estado": "activo",
+        "id_rol": "id_rol-1",
+        "id_usuario": "USU00000012",
+        "nombres": "Ana",
+        "usuario": "aquispe",
+      },
+    },
+    "prisma": "usuario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Usuario creado: ana.quispe@example.com",
+      "enTransaccion": true,
+      "entidad_afectada": "usuario",
+      "id_registro_afectado": "USU00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/users",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createUserAction > el correo se guarda en minusculas y sin espacios > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_usuario": "USU00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "  Ana.Quispe@Example.COM ",
+      "nombres": "  Ana  ",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > el correo ya esta en uso > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "SELLER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "correo": true,
+        "usuario": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "correo": "ana.quispe@example.com",
+          },
+          {
+            "usuario": "aquispe",
+          },
+        ],
+      },
+    },
+    "prisma": "usuario.findFirst",
+  },
+]
+`;
+
+exports[`createUserAction > el correo ya esta en uso > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un usuario con ese correo.",
+    "fieldErrors": {
+      "correo": [
+        "Ya existe un usuario con ese correo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > el rol no existe en la base > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "SELLER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+]
+`;
+
+exports[`createUserAction > el rol no existe en la base > resultado 1`] = `
+{
+  "estado": {
+    "error": "El rol seleccionado no es válido.",
+    "fieldErrors": {
+      "rol": [
+        "El rol seleccionado no es válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > el usuario ya esta en uso > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "SELLER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "correo": true,
+        "usuario": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "correo": "ana.quispe@example.com",
+          },
+          {
+            "usuario": "aquispe",
+          },
+        ],
+      },
+    },
+    "prisma": "usuario.findFirst",
+  },
+]
+`;
+
+exports[`createUserAction > el usuario ya esta en uso > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un usuario con ese nombre de usuario.",
+    "fieldErrors": {
+      "usuario": [
+        "Ya existe un usuario con ese nombre de usuario.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > las contrasenas que no coinciden se rechazan > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createUserAction > las contrasenas que no coinciden se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "confirmPassword": [
+        "Las contraseñas no coinciden.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > nombres de una letra se rechazan > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createUserAction > nombres de una letra se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "nombres": [
+        "Los nombres deben tener al menos 2 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "A",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > sin confirmacion se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createUserAction > sin confirmacion se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "confirmPassword": [
+        "Confirme la contraseña.",
+        "Las contraseñas no coinciden.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createUserAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "apellidos": [
+        "Los apellidos deben tener al menos 2 caracteres.",
+      ],
+      "confirmPassword": [
+        "Confirme la contraseña.",
+      ],
+      "correo": [
+        "Ingrese un correo electrónico válido.",
+      ],
+      "nombres": [
+        "Los nombres deben tener al menos 2 caracteres.",
+      ],
+      "password": [
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
+      ],
+      "rol": [
+        "Seleccione un rol válido.",
+      ],
+      "usuario": [
+        "El usuario debe tener al menos 3 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "",
+      "correo": "",
+      "nombres": "",
+      "rol": "",
+      "usuario": "",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > un correo invalido se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createUserAction > un correo invalido se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "correo": [
+        "Ingrese un correo electrónico válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > un rol fuera de la lista se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createUserAction > un rol fuera de la lista se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "rol": [
+        "Seleccione un rol válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "ROOT",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > una carrera por el correo (P2002) responde como duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "SELLER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "correo": true,
+        "usuario": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "correo": "ana.quispe@example.com",
+          },
+          {
+            "usuario": "aquispe",
+          },
+        ],
+      },
+    },
+    "prisma": "usuario.findFirst",
+  },
+  {
+    "args": {
+      "bytes": 13,
+      "cost": 10,
+    },
+    "effect": "bcrypt.hash",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "usuario",
+      "prefijo": "USU",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Quispe",
+        "clave_hash": "$2b$10$hash-de-prueba",
+        "correo": "ana.quispe@example.com",
+        "estado": "activo",
+        "id_rol": "id_rol-1",
+        "id_usuario": "USU00000012",
+        "nombres": "Ana",
+        "usuario": "aquispe",
+      },
+    },
+    "prisma": "usuario.create",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createUserAction > una carrera por el correo (P2002) responde como duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un usuario con ese correo o nombre de usuario.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > una contrasena corta se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createUserAction > una contrasena corta se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "password": [
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > una contrasena de 40 caracteres con tildes se rechaza: son 80 bytes > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createUserAction > una contrasena de 40 caracteres con tildes se rechaza: son 80 bytes > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "password": [
+        "La contraseña no debe superar los 72 caracteres; las tildes y la ñ cuentan doble.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > una contrasena de 73 bytes se rechaza: bcrypt ignoraria el ultimo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createUserAction > una contrasena de 73 bytes se rechaza: bcrypt ignoraria el ultimo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "password": [
+        "La contraseña no debe superar los 72 caracteres; las tildes y la ñ cuentan doble.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`createUserAction > una contrasena sin caracter especial se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createUserAction > una contrasena sin caracter especial se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "password": [
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`resetUserPasswordAction > ADMIN restablece la contrasena con su bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "bytes": 13,
+      "cost": 10,
+    },
+    "effect": "bcrypt.hash",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "clave_hash": "$2b$10$hash-de-prueba",
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Contraseña reiniciada para usuario: USU00000002",
+      "enTransaccion": true,
+      "entidad_afectada": "usuario",
+      "id_registro_afectado": "USU00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/users",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`resetUserPasswordAction > ADMIN restablece la contrasena con su bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_usuario": "USU00000002",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {},
+  },
+}
+`;
+
+exports[`resetUserPasswordAction > SELLER no puede restablecer > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`resetUserPasswordAction > SELLER no puede restablecer > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar usuarios.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {},
+  },
+}
+`;
+
+exports[`resetUserPasswordAction > el restablecer de uno mismo se permite > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "bytes": 13,
+      "cost": 10,
+    },
+    "effect": "bcrypt.hash",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "clave_hash": "$2b$10$hash-de-prueba",
+      },
+      "where": {
+        "id_usuario": "USU00000001",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Contraseña reiniciada para usuario: USU00000001",
+      "enTransaccion": true,
+      "entidad_afectada": "usuario",
+      "id_registro_afectado": "USU00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/users",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`resetUserPasswordAction > el restablecer de uno mismo se permite > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_usuario": "USU00000001",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {},
+  },
+}
+`;
+
+exports[`resetUserPasswordAction > el usuario no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "bytes": 13,
+      "cost": 10,
+    },
+    "effect": "bcrypt.hash",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "clave_hash": "$2b$10$hash-de-prueba",
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`resetUserPasswordAction > el usuario no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {},
+  },
+}
+`;
+
+exports[`resetUserPasswordAction > las contrasenas que no coinciden se rechazan > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`resetUserPasswordAction > las contrasenas que no coinciden se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa la contraseña ingresada.",
+    "fieldErrors": {
+      "confirmPassword": [
+        "Las contraseñas no coinciden.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {},
+  },
+}
+`;
+
+exports[`resetUserPasswordAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`resetUserPasswordAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa la contraseña ingresada.",
+    "fieldErrors": {
+      "id_usuario": [
+        "El usuario no existe.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {},
+  },
+}
+`;
+
+exports[`resetUserPasswordAction > una contrasena de 73 bytes se rechaza: bcrypt ignoraria el ultimo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`resetUserPasswordAction > una contrasena de 73 bytes se rechaza: bcrypt ignoraria el ultimo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa la contraseña ingresada.",
+    "fieldErrors": {
+      "password": [
+        "La contraseña no debe superar los 72 caracteres; las tildes y la ñ cuentan doble.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {},
+  },
+}
+`;
+
+exports[`resetUserPasswordAction > una contrasena debil se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`resetUserPasswordAction > una contrasena debil se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa la contraseña ingresada.",
+    "fieldErrors": {
+      "password": [
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {},
+  },
+}
+`;
+
+exports[`updateUserAction > ADMIN actualiza los datos sin cambiar el rol: una bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "SELLER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "correo": true,
+        "usuario": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "correo": "ana.quispe@example.com",
+          },
+          {
+            "usuario": "aquispe",
+          },
+        ],
+        "id_usuario": {
+          "not": "USU00000002",
+        },
+      },
+    },
+    "prisma": "usuario.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Quispe",
+        "correo": "ana.quispe@example.com",
+        "id_rol": "id_rol-1",
+        "nombres": "Ana",
+        "usuario": "aquispe",
+      },
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Usuario actualizado: USU00000002",
+      "enTransaccion": true,
+      "entidad_afectada": "usuario",
+      "id_registro_afectado": "USU00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/users",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateUserAction > ADMIN actualiza los datos sin cambiar el rol: una bitacora > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_usuario": "USU00000002",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`updateUserAction > SELLER no puede actualizar > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserAction > SELLER no puede actualizar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar usuarios.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`updateUserAction > cambiar el rol deja la bitacora del cambio > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "WORKSHOP_MASTER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "correo": true,
+        "usuario": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "correo": "ana.quispe@example.com",
+          },
+          {
+            "usuario": "aquispe",
+          },
+        ],
+        "id_usuario": {
+          "not": "USU00000002",
+        },
+      },
+    },
+    "prisma": "usuario.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Quispe",
+        "correo": "ana.quispe@example.com",
+        "id_rol": "id_rol-1",
+        "nombres": "Ana",
+        "usuario": "aquispe",
+      },
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Usuario actualizado: USU00000002",
+      "enTransaccion": true,
+      "entidad_afectada": "usuario",
+      "id_registro_afectado": "USU00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Rol de usuario actualizado: USU00000002 (SELLER -> WORKSHOP_MASTER)",
+      "enTransaccion": true,
+      "entidad_afectada": "usuario",
+      "id_registro_afectado": "USU00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/users",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateUserAction > cambiar el rol deja la bitacora del cambio > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_usuario": "USU00000002",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "WORKSHOP_MASTER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`updateUserAction > el administrador edita sus propios datos > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+      },
+      "where": {
+        "id_usuario": "USU00000001",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "ADMIN",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "correo": true,
+        "usuario": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "correo": "ana.quispe@example.com",
+          },
+          {
+            "usuario": "aquispe",
+          },
+        ],
+        "id_usuario": {
+          "not": "USU00000001",
+        },
+      },
+    },
+    "prisma": "usuario.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Quispe",
+        "correo": "ana.quispe@example.com",
+        "id_rol": "id_rol-1",
+        "nombres": "Ana",
+        "usuario": "aquispe",
+      },
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000001",
+      },
+    },
+    "prisma": "usuario.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Usuario actualizado: USU00000001",
+      "enTransaccion": true,
+      "entidad_afectada": "usuario",
+      "id_registro_afectado": "USU00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/users",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateUserAction > el administrador edita sus propios datos > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_usuario": "USU00000001",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "ADMIN",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`updateUserAction > el administrador no puede quitarse el rol > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+      },
+      "where": {
+        "id_usuario": "USU00000001",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "SELLER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserAction > el administrador no puede quitarse el rol > resultado 1`] = `
+{
+  "estado": {
+    "error": "No puedes quitarte tu propio rol de administrador.",
+    "fieldErrors": {
+      "rol": [
+        "No puedes quitarte tu propio rol de administrador.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`updateUserAction > el correo ya esta en uso por otro > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "SELLER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "correo": true,
+        "usuario": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "correo": "ana.quispe@example.com",
+          },
+          {
+            "usuario": "aquispe",
+          },
+        ],
+        "id_usuario": {
+          "not": "USU00000002",
+        },
+      },
+    },
+    "prisma": "usuario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserAction > el correo ya esta en uso por otro > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otro usuario con ese correo.",
+    "fieldErrors": {
+      "correo": [
+        "Ya existe otro usuario con ese correo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`updateUserAction > el rol no existe en la base > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "SELLER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserAction > el rol no existe en la base > resultado 1`] = `
+{
+  "estado": {
+    "error": "El rol seleccionado no es válido.",
+    "fieldErrors": {
+      "rol": [
+        "El rol seleccionado no es válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`updateUserAction > el usuario no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserAction > el usuario no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`updateUserAction > el usuario ya esta en uso por otro > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "SELLER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "correo": true,
+        "usuario": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "correo": "ana.quispe@example.com",
+          },
+          {
+            "usuario": "aquispe",
+          },
+        ],
+        "id_usuario": {
+          "not": "USU00000002",
+        },
+      },
+    },
+    "prisma": "usuario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserAction > el usuario ya esta en uso por otro > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otro usuario con ese nombre de usuario.",
+    "fieldErrors": {
+      "usuario": [
+        "Ya existe otro usuario con ese nombre de usuario.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`updateUserAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "id_usuario": [
+        "El usuario no existe.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`updateUserAction > una carrera por el correo (P2002) responde como duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_usuario FROM aceros.usuario WHERE id_usuario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "USU00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_rol": true,
+      },
+      "where": {
+        "nombre_rol": "SELLER",
+      },
+    },
+    "prisma": "rol.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "correo": true,
+        "usuario": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "correo": "ana.quispe@example.com",
+          },
+          {
+            "usuario": "aquispe",
+          },
+        ],
+        "id_usuario": {
+          "not": "USU00000002",
+        },
+      },
+    },
+    "prisma": "usuario.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Quispe",
+        "correo": "ana.quispe@example.com",
+        "id_rol": "id_rol-1",
+        "nombres": "Ana",
+        "usuario": "aquispe",
+      },
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.update",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateUserAction > una carrera por el correo (P2002) responde como duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un usuario con ese correo o nombre de usuario.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Quispe",
+      "correo": "ana.quispe@example.com",
+      "nombres": "Ana",
+      "rol": "SELLER",
+      "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > SELLER no puede cambiar el estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserStatusAction > SELLER no puede cambiar el estado > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar usuarios.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > WORKSHOP_MASTER no puede cambiar el estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserStatusAction > WORKSHOP_MASTER no puede cambiar el estado > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar usuarios.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > activar un usuario activo no escribe y dice por que > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activo",
+      },
+      "where": {
+        "estado": {
+          "not": "activo",
+        },
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserStatusAction > activar un usuario activo no escribe y dice por que > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario ya está activo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > activar un usuario inactivo escribe con su bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activo",
+      },
+      "where": {
+        "estado": {
+          "not": "activo",
+        },
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Usuario activado: USU00000002",
+      "enTransaccion": true,
+      "entidad_afectada": "usuario",
+      "id_registro_afectado": "USU00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/users",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateUserStatusAction > activar un usuario inactivo escribe con su bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "activo",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > desactivar un usuario activo escribe con su bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactivo",
+      },
+      "where": {
+        "estado": {
+          "not": "inactivo",
+        },
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Usuario desactivado: USU00000002",
+      "enTransaccion": true,
+      "entidad_afectada": "usuario",
+      "id_registro_afectado": "USU00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/users",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateUserStatusAction > desactivar un usuario activo escribe con su bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "inactivo",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > desactivar un usuario inactivo no escribe y dice por que > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactivo",
+      },
+      "where": {
+        "estado": {
+          "not": "inactivo",
+        },
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserStatusAction > desactivar un usuario inactivo no escribe y dice por que > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario ya está inactivo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > el administrador activo puede pedir activo: ya lo esta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activo",
+      },
+      "where": {
+        "estado": {
+          "not": "activo",
+        },
+        "id_usuario": "USU00000001",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000001",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserStatusAction > el administrador activo puede pedir activo: ya lo esta > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario ya está activo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000001",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > el administrador no puede desactivarse > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserStatusAction > el administrador no puede desactivarse > resultado 1`] = `
+{
+  "estado": {
+    "error": "No puedes desactivar tu propio usuario.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000001",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > el usuario no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activo",
+      },
+      "where": {
+        "estado": {
+          "not": "activo",
+        },
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserStatusAction > el usuario no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserStatusAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserStatusAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > un estado desconocido se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserStatusAction > un estado desconocido se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Selecciona un estado válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
