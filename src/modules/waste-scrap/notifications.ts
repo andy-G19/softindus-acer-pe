@@ -7,4 +7,6 @@ export const wasteScrapNotifications = {
   "scrap-sale-created": { type: "success", message: "Venta de chatarra registrada correctamente" },
   "scrap-created": { type: "success", message: "Chatarra registrada correctamente" },
   "reusable-scrap-created": { type: "success", message: "Retazo reutilizable creado correctamente" },
+  "reusable-scrap-reused": { type: "success", message: "Retazo marcado como reutilizado" },
+  "reusable-scrap-discarded": { type: "warning", message: "Retazo descartado" },
 } satisfies NotificationCatalog;

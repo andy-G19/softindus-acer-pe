@@ -1,8 +1,16 @@
-import { vi } from "vitest";
+import { createElement, type ReactNode } from "react";
+import { describe, expect, it, vi } from "vitest";
 
-import { definePageSuite, generatedRow } from "@/testing/page-characterization";
+import { characterizePage, definePageSuite, generatedRow } from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
+// RouteSheet pinta su contenido en un portal, que no existe en el render de
+// servidor: el HTML de un panel sale vacio. El doble lo deja en linea para que la
+// prueba vea el titulo, los avisos y el formulario del panel.
+vi.mock("@/components/navigation/route-sheet", () => ({
+  RouteSheet: ({ title, description, children }: { title: string; description?: string; children: ReactNode }) =>
+    createElement("section", null, createElement("h2", null, title), createElement("p", null, description), children),
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock(),
 );
@@ -52,6 +60,31 @@ definePageSuite([
     load: () => import("./new/page"),
     cases: [
       { name: "formulario" },
+      { name: "sin materiales", data: { "material.findMany": [] } },
+      { name: "vuelve al returnTo", searchParams: { returnTo: "/dashboard/waste-scrap/reusable-scraps?estado=descartado" } },
+      { name: "un returnTo ajeno vuelve a la lista", searchParams: { returnTo: "https://otro.example/x" } },
     ],
   },
+  {
+    route: "/dashboard/waste-scrap/reusable-scraps/@panel/(.)new",
+    load: () => import("./@panel/(.)new/page"),
+    cases: [{ name: "panel de alta" }, { name: "maestro de taller", role: "WORKSHOP_MASTER" }],
+  },
 ]);
+
+// A12: la lista usa la barra compartida, conserva sus filtros al abrir el panel y la
+// pagina no anida otro main.
+describe("lista de retazos", () => {
+  it("filtra con FilterBar y enlaza el alta con su returnTo", async () => {
+    const { html } = await characterizePage(
+      () => import("./page"),
+      { name: "lista", searchParams: { estado: "disponible", q: "plancha" } },
+      "/dashboard/waste-scrap/reusable-scraps",
+    );
+
+    expect(html).toContain('aria-label="Filtros de retazos"');
+    expect(html).toContain("/dashboard/waste-scrap/reusable-scraps/new?returnTo=");
+    expect(html).toContain(encodeURIComponent("estado=disponible"));
+    expect(html).not.toContain("<main");
+  });
+});

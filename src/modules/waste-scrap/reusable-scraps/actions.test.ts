@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { createReusableScrapAction } from "@/modules/waste-scrap/reusable-scraps/actions";
+import type { RowStatusState } from "@/lib/requested-status";
+import { createReusableScrapAction, type ReusableScrapFormState } from "@/modules/waste-scrap/reusable-scraps/actions";
 import { updateReusableScrapStatusAction } from "@/modules/waste-scrap/reusable-scraps/status-actions";
 import {
   characterizeHandler,
@@ -14,13 +15,19 @@ import {
 
 // Caracterizacion del alta y del cambio de estado de retazos (entrega 10.7a),
 // escrita antes de llevarlos al bloqueo de fila, al resultado de accion y al panel
-// lateral. Desde A10 el cambio de estado es un compare-and-set y deja bitacora.
+// lateral. Desde A10 el cambio de estado es un compare-and-set y deja bitacora. Desde
+// A12 las dos acciones devuelven su resultado: sin permiso responden con un error.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -121,6 +128,11 @@ function defineCases(name: string, run: (formData: FormData) => Promise<unknown>
 
 const RETAZO = "RET00000003";
 
+const initialState: ReusableScrapFormState = { status: "idle" };
+const create = (formData: FormData) => createReusableScrapAction(initialState, formData);
+const initialStatusState: RowStatusState = { status: "idle" };
+const changeStatus = (formData: FormData) => updateReusableScrapStatusAction(initialStatusState, formData);
+
 const form: FormFields = {
   id_material: "MAT00000002",
   id_orden_trabajo: "OTR00000003",
@@ -161,10 +173,10 @@ const statusWith = (estadoActual: string | null, estado: string | null = "reutil
   } satisfies DataOverrides,
 });
 
-defineCases("createReusableScrapAction", createReusableScrapAction, [
+defineCases("createReusableScrapAction", create, [
   { name: "ADMIN registra el retazo disponible con el tipo de la categoria del material", ...scrapWith() },
   { name: "WORKSHOP_MASTER tambien registra retazos", ...scrapWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER no puede registrar", ...scrapWith(), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...scrapWith(), role: "SELLER" },
   { name: "medida y ubicacion vacias se guardan como null", ...scrapWith({ medida_aproximada: "", ubicacion: "" }) },
   { name: "sin material se rechaza", ...scrapWith({ id_material: "" }) },
   { name: "sin orden se rechaza", ...scrapWith({ id_orden_trabajo: "" }) },
@@ -180,19 +192,32 @@ defineCases("createReusableScrapAction", createReusableScrapAction, [
   { name: "la orden esta anulada", ...scrapWith({}, workOrder("anulada")) },
   { name: "una orden finalizada se admite", ...scrapWith({}, workOrder("finalizada")) },
   { name: "un POST sin campos se rechaza sin tocar Prisma", form: {} },
+  {
+    name: "un fallo al crear revierte con el mensaje generico",
+    ...scrapWith({}, { "retazo_reutilizable.create": () => { throw new Error("conexion perdida"); } }),
+  },
 ]);
 
-defineCases("updateReusableScrapStatusAction", updateReusableScrapStatusAction, [
+defineCases("updateReusableScrapStatusAction", changeStatus, [
   { name: "un retazo disponible pasa a reutilizado y deja bitacora", ...statusWith("disponible") },
   { name: "un retazo disponible pasa a descartado", ...statusWith("disponible", "descartado") },
   { name: "WORKSHOP_MASTER tambien cambia el estado", ...statusWith("disponible"), role: "WORKSHOP_MASTER" },
-  { name: "SELLER no puede cambiar el estado", ...statusWith("disponible"), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...statusWith("disponible"), role: "SELLER" },
   { name: "sin id se rechaza sin tocar Prisma", form: { id_retazo: "", estado: "reutilizado" } },
   { name: "disponible no es un estado de destino", ...statusWith("disponible", "disponible") },
   { name: "sin estado se rechaza", ...statusWith("disponible", null) },
   { name: "el retazo no existe", ...statusWith(null) },
   { name: "un retazo reutilizado ya no cambia", ...statusWith("reutilizado", "descartado") },
   { name: "un retazo descartado ya no cambia", ...statusWith("descartado", "reutilizado") },
+  {
+    name: "un fallo al escribir revierte con el mensaje generico",
+    form: { id_retazo: RETAZO, estado: "reutilizado" },
+    data: {
+      "retazo_reutilizable.updateManyAndReturn": () => {
+        throw new Error("conexion perdida");
+      },
+    },
+  },
 ]);
 
 // La orden se bloquea antes de leerla (hallazgo 12 de la 10.7): anularla a la vez ya no
@@ -201,7 +226,7 @@ describe("las decisiones se toman con la orden bloqueada", () => {
   const ORDEN = "OTR00000003";
 
   it("bloquea la orden antes de leer lo que decide", async () => {
-    const { calls } = await runCase(createReusableScrapAction, scrapWith());
+    const { calls } = await runCase(create, scrapWith());
 
     expectRowLockedBefore(calls, {
       table: "orden_trabajo",
@@ -211,7 +236,7 @@ describe("las decisiones se toman con la orden bloqueada", () => {
   });
 
   it("el correlativo se reserva despues del bloqueo", async () => {
-    const { calls } = await runCase(createReusableScrapAction, scrapWith());
+    const { calls } = await runCase(create, scrapWith());
     const lock = calls.findIndex((call) => isRowLock(call, "orden_trabajo", ORDEN));
     const correlative = calls.findIndex((call) => "effect" in call && call.effect === "getNextCorrelativeId");
 
@@ -225,7 +250,7 @@ describe("el estado del retazo se fija con una sola sentencia", () => {
   type Recorded = { prisma?: string; effect?: string; args?: { where?: unknown; data?: unknown; accion?: unknown } };
 
   it("solo escribe si sigue disponible, sin leer antes", async () => {
-    const { calls } = await runCase(updateReusableScrapStatusAction, statusWith("disponible", "descartado"));
+    const { calls } = await runCase(changeStatus, statusWith("disponible", "descartado"));
     const recorded = calls as Recorded[];
     const write = recorded.find((call) => call.prisma === "retazo_reutilizable.updateManyAndReturn");
 
@@ -235,7 +260,7 @@ describe("el estado del retazo se fija con una sola sentencia", () => {
   });
 
   it("deja la bitacora dentro de la transaccion, con quien lo hizo", async () => {
-    const { calls } = await runCase(updateReusableScrapStatusAction, statusWith("disponible", "descartado"));
+    const { calls } = await runCase(changeStatus, statusWith("disponible", "descartado"));
     const audit = (calls as Recorded[]).find((call) => call.effect === "registerAuditLog");
 
     expect(audit?.args).toEqual(
@@ -250,10 +275,15 @@ describe("el estado del retazo se fija con una sola sentencia", () => {
   });
 
   it("si ya no estaba disponible no deja bitacora ni revalida", async () => {
-    const { calls, result } = await runCase(updateReusableScrapStatusAction, statusWith("reutilizado", "descartado"));
+    const { calls, result } = await runCase(changeStatus, statusWith("reutilizado", "descartado"));
     const recorded = calls as Recorded[];
 
-    expect(result).toBe("error: Solo se puede cambiar el estado de retazos disponibles.");
+    expect(result).toEqual({
+      estado: expect.objectContaining({
+        status: "error",
+        error: "Solo se puede cambiar el estado de retazos disponibles.",
+      }),
+    });
     expect(recorded.some((call) => call.effect === "registerAuditLog")).toBe(false);
     expect(recorded.some((call) => call.effect === "revalidatePath")).toBe(false);
   });

@@ -16,7 +16,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -26,14 +25,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { formatDate } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateReusableScrapStatusAction } from "@/modules/waste-scrap/reusable-scraps/status-actions";
+import { wasteScrapNotifications } from "@/modules/waste-scrap/notifications";
 import { getReusableScrapListData } from "@/modules/waste-scrap/reusable-scraps/queries";
+import { ReusableScrapStatusActions } from "@/modules/waste-scrap/reusable-scraps/reusable-scrap-status-actions";
 
 type SearchParams = {
   estado?: string;
@@ -89,10 +97,10 @@ export default async function ReusableScrapsPage({
     retazosDescartados,
   } = await getReusableScrapListData({ estado, material, query });
 
-  const hasFilters = Boolean(estado || material || query);
+  const returnTo = createReturnToHref(navigationHrefs.reusableScraps, params);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Retazos reutilizables"
         description="Consulta los retazos aprovechables registrados durante producción. Puedes filtrar por estado, material de origen o buscar por código, medida, ubicación u orden de trabajo. Desde este listado también puedes marcar retazos disponibles como reutilizados o descartados."
@@ -104,7 +112,7 @@ export default async function ReusableScrapsPage({
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/waste-scrap/reusable-scraps/new">
+            <Link href={withReturnTo(`${navigationHrefs.reusableScraps}/new`, returnTo)}>
               Registrar retazo
             </Link>
           </Button>
@@ -118,58 +126,48 @@ export default async function ReusableScrapsPage({
         <KpiCard title="Descartados" value={retazosDescartados.toString()} description="No aprovechables" tone="warning" icon={XCircle} />
       </section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form className="grid gap-4 md:grid-cols-[1fr_1fr_1.2fr_auto]">
-            <div className="space-y-2">
-              <Label htmlFor="estado">Estado</Label>
-              <NativeSelect id="estado" name="estado" defaultValue={estado}>
-                <option value="">Todos</option>
-                <option value="disponible">Disponible</option>
-                <option value="reutilizado">Reutilizado</option>
-                <option value="descartado">Descartado</option>
-              </NativeSelect>
-            </div>
+      <FilterBar
+        action={navigationHrefs.reusableScraps}
+        label="Filtros de retazos"
+        clearHref={navigationHrefs.reusableScraps}
+        clearLabel="Limpiar"
+      >
+        <Field id="estado" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="estado" defaultValue={estado}>
+              <option value="">Todos</option>
+              <option value="disponible">Disponible</option>
+              <option value="reutilizado">Reutilizado</option>
+              <option value="descartado">Descartado</option>
+            </NativeSelect>
+          )}
+        </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="material">Material</Label>
-              <NativeSelect id="material" name="material" defaultValue={material}>
-                <option value="">Todos</option>
-                {materials.map((item) => (
-                  <option key={item.id_material} value={item.id_material}>
-                    {item.nombre_material} · {item.categoria}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
+        <Field id="material" label="Material">
+          {(control) => (
+            <NativeSelect {...control} name="material" defaultValue={material}>
+              <option value="">Todos</option>
+              {materials.map((item) => (
+                <option key={item.id_material} value={item.id_material}>
+                  {item.nombre_material} · {item.categoria}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="q">Buscar</Label>
-              <Input
-                id="q"
-                name="q"
-                type="search"
-                defaultValue={query}
-                placeholder="Código, medida, ubicación u orden"
-              />
-            </div>
-
-            <div className="flex items-end gap-2">
-              <Button type="submit">Filtrar</Button>
-              {hasFilters ? (
-                <Button variant="outline" asChild>
-                  <Link href="/dashboard/waste-scrap/reusable-scraps">
-                    Limpiar
-                  </Link>
-                </Button>
-              ) : null}
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+        <Field id="q" label="Buscar">
+          {(control) => (
+            <Input
+              {...control}
+              name="q"
+              type="search"
+              defaultValue={query}
+              placeholder="Código, medida, ubicación u orden"
+            />
+          )}
+        </Field>
+      </FilterBar>
 
       <Card>
         <CardHeader>
@@ -245,27 +243,12 @@ export default async function ReusableScrapsPage({
                     <TableCell>{formatDate(item.fecha_registro, { format: "dd/mm/yyyy" })}</TableCell>
 
                     <TableCell>
-                      {item.estado === "disponible" ? (
-                        <div className="flex flex-col gap-2">
-                          <form action={updateReusableScrapStatusAction}>
-                            <input type="hidden" name="id_retazo" value={item.id_retazo} />
-                            <input type="hidden" name="estado" value="reutilizado" />
-                            <Button type="submit" variant="link" size="sm" className="h-auto p-0">
-                              Reutilizar →
-                            </Button>
-                          </form>
-
-                          <form action={updateReusableScrapStatusAction}>
-                            <input type="hidden" name="id_retazo" value={item.id_retazo} />
-                            <input type="hidden" name="estado" value="descartado" />
-                            <Button type="submit" variant="link" size="sm" className="h-auto p-0 text-destructive">
-                              Descartar →
-                            </Button>
-                          </form>
-                        </div>
-                      ) : (
-                        <span className="text-sm text-muted-foreground">Sin acción</span>
-                      )}
+                      <ReusableScrapStatusActions
+                        scrap={item}
+                        action={updateReusableScrapStatusAction}
+                        reusedNotification={wasteScrapNotifications["reusable-scrap-reused"]}
+                        discardedNotification={wasteScrapNotifications["reusable-scrap-discarded"]}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -274,6 +257,6 @@ export default async function ReusableScrapsPage({
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

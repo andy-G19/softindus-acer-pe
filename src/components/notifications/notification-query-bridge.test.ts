@@ -156,6 +156,7 @@ const CLAVES = [
 
   // Mermas y chatarra
   "scrap-sale-created", "scrap-created", "reusable-scrap-created",
+  "reusable-scrap-reused", "reusable-scrap-discarded",
 ];
 
 beforeEach(() => {
@@ -163,9 +164,9 @@ beforeEach(() => {
   mount();
 });
 
-it("la lista fija tiene las 128 claves sin repetir", () => {
-  expect(CLAVES).toHaveLength(128);
-  expect(new Set(CLAVES).size).toBe(128);
+it("la lista fija tiene las 130 claves sin repetir", () => {
+  expect(CLAVES).toHaveLength(130);
+  expect(new Set(CLAVES).size).toBe(130);
 });
 
 // Una clave nueva en el registro tambien entra en la lista y en el snapshot:

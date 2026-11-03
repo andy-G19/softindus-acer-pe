@@ -345,12 +345,14 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/waste-scrap/reusable-scraps/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createReusableScrapAction"],
+    rechazanConResultado: ["createReusableScrapAction"],
   },
   {
     ruta: "waste-scrap/reusable-scraps/status-actions",
     cargar: () => import("@/modules/waste-scrap/reusable-scraps/status-actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["updateReusableScrapStatusAction"],
+    rechazanConResultado: ["updateReusableScrapStatusAction"],
   },
   {
     ruta: "waste-scrap/scrap-sales/actions",

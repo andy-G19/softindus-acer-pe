@@ -82,7 +82,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > llam
 
 exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -111,7 +111,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > resu
 <div>
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
-<a data-variant="default" href="/dashboard/waste-scrap/reusable-scraps/new">Registrar retazo</a>
+<a data-variant="default" href="/dashboard/waste-scrap/reusable-scraps/new?returnTo=%2Fdashboard%2Fwaste-scrap%2Freusable-scraps">Registrar retazo</a>
 </div>
 </div>
 </section>
@@ -173,12 +173,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > resu
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -202,10 +197,9 @@ exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > resu
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/waste-scrap/reusable-scraps">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Listado de retazos</div>
@@ -248,16 +242,8 @@ exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > resu
 <td>01/07/2026</td>
 <td>
 <div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_retazo" value="RET00000001"/>
-<input type="hidden" name="estado" value="reutilizado"/>
-<button data-variant="link" type="submit">Reutilizar →</button>
-</form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_retazo" value="RET00000001"/>
-<input type="hidden" name="estado" value="descartado"/>
-<button data-variant="link" type="submit">Descartar →</button>
-</form>
+<button data-variant="outline" type="button">Reutilizar</button>
+<button data-variant="destructive" type="button">Descartar</button>
 </div>
 </td>
 </tr>
@@ -312,8 +298,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > resu
 </div>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -400,7 +385,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -429,7 +414,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > resultado 1`] = 
 <div>
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
-<a data-variant="default" href="/dashboard/waste-scrap/reusable-scraps/new">Registrar retazo</a>
+<a data-variant="default" href="/dashboard/waste-scrap/reusable-scraps/new?returnTo=%2Fdashboard%2Fwaste-scrap%2Freusable-scraps">Registrar retazo</a>
 </div>
 </div>
 </section>
@@ -491,12 +476,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > resultado 1`] = 
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -520,10 +500,9 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > resultado 1`] = 
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/waste-scrap/reusable-scraps">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Listado de retazos</div>
@@ -596,7 +575,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > resultado 1`] = 
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -683,7 +662,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin retazos > llamadas 1`] = `
 
 exports[`/dashboard/waste-scrap/reusable-scraps > sin retazos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -712,7 +691,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin retazos > resultado 1`] = 
 <div>
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
-<a data-variant="default" href="/dashboard/waste-scrap/reusable-scraps/new">Registrar retazo</a>
+<a data-variant="default" href="/dashboard/waste-scrap/reusable-scraps/new?returnTo=%2Fdashboard%2Fwaste-scrap%2Freusable-scraps">Registrar retazo</a>
 </div>
 </div>
 </section>
@@ -774,12 +753,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin retazos > resultado 1`] = 
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -803,10 +777,9 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin retazos > resultado 1`] = 
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/waste-scrap/reusable-scraps">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Listado de retazos</div>
@@ -819,7 +792,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin retazos > resultado 1`] = 
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -976,7 +949,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > todos los filtros > llamadas 1
 
 exports[`/dashboard/waste-scrap/reusable-scraps > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1005,7 +978,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > todos los filtros > resultado 
 <div>
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
-<a data-variant="default" href="/dashboard/waste-scrap/reusable-scraps/new">Registrar retazo</a>
+<a data-variant="default" href="/dashboard/waste-scrap/reusable-scraps/new?returnTo=%2Fdashboard%2Fwaste-scrap%2Freusable-scraps%3Festado%3Ddisponible%26material%3DMAT00000001%26q%3Dplancha">Registrar retazo</a>
 </div>
 </div>
 </section>
@@ -1067,12 +1040,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > todos los filtros > resultado 
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -1096,11 +1064,9 @@ exports[`/dashboard/waste-scrap/reusable-scraps > todos los filtros > resultado 
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps">Limpiar</a>
+<a data-variant="clear" href="/dashboard/waste-scrap/reusable-scraps">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Listado de retazos</div>
@@ -1173,7 +1139,239 @@ exports[`/dashboard/waste-scrap/reusable-scraps > todos los filtros > resultado 
 </div>
 </div>
 </div>
-</main>",
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 50,
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > maestro de taller > resultado 1`] = `
+{
+  "html": "<section>
+<h2>Registrar retazo reutilizable</h2>
+<p>Registra sobrantes aprovechables generados durante el corte o la producción.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_material">Material de origen *</label>
+<input type="hidden" name="id_material" value=""/>
+<div>
+<input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
+</div>
+</div>
+<p>El tipo de material del retazo se tomará automáticamente desde la categoría del material seleccionado.</p>
+</div>
+<div>
+<div>
+<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<input type="hidden" name="id_orden_trabajo" value=""/>
+<div>
+<input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
+</div>
+</div>
+<p>Todo retazo debe quedar asociado a la orden de trabajo que lo generó.</p>
+</div>
+<div>
+<div>
+<label for="medida_aproximada">Medida aproximada</label>
+<input id="medida_aproximada" maxLength="80" placeholder="Ejemplo: 30 cm x 15 cm" name="medida_aproximada" value=""/>
+</div>
+<div>
+<label for="ubicacion">Ubicación física</label>
+<input id="ubicacion" maxLength="100" placeholder="Ejemplo: Estante A, zona de corte" name="ubicacion" value=""/>
+</div>
+<div>
+<label for="cantidad">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad" required="" min="0.01" step="0.01" placeholder="Ejemplo: 2" name="cantidad" value=""/>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
+<option value="" disabled="" selected="">Selecciona una unidad</option>
+<option value="unidad">Unidad</option>
+<option value="kg">Kg</option>
+<option value="metro">Metro</option>
+<option value="plancha">Plancha</option>
+<option value="pieza">Pieza</option>
+</select>
+</div>
+</div>
+<div>
+<p>Estado inicial del retazo</p>
+<p>Todo retazo registrado se guardará inicialmente con estado <span>disponible</span>. Podrás marcarlo como reutilizado o descartado desde la lista.</p>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar retazo</button>
+<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > panel de alta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 50,
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > panel de alta > resultado 1`] = `
+{
+  "html": "<section>
+<h2>Registrar retazo reutilizable</h2>
+<p>Registra sobrantes aprovechables generados durante el corte o la producción.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_material">Material de origen *</label>
+<input type="hidden" name="id_material" value=""/>
+<div>
+<input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
+</div>
+</div>
+<p>El tipo de material del retazo se tomará automáticamente desde la categoría del material seleccionado.</p>
+</div>
+<div>
+<div>
+<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<input type="hidden" name="id_orden_trabajo" value=""/>
+<div>
+<input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
+</div>
+</div>
+<p>Todo retazo debe quedar asociado a la orden de trabajo que lo generó.</p>
+</div>
+<div>
+<div>
+<label for="medida_aproximada">Medida aproximada</label>
+<input id="medida_aproximada" maxLength="80" placeholder="Ejemplo: 30 cm x 15 cm" name="medida_aproximada" value=""/>
+</div>
+<div>
+<label for="ubicacion">Ubicación física</label>
+<input id="ubicacion" maxLength="100" placeholder="Ejemplo: Estante A, zona de corte" name="ubicacion" value=""/>
+</div>
+<div>
+<label for="cantidad">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad" required="" min="0.01" step="0.01" placeholder="Ejemplo: 2" name="cantidad" value=""/>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
+<option value="" disabled="" selected="">Selecciona una unidad</option>
+<option value="unidad">Unidad</option>
+<option value="kg">Kg</option>
+<option value="metro">Metro</option>
+<option value="plancha">Plancha</option>
+<option value="pieza">Pieza</option>
+</select>
+</div>
+</div>
+<div>
+<p>Estado inicial del retazo</p>
+<p>Todo retazo registrado se guardará inicialmente con estado <span>disponible</span>. Podrás marcarlo como reutilizado o descartado desde la lista.</p>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar retazo</button>
+<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
 `;
@@ -1228,7 +1426,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > formulario > llamadas 1`] 
 
 exports[`/dashboard/waste-scrap/reusable-scraps/new > formulario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1259,53 +1457,50 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > formulario > resultado 1`]
 </div>
 </div>
 <div>
-<button type="button" aria-label="Volver al módulo">
-<svg/>Volver al módulo</button>
+<button type="button" aria-label="Volver a retazos">
+<svg/>Volver a retazos</button>
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Datos del retazo</div>
-</div>
-<div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<div>
-<label for="id_material-_R_2bb_">Material de origen *</label>
+<label for="id_material">Material de origen *</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
-<input id="id_material-_R_2bb_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-_R_2bb_-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
+<input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
 <p>El tipo de material del retazo se tomará automáticamente desde la categoría del material seleccionado.</p>
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo-_R_2jb_">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
-<input id="id_orden_trabajo-_R_2jb_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-_R_2jb_-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
+<input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
 <p>Todo retazo debe quedar asociado a la orden de trabajo que lo generó.</p>
 </div>
 <div>
+<div>
 <label for="medida_aproximada">Medida aproximada</label>
-<input type="text" id="medida_aproximada" placeholder="Ejemplo: 30 cm x 15 cm" name="medida_aproximada"/>
+<input id="medida_aproximada" maxLength="80" placeholder="Ejemplo: 30 cm x 15 cm" name="medida_aproximada" value=""/>
 </div>
 <div>
 <label for="ubicacion">Ubicación física</label>
-<input type="text" id="ubicacion" placeholder="Ejemplo: Estante A, zona de corte" name="ubicacion"/>
+<input id="ubicacion" maxLength="100" placeholder="Ejemplo: Estante A, zona de corte" name="ubicacion" value=""/>
 </div>
 <div>
-<label for="cantidad">Cantidad *</label>
-<input type="number" id="cantidad" min="0.01" step="0.01" required="" placeholder="Ejemplo: 2" name="cantidad"/>
+<label for="cantidad">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad" required="" min="0.01" step="0.01" placeholder="Ejemplo: 2" name="cantidad" value=""/>
 </div>
 <div>
-<label for="unidad_medida">Unidad de medida *</label>
-<select id="unidad_medida" name="unidad_medida" required="">
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
 <option value="" disabled="" selected="">Selecciona una unidad</option>
 <option value="unidad">Unidad</option>
 <option value="kg">Kg</option>
@@ -1317,16 +1512,464 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > formulario > resultado 1`]
 </div>
 <div>
 <p>Estado inicial del retazo</p>
-<p>Todo retazo registrado se guardará inicialmente con estado <span>disponible</span>. En una fase posterior podremos marcarlo como reutilizado o descartado.</p>
+<p>Todo retazo registrado se guardará inicialmente con estado <span>disponible</span>. Podrás marcarlo como reutilizado o descartado desde la lista.</p>
 </div>
 <div>
-<a data-variant="outline" href="/dashboard/waste-scrap">Cancelar</a>
 <button data-variant="default" type="submit">Guardar retazo</button>
+<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps">Cancelar</a>
 </div>
 </form>
 </div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps/new > sin materiales > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 50,
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps/new > sin materiales > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap">Mermas y chatarra</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap/reusable-scraps">Retazos reutilizables</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo retazo</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
 </div>
-</main>
+<div>
+<h1>Registrar retazo reutilizable</h1>
+<p>Registra sobrantes aprovechables generados durante el corte o la producción. Estos retazos quedarán disponibles para reutilización futura dentro del taller.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a retazos">
+<svg/>Volver a retazos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div role="alert">
+<div>No hay materiales activos. Primero registra materiales o insumos en el módulo de inventario.</div>
+</div>
+<div>
+<div>
+<label for="id_material">Material de origen *</label>
+<input type="hidden" name="id_material" value=""/>
+<div>
+<input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value=""/>
+</div>
+</div>
+<p>El tipo de material del retazo se tomará automáticamente desde la categoría del material seleccionado.</p>
+</div>
+<div>
+<div>
+<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<input type="hidden" name="id_orden_trabajo" value=""/>
+<div>
+<input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
+</div>
+</div>
+<p>Todo retazo debe quedar asociado a la orden de trabajo que lo generó.</p>
+</div>
+<div>
+<div>
+<label for="medida_aproximada">Medida aproximada</label>
+<input id="medida_aproximada" maxLength="80" placeholder="Ejemplo: 30 cm x 15 cm" name="medida_aproximada" value=""/>
+</div>
+<div>
+<label for="ubicacion">Ubicación física</label>
+<input id="ubicacion" maxLength="100" placeholder="Ejemplo: Estante A, zona de corte" name="ubicacion" value=""/>
+</div>
+<div>
+<label for="cantidad">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad" required="" min="0.01" step="0.01" placeholder="Ejemplo: 2" name="cantidad" value=""/>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
+<option value="" disabled="" selected="">Selecciona una unidad</option>
+<option value="unidad">Unidad</option>
+<option value="kg">Kg</option>
+<option value="metro">Metro</option>
+<option value="plancha">Plancha</option>
+<option value="pieza">Pieza</option>
+</select>
+</div>
+</div>
+<div>
+<p>Estado inicial del retazo</p>
+<p>Todo retazo registrado se guardará inicialmente con estado <span>disponible</span>. Podrás marcarlo como reutilizado o descartado desde la lista.</p>
+</div>
+<div>
+<button data-variant="default" type="submit" disabled="">Guardar retazo</button>
+<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps/new > un returnTo ajeno vuelve a la lista > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 50,
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps/new > un returnTo ajeno vuelve a la lista > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap">Mermas y chatarra</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap/reusable-scraps">Retazos reutilizables</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo retazo</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar retazo reutilizable</h1>
+<p>Registra sobrantes aprovechables generados durante el corte o la producción. Estos retazos quedarán disponibles para reutilización futura dentro del taller.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a retazos">
+<svg/>Volver a retazos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_material">Material de origen *</label>
+<input type="hidden" name="id_material" value=""/>
+<div>
+<input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
+</div>
+</div>
+<p>El tipo de material del retazo se tomará automáticamente desde la categoría del material seleccionado.</p>
+</div>
+<div>
+<div>
+<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<input type="hidden" name="id_orden_trabajo" value=""/>
+<div>
+<input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
+</div>
+</div>
+<p>Todo retazo debe quedar asociado a la orden de trabajo que lo generó.</p>
+</div>
+<div>
+<div>
+<label for="medida_aproximada">Medida aproximada</label>
+<input id="medida_aproximada" maxLength="80" placeholder="Ejemplo: 30 cm x 15 cm" name="medida_aproximada" value=""/>
+</div>
+<div>
+<label for="ubicacion">Ubicación física</label>
+<input id="ubicacion" maxLength="100" placeholder="Ejemplo: Estante A, zona de corte" name="ubicacion" value=""/>
+</div>
+<div>
+<label for="cantidad">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad" required="" min="0.01" step="0.01" placeholder="Ejemplo: 2" name="cantidad" value=""/>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
+<option value="" disabled="" selected="">Selecciona una unidad</option>
+<option value="unidad">Unidad</option>
+<option value="kg">Kg</option>
+<option value="metro">Metro</option>
+<option value="plancha">Plancha</option>
+<option value="pieza">Pieza</option>
+</select>
+</div>
+</div>
+<div>
+<p>Estado inicial del retazo</p>
+<p>Todo retazo registrado se guardará inicialmente con estado <span>disponible</span>. Podrás marcarlo como reutilizado o descartado desde la lista.</p>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar retazo</button>
+<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps/new > vuelve al returnTo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 50,
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/reusable-scraps/new > vuelve al returnTo > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap">Mermas y chatarra</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap/reusable-scraps">Retazos reutilizables</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo retazo</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar retazo reutilizable</h1>
+<p>Registra sobrantes aprovechables generados durante el corte o la producción. Estos retazos quedarán disponibles para reutilización futura dentro del taller.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a retazos">
+<svg/>Volver a retazos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_material">Material de origen *</label>
+<input type="hidden" name="id_material" value=""/>
+<div>
+<input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
+</div>
+</div>
+<p>El tipo de material del retazo se tomará automáticamente desde la categoría del material seleccionado.</p>
+</div>
+<div>
+<div>
+<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<input type="hidden" name="id_orden_trabajo" value=""/>
+<div>
+<input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
+</div>
+</div>
+<p>Todo retazo debe quedar asociado a la orden de trabajo que lo generó.</p>
+</div>
+<div>
+<div>
+<label for="medida_aproximada">Medida aproximada</label>
+<input id="medida_aproximada" maxLength="80" placeholder="Ejemplo: 30 cm x 15 cm" name="medida_aproximada" value=""/>
+</div>
+<div>
+<label for="ubicacion">Ubicación física</label>
+<input id="ubicacion" maxLength="100" placeholder="Ejemplo: Estante A, zona de corte" name="ubicacion" value=""/>
+</div>
+<div>
+<label for="cantidad">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad" required="" min="0.01" step="0.01" placeholder="Ejemplo: 2" name="cantidad" value=""/>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
+<option value="" disabled="" selected="">Selecciona una unidad</option>
+<option value="unidad">Unidad</option>
+<option value="kg">Kg</option>
+<option value="metro">Metro</option>
+<option value="plancha">Plancha</option>
+<option value="pieza">Pieza</option>
+</select>
+</div>
+</div>
+<div>
+<p>Estado inicial del retazo</p>
+<p>Todo retazo registrado se guardará inicialmente con estado <span>disponible</span>. Podrás marcarlo como reutilizado o descartado desde la lista.</p>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar retazo</button>
+<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps?estado=descartado">Cancelar</a>
+</div>
+</form>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

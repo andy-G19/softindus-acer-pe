@@ -3,7 +3,7 @@
 exports[`createReusableScrapAction > ADMIN registra el retazo disponible con el tipo de la categoria del material > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -96,15 +96,37 @@ exports[`createReusableScrapAction > ADMIN registra el retazo disponible con el 
     "args": "/dashboard/waste-scrap",
     "effect": "revalidatePath",
   },
+  {
+    "args": "/dashboard/waste-scrap/reusable-scraps",
+    "effect": "revalidatePath",
+  },
 ]
 `;
 
-exports[`createReusableScrapAction > ADMIN registra el retazo disponible con el tipo de la categoria del material > resultado 1`] = `"redirect:/dashboard/waste-scrap?toast=reusable-scrap-created"`;
+exports[`createReusableScrapAction > ADMIN registra el retazo disponible con el tipo de la categoria del material > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_retazo": "RET00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
-exports[`createReusableScrapAction > SELLER no puede registrar > llamadas 1`] = `
+exports[`createReusableScrapAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -113,12 +135,29 @@ exports[`createReusableScrapAction > SELLER no puede registrar > llamadas 1`] = 
 ]
 `;
 
-exports[`createReusableScrapAction > SELLER no puede registrar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createReusableScrapAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar retazos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > WORKSHOP_MASTER tambien registra retazos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -211,15 +250,37 @@ exports[`createReusableScrapAction > WORKSHOP_MASTER tambien registra retazos > 
     "args": "/dashboard/waste-scrap",
     "effect": "revalidatePath",
   },
+  {
+    "args": "/dashboard/waste-scrap/reusable-scraps",
+    "effect": "revalidatePath",
+  },
 ]
 `;
 
-exports[`createReusableScrapAction > WORKSHOP_MASTER tambien registra retazos > resultado 1`] = `"redirect:/dashboard/waste-scrap?toast=reusable-scrap-created"`;
+exports[`createReusableScrapAction > WORKSHOP_MASTER tambien registra retazos > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_retazo": "RET00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > el material esta inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -254,18 +315,39 @@ exports[`createReusableScrapAction > el material esta inactivo > llamadas 1`] = 
     "prisma": "material.findUnique",
   },
   {
-    "args": "No se puede registrar retazos de un material inactivo.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createReusableScrapAction > el material esta inactivo > resultado 1`] = `"error: No se puede registrar retazos de un material inactivo."`;
+exports[`createReusableScrapAction > el material esta inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede registrar retazos de un material inactivo.",
+    "fieldErrors": {
+      "id_material": [
+        "No se puede registrar retazos de un material inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > el material no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -300,18 +382,39 @@ exports[`createReusableScrapAction > el material no existe > llamadas 1`] = `
     "prisma": "material.findUnique",
   },
   {
-    "args": "El material seleccionado no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createReusableScrapAction > el material no existe > resultado 1`] = `"error: El material seleccionado no existe."`;
+exports[`createReusableScrapAction > el material no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material seleccionado no existe.",
+    "fieldErrors": {
+      "id_material": [
+        "El material seleccionado no existe.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > la cantidad cero se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -320,12 +423,33 @@ exports[`createReusableScrapAction > la cantidad cero se rechaza > llamadas 1`] 
 ]
 `;
 
-exports[`createReusableScrapAction > la cantidad cero se rechaza > resultado 1`] = `"error: La cantidad debe ser mayor que cero."`;
+exports[`createReusableScrapAction > la cantidad cero se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del retazo.",
+    "fieldErrors": {
+      "cantidad": [
+        "La cantidad debe ser mayor que cero.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "0",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > la cantidad no numerica se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -334,12 +458,33 @@ exports[`createReusableScrapAction > la cantidad no numerica se rechaza > llamad
 ]
 `;
 
-exports[`createReusableScrapAction > la cantidad no numerica se rechaza > resultado 1`] = `"error: La cantidad debe ser numérica."`;
+exports[`createReusableScrapAction > la cantidad no numerica se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del retazo.",
+    "fieldErrors": {
+      "cantidad": [
+        "La cantidad debe ser numérica.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "abc",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > la medida no supera 80 caracteres > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -348,12 +493,33 @@ exports[`createReusableScrapAction > la medida no supera 80 caracteres > llamada
 ]
 `;
 
-exports[`createReusableScrapAction > la medida no supera 80 caracteres > resultado 1`] = `"error: La medida aproximada no debe superar 80 caracteres."`;
+exports[`createReusableScrapAction > la medida no supera 80 caracteres > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del retazo.",
+    "fieldErrors": {
+      "medida_aproximada": [
+        "La medida aproximada no debe superar 80 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > la orden esta anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -400,18 +566,39 @@ exports[`createReusableScrapAction > la orden esta anulada > llamadas 1`] = `
     "prisma": "orden_trabajo.findUnique",
   },
   {
-    "args": "No se puede asociar un retazo a una orden anulada.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createReusableScrapAction > la orden esta anulada > resultado 1`] = `"error: No se puede asociar un retazo a una orden anulada."`;
+exports[`createReusableScrapAction > la orden esta anulada > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede asociar un retazo a una orden anulada.",
+    "fieldErrors": {
+      "id_orden_trabajo": [
+        "No se puede asociar un retazo a una orden anulada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > la orden no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -458,18 +645,39 @@ exports[`createReusableScrapAction > la orden no existe > llamadas 1`] = `
     "prisma": "orden_trabajo.findUnique",
   },
   {
-    "args": "La orden de trabajo seleccionada no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createReusableScrapAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo seleccionada no existe."`;
+exports[`createReusableScrapAction > la orden no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La orden de trabajo seleccionada no existe.",
+    "fieldErrors": {
+      "id_orden_trabajo": [
+        "La orden de trabajo seleccionada no existe.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > la ubicacion no supera 100 caracteres > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -478,12 +686,33 @@ exports[`createReusableScrapAction > la ubicacion no supera 100 caracteres > lla
 ]
 `;
 
-exports[`createReusableScrapAction > la ubicacion no supera 100 caracteres > resultado 1`] = `"error: La ubicación no debe superar 100 caracteres."`;
+exports[`createReusableScrapAction > la ubicacion no supera 100 caracteres > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del retazo.",
+    "fieldErrors": {
+      "ubicacion": [
+        "La ubicación no debe superar 100 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > medida y ubicacion vacias se guardan como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -576,15 +805,37 @@ exports[`createReusableScrapAction > medida y ubicacion vacias se guardan como n
     "args": "/dashboard/waste-scrap",
     "effect": "revalidatePath",
   },
+  {
+    "args": "/dashboard/waste-scrap/reusable-scraps",
+    "effect": "revalidatePath",
+  },
 ]
 `;
 
-exports[`createReusableScrapAction > medida y ubicacion vacias se guardan como null > resultado 1`] = `"redirect:/dashboard/waste-scrap?toast=reusable-scrap-created"`;
+exports[`createReusableScrapAction > medida y ubicacion vacias se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_retazo": "RET00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "",
+      "ubicacion": "",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > sin material se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -593,12 +844,33 @@ exports[`createReusableScrapAction > sin material se rechaza > llamadas 1`] = `
 ]
 `;
 
-exports[`createReusableScrapAction > sin material se rechaza > resultado 1`] = `"error: Debe seleccionar un material de origen."`;
+exports[`createReusableScrapAction > sin material se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del retazo.",
+    "fieldErrors": {
+      "id_material": [
+        "Debe seleccionar un material de origen.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "2",
+      "id_material": "",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > sin orden se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -607,12 +879,33 @@ exports[`createReusableScrapAction > sin orden se rechaza > llamadas 1`] = `
 ]
 `;
 
-exports[`createReusableScrapAction > sin orden se rechaza > resultado 1`] = `"error: Debe seleccionar la orden de trabajo que generó el retazo."`;
+exports[`createReusableScrapAction > sin orden se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del retazo.",
+    "fieldErrors": {
+      "id_orden_trabajo": [
+        "Debe seleccionar la orden de trabajo que generó el retazo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > sin unidad se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -621,12 +914,33 @@ exports[`createReusableScrapAction > sin unidad se rechaza > llamadas 1`] = `
 ]
 `;
 
-exports[`createReusableScrapAction > sin unidad se rechaza > resultado 1`] = `"error: La unidad de medida es obligatoria."`;
+exports[`createReusableScrapAction > sin unidad se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del retazo.",
+    "fieldErrors": {
+      "unidad_medida": [
+        "La unidad de medida es obligatoria.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -635,12 +949,141 @@ exports[`createReusableScrapAction > un POST sin campos se rechaza sin tocar Pri
 ]
 `;
 
-exports[`createReusableScrapAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: Debe seleccionar un material de origen. Debe seleccionar la orden de trabajo que generó el retazo. La cantidad debe ser mayor que cero. La unidad de medida es obligatoria."`;
+exports[`createReusableScrapAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del retazo.",
+    "fieldErrors": {
+      "cantidad": [
+        "La cantidad debe ser mayor que cero.",
+      ],
+      "id_material": [
+        "Debe seleccionar un material de origen.",
+      ],
+      "id_orden_trabajo": [
+        "Debe seleccionar la orden de trabajo que generó el retazo.",
+      ],
+      "unidad_medida": [
+        "La unidad de medida es obligatoria.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "",
+      "id_material": "",
+      "id_orden_trabajo": "",
+      "medida_aproximada": "",
+      "ubicacion": "",
+      "unidad_medida": "",
+    },
+  },
+}
+`;
+
+exports[`createReusableScrapAction > un fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "categoria": true,
+        "estado": true,
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000003",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "retazo_reutilizable",
+      "prefijo": "RET",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 2,
+        "estado": "disponible",
+        "id_material": "MAT00000002",
+        "id_orden_trabajo": "OTR00000003",
+        "id_retazo": "RET00000012",
+        "id_usuario_registro": "USU00000001",
+        "medida_aproximada": "30 cm x 15 cm",
+        "tipo_material": "planchas",
+        "ubicacion": "Estante A",
+        "unidad_medida": "pieza",
+      },
+    },
+    "prisma": "retazo_reutilizable.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createReusableScrapAction > un fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo registrar el retazo. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > una cantidad de 0.001 se rechaza porque se guardaria como cero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -649,12 +1092,33 @@ exports[`createReusableScrapAction > una cantidad de 0.001 se rechaza porque se 
 ]
 `;
 
-exports[`createReusableScrapAction > una cantidad de 0.001 se rechaza porque se guardaria como cero > resultado 1`] = `"error: La cantidad debe ser mayor que cero."`;
+exports[`createReusableScrapAction > una cantidad de 0.001 se rechaza porque se guardaria como cero > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del retazo.",
+    "fieldErrors": {
+      "cantidad": [
+        "La cantidad debe ser mayor que cero.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "cantidad": "0.001",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
 exports[`createReusableScrapAction > una orden finalizada se admite > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -747,15 +1211,37 @@ exports[`createReusableScrapAction > una orden finalizada se admite > llamadas 1
     "args": "/dashboard/waste-scrap",
     "effect": "revalidatePath",
   },
+  {
+    "args": "/dashboard/waste-scrap/reusable-scraps",
+    "effect": "revalidatePath",
+  },
 ]
 `;
 
-exports[`createReusableScrapAction > una orden finalizada se admite > resultado 1`] = `"redirect:/dashboard/waste-scrap?toast=reusable-scrap-created"`;
+exports[`createReusableScrapAction > una orden finalizada se admite > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_retazo": "RET00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "cantidad": "2",
+      "id_material": "MAT00000002",
+      "id_orden_trabajo": "OTR00000003",
+      "medida_aproximada": "30 cm x 15 cm",
+      "ubicacion": "Estante A",
+      "unidad_medida": "pieza",
+    },
+  },
+}
+`;
 
-exports[`updateReusableScrapStatusAction > SELLER no puede cambiar el estado > llamadas 1`] = `
+exports[`updateReusableScrapStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -764,12 +1250,23 @@ exports[`updateReusableScrapStatusAction > SELLER no puede cambiar el estado > l
 ]
 `;
 
-exports[`updateReusableScrapStatusAction > SELLER no puede cambiar el estado > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateReusableScrapStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para cambiar el estado de retazos.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RET00000003",
+    },
+  },
+}
+`;
 
 exports[`updateReusableScrapStatusAction > WORKSHOP_MASTER tambien cambia el estado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -824,12 +1321,25 @@ exports[`updateReusableScrapStatusAction > WORKSHOP_MASTER tambien cambia el est
 ]
 `;
 
-exports[`updateReusableScrapStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `"redirect:/dashboard/waste-scrap/reusable-scraps"`;
+exports[`updateReusableScrapStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "reutilizado",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RET00000003",
+    },
+  },
+}
+`;
 
 exports[`updateReusableScrapStatusAction > disponible no es un estado de destino > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -838,12 +1348,23 @@ exports[`updateReusableScrapStatusAction > disponible no es un estado de destino
 ]
 `;
 
-exports[`updateReusableScrapStatusAction > disponible no es un estado de destino > resultado 1`] = `"error: Debe seleccionar un estado válido para el retazo."`;
+exports[`updateReusableScrapStatusAction > disponible no es un estado de destino > resultado 1`] = `
+{
+  "estado": {
+    "error": "Debe seleccionar un estado válido para el retazo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RET00000003",
+    },
+  },
+}
+`;
 
 exports[`updateReusableScrapStatusAction > el retazo no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -880,18 +1401,29 @@ exports[`updateReusableScrapStatusAction > el retazo no existe > llamadas 1`] = 
     "prisma": "retazo_reutilizable.findUnique",
   },
   {
-    "args": "El retazo seleccionado no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateReusableScrapStatusAction > el retazo no existe > resultado 1`] = `"error: El retazo seleccionado no existe."`;
+exports[`updateReusableScrapStatusAction > el retazo no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El retazo seleccionado no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RET00000003",
+    },
+  },
+}
+`;
 
 exports[`updateReusableScrapStatusAction > sin estado se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -900,12 +1432,23 @@ exports[`updateReusableScrapStatusAction > sin estado se rechaza > llamadas 1`] 
 ]
 `;
 
-exports[`updateReusableScrapStatusAction > sin estado se rechaza > resultado 1`] = `"error: Debe seleccionar un estado válido para el retazo."`;
+exports[`updateReusableScrapStatusAction > sin estado se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Debe seleccionar un estado válido para el retazo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RET00000003",
+    },
+  },
+}
+`;
 
 exports[`updateReusableScrapStatusAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -914,12 +1457,71 @@ exports[`updateReusableScrapStatusAction > sin id se rechaza sin tocar Prisma > 
 ]
 `;
 
-exports[`updateReusableScrapStatusAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `"error: Debe seleccionar un retazo."`;
+exports[`updateReusableScrapStatusAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Debe seleccionar un retazo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateReusableScrapStatusAction > un fallo al escribir revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "reutilizado",
+      },
+      "select": {
+        "id_retazo": true,
+      },
+      "where": {
+        "estado": "disponible",
+        "id_retazo": "RET00000003",
+      },
+    },
+    "prisma": "retazo_reutilizable.updateManyAndReturn",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateReusableScrapStatusAction > un fallo al escribir revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo cambiar el estado del retazo. Intenta nuevamente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RET00000003",
+    },
+  },
+}
+`;
 
 exports[`updateReusableScrapStatusAction > un retazo descartado ya no cambia > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -956,18 +1558,29 @@ exports[`updateReusableScrapStatusAction > un retazo descartado ya no cambia > l
     "prisma": "retazo_reutilizable.findUnique",
   },
   {
-    "args": "Solo se puede cambiar el estado de retazos disponibles.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateReusableScrapStatusAction > un retazo descartado ya no cambia > resultado 1`] = `"error: Solo se puede cambiar el estado de retazos disponibles."`;
+exports[`updateReusableScrapStatusAction > un retazo descartado ya no cambia > resultado 1`] = `
+{
+  "estado": {
+    "error": "Solo se puede cambiar el estado de retazos disponibles.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RET00000003",
+    },
+  },
+}
+`;
 
 exports[`updateReusableScrapStatusAction > un retazo disponible pasa a descartado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1022,12 +1635,25 @@ exports[`updateReusableScrapStatusAction > un retazo disponible pasa a descartad
 ]
 `;
 
-exports[`updateReusableScrapStatusAction > un retazo disponible pasa a descartado > resultado 1`] = `"redirect:/dashboard/waste-scrap/reusable-scraps"`;
+exports[`updateReusableScrapStatusAction > un retazo disponible pasa a descartado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "descartado",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RET00000003",
+    },
+  },
+}
+`;
 
 exports[`updateReusableScrapStatusAction > un retazo disponible pasa a reutilizado y deja bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1082,12 +1708,25 @@ exports[`updateReusableScrapStatusAction > un retazo disponible pasa a reutiliza
 ]
 `;
 
-exports[`updateReusableScrapStatusAction > un retazo disponible pasa a reutilizado y deja bitacora > resultado 1`] = `"redirect:/dashboard/waste-scrap/reusable-scraps"`;
+exports[`updateReusableScrapStatusAction > un retazo disponible pasa a reutilizado y deja bitacora > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "reutilizado",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RET00000003",
+    },
+  },
+}
+`;
 
 exports[`updateReusableScrapStatusAction > un retazo reutilizado ya no cambia > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1124,10 +1763,21 @@ exports[`updateReusableScrapStatusAction > un retazo reutilizado ya no cambia > 
     "prisma": "retazo_reutilizable.findUnique",
   },
   {
-    "args": "Solo se puede cambiar el estado de retazos disponibles.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateReusableScrapStatusAction > un retazo reutilizado ya no cambia > resultado 1`] = `"error: Solo se puede cambiar el estado de retazos disponibles."`;
+exports[`updateReusableScrapStatusAction > un retazo reutilizado ya no cambia > resultado 1`] = `
+{
+  "estado": {
+    "error": "Solo se puede cambiar el estado de retazos disponibles.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RET00000003",
+    },
+  },
+}
+`;
