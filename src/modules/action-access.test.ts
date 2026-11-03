@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Pruebas de caracterizacion del control de acceso de las Server Actions de
-// costos, mantenimiento, caja chica, ordenes de trabajo, personal y mermas.
+// costos, mantenimiento, caja chica, ordenes de trabajo, personal, mermas y
+// usuarios (10.7b).
 //
 // La tabla MODULOS registra, por archivo, los roles que cada accion exige;
 // rolesPorAccion, las excepciones dentro de un archivo. Las ordenes de trabajo
@@ -339,6 +340,18 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/staff/tasks/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createOperatorTaskAction", "cancelOperatorTaskAction"],
+  },
+  {
+    ruta: "users/actions",
+    cargar: () => import("@/modules/users/actions"),
+    roles: SOLO_ADMIN,
+    acciones: [
+      "createUserAction",
+      "updateUserAction",
+      "activateUserAction",
+      "deactivateUserAction",
+      "resetUserPasswordAction",
+    ],
   },
   {
     ruta: "waste-scrap/reusable-scraps/actions",
