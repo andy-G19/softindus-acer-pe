@@ -297,11 +297,11 @@ defineCases("createUserAction", withState(createUserAction), [
   { name: "las contrasenas que no coinciden se rechazan", ...createWith({ confirmPassword: "Clave#Segura2" }) },
   { name: "sin confirmacion se rechaza", ...createWith({ confirmPassword: "" }) },
   {
-    name: "una contrasena de 73 bytes pasa aunque bcrypt ignora el ultimo",
+    name: "una contrasena de 73 bytes se rechaza: bcrypt ignoraria el ultimo",
     ...createWith({ password: LONG_PASSWORD, confirmPassword: LONG_PASSWORD }),
   },
   {
-    name: "una contrasena de 40 caracteres con tildes pasa con 80 bytes",
+    name: "una contrasena de 40 caracteres con tildes se rechaza: son 80 bytes",
     ...createWith({ password: ACCENTED_PASSWORD, confirmPassword: ACCENTED_PASSWORD }),
   },
   { name: "el rol no existe en la base", ...createWith({}, noRole) },
@@ -371,7 +371,7 @@ defineCases("resetUserPasswordAction", withState(resetUserPasswordAction), [
   { name: "una contrasena debil se rechaza", ...resetWith({ password: "debil", confirmPassword: "debil" }) },
   { name: "las contrasenas que no coinciden se rechazan", ...resetWith({ confirmPassword: "Clave#Segura2" }) },
   {
-    name: "una contrasena de 73 bytes pasa aunque bcrypt ignora el ultimo",
+    name: "una contrasena de 73 bytes se rechaza: bcrypt ignoraria el ultimo",
     ...resetWith({ password: LONG_PASSWORD, confirmPassword: LONG_PASSWORD }),
   },
   { name: "el usuario no existe", ...resetWith({}, noUser) },

@@ -8,6 +8,13 @@ const USER_STATUSES = ["activo", "inactivo"] as const;
 const PASSWORD_RULES_MESSAGE =
   "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.";
 
+// bcrypt solo usa los primeros 72 bytes: dos contraseñas con el mismo principio
+// servirian igual. Se cuentan bytes en UTF-8, donde una tilde o la ñ ocupan 2.
+// Solo rige en el alta y el restablecer; no toca el login ni lo ya guardado.
+const PASSWORD_MAX_BYTES = 72;
+const PASSWORD_MAX_BYTES_MESSAGE =
+  "La contraseña no debe superar los 72 caracteres; las tildes y la ñ cuentan doble.";
+
 // Reglas de contraseña: minimo 8 caracteres, al menos una mayuscula, una
 // minuscula, un numero y un caracter especial. Nunca se acepta clave_hash
 // desde el formulario: siempre se recibe la contraseña en texto plano aqui
@@ -18,7 +25,11 @@ const passwordSchema = z
   .refine((value) => /[A-Z]/.test(value), PASSWORD_RULES_MESSAGE)
   .refine((value) => /[a-z]/.test(value), PASSWORD_RULES_MESSAGE)
   .refine((value) => /[0-9]/.test(value), PASSWORD_RULES_MESSAGE)
-  .refine((value) => /[^A-Za-z0-9]/.test(value), PASSWORD_RULES_MESSAGE);
+  .refine((value) => /[^A-Za-z0-9]/.test(value), PASSWORD_RULES_MESSAGE)
+  .refine(
+    (value) => new TextEncoder().encode(value).length <= PASSWORD_MAX_BYTES,
+    PASSWORD_MAX_BYTES_MESSAGE,
+  );
 
 const nombresSchema = z
   .string()

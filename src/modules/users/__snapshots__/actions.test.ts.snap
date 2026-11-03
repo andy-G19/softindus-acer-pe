@@ -795,7 +795,7 @@ exports[`createUserAction > una contrasena corta se rechaza > resultado 1`] = `
 }
 `;
 
-exports[`createUserAction > una contrasena de 40 caracteres con tildes pasa con 80 bytes > llamadas 1`] = `
+exports[`createUserAction > una contrasena de 40 caracteres con tildes se rechaza: son 80 bytes > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -803,94 +803,23 @@ exports[`createUserAction > una contrasena de 40 caracteres con tildes pasa con 
       "ADMIN",
     ],
   },
-  {
-    "args": {
-      "select": {
-        "id_rol": true,
-      },
-      "where": {
-        "nombre_rol": "SELLER",
-      },
-    },
-    "prisma": "rol.findUnique",
-  },
-  {
-    "args": {
-      "select": {
-        "correo": true,
-        "usuario": true,
-      },
-      "where": {
-        "OR": [
-          {
-            "correo": "ana.quispe@example.com",
-          },
-          {
-            "usuario": "aquispe",
-          },
-        ],
-      },
-    },
-    "prisma": "usuario.findFirst",
-  },
-  {
-    "args": {
-      "bytes": 76,
-      "cost": 10,
-    },
-    "effect": "bcrypt.hash",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "usuario",
-      "prefijo": "USU",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "apellidos": "Quispe",
-        "clave_hash": "$2b$10$hash-de-prueba",
-        "correo": "ana.quispe@example.com",
-        "estado": "activo",
-        "id_rol": "id_rol-1",
-        "id_usuario": "USU00000012",
-        "nombres": "Ana",
-        "usuario": "aquispe",
-      },
-    },
-    "prisma": "usuario.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Usuario creado: ana.quispe@example.com",
-      "enTransaccion": true,
-      "entidad_afectada": "usuario",
-      "id_registro_afectado": "USU00000012",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/users",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createUserAction > una contrasena de 40 caracteres con tildes pasa con 80 bytes > resultado 1`] = `"redirect:/dashboard/users?toast=user-created"`;
+exports[`createUserAction > una contrasena de 40 caracteres con tildes se rechaza: son 80 bytes > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "password": [
+        "La contraseña no debe superar los 72 caracteres; las tildes y la ñ cuentan doble.",
+      ],
+    },
+  },
+}
+`;
 
-exports[`createUserAction > una contrasena de 73 bytes pasa aunque bcrypt ignora el ultimo > llamadas 1`] = `
+exports[`createUserAction > una contrasena de 73 bytes se rechaza: bcrypt ignoraria el ultimo > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -898,92 +827,21 @@ exports[`createUserAction > una contrasena de 73 bytes pasa aunque bcrypt ignora
       "ADMIN",
     ],
   },
-  {
-    "args": {
-      "select": {
-        "id_rol": true,
-      },
-      "where": {
-        "nombre_rol": "SELLER",
-      },
-    },
-    "prisma": "rol.findUnique",
-  },
-  {
-    "args": {
-      "select": {
-        "correo": true,
-        "usuario": true,
-      },
-      "where": {
-        "OR": [
-          {
-            "correo": "ana.quispe@example.com",
-          },
-          {
-            "usuario": "aquispe",
-          },
-        ],
-      },
-    },
-    "prisma": "usuario.findFirst",
-  },
-  {
-    "args": {
-      "bytes": 73,
-      "cost": 10,
-    },
-    "effect": "bcrypt.hash",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "usuario",
-      "prefijo": "USU",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "apellidos": "Quispe",
-        "clave_hash": "$2b$10$hash-de-prueba",
-        "correo": "ana.quispe@example.com",
-        "estado": "activo",
-        "id_rol": "id_rol-1",
-        "id_usuario": "USU00000012",
-        "nombres": "Ana",
-        "usuario": "aquispe",
-      },
-    },
-    "prisma": "usuario.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Usuario creado: ana.quispe@example.com",
-      "enTransaccion": true,
-      "entidad_afectada": "usuario",
-      "id_registro_afectado": "USU00000012",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/users",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createUserAction > una contrasena de 73 bytes pasa aunque bcrypt ignora el ultimo > resultado 1`] = `"redirect:/dashboard/users?toast=user-created"`;
+exports[`createUserAction > una contrasena de 73 bytes se rechaza: bcrypt ignoraria el ultimo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del usuario.",
+    "fieldErrors": {
+      "password": [
+        "La contraseña no debe superar los 72 caracteres; las tildes y la ñ cuentan doble.",
+      ],
+    },
+  },
+}
+`;
 
 exports[`createUserAction > una contrasena sin caracter especial se rechaza > llamadas 1`] = `
 [
@@ -1382,7 +1240,7 @@ exports[`resetUserPasswordAction > sin id se rechaza sin tocar Prisma > resultad
 }
 `;
 
-exports[`resetUserPasswordAction > una contrasena de 73 bytes pasa aunque bcrypt ignora el ultimo > llamadas 1`] = `
+exports[`resetUserPasswordAction > una contrasena de 73 bytes se rechaza: bcrypt ignoraria el ultimo > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1390,51 +1248,21 @@ exports[`resetUserPasswordAction > una contrasena de 73 bytes pasa aunque bcrypt
       "ADMIN",
     ],
   },
-  {
-    "args": {
-      "bytes": 73,
-      "cost": 10,
-    },
-    "effect": "bcrypt.hash",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "data": {
-        "clave_hash": "$2b$10$hash-de-prueba",
-      },
-      "where": {
-        "id_usuario": "USU00000002",
-      },
-    },
-    "prisma": "usuario.updateMany",
-  },
-  {
-    "args": {
-      "accion": "actualizar",
-      "detalle": "Contraseña reiniciada para usuario: USU00000002",
-      "enTransaccion": true,
-      "entidad_afectada": "usuario",
-      "id_registro_afectado": "USU00000002",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/users",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`resetUserPasswordAction > una contrasena de 73 bytes pasa aunque bcrypt ignora el ultimo > resultado 1`] = `"redirect:/dashboard/users?toast=user-password-reset"`;
+exports[`resetUserPasswordAction > una contrasena de 73 bytes se rechaza: bcrypt ignoraria el ultimo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa la contraseña ingresada.",
+    "fieldErrors": {
+      "password": [
+        "La contraseña no debe superar los 72 caracteres; las tildes y la ñ cuentan doble.",
+      ],
+    },
+  },
+}
+`;
 
 exports[`resetUserPasswordAction > una contrasena debil se rechaza > llamadas 1`] = `
 [
