@@ -1,7 +1,8 @@
 import { UserRoundCheck, UserX, Users } from "lucide-react";
 import Link from "next/link";
 
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
 import { RowEditLink } from "@/components/table/row-actions";
@@ -16,7 +17,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -42,13 +42,13 @@ import {
 } from "@/lib/permissions";
 import { parseStringParam, type SearchParamsRecord } from "@/lib/search-params";
 import {
-  activateUserAction,
-  deactivateUserAction,
   resetUserPasswordAction,
+  updateUserStatusAction,
 } from "@/modules/users/actions";
 import { usersNotifications } from "@/modules/users/notifications";
 import { getUserListData } from "@/modules/users/queries";
 import { ResetPasswordDialog } from "@/modules/users/reset-password-dialog";
+import { UserStatusActions } from "@/modules/users/user-status-actions";
 
 const ROLE_OPTIONS = [
   APP_ROLES.ADMIN,
@@ -77,7 +77,7 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
   const returnTo = createReturnToHref(navigationHrefs.users, params);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Usuarios"
         description="Administra las cuentas de acceso al sistema: roles, estado y credenciales."
@@ -113,57 +113,34 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
         />
       </section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form
-            action={navigationHrefs.users}
-            className="grid gap-3 md:grid-cols-4"
-          >
-            <div className="space-y-2">
-              <Label htmlFor="q">Buscar</Label>
-              <Input
-                id="q"
-                name="q"
-                defaultValue={q}
-                placeholder="Nombre, usuario o correo"
-              />
-            </div>
+      <FilterBar action={navigationHrefs.users} label="Filtros de usuarios" clearHref={navigationHrefs.users}>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Nombre, usuario o correo" />}
+        </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="rol">Rol</Label>
-              <NativeSelect id="rol" name="rol" defaultValue={rol}>
-                <option value="">Todos los roles</option>
-                {ROLE_OPTIONS.map((role) => (
-                  <option key={role} value={role}>
-                    {getRoleLabel(role)}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
+        <Field id="rol" label="Rol">
+          {(control) => (
+            <NativeSelect {...control} name="rol" defaultValue={rol}>
+              <option value="">Todos los roles</option>
+              {ROLE_OPTIONS.map((role) => (
+                <option key={role} value={role}>
+                  {getRoleLabel(role)}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="estado">Estado</Label>
-              <NativeSelect id="estado" name="estado" defaultValue={estado}>
-                <option value="">Todos los estados</option>
-                <option value="activo">Activo</option>
-                <option value="inactivo">Inactivo</option>
-              </NativeSelect>
-            </div>
-
-            <div className="flex items-end gap-2">
-              <Button type="submit" className="flex-1">
-                Filtrar
-              </Button>
-              <Button variant="clear" asChild>
-                <Link href={navigationHrefs.users}>Limpiar</Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+        <Field id="estado" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="estado" defaultValue={estado}>
+              <option value="">Todos los estados</option>
+              <option value="activo">Activo</option>
+              <option value="inactivo">Inactivo</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
       <Card>
         <CardHeader>
@@ -243,34 +220,17 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
                             successNotification={usersNotifications["user-password-reset"]}
                           />
 
-                          {user.estado === "activo" ? (
-                            <form action={deactivateUserAction}>
-                              <input
-                                type="hidden"
-                                name="id_usuario"
-                                value={user.id_usuario}
-                              />
-                              <ConfirmDeleteButton
-                                disabled={isSelf}
-                                title="¿Desactivar usuario?"
-                                description={`El usuario ${user.nombres} ${user.apellidos} no podrá iniciar sesión hasta que se reactive.`}
-                                confirmText="Desactivar"
-                              >
-                                Desactivar
-                              </ConfirmDeleteButton>
-                            </form>
-                          ) : (
-                            <form action={activateUserAction}>
-                              <input
-                                type="hidden"
-                                name="id_usuario"
-                                value={user.id_usuario}
-                              />
-                              <Button type="submit" variant="outline" size="sm">
-                                Activar
-                              </Button>
-                            </form>
-                          )}
+                          <UserStatusActions
+                            user={{
+                              id_usuario: user.id_usuario,
+                              nombre: `${user.nombres} ${user.apellidos}`,
+                              estado: user.estado,
+                            }}
+                            isSelf={isSelf}
+                            action={updateUserStatusAction}
+                            activatedNotification={usersNotifications["user-activated"]}
+                            deactivatedNotification={usersNotifications["user-deactivated"]}
+                          />
                         </div>
                       </TableCell>
                     </TableRow>
@@ -290,6 +250,6 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
           </div>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

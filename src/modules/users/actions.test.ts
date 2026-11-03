@@ -2,11 +2,10 @@ import { describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
 import {
-  activateUserAction,
   createUserAction,
-  deactivateUserAction,
   resetUserPasswordAction,
   updateUserAction,
+  updateUserStatusAction,
   type ResetPasswordFormState,
   type UserFormState,
 } from "@/modules/users/actions";
@@ -349,22 +348,25 @@ defineCases("updateUserAction", withState(updateUserAction), [
   },
 ]);
 
-defineCases("activateUserAction", activateUserAction, [
-  { name: "activar un usuario inactivo escribe con su bitacora en la transaccion", ...statusWith("inactivo") },
-  { name: "activar un usuario activo no escribe", ...statusWith("activo") },
-  { name: "el usuario no existe", form: { id_usuario: OTHER }, data: noUser },
-  { name: "sin id vuelve a la lista sin tocar Prisma", ...statusWith("inactivo", "") },
-  { name: "un POST sin campos vuelve a la lista", ...statusWith("inactivo", null) },
-  { name: "SELLER no puede activar", ...statusWith("inactivo"), role: "SELLER" },
-]);
+// El estado pedido viaja en el formulario, como lo envia ConfirmActionButton.
+const statusTo = (pedido: string | null, guardado: string, id: string | null = OTHER) => ({
+  ...statusWith(guardado, id),
+  form: { id_usuario: id, estado: pedido },
+});
 
-defineCases("deactivateUserAction", deactivateUserAction, [
-  { name: "desactivar un usuario activo escribe con su bitacora en la transaccion", ...statusWith("activo") },
-  { name: "desactivar un usuario inactivo no escribe", ...statusWith("inactivo") },
-  { name: "el usuario no existe", form: { id_usuario: OTHER }, data: noUser },
-  { name: "el administrador no puede desactivarse: aviso por la URL", ...statusWith("activo", SELF) },
-  { name: "sin id vuelve a la lista sin tocar Prisma", ...statusWith("activo", "") },
-  { name: "WORKSHOP_MASTER no puede desactivar", ...statusWith("activo"), role: "WORKSHOP_MASTER" },
+defineCases("updateUserStatusAction", (formData) => updateUserStatusAction({ status: "idle" }, formData), [
+  { name: "activar un usuario inactivo escribe con su bitacora en la transaccion", ...statusTo("activo", "inactivo") },
+  { name: "desactivar un usuario activo escribe con su bitacora en la transaccion", ...statusTo("inactivo", "activo") },
+  { name: "activar un usuario activo no escribe y dice por que", ...statusTo("activo", "activo") },
+  { name: "desactivar un usuario inactivo no escribe y dice por que", ...statusTo("inactivo", "inactivo") },
+  { name: "el usuario no existe", form: { id_usuario: OTHER, estado: "activo" }, data: noUser },
+  { name: "el administrador no puede desactivarse", ...statusTo("inactivo", "activo", SELF) },
+  { name: "el administrador activo puede pedir activo: ya lo esta", ...statusTo("activo", "activo", SELF) },
+  { name: "un estado desconocido se rechaza sin tocar Prisma", ...statusTo("bloqueado", "activo") },
+  { name: "sin id se rechaza sin tocar Prisma", ...statusTo("activo", "inactivo", "") },
+  { name: "un POST sin campos se rechaza sin tocar Prisma", ...statusTo(null, "inactivo", null) },
+  { name: "SELLER no puede cambiar el estado", ...statusTo("activo", "inactivo"), role: "SELLER" },
+  { name: "WORKSHOP_MASTER no puede cambiar el estado", ...statusTo("inactivo", "activo"), role: "WORKSHOP_MASTER" },
 ]);
 
 defineCases("resetUserPasswordAction", withResetState(resetUserPasswordAction), [
@@ -434,32 +436,18 @@ function auditLogs(calls: RecordedCall[]) {
 }
 
 describe("activar y desactivar escriben con compare-and-set", () => {
-  it.each([
-    { name: "activar", run: activateUserAction, estado: "inactivo", siguiente: "activo" },
-    { name: "desactivar", run: deactivateUserAction, estado: "activo", siguiente: "inactivo" },
-  ])("$name escribe en la transaccion sin leer antes", async ({ run, estado, siguiente }) => {
-    const { calls } = await runCase(run, statusWith(estado));
-    const writes = prismaCalls(calls).filter((call) => call.prisma === "usuario.updateMany");
+  const run = (formData: FormData) => updateUserStatusAction({ status: "idle" }, formData);
 
-    expect(prismaCalls(calls).map((call) => call.prisma)).not.toContain("usuario.findUnique");
-    expect(prismaCalls(calls).map((call) => call.prisma)).not.toContain("usuario.update");
-    expect(writes).toEqual([
-      {
-        prisma: "usuario.updateMany",
-        args: { where: { id_usuario: OTHER, estado: { not: siguiente } }, data: { estado: siguiente } },
-      },
-    ]);
+  it.each([
+    { name: "activar", estado: "inactivo", siguiente: "activo" },
+    { name: "desactivar", estado: "activo", siguiente: "inactivo" },
+  ])("$name escribe en la transaccion sin leer antes", async ({ estado, siguiente }) => {
+    const { calls } = await runCase(run, statusTo(siguiente, estado));
+    const names = prismaCalls(calls).map((call) => call.prisma);
+
+    expect(names).not.toContain("usuario.findUnique");
+    expect(names).not.toContain("usuario.update");
     expect(auditLogs(calls)).toEqual([expect.objectContaining({ enTransaccion: true })]);
-  });
-
-  it.each([
-    { name: "activar un activo", run: activateUserAction, estado: "activo" },
-    { name: "desactivar un inactivo", run: deactivateUserAction, estado: "inactivo" },
-  ])("$name no deja bitacora", async ({ run, estado }) => {
-    const { calls, result } = await runCase(run, statusWith(estado));
-
-    expect(auditLogs(calls)).toEqual([]);
-    expect(result).toBe("redirect:/dashboard/users");
   });
 });
 
@@ -596,5 +584,65 @@ describe("el restablecer devuelve el resultado", () => {
     const { result } = await runCase(reset, actionCase);
 
     expect(result).toEqual({ estado: expect.objectContaining({ status: "error", values: {} }) });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Estado desde la fila (B7, D4)
+// ---------------------------------------------------------------------------
+
+// Activar y desactivar son una sola accion para ConfirmActionButton: recibe el
+// estado pedido, lo fija con compare-and-set y devuelve el resultado en lugar de
+// redirigir. Un rechazo queda en la confirmacion con su motivo, tambien el de
+// desactivarse a uno mismo, que antes llegaba como aviso por la URL.
+describe("updateUserStatusAction", () => {
+  const run = (formData: FormData) => updateUserStatusAction({ status: "idle" }, formData);
+  const requested = (estado: string, stored: string, id: string | null = OTHER) => ({
+    ...statusWith(stored, id),
+    form: { id_usuario: id, estado },
+  });
+
+  it.each([
+    { pedido: "inactivo", guardado: "activo" },
+    { pedido: "activo", guardado: "inactivo" },
+  ])("fija $pedido con compare-and-set y su bitacora en la transaccion", async ({ pedido, guardado }) => {
+    const { calls, result } = await runCase(run, requested(pedido, guardado));
+
+    expect(prismaCalls(calls).filter((call) => call.prisma === "usuario.updateMany")).toEqual([
+      {
+        prisma: "usuario.updateMany",
+        args: { where: { id_usuario: OTHER, estado: { not: pedido } }, data: { estado: pedido } },
+      },
+    ]);
+    expect(auditLogs(calls)).toEqual([
+      expect.objectContaining({ accion: pedido === "activo" ? "activar" : "inactivar", enTransaccion: true }),
+    ]);
+    expect(result).toEqual({
+      estado: { status: "success", data: { estado: pedido }, values: { id: OTHER }, operationId: "operacion-de-prueba" },
+    });
+  });
+
+  it.each([
+    { name: "sin permiso", actionCase: { ...requested("inactivo", "activo"), role: "SELLER" as const }, error: "No tienes permisos para gestionar usuarios." },
+    { name: "desactivarse a uno mismo", actionCase: requested("inactivo", "activo", SELF), error: "No puedes desactivar tu propio usuario." },
+    { name: "un estado desconocido", actionCase: requested("bloqueado", "activo"), error: "Selecciona un estado válido." },
+    { name: "sin usuario", actionCase: requested("inactivo", "activo", ""), error: "El usuario no existe." },
+  ])("$name se rechaza sin tocar Prisma", async ({ actionCase, error }) => {
+    const { calls, result } = await runCase(run, actionCase);
+
+    expect(prismaCalls(calls)).toEqual([]);
+    expect(result).toEqual({ estado: expect.objectContaining({ status: "error", error }) });
+  });
+
+  it.each([
+    { name: "desactivar un inactivo", actionCase: requested("inactivo", "inactivo"), error: "El usuario ya está inactivo." },
+    { name: "activar un activo", actionCase: requested("activo", "activo"), error: "El usuario ya está activo." },
+    { name: "un usuario inexistente", actionCase: { ...requested("activo", "inactivo"), data: noUser }, error: "El usuario no existe." },
+  ])("$name responde con su motivo, sin bitacora ni revalidar", async ({ actionCase, error }) => {
+    const { calls, result } = await runCase(run, actionCase);
+
+    expect(auditLogs(calls)).toEqual([]);
+    expect(calls.some((call) => "effect" in call && call.effect === "revalidatePath")).toBe(false);
+    expect(result).toEqual({ estado: expect.objectContaining({ status: "error", error }) });
   });
 });

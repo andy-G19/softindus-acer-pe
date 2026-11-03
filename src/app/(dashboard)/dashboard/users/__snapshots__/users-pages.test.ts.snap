@@ -70,7 +70,7 @@ exports[`/dashboard/users > estado desconocido no filtra > llamadas 1`] = `
 
 exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -141,12 +141,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form action="/dashboard/users">
+<form role="search" aria-label="Filtros de usuarios" action="/dashboard/users" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Nombre, usuario o correo" name="q" value=""/>
@@ -170,11 +165,9 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="clear" href="/dashboard/users">Limpiar</a>
+<a data-variant="clear" href="/dashboard/users">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Usuarios registrados</div>
@@ -213,10 +206,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers%3Festado%3Dtodos">Editar</a>
 <button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-1"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -238,10 +228,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers%3Festado%3Dtodos">Editar</a>
 <button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-2"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -259,8 +246,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -335,7 +321,7 @@ exports[`/dashboard/users > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/users > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -406,12 +392,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form action="/dashboard/users">
+<form role="search" aria-label="Filtros de usuarios" action="/dashboard/users" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Nombre, usuario o correo" name="q" value=""/>
@@ -435,11 +416,9 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="clear" href="/dashboard/users">Limpiar</a>
+<a data-variant="clear" href="/dashboard/users">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Usuarios registrados</div>
@@ -478,10 +457,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers">Editar</a>
 <button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-1"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -503,10 +479,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers">Editar</a>
 <button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-2"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -524,8 +497,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -678,7 +650,7 @@ exports[`/dashboard/users > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -749,12 +721,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form action="/dashboard/users">
+<form role="search" aria-label="Filtros de usuarios" action="/dashboard/users" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Nombre, usuario o correo" name="q" value="ana"/>
@@ -778,11 +745,9 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="clear" href="/dashboard/users">Limpiar</a>
+<a data-variant="clear" href="/dashboard/users">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Usuarios registrados</div>
@@ -821,10 +786,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers%3Fq%3Dana%26rol%3DSELLER%26estado%3Dactivo%26page%3D2">Editar</a>
 <button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-1"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -846,10 +808,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers%3Fq%3Dana%26rol%3DSELLER%26estado%3Dactivo%26page%3D2">Editar</a>
 <button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_usuario" value="id_usuario-2"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -867,8 +826,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;

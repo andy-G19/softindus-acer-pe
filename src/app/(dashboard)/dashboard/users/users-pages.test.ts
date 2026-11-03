@@ -110,3 +110,29 @@ describe("restablecer desde la lista", () => {
     expect(html).not.toContain("/reset-password");
   });
 });
+
+// La fila del usuario de la sesion ofrece Desactivar deshabilitado; la de otro, no.
+describe("estado desde la lista", () => {
+  it("el administrador no puede desactivarse desde su fila", async () => {
+    const row = (id_usuario: string) => (args: Parameters<typeof generatedRow>[2]) => ({
+      ...generatedRow("usuario", "findUnique", args),
+      id_usuario,
+      estado: "activo",
+    });
+    const { html } = await characterizePage(
+      () => import("./page"),
+      {
+        name: "lista con el propio usuario",
+        data: {
+          "usuario.findMany": (args) => [row("USU00000001")(args), row("USU00000002")(args)],
+        },
+      },
+      "/dashboard/users",
+    );
+    const deactivate = [...(html ?? "").matchAll(/<button[^>]*>Desactivar<\/button>/g)].map((match) => match[0]);
+
+    expect(deactivate).toHaveLength(2);
+    expect(deactivate[0]).toContain('aria-disabled="true"');
+    expect(deactivate[1]).not.toContain("aria-disabled");
+  });
+});

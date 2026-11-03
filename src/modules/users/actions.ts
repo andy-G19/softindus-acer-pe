@@ -2,14 +2,14 @@
 
 import bcrypt from "bcrypt";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockUserRow } from "@/lib/row-locks";
 import type { FieldErrors } from "@/lib/errors";
 import { APP_ROLES } from "@/lib/permissions";
@@ -375,61 +375,86 @@ export async function updateUserAction(
   return userSaved(values, data.id_usuario);
 }
 
-async function setUserStatus(formData: FormData, nextStatus: "activo" | "inactivo") {
-  const session = await requireRole([APP_ROLES.ADMIN]);
-  const idUsuario = formData.get("id_usuario")?.toString().trim();
+const USER_STATUSES = ["activo", "inactivo"] as const;
+type UserStatus = (typeof USER_STATUSES)[number];
+
+function isUserStatus(value: string): value is UserStatus {
+  return (USER_STATUSES as readonly string[]).includes(value);
+}
+
+// Activar y desactivar desde la fila (entrega 10.7b): una sola accion para
+// ConfirmActionButton, que envia el estado pedido y recibe el resultado en lugar
+// de una redireccion. Un rechazo no revalida: el repintado quitaria el boton, y su
+// mensaje con el.
+export async function updateUserStatusAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
+  const idUsuario = formData.get("id_usuario")?.toString().trim() ?? "";
+  const nextStatus = formData.get("estado")?.toString() ?? "";
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return rowStatusError(idUsuario, PERMISSION_ERROR);
+  }
 
   if (!idUsuario) {
-    redirect(USERS_PATH);
+    return rowStatusError(idUsuario, "El usuario no existe.");
   }
 
-  // Un ADMIN no puede desactivarse a si mismo, ni siquiera desde el boton
-  // rapido del listado (la UI ya lo deshabilita, esto es el respaldo real).
+  if (!isUserStatus(nextStatus)) {
+    return rowStatusError(idUsuario, "Selecciona un estado válido.");
+  }
+
+  // Un ADMIN no puede desactivarse a si mismo: la fila deshabilita el boton y
+  // esta es la garantia real.
   if (nextStatus === "inactivo" && idUsuario === session.user.id) {
-    redirect(`${USERS_PATH}?toast=user-self-deactivate-blocked`);
+    return rowStatusError(idUsuario, "No puedes desactivar tu propio usuario.");
   }
 
-  // Compare-and-set: la escritura misma comprueba que el usuario no tenga ya ese
-  // estado, sin leerlo antes, y la bitacora va en la misma transaccion. count 0
-  // significa que no existe o que ya lo tenia: no hay nada que registrar.
-  const changed = await prisma.$transaction(async (tx) => {
-    const { count } = await tx.usuario.updateMany({
-      where: { id_usuario: idUsuario, estado: { not: nextStatus } },
-      data: { estado: nextStatus },
+  let problem: string | null;
+
+  try {
+    // Compare-and-set: la escritura misma comprueba que el usuario no tenga ya
+    // ese estado, sin leerlo antes, y la bitacora va en la misma transaccion. Con
+    // count 0 se lee solo para explicar el rechazo: no existe o ya lo tenia.
+    problem = await prisma.$transaction(async (tx) => {
+      const { count } = await tx.usuario.updateMany({
+        where: { id_usuario: idUsuario, estado: { not: nextStatus } },
+        data: { estado: nextStatus },
+      });
+
+      if (count === 0) {
+        const exists = await tx.usuario.findUnique({
+          where: { id_usuario: idUsuario },
+          select: { id_usuario: true },
+        });
+
+        return exists ? `El usuario ya está ${nextStatus}.` : "El usuario no existe.";
+      }
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "usuario",
+        id_registro_afectado: idUsuario,
+        accion: nextStatus === "activo" ? "activar" : "inactivar",
+        detalle: `Usuario ${nextStatus === "activo" ? "activado" : "desactivado"}: ${idUsuario}`,
+        tx,
+      });
+
+      return null;
     });
+  } catch {
+    problem = "No se pudo cambiar el estado del usuario. Intenta nuevamente.";
+  }
 
-    if (count === 0) {
-      return false;
-    }
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "usuario",
-      id_registro_afectado: idUsuario,
-      accion: nextStatus === "activo" ? "activar" : "inactivar",
-      detalle: `Usuario ${nextStatus === "activo" ? "activado" : "desactivado"}: ${idUsuario}`,
-      tx,
-    });
-
-    return true;
-  });
-
-  if (!changed) {
-    redirect(USERS_PATH);
+  if (problem) {
+    return rowStatusError(idUsuario, problem);
   }
 
   revalidatePath(USERS_PATH);
-  redirect(
-    `${USERS_PATH}?toast=${nextStatus === "activo" ? "user-activated" : "user-deactivated"}`,
-  );
-}
 
-export async function activateUserAction(formData: FormData) {
-  await setUserStatus(formData, "activo");
-}
-
-export async function deactivateUserAction(formData: FormData) {
-  await setUserStatus(formData, "inactivo");
+  return rowStatusDone(idUsuario, nextStatus);
 }
 
 export async function resetUserPasswordAction(

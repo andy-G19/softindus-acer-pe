@@ -1904,22 +1904,6 @@ exports[`cada clave del catalogo > user-password-reset: muestra su toast y limpi
 ]
 `;
 
-exports[`cada clave del catalogo > user-self-deactivate-blocked: muestra su toast y limpia la URL 1`] = `
-[
-  {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">No puedes desactivar tu propio usuario</p></div>",
-    "options": {
-      "className": "toast-industrial-error",
-      "progressClassName": "toast-industrial-progress-error",
-    },
-    "toast": "error",
-  },
-  {
-    "effect": "router.replace /dashboard {"scroll":false}",
-  },
-]
-`;
-
 exports[`cada clave del catalogo > user-updated: muestra su toast y limpia la URL 1`] = `
 [
   {

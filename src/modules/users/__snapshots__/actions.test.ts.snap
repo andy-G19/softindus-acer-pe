@@ -1,164 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`activateUserAction > SELLER no puede activar > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`activateUserAction > SELLER no puede activar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
-
-exports[`activateUserAction > activar un usuario activo no escribe > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "activo",
-      },
-      "where": {
-        "estado": {
-          "not": "activo",
-        },
-        "id_usuario": "USU00000002",
-      },
-    },
-    "prisma": "usuario.updateMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-]
-`;
-
-exports[`activateUserAction > activar un usuario activo no escribe > resultado 1`] = `"redirect:/dashboard/users"`;
-
-exports[`activateUserAction > activar un usuario inactivo escribe con su bitacora en la transaccion > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "activo",
-      },
-      "where": {
-        "estado": {
-          "not": "activo",
-        },
-        "id_usuario": "USU00000002",
-      },
-    },
-    "prisma": "usuario.updateMany",
-  },
-  {
-    "args": {
-      "accion": "activar",
-      "detalle": "Usuario activado: USU00000002",
-      "enTransaccion": true,
-      "entidad_afectada": "usuario",
-      "id_registro_afectado": "USU00000002",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/users",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`activateUserAction > activar un usuario inactivo escribe con su bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/users?toast=user-activated"`;
-
-exports[`activateUserAction > el usuario no existe > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "activo",
-      },
-      "where": {
-        "estado": {
-          "not": "activo",
-        },
-        "id_usuario": "USU00000002",
-      },
-    },
-    "prisma": "usuario.updateMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-]
-`;
-
-exports[`activateUserAction > el usuario no existe > resultado 1`] = `"redirect:/dashboard/users"`;
-
-exports[`activateUserAction > sin id vuelve a la lista sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`activateUserAction > sin id vuelve a la lista sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/users"`;
-
-exports[`activateUserAction > un POST sin campos vuelve a la lista > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`activateUserAction > un POST sin campos vuelve a la lista > resultado 1`] = `"redirect:/dashboard/users"`;
-
 exports[`createUserAction > ADMIN crea el usuario activo con su hash, correlativo y bitacora en la transaccion > llamadas 1`] = `
 [
   {
@@ -1059,165 +900,6 @@ exports[`createUserAction > una contrasena sin caracter especial se rechaza > re
   },
 }
 `;
-
-exports[`deactivateUserAction > WORKSHOP_MASTER no puede desactivar > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`deactivateUserAction > WORKSHOP_MASTER no puede desactivar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
-
-exports[`deactivateUserAction > desactivar un usuario activo escribe con su bitacora en la transaccion > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "inactivo",
-      },
-      "where": {
-        "estado": {
-          "not": "inactivo",
-        },
-        "id_usuario": "USU00000002",
-      },
-    },
-    "prisma": "usuario.updateMany",
-  },
-  {
-    "args": {
-      "accion": "inactivar",
-      "detalle": "Usuario desactivado: USU00000002",
-      "enTransaccion": true,
-      "entidad_afectada": "usuario",
-      "id_registro_afectado": "USU00000002",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/users",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`deactivateUserAction > desactivar un usuario activo escribe con su bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/users?toast=user-deactivated"`;
-
-exports[`deactivateUserAction > desactivar un usuario inactivo no escribe > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "inactivo",
-      },
-      "where": {
-        "estado": {
-          "not": "inactivo",
-        },
-        "id_usuario": "USU00000002",
-      },
-    },
-    "prisma": "usuario.updateMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-]
-`;
-
-exports[`deactivateUserAction > desactivar un usuario inactivo no escribe > resultado 1`] = `"redirect:/dashboard/users"`;
-
-exports[`deactivateUserAction > el administrador no puede desactivarse: aviso por la URL > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`deactivateUserAction > el administrador no puede desactivarse: aviso por la URL > resultado 1`] = `"redirect:/dashboard/users?toast=user-self-deactivate-blocked"`;
-
-exports[`deactivateUserAction > el usuario no existe > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "inactivo",
-      },
-      "where": {
-        "estado": {
-          "not": "inactivo",
-        },
-        "id_usuario": "USU00000002",
-      },
-    },
-    "prisma": "usuario.updateMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-]
-`;
-
-exports[`deactivateUserAction > el usuario no existe > resultado 1`] = `"redirect:/dashboard/users"`;
-
-exports[`deactivateUserAction > sin id vuelve a la lista sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`deactivateUserAction > sin id vuelve a la lista sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/users"`;
 
 exports[`resetUserPasswordAction > ADMIN restablece la contrasena con su bitacora en la transaccion > llamadas 1`] = `
 [
@@ -2514,6 +2196,504 @@ exports[`updateUserAction > una carrera por el correo (P2002) responde como dupl
       "nombres": "Ana",
       "rol": "SELLER",
       "usuario": "aquispe",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > SELLER no puede cambiar el estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserStatusAction > SELLER no puede cambiar el estado > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar usuarios.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > WORKSHOP_MASTER no puede cambiar el estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserStatusAction > WORKSHOP_MASTER no puede cambiar el estado > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar usuarios.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > activar un usuario activo no escribe y dice por que > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activo",
+      },
+      "where": {
+        "estado": {
+          "not": "activo",
+        },
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserStatusAction > activar un usuario activo no escribe y dice por que > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario ya está activo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > activar un usuario inactivo escribe con su bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activo",
+      },
+      "where": {
+        "estado": {
+          "not": "activo",
+        },
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Usuario activado: USU00000002",
+      "enTransaccion": true,
+      "entidad_afectada": "usuario",
+      "id_registro_afectado": "USU00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/users",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateUserStatusAction > activar un usuario inactivo escribe con su bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "activo",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > desactivar un usuario activo escribe con su bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactivo",
+      },
+      "where": {
+        "estado": {
+          "not": "inactivo",
+        },
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Usuario desactivado: USU00000002",
+      "enTransaccion": true,
+      "entidad_afectada": "usuario",
+      "id_registro_afectado": "USU00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/users",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateUserStatusAction > desactivar un usuario activo escribe con su bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "inactivo",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > desactivar un usuario inactivo no escribe y dice por que > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactivo",
+      },
+      "where": {
+        "estado": {
+          "not": "inactivo",
+        },
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserStatusAction > desactivar un usuario inactivo no escribe y dice por que > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario ya está inactivo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > el administrador activo puede pedir activo: ya lo esta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activo",
+      },
+      "where": {
+        "estado": {
+          "not": "activo",
+        },
+        "id_usuario": "USU00000001",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000001",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserStatusAction > el administrador activo puede pedir activo: ya lo esta > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario ya está activo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000001",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > el administrador no puede desactivarse > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserStatusAction > el administrador no puede desactivarse > resultado 1`] = `
+{
+  "estado": {
+    "error": "No puedes desactivar tu propio usuario.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000001",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > el usuario no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activo",
+      },
+      "where": {
+        "estado": {
+          "not": "activo",
+        },
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateUserStatusAction > el usuario no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000002",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserStatusAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserStatusAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El usuario no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateUserStatusAction > un estado desconocido se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateUserStatusAction > un estado desconocido se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Selecciona un estado válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "USU00000002",
     },
   },
 }

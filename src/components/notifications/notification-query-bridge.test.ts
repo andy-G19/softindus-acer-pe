@@ -146,7 +146,7 @@ const CLAVES = [
 
   // Usuarios
   "user-created", "user-updated", "user-activated", "user-deactivated",
-  "user-password-reset", "user-self-deactivate-blocked",
+  "user-password-reset",
 
   // Caja chica
   "petty-cash-movement-annulled", "petty-cash-income-registered",
@@ -164,9 +164,9 @@ beforeEach(() => {
   mount();
 });
 
-it("la lista fija tiene las 130 claves sin repetir", () => {
-  expect(CLAVES).toHaveLength(130);
-  expect(new Set(CLAVES).size).toBe(130);
+it("la lista fija tiene las 129 claves sin repetir", () => {
+  expect(CLAVES).toHaveLength(129);
+  expect(new Set(CLAVES).size).toBe(129);
 });
 
 // Una clave nueva en el registro tambien entra en la lista y en el snapshot:
