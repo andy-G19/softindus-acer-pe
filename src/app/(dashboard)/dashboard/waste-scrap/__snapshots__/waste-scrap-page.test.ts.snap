@@ -135,7 +135,7 @@ exports[`/dashboard/waste-scrap > administrador > llamadas 1`] = `
 
 exports[`/dashboard/waste-scrap > administrador > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -158,8 +158,8 @@ exports[`/dashboard/waste-scrap > administrador > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps/new">Registrar retazo</a>
-<a data-variant="outline" href="/dashboard/waste-scrap/scraps/new">Registrar chatarra</a>
+<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps/new?returnTo=%2Fdashboard%2Fwaste-scrap">Registrar retazo</a>
+<a data-variant="outline" href="/dashboard/waste-scrap/scraps/new?returnTo=%2Fdashboard%2Fwaste-scrap">Registrar chatarra</a>
 <a data-variant="outline" href="/dashboard/waste-scrap/scrap-sales/new">Registrar venta</a>
 <a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps">Ver retazos</a>
 <a data-variant="default" href="/dashboard/waste-scrap/scraps">Ver chatarra</a>
@@ -349,7 +349,7 @@ exports[`/dashboard/waste-scrap > administrador > resultado 1`] = `
 <div>
 <div>
 <p>Registro de retazos reutilizables</p>
-<p>Se pueden registrar retazos con material, cantidad, unidad, ubicación y orden relacionada opcional.</p>
+<p>Se pueden registrar retazos con material, cantidad, unidad, ubicación y orden relacionada.</p>
 </div>
 <div>
 <p>Registro de chatarra generada</p>
@@ -366,7 +366,7 @@ exports[`/dashboard/waste-scrap > administrador > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -506,7 +506,7 @@ exports[`/dashboard/waste-scrap > maestro de taller > llamadas 1`] = `
 
 exports[`/dashboard/waste-scrap > maestro de taller > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -529,8 +529,8 @@ exports[`/dashboard/waste-scrap > maestro de taller > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps/new">Registrar retazo</a>
-<a data-variant="outline" href="/dashboard/waste-scrap/scraps/new">Registrar chatarra</a>
+<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps/new?returnTo=%2Fdashboard%2Fwaste-scrap">Registrar retazo</a>
+<a data-variant="outline" href="/dashboard/waste-scrap/scraps/new?returnTo=%2Fdashboard%2Fwaste-scrap">Registrar chatarra</a>
 <a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps">Ver retazos</a>
 <a data-variant="default" href="/dashboard/waste-scrap/scraps">Ver chatarra</a>
 </div>
@@ -717,7 +717,7 @@ exports[`/dashboard/waste-scrap > maestro de taller > resultado 1`] = `
 <div>
 <div>
 <p>Registro de retazos reutilizables</p>
-<p>Se pueden registrar retazos con material, cantidad, unidad, ubicación y orden relacionada opcional.</p>
+<p>Se pueden registrar retazos con material, cantidad, unidad, ubicación y orden relacionada.</p>
 </div>
 <div>
 <p>Registro de chatarra generada</p>
@@ -734,7 +734,7 @@ exports[`/dashboard/waste-scrap > maestro de taller > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;

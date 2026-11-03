@@ -15,7 +15,7 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { getWasteScrapOverviewData } from "@/modules/waste-scrap/overview/queries";
 import { formatDate } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, navigationHrefs, withReturnTo } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 
@@ -79,7 +79,7 @@ export default async function WasteScrapDashboardPage() {
   const hasScrapIncome = totalIngresos > 0;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Mermas y chatarra"
         description="Controla los sobrantes generados en producción, diferenciando retazos reutilizables, chatarra acumulada y ventas de chatarra como ingreso menor del taller."
@@ -87,13 +87,13 @@ export default async function WasteScrapDashboardPage() {
         actions={
           <>
             <Button variant="outline" asChild>
-              <Link href={`${navigationHrefs.reusableScraps}/new`}>
+              <Link href={withReturnTo(`${navigationHrefs.reusableScraps}/new`, navigationHrefs.wasteScrap)}>
                 Registrar retazo
               </Link>
             </Button>
 
             <Button variant="outline" asChild>
-              <Link href={`${navigationHrefs.scraps}/new`}>
+              <Link href={withReturnTo(`${navigationHrefs.scraps}/new`, navigationHrefs.wasteScrap)}>
                 Registrar chatarra
               </Link>
             </Button>
@@ -377,7 +377,7 @@ export default async function WasteScrapDashboardPage() {
               </p>
               <p className="mt-1 text-muted-foreground">
                 Se pueden registrar retazos con material, cantidad, unidad,
-                ubicación y orden relacionada opcional.
+                ubicación y orden relacionada.
               </p>
             </div>
 
@@ -413,7 +413,7 @@ export default async function WasteScrapDashboardPage() {
           </div>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
 
