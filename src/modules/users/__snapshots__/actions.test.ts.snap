@@ -22,23 +22,33 @@ exports[`activateUserAction > activar un usuario activo no escribe > llamadas 1`
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
-      "select": {
-        "estado": true,
-        "id_usuario": true,
+      "data": {
+        "estado": "activo",
       },
       "where": {
+        "estado": {
+          "not": "activo",
+        },
         "id_usuario": "USU00000002",
       },
     },
-    "prisma": "usuario.findUnique",
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
 exports[`activateUserAction > activar un usuario activo no escribe > resultado 1`] = `"redirect:/dashboard/users"`;
 
-exports[`activateUserAction > activar un usuario inactivo escribe fuera de transaccion > llamadas 1`] = `
+exports[`activateUserAction > activar un usuario inactivo escribe con su bitacora en la transaccion > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -47,16 +57,8 @@ exports[`activateUserAction > activar un usuario inactivo escribe fuera de trans
     ],
   },
   {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_usuario": true,
-      },
-      "where": {
-        "id_usuario": "USU00000002",
-      },
-    },
-    "prisma": "usuario.findUnique",
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -64,22 +66,28 @@ exports[`activateUserAction > activar un usuario inactivo escribe fuera de trans
         "estado": "activo",
       },
       "where": {
+        "estado": {
+          "not": "activo",
+        },
         "id_usuario": "USU00000002",
       },
     },
-    "fueraDeTransaccion": true,
-    "prisma": "usuario.update",
+    "prisma": "usuario.updateMany",
   },
   {
     "args": {
       "accion": "activar",
       "detalle": "Usuario activado: USU00000002",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "usuario",
       "id_registro_afectado": "USU00000002",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard/users",
@@ -88,7 +96,7 @@ exports[`activateUserAction > activar un usuario inactivo escribe fuera de trans
 ]
 `;
 
-exports[`activateUserAction > activar un usuario inactivo escribe fuera de transaccion > resultado 1`] = `"redirect:/dashboard/users?toast=user-activated"`;
+exports[`activateUserAction > activar un usuario inactivo escribe con su bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/users?toast=user-activated"`;
 
 exports[`activateUserAction > el usuario no existe > llamadas 1`] = `
 [
@@ -99,16 +107,26 @@ exports[`activateUserAction > el usuario no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
-      "select": {
-        "estado": true,
-        "id_usuario": true,
+      "data": {
+        "estado": "activo",
       },
       "where": {
+        "estado": {
+          "not": "activo",
+        },
         "id_usuario": "USU00000002",
       },
     },
-    "prisma": "usuario.findUnique",
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -1004,7 +1022,7 @@ exports[`deactivateUserAction > WORKSHOP_MASTER no puede desactivar > llamadas 1
 
 exports[`deactivateUserAction > WORKSHOP_MASTER no puede desactivar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
 
-exports[`deactivateUserAction > desactivar un usuario activo escribe fuera de transaccion > llamadas 1`] = `
+exports[`deactivateUserAction > desactivar un usuario activo escribe con su bitacora en la transaccion > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1013,16 +1031,8 @@ exports[`deactivateUserAction > desactivar un usuario activo escribe fuera de tr
     ],
   },
   {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_usuario": true,
-      },
-      "where": {
-        "id_usuario": "USU00000002",
-      },
-    },
-    "prisma": "usuario.findUnique",
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1030,22 +1040,28 @@ exports[`deactivateUserAction > desactivar un usuario activo escribe fuera de tr
         "estado": "inactivo",
       },
       "where": {
+        "estado": {
+          "not": "inactivo",
+        },
         "id_usuario": "USU00000002",
       },
     },
-    "fueraDeTransaccion": true,
-    "prisma": "usuario.update",
+    "prisma": "usuario.updateMany",
   },
   {
     "args": {
       "accion": "inactivar",
       "detalle": "Usuario desactivado: USU00000002",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "usuario",
       "id_registro_afectado": "USU00000002",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard/users",
@@ -1054,7 +1070,7 @@ exports[`deactivateUserAction > desactivar un usuario activo escribe fuera de tr
 ]
 `;
 
-exports[`deactivateUserAction > desactivar un usuario activo escribe fuera de transaccion > resultado 1`] = `"redirect:/dashboard/users?toast=user-deactivated"`;
+exports[`deactivateUserAction > desactivar un usuario activo escribe con su bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/users?toast=user-deactivated"`;
 
 exports[`deactivateUserAction > desactivar un usuario inactivo no escribe > llamadas 1`] = `
 [
@@ -1065,16 +1081,26 @@ exports[`deactivateUserAction > desactivar un usuario inactivo no escribe > llam
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
-      "select": {
-        "estado": true,
-        "id_usuario": true,
+      "data": {
+        "estado": "inactivo",
       },
       "where": {
+        "estado": {
+          "not": "inactivo",
+        },
         "id_usuario": "USU00000002",
       },
     },
-    "prisma": "usuario.findUnique",
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -1103,16 +1129,26 @@ exports[`deactivateUserAction > el usuario no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
-      "select": {
-        "estado": true,
-        "id_usuario": true,
+      "data": {
+        "estado": "inactivo",
       },
       "where": {
+        "estado": {
+          "not": "inactivo",
+        },
         "id_usuario": "USU00000002",
       },
     },
-    "prisma": "usuario.findUnique",
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -1132,7 +1168,7 @@ exports[`deactivateUserAction > sin id vuelve a la lista sin tocar Prisma > llam
 
 exports[`deactivateUserAction > sin id vuelve a la lista sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/users"`;
 
-exports[`resetUserPasswordAction > ADMIN restablece la contrasena fuera de transaccion y con la fila completa > llamadas 1`] = `
+exports[`resetUserPasswordAction > ADMIN restablece la contrasena con su bitacora en la transaccion > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1142,21 +1178,14 @@ exports[`resetUserPasswordAction > ADMIN restablece la contrasena fuera de trans
   },
   {
     "args": {
-      "select": {
-        "id_usuario": true,
-      },
-      "where": {
-        "id_usuario": "USU00000002",
-      },
-    },
-    "prisma": "usuario.findUnique",
-  },
-  {
-    "args": {
       "bytes": 13,
       "cost": 10,
     },
     "effect": "bcrypt.hash",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1167,19 +1196,22 @@ exports[`resetUserPasswordAction > ADMIN restablece la contrasena fuera de trans
         "id_usuario": "USU00000002",
       },
     },
-    "fueraDeTransaccion": true,
-    "prisma": "usuario.update",
+    "prisma": "usuario.updateMany",
   },
   {
     "args": {
       "accion": "actualizar",
       "detalle": "Contraseña reiniciada para usuario: USU00000002",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "usuario",
       "id_registro_afectado": "USU00000002",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard/users",
@@ -1188,7 +1220,7 @@ exports[`resetUserPasswordAction > ADMIN restablece la contrasena fuera de trans
 ]
 `;
 
-exports[`resetUserPasswordAction > ADMIN restablece la contrasena fuera de transaccion y con la fila completa > resultado 1`] = `"redirect:/dashboard/users?toast=user-password-reset"`;
+exports[`resetUserPasswordAction > ADMIN restablece la contrasena con su bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/users?toast=user-password-reset"`;
 
 exports[`resetUserPasswordAction > SELLER no puede restablecer > llamadas 1`] = `
 [
@@ -1213,21 +1245,14 @@ exports[`resetUserPasswordAction > el restablecer de uno mismo se permite > llam
   },
   {
     "args": {
-      "select": {
-        "id_usuario": true,
-      },
-      "where": {
-        "id_usuario": "USU00000001",
-      },
-    },
-    "prisma": "usuario.findUnique",
-  },
-  {
-    "args": {
       "bytes": 13,
       "cost": 10,
     },
     "effect": "bcrypt.hash",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1238,19 +1263,22 @@ exports[`resetUserPasswordAction > el restablecer de uno mismo se permite > llam
         "id_usuario": "USU00000001",
       },
     },
-    "fueraDeTransaccion": true,
-    "prisma": "usuario.update",
+    "prisma": "usuario.updateMany",
   },
   {
     "args": {
       "accion": "actualizar",
       "detalle": "Contraseña reiniciada para usuario: USU00000001",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "usuario",
       "id_registro_afectado": "USU00000001",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard/users",
@@ -1271,14 +1299,29 @@ exports[`resetUserPasswordAction > el usuario no existe > llamadas 1`] = `
   },
   {
     "args": {
-      "select": {
-        "id_usuario": true,
+      "bytes": 13,
+      "cost": 10,
+    },
+    "effect": "bcrypt.hash",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "clave_hash": "$2b$10$hash-de-prueba",
       },
       "where": {
         "id_usuario": "USU00000002",
       },
     },
-    "prisma": "usuario.findUnique",
+    "prisma": "usuario.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -1349,21 +1392,14 @@ exports[`resetUserPasswordAction > una contrasena de 73 bytes pasa aunque bcrypt
   },
   {
     "args": {
-      "select": {
-        "id_usuario": true,
-      },
-      "where": {
-        "id_usuario": "USU00000002",
-      },
-    },
-    "prisma": "usuario.findUnique",
-  },
-  {
-    "args": {
       "bytes": 73,
       "cost": 10,
     },
     "effect": "bcrypt.hash",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1374,19 +1410,22 @@ exports[`resetUserPasswordAction > una contrasena de 73 bytes pasa aunque bcrypt
         "id_usuario": "USU00000002",
       },
     },
-    "fueraDeTransaccion": true,
-    "prisma": "usuario.update",
+    "prisma": "usuario.updateMany",
   },
   {
     "args": {
       "accion": "actualizar",
       "detalle": "Contraseña reiniciada para usuario: USU00000002",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "usuario",
       "id_registro_afectado": "USU00000002",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard/users",

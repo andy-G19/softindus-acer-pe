@@ -31,8 +31,8 @@ import {
 // bitacora, las revalidaciones y la redireccion o el error con su mensaje exacto.
 //
 // Varios casos fijan defectos (hallazgos 18 a 22 de plan-10-7.md): cambian a
-// proposito en sus commits fix. Hoy el estado y el restablecer escriben con el
-// cliente global, sin transaccion: el doble lo permite y lo marca.
+// proposito en sus commits fix. Desde B2 la edicion bloquea la fila; desde B3
+// el estado y el restablecer escriben con updateMany en una transaccion.
 //
 // Credenciales: el doble de bcrypt registra solo la longitud en bytes de lo que
 // recibe y devuelve un hash fijo. Cada caso comprueba ademas que ninguna
@@ -212,7 +212,20 @@ const duplicate = (correo: string, usuario: string): DataOverrides => ({
   "usuario.findFirst": { correo, usuario },
 });
 const noRole: DataOverrides = { "rol.findUnique": null };
-const noUser: DataOverrides = { "usuario.findUnique": null };
+// Un usuario inexistente: ninguna lectura lo encuentra y ninguna escritura
+// condicionada lo afecta.
+const noUser: DataOverrides = { "usuario.findUnique": null, "usuario.updateMany": { count: 0 } };
+
+// updateMany afecta la fila solo si su estado guardado cumple la condicion del
+// where, como haria la base con un compare-and-set.
+const storedStatus = (estado: string) => (args: unknown) => {
+  const condition = (args as { where?: { estado?: string | { not?: string } } }).where?.estado;
+  const matches =
+    condition === undefined ||
+    (typeof condition === "string" ? condition === estado : condition.not !== estado);
+
+  return { count: matches ? 1 : 0 };
+};
 
 const createForm: FormFields = {
   nombres: "Ana",
@@ -253,7 +266,10 @@ const updateSelfWith = (fields: FormFields = {}) =>
 
 const statusWith = (estado: string, id: string | null = OTHER) => ({
   form: { id_usuario: id },
-  data: { "usuario.findUnique": { id_usuario: OTHER, estado } },
+  data: {
+    "usuario.findUnique": { id_usuario: OTHER, estado },
+    "usuario.updateMany": storedStatus(estado),
+  },
 });
 
 const resetWith = (fields: FormFields = {}, data: DataOverrides = {}) => ({
@@ -331,7 +347,7 @@ defineCases("updateUserAction", withState(updateUserAction), [
 ]);
 
 defineCases("activateUserAction", activateUserAction, [
-  { name: "activar un usuario inactivo escribe fuera de transaccion", ...statusWith("inactivo") },
+  { name: "activar un usuario inactivo escribe con su bitacora en la transaccion", ...statusWith("inactivo") },
   { name: "activar un usuario activo no escribe", ...statusWith("activo") },
   { name: "el usuario no existe", form: { id_usuario: OTHER }, data: noUser },
   { name: "sin id vuelve a la lista sin tocar Prisma", ...statusWith("inactivo", "") },
@@ -340,7 +356,7 @@ defineCases("activateUserAction", activateUserAction, [
 ]);
 
 defineCases("deactivateUserAction", deactivateUserAction, [
-  { name: "desactivar un usuario activo escribe fuera de transaccion", ...statusWith("activo") },
+  { name: "desactivar un usuario activo escribe con su bitacora en la transaccion", ...statusWith("activo") },
   { name: "desactivar un usuario inactivo no escribe", ...statusWith("inactivo") },
   { name: "el usuario no existe", form: { id_usuario: OTHER }, data: noUser },
   { name: "el administrador no puede desactivarse: aviso por la URL", ...statusWith("activo", SELF) },
@@ -349,7 +365,7 @@ defineCases("deactivateUserAction", deactivateUserAction, [
 ]);
 
 defineCases("resetUserPasswordAction", withState(resetUserPasswordAction), [
-  { name: "ADMIN restablece la contrasena fuera de transaccion y con la fila completa", ...resetWith() },
+  { name: "ADMIN restablece la contrasena con su bitacora en la transaccion", ...resetWith() },
   { name: "SELLER no puede restablecer", ...resetWith(), role: "SELLER" },
   { name: "sin id se rechaza sin tocar Prisma", ...resetWith({ id_usuario: "" }) },
   { name: "una contrasena debil se rechaza", ...resetWith({ password: "debil", confirmPassword: "debil" }) },
@@ -390,6 +406,80 @@ describe("updateUserAction bloquea la fila del usuario", () => {
 
     expect(lock).toBeGreaterThanOrEqual(0);
     expect(calls.filter(isPrismaCall).map((call) => call.prisma)).not.toContain("usuario.update");
+    expect(result).toEqual({ estado: { error: "El usuario no existe." } });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Escrituras atomicas (B3, hallazgos 18 y 22)
+// ---------------------------------------------------------------------------
+
+// El estado se cambia con un compare-and-set: la escritura misma decide si el
+// usuario tenia el estado opuesto, sin leerlo antes, y la bitacora va en la
+// misma transaccion. El restablecer escribe el hash con updateMany, que no
+// devuelve la fila (con clave_hash) y dice por su count si el usuario existe.
+function prismaCalls(calls: RecordedCall[]) {
+  return calls.filter(isPrismaCall);
+}
+
+function auditLogs(calls: RecordedCall[]) {
+  return calls.flatMap((call) =>
+    "effect" in call && call.effect === "registerAuditLog" ? [call.args as Record<string, unknown>] : [],
+  );
+}
+
+describe("activar y desactivar escriben con compare-and-set", () => {
+  it.each([
+    { name: "activar", run: activateUserAction, estado: "inactivo", siguiente: "activo" },
+    { name: "desactivar", run: deactivateUserAction, estado: "activo", siguiente: "inactivo" },
+  ])("$name escribe en la transaccion sin leer antes", async ({ run, estado, siguiente }) => {
+    const { calls } = await runCase(run, statusWith(estado));
+    const writes = prismaCalls(calls).filter((call) => call.prisma === "usuario.updateMany");
+
+    expect(prismaCalls(calls).map((call) => call.prisma)).not.toContain("usuario.findUnique");
+    expect(prismaCalls(calls).map((call) => call.prisma)).not.toContain("usuario.update");
+    expect(writes).toEqual([
+      {
+        prisma: "usuario.updateMany",
+        args: { where: { id_usuario: OTHER, estado: { not: siguiente } }, data: { estado: siguiente } },
+      },
+    ]);
+    expect(auditLogs(calls)).toEqual([expect.objectContaining({ enTransaccion: true })]);
+  });
+
+  it.each([
+    { name: "activar un activo", run: activateUserAction, estado: "activo" },
+    { name: "desactivar un inactivo", run: deactivateUserAction, estado: "inactivo" },
+  ])("$name no deja bitacora", async ({ run, estado }) => {
+    const { calls, result } = await runCase(run, statusWith(estado));
+
+    expect(auditLogs(calls)).toEqual([]);
+    expect(result).toBe("redirect:/dashboard/users");
+  });
+});
+
+describe("restablecer escribe el hash con updateMany en la transaccion", () => {
+  const reset = withState(resetUserPasswordAction);
+
+  it("no lee el usuario ni recibe su fila", async () => {
+    const { calls } = await runCase(reset, resetWith());
+    const names = prismaCalls(calls).map((call) => call.prisma);
+
+    expect(names).not.toContain("usuario.findUnique");
+    expect(names).not.toContain("usuario.update");
+    expect(prismaCalls(calls).filter((call) => call.prisma === "usuario.updateMany")).toEqual([
+      {
+        prisma: "usuario.updateMany",
+        args: { where: { id_usuario: OTHER }, data: { clave_hash: "$2b$10$hash-de-prueba" } },
+      },
+    ]);
+    expect(auditLogs(calls)).toEqual([expect.objectContaining({ enTransaccion: true })]);
+  });
+
+  it("un usuario inexistente responde sin bitacora", async () => {
+    const { calls, result } = await runCase(reset, resetWith({}, noUser));
+
+    expect(auditLogs(calls)).toEqual([]);
     expect(result).toEqual({ estado: { error: "El usuario no existe." } });
   });
 });

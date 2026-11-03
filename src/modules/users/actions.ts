@@ -374,31 +374,34 @@ async function setUserStatus(formData: FormData, nextStatus: "activo" | "inactiv
     redirect(`${USERS_PATH}?toast=user-self-deactivate-blocked`);
   }
 
-  const user = await prisma.usuario.findUnique({
-    where: { id_usuario: idUsuario },
-    select: { id_usuario: true, estado: true },
+  // Compare-and-set: la escritura misma comprueba que el usuario no tenga ya ese
+  // estado, sin leerlo antes, y la bitacora va en la misma transaccion. count 0
+  // significa que no existe o que ya lo tenia: no hay nada que registrar.
+  const changed = await prisma.$transaction(async (tx) => {
+    const { count } = await tx.usuario.updateMany({
+      where: { id_usuario: idUsuario, estado: { not: nextStatus } },
+      data: { estado: nextStatus },
+    });
+
+    if (count === 0) {
+      return false;
+    }
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "usuario",
+      id_registro_afectado: idUsuario,
+      accion: nextStatus === "activo" ? "activar" : "inactivar",
+      detalle: `Usuario ${nextStatus === "activo" ? "activado" : "desactivado"}: ${idUsuario}`,
+      tx,
+    });
+
+    return true;
   });
 
-  if (!user) {
+  if (!changed) {
     redirect(USERS_PATH);
   }
-
-  if (user.estado === nextStatus) {
-    redirect(USERS_PATH);
-  }
-
-  await prisma.usuario.update({
-    where: { id_usuario: idUsuario },
-    data: { estado: nextStatus },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "usuario",
-    id_registro_afectado: idUsuario,
-    accion: nextStatus === "activo" ? "activar" : "inactivar",
-    detalle: `Usuario ${nextStatus === "activo" ? "activado" : "desactivado"}: ${idUsuario}`,
-  });
 
   revalidatePath(USERS_PATH);
   redirect(
@@ -433,33 +436,39 @@ export async function resetUserPasswordAction(
 
   const data = parsed.data;
 
-  const user = await prisma.usuario.findUnique({
-    where: { id_usuario: data.id_usuario },
-    select: { id_usuario: true },
-  });
-
-  if (!user) {
-    return { error: "El usuario no existe." };
-  }
-
   // La contraseña nueva en texto plano nunca se persiste ni se audita: solo
-  // se usa aqui para calcular el hash. Al actualizar clave_hash, la
-  // contraseña anterior deja de servir de inmediato (auth.ts compara
-  // siempre contra el hash vigente en base de datos).
+  // se usa aqui para calcular el hash, antes de abrir la transaccion (bcrypt
+  // tarda). Al actualizar clave_hash, la contraseña anterior deja de servir de
+  // inmediato (auth.ts compara siempre contra el hash vigente en base de datos).
   const claveHash = await bcrypt.hash(data.password, BCRYPT_COST);
 
-  await prisma.usuario.update({
-    where: { id_usuario: data.id_usuario },
-    data: { clave_hash: claveHash },
+  // updateMany no devuelve la fila, que trae clave_hash, y su count dice si el
+  // usuario existe; la bitacora va en la misma transaccion (hallazgos 18 y 22).
+  const updated = await prisma.$transaction(async (tx) => {
+    const { count } = await tx.usuario.updateMany({
+      where: { id_usuario: data.id_usuario },
+      data: { clave_hash: claveHash },
+    });
+
+    if (count === 0) {
+      return false;
+    }
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "usuario",
+      id_registro_afectado: data.id_usuario,
+      accion: "actualizar",
+      detalle: `Contraseña reiniciada para usuario: ${data.id_usuario}`,
+      tx,
+    });
+
+    return true;
   });
 
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "usuario",
-    id_registro_afectado: data.id_usuario,
-    accion: "actualizar",
-    detalle: `Contraseña reiniciada para usuario: ${data.id_usuario}`,
-  });
+  if (!updated) {
+    return { error: "El usuario no existe." };
+  }
 
   revalidatePath(USERS_PATH);
   redirect(`${USERS_PATH}?toast=user-password-reset`);
