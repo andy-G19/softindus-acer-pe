@@ -468,7 +468,7 @@ defineCases("createAttendanceAction", createAttendanceAction, [
     ...attendanceWith({}, { "asistencia.findFirst": { id_asistencia: "ASI00000001" } }),
   },
   {
-    name: "una carrera por la misma fecha (P2002) lanza el error de Prisma (hallazgo 60)",
+    name: "una carrera por la misma fecha (P2002) responde como duplicado",
     ...attendanceWith({}, { "asistencia.create": failWith(uniqueViolation()) }),
   },
   { name: "un POST sin campos se rechaza sin tocar Prisma", form: {} },
@@ -681,5 +681,66 @@ describe("anular una tarea escribe con compare-and-set", () => {
     expect(prismaCalls(calls)).toContain("tarea_operario.updateMany");
     expect(auditCalls(calls)).toEqual([]);
     expect(result).toBe(`error: ${error}`);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Asistencia: duplicado dentro de la transaccion y carrera P2002 (A4)
+// ---------------------------------------------------------------------------
+
+// Hallazgo 60: la comprobacion del duplicado iba fuera de la transaccion y una
+// carrera por la misma fecha chocaba con uq_asistencia_operario_fecha (P2002),
+// que llegaba sin tratar a la pagina de error. La restriccion unica es la
+// garantia: la accion decide dentro de la transaccion y traduce su P2002 al
+// mismo mensaje del duplicado.
+describe("createAttendanceAction decide el duplicado dentro de la transaccion", () => {
+  const DUPLICATE = "Este operario ya tiene asistencia registrada en la fecha seleccionada.";
+  const transactionStart = (calls: RecordedCall[]) =>
+    calls.findIndex((call) => "effect" in call && call.effect === "prisma.$transaction");
+
+  it("lee el operario y el duplicado dentro de la transaccion que escribe", async () => {
+    const { calls } = await runCase(createAttendanceAction, attendanceWith());
+    const start = transactionStart(calls);
+    const reads = calls.flatMap((call, index) =>
+      isPrismaCall(call) && ["operario.findFirst", "asistencia.findFirst"].includes(call.prisma) ? [index] : [],
+    );
+
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(reads).toHaveLength(2);
+    expect(Math.min(...reads)).toBeGreaterThan(start);
+  });
+
+  it("un duplicado se decide dentro de la transaccion y no escribe", async () => {
+    const { calls, result } = await runCase(
+      createAttendanceAction,
+      attendanceWith({}, { "asistencia.findFirst": { id_asistencia: "ASI00000001" } }),
+    );
+
+    expect(transactionStart(calls)).toBeGreaterThanOrEqual(0);
+    expect(prismaCalls(calls)).not.toContain("asistencia.create");
+    expect(result).toBe(`error: ${DUPLICATE}`);
+  });
+
+  it("una carrera por la misma fecha (P2002) responde con el mensaje del duplicado", async () => {
+    const { calls, result } = await runCase(
+      createAttendanceAction,
+      attendanceWith({}, { "asistencia.create": failWith(uniqueViolation()) }),
+    );
+
+    expect(auditCalls(calls)).toEqual([]);
+    expect(result).toBe(`error: ${DUPLICATE}`);
+  });
+
+  it("otro error de Prisma se propaga sin cambiar", async () => {
+    const foreignKey = new Prisma.PrismaClientKnownRequestError("Foreign key constraint failed", {
+      code: "P2003",
+      clientVersion: "test",
+    });
+    const { result } = await runCase(
+      createAttendanceAction,
+      attendanceWith({}, { "asistencia.create": failWith(foreignKey) }),
+    );
+
+    expect(result).toBe("error: Foreign key constraint failed");
   });
 });

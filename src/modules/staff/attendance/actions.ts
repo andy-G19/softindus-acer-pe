@@ -3,11 +3,22 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { attendanceSchema } from "@/schemas/staff/attendance.schema";
+
+const DUPLICATED_ATTENDANCE =
+  "Este operario ya tiene asistencia registrada en la fecha seleccionada.";
+
+function isUniqueViolation(error: unknown) {
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2002"
+  );
+}
 
 async function requireStaffManager() {
   return requireRole(["ADMIN", "WORKSHOP_MASTER"]);
@@ -64,69 +75,86 @@ export async function createAttendanceAction(formData: FormData) {
   }
 
   const data = parsed.data;
-
-  const operator = await prisma.operario.findFirst({
-    where: {
-      id_operario: data.id_operario,
-      estado: "activo",
-    },
-    select: {
-      id_operario: true,
-    },
-  });
-
-  if (!operator) {
-    throw new Error("El operario seleccionado no existe o está inactivo.");
-  }
-
-  const duplicatedAttendance = await prisma.asistencia.findFirst({
-    where: {
-      id_operario: data.id_operario,
-      fecha: data.fecha,
-    },
-  });
-
-  if (duplicatedAttendance) {
-    throw new Error(
-      "Este operario ya tiene asistencia registrada en la fecha seleccionada.",
-    );
-  }
-
   const workedHours = data.falta
     ? null
     : calculateWorkedHours(data.hora_ingreso, data.hora_salida);
 
-  await prisma.$transaction(async (tx) => {
-    const idAsistencia = await getNextCorrelativeId(tx, {
-      codigoEntidad: "asistencia",
-      prefijo: "ASI",
-    });
+  // Hallazgo 60: el operario y el duplicado se deciden dentro de la transaccion que
+  // escribe; un rechazo se devuelve desde ella y se lanza con el mismo mensaje. La
+  // garantia es uq_asistencia_operario_fecha: si dos registros de la misma fecha
+  // llegan a la vez, el segundo choca con ella (P2002) y responde como duplicado.
+  let problem: string | null;
 
-    await tx.asistencia.create({
-      data: {
-        id_asistencia: idAsistencia,
-        id_operario: data.id_operario,
-        id_usuario_registro: session.user.id,
-        fecha: data.fecha,
-        hora_ingreso: timeStringToDate(data.hora_ingreso),
-        hora_salida: timeStringToDate(data.hora_salida),
-        tardanza: data.falta ? false : data.tardanza,
-        falta: data.falta,
-        horas_trabajadas:
-          workedHours === null ? null : workedHours.toFixed(2),
-        observaciones: data.observaciones || null,
-      },
-    });
+  try {
+    problem = await prisma.$transaction(async (tx): Promise<string | null> => {
+      const operator = await tx.operario.findFirst({
+        where: {
+          id_operario: data.id_operario,
+          estado: "activo",
+        },
+        select: {
+          id_operario: true,
+        },
+      });
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "asistencia",
-      id_registro_afectado: idAsistencia,
-      accion: "crear",
-      detalle: `Asistencia registrada para el operario ${data.id_operario}.`,
-      tx,
+      if (!operator) {
+        return "El operario seleccionado no existe o está inactivo.";
+      }
+
+      const duplicatedAttendance = await tx.asistencia.findFirst({
+        where: {
+          id_operario: data.id_operario,
+          fecha: data.fecha,
+        },
+      });
+
+      if (duplicatedAttendance) {
+        return DUPLICATED_ATTENDANCE;
+      }
+
+      const idAsistencia = await getNextCorrelativeId(tx, {
+        codigoEntidad: "asistencia",
+        prefijo: "ASI",
+      });
+
+      await tx.asistencia.create({
+        data: {
+          id_asistencia: idAsistencia,
+          id_operario: data.id_operario,
+          id_usuario_registro: session.user.id,
+          fecha: data.fecha,
+          hora_ingreso: timeStringToDate(data.hora_ingreso),
+          hora_salida: timeStringToDate(data.hora_salida),
+          tardanza: data.falta ? false : data.tardanza,
+          falta: data.falta,
+          horas_trabajadas:
+            workedHours === null ? null : workedHours.toFixed(2),
+          observaciones: data.observaciones || null,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "asistencia",
+        id_registro_afectado: idAsistencia,
+        accion: "crear",
+        detalle: `Asistencia registrada para el operario ${data.id_operario}.`,
+        tx,
+      });
+
+      return null;
     });
-  });
+  } catch (error) {
+    if (!isUniqueViolation(error)) {
+      throw error;
+    }
+
+    problem = DUPLICATED_ATTENDANCE;
+  }
+
+  if (problem) {
+    throw new Error(problem);
+  }
 
   revalidatePath("/dashboard/staff");
   revalidatePath("/dashboard/staff/attendance");

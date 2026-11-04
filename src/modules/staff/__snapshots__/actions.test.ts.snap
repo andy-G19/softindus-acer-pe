@@ -297,6 +297,10 @@ exports[`createAttendanceAction > 20 minutos se guardan como 0.33 horas > llamad
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -316,10 +320,6 @@ exports[`createAttendanceAction > 20 minutos se guardan como 0.33 horas > llamad
       },
     },
     "prisma": "asistencia.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -383,6 +383,10 @@ exports[`createAttendanceAction > ADMIN registra ingreso y salida: 9 horas, con 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -402,10 +406,6 @@ exports[`createAttendanceAction > ADMIN registra ingreso y salida: 9 horas, con 
       },
     },
     "prisma": "asistencia.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -483,6 +483,10 @@ exports[`createAttendanceAction > WORKSHOP_MASTER tambien registra > llamadas 1`
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -502,10 +506,6 @@ exports[`createAttendanceAction > WORKSHOP_MASTER tambien registra > llamadas 1`
       },
     },
     "prisma": "asistencia.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -569,6 +569,10 @@ exports[`createAttendanceAction > con tardanza se guarda la tardanza > llamadas 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -588,10 +592,6 @@ exports[`createAttendanceAction > con tardanza se guarda la tardanza > llamadas 
       },
     },
     "prisma": "asistencia.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -655,6 +655,10 @@ exports[`createAttendanceAction > el 30 de febrero se guarda como 2 de marzo (ha
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -674,10 +678,6 @@ exports[`createAttendanceAction > el 30 de febrero se guarda como 2 de marzo (ha
       },
     },
     "prisma": "asistencia.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -741,6 +741,10 @@ exports[`createAttendanceAction > el operario no existe o esta inactivo > llamad
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -751,6 +755,10 @@ exports[`createAttendanceAction > el operario no existe o esta inactivo > llamad
       },
     },
     "prisma": "operario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -765,6 +773,10 @@ exports[`createAttendanceAction > el operario ya tiene asistencia en esa fecha >
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -786,6 +798,10 @@ exports[`createAttendanceAction > el operario ya tiene asistencia en esa fecha >
       },
     },
     "prisma": "asistencia.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -844,6 +860,10 @@ exports[`createAttendanceAction > solo ingreso: sin horas trabajadas > llamadas 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -863,10 +883,6 @@ exports[`createAttendanceAction > solo ingreso: sin horas trabajadas > llamadas 
       },
     },
     "prisma": "asistencia.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -934,7 +950,7 @@ exports[`createAttendanceAction > un POST sin campos se rechaza sin tocar Prisma
 
 exports[`createAttendanceAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null Invalid input: expected string, received null"`;
 
-exports[`createAttendanceAction > una carrera por la misma fecha (P2002) lanza el error de Prisma (hallazgo 60) > llamadas 1`] = `
+exports[`createAttendanceAction > una carrera por la misma fecha (P2002) responde como duplicado > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -942,6 +958,10 @@ exports[`createAttendanceAction > una carrera por la misma fecha (P2002) lanza e
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -963,10 +983,6 @@ exports[`createAttendanceAction > una carrera por la misma fecha (P2002) lanza e
       },
     },
     "prisma": "asistencia.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -999,7 +1015,7 @@ exports[`createAttendanceAction > una carrera por la misma fecha (P2002) lanza e
 ]
 `;
 
-exports[`createAttendanceAction > una carrera por la misma fecha (P2002) lanza el error de Prisma (hallazgo 60) > resultado 1`] = `"error: Unique constraint failed"`;
+exports[`createAttendanceAction > una carrera por la misma fecha (P2002) responde como duplicado > resultado 1`] = `"error: Este operario ya tiene asistencia registrada en la fecha seleccionada."`;
 
 exports[`createAttendanceAction > una falta con horas se rechaza > llamadas 1`] = `
 [
@@ -1025,6 +1041,10 @@ exports[`createAttendanceAction > una falta no guarda horas y descarta la tardan
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -1044,10 +1064,6 @@ exports[`createAttendanceAction > una falta no guarda horas y descarta la tardan
       },
     },
     "prisma": "asistencia.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1111,6 +1127,10 @@ exports[`createAttendanceAction > una fecha que no es fecha llega a Prisma como 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -1130,10 +1150,6 @@ exports[`createAttendanceAction > una fecha que no es fecha llega a Prisma como 
       },
     },
     "prisma": "asistencia.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
