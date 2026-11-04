@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 850 |
-| Páginas | 172 |
-| Páginas en ranuras paralelas (@ranura) | 46 |
-| Páginas que interceptan una ruta | 29 |
-| Declaraciones JSX de formulario | 54 |
+| Archivos fuente analizados | 878 |
+| Páginas | 179 |
+| Páginas en ranuras paralelas (@ranura) | 53 |
+| Páginas que interceptan una ruta | 33 |
+| Declaraciones JSX de formulario | 47 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 111 |
 
@@ -30,7 +30,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | petty-cash | 9 |
 | production | 39 |
 | reports | 10 |
-| staff | 12 |
+| staff | 19 |
 | users | 6 |
 | waste-scrap | 10 |
 
@@ -183,18 +183,25 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/reports/sales-collections` | — | `src/app/(dashboard)/dashboard/reports/sales-collections/page.tsx` | 0 | — |
 | `/dashboard/reports/staff` | — | `src/app/(dashboard)/dashboard/reports/staff/page.tsx` | 0 | — |
 | `/dashboard/reports/suppliers-purchases` | — | `src/app/(dashboard)/dashboard/reports/suppliers-purchases/page.tsx` | 0 | — |
-| `/dashboard/staff/attendance/new` | — | `src/app/(dashboard)/dashboard/staff/attendance/new/page.tsx` | 1 | — |
-| `/dashboard/staff/attendance` | — | `src/app/(dashboard)/dashboard/staff/attendance/page.tsx` | 1 | — |
+| `/dashboard/staff/attendance/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/staff/attendance/@panel/(.)new/page.tsx` | 0 | AttendanceForm |
+| `/dashboard/staff/attendance` | `@panel` | `src/app/(dashboard)/dashboard/staff/attendance/@panel/page.tsx` | 0 | — |
+| `/dashboard/staff/attendance/new` | — | `src/app/(dashboard)/dashboard/staff/attendance/new/page.tsx` | 0 | AttendanceForm |
+| `/dashboard/staff/attendance` | — | `src/app/(dashboard)/dashboard/staff/attendance/page.tsx` | 0 | — |
+| `/dashboard/staff/operators/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/staff/operators/@panel/(.)[id]/edit/page.tsx` | 0 | OperatorForm |
+| `/dashboard/staff/operators/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/staff/operators/@panel/(.)new/page.tsx` | 0 | OperatorForm |
+| `/dashboard/staff/operators` | `@panel` | `src/app/(dashboard)/dashboard/staff/operators/@panel/page.tsx` | 0 | — |
 | `/dashboard/staff/operators/[id]/edit` | — | `src/app/(dashboard)/dashboard/staff/operators/[id]/edit/page.tsx` | 0 | OperatorForm |
 | `/dashboard/staff/operators/new` | — | `src/app/(dashboard)/dashboard/staff/operators/new/page.tsx` | 0 | OperatorForm |
-| `/dashboard/staff/operators` | — | `src/app/(dashboard)/dashboard/staff/operators/page.tsx` | 1 | — |
+| `/dashboard/staff/operators` | — | `src/app/(dashboard)/dashboard/staff/operators/page.tsx` | 0 | — |
 | `/dashboard/staff` | — | `src/app/(dashboard)/dashboard/staff/page.tsx` | 0 | — |
 | `/dashboard/staff/payment-history/new` | — | `src/app/(dashboard)/dashboard/staff/payment-history/new/page.tsx` | 1 | — |
 | `/dashboard/staff/payment-history` | — | `src/app/(dashboard)/dashboard/staff/payment-history/page.tsx` | 0 | — |
 | `/dashboard/staff/payrolls/new` | — | `src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx` | 1 | — |
-| `/dashboard/staff/payrolls` | — | `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 2 | — |
-| `/dashboard/staff/tasks/new` | — | `src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx` | 1 | — |
-| `/dashboard/staff/tasks` | — | `src/app/(dashboard)/dashboard/staff/tasks/page.tsx` | 1 | — |
+| `/dashboard/staff/payrolls` | — | `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 1 | — |
+| `/dashboard/staff/tasks/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/staff/tasks/@panel/(.)new/page.tsx` | 0 | TaskForm |
+| `/dashboard/staff/tasks` | `@panel` | `src/app/(dashboard)/dashboard/staff/tasks/@panel/page.tsx` | 0 | — |
+| `/dashboard/staff/tasks/new` | — | `src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx` | 0 | TaskForm |
+| `/dashboard/staff/tasks` | — | `src/app/(dashboard)/dashboard/staff/tasks/page.tsx` | 0 | — |
 | `/dashboard/users/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/users/@panel/(.)[id]/edit/page.tsx` | 0 | UserForm |
 | `/dashboard/users/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/users/@panel/(.)new/page.tsx` | 0 | UserForm |
 | `/dashboard/users` | `@panel` | `src/app/(dashboard)/dashboard/users/@panel/page.tsx` | 0 | — |
@@ -239,15 +246,9 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 231 | `{updateWorkOrderProgressAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 375 | `{annulWorkOrderAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 394 | `{finishWorkOrderAction}` |
-| `src/app/(dashboard)/dashboard/staff/attendance/new/page.tsx` | 71 | `{createAttendanceAction}` |
-| `src/app/(dashboard)/dashboard/staff/attendance/page.tsx` | 139 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/staff/operators/page.tsx` | 114 | `"/dashboard/staff/operators"` |
 | `src/app/(dashboard)/dashboard/staff/payment-history/new/page.tsx` | 91 | `{registerOperatorPaymentAction}` |
 | `src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx` | 98 | `{generatePayrollAction}` |
-| `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 127 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 280 | `{cancelPayrollAction}` |
-| `src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx` | 92 | `{createOperatorTaskAction}` |
-| `src/app/(dashboard)/dashboard/staff/tasks/page.tsx` | 198 | `{cancelOperatorTaskAction}` |
+| `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 260 | `{cancelPayrollAction}` |
 | `src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx` | 82 | `{createScrapSaleAction}` |
 | `src/components/commercial/payment-form.tsx` | 31 | `{createPaymentAction}` |
 | `src/components/commercial/quote-form.tsx` | 66 | `{createQuoteAction}` |
@@ -270,7 +271,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/modules/production/work-orders/close-materials-form.tsx` | 60 | `{closeWorkOrderMaterialsAction}` |
 | `src/modules/production/work-orders/components/work-order-form.tsx` | 295 | `{createWorkOrderAction}` |
 | `src/modules/production/work-orders/material-movement-form.tsx` | 52 | `{ isReturn ? returnWorkOrderMaterialAction : deliverAdditionalMaterialAction }` |
-| `src/modules/staff/operators/operator-form.tsx` | 79 | `{formAction}` |
 
 ## Entradas de servidor
 
@@ -315,7 +315,7 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/modules/production/work-order-progress/actions.ts` | generateWorkOrderProgressAction, updateWorkOrderProgressAction, reassignWorkOrderProgressAction |
 | `src/modules/production/work-orders/actions.ts` | createWorkOrderAction, deliverWorkOrderMaterialsAction, deliverAdditionalMaterialAction, returnWorkOrderMaterialAction, closeWorkOrderMaterialsAction, reopenWorkOrderMaterialsAction, annulWorkOrderAction, finishWorkOrderAction |
 | `src/modules/staff/attendance/actions.ts` | createAttendanceAction |
-| `src/modules/staff/operators/actions.ts` | createOperatorAction, updateOperatorAction, toggleOperatorStatusAction |
+| `src/modules/staff/operators/actions.ts` | createOperatorAction, updateOperatorAction, updateOperatorStatusAction |
 | `src/modules/staff/payment-history/actions.ts` | registerOperatorPaymentAction |
 | `src/modules/staff/payrolls/actions.ts` | generatePayrollAction, cancelPayrollAction |
 | `src/modules/staff/tasks/actions.ts` | createOperatorTaskAction, cancelOperatorTaskAction |
