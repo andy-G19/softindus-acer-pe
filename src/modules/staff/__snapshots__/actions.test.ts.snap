@@ -3254,226 +3254,6 @@ exports[`createOperatorTaskAction > una descripcion corta se rechaza > llamadas 
 
 exports[`createOperatorTaskAction > una descripcion corta se rechaza > resultado 1`] = `"error: La descripción debe tener al menos 5 caracteres."`;
 
-exports[`toggleOperatorStatusAction > WORKSHOP_MASTER no puede cambiar el estado > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`toggleOperatorStatusAction > WORKSHOP_MASTER no puede cambiar el estado > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
-
-exports[`toggleOperatorStatusAction > activar un operario inactivo > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "activo",
-      },
-      "select": {
-        "apellidos": true,
-        "nombres": true,
-      },
-      "where": {
-        "estado": {
-          "not": "activo",
-        },
-        "id_operario": "OPE00000003",
-      },
-    },
-    "prisma": "operario.updateManyAndReturn",
-  },
-  {
-    "args": {
-      "accion": "activar",
-      "detalle": "Operario activado: Luis Huaman",
-      "enTransaccion": true,
-      "entidad_afectada": "operario",
-      "id_registro_afectado": "OPE00000003",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/staff",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/operators",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`toggleOperatorStatusAction > activar un operario inactivo > resultado 1`] = `"redirect:/dashboard/staff/operators?toast=operator-activated"`;
-
-exports[`toggleOperatorStatusAction > inactivar un operario activo > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "inactivo",
-      },
-      "select": {
-        "apellidos": true,
-        "nombres": true,
-      },
-      "where": {
-        "estado": {
-          "not": "inactivo",
-        },
-        "id_operario": "OPE00000003",
-      },
-    },
-    "prisma": "operario.updateManyAndReturn",
-  },
-  {
-    "args": {
-      "accion": "inactivar",
-      "detalle": "Operario inactivado: Luis Huaman",
-      "enTransaccion": true,
-      "entidad_afectada": "operario",
-      "id_registro_afectado": "OPE00000003",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/staff",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/operators",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`toggleOperatorStatusAction > inactivar un operario activo > resultado 1`] = `"redirect:/dashboard/staff/operators?toast=operator-deactivated"`;
-
-exports[`toggleOperatorStatusAction > inactivar un operario ya inactivo vuelve a la lista sin escribir la bitacora > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "inactivo",
-      },
-      "select": {
-        "apellidos": true,
-        "nombres": true,
-      },
-      "where": {
-        "estado": {
-          "not": "inactivo",
-        },
-        "id_operario": "OPE00000003",
-      },
-    },
-    "prisma": "operario.updateManyAndReturn",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-]
-`;
-
-exports[`toggleOperatorStatusAction > inactivar un operario ya inactivo vuelve a la lista sin escribir la bitacora > resultado 1`] = `"redirect:/dashboard/staff/operators"`;
-
-exports[`toggleOperatorStatusAction > sin id vuelve a la lista sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`toggleOperatorStatusAction > sin id vuelve a la lista sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/staff/operators"`;
-
-exports[`toggleOperatorStatusAction > un operario inexistente vuelve a la lista sin escribir la bitacora > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "inactivo",
-      },
-      "select": {
-        "apellidos": true,
-        "nombres": true,
-      },
-      "where": {
-        "estado": {
-          "not": "inactivo",
-        },
-        "id_operario": "OPE00000003",
-      },
-    },
-    "prisma": "operario.updateManyAndReturn",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-]
-`;
-
-exports[`toggleOperatorStatusAction > un operario inexistente vuelve a la lista sin escribir la bitacora > resultado 1`] = `"redirect:/dashboard/staff/operators"`;
-
 exports[`updateOperatorAction > ADMIN actualiza bloqueando la fila, con escritura y bitacora en la transaccion > llamadas 1`] = `
 [
   {
@@ -4085,6 +3865,318 @@ exports[`updateOperatorAction > sin id se rechaza sin tocar Prisma > resultado 1
       "observaciones": "",
       "tarifa": "80.50",
       "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorStatusAction > WORKSHOP_MASTER no puede cambiar el estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateOperatorStatusAction > WORKSHOP_MASTER no puede cambiar el estado > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar operarios.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "OPE00000003",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorStatusAction > activar un operario inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activo",
+      },
+      "select": {
+        "apellidos": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": {
+          "not": "activo",
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Operario activado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOperatorStatusAction > activar un operario inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "activo",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "OPE00000003",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorStatusAction > inactivar un operario activo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactivo",
+      },
+      "select": {
+        "apellidos": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": {
+          "not": "inactivo",
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Operario inactivado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOperatorStatusAction > inactivar un operario activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "inactivo",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "OPE00000003",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorStatusAction > inactivar un operario ya inactivo responde el motivo sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactivo",
+      },
+      "select": {
+        "apellidos": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": {
+          "not": "inactivo",
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateOperatorStatusAction > inactivar un operario ya inactivo responde el motivo sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El operario ya está inactivo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "OPE00000003",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorStatusAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateOperatorStatusAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El operario no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorStatusAction > un operario inexistente responde el motivo sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactivo",
+      },
+      "select": {
+        "apellidos": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": {
+          "not": "inactivo",
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateOperatorStatusAction > un operario inexistente responde el motivo sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El operario no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "OPE00000003",
     },
   },
 }

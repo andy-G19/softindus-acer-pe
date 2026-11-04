@@ -320,9 +320,9 @@ const MODULOS: ModuloDeAcciones[] = [
     acciones: [
       "createOperatorAction",
       "updateOperatorAction",
-      "toggleOperatorStatusAction",
+      "updateOperatorStatusAction",
     ],
-    rechazanConResultado: ["createOperatorAction", "updateOperatorAction"],
+    rechazanConResultado: ["createOperatorAction", "updateOperatorAction", "updateOperatorStatusAction"],
   },
   {
     ruta: "staff/payment-history/actions",

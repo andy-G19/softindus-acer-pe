@@ -4,7 +4,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { createAttendanceAction } from "@/modules/staff/attendance/actions";
 import {
   createOperatorAction,
-  toggleOperatorStatusAction,
+  updateOperatorStatusAction,
   updateOperatorAction,
   type OperatorFormState,
 } from "@/modules/staff/operators/actions";
@@ -215,12 +215,18 @@ const storedOperatorStatus = (estado: string) => (args: unknown) => {
   return matches ? [{ nombres: "Luis", apellidos: "Huaman" }] : [];
 };
 
-// Desde A2 el boton envia el estado que pide ("true" activa, "false"
-// inactiva), como los catalogos desde la 10.1 (sendsRequestedStatus).
+// El boton de la fila envia el estado que pide ("activo" o "inactivo"). Desde A7
+// la accion devuelve el resultado; sin filas lee el operario solo para explicar
+// el rechazo.
 const requestStatus = (pedido: string | null, guardado: string, id: string | null = OPERATOR) => ({
   form: { id_operario: id, estado: pedido },
-  data: { "operario.updateManyAndReturn": storedOperatorStatus(guardado) },
+  data: {
+    "operario.updateManyAndReturn": storedOperatorStatus(guardado),
+    "operario.findUnique": { id_operario: OPERATOR },
+  },
 });
+
+const updateStatus = (formData: FormData) => updateOperatorStatusAction({ status: "idle" }, formData);
 
 defineCases("createOperatorAction", withState(createOperatorAction), [
   { name: "ADMIN registra el operario con correlativo y bitacora en la transaccion", ...createOperatorWith() },
@@ -292,19 +298,19 @@ defineCases("updateOperatorAction", withState(updateOperatorAction), [
   },
 ]);
 
-defineCases("toggleOperatorStatusAction", toggleOperatorStatusAction, [
-  { name: "inactivar un operario activo", ...requestStatus("false", "activo") },
-  { name: "activar un operario inactivo", ...requestStatus("true", "inactivo") },
+defineCases("updateOperatorStatusAction", updateStatus, [
+  { name: "inactivar un operario activo", ...requestStatus("inactivo", "activo") },
+  { name: "activar un operario inactivo", ...requestStatus("activo", "inactivo") },
   {
-    name: "inactivar un operario ya inactivo vuelve a la lista sin escribir la bitacora",
-    ...requestStatus("false", "inactivo"),
+    name: "inactivar un operario ya inactivo responde el motivo sin bitacora",
+    ...requestStatus("inactivo", "inactivo"),
   },
-  { name: "WORKSHOP_MASTER no puede cambiar el estado", ...requestStatus("false", "activo"), role: "WORKSHOP_MASTER" },
-  { name: "sin id vuelve a la lista sin tocar Prisma", ...requestStatus("false", "activo", "") },
+  { name: "WORKSHOP_MASTER no puede cambiar el estado", ...requestStatus("inactivo", "activo"), role: "WORKSHOP_MASTER" },
+  { name: "sin id se rechaza sin tocar Prisma", ...requestStatus("inactivo", "activo", "") },
   {
-    name: "un operario inexistente vuelve a la lista sin escribir la bitacora",
-    form: { id_operario: OPERATOR, estado: "false" },
-    data: { "operario.updateManyAndReturn": [] },
+    name: "un operario inexistente responde el motivo sin bitacora",
+    form: { id_operario: OPERATOR, estado: "inactivo" },
+    data: { "operario.updateManyAndReturn": [], "operario.findUnique": null },
   },
 ]);
 
@@ -358,58 +364,6 @@ describe("updateOperatorAction bloquea la fila del operario", () => {
     expect(result).toEqual({
       estado: expect.objectContaining({ error: "Ya existe otro operario registrado con esos datos." }),
     });
-  });
-});
-
-describe("activar e inactivar operario escriben con compare-and-set", () => {
-  it("inactivar fija el estado pedido con una sola sentencia y la bitacora en la transaccion", async () => {
-    const { calls, result } = await runCase(toggleOperatorStatusAction, requestStatus("false", "activo"));
-    const write = calls.filter(isPrismaCall).find((call) => call.prisma === "operario.updateManyAndReturn");
-
-    expect(prismaCalls(calls)).not.toContain("operario.findUnique");
-    expect(prismaCalls(calls)).not.toContain("operario.update");
-    expect(write?.args).toEqual({
-      where: { id_operario: OPERATOR, estado: { not: "inactivo" } },
-      data: { estado: "inactivo" },
-      select: { nombres: true, apellidos: true },
-    });
-    expect(auditCalls(calls)).toEqual([
-      expect.objectContaining({
-        args: expect.objectContaining({
-          accion: "inactivar",
-          detalle: "Operario inactivado: Luis Huaman",
-          enTransaccion: true,
-        }),
-      }),
-    ]);
-    expect(result).toBe("redirect:/dashboard/staff/operators?toast=operator-deactivated");
-  });
-
-  it("activar fija el estado pedido", async () => {
-    const { calls, result } = await runCase(toggleOperatorStatusAction, requestStatus("true", "inactivo"));
-
-    expect(auditCalls(calls)).toEqual([
-      expect.objectContaining({ args: expect.objectContaining({ accion: "activar", enTransaccion: true }) }),
-    ]);
-    expect(result).toBe("redirect:/dashboard/staff/operators?toast=operator-activated");
-  });
-
-  it("con la lista vieja, Inactivar sobre un inactivo no lo activa ni deja bitacora", async () => {
-    const { calls, result } = await runCase(toggleOperatorStatusAction, requestStatus("false", "inactivo"));
-
-    expect(auditCalls(calls)).toEqual([]);
-    expect(prismaCalls(calls)).not.toContain("operario.update");
-    expect(result).toBe("redirect:/dashboard/staff/operators");
-  });
-
-  it.each([
-    { name: "sin estado pedido", pedido: null },
-    { name: "un estado pedido desconocido", pedido: "activo" },
-  ])("$name vuelve a la lista sin tocar Prisma", async ({ pedido }) => {
-    const { calls, result } = await runCase(toggleOperatorStatusAction, requestStatus(pedido, "activo"));
-
-    expect(calls.filter(isPrismaCall)).toEqual([]);
-    expect(result).toBe("redirect:/dashboard/staff/operators");
   });
 });
 
@@ -869,6 +823,91 @@ describe("el alta y la edicion de operarios devuelven el resultado", () => {
         values: VALUES,
         operationId: expect.any(String),
       },
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Activar e inactivar operario desde la fila con resultado (A7)
+// ---------------------------------------------------------------------------
+
+// Desde A7 activar e inactivar son una sola accion que recibe el estado pedido
+// ("activo" o "inactivo", como usuarios), lo fija con compare-and-set y
+// devuelve el resultado para ConfirmActionButton en lugar de redirigir. Un rechazo
+// no revalida: la lista repintada quitaria el boton y su mensaje.
+describe("updateOperatorStatusAction devuelve el resultado", () => {
+  const run = updateStatus;
+  const status = (pedido: string | null, guardado: string | null, id: string | null = OPERATOR) => ({
+    form: { id_operario: id, estado: pedido },
+    data: {
+      "operario.updateManyAndReturn": guardado === null ? [] : storedOperatorStatus(guardado),
+      "operario.findUnique": guardado === null ? null : { id_operario: OPERATOR },
+    },
+  });
+  const revalidations = (calls: RecordedCall[]) =>
+    calls.filter((call) => "effect" in call && call.effect === "revalidatePath");
+
+  it("inactivar escribe con compare-and-set y la bitacora, revalida y devuelve el estado", async () => {
+    const { calls, result } = await runCase(run, status("inactivo", "activo"));
+    const write = calls.filter(isPrismaCall).find((call) => call.prisma === "operario.updateManyAndReturn");
+
+    // Compara y escribe en una sola sentencia: no lee antes ni usa update.
+    expect(prismaCalls(calls)).not.toContain("operario.findUnique");
+    expect(prismaCalls(calls)).not.toContain("operario.update");
+    expect(calls).toContainEqual({ authz: "getAuthorizedSession", roles: ["ADMIN"] });
+    expect(write?.args).toEqual({
+      where: { id_operario: OPERATOR, estado: { not: "inactivo" } },
+      data: { estado: "inactivo" },
+      select: { nombres: true, apellidos: true },
+    });
+    expect(auditCalls(calls)).toEqual([
+      expect.objectContaining({
+        args: expect.objectContaining({ accion: "inactivar", detalle: "Operario inactivado: Luis Huaman", enTransaccion: true }),
+      }),
+    ]);
+    expect(revalidations(calls).length).toBeGreaterThan(0);
+    expect(result).toEqual({
+      estado: { status: "success", data: { estado: "inactivo" }, values: { id: OPERATOR }, operationId: "operacion-de-prueba" },
+    });
+  });
+
+  it("activar devuelve el estado activo", async () => {
+    const { result } = await runCase(run, status("activo", "inactivo"));
+
+    expect(result).toEqual({
+      estado: { status: "success", data: { estado: "activo" }, values: { id: OPERATOR }, operationId: "operacion-de-prueba" },
+    });
+  });
+
+  it.each([
+    { motivo: "ya inactivo", caso: status("inactivo", "inactivo"), error: "El operario ya está inactivo." },
+    { motivo: "inexistente", caso: status("inactivo", null), error: "El operario no existe." },
+  ])("un operario $motivo responde el motivo sin bitacora ni revalidar", async ({ caso, error }) => {
+    const { calls, result } = await runCase(run, caso);
+
+    expect(auditCalls(calls)).toEqual([]);
+    expect(revalidations(calls)).toEqual([]);
+    expect(result).toEqual({
+      estado: { status: "error", error, values: { id: OPERATOR }, operationId: "operacion-de-prueba" },
+    });
+  });
+
+  it.each([
+    { motivo: "un estado pedido desconocido", caso: status("true", "activo"), error: "Selecciona un estado válido." },
+    { motivo: "sin id", caso: status("inactivo", "activo", ""), error: "El operario no existe." },
+  ])("$motivo se rechaza sin tocar Prisma", async ({ caso, error }) => {
+    const { calls, result } = await runCase(run, caso);
+
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+    expect(result).toEqual({ estado: expect.objectContaining({ status: "error", error }) });
+  });
+
+  it("sin permiso responde con un error sin tocar Prisma", async () => {
+    const { calls, result } = await runCase(run, { ...status("inactivo", "activo"), role: "WORKSHOP_MASTER" });
+
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+    expect(result).toEqual({
+      estado: expect.objectContaining({ status: "error", error: "No tienes permisos para gestionar operarios." }),
     });
   });
 });

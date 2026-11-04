@@ -1,17 +1,16 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import type { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
 import { APP_ROLES } from "@/lib/permissions";
-import { parseRequestedStatus } from "@/lib/requested-status";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockOperatorRow } from "@/lib/row-locks";
 import { operatorSchema } from "@/schemas/staff/operator.schema";
 
@@ -39,10 +38,6 @@ export type OperatorFormState = FormActionState<OperatorFormValues, { id_operari
 const OPERATORS_PATH = "/dashboard/staff/operators";
 const PERMISSION_ERROR = "No tienes permisos para gestionar operarios.";
 const INVALID_DATA = "Revisa los datos del operario.";
-
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
 
 function getOperatorFormValues(formData: FormData): OperatorFormValues {
   const text = (name: keyof OperatorFormValues) => formData.get(name)?.toString() ?? "";
@@ -288,63 +283,91 @@ export async function updateOperatorAction(
   return operatorSaved(values, operatorId);
 }
 
-export async function toggleOperatorStatusAction(formData: FormData) {
-  const session = await requireAdmin();
-  const operatorId = formData.get("id_operario")?.toString().trim();
-  const requestedStatus = parseRequestedStatus(formData.get("estado"));
+const OPERATOR_STATUSES = ["activo", "inactivo"] as const;
 
-  if (!operatorId || requestedStatus === null) {
-    redirect(OPERATORS_PATH);
+function isOperatorStatus(value: string): value is (typeof OPERATOR_STATUSES)[number] {
+  return (OPERATOR_STATUSES as readonly string[]).includes(value);
+}
+
+// Entrega 10.8a: activar e inactivar son una sola accion desde la fila
+// (ConfirmActionButton). Recibe el estado pedido y devuelve el resultado; sin
+// permiso responde con un error, no redirige.
+export async function updateOperatorStatusAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
+  const operatorId = formData.get("id_operario")?.toString().trim() ?? "";
+  const nextStatus = formData.get("estado")?.toString() ?? "";
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return rowStatusError(operatorId, PERMISSION_ERROR);
   }
 
-  const nextStatus = requestedStatus ? "activo" : "inactivo";
+  if (!operatorId) {
+    return rowStatusError(operatorId, "El operario no existe.");
+  }
 
-  // Hallazgo 58: fija el estado pedido solo si el operario no lo tiene ya.
-  // Comparar y escribir en una sola sentencia evita que una lista desactualizada
-  // o un doble clic hagan lo contrario de lo que dice el boton; la misma
-  // sentencia devuelve el nombre para la bitacora, que va en la transaccion.
-  // Sin filas: no existe o ya tenia ese estado, y no hay nada que registrar.
-  const changed = await prisma.$transaction(async (tx) => {
-    const [operator] = await tx.operario.updateManyAndReturn({
-      where: {
-        id_operario: operatorId,
-        estado: { not: nextStatus },
-      },
-      data: {
-        estado: nextStatus,
-      },
-      select: {
-        nombres: true,
-        apellidos: true,
-      },
+  if (!isOperatorStatus(nextStatus)) {
+    return rowStatusError(operatorId, "Selecciona un estado válido.");
+  }
+
+  let problem: string | null;
+
+  try {
+    // Hallazgo 58: fija el estado pedido solo si el operario no lo tiene ya.
+    // Comparar y escribir en una sola sentencia evita que una lista desactualizada
+    // o un doble clic hagan lo contrario de lo que dice el boton; la misma
+    // sentencia devuelve el nombre para la bitacora, que va en la transaccion.
+    // Sin filas se lee solo para explicar el rechazo: no existe o ya lo tenia.
+    problem = await prisma.$transaction(async (tx) => {
+      const [operator] = await tx.operario.updateManyAndReturn({
+        where: {
+          id_operario: operatorId,
+          estado: { not: nextStatus },
+        },
+        data: {
+          estado: nextStatus,
+        },
+        select: {
+          nombres: true,
+          apellidos: true,
+        },
+      });
+
+      if (!operator) {
+        const exists = await tx.operario.findUnique({
+          where: { id_operario: operatorId },
+          select: { id_operario: true },
+        });
+
+        return exists ? `El operario ya está ${nextStatus}.` : "El operario no existe.";
+      }
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "operario",
+        id_registro_afectado: operatorId,
+        accion: nextStatus === "activo" ? "activar" : "inactivar",
+        detalle: `Operario ${
+          nextStatus === "activo" ? "activado" : "inactivado"
+        }: ${operator.nombres} ${operator.apellidos}`,
+        tx,
+      });
+
+      return null;
     });
+  } catch {
+    problem = "No se pudo cambiar el estado del operario. Intenta nuevamente.";
+  }
 
-    if (!operator) {
-      return false;
-    }
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "operario",
-      id_registro_afectado: operatorId,
-      accion: nextStatus === "activo" ? "activar" : "inactivar",
-      detalle: `Operario ${
-        nextStatus === "activo" ? "activado" : "inactivado"
-      }: ${operator.nombres} ${operator.apellidos}`,
-      tx,
-    });
-
-    return true;
-  });
-
-  if (!changed) {
-    redirect(OPERATORS_PATH);
+  // Un rechazo no revalida: la lista repintada quitaria el boton y su mensaje.
+  if (problem) {
+    return rowStatusError(operatorId, problem);
   }
 
   revalidatePath("/dashboard/staff");
   revalidatePath(OPERATORS_PATH);
 
-  redirect(
-    `${OPERATORS_PATH}?toast=${nextStatus === "activo" ? "operator-activated" : "operator-deactivated"}`,
-  );
+  return rowStatusDone(operatorId, nextStatus);
 }

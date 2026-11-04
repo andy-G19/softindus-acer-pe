@@ -108,6 +108,8 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/staff/operators/@panel/(.)new/page.tsx [successNotification] -> operator-created",
   "src/app/(dashboard)/dashboard/staff/operators/[id]/edit/page.tsx [successNotification] -> operator-updated",
   "src/app/(dashboard)/dashboard/staff/operators/new/page.tsx [successNotification] -> operator-created",
+  "src/app/(dashboard)/dashboard/staff/operators/page.tsx [activatedNotification] -> operator-activated",
+  "src/app/(dashboard)/dashboard/staff/operators/page.tsx [deactivatedNotification] -> operator-deactivated",
   "src/app/(dashboard)/dashboard/users/@panel/(.)[id]/edit/page.tsx [successNotification] -> user-updated",
   "src/app/(dashboard)/dashboard/users/@panel/(.)new/page.tsx [successNotification] -> user-created",
   "src/app/(dashboard)/dashboard/users/[id]/edit/page.tsx [successNotification] -> user-updated",
