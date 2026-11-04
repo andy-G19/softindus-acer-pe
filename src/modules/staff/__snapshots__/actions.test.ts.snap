@@ -3,7 +3,7 @@
 exports[`cancelOperatorTaskAction > ADMIN anula con compare-and-set y la bitacora en la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -53,12 +53,25 @@ exports[`cancelOperatorTaskAction > ADMIN anula con compare-and-set y la bitacor
 ]
 `;
 
-exports[`cancelOperatorTaskAction > ADMIN anula con compare-and-set y la bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/staff/tasks?toast=operator-task-annulled"`;
+exports[`cancelOperatorTaskAction > ADMIN anula con compare-and-set y la bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "TAR00000007",
+    },
+  },
+}
+`;
 
 exports[`cancelOperatorTaskAction > SELLER no puede anular > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -67,12 +80,23 @@ exports[`cancelOperatorTaskAction > SELLER no puede anular > llamadas 1`] = `
 ]
 `;
 
-exports[`cancelOperatorTaskAction > SELLER no puede anular > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`cancelOperatorTaskAction > SELLER no puede anular > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar tareas.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "TAR00000007",
+    },
+  },
+}
+`;
 
 exports[`cancelOperatorTaskAction > WORKSHOP_MASTER tambien anula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -122,12 +146,25 @@ exports[`cancelOperatorTaskAction > WORKSHOP_MASTER tambien anula > llamadas 1`]
 ]
 `;
 
-exports[`cancelOperatorTaskAction > WORKSHOP_MASTER tambien anula > resultado 1`] = `"redirect:/dashboard/staff/tasks?toast=operator-task-annulled"`;
+exports[`cancelOperatorTaskAction > WORKSHOP_MASTER tambien anula > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "TAR00000007",
+    },
+  },
+}
+`;
 
 exports[`cancelOperatorTaskAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -136,12 +173,23 @@ exports[`cancelOperatorTaskAction > sin id se rechaza sin tocar Prisma > llamada
 ]
 `;
 
-exports[`cancelOperatorTaskAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `"error: No se recibió la tarea del operario."`;
+exports[`cancelOperatorTaskAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió la tarea del operario.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`cancelOperatorTaskAction > una tarea inexistente se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -183,12 +231,23 @@ exports[`cancelOperatorTaskAction > una tarea inexistente se rechaza > llamadas 
 ]
 `;
 
-exports[`cancelOperatorTaskAction > una tarea inexistente se rechaza > resultado 1`] = `"error: La tarea seleccionada no existe."`;
+exports[`cancelOperatorTaskAction > una tarea inexistente se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "La tarea seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "TAR00000007",
+    },
+  },
+}
+`;
 
 exports[`cancelOperatorTaskAction > una tarea terminada tambien se anula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -238,12 +297,25 @@ exports[`cancelOperatorTaskAction > una tarea terminada tambien se anula > llama
 ]
 `;
 
-exports[`cancelOperatorTaskAction > una tarea terminada tambien se anula > resultado 1`] = `"redirect:/dashboard/staff/tasks?toast=operator-task-annulled"`;
+exports[`cancelOperatorTaskAction > una tarea terminada tambien se anula > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "TAR00000007",
+    },
+  },
+}
+`;
 
 exports[`cancelOperatorTaskAction > una tarea ya anulada se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -285,7 +357,18 @@ exports[`cancelOperatorTaskAction > una tarea ya anulada se rechaza > llamadas 1
 ]
 `;
 
-exports[`cancelOperatorTaskAction > una tarea ya anulada se rechaza > resultado 1`] = `"error: La tarea ya se encuentra anulada."`;
+exports[`cancelOperatorTaskAction > una tarea ya anulada se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "La tarea ya se encuentra anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "TAR00000007",
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > 20 minutos se guardan como 0.33 horas > llamadas 1`] = `
 [
@@ -2529,7 +2612,7 @@ exports[`createOperatorAction > una tarifa que no es numero se rechaza > resulta
 exports[`createOperatorTaskAction > 0.004 horas se envian tal cual: la columna guarda 0.00 > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2625,12 +2708,32 @@ exports[`createOperatorTaskAction > 0.004 horas se envian tal cual: la columna g
 ]
 `;
 
-exports[`createOperatorTaskAction > 0.004 horas se envian tal cual: la columna guarda 0.00 > resultado 1`] = `"redirect:/dashboard/staff/tasks?toast=operator-task-created"`;
+exports[`createOperatorTaskAction > 0.004 horas se envian tal cual: la columna guarda 0.00 > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_tarea_operario": "TAR00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "0.004",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > 3.005 horas se envian tal cual: la columna guarda 3.01 > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2726,12 +2829,32 @@ exports[`createOperatorTaskAction > 3.005 horas se envian tal cual: la columna g
 ]
 `;
 
-exports[`createOperatorTaskAction > 3.005 horas se envian tal cual: la columna guarda 3.01 > resultado 1`] = `"redirect:/dashboard/staff/tasks?toast=operator-task-created"`;
+exports[`createOperatorTaskAction > 3.005 horas se envian tal cual: la columna guarda 3.01 > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_tarea_operario": "TAR00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "3.005",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > ADMIN registra la tarea sin etapa, con bitacora en la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2827,12 +2950,32 @@ exports[`createOperatorTaskAction > ADMIN registra la tarea sin etapa, con bitac
 ]
 `;
 
-exports[`createOperatorTaskAction > ADMIN registra la tarea sin etapa, con bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/staff/tasks?toast=operator-task-created"`;
+exports[`createOperatorTaskAction > ADMIN registra la tarea sin etapa, con bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_tarea_operario": "TAR00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > SELLER no puede registrar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2841,12 +2984,31 @@ exports[`createOperatorTaskAction > SELLER no puede registrar > llamadas 1`] = `
 ]
 `;
 
-exports[`createOperatorTaskAction > SELLER no puede registrar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createOperatorTaskAction > SELLER no puede registrar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar tareas.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > WORKSHOP_MASTER tambien registra > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2942,12 +3104,32 @@ exports[`createOperatorTaskAction > WORKSHOP_MASTER tambien registra > llamadas 
 ]
 `;
 
-exports[`createOperatorTaskAction > WORKSHOP_MASTER tambien registra > resultado 1`] = `"redirect:/dashboard/staff/tasks?toast=operator-task-created"`;
+exports[`createOperatorTaskAction > WORKSHOP_MASTER tambien registra > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_tarea_operario": "TAR00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > con una etapa de la ruta de la orden > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3056,12 +3238,32 @@ exports[`createOperatorTaskAction > con una etapa de la ruta de la orden > llama
 ]
 `;
 
-exports[`createOperatorTaskAction > con una etapa de la ruta de la orden > resultado 1`] = `"redirect:/dashboard/staff/tasks?toast=operator-task-created"`;
+exports[`createOperatorTaskAction > con una etapa de la ruta de la orden > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_tarea_operario": "TAR00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "ETA00000005",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > el 30 de febrero se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3070,12 +3272,35 @@ exports[`createOperatorTaskAction > el 30 de febrero se rechaza > llamadas 1`] =
 ]
 `;
 
-exports[`createOperatorTaskAction > el 30 de febrero se rechaza > resultado 1`] = `"error: La fecha de la tarea no es válida."`;
+exports[`createOperatorTaskAction > el 30 de febrero se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "fecha_tarea": [
+        "La fecha de la tarea no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-02-30",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > el alta rechaza una tarea anulada enviada a mano > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3084,12 +3309,35 @@ exports[`createOperatorTaskAction > el alta rechaza una tarea anulada enviada a 
 ]
 `;
 
-exports[`createOperatorTaskAction > el alta rechaza una tarea anulada enviada a mano > resultado 1`] = `"error: Seleccione un estado válido para la tarea."`;
+exports[`createOperatorTaskAction > el alta rechaza una tarea anulada enviada a mano > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "estado": [
+        "Seleccione un estado válido para la tarea.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "anulada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > el operario no existe o esta inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3127,12 +3375,35 @@ exports[`createOperatorTaskAction > el operario no existe o esta inactivo > llam
 ]
 `;
 
-exports[`createOperatorTaskAction > el operario no existe o esta inactivo > resultado 1`] = `"error: El operario seleccionado no existe o está inactivo."`;
+exports[`createOperatorTaskAction > el operario no existe o esta inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "El operario seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_operario": [
+        "El operario seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > horas negativas se rechazan > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3141,12 +3412,35 @@ exports[`createOperatorTaskAction > horas negativas se rechazan > llamadas 1`] =
 ]
 `;
 
-exports[`createOperatorTaskAction > horas negativas se rechazan > resultado 1`] = `"error: Las horas dedicadas no pueden ser negativas."`;
+exports[`createOperatorTaskAction > horas negativas se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "horas_dedicadas": [
+        "Las horas dedicadas no pueden ser negativas.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "-1",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > horas que no son numero se rechazan > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3155,12 +3449,35 @@ exports[`createOperatorTaskAction > horas que no son numero se rechazan > llamad
 ]
 `;
 
-exports[`createOperatorTaskAction > horas que no son numero se rechazan > resultado 1`] = `"error: Las horas dedicadas deben ser un número válido."`;
+exports[`createOperatorTaskAction > horas que no son numero se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "horas_dedicadas": [
+        "Las horas dedicadas deben ser un número válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "abc",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > la etapa es de otra ruta > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3226,12 +3543,35 @@ exports[`createOperatorTaskAction > la etapa es de otra ruta > llamadas 1`] = `
 ]
 `;
 
-exports[`createOperatorTaskAction > la etapa es de otra ruta > resultado 1`] = `"error: La etapa seleccionada no pertenece a la ruta de fabricación de la orden."`;
+exports[`createOperatorTaskAction > la etapa es de otra ruta > resultado 1`] = `
+{
+  "estado": {
+    "error": "La etapa seleccionada no pertenece a la ruta de fabricación de la orden.",
+    "fieldErrors": {
+      "id_etapa_ruta": [
+        "La etapa seleccionada no pertenece a la ruta de fabricación de la orden.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "ETA00000005",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > la etapa esta inactiva > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3297,12 +3637,35 @@ exports[`createOperatorTaskAction > la etapa esta inactiva > llamadas 1`] = `
 ]
 `;
 
-exports[`createOperatorTaskAction > la etapa esta inactiva > resultado 1`] = `"error: La etapa seleccionada no existe o está inactiva."`;
+exports[`createOperatorTaskAction > la etapa esta inactiva > resultado 1`] = `
+{
+  "estado": {
+    "error": "La etapa seleccionada no existe o está inactiva.",
+    "fieldErrors": {
+      "id_etapa_ruta": [
+        "La etapa seleccionada no existe o está inactiva.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "ETA00000005",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > la etapa no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3368,12 +3731,35 @@ exports[`createOperatorTaskAction > la etapa no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`createOperatorTaskAction > la etapa no existe > resultado 1`] = `"error: La etapa seleccionada no existe o está inactiva."`;
+exports[`createOperatorTaskAction > la etapa no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La etapa seleccionada no existe o está inactiva.",
+    "fieldErrors": {
+      "id_etapa_ruta": [
+        "La etapa seleccionada no existe o está inactiva.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "ETA00000005",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > la orden no existe o esta anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3426,12 +3812,35 @@ exports[`createOperatorTaskAction > la orden no existe o esta anulada > llamadas
 ]
 `;
 
-exports[`createOperatorTaskAction > la orden no existe o esta anulada > resultado 1`] = `"error: La orden de trabajo seleccionada no existe o está anulada."`;
+exports[`createOperatorTaskAction > la orden no existe o esta anulada > resultado 1`] = `
+{
+  "estado": {
+    "error": "La orden de trabajo seleccionada no existe o está anulada.",
+    "fieldErrors": {
+      "id_orden_trabajo": [
+        "La orden de trabajo seleccionada no existe o está anulada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > la orden no tiene ruta y se eligio etapa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3497,12 +3906,35 @@ exports[`createOperatorTaskAction > la orden no tiene ruta y se eligio etapa > l
 ]
 `;
 
-exports[`createOperatorTaskAction > la orden no tiene ruta y se eligio etapa > resultado 1`] = `"error: La orden de trabajo seleccionada no tiene una ruta de fabricación asignada."`;
+exports[`createOperatorTaskAction > la orden no tiene ruta y se eligio etapa > resultado 1`] = `
+{
+  "estado": {
+    "error": "La orden de trabajo seleccionada no tiene una ruta de fabricación asignada.",
+    "fieldErrors": {
+      "id_etapa_ruta": [
+        "La orden de trabajo seleccionada no tiene una ruta de fabricación asignada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "ETA00000005",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > mas de 24 horas se rechazan > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3511,12 +3943,35 @@ exports[`createOperatorTaskAction > mas de 24 horas se rechazan > llamadas 1`] =
 ]
 `;
 
-exports[`createOperatorTaskAction > mas de 24 horas se rechazan > resultado 1`] = `"error: Las horas dedicadas no pueden superar 24 horas."`;
+exports[`createOperatorTaskAction > mas de 24 horas se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "horas_dedicadas": [
+        "Las horas dedicadas no pueden superar 24 horas.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "24.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > sin horas: horas null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3612,12 +4067,32 @@ exports[`createOperatorTaskAction > sin horas: horas null > llamadas 1`] = `
 ]
 `;
 
-exports[`createOperatorTaskAction > sin horas: horas null > resultado 1`] = `"redirect:/dashboard/staff/tasks?toast=operator-task-created"`;
+exports[`createOperatorTaskAction > sin horas: horas null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_tarea_operario": "TAR00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3626,12 +4101,47 @@ exports[`createOperatorTaskAction > un POST sin campos se rechaza sin tocar Pris
 ]
 `;
 
-exports[`createOperatorTaskAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: Debe seleccionar un operario. Debe seleccionar una orden de trabajo. La fecha de la tarea es obligatoria. La descripción es obligatoria. Seleccione un estado válido para la tarea."`;
+exports[`createOperatorTaskAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "descripcion": [
+        "La descripción debe tener al menos 5 caracteres.",
+      ],
+      "estado": [
+        "Seleccione un estado válido para la tarea.",
+      ],
+      "fecha_tarea": [
+        "La fecha de la tarea es obligatoria.",
+      ],
+      "id_operario": [
+        "Debe seleccionar un operario.",
+      ],
+      "id_orden_trabajo": [
+        "Debe seleccionar una orden de trabajo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "",
+      "estado": "",
+      "fecha_tarea": "",
+      "horas_dedicadas": "",
+      "id_etapa_ruta": "",
+      "id_operario": "",
+      "id_orden_trabajo": "",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > un estado fuera de la lista se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3640,12 +4150,35 @@ exports[`createOperatorTaskAction > un estado fuera de la lista se rechaza > lla
 ]
 `;
 
-exports[`createOperatorTaskAction > un estado fuera de la lista se rechaza > resultado 1`] = `"error: Seleccione un estado válido para la tarea."`;
+exports[`createOperatorTaskAction > un estado fuera de la lista se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "estado": [
+        "Seleccione un estado válido para la tarea.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "pausada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorTaskAction > una descripcion corta se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3654,7 +4187,30 @@ exports[`createOperatorTaskAction > una descripcion corta se rechaza > llamadas 
 ]
 `;
 
-exports[`createOperatorTaskAction > una descripcion corta se rechaza > resultado 1`] = `"error: La descripción debe tener al menos 5 caracteres."`;
+exports[`createOperatorTaskAction > una descripcion corta se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "descripcion": [
+        "La descripción debe tener al menos 5 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Cort",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
 
 exports[`updateOperatorAction > ADMIN actualiza bloqueando la fila, con escritura y bitacora en la transaccion > llamadas 1`] = `
 [

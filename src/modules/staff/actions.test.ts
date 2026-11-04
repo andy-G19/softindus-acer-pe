@@ -470,7 +470,12 @@ const taskWith = (fields: FormFields = {}, data: DataOverrides = {}) => ({
   data: { ...activeOperator, ...openWorkOrder, ...data },
 });
 
-defineCases("createOperatorTaskAction", createOperatorTaskAction, [
+// Desde A9 el registro y la anulacion de tareas parten del estado inicial de su
+// formulario y devuelven el resultado.
+const createTask = (formData: FormData) => createOperatorTaskAction({ status: "idle" }, formData);
+const cancelTask = (formData: FormData) => cancelOperatorTaskAction({ status: "idle" }, formData);
+
+defineCases("createOperatorTaskAction", createTask, [
   { name: "ADMIN registra la tarea sin etapa, con bitacora en la transaccion", ...taskWith() },
   { name: "WORKSHOP_MASTER tambien registra", ...taskWith(), role: "WORKSHOP_MASTER" },
   { name: "SELLER no puede registrar", ...taskWith(), role: "SELLER" },
@@ -551,7 +556,7 @@ const cancelWith = (estado: string | null, id: string | null = TASK) => ({
   data: storedTask(estado),
 });
 
-defineCases("cancelOperatorTaskAction", cancelOperatorTaskAction, [
+defineCases("cancelOperatorTaskAction", cancelTask, [
   {
     name: "ADMIN anula con compare-and-set y la bitacora en la transaccion",
     ...cancelWith("registrada"),
@@ -579,7 +584,7 @@ describe("createOperatorTaskAction bloquea la orden de trabajo", () => {
 
   it("bloquea antes de leer y antes del correlativo", async () => {
     const { calls } = await runCase(
-      createOperatorTaskAction,
+      createTask,
       taskWith({ id_etapa_ruta: STAGE }, activeStage(ROUTE)),
     );
     const correlative = calls.findIndex(
@@ -607,12 +612,12 @@ describe("createOperatorTaskAction bloquea la orden de trabajo", () => {
       error: "La etapa seleccionada no pertenece a la ruta de fabricación de la orden.",
     },
   ])("$name se decide dentro de la transaccion y no escribe", async ({ actionCase, error }) => {
-    const { calls, result } = await runCase(createOperatorTaskAction, actionCase);
+    const { calls, result } = await runCase(createTask, actionCase);
 
     expect(lockIndex(calls)).toBeGreaterThanOrEqual(0);
     expect(prismaCalls(calls)).not.toContain("tarea_operario.create");
     expect(auditCalls(calls)).toEqual([]);
-    expect(result).toBe(`error: ${error}`);
+    expect(result).toEqual({ estado: expect.objectContaining({ status: "error", error }) });
   });
 });
 
@@ -622,7 +627,7 @@ describe("anular una tarea escribe con compare-and-set", () => {
   const cancel = (estado: string | null) => ({ form: { id_tarea_operario: TASK }, data: storedTask(estado) });
 
   it("anula con una sola sentencia y la bitacora en la transaccion", async () => {
-    const { calls, result } = await runCase(cancelOperatorTaskAction, cancel("registrada"));
+    const { calls, result } = await runCase(cancelTask, cancel("registrada"));
     const write = calls.filter(isPrismaCall).find((call) => call.prisma === "tarea_operario.updateMany");
 
     expect(prismaCalls(calls)).not.toContain("tarea_operario.update");
@@ -634,18 +639,20 @@ describe("anular una tarea escribe con compare-and-set", () => {
     expect(auditCalls(calls)).toEqual([
       expect.objectContaining({ args: expect.objectContaining({ accion: "anular", enTransaccion: true }) }),
     ]);
-    expect(result).toBe("redirect:/dashboard/staff/tasks?toast=operator-task-annulled");
+    expect(result).toEqual({
+      estado: expect.objectContaining({ status: "success", data: { estado: "anulada" } }),
+    });
   });
 
   it.each([
     { name: "una tarea ya anulada (doble clic)", estado: "anulada", error: "La tarea ya se encuentra anulada." },
     { name: "una tarea inexistente", estado: null, error: "La tarea seleccionada no existe." },
   ])("$name no escribe bitacora y explica el rechazo", async ({ estado, error }) => {
-    const { calls, result } = await runCase(cancelOperatorTaskAction, cancel(estado));
+    const { calls, result } = await runCase(cancelTask, cancel(estado));
 
     expect(prismaCalls(calls)).toContain("tarea_operario.updateMany");
     expect(auditCalls(calls)).toEqual([]);
-    expect(result).toBe(`error: ${error}`);
+    expect(result).toEqual({ estado: expect.objectContaining({ status: "error", error }) });
   });
 });
 
@@ -727,7 +734,7 @@ describe("createOperatorTaskAction deja el redondeo de las horas a la columna", 
     { horas: "4.5", enviado: "4.5" },
     { horas: "8", enviado: "8" },
   ])("$horas horas se envian como $enviado", async ({ horas, enviado }) => {
-    const { calls } = await runCase(createOperatorTaskAction, taskWith({ horas_dedicadas: horas }));
+    const { calls } = await runCase(createTask, taskWith({ horas_dedicadas: horas }));
     const create = calls.filter(isPrismaCall).find((call) => call.prisma === "tarea_operario.create");
 
     expect((create?.args as { data: { horas_dedicadas: unknown } }).data.horas_dedicadas).toBe(enviado);
@@ -994,5 +1001,138 @@ describe("createAttendanceAction devuelve el resultado", () => {
     const { result } = await runCase(run, attendanceWith({}, data));
 
     expect(result).toEqual(errorWith(DUPLICATE, { fecha: [DUPLICATE] }));
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Tareas con resultado de accion (A9)
+// ---------------------------------------------------------------------------
+
+// Desde A9 el registro de tareas se usa en el panel lateral y anular desde la fila
+// con ConfirmActionButton: las dos acciones devuelven el resultado en lugar de
+// lanzar o redirigir. Cada rechazo del registro queda junto a su campo.
+describe("createOperatorTaskAction devuelve el resultado", () => {
+  const run = createTask;
+  const VALUES = {
+    id_operario: OPERATOR,
+    id_orden_trabajo: WORK_ORDER,
+    id_etapa_ruta: "",
+    fecha_tarea: "2026-07-15",
+    descripcion: "Corte de piezas para lote de lampas",
+    horas_dedicadas: "4.5",
+    estado: "registrada",
+    observaciones: "",
+  };
+  const rejected = (error: string, field: string, values: Record<string, string> = VALUES) => ({
+    estado: { status: "error", error, fieldErrors: { [field]: [error] }, values, operationId: "operacion-de-prueba" },
+  });
+
+  it("guardada devuelve el id y los valores y revalida sin redirigir", async () => {
+    const { calls, result } = await runCase(run, taskWith());
+
+    expect(calls).toContainEqual({ authz: "getAuthorizedSession", roles: ["ADMIN", "WORKSHOP_MASTER"] });
+    expect(calls).toContainEqual({ effect: "revalidatePath", args: "/dashboard/staff/tasks" });
+    expect(result).toEqual({
+      estado: {
+        status: "success",
+        data: { id_tarea_operario: "TAR00000012" },
+        values: VALUES,
+        operationId: "operacion-de-prueba",
+      },
+    });
+  });
+
+  it("sin permiso responde con un error, sin tocar Prisma", async () => {
+    const { calls, result } = await runCase(run, { ...taskWith(), role: "SELLER" });
+
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+    expect(result).toEqual({
+      estado: {
+        status: "error",
+        error: "No tienes permisos para registrar tareas.",
+        values: VALUES,
+        operationId: "operacion-de-prueba",
+      },
+    });
+  });
+
+  it("un dato invalido devuelve el error junto a su campo", async () => {
+    const { result } = await runCase(run, taskWith({ horas_dedicadas: "25" }));
+
+    expect(result).toEqual({
+      estado: {
+        status: "error",
+        error: "Revisa los datos de la tarea.",
+        fieldErrors: { horas_dedicadas: ["Las horas dedicadas no pueden superar 24 horas."] },
+        values: { ...VALUES, horas_dedicadas: "25" },
+        operationId: "operacion-de-prueba",
+      },
+    });
+  });
+
+  it.each<{ motivo: string; caso: ReturnType<typeof taskWith>; error: string; campo: string }>([
+    {
+      motivo: "un operario inactivo",
+      caso: taskWith({}, { "operario.findFirst": null }),
+      error: "El operario seleccionado no existe o está inactivo.",
+      campo: "id_operario",
+    },
+    {
+      motivo: "una orden anulada",
+      caso: taskWith({}, { "orden_trabajo.findFirst": null }),
+      error: "La orden de trabajo seleccionada no existe o está anulada.",
+      campo: "id_orden_trabajo",
+    },
+    {
+      motivo: "una etapa de otra ruta",
+      caso: taskWith({ id_etapa_ruta: STAGE }, activeStage("RUT00000009")),
+      error: "La etapa seleccionada no pertenece a la ruta de fabricación de la orden.",
+      campo: "id_etapa_ruta",
+    },
+  ])("$motivo devuelve el error en su campo", async ({ caso, error, campo }) => {
+    const { result } = await runCase(run, caso);
+
+    expect(result).toEqual(rejected(error, campo, { ...VALUES, id_etapa_ruta: caso.form.id_etapa_ruta ?? "" }));
+  });
+});
+
+describe("cancelOperatorTaskAction devuelve el resultado", () => {
+  const run = cancelTask;
+  const cancel = (estado: string | null, id: string | null = TASK) => ({
+    form: { id_tarea_operario: id },
+    data: storedTask(estado),
+  });
+  const revalidations = (calls: RecordedCall[]) =>
+    calls.filter((call) => "effect" in call && call.effect === "revalidatePath");
+
+  it("anular devuelve el estado anulado y revalida", async () => {
+    const { calls, result } = await runCase(run, cancel("registrada"));
+
+    expect(calls).toContainEqual({ authz: "getAuthorizedSession", roles: ["ADMIN", "WORKSHOP_MASTER"] });
+    expect(revalidations(calls).length).toBeGreaterThan(0);
+    expect(result).toEqual({
+      estado: { status: "success", data: { estado: "anulada" }, values: { id: TASK }, operationId: "operacion-de-prueba" },
+    });
+  });
+
+  it.each([
+    { motivo: "ya anulada", estado: "anulada", error: "La tarea ya se encuentra anulada." },
+    { motivo: "inexistente", estado: null, error: "La tarea seleccionada no existe." },
+  ])("una tarea $motivo responde el motivo sin revalidar", async ({ estado, error }) => {
+    const { calls, result } = await runCase(run, cancel(estado));
+
+    expect(revalidations(calls)).toEqual([]);
+    expect(result).toEqual({
+      estado: { status: "error", error, values: { id: TASK }, operationId: "operacion-de-prueba" },
+    });
+  });
+
+  it("sin permiso responde con un error, sin tocar Prisma", async () => {
+    const { calls, result } = await runCase(run, { ...cancel("registrada"), role: "SELLER" });
+
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+    expect(result).toEqual({
+      estado: expect.objectContaining({ status: "error", error: "No tienes permisos para registrar tareas." }),
+    });
   });
 });

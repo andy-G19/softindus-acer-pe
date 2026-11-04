@@ -342,6 +342,7 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/staff/tasks/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createOperatorTaskAction", "cancelOperatorTaskAction"],
+    rechazanConResultado: ["createOperatorTaskAction", "cancelOperatorTaskAction"],
   },
   {
     ruta: "users/actions",
