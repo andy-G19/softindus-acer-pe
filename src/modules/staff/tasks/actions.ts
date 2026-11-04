@@ -116,10 +116,12 @@ export async function createOperatorTaskAction(formData: FormData) {
         id_usuario_registro: session.user.id,
         fecha_tarea: data.fecha_tarea,
         descripcion: data.descripcion,
+        // Hallazgo 62: la columna numeric(5,2) redondea; toFixed redondeaba sobre
+        // el binario y 3.005 quedaba en 3.00 en lugar de 3.01.
         horas_dedicadas:
           data.horas_dedicadas === null
             ? null
-            : data.horas_dedicadas.toFixed(2),
+            : String(data.horas_dedicadas),
         estado: data.estado,
         observaciones: data.observaciones || null,
       },

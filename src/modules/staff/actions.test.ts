@@ -242,15 +242,15 @@ defineCases("createOperatorAction", withState(createOperatorAction), [
   { name: "una tarifa negativa se rechaza", ...createOperatorWith({ tarifa: "-1" }) },
   { name: "una tarifa que no es numero se rechaza", ...createOperatorWith({ tarifa: "abc" }) },
   {
-    name: "una tarifa de 1e12 pasa el esquema aunque desborda Decimal(12,2) (hallazgo 69)",
+    name: "una tarifa de 1e12 se rechaza: desborda Decimal(12,2)",
     ...createOperatorWith({ tarifa: "1000000000000" }),
   },
   {
-    name: "una tarifa de 0.004 pasa y la columna la deja en 0 (hallazgo 69)",
+    name: "una tarifa de 0.004 pasa: la columna la deja en 0, una tarifa valida",
     ...createOperatorWith({ tarifa: "0.004" }),
   },
   {
-    name: "el 30 de febrero se guarda como 2 de marzo (hallazgo 68)",
+    name: "el 30 de febrero se rechaza",
     ...createOperatorWith({ fecha_ingreso: "2026-02-30" }),
   },
   {
@@ -452,11 +452,11 @@ defineCases("createAttendanceAction", createAttendanceAction, [
     ...attendanceWith({ observaciones: "x".repeat(501) }),
   },
   {
-    name: "el 30 de febrero se guarda como 2 de marzo (hallazgo 68)",
+    name: "el 30 de febrero se rechaza",
     ...attendanceWith({ fecha: "2026-02-30" }),
   },
   {
-    name: "una fecha que no es fecha llega a Prisma como Invalid Date (hallazgo 68)",
+    name: "una fecha que no es fecha se rechaza",
     ...attendanceWith({ fecha: "abc" }),
   },
   {
@@ -515,11 +515,11 @@ defineCases("createOperatorTaskAction", createOperatorTaskAction, [
   },
   { name: "sin horas: horas null", ...taskWith({ horas_dedicadas: "" }) },
   {
-    name: "3.005 horas se guardan como 3.00 por toFixed: la columna daria 3.01 (hallazgo 62)",
+    name: "3.005 horas se envian tal cual: la columna guarda 3.01",
     ...taskWith({ horas_dedicadas: "3.005" }),
   },
   {
-    name: "0.004 horas pasan y se guardan como 0.00 (hallazgo 62)",
+    name: "0.004 horas se envian tal cual: la columna guarda 0.00",
     ...taskWith({ horas_dedicadas: "0.004" }),
   },
   { name: "mas de 24 horas se rechazan", ...taskWith({ horas_dedicadas: "24.5" }) },
@@ -528,11 +528,11 @@ defineCases("createOperatorTaskAction", createOperatorTaskAction, [
   { name: "una descripcion corta se rechaza", ...taskWith({ descripcion: "Cort" }) },
   { name: "un estado fuera de la lista se rechaza", ...taskWith({ estado: "pausada" }) },
   {
-    name: "el alta acepta una tarea ya anulada si se envia a mano (hallazgo 70)",
+    name: "el alta rechaza una tarea anulada enviada a mano",
     ...taskWith({ estado: "anulada" }),
   },
   {
-    name: "el 30 de febrero se guarda como 2 de marzo (hallazgo 68)",
+    name: "el 30 de febrero se rechaza",
     ...taskWith({ fecha_tarea: "2026-02-30" }),
   },
   {
@@ -742,5 +742,25 @@ describe("createAttendanceAction decide el duplicado dentro de la transaccion", 
     );
 
     expect(result).toBe("error: Foreign key constraint failed");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Horas de tarea redondeadas por la columna (A5, hallazgo 62)
+// ---------------------------------------------------------------------------
+
+// horas_dedicadas es numeric(5,2) y redondea a dos decimales alejandose del cero.
+// toFixed(2) redondeaba sobre el binario: 3.005 quedaba en 3.00 y la columna
+// guarda 3.01. La accion envia el valor tal cual y deja el redondeo a la base.
+describe("createOperatorTaskAction deja el redondeo de las horas a la columna", () => {
+  it.each([
+    { horas: "3.005", enviado: "3.005" },
+    { horas: "4.5", enviado: "4.5" },
+    { horas: "8", enviado: "8" },
+  ])("$horas horas se envian como $enviado", async ({ horas, enviado }) => {
+    const { calls } = await runCase(createOperatorTaskAction, taskWith({ horas_dedicadas: horas }));
+    const create = calls.filter(isPrismaCall).find((call) => call.prisma === "tarea_operario.create");
+
+    expect((create?.args as { data: { horas_dedicadas: unknown } }).data.horas_dedicadas).toBe(enviado);
   });
 });
