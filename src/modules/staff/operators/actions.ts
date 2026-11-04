@@ -4,38 +4,77 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import type { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import type { ActionErrorState } from "@/lib/errors";
+import type { FieldErrors } from "@/lib/errors";
+import { APP_ROLES } from "@/lib/permissions";
 import { parseRequestedStatus } from "@/lib/requested-status";
 import { lockOperatorRow } from "@/lib/row-locks";
 import { operatorSchema } from "@/schemas/staff/operator.schema";
 
-export type OperatorFormState = ActionErrorState;
+/**
+ * Lo que el formulario de operario envio, para volver a mostrarlo. No lleva el
+ * estado: el operario nace activo y su estado cambia solo desde la fila (D3).
+ */
+export type OperatorFormValues = {
+  nombres: string;
+  apellidos: string;
+  cargo: string;
+  especialidad: string;
+  telefono: string;
+  direccion: string;
+  modalidad_pago: string;
+  tarifa: string;
+  fecha_ingreso: string;
+  observaciones: string;
+};
+
+// Entrega 10.8a: el alta y la edicion se usan desde el panel lateral y devuelven
+// el resultado; sin permiso responden con un error, no redirigen.
+export type OperatorFormState = FormActionState<OperatorFormValues, { id_operario: string }>;
 
 const OPERATORS_PATH = "/dashboard/staff/operators";
+const PERMISSION_ERROR = "No tienes permisos para gestionar operarios.";
+const INVALID_DATA = "Revisa los datos del operario.";
 
 async function requireAdmin() {
   return requireRole(["ADMIN"]);
 }
 
-function getOperatorFormData(formData: FormData) {
+function getOperatorFormValues(formData: FormData): OperatorFormValues {
+  const text = (name: keyof OperatorFormValues) => formData.get(name)?.toString() ?? "";
+
   return {
-    nombres: formData.get("nombres"),
-    apellidos: formData.get("apellidos"),
-    cargo: formData.get("cargo") ?? "",
-    especialidad: formData.get("especialidad") ?? "",
-    telefono: formData.get("telefono") ?? "",
-    direccion: formData.get("direccion") ?? "",
-    modalidad_pago: formData.get("modalidad_pago"),
-    tarifa: formData.get("tarifa") ?? "",
-    fecha_ingreso: formData.get("fecha_ingreso") ?? "",
-    estado: formData.get("estado") ?? "activo",
-    observaciones: formData.get("observaciones") ?? "",
+    nombres: text("nombres"),
+    apellidos: text("apellidos"),
+    cargo: text("cargo"),
+    especialidad: text("especialidad"),
+    telefono: text("telefono"),
+    direccion: text("direccion"),
+    modalidad_pago: text("modalidad_pago"),
+    tarifa: text("tarifa"),
+    fecha_ingreso: text("fecha_ingreso"),
+    observaciones: text("observaciones"),
   };
 }
+
+function operatorError(
+  values: OperatorFormValues,
+  error: string,
+  fieldErrors?: FieldErrors,
+): OperatorFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function operatorSaved(values: OperatorFormValues, idOperario: string): OperatorFormState {
+  return { status: "success", data: { id_operario: idOperario }, values, operationId: newOperationId() };
+}
+
+/** Un problema que el formulario muestra: mensaje general y, si aplica, el del campo. */
+type OperatorProblem = { error: string; fieldErrors?: FieldErrors };
 
 // Recibe el cliente con el que se decide: el de la transaccion en la edicion.
 async function hasDuplicateOperator(
@@ -77,14 +116,17 @@ export async function createOperatorAction(
   _prevState: OperatorFormState,
   formData: FormData,
 ): Promise<OperatorFormState> {
-  const session = await requireAdmin();
-  const parsed = operatorSchema.safeParse(getOperatorFormData(formData));
+  const values = getOperatorFormValues(formData);
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return operatorError(values, PERMISSION_ERROR);
+  }
+
+  const parsed = operatorSchema.safeParse(values);
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del operario.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return operatorError(values, INVALID_DATA, parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -96,16 +138,15 @@ export async function createOperatorAction(
   );
 
   if (duplicated) {
-    return {
-      error: "Ya existe un operario registrado con esos datos.",
-      fieldErrors: {
-        nombres: ["Ya existe un operario registrado con esos datos."],
-      },
-    };
+    return operatorError(values, "Ya existe un operario registrado con esos datos.", {
+      nombres: ["Ya existe un operario registrado con esos datos."],
+    });
   }
 
+  let idOperario = "";
+
   await prisma.$transaction(async (tx) => {
-    const idOperario = await getNextCorrelativeId(tx, {
+    idOperario = await getNextCorrelativeId(tx, {
       codigoEntidad: "operario",
       prefijo: "OPE",
     });
@@ -122,7 +163,8 @@ export async function createOperatorAction(
         modalidad_pago: data.modalidad_pago,
         tarifa: data.tarifa,
         fecha_ingreso: data.fecha_ingreso,
-        estado: data.estado,
+        // D3: nace activo; el estado cambia solo desde la fila.
+        estado: "activo",
         observaciones: data.observaciones || null,
       },
     });
@@ -140,27 +182,30 @@ export async function createOperatorAction(
   revalidatePath("/dashboard/staff");
   revalidatePath(OPERATORS_PATH);
 
-  redirect(`${OPERATORS_PATH}?toast=operator-created`);
+  return operatorSaved(values, idOperario);
 }
 
 export async function updateOperatorAction(
   _prevState: OperatorFormState,
   formData: FormData,
 ): Promise<OperatorFormState> {
-  const session = await requireAdmin();
+  const values = getOperatorFormValues(formData);
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return operatorError(values, PERMISSION_ERROR);
+  }
+
   const operatorId = formData.get("id_operario")?.toString().trim();
 
   if (!operatorId) {
-    return { error: "El operario no existe." };
+    return operatorError(values, "El operario no existe.");
   }
 
-  const parsed = operatorSchema.safeParse(getOperatorFormData(formData));
+  const parsed = operatorSchema.safeParse(values);
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del operario.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return operatorError(values, INVALID_DATA, parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -169,7 +214,7 @@ export async function updateOperatorAction(
   // con esos datos) y escribe. Bloquea la fila antes de leerla y decide, escribe y
   // deja la bitacora en la misma transaccion; un rechazo se devuelve desde ella,
   // antes de escribir nada.
-  const problem = await prisma.$transaction(async (tx): Promise<OperatorFormState | null> => {
+  const problem = await prisma.$transaction(async (tx): Promise<OperatorProblem | null> => {
     await lockOperatorRow(tx, operatorId);
 
     const currentOperator = await tx.operario.findUnique({
@@ -202,6 +247,7 @@ export async function updateOperatorAction(
       };
     }
 
+    // D3: la edicion no cambia el estado; cambia solo desde la fila.
     await tx.operario.update({
       where: {
         id_operario: operatorId,
@@ -216,7 +262,6 @@ export async function updateOperatorAction(
         modalidad_pago: data.modalidad_pago,
         tarifa: data.tarifa,
         fecha_ingreso: data.fecha_ingreso,
-        estado: data.estado,
         observaciones: data.observaciones || null,
       },
     });
@@ -234,13 +279,13 @@ export async function updateOperatorAction(
   });
 
   if (problem) {
-    return problem;
+    return operatorError(values, problem.error, problem.fieldErrors);
   }
 
   revalidatePath("/dashboard/staff");
   revalidatePath(OPERATORS_PATH);
 
-  redirect(`${OPERATORS_PATH}?toast=operator-updated`);
+  return operatorSaved(values, operatorId);
 }
 
 export async function toggleOperatorStatusAction(formData: FormData) {

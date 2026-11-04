@@ -29,7 +29,12 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { toggleOperatorStatusAction } from "@/modules/staff/operators/actions";
 import { getOperatorListData } from "@/modules/staff/operators/queries";
@@ -65,6 +70,8 @@ export default async function OperatorsPage({
 
   const canManageOperators = session.user.role === APP_ROLES.ADMIN;
   const params = (await searchParams) ?? {};
+  // El panel de alta o edicion vuelve a la lista con sus filtros.
+  const returnTo = createReturnToHref(navigationHrefs.operators, params);
   const q = getSearchParam(params, "q");
   const cargo = getSearchParam(params, "cargo");
   const especialidad = getSearchParam(params, "especialidad");
@@ -92,7 +99,7 @@ export default async function OperatorsPage({
         actions={
           canManageOperators ? (
             <Button asChild>
-              <Link href={`${navigationHrefs.operators}/new`}>
+              <Link href={withReturnTo(`${navigationHrefs.operators}/new`, returnTo)}>
                 Registrar operario
               </Link>
             </Button>
@@ -254,7 +261,7 @@ export default async function OperatorsPage({
                       <TableCell>
                         <div className="flex justify-end gap-2">
                           <RowEditLink
-                            href={`/dashboard/staff/operators/${operator.id_operario}/edit`}
+                            href={withReturnTo(`${navigationHrefs.operators}/${operator.id_operario}/edit`, returnTo)}
                           />
                           <RowToggleStatusButton
                             action={toggleOperatorStatusAction}

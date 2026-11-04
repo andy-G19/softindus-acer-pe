@@ -42,6 +42,11 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -146,11 +151,11 @@ function defineCases(name: string, run: (formData: FormData) => Promise<unknown>
 }
 
 // El alta y la edicion de operarios usan useActionState: parten del estado
-// inicial de su formulario.
+// inicial de su formulario. Desde A6 devuelven el resultado (FormActionState).
 const withState =
   (action: (prev: OperatorFormState, formData: FormData) => Promise<OperatorFormState>) =>
   (formData: FormData) =>
-    action({ error: "" }, formData);
+    action({ status: "idle" }, formData);
 
 const failWith = (error: Error) => () => {
   throw error;
@@ -254,10 +259,10 @@ defineCases("createOperatorAction", withState(createOperatorAction), [
     ...createOperatorWith({ fecha_ingreso: "2026-02-30" }),
   },
   {
-    name: "el alta acepta el estado inactivo desde el formulario (hallazgo 59)",
+    name: "el alta ignora el estado del formulario: nace activo",
     ...createOperatorWith({ estado: "inactivo" }),
   },
-  { name: "un estado fuera de la lista se rechaza", ...createOperatorWith({ estado: "retirado" }) },
+  { name: "un estado desconocido en el formulario se ignora", ...createOperatorWith({ estado: "retirado" }) },
   { name: "un POST sin campos se rechaza sin tocar Prisma", form: {} },
 ]);
 
@@ -282,7 +287,7 @@ defineCases("updateOperatorAction", withState(updateOperatorAction), [
     ...updateOperatorWith({}, { "operario.findFirst": { id_operario: OPERATOR } }),
   },
   {
-    name: "la edicion cambia el estado desde el formulario (hallazgo 59)",
+    name: "la edicion ignora el estado del formulario",
     ...updateOperatorWith({ estado: "inactivo" }),
   },
 ]);
@@ -337,7 +342,9 @@ describe("updateOperatorAction bloquea la fila del operario", () => {
 
     expect(calls.some((call) => isRowLock(call, "operario", OPERATOR))).toBe(true);
     expect(prismaCalls(calls)).not.toContain("operario.update");
-    expect(result).toEqual({ estado: { error: "El operario no existe." } });
+    expect(result).toEqual({
+      estado: expect.objectContaining({ status: "error", error: "El operario no existe." }),
+    });
   });
 
   it("un duplicado de otro operario se decide dentro de la transaccion y no escribe", async () => {
@@ -762,5 +769,106 @@ describe("createOperatorTaskAction deja el redondeo de las horas a la columna", 
     const create = calls.filter(isPrismaCall).find((call) => call.prisma === "tarea_operario.create");
 
     expect((create?.args as { data: { horas_dedicadas: unknown } }).data.horas_dedicadas).toBe(enviado);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Alta y edicion de operarios con resultado de accion (A6)
+// ---------------------------------------------------------------------------
+
+// Desde A6 el alta y la edicion se usan en el panel lateral: devuelven el
+// resultado en lugar de redirigir, y sin permiso responden con un error sin tocar
+// Prisma (se corrige la desviacion de 2 funciones). El estado ya no viaja en el
+// formulario: nace activo y cambia solo desde la fila (D3).
+describe("el alta y la edicion de operarios devuelven el resultado", () => {
+  const idle = { status: "idle" } as const;
+  const create = (formData: FormData) =>
+    (createOperatorAction as unknown as (prev: unknown, formData: FormData) => Promise<unknown>)(idle, formData);
+  const update = (formData: FormData) =>
+    (updateOperatorAction as unknown as (prev: unknown, formData: FormData) => Promise<unknown>)(idle, formData);
+  const VALUES = {
+    nombres: "Luis",
+    apellidos: "Huaman",
+    cargo: "Soldador",
+    especialidad: "Soldadura MIG",
+    telefono: "987654321",
+    direccion: "Av. Industrial 123",
+    modalidad_pago: "semanal",
+    tarifa: "80.50",
+    fecha_ingreso: "2026-03-02",
+    observaciones: "",
+  };
+
+  it("sin permiso responde con un error, sin redirigir ni tocar Prisma", async () => {
+    const { calls, result } = await runCase(create, { ...createOperatorWith(), role: "WORKSHOP_MASTER" });
+
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+    expect(calls).toContainEqual({ authz: "getAuthorizedSession", roles: ["ADMIN"] });
+    expect(result).toEqual({
+      estado: {
+        status: "error",
+        error: "No tienes permisos para gestionar operarios.",
+        values: VALUES,
+        operationId: expect.any(String),
+      },
+    });
+  });
+
+  it("el alta guardada devuelve el id y los valores, nace activo y revalida sin redirigir", async () => {
+    const { calls, result } = await runCase(create, createOperatorWith({ estado: "inactivo" }));
+    const write = calls.filter(isPrismaCall).find((call) => call.prisma === "operario.create");
+
+    expect((write?.args as { data: { estado: string } }).data.estado).toBe("activo");
+    expect(calls).toContainEqual({ effect: "revalidatePath", args: "/dashboard/staff/operators" });
+    expect(result).toEqual({
+      estado: {
+        status: "success",
+        data: { id_operario: "OPE00000012" },
+        values: VALUES,
+        operationId: expect.any(String),
+      },
+    });
+  });
+
+  it("un dato invalido devuelve el error del campo con lo enviado", async () => {
+    const { result } = await runCase(create, createOperatorWith({ nombres: "L" }));
+
+    expect(result).toEqual({
+      estado: {
+        status: "error",
+        error: "Revisa los datos del operario.",
+        fieldErrors: { nombres: ["Los nombres deben tener al menos 2 caracteres."] },
+        values: { ...VALUES, nombres: "L" },
+        operationId: expect.any(String),
+      },
+    });
+  });
+
+  it("la edicion guardada ignora el estado: solo cambia desde la fila", async () => {
+    const { calls, result } = await runCase(update, updateOperatorWith({ estado: "inactivo" }));
+    const write = calls.filter(isPrismaCall).find((call) => call.prisma === "operario.update");
+
+    expect((write?.args as { data: Record<string, unknown> }).data).not.toHaveProperty("estado");
+    expect(result).toEqual({
+      estado: {
+        status: "success",
+        data: { id_operario: OPERATOR },
+        values: VALUES,
+        operationId: expect.any(String),
+      },
+    });
+  });
+
+  it("la edicion de un operario inexistente devuelve el error con lo enviado", async () => {
+    const { result } = await runCase(update, updateOperatorWith({}, { "operario.findUnique": null }));
+
+    expect(result).toEqual({
+      estado: {
+        status: "error",
+        error: "El operario no existe.",
+        values: VALUES,
+        operationId: expect.any(String),
+      },
+    });
   });
 });

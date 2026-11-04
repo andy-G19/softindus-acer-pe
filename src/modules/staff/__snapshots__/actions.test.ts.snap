@@ -1090,7 +1090,7 @@ exports[`createAttendanceAction > unas observaciones de mas de 500 caracteres se
 exports[`createOperatorAction > ADMIN registra el operario con correlativo y bitacora en la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1170,12 +1170,34 @@ exports[`createOperatorAction > ADMIN registra el operario con correlativo y bit
 ]
 `;
 
-exports[`createOperatorAction > ADMIN registra el operario con correlativo y bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/staff/operators?toast=operator-created"`;
+exports[`createOperatorAction > ADMIN registra el operario con correlativo y bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
 
 exports[`createOperatorAction > SELLER no puede registrar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1183,12 +1205,33 @@ exports[`createOperatorAction > SELLER no puede registrar > llamadas 1`] = `
 ]
 `;
 
-exports[`createOperatorAction > SELLER no puede registrar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createOperatorAction > SELLER no puede registrar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar operarios.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
 
 exports[`createOperatorAction > WORKSHOP_MASTER no puede registrar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1196,12 +1239,33 @@ exports[`createOperatorAction > WORKSHOP_MASTER no puede registrar > llamadas 1`
 ]
 `;
 
-exports[`createOperatorAction > WORKSHOP_MASTER no puede registrar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createOperatorAction > WORKSHOP_MASTER no puede registrar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar operarios.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
 
 exports[`createOperatorAction > el 30 de febrero se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1218,14 +1282,28 @@ exports[`createOperatorAction > el 30 de febrero se rechaza > resultado 1`] = `
         "La fecha de ingreso no es válida.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-02-30",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
   },
 }
 `;
 
-exports[`createOperatorAction > el alta acepta el estado inactivo desde el formulario (hallazgo 59) > llamadas 1`] = `
+exports[`createOperatorAction > el alta ignora el estado del formulario: nace activo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1267,7 +1345,7 @@ exports[`createOperatorAction > el alta acepta el estado inactivo desde el formu
         "cargo": "Soldador",
         "direccion": "Av. Industrial 123",
         "especialidad": "Soldadura MIG",
-        "estado": "inactivo",
+        "estado": "activo",
         "fecha_ingreso": 2026-03-02T00:00:00.000Z,
         "id_operario": "OPE00000012",
         "modalidad_pago": "semanal",
@@ -1305,12 +1383,34 @@ exports[`createOperatorAction > el alta acepta el estado inactivo desde el formu
 ]
 `;
 
-exports[`createOperatorAction > el alta acepta el estado inactivo desde el formulario (hallazgo 59) > resultado 1`] = `"redirect:/dashboard/staff/operators?toast=operator-created"`;
+exports[`createOperatorAction > el alta ignora el estado del formulario: nace activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
 
 exports[`createOperatorAction > los campos opcionales vacios se guardan como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1389,12 +1489,34 @@ exports[`createOperatorAction > los campos opcionales vacios se guardan como nul
 ]
 `;
 
-exports[`createOperatorAction > los campos opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/staff/operators?toast=operator-created"`;
+exports[`createOperatorAction > los campos opcionales vacios se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "",
+      "direccion": "",
+      "especialidad": "",
+      "fecha_ingreso": "",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "",
+      "telefono": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorAction > nombres de una letra se rechazan > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1411,6 +1533,20 @@ exports[`createOperatorAction > nombres de una letra se rechazan > resultado 1`]
         "Los nombres deben tener al menos 2 caracteres.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "L",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
   },
 }
 `;
@@ -1418,7 +1554,7 @@ exports[`createOperatorAction > nombres de una letra se rechazan > resultado 1`]
 exports[`createOperatorAction > sin telefono, el duplicado se busca solo por nombres y apellidos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1497,12 +1633,34 @@ exports[`createOperatorAction > sin telefono, el duplicado se busca solo por nom
 ]
 `;
 
-exports[`createOperatorAction > sin telefono, el duplicado se busca solo por nombres y apellidos > resultado 1`] = `"redirect:/dashboard/staff/operators?toast=operator-created"`;
+exports[`createOperatorAction > sin telefono, el duplicado se busca solo por nombres y apellidos > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "",
+    },
+  },
+}
+`;
 
 exports[`createOperatorAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1516,38 +1674,135 @@ exports[`createOperatorAction > un POST sin campos se rechaza sin tocar Prisma >
     "error": "Revisa los datos del operario.",
     "fieldErrors": {
       "apellidos": [
-        "Los apellidos son obligatorios.",
+        "Los apellidos deben tener al menos 2 caracteres.",
       ],
       "modalidad_pago": [
         "Seleccione una modalidad de pago válida.",
       ],
       "nombres": [
-        "Los nombres son obligatorios.",
+        "Los nombres deben tener al menos 2 caracteres.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "",
+      "cargo": "",
+      "direccion": "",
+      "especialidad": "",
+      "fecha_ingreso": "",
+      "modalidad_pago": "",
+      "nombres": "",
+      "observaciones": "",
+      "tarifa": "",
+      "telefono": "",
     },
   },
 }
 `;
 
-exports[`createOperatorAction > un estado fuera de la lista se rechaza > llamadas 1`] = `
+exports[`createOperatorAction > un estado desconocido en el formulario se ignora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
   },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "apellidos": {
+          "equals": "Huaman",
+          "mode": "insensitive",
+        },
+        "nombres": {
+          "equals": "Luis",
+          "mode": "insensitive",
+        },
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "operario",
+      "prefijo": "OPE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Huaman",
+        "cargo": "Soldador",
+        "direccion": "Av. Industrial 123",
+        "especialidad": "Soldadura MIG",
+        "estado": "activo",
+        "fecha_ingreso": 2026-03-02T00:00:00.000Z,
+        "id_operario": "OPE00000012",
+        "modalidad_pago": "semanal",
+        "nombres": "Luis",
+        "observaciones": null,
+        "tarifa": 80.5,
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Operario creado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
 ]
 `;
 
-exports[`createOperatorAction > un estado fuera de la lista se rechaza > resultado 1`] = `
+exports[`createOperatorAction > un estado desconocido en el formulario se ignora > resultado 1`] = `
 {
   "estado": {
-    "error": "Revisa los datos del operario.",
-    "fieldErrors": {
-      "estado": [
-        "Seleccione un estado válido.",
-      ],
+    "data": {
+      "id_operario": "OPE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
     },
   },
 }
@@ -1556,7 +1811,7 @@ exports[`createOperatorAction > un estado fuera de la lista se rechaza > resulta
 exports[`createOperatorAction > un operario con los mismos datos se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1592,6 +1847,20 @@ exports[`createOperatorAction > un operario con los mismos datos se rechaza > re
         "Ya existe un operario registrado con esos datos.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
   },
 }
 `;
@@ -1599,7 +1868,7 @@ exports[`createOperatorAction > un operario con los mismos datos se rechaza > re
 exports[`createOperatorAction > una modalidad fuera de la lista se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1616,6 +1885,20 @@ exports[`createOperatorAction > una modalidad fuera de la lista se rechaza > res
         "Seleccione una modalidad de pago válida.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "diaria",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
   },
 }
 `;
@@ -1623,7 +1906,7 @@ exports[`createOperatorAction > una modalidad fuera de la lista se rechaza > res
 exports[`createOperatorAction > una tarifa de 0.004 pasa: la columna la deja en 0, una tarifa valida > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1703,12 +1986,34 @@ exports[`createOperatorAction > una tarifa de 0.004 pasa: la columna la deja en 
 ]
 `;
 
-exports[`createOperatorAction > una tarifa de 0.004 pasa: la columna la deja en 0, una tarifa valida > resultado 1`] = `"redirect:/dashboard/staff/operators?toast=operator-created"`;
+exports[`createOperatorAction > una tarifa de 0.004 pasa: la columna la deja en 0, una tarifa valida > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "0.004",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
 
 exports[`createOperatorAction > una tarifa de 1e12 se rechaza: desborda Decimal(12,2) > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1725,6 +2030,20 @@ exports[`createOperatorAction > una tarifa de 1e12 se rechaza: desborda Decimal(
         "La tarifa no debe superar S/ 9,999,999,999.99.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "1000000000000",
+      "telefono": "987654321",
+    },
   },
 }
 `;
@@ -1732,7 +2051,7 @@ exports[`createOperatorAction > una tarifa de 1e12 se rechaza: desborda Decimal(
 exports[`createOperatorAction > una tarifa negativa se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1749,6 +2068,20 @@ exports[`createOperatorAction > una tarifa negativa se rechaza > resultado 1`] =
         "La tarifa no puede ser negativa.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "-1",
+      "telefono": "987654321",
+    },
   },
 }
 `;
@@ -1756,7 +2089,7 @@ exports[`createOperatorAction > una tarifa negativa se rechaza > resultado 1`] =
 exports[`createOperatorAction > una tarifa que no es numero se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1772,6 +2105,20 @@ exports[`createOperatorAction > una tarifa que no es numero se rechaza > resulta
       "tarifa": [
         "La tarifa debe ser un número válido.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "abc",
+      "telefono": "987654321",
     },
   },
 }
@@ -3130,7 +3477,7 @@ exports[`toggleOperatorStatusAction > un operario inexistente vuelve a la lista 
 exports[`updateOperatorAction > ADMIN actualiza bloqueando la fila, con escritura y bitacora en la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -3185,7 +3532,6 @@ exports[`updateOperatorAction > ADMIN actualiza bloqueando la fila, con escritur
         "cargo": "Soldador",
         "direccion": "Av. Industrial 123",
         "especialidad": "Soldadura MIG",
-        "estado": "activo",
         "fecha_ingreso": 2026-03-02T00:00:00.000Z,
         "modalidad_pago": "semanal",
         "nombres": "Luis",
@@ -3225,12 +3571,34 @@ exports[`updateOperatorAction > ADMIN actualiza bloqueando la fila, con escritur
 ]
 `;
 
-exports[`updateOperatorAction > ADMIN actualiza bloqueando la fila, con escritura y bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/staff/operators?toast=operator-updated"`;
+exports[`updateOperatorAction > ADMIN actualiza bloqueando la fila, con escritura y bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
 
 exports[`updateOperatorAction > WORKSHOP_MASTER no puede actualizar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -3238,12 +3606,33 @@ exports[`updateOperatorAction > WORKSHOP_MASTER no puede actualizar > llamadas 1
 ]
 `;
 
-exports[`updateOperatorAction > WORKSHOP_MASTER no puede actualizar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateOperatorAction > WORKSHOP_MASTER no puede actualizar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar operarios.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
 
 exports[`updateOperatorAction > datos invalidos se rechazan sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -3260,6 +3649,20 @@ exports[`updateOperatorAction > datos invalidos se rechazan sin tocar Prisma > r
         "Los apellidos deben tener al menos 2 caracteres.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "H",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
   },
 }
 `;
@@ -3267,7 +3670,7 @@ exports[`updateOperatorAction > datos invalidos se rechazan sin tocar Prisma > r
 exports[`updateOperatorAction > el operario no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -3307,6 +3710,21 @@ exports[`updateOperatorAction > el operario no existe > resultado 1`] = `
 {
   "estado": {
     "error": "El operario no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
   },
 }
 `;
@@ -3314,7 +3732,7 @@ exports[`updateOperatorAction > el operario no existe > resultado 1`] = `
 exports[`updateOperatorAction > encontrarse a si mismo como duplicado no es duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -3369,7 +3787,6 @@ exports[`updateOperatorAction > encontrarse a si mismo como duplicado no es dupl
         "cargo": "Soldador",
         "direccion": "Av. Industrial 123",
         "especialidad": "Soldadura MIG",
-        "estado": "activo",
         "fecha_ingreso": 2026-03-02T00:00:00.000Z,
         "modalidad_pago": "semanal",
         "nombres": "Luis",
@@ -3409,12 +3826,34 @@ exports[`updateOperatorAction > encontrarse a si mismo como duplicado no es dupl
 ]
 `;
 
-exports[`updateOperatorAction > encontrarse a si mismo como duplicado no es duplicado > resultado 1`] = `"redirect:/dashboard/staff/operators?toast=operator-updated"`;
+exports[`updateOperatorAction > encontrarse a si mismo como duplicado no es duplicado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
 
-exports[`updateOperatorAction > la edicion cambia el estado desde el formulario (hallazgo 59) > llamadas 1`] = `
+exports[`updateOperatorAction > la edicion ignora el estado del formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -3469,7 +3908,6 @@ exports[`updateOperatorAction > la edicion cambia el estado desde el formulario 
         "cargo": "Soldador",
         "direccion": "Av. Industrial 123",
         "especialidad": "Soldadura MIG",
-        "estado": "inactivo",
         "fecha_ingreso": 2026-03-02T00:00:00.000Z,
         "modalidad_pago": "semanal",
         "nombres": "Luis",
@@ -3509,12 +3947,34 @@ exports[`updateOperatorAction > la edicion cambia el estado desde el formulario 
 ]
 `;
 
-exports[`updateOperatorAction > la edicion cambia el estado desde el formulario (hallazgo 59) > resultado 1`] = `"redirect:/dashboard/staff/operators?toast=operator-updated"`;
+exports[`updateOperatorAction > la edicion ignora el estado del formulario > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
 
 exports[`updateOperatorAction > otro operario con los mismos datos se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -3578,6 +4038,20 @@ exports[`updateOperatorAction > otro operario con los mismos datos se rechaza > 
         "Ya existe otro operario registrado con esos datos.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
   },
 }
 `;
@@ -3585,7 +4059,7 @@ exports[`updateOperatorAction > otro operario con los mismos datos se rechaza > 
 exports[`updateOperatorAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -3597,6 +4071,21 @@ exports[`updateOperatorAction > sin id se rechaza sin tocar Prisma > resultado 1
 {
   "estado": {
     "error": "El operario no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
   },
 }
 `;

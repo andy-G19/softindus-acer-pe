@@ -435,7 +435,7 @@ exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/staff/operators/new">Registrar operario</a>
+<a data-variant="default" href="/dashboard/staff/operators/new?returnTo=%2Fdashboard%2Fstaff%2Foperators">Registrar operario</a>
 </div>
 </div>
 </section>
@@ -569,7 +569,7 @@ exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/staff/operators/id_operario-1/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/staff/operators/id_operario-1/edit?returnTo=%2Fdashboard%2Fstaff%2Foperators">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_operario" value="id_operario-1"/>
 <input type="hidden" name="estado" value="true"/>
@@ -594,7 +594,7 @@ exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/staff/operators/id_operario-2/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/staff/operators/id_operario-2/edit?returnTo=%2Fdashboard%2Fstaff%2Foperators">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_operario" value="id_operario-2"/>
 <input type="hidden" name="estado" value="true"/>
@@ -609,6 +609,208 @@ exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
 </div>
 </div>
 </main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/operators/@panel/(.)[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE99999999",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/staff/operators/@panel/(.)[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/staff/operators/@panel/(.)[id]/edit > panel de edicion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE00000001",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/staff/operators/@panel/(.)[id]/edit > panel de edicion > resultado 1`] = `
+{
+  "html": "<section>
+<h2>Editar operario</h2>
+<p>nombres-1 apellidos-1 · id_operario-1</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_operario" value="id_operario-1"/>
+<div>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value="nombres-1"/>
+</div>
+<div>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value="apellidos-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="cargo">Cargo</label>
+<input id="cargo" maxLength="50" name="cargo" value="cargo-1"/>
+</div>
+<div>
+<label for="especialidad">Especialidad</label>
+<input id="especialidad" maxLength="80" name="especialidad" value="especialidad-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Telefono</label>
+<input id="telefono" maxLength="20" name="telefono" value="telefono-1"/>
+</div>
+<div>
+<label for="fecha_ingreso">Fecha de ingreso</label>
+<input type="date" id="fecha_ingreso" name="fecha_ingreso" value="2026-07-01"/>
+</div>
+</div>
+<div>
+<label for="direccion">Direccion</label>
+<input id="direccion" maxLength="150" name="direccion" value="direccion-1"/>
+</div>
+<div>
+<div>
+<label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
+</label>
+<select id="modalidad_pago" required="" name="modalidad_pago">
+<option value="semanal">Semanal</option>
+<option value="quincenal">Quincenal</option>
+<option value="mensual">Mensual</option>
+</select>
+</div>
+<div>
+<label for="tarifa">Tarifa</label>
+<input type="number" id="tarifa" min="0" step="0.01" name="tarifa" value="11.5"/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" maxLength="500">observaciones-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/staff/operators">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/operators/@panel/(.)new > panel de alta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/staff/operators/@panel/(.)new > panel de alta > resultado 1`] = `
+{
+  "html": "<section>
+<h2>Registrar operario</h2>
+<p>Registra los datos laborales básicos del trabajador, su modalidad de pago y su tarifa. Nace activo.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value=""/>
+</div>
+<div>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="cargo">Cargo</label>
+<input id="cargo" maxLength="50" name="cargo" value=""/>
+</div>
+<div>
+<label for="especialidad">Especialidad</label>
+<input id="especialidad" maxLength="80" name="especialidad" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Telefono</label>
+<input id="telefono" maxLength="20" name="telefono" value=""/>
+</div>
+<div>
+<label for="fecha_ingreso">Fecha de ingreso</label>
+<input type="date" id="fecha_ingreso" name="fecha_ingreso" value="2026-07-15"/>
+</div>
+</div>
+<div>
+<label for="direccion">Direccion</label>
+<input id="direccion" maxLength="150" name="direccion" value=""/>
+</div>
+<div>
+<div>
+<label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
+</label>
+<select id="modalidad_pago" required="" name="modalidad_pago">
+<option value="semanal" selected="">Semanal</option>
+<option value="quincenal">Quincenal</option>
+<option value="mensual">Mensual</option>
+</select>
+</div>
+<div>
+<label for="tarifa">Tarifa</label>
+<input type="number" id="tarifa" min="0" step="0.01" name="tarifa" value=""/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" maxLength="500">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar operario</button>
+<a data-variant="outline" href="/dashboard/staff/operators">Cancelar</a>
+</div>
+</form>
+</section>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -635,7 +837,7 @@ exports[`/dashboard/staff/operators/[id]/edit > editar > llamadas 1`] = `
 
 exports[`/dashboard/staff/operators/[id]/edit > editar > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -662,7 +864,7 @@ exports[`/dashboard/staff/operators/[id]/edit > editar > resultado 1`] = `
 </div>
 <div>
 <h1>Editar operario</h1>
-<p>Actualiza los datos laborales básicos del operario sin tocar asistencia ni planillas.</p>
+<p>Actualiza los datos laborales básicos del operario sin tocar asistencia ni planillas. El estado se cambia desde la lista.</p>
 </div>
 </div>
 <div>
@@ -672,37 +874,34 @@ exports[`/dashboard/staff/operators/[id]/edit > editar > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Datos laborales</div>
-</div>
-<div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_operario" value="id_operario-1"/>
 <div>
 <div>
-<label for="nombres">Nombres</label>
-<input id="nombres" required="" name="nombres" value="nombres-1"/>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value="nombres-1"/>
 </div>
 <div>
-<label for="apellidos">Apellidos</label>
-<input id="apellidos" required="" name="apellidos" value="apellidos-1"/>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value="apellidos-1"/>
 </div>
 </div>
 <div>
 <div>
 <label for="cargo">Cargo</label>
-<input id="cargo" name="cargo" value="cargo-1"/>
+<input id="cargo" maxLength="50" name="cargo" value="cargo-1"/>
 </div>
 <div>
 <label for="especialidad">Especialidad</label>
-<input id="especialidad" name="especialidad" value="especialidad-1"/>
+<input id="especialidad" maxLength="80" name="especialidad" value="especialidad-1"/>
 </div>
 </div>
 <div>
 <div>
 <label for="telefono">Telefono</label>
-<input id="telefono" name="telefono" value="telefono-1"/>
+<input id="telefono" maxLength="20" name="telefono" value="telefono-1"/>
 </div>
 <div>
 <label for="fecha_ingreso">Fecha de ingreso</label>
@@ -711,12 +910,13 @@ exports[`/dashboard/staff/operators/[id]/edit > editar > resultado 1`] = `
 </div>
 <div>
 <label for="direccion">Direccion</label>
-<input id="direccion" name="direccion" value="direccion-1"/>
+<input id="direccion" maxLength="150" name="direccion" value="direccion-1"/>
 </div>
 <div>
 <div>
-<label for="modalidad_pago">Modalidad de pago</label>
-<select id="modalidad_pago" name="modalidad_pago" required="">
+<label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
+</label>
+<select id="modalidad_pago" required="" name="modalidad_pago">
 <option value="semanal">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
@@ -726,17 +926,10 @@ exports[`/dashboard/staff/operators/[id]/edit > editar > resultado 1`] = `
 <label for="tarifa">Tarifa</label>
 <input type="number" id="tarifa" min="0" step="0.01" name="tarifa" value="11.5"/>
 </div>
-<div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado" required="">
-<option value="activo">Activo</option>
-<option value="inactivo">Inactivo</option>
-</select>
-</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
-<textarea id="observaciones" name="observaciones" rows="4">observaciones-1</textarea>
+<textarea id="observaciones" name="observaciones" rows="4" maxLength="500">observaciones-1</textarea>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
@@ -744,8 +937,6 @@ exports[`/dashboard/staff/operators/[id]/edit > editar > resultado 1`] = `
 </div>
 </form>
 </div>
-</div>
-</main>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -774,5 +965,485 @@ exports[`/dashboard/staff/operators/[id]/edit > inexistente > resultado 1`] = `
 {
   "html": null,
   "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/staff/operators/[id]/edit > vuelve al returnTo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE00000001",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/staff/operators/[id]/edit > vuelve al returnTo > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff/operators?status=activo">Operarios</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar operario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar operario</h1>
+<p>Actualiza los datos laborales básicos del operario sin tocar asistencia ni planillas. El estado se cambia desde la lista.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_operario" value="id_operario-1"/>
+<div>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value="nombres-1"/>
+</div>
+<div>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value="apellidos-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="cargo">Cargo</label>
+<input id="cargo" maxLength="50" name="cargo" value="cargo-1"/>
+</div>
+<div>
+<label for="especialidad">Especialidad</label>
+<input id="especialidad" maxLength="80" name="especialidad" value="especialidad-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Telefono</label>
+<input id="telefono" maxLength="20" name="telefono" value="telefono-1"/>
+</div>
+<div>
+<label for="fecha_ingreso">Fecha de ingreso</label>
+<input type="date" id="fecha_ingreso" name="fecha_ingreso" value="2026-07-01"/>
+</div>
+</div>
+<div>
+<label for="direccion">Direccion</label>
+<input id="direccion" maxLength="150" name="direccion" value="direccion-1"/>
+</div>
+<div>
+<div>
+<label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
+</label>
+<select id="modalidad_pago" required="" name="modalidad_pago">
+<option value="semanal">Semanal</option>
+<option value="quincenal">Quincenal</option>
+<option value="mensual">Mensual</option>
+</select>
+</div>
+<div>
+<label for="tarifa">Tarifa</label>
+<input type="number" id="tarifa" min="0" step="0.01" name="tarifa" value="11.5"/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" maxLength="500">observaciones-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/staff/operators?status=activo">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/operators/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/staff/operators/new > formulario > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff/operators">Operarios</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo operario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar operario</h1>
+<p>Registra los datos laborales básicos del trabajador, su modalidad de pago y su tarifa. Nace activo.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a operarios">
+<svg/>Volver a operarios</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value=""/>
+</div>
+<div>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="cargo">Cargo</label>
+<input id="cargo" maxLength="50" name="cargo" value=""/>
+</div>
+<div>
+<label for="especialidad">Especialidad</label>
+<input id="especialidad" maxLength="80" name="especialidad" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Telefono</label>
+<input id="telefono" maxLength="20" name="telefono" value=""/>
+</div>
+<div>
+<label for="fecha_ingreso">Fecha de ingreso</label>
+<input type="date" id="fecha_ingreso" name="fecha_ingreso" value="2026-07-15"/>
+</div>
+</div>
+<div>
+<label for="direccion">Direccion</label>
+<input id="direccion" maxLength="150" name="direccion" value=""/>
+</div>
+<div>
+<div>
+<label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
+</label>
+<select id="modalidad_pago" required="" name="modalidad_pago">
+<option value="semanal" selected="">Semanal</option>
+<option value="quincenal">Quincenal</option>
+<option value="mensual">Mensual</option>
+</select>
+</div>
+<div>
+<label for="tarifa">Tarifa</label>
+<input type="number" id="tarifa" min="0" step="0.01" name="tarifa" value=""/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" maxLength="500">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar operario</button>
+<a data-variant="outline" href="/dashboard/staff/operators">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/operators/new > un returnTo ajeno vuelve a la lista > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/staff/operators/new > un returnTo ajeno vuelve a la lista > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff/operators">Operarios</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo operario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar operario</h1>
+<p>Registra los datos laborales básicos del trabajador, su modalidad de pago y su tarifa. Nace activo.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a operarios">
+<svg/>Volver a operarios</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value=""/>
+</div>
+<div>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="cargo">Cargo</label>
+<input id="cargo" maxLength="50" name="cargo" value=""/>
+</div>
+<div>
+<label for="especialidad">Especialidad</label>
+<input id="especialidad" maxLength="80" name="especialidad" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Telefono</label>
+<input id="telefono" maxLength="20" name="telefono" value=""/>
+</div>
+<div>
+<label for="fecha_ingreso">Fecha de ingreso</label>
+<input type="date" id="fecha_ingreso" name="fecha_ingreso" value="2026-07-15"/>
+</div>
+</div>
+<div>
+<label for="direccion">Direccion</label>
+<input id="direccion" maxLength="150" name="direccion" value=""/>
+</div>
+<div>
+<div>
+<label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
+</label>
+<select id="modalidad_pago" required="" name="modalidad_pago">
+<option value="semanal" selected="">Semanal</option>
+<option value="quincenal">Quincenal</option>
+<option value="mensual">Mensual</option>
+</select>
+</div>
+<div>
+<label for="tarifa">Tarifa</label>
+<input type="number" id="tarifa" min="0" step="0.01" name="tarifa" value=""/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" maxLength="500">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar operario</button>
+<a data-variant="outline" href="/dashboard/staff/operators">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/operators/new > vuelve al returnTo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/staff/operators/new > vuelve al returnTo > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff/operators?status=inactivo">Operarios</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo operario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar operario</h1>
+<p>Registra los datos laborales básicos del trabajador, su modalidad de pago y su tarifa. Nace activo.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a operarios">
+<svg/>Volver a operarios</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="nombres">Nombres<span aria-hidden="true">*</span>
+</label>
+<input id="nombres" required="" maxLength="100" name="nombres" value=""/>
+</div>
+<div>
+<label for="apellidos">Apellidos<span aria-hidden="true">*</span>
+</label>
+<input id="apellidos" required="" maxLength="100" name="apellidos" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="cargo">Cargo</label>
+<input id="cargo" maxLength="50" name="cargo" value=""/>
+</div>
+<div>
+<label for="especialidad">Especialidad</label>
+<input id="especialidad" maxLength="80" name="especialidad" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Telefono</label>
+<input id="telefono" maxLength="20" name="telefono" value=""/>
+</div>
+<div>
+<label for="fecha_ingreso">Fecha de ingreso</label>
+<input type="date" id="fecha_ingreso" name="fecha_ingreso" value="2026-07-15"/>
+</div>
+</div>
+<div>
+<label for="direccion">Direccion</label>
+<input id="direccion" maxLength="150" name="direccion" value=""/>
+</div>
+<div>
+<div>
+<label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
+</label>
+<select id="modalidad_pago" required="" name="modalidad_pago">
+<option value="semanal" selected="">Semanal</option>
+<option value="quincenal">Quincenal</option>
+<option value="mensual">Mensual</option>
+</select>
+</div>
+<div>
+<label for="tarifa">Tarifa</label>
+<input type="number" id="tarifa" min="0" step="0.01" name="tarifa" value=""/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" maxLength="500">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar operario</button>
+<a data-variant="outline" href="/dashboard/staff/operators?status=inactivo">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
 }
 `;

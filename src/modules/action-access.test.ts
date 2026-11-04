@@ -322,6 +322,7 @@ const MODULOS: ModuloDeAcciones[] = [
       "updateOperatorAction",
       "toggleOperatorStatusAction",
     ],
+    rechazanConResultado: ["createOperatorAction", "updateOperatorAction"],
   },
   {
     ruta: "staff/payment-history/actions",

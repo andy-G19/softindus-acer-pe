@@ -1,55 +1,45 @@
-﻿import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { PageHeader } from "@/components/navigation/page-header";
+﻿import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
 import { requireRole } from "@/lib/authz";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
+import { staffNotifications } from "@/modules/staff/notifications";
 import { createOperatorAction } from "@/modules/staff/operators/actions";
 import { OperatorForm } from "@/modules/staff/operators/operator-form";
+import { newOperatorFormValues } from "@/modules/staff/operators/operator-form-values";
 
-export default async function NewOperatorPage() {
+type NewOperatorPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function NewOperatorPage({ searchParams }: NewOperatorPageProps) {
   await requireRole([APP_ROLES.ADMIN]);
 
-  const today = new Date().toISOString().split("T")[0];
+  const queryParams = (await searchParams) ?? {};
+  const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.operators);
 
   return (
-    <main className="space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6">
       <PageHeader
         title="Registrar operario"
-        description="Registra los datos laborales básicos del trabajador, modalidad de pago, tarifa y estado dentro del taller."
-        backHref={navigationHrefs.operators}
+        description="Registra los datos laborales básicos del trabajador, su modalidad de pago y su tarifa. Nace activo."
+        backHref={backHref}
         backLabel="Volver a operarios"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Personal", href: navigationHrefs.staff },
-          { label: "Operarios", href: navigationHrefs.operators },
+          { label: "Operarios", href: backHref },
           { label: "Nuevo operario" },
         ])}
         actions={<Badge>Solo ADMIN</Badge>}
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Datos laborales</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <OperatorForm
-            action={createOperatorAction}
-            defaultValues={{
-              fecha_ingreso: today,
-              modalidad_pago: "semanal",
-              estado: "activo",
-            }}
-            submitLabel="Registrar operario"
-          />
-        </CardContent>
-      </Card>
-    </main>
+      <OperatorForm
+        action={createOperatorAction}
+        defaultValues={newOperatorFormValues()}
+        submitLabel="Registrar operario"
+        successNotification={staffNotifications["operator-created"]}
+        returnTo={backHref}
+      />
+    </div>
   );
 }
-
-

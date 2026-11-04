@@ -8,7 +8,6 @@ import { toDateInputValue } from "@/lib/date-range";
 const isRealDate = (value: string) => toDateInputValue(value) === value;
 
 const paymentModes = ["semanal", "quincenal", "mensual"];
-const operatorStatuses = ["activo", "inactivo"];
 // operario.tarifa es numeric(12,2): un valor mayor llegaba a la base y daba un
 // error 500 (hallazgo 69).
 const MAX_RATE = 9_999_999_999.99;
@@ -117,14 +116,6 @@ export const operatorSchema = z.object({
 
       return new Date(`${value}T00:00:00`);
     }),
-
-  estado: z
-    .string({ error: "Seleccione un estado válido." })
-    .trim()
-    .refine(
-      (value) => operatorStatuses.includes(value),
-      "Seleccione un estado válido.",
-    ),
 
   observaciones: z
     .string()
