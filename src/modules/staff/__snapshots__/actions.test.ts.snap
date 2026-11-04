@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`cancelOperatorTaskAction > ADMIN anula: lee y escribe sin compare-and-set (hallazgo 61) > llamadas 1`] = `
+exports[`cancelOperatorTaskAction > ADMIN anula con compare-and-set y la bitacora en la transaccion > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -8,18 +8,6 @@ exports[`cancelOperatorTaskAction > ADMIN anula: lee y escribe sin compare-and-s
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_tarea_operario": true,
-      },
-      "where": {
-        "id_tarea_operario": "TAR00000007",
-      },
-    },
-    "prisma": "tarea_operario.findUnique",
   },
   {
     "args": null,
@@ -31,10 +19,13 @@ exports[`cancelOperatorTaskAction > ADMIN anula: lee y escribe sin compare-and-s
         "estado": "anulada",
       },
       "where": {
+        "estado": {
+          "not": "anulada",
+        },
         "id_tarea_operario": "TAR00000007",
       },
     },
-    "prisma": "tarea_operario.update",
+    "prisma": "tarea_operario.updateMany",
   },
   {
     "args": {
@@ -62,7 +53,7 @@ exports[`cancelOperatorTaskAction > ADMIN anula: lee y escribe sin compare-and-s
 ]
 `;
 
-exports[`cancelOperatorTaskAction > ADMIN anula: lee y escribe sin compare-and-set (hallazgo 61) > resultado 1`] = `"redirect:/dashboard/staff/tasks?toast=operator-task-annulled"`;
+exports[`cancelOperatorTaskAction > ADMIN anula con compare-and-set y la bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/staff/tasks?toast=operator-task-annulled"`;
 
 exports[`cancelOperatorTaskAction > SELLER no puede anular > llamadas 1`] = `
 [
@@ -88,18 +79,6 @@ exports[`cancelOperatorTaskAction > WORKSHOP_MASTER tambien anula > llamadas 1`]
     ],
   },
   {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_tarea_operario": true,
-      },
-      "where": {
-        "id_tarea_operario": "TAR00000007",
-      },
-    },
-    "prisma": "tarea_operario.findUnique",
-  },
-  {
     "args": null,
     "effect": "prisma.$transaction",
   },
@@ -109,10 +88,13 @@ exports[`cancelOperatorTaskAction > WORKSHOP_MASTER tambien anula > llamadas 1`]
         "estado": "anulada",
       },
       "where": {
+        "estado": {
+          "not": "anulada",
+        },
         "id_tarea_operario": "TAR00000007",
       },
     },
-    "prisma": "tarea_operario.update",
+    "prisma": "tarea_operario.updateMany",
   },
   {
     "args": {
@@ -166,9 +148,26 @@ exports[`cancelOperatorTaskAction > una tarea inexistente se rechaza > llamadas 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_tarea_operario": "TAR00000007",
+      },
+    },
+    "prisma": "tarea_operario.updateMany",
+  },
+  {
     "args": {
       "select": {
-        "estado": true,
         "id_tarea_operario": true,
       },
       "where": {
@@ -176,6 +175,10 @@ exports[`cancelOperatorTaskAction > una tarea inexistente se rechaza > llamadas 
       },
     },
     "prisma": "tarea_operario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -192,18 +195,6 @@ exports[`cancelOperatorTaskAction > una tarea terminada tambien se anula > llama
     ],
   },
   {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_tarea_operario": true,
-      },
-      "where": {
-        "id_tarea_operario": "TAR00000007",
-      },
-    },
-    "prisma": "tarea_operario.findUnique",
-  },
-  {
     "args": null,
     "effect": "prisma.$transaction",
   },
@@ -213,10 +204,13 @@ exports[`cancelOperatorTaskAction > una tarea terminada tambien se anula > llama
         "estado": "anulada",
       },
       "where": {
+        "estado": {
+          "not": "anulada",
+        },
         "id_tarea_operario": "TAR00000007",
       },
     },
-    "prisma": "tarea_operario.update",
+    "prisma": "tarea_operario.updateMany",
   },
   {
     "args": {
@@ -256,9 +250,26 @@ exports[`cancelOperatorTaskAction > una tarea ya anulada se rechaza > llamadas 1
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_tarea_operario": "TAR00000007",
+      },
+    },
+    "prisma": "tarea_operario.updateMany",
+  },
+  {
     "args": {
       "select": {
-        "estado": true,
         "id_tarea_operario": true,
       },
       "where": {
@@ -266,6 +277,10 @@ exports[`cancelOperatorTaskAction > una tarea ya anulada se rechaza > llamadas 1
       },
     },
     "prisma": "tarea_operario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -2022,6 +2037,19 @@ exports[`createOperatorTaskAction > 0.004 horas pasan y se guardan como 0.00 (ha
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -2047,10 +2075,6 @@ exports[`createOperatorTaskAction > 0.004 horas pasan y se guardan como 0.00 (ha
       },
     },
     "prisma": "orden_trabajo.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2114,6 +2138,19 @@ exports[`createOperatorTaskAction > 3.005 horas se guardan como 3.00 por toFixed
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -2139,10 +2176,6 @@ exports[`createOperatorTaskAction > 3.005 horas se guardan como 3.00 por toFixed
       },
     },
     "prisma": "orden_trabajo.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2206,6 +2239,19 @@ exports[`createOperatorTaskAction > ADMIN registra la tarea sin etapa, con bitac
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -2231,10 +2277,6 @@ exports[`createOperatorTaskAction > ADMIN registra la tarea sin etapa, con bitac
       },
     },
     "prisma": "orden_trabajo.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2312,6 +2354,19 @@ exports[`createOperatorTaskAction > WORKSHOP_MASTER tambien registra > llamadas 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -2337,10 +2392,6 @@ exports[`createOperatorTaskAction > WORKSHOP_MASTER tambien registra > llamadas 
       },
     },
     "prisma": "orden_trabajo.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2404,6 +2455,19 @@ exports[`createOperatorTaskAction > con una etapa de la ruta de la orden > llama
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -2442,10 +2506,6 @@ exports[`createOperatorTaskAction > con una etapa de la ruta de la orden > llama
       },
     },
     "prisma": "etapa_ruta.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2509,6 +2569,19 @@ exports[`createOperatorTaskAction > el 30 de febrero se guarda como 2 de marzo (
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -2534,10 +2607,6 @@ exports[`createOperatorTaskAction > el 30 de febrero se guarda como 2 de marzo (
       },
     },
     "prisma": "orden_trabajo.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2601,6 +2670,19 @@ exports[`createOperatorTaskAction > el alta acepta una tarea ya anulada si se en
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -2626,10 +2708,6 @@ exports[`createOperatorTaskAction > el alta acepta una tarea ya anulada si se en
       },
     },
     "prisma": "orden_trabajo.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2693,6 +2771,19 @@ exports[`createOperatorTaskAction > el operario no existe o esta inactivo > llam
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -2703,6 +2794,10 @@ exports[`createOperatorTaskAction > el operario no existe o esta inactivo > llam
       },
     },
     "prisma": "operario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -2747,6 +2842,19 @@ exports[`createOperatorTaskAction > la etapa es de otra ruta > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -2785,6 +2893,10 @@ exports[`createOperatorTaskAction > la etapa es de otra ruta > llamadas 1`] = `
       },
     },
     "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -2801,6 +2913,19 @@ exports[`createOperatorTaskAction > la etapa esta inactiva > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -2839,6 +2964,10 @@ exports[`createOperatorTaskAction > la etapa esta inactiva > llamadas 1`] = `
       },
     },
     "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -2855,6 +2984,19 @@ exports[`createOperatorTaskAction > la etapa no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_operario": true,
@@ -2893,13 +3035,17 @@ exports[`createOperatorTaskAction > la etapa no existe > llamadas 1`] = `
       },
     },
     "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
 exports[`createOperatorTaskAction > la etapa no existe > resultado 1`] = `"error: La etapa seleccionada no existe o está inactiva."`;
 
-exports[`createOperatorTaskAction > la orden no existe o esta anulada: se decide fuera de la transaccion (hallazgo 63) > llamadas 1`] = `
+exports[`createOperatorTaskAction > la orden no existe o esta anulada > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -2909,113 +3055,17 @@ exports[`createOperatorTaskAction > la orden no existe o esta anulada: se decide
     ],
   },
   {
-    "args": {
-      "select": {
-        "id_operario": true,
-      },
-      "where": {
-        "estado": "activo",
-        "id_operario": "OPE00000003",
-      },
-    },
-    "prisma": "operario.findFirst",
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
-      "select": {
-        "id_orden_trabajo": true,
-        "id_ruta": true,
-      },
-      "where": {
-        "estado": {
-          "not": "anulada",
-        },
-        "id_orden_trabajo": "OTR00000006",
-      },
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
     },
-    "prisma": "orden_trabajo.findFirst",
-  },
-]
-`;
-
-exports[`createOperatorTaskAction > la orden no existe o esta anulada: se decide fuera de la transaccion (hallazgo 63) > resultado 1`] = `"error: La orden de trabajo seleccionada no existe o está anulada."`;
-
-exports[`createOperatorTaskAction > la orden no tiene ruta y se eligio etapa > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "id_operario": true,
-      },
-      "where": {
-        "estado": "activo",
-        "id_operario": "OPE00000003",
-      },
-    },
-    "prisma": "operario.findFirst",
-  },
-  {
-    "args": {
-      "select": {
-        "id_orden_trabajo": true,
-        "id_ruta": true,
-      },
-      "where": {
-        "estado": {
-          "not": "anulada",
-        },
-        "id_orden_trabajo": "OTR00000006",
-      },
-    },
-    "prisma": "orden_trabajo.findFirst",
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_etapa_ruta": true,
-        "id_ruta": true,
-      },
-      "where": {
-        "id_etapa_ruta": "ETA00000005",
-      },
-    },
-    "prisma": "etapa_ruta.findUnique",
-  },
-]
-`;
-
-exports[`createOperatorTaskAction > la orden no tiene ruta y se eligio etapa > resultado 1`] = `"error: La orden de trabajo seleccionada no tiene una ruta de fabricación asignada."`;
-
-exports[`createOperatorTaskAction > mas de 24 horas se rechazan > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-]
-`;
-
-exports[`createOperatorTaskAction > mas de 24 horas se rechazan > resultado 1`] = `"error: Las horas dedicadas no pueden superar 24 horas."`;
-
-exports[`createOperatorTaskAction > sin horas: horas null > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -3046,7 +3096,146 @@ exports[`createOperatorTaskAction > sin horas: horas null > llamadas 1`] = `
   },
   {
     "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > la orden no existe o esta anulada > resultado 1`] = `"error: La orden de trabajo seleccionada no existe o está anulada."`;
+
+exports[`createOperatorTaskAction > la orden no tiene ruta y se eligio etapa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_etapa_ruta": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000005",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > la orden no tiene ruta y se eligio etapa > resultado 1`] = `"error: La orden de trabajo seleccionada no tiene una ruta de fabricación asignada."`;
+
+exports[`createOperatorTaskAction > mas de 24 horas se rechazan > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > mas de 24 horas se rechazan > resultado 1`] = `"error: Las horas dedicadas no pueden superar 24 horas."`;
+
+exports[`createOperatorTaskAction > sin horas: horas null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
   },
   {
     "args": {

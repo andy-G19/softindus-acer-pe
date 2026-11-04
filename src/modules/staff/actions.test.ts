@@ -540,7 +540,7 @@ defineCases("createOperatorTaskAction", createOperatorTaskAction, [
     ...taskWith({}, { "operario.findFirst": null }),
   },
   {
-    name: "la orden no existe o esta anulada: se decide fuera de la transaccion (hallazgo 63)",
+    name: "la orden no existe o esta anulada",
     ...taskWith({}, { "orden_trabajo.findFirst": null }),
   },
   {
@@ -570,16 +570,25 @@ defineCases("createOperatorTaskAction", createOperatorTaskAction, [
 
 const TASK = "TAR00000007";
 
+// updateMany afecta la tarea solo si no esta anulada, como haria la base con
+// un compare-and-set; null: la tarea no existe.
+const storedTask = (estado: string | null): DataOverrides => ({
+  "tarea_operario.updateMany": (args: unknown) => {
+    const condition = (args as { where?: { estado?: { not?: string } } }).where?.estado;
+
+    return { count: estado !== null && condition?.not !== estado ? 1 : 0 };
+  },
+  "tarea_operario.findUnique": estado === null ? null : { id_tarea_operario: TASK, estado },
+});
+
 const cancelWith = (estado: string | null, id: string | null = TASK) => ({
   form: { id_tarea_operario: id },
-  data: {
-    "tarea_operario.findUnique": estado === null ? null : { id_tarea_operario: TASK, estado },
-  },
+  data: storedTask(estado),
 });
 
 defineCases("cancelOperatorTaskAction", cancelOperatorTaskAction, [
   {
-    name: "ADMIN anula: lee y escribe sin compare-and-set (hallazgo 61)",
+    name: "ADMIN anula con compare-and-set y la bitacora en la transaccion",
     ...cancelWith("registrada"),
   },
   { name: "WORKSHOP_MASTER tambien anula", ...cancelWith("en_proceso"), role: "WORKSHOP_MASTER" },
@@ -589,3 +598,88 @@ defineCases("cancelOperatorTaskAction", cancelOperatorTaskAction, [
   { name: "una tarea inexistente se rechaza", ...cancelWith(null) },
   { name: "sin id se rechaza sin tocar Prisma", ...cancelWith("registrada", "") },
 ]);
+
+// ---------------------------------------------------------------------------
+// Tareas: orden bloqueada al crear y anulacion con compare-and-set (A3)
+// ---------------------------------------------------------------------------
+
+// Hallazgo 63: crear una tarea decide con la orden (no anulada, su ruta), el
+// operario y la etapa. Bloquea la orden, el padre, antes de leerla y del
+// correlativo, y decide dentro de la transaccion que escribe.
+describe("createOperatorTaskAction bloquea la orden de trabajo", () => {
+  const reads = (call: PrismaCall) =>
+    ["operario.findFirst", "orden_trabajo.findFirst", "etapa_ruta.findUnique"].includes(call.prisma);
+  const lockIndex = (calls: RecordedCall[]) =>
+    calls.findIndex((call) => isRowLock(call, "orden_trabajo", WORK_ORDER));
+
+  it("bloquea antes de leer y antes del correlativo", async () => {
+    const { calls } = await runCase(
+      createOperatorTaskAction,
+      taskWith({ id_etapa_ruta: STAGE }, activeStage(ROUTE)),
+    );
+    const correlative = calls.findIndex(
+      (call) => "effect" in call && call.effect === "getNextCorrelativeId",
+    );
+
+    expectRowLockedBefore(calls, { table: "orden_trabajo", id: WORK_ORDER, reads });
+    expect(lockIndex(calls)).toBeLessThan(correlative);
+  });
+
+  it.each([
+    {
+      name: "una orden anulada",
+      actionCase: taskWith({}, { "orden_trabajo.findFirst": null }),
+      error: "La orden de trabajo seleccionada no existe o está anulada.",
+    },
+    {
+      name: "un operario inactivo",
+      actionCase: taskWith({}, { "operario.findFirst": null }),
+      error: "El operario seleccionado no existe o está inactivo.",
+    },
+    {
+      name: "una etapa de otra ruta",
+      actionCase: taskWith({ id_etapa_ruta: STAGE }, activeStage("RUT00000009")),
+      error: "La etapa seleccionada no pertenece a la ruta de fabricación de la orden.",
+    },
+  ])("$name se decide dentro de la transaccion y no escribe", async ({ actionCase, error }) => {
+    const { calls, result } = await runCase(createOperatorTaskAction, actionCase);
+
+    expect(lockIndex(calls)).toBeGreaterThanOrEqual(0);
+    expect(prismaCalls(calls)).not.toContain("tarea_operario.create");
+    expect(auditCalls(calls)).toEqual([]);
+    expect(result).toBe(`error: ${error}`);
+  });
+});
+
+// Hallazgo 61: anular leia el estado y escribia aparte; dos anulaciones a la vez
+// dejaban dos bitacoras.
+describe("anular una tarea escribe con compare-and-set", () => {
+  const cancel = (estado: string | null) => ({ form: { id_tarea_operario: TASK }, data: storedTask(estado) });
+
+  it("anula con una sola sentencia y la bitacora en la transaccion", async () => {
+    const { calls, result } = await runCase(cancelOperatorTaskAction, cancel("registrada"));
+    const write = calls.filter(isPrismaCall).find((call) => call.prisma === "tarea_operario.updateMany");
+
+    expect(prismaCalls(calls)).not.toContain("tarea_operario.update");
+    expect(prismaCalls(calls)).not.toContain("tarea_operario.findUnique");
+    expect(write?.args).toEqual({
+      where: { id_tarea_operario: TASK, estado: { not: "anulada" } },
+      data: { estado: "anulada" },
+    });
+    expect(auditCalls(calls)).toEqual([
+      expect.objectContaining({ args: expect.objectContaining({ accion: "anular", enTransaccion: true }) }),
+    ]);
+    expect(result).toBe("redirect:/dashboard/staff/tasks?toast=operator-task-annulled");
+  });
+
+  it.each([
+    { name: "una tarea ya anulada (doble clic)", estado: "anulada", error: "La tarea ya se encuentra anulada." },
+    { name: "una tarea inexistente", estado: null, error: "La tarea seleccionada no existe." },
+  ])("$name no escribe bitacora y explica el rechazo", async ({ estado, error }) => {
+    const { calls, result } = await runCase(cancelOperatorTaskAction, cancel(estado));
+
+    expect(prismaCalls(calls)).toContain("tarea_operario.updateMany");
+    expect(auditCalls(calls)).toEqual([]);
+    expect(result).toBe(`error: ${error}`);
+  });
+});

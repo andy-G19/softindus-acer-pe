@@ -7,6 +7,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockWorkOrderRow } from "@/lib/row-locks";
 import { operatorTaskSchema } from "@/schemas/staff/operator-task.schema";
 
 async function requireStaffManager() {
@@ -38,67 +39,69 @@ export async function createOperatorTaskAction(formData: FormData) {
   const data = parsed.data;
   const selectedStageId = data.id_etapa_ruta || null;
 
-  const operator = await prisma.operario.findFirst({
-    where: {
-      id_operario: data.id_operario,
-      estado: "activo",
-    },
-    select: {
-      id_operario: true,
-    },
-  });
+  // Hallazgo 63: la tarea depende de la orden (que no este anulada, su ruta), del
+  // operario y de la etapa. Bloquea la orden, el padre, antes de leerla y del
+  // correlativo, y decide y escribe en la misma transaccion; un rechazo se
+  // devuelve desde ella, antes de escribir, y se lanza con el mismo mensaje.
+  const problem = await prisma.$transaction(async (tx): Promise<string | null> => {
+    await lockWorkOrderRow(tx, data.id_orden_trabajo);
 
-  if (!operator) {
-    throw new Error("El operario seleccionado no existe o está inactivo.");
-  }
-
-  const workOrder = await prisma.orden_trabajo.findFirst({
-    where: {
-      id_orden_trabajo: data.id_orden_trabajo,
-      estado: {
-        not: "anulada",
-      },
-    },
-    select: {
-      id_orden_trabajo: true,
-      id_ruta: true,
-    },
-  });
-
-  if (!workOrder) {
-    throw new Error("La orden de trabajo seleccionada no existe o está anulada.");
-  }
-
-  if (selectedStageId) {
-    const selectedStage = await prisma.etapa_ruta.findUnique({
+    const operator = await tx.operario.findFirst({
       where: {
-        id_etapa_ruta: selectedStageId,
+        id_operario: data.id_operario,
+        estado: "activo",
       },
       select: {
-        id_etapa_ruta: true,
-        id_ruta: true,
-        estado: true,
+        id_operario: true,
       },
     });
 
-    if (!selectedStage || !selectedStage.estado) {
-      throw new Error("La etapa seleccionada no existe o está inactiva.");
+    if (!operator) {
+      return "El operario seleccionado no existe o está inactivo.";
     }
 
-    if (!workOrder.id_ruta) {
-      throw new Error(
-        "La orden de trabajo seleccionada no tiene una ruta de fabricación asignada.",
-      );
+    const workOrder = await tx.orden_trabajo.findFirst({
+      where: {
+        id_orden_trabajo: data.id_orden_trabajo,
+        estado: {
+          not: "anulada",
+        },
+      },
+      select: {
+        id_orden_trabajo: true,
+        id_ruta: true,
+      },
+    });
+
+    if (!workOrder) {
+      return "La orden de trabajo seleccionada no existe o está anulada.";
     }
 
-    if (selectedStage.id_ruta !== workOrder.id_ruta) {
-      throw new Error(
-        "La etapa seleccionada no pertenece a la ruta de fabricación de la orden.",
-      );
-    }
-  }
+    if (selectedStageId) {
+      const selectedStage = await tx.etapa_ruta.findUnique({
+        where: {
+          id_etapa_ruta: selectedStageId,
+        },
+        select: {
+          id_etapa_ruta: true,
+          id_ruta: true,
+          estado: true,
+        },
+      });
 
-  await prisma.$transaction(async (tx) => {
+      if (!selectedStage || !selectedStage.estado) {
+        return "La etapa seleccionada no existe o está inactiva.";
+      }
+
+      if (!workOrder.id_ruta) {
+        return "La orden de trabajo seleccionada no tiene una ruta de fabricación asignada.";
+      }
+
+      if (selectedStage.id_ruta !== workOrder.id_ruta) {
+        return "La etapa seleccionada no pertenece a la ruta de fabricación de la orden.";
+      }
+    }
+
     const idTareaOperario = await getNextCorrelativeId(tx, {
       codigoEntidad: "tarea_operario",
       prefijo: "TAR",
@@ -130,7 +133,13 @@ export async function createOperatorTaskAction(formData: FormData) {
       detalle: `Tarea registrada para el operario ${data.id_operario} en la orden ${data.id_orden_trabajo}.`,
       tx,
     });
+
+    return null;
   });
+
+  if (problem) {
+    throw new Error(problem);
+  }
 
   revalidatePath("/dashboard/staff");
   revalidatePath("/dashboard/staff/tasks");
@@ -147,33 +156,35 @@ export async function cancelOperatorTaskAction(formData: FormData) {
     throw new Error("No se recibió la tarea del operario.");
   }
 
-  const task = await prisma.tarea_operario.findUnique({
-    where: {
-      id_tarea_operario: idTareaOperario,
-    },
-    select: {
-      id_tarea_operario: true,
-      estado: true,
-    },
-  });
-
-  if (!task) {
-    throw new Error("La tarea seleccionada no existe.");
-  }
-
-  if (task.estado === "anulada") {
-    throw new Error("La tarea ya se encuentra anulada.");
-  }
-
-  await prisma.$transaction(async (tx) => {
-    await tx.tarea_operario.update({
+  // Hallazgo 61: anula solo si la tarea no lo esta ya, comparando y escribiendo
+  // en una sola sentencia, con la bitacora en la misma transaccion. Con count 0
+  // lee la tarea solo para explicar el rechazo: un doble clic no deja dos
+  // bitacoras.
+  const problem = await prisma.$transaction(async (tx): Promise<string | null> => {
+    const { count } = await tx.tarea_operario.updateMany({
       where: {
         id_tarea_operario: idTareaOperario,
+        estado: { not: "anulada" },
       },
       data: {
         estado: "anulada",
       },
     });
+
+    if (count === 0) {
+      const task = await tx.tarea_operario.findUnique({
+        where: {
+          id_tarea_operario: idTareaOperario,
+        },
+        select: {
+          id_tarea_operario: true,
+        },
+      });
+
+      return task
+        ? "La tarea ya se encuentra anulada."
+        : "La tarea seleccionada no existe.";
+    }
 
     await registerAuditLog({
       userId: session.user.id,
@@ -183,7 +194,13 @@ export async function cancelOperatorTaskAction(formData: FormData) {
       detalle: `Tarea de operario anulada: ${idTareaOperario}.`,
       tx,
     });
+
+    return null;
   });
+
+  if (problem) {
+    throw new Error(problem);
+  }
 
   revalidatePath("/dashboard/staff");
   revalidatePath("/dashboard/staff/tasks");
