@@ -312,6 +312,7 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/staff/attendance/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createAttendanceAction"],
+    rechazanConResultado: ["createAttendanceAction"],
   },
   {
     ruta: "staff/operators/actions",

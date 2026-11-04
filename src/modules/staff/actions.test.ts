@@ -389,7 +389,11 @@ const attendanceWith = (fields: FormFields = {}, data: DataOverrides = {}) => ({
   data: { ...activeOperator, ...noAttendance, ...data },
 });
 
-defineCases("createAttendanceAction", createAttendanceAction, [
+// Desde A8 el registro de asistencia parte del estado inicial de su formulario y
+// devuelve el resultado (FormActionState).
+const createAttendance = (formData: FormData) => createAttendanceAction({ status: "idle" }, formData);
+
+defineCases("createAttendanceAction", createAttendance, [
   { name: "ADMIN registra ingreso y salida: 9 horas, con bitacora en la transaccion", ...attendanceWith() },
   { name: "WORKSHOP_MASTER tambien registra", ...attendanceWith(), role: "WORKSHOP_MASTER" },
   { name: "SELLER no puede registrar", ...attendanceWith(), role: "SELLER" },
@@ -660,7 +664,7 @@ describe("createAttendanceAction decide el duplicado dentro de la transaccion", 
     calls.findIndex((call) => "effect" in call && call.effect === "prisma.$transaction");
 
   it("lee el operario y el duplicado dentro de la transaccion que escribe", async () => {
-    const { calls } = await runCase(createAttendanceAction, attendanceWith());
+    const { calls } = await runCase(createAttendance, attendanceWith());
     const start = transactionStart(calls);
     const reads = calls.flatMap((call, index) =>
       isPrismaCall(call) && ["operario.findFirst", "asistencia.findFirst"].includes(call.prisma) ? [index] : [],
@@ -673,23 +677,27 @@ describe("createAttendanceAction decide el duplicado dentro de la transaccion", 
 
   it("un duplicado se decide dentro de la transaccion y no escribe", async () => {
     const { calls, result } = await runCase(
-      createAttendanceAction,
+      createAttendance,
       attendanceWith({}, { "asistencia.findFirst": { id_asistencia: "ASI00000001" } }),
     );
 
     expect(transactionStart(calls)).toBeGreaterThanOrEqual(0);
     expect(prismaCalls(calls)).not.toContain("asistencia.create");
-    expect(result).toBe(`error: ${DUPLICATE}`);
+    expect(result).toEqual({
+      estado: expect.objectContaining({ status: "error", error: DUPLICATE, fieldErrors: { fecha: [DUPLICATE] } }),
+    });
   });
 
   it("una carrera por la misma fecha (P2002) responde con el mensaje del duplicado", async () => {
     const { calls, result } = await runCase(
-      createAttendanceAction,
+      createAttendance,
       attendanceWith({}, { "asistencia.create": failWith(uniqueViolation()) }),
     );
 
     expect(auditCalls(calls)).toEqual([]);
-    expect(result).toBe(`error: ${DUPLICATE}`);
+    expect(result).toEqual({
+      estado: expect.objectContaining({ status: "error", error: DUPLICATE, fieldErrors: { fecha: [DUPLICATE] } }),
+    });
   });
 
   it("otro error de Prisma se propaga sin cambiar", async () => {
@@ -698,7 +706,7 @@ describe("createAttendanceAction decide el duplicado dentro de la transaccion", 
       clientVersion: "test",
     });
     const { result } = await runCase(
-      createAttendanceAction,
+      createAttendance,
       attendanceWith({}, { "asistencia.create": failWith(foreignKey) }),
     );
 
@@ -909,5 +917,82 @@ describe("updateOperatorStatusAction devuelve el resultado", () => {
     expect(result).toEqual({
       estado: expect.objectContaining({ status: "error", error: "No tienes permisos para gestionar operarios." }),
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Asistencia con resultado de accion (A8)
+// ---------------------------------------------------------------------------
+
+// Desde A8 el registro de asistencia se usa en el panel lateral: devuelve el
+// resultado en lugar de lanzar o redirigir. Cada rechazo queda junto a su campo
+// con lo enviado; sin permiso responde con un error sin tocar Prisma.
+describe("createAttendanceAction devuelve el resultado", () => {
+  const run = createAttendance;
+  const VALUES = {
+    id_operario: OPERATOR,
+    fecha: "2026-07-15",
+    hora_ingreso: "08:00",
+    hora_salida: "17:00",
+    tardanza: false,
+    falta: false,
+    observaciones: "",
+  };
+  const DUPLICATE = "Este operario ya tiene asistencia registrada en la fecha seleccionada.";
+  const errorWith = (error: string, fieldErrors: Record<string, string[]> | undefined, values = VALUES) => ({
+    estado: { status: "error", error, fieldErrors, values, operationId: "operacion-de-prueba" },
+  });
+
+  it("guardada devuelve el id y los valores y revalida sin redirigir", async () => {
+    const { calls, result } = await runCase(run, attendanceWith({ tardanza: "on" }));
+
+    expect(calls).toContainEqual({ authz: "getAuthorizedSession", roles: ["ADMIN", "WORKSHOP_MASTER"] });
+    expect(calls).toContainEqual({ effect: "revalidatePath", args: "/dashboard/staff/attendance" });
+    expect(result).toEqual({
+      estado: {
+        status: "success",
+        data: { id_asistencia: "ASI00000012" },
+        values: { ...VALUES, tardanza: true },
+        operationId: "operacion-de-prueba",
+      },
+    });
+  });
+
+  it("sin permiso responde con un error, sin tocar Prisma", async () => {
+    const { calls, result } = await runCase(run, { ...attendanceWith(), role: "SELLER" });
+
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+    expect(result).toEqual(errorWith("No tienes permisos para registrar asistencia.", undefined));
+  });
+
+  it("un dato invalido devuelve el error junto a su campo", async () => {
+    const { result } = await runCase(run, attendanceWith({ hora_salida: "07:00" }));
+
+    expect(result).toEqual(
+      errorWith(
+        "Revisa los datos de la asistencia.",
+        { hora_salida: ["La hora de salida debe ser mayor que la hora de ingreso."] },
+        { ...VALUES, hora_salida: "07:00" },
+      ),
+    );
+  });
+
+  it("un operario inactivo devuelve el error en el operario", async () => {
+    const { result } = await runCase(run, attendanceWith({}, { "operario.findFirst": null }));
+
+    expect(result).toEqual(
+      errorWith("El operario seleccionado no existe o está inactivo.", {
+        id_operario: ["El operario seleccionado no existe o está inactivo."],
+      }),
+    );
+  });
+
+  it.each<{ motivo: string; data: DataOverrides }>([
+    { motivo: "el duplicado", data: { "asistencia.findFirst": { id_asistencia: "ASI00000001" } } },
+    { motivo: "la carrera P2002", data: { "asistencia.create": failWith(uniqueViolation()) } },
+  ])("$motivo devuelve el error en la fecha", async ({ data }) => {
+    const { result } = await runCase(run, attendanceWith({}, data));
+
+    expect(result).toEqual(errorWith(DUPLICATE, { fecha: [DUPLICATE] }));
   });
 });

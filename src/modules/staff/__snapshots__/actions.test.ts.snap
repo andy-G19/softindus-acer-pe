@@ -290,7 +290,7 @@ exports[`cancelOperatorTaskAction > una tarea ya anulada se rechaza > resultado 
 exports[`createAttendanceAction > 20 minutos se guardan como 0.33 horas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -371,12 +371,31 @@ exports[`createAttendanceAction > 20 minutos se guardan como 0.33 horas > llamad
 ]
 `;
 
-exports[`createAttendanceAction > 20 minutos se guardan como 0.33 horas > resultado 1`] = `"redirect:/dashboard/staff/attendance?toast=attendance-created"`;
+exports[`createAttendanceAction > 20 minutos se guardan como 0.33 horas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_asistencia": "ASI00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "08:20",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > ADMIN registra ingreso y salida: 9 horas, con bitacora en la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -457,12 +476,31 @@ exports[`createAttendanceAction > ADMIN registra ingreso y salida: 9 horas, con 
 ]
 `;
 
-exports[`createAttendanceAction > ADMIN registra ingreso y salida: 9 horas, con bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/staff/attendance?toast=attendance-created"`;
+exports[`createAttendanceAction > ADMIN registra ingreso y salida: 9 horas, con bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_asistencia": "ASI00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > SELLER no puede registrar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -471,12 +509,30 @@ exports[`createAttendanceAction > SELLER no puede registrar > llamadas 1`] = `
 ]
 `;
 
-exports[`createAttendanceAction > SELLER no puede registrar > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createAttendanceAction > SELLER no puede registrar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar asistencia.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > WORKSHOP_MASTER tambien registra > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -557,12 +613,31 @@ exports[`createAttendanceAction > WORKSHOP_MASTER tambien registra > llamadas 1`
 ]
 `;
 
-exports[`createAttendanceAction > WORKSHOP_MASTER tambien registra > resultado 1`] = `"redirect:/dashboard/staff/attendance?toast=attendance-created"`;
+exports[`createAttendanceAction > WORKSHOP_MASTER tambien registra > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_asistencia": "ASI00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > con tardanza se guarda la tardanza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -643,12 +718,31 @@ exports[`createAttendanceAction > con tardanza se guarda la tardanza > llamadas 
 ]
 `;
 
-exports[`createAttendanceAction > con tardanza se guarda la tardanza > resultado 1`] = `"redirect:/dashboard/staff/attendance?toast=attendance-created"`;
+exports[`createAttendanceAction > con tardanza se guarda la tardanza > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_asistencia": "ASI00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": true,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > el 30 de febrero se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -657,12 +751,34 @@ exports[`createAttendanceAction > el 30 de febrero se rechaza > llamadas 1`] = `
 ]
 `;
 
-exports[`createAttendanceAction > el 30 de febrero se rechaza > resultado 1`] = `"error: La fecha de asistencia no es válida."`;
+exports[`createAttendanceAction > el 30 de febrero se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "fecha": [
+        "La fecha de asistencia no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-02-30",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > el operario no existe o esta inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -691,12 +807,34 @@ exports[`createAttendanceAction > el operario no existe o esta inactivo > llamad
 ]
 `;
 
-exports[`createAttendanceAction > el operario no existe o esta inactivo > resultado 1`] = `"error: El operario seleccionado no existe o está inactivo."`;
+exports[`createAttendanceAction > el operario no existe o esta inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "El operario seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_operario": [
+        "El operario seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > el operario ya tiene asistencia en esa fecha > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -734,12 +872,34 @@ exports[`createAttendanceAction > el operario ya tiene asistencia en esa fecha >
 ]
 `;
 
-exports[`createAttendanceAction > el operario ya tiene asistencia en esa fecha > resultado 1`] = `"error: Este operario ya tiene asistencia registrada en la fecha seleccionada."`;
+exports[`createAttendanceAction > el operario ya tiene asistencia en esa fecha > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este operario ya tiene asistencia registrada en la fecha seleccionada.",
+    "fieldErrors": {
+      "fecha": [
+        "Este operario ya tiene asistencia registrada en la fecha seleccionada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > salida antes del ingreso se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -748,12 +908,34 @@ exports[`createAttendanceAction > salida antes del ingreso se rechaza > llamadas
 ]
 `;
 
-exports[`createAttendanceAction > salida antes del ingreso se rechaza > resultado 1`] = `"error: La hora de salida debe ser mayor que la hora de ingreso."`;
+exports[`createAttendanceAction > salida antes del ingreso se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "hora_salida": [
+        "La hora de salida debe ser mayor que la hora de ingreso.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "07:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > salida igual al ingreso se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -762,12 +944,34 @@ exports[`createAttendanceAction > salida igual al ingreso se rechaza > llamadas 
 ]
 `;
 
-exports[`createAttendanceAction > salida igual al ingreso se rechaza > resultado 1`] = `"error: La hora de salida debe ser mayor que la hora de ingreso."`;
+exports[`createAttendanceAction > salida igual al ingreso se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "hora_salida": [
+        "La hora de salida debe ser mayor que la hora de ingreso.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "08:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > sin falta ni ingreso se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -776,12 +980,34 @@ exports[`createAttendanceAction > sin falta ni ingreso se rechaza > llamadas 1`]
 ]
 `;
 
-exports[`createAttendanceAction > sin falta ni ingreso se rechaza > resultado 1`] = `"error: Si no marca falta, debe registrar al menos la hora de ingreso."`;
+exports[`createAttendanceAction > sin falta ni ingreso se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "hora_ingreso": [
+        "Si no marca falta, debe registrar al menos la hora de ingreso.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "",
+      "hora_salida": "",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > solo ingreso: sin horas trabajadas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -862,12 +1088,31 @@ exports[`createAttendanceAction > solo ingreso: sin horas trabajadas > llamadas 
 ]
 `;
 
-exports[`createAttendanceAction > solo ingreso: sin horas trabajadas > resultado 1`] = `"redirect:/dashboard/staff/attendance?toast=attendance-created"`;
+exports[`createAttendanceAction > solo ingreso: sin horas trabajadas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_asistencia": "ASI00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -876,12 +1121,40 @@ exports[`createAttendanceAction > un POST sin campos se rechaza sin tocar Prisma
 ]
 `;
 
-exports[`createAttendanceAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `"error: Debe seleccionar un operario. La fecha de asistencia es obligatoria."`;
+exports[`createAttendanceAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "fecha": [
+        "La fecha de asistencia es obligatoria.",
+      ],
+      "hora_ingreso": [
+        "Si no marca falta, debe registrar al menos la hora de ingreso.",
+      ],
+      "id_operario": [
+        "Debe seleccionar un operario.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "",
+      "hora_ingreso": "",
+      "hora_salida": "",
+      "id_operario": "",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > una carrera por la misma fecha (P2002) responde como duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -943,12 +1216,34 @@ exports[`createAttendanceAction > una carrera por la misma fecha (P2002) respond
 ]
 `;
 
-exports[`createAttendanceAction > una carrera por la misma fecha (P2002) responde como duplicado > resultado 1`] = `"error: Este operario ya tiene asistencia registrada en la fecha seleccionada."`;
+exports[`createAttendanceAction > una carrera por la misma fecha (P2002) responde como duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este operario ya tiene asistencia registrada en la fecha seleccionada.",
+    "fieldErrors": {
+      "fecha": [
+        "Este operario ya tiene asistencia registrada en la fecha seleccionada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > una falta con horas se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -957,12 +1252,34 @@ exports[`createAttendanceAction > una falta con horas se rechaza > llamadas 1`] 
 ]
 `;
 
-exports[`createAttendanceAction > una falta con horas se rechaza > resultado 1`] = `"error: Si el operario tiene falta, no debe registrar hora de ingreso ni hora de salida."`;
+exports[`createAttendanceAction > una falta con horas se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "falta": [
+        "Si el operario tiene falta, no debe registrar hora de ingreso ni hora de salida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": true,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > una falta no guarda horas y descarta la tardanza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1043,12 +1360,31 @@ exports[`createAttendanceAction > una falta no guarda horas y descarta la tardan
 ]
 `;
 
-exports[`createAttendanceAction > una falta no guarda horas y descarta la tardanza > resultado 1`] = `"redirect:/dashboard/staff/attendance?toast=attendance-created"`;
+exports[`createAttendanceAction > una falta no guarda horas y descarta la tardanza > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_asistencia": "ASI00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "falta": true,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "",
+      "hora_salida": "",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": true,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > una fecha que no es fecha se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1057,12 +1393,34 @@ exports[`createAttendanceAction > una fecha que no es fecha se rechaza > llamada
 ]
 `;
 
-exports[`createAttendanceAction > una fecha que no es fecha se rechaza > resultado 1`] = `"error: La fecha de asistencia no es válida."`;
+exports[`createAttendanceAction > una fecha que no es fecha se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "fecha": [
+        "La fecha de asistencia no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "abc",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > una hora con otro formato se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1071,12 +1429,34 @@ exports[`createAttendanceAction > una hora con otro formato se rechaza > llamada
 ]
 `;
 
-exports[`createAttendanceAction > una hora con otro formato se rechaza > resultado 1`] = `"error: La hora debe tener el formato HH:mm."`;
+exports[`createAttendanceAction > una hora con otro formato se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "hora_ingreso": [
+        "La hora debe tener el formato HH:mm.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "8:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createAttendanceAction > unas observaciones de mas de 500 caracteres se rechazan > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1085,7 +1465,29 @@ exports[`createAttendanceAction > unas observaciones de mas de 500 caracteres se
 ]
 `;
 
-exports[`createAttendanceAction > unas observaciones de mas de 500 caracteres se rechazan > resultado 1`] = `"error: Las observaciones no deben superar los 500 caracteres."`;
+exports[`createAttendanceAction > unas observaciones de mas de 500 caracteres se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "observaciones": [
+        "Las observaciones no deben superar los 500 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "tardanza": false,
+    },
+  },
+}
+`;
 
 exports[`createOperatorAction > ADMIN registra el operario con correlativo y bitacora en la transaccion > llamadas 1`] = `
 [
