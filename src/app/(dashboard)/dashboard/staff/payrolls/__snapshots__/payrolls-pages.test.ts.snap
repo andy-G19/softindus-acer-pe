@@ -83,7 +83,7 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > llamadas 1`]
 
 exports[`/dashboard/staff/payrolls > periodo con formato invalido > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -116,12 +116,7 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > resultado 1`
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar planilla u operario" name="q" value=""/>
@@ -152,21 +147,22 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > resultado 1`
 <option value="anulada">Anulada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/staff/payrolls">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -284,7 +280,7 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > resultado 1`
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -372,7 +368,7 @@ exports[`/dashboard/staff/payrolls > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/staff/payrolls > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -405,12 +401,7 @@ exports[`/dashboard/staff/payrolls > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar planilla u operario" name="q" value=""/>
@@ -441,21 +432,22 @@ exports[`/dashboard/staff/payrolls > sin filtros > resultado 1`] = `
 <option value="anulada">Anulada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/staff/payrolls">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -573,7 +565,7 @@ exports[`/dashboard/staff/payrolls > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -771,7 +763,7 @@ exports[`/dashboard/staff/payrolls > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/staff/payrolls > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -804,12 +796,7 @@ exports[`/dashboard/staff/payrolls > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar planilla u operario" name="q" value="quispe"/>
@@ -840,21 +827,22 @@ exports[`/dashboard/staff/payrolls > todos los filtros > resultado 1`] = `
 <option value="anulada">Anulada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/staff/payrolls">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -972,7 +960,7 @@ exports[`/dashboard/staff/payrolls > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1014,7 +1002,7 @@ exports[`/dashboard/staff/payrolls/new > formulario > llamadas 1`] = `
 
 exports[`/dashboard/staff/payrolls/new > formulario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1138,7 +1126,7 @@ exports[`/dashboard/staff/payrolls/new > formulario > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

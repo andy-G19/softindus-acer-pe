@@ -47,7 +47,7 @@ export default async function NewOperatorPaymentPage() {
   const pendingPayrolls = await getPendingPayrolls();
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Registrar pago de planilla"
         description="Selecciona una planilla pendiente y registra el pago realizado al operario. El sistema guardará el historial y marcará la planilla como pagada."
@@ -280,6 +280,6 @@ export default async function NewOperatorPaymentPage() {
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

@@ -9,6 +9,7 @@ import {
   Receipt,
   UserRoundCheck,
   Users,
+  type LucideIcon,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -20,14 +21,28 @@ import {
 } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { ModuleAccessCard } from "@/components/ui/module-access-card";
+import { ModuleAccessCard, type ModuleCardTone } from "@/components/ui/module-access-card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { getStaffOverviewData } from "@/modules/staff/overview/queries";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
-import { APP_ROLES } from "@/lib/permissions";
+import { APP_ROLES, type AppRole } from "@/lib/permissions";
+
+type StaffLink = {
+  title: string;
+  description: string;
+  href: string;
+  access: string;
+  /** Los roles que admite el requireRole de la pantalla de destino. */
+  roles: readonly AppRole[];
+  icon: LucideIcon;
+  tone: ModuleCardTone;
+};
+
+const ADMIN_ONLY = [APP_ROLES.ADMIN] as const;
+const ADMIN_AND_WORKSHOP = [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER] as const;
 
 function getOperatorStatusVariant(status: string) {
   if (status === "activo") {
@@ -42,7 +57,7 @@ function formatHours(value: unknown) {
 }
 
 export default async function StaffDashboardPage() {
-  await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
+  const session = await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
   const today = new Date();
 
@@ -58,12 +73,17 @@ export default async function StaffDashboardPage() {
     latestAttendance,
   } = await getStaffOverviewData(today);
 
-  const quickLinks = [
+  // Cada tarjeta lleva los roles que admite su pantalla (los de su requireRole) y
+  // solo se muestra a ellos (entrega 10.8a, hallazgo 67), como en Mantenimiento:
+  // el maestro de taller veia Planillas e Historial de pagos, que lo llevaban a
+  // «acceso denegado». staff-links.test.ts abre cada enlace con cada rol.
+  const quickLinks = ([
     {
       title: "Operarios",
       description: "Registrar y consultar trabajadores del taller.",
       href: "/dashboard/staff/operators",
-      roles: "ADMIN",
+      access: "ADMIN; maestro de taller, solo consulta",
+      roles: ADMIN_AND_WORKSHOP,
       icon: UserRoundCheck,
       tone: "chart-1" as const,
     },
@@ -71,7 +91,8 @@ export default async function StaffDashboardPage() {
       title: "Asistencia diaria",
       description: "Registrar ingreso, salida, tardanza o falta.",
       href: "/dashboard/staff/attendance",
-      roles: "ADMIN",
+      access: "ADMIN / Maestro de taller",
+      roles: ADMIN_AND_WORKSHOP,
       icon: CalendarCheck,
       tone: "chart-2" as const,
     },
@@ -79,7 +100,8 @@ export default async function StaffDashboardPage() {
       title: "Tareas diarias",
       description: "Registrar actividades realizadas por operario.",
       href: "/dashboard/staff/tasks",
-      roles: "ADMIN / Maestro de taller",
+      access: "ADMIN / Maestro de taller",
+      roles: ADMIN_AND_WORKSHOP,
       icon: ListChecks,
       tone: "chart-3" as const,
     },
@@ -87,7 +109,8 @@ export default async function StaffDashboardPage() {
       title: "Planillas",
       description: "Generar pagos según asistencia y modalidad.",
       href: "/dashboard/staff/payrolls",
-      roles: "ADMIN",
+      access: "ADMIN",
+      roles: ADMIN_ONLY,
       icon: FileSpreadsheet,
       tone: "chart-4" as const,
     },
@@ -95,11 +118,14 @@ export default async function StaffDashboardPage() {
       title: "Historial de pagos",
       description: "Consultar pagos realizados a operarios.",
       href: "/dashboard/staff/payment-history",
-      roles: "ADMIN",
+      access: "ADMIN",
+      roles: ADMIN_ONLY,
       icon: Receipt,
       tone: "chart-5" as const,
     },
-  ];
+  ] satisfies StaffLink[]).filter((link) =>
+    link.roles.some((role) => role === session.user.role),
+  );
 
   return (
     <div className="space-y-6">
@@ -148,7 +174,7 @@ export default async function StaffDashboardPage() {
             tone={link.tone}
             icon={link.icon}
             title={link.title}
-            description={`${link.description} Acceso: ${link.roles}.`}
+            description={`${link.description} Acceso: ${link.access}.`}
             href={link.href}
           />
         ))}

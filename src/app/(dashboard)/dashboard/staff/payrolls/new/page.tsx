@@ -61,7 +61,7 @@ export default async function NewPayrollPage() {
   }));
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Generar planilla de pago"
         description="Selecciona un operario y un periodo. El sistema calculará el monto según asistencias válidas, tarifa configurada y descuentos."
@@ -239,6 +239,6 @@ export default async function NewPayrollPage() {
           </Table>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

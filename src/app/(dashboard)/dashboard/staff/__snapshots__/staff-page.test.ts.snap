@@ -205,7 +205,7 @@ exports[`/dashboard/staff > indicadores del dia y del mes > resultado 1`] = `
 <div>Operarios</div>
 </div>
 <div>
-<p>Registrar y consultar trabajadores del taller. Acceso: ADMIN.</p>
+<p>Registrar y consultar trabajadores del taller. Acceso: ADMIN; maestro de taller, solo consulta.</p>
 </div>
 </div>
 </a>
@@ -219,7 +219,7 @@ exports[`/dashboard/staff > indicadores del dia y del mes > resultado 1`] = `
 <div>Asistencia diaria</div>
 </div>
 <div>
-<p>Registrar ingreso, salida, tardanza o falta. Acceso: ADMIN.</p>
+<p>Registrar ingreso, salida, tardanza o falta. Acceso: ADMIN / Maestro de taller.</p>
 </div>
 </div>
 </a>
@@ -532,7 +532,7 @@ exports[`/dashboard/staff > maestro de taller > resultado 1`] = `
 <div>Operarios</div>
 </div>
 <div>
-<p>Registrar y consultar trabajadores del taller. Acceso: ADMIN.</p>
+<p>Registrar y consultar trabajadores del taller. Acceso: ADMIN; maestro de taller, solo consulta.</p>
 </div>
 </div>
 </a>
@@ -546,7 +546,7 @@ exports[`/dashboard/staff > maestro de taller > resultado 1`] = `
 <div>Asistencia diaria</div>
 </div>
 <div>
-<p>Registrar ingreso, salida, tardanza o falta. Acceso: ADMIN.</p>
+<p>Registrar ingreso, salida, tardanza o falta. Acceso: ADMIN / Maestro de taller.</p>
 </div>
 </div>
 </a>
@@ -561,34 +561,6 @@ exports[`/dashboard/staff > maestro de taller > resultado 1`] = `
 </div>
 <div>
 <p>Registrar actividades realizadas por operario. Acceso: ADMIN / Maestro de taller.</p>
-</div>
-</div>
-</a>
-<a href="/dashboard/staff/payrolls">
-<div>
-<span aria-hidden="true">04</span>
-<div>
-<div>
-<svg/>
-</div>
-<div>Planillas</div>
-</div>
-<div>
-<p>Generar pagos según asistencia y modalidad. Acceso: ADMIN.</p>
-</div>
-</div>
-</a>
-<a href="/dashboard/staff/payment-history">
-<div>
-<span aria-hidden="true">05</span>
-<div>
-<div>
-<svg/>
-</div>
-<div>Historial de pagos</div>
-</div>
-<div>
-<p>Consultar pagos realizados a operarios. Acceso: ADMIN.</p>
 </div>
 </div>
 </a>
