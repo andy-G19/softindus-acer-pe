@@ -85,6 +85,15 @@ export async function lockUserRow(tx: RowLockClient, idUsuario: string) {
   `);
 }
 
+export async function lockOperatorRow(tx: RowLockClient, idOperario: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_operario
+    FROM aceros.operario
+    WHERE id_operario = ${idOperario}
+    FOR NO KEY UPDATE
+  `);
+}
+
 export async function lockMachineRow(tx: RowLockClient, idMaquina: string) {
   await tx.$queryRaw(Prisma.sql`
     SELECT id_maquina

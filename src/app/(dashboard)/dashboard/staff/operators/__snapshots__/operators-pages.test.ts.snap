@@ -572,6 +572,7 @@ exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/staff/operators/id_operario-1/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_operario" value="id_operario-1"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="ghost" type="submit">Activar</button>
 </form>
 </div>
@@ -596,6 +597,7 @@ exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/staff/operators/id_operario-2/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_operario" value="id_operario-2"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="ghost" type="submit">Activar</button>
 </form>
 </div>

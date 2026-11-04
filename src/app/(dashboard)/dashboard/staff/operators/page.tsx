@@ -261,6 +261,7 @@ export default async function OperatorsPage({
                             hiddenFieldName="id_operario"
                             hiddenFieldValue={operator.id_operario}
                             isActive={operator.estado === "activo"}
+                            sendsRequestedStatus
                           />
                         </div>
                       </TableCell>
