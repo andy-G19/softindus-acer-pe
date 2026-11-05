@@ -8,6 +8,7 @@ import { getNextCorrelativeId } from "@/lib/correlatives";
 import { calculateProfitability } from "@/lib/costing-calculations";
 import { prisma } from "@/lib/db";
 import { toNumber } from "@/lib/numbers";
+import { lockCostingRow } from "@/lib/row-locks";
 import { profitabilitySchema } from "@/schemas/costs/profitability.schema";
 
 async function requireAdmin() {
@@ -32,61 +33,66 @@ export async function createProfitabilityAction(formData: FormData) {
 
   const data = parsedData.data;
 
-  const costing = await prisma.costeo.findUnique({
-    where: {
-      id_costeo: data.id_costeo,
-    },
-    include: {
-      margen_ganancia: {
-        orderBy: {
-          fecha_aplicacion: "desc",
-        },
-        take: 1,
-      },
-    },
-  });
-
-  if (!costing) {
-    throw new Error("El costeo seleccionado no existe.");
-  }
-
-  const latestMargin = costing.margen_ganancia[0];
-
-  if (!latestMargin) {
-    throw new Error(
-      "Primero debes aplicar un margen de ganancia antes de calcular la rentabilidad.",
-    );
-  }
-
-  const totalCost = toNumber(costing.costo_total);
-  const estimatedIncome = toNumber(
-    latestMargin.precio_final ?? latestMargin.precio_sugerido,
-  );
-
-  if (totalCost <= 0) {
-    throw new Error(
-      "No se puede calcular rentabilidad porque el costo total debe ser mayor que cero.",
-    );
-  }
-
-  if (estimatedIncome <= 0) {
-    throw new Error(
-      "No se puede calcular rentabilidad porque el ingreso estimado debe ser mayor que cero.",
-    );
-  }
-
-  const expectedMargin = toNumber(latestMargin.porcentaje_margen);
-  const {
-    profit: estimatedProfit,
-    realMargin,
-    lowMarginAlert,
-  } = calculateProfitability({
-    income: estimatedIncome,
-    totalCost,
-    expectedMargin,
-  });
-
   await prisma.$transaction(async (tx) => {
+    // Hallazgo 64 (10.8): el costeo se bloquea y se lee con su ultimo margen dentro de la
+    // transaccion; antes se leia fuera y la rentabilidad podia quedar con un costo viejo.
+    // Aplicar un margen toma el mismo bloqueo, asi que el ultimo margen tampoco cambia.
+    await lockCostingRow(tx, data.id_costeo);
+
+    const costing = await tx.costeo.findUnique({
+      where: {
+        id_costeo: data.id_costeo,
+      },
+      include: {
+        margen_ganancia: {
+          orderBy: {
+            fecha_aplicacion: "desc",
+          },
+          take: 1,
+        },
+      },
+    });
+
+    if (!costing) {
+      throw new Error("El costeo seleccionado no existe.");
+    }
+
+    const latestMargin = costing.margen_ganancia[0];
+
+    if (!latestMargin) {
+      throw new Error(
+        "Primero debes aplicar un margen de ganancia antes de calcular la rentabilidad.",
+      );
+    }
+
+    const totalCost = toNumber(costing.costo_total);
+    const estimatedIncome = toNumber(
+      latestMargin.precio_final ?? latestMargin.precio_sugerido,
+    );
+
+    if (totalCost <= 0) {
+      throw new Error(
+        "No se puede calcular rentabilidad porque el costo total debe ser mayor que cero.",
+      );
+    }
+
+    if (estimatedIncome <= 0) {
+      throw new Error(
+        "No se puede calcular rentabilidad porque el ingreso estimado debe ser mayor que cero.",
+      );
+    }
+
+    const expectedMargin = toNumber(latestMargin.porcentaje_margen);
+    const {
+      profit: estimatedProfit,
+      realMargin,
+      lowMarginAlert,
+    } = calculateProfitability({
+      income: estimatedIncome,
+      totalCost,
+      expectedMargin,
+    });
+
     const idRentabilidad = await getNextCorrelativeId(tx, {
       codigoEntidad: "rentabilidad",
       prefijo: "REN",

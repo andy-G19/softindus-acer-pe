@@ -20,6 +20,7 @@ import {
   expectRowLockedBefore,
   isPrismaCall,
   isPrismaRead,
+  isRowLock,
   type DataOverrides,
   type PrismaCall,
 } from "@/testing/page-characterization";
@@ -742,6 +743,70 @@ describe("H10: anular un costo indirecto lo bloquea antes de leerlo", () => {
         id: actionCase.form.id_costo_indirecto.trim(),
         reads: isPrismaRead,
       });
+    });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Hallazgos 64 y 65 (10.8): las acciones que tocan el costeo lo bloquean primero
+// ---------------------------------------------------------------------------
+
+// Margen y rentabilidad leian el costeo fuera de la transaccion y decidian con
+// el (costo mayor que cero, precio no menor que el costo, ultimo margen): con un
+// recalculo a la vez, guardaban un margen o una rentabilidad con un costo viejo
+// (64). El alta de costo indirecto tomaba el correlativo antes de que el
+// recalculo bloqueara el costeo, y la mano de obra escribia el costeo antes del
+// bloqueo (65); recalcular comprobaba que existiera antes de bloquearlo. Ahora
+// las cinco bloquean la fila del costeo antes de cualquier lectura o escritura
+// y antes del correlativo, dentro de la transaccion.
+function touchesCosting(call: PrismaCall) {
+  return call.prisma !== "$queryRaw";
+}
+
+describe("Hallazgos 64 y 65: las acciones que tocan el costeo lo bloquean primero", () => {
+  const casesReachingCosting = [
+    ["updateLaborCostAction", "el costeo no existe: se revierte"],
+    ["updateLaborCostAction", "actualiza la mano de obra y recalcula los totales"],
+    ["recalculateCostingAction", "el costeo no existe: se revierte"],
+    ["recalculateCostingAction", "recalcula con los costos indirectos vigentes"],
+    ["recalculateCostingAction", "cantidad base en cero: el costo unitario queda vacio"],
+    ["createIndirectCostAction", "el costeo no existe: se revierte"],
+    ["createIndirectCostAction", "registra el costo indirecto y recalcula"],
+    ["createMarginAction", "el costeo no existe"],
+    ["createMarginAction", "costo total en cero"],
+    ["createMarginAction", "precio final menor que el costo total"],
+    ["createMarginAction", "sin precio final: usa el precio sugerido"],
+    ["createMarginAction", "costo con centimos: fija el orden de la formula del precio sugerido"],
+    ["createMarginAction", "con precio final ajustado y motivo"],
+    ["createProfitabilityAction", "el costeo no existe"],
+    ["createProfitabilityAction", "sin margen aplicado"],
+    ["createProfitabilityAction", "costo total en cero"],
+    ["createProfitabilityAction", "ingreso estimado en cero"],
+    ["createProfitabilityAction", "precio final bajo el margen esperado: alerta de bajo margen"],
+    ["createProfitabilityAction", "margen real igual al esperado: no es margen bajo"],
+    ["createProfitabilityAction", "costo con centimos: fija el orden de la formula del margen real"],
+    ["createProfitabilityAction", "sin precio final usa el sugerido: rentable, con observaciones"],
+  ];
+
+  it("cubre los 21 casos que llegan a la base", () => {
+    expect(casesReachingCosting).toHaveLength(21);
+  });
+
+  for (const [suite, caseName] of casesReachingCosting) {
+    it(`${suite}: ${caseName}`, async () => {
+      const { action, actionCase } = findCase(suite, caseName);
+      const { calls } = await runAction(action, actionCase);
+
+      expectRowLockedBefore(calls, { table: "costeo", id: COSTEO, reads: touchesCosting });
+
+      const lock = calls.findIndex((call) => isRowLock(call, "costeo", COSTEO));
+      const correlative = calls.findIndex(
+        (call) => "effect" in call && call.effect === "getNextCorrelativeId",
+      );
+
+      if (correlative >= 0) {
+        expect(lock, "el correlativo se toma antes de bloquear el costeo").toBeLessThan(correlative);
+      }
     });
   }
 });

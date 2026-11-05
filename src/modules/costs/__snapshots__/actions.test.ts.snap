@@ -1156,6 +1156,15 @@ exports[`createIndirectCostAction > el costeo no existe: se revierte > llamadas 
   },
   {
     "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "id_costeo": true,
       },
@@ -1185,6 +1194,15 @@ exports[`createIndirectCostAction > monto sobre el maximo de la columna: hoy pas
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1317,6 +1335,15 @@ exports[`createIndirectCostAction > monto vacio: hoy crea un costo indirecto de 
   },
   {
     "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "id_costeo": true,
       },
@@ -1446,6 +1473,15 @@ exports[`createIndirectCostAction > registra el costo indirecto y recalcula > ll
   },
   {
     "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "id_costeo": true,
       },
@@ -1570,6 +1606,19 @@ exports[`createMarginAction > con precio final ajustado y motivo > llamadas 1`] 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "costo_total": true,
@@ -1580,10 +1629,6 @@ exports[`createMarginAction > con precio final ajustado y motivo > llamadas 1`] 
       },
     },
     "prisma": "costeo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1651,6 +1696,19 @@ exports[`createMarginAction > costo con centimos: fija el orden de la formula de
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "costo_total": true,
@@ -1661,10 +1719,6 @@ exports[`createMarginAction > costo con centimos: fija el orden de la formula de
       },
     },
     "prisma": "costeo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1732,6 +1786,19 @@ exports[`createMarginAction > costo total en cero > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "costo_total": true,
@@ -1742,6 +1809,10 @@ exports[`createMarginAction > costo total en cero > llamadas 1`] = `
       },
     },
     "prisma": "costeo.findUnique",
+  },
+  {
+    "args": "No se puede aplicar margen porque el costo total debe ser mayor que cero.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1757,6 +1828,19 @@ exports[`createMarginAction > el costeo no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "costo_total": true,
@@ -1767,6 +1851,10 @@ exports[`createMarginAction > el costeo no existe > llamadas 1`] = `
       },
     },
     "prisma": "costeo.findUnique",
+  },
+  {
+    "args": "El costeo seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1808,6 +1896,19 @@ exports[`createMarginAction > precio final menor que el costo total > llamadas 1
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "costo_total": true,
@@ -1818,6 +1919,10 @@ exports[`createMarginAction > precio final menor que el costo total > llamadas 1
       },
     },
     "prisma": "costeo.findUnique",
+  },
+  {
+    "args": "El precio final no puede ser menor que el costo total del producto.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1846,6 +1951,19 @@ exports[`createMarginAction > sin el campo de precio final: hoy se vuelve 0 > ll
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "costo_total": true,
@@ -1856,6 +1974,10 @@ exports[`createMarginAction > sin el campo de precio final: hoy se vuelve 0 > ll
       },
     },
     "prisma": "costeo.findUnique",
+  },
+  {
+    "args": "El precio final no puede ser menor que el costo total del producto.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1871,6 +1993,19 @@ exports[`createMarginAction > sin precio final: usa el precio sugerido > llamada
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "costo_total": true,
@@ -1881,10 +2016,6 @@ exports[`createMarginAction > sin precio final: usa el precio sugerido > llamada
       },
     },
     "prisma": "costeo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1952,6 +2083,19 @@ exports[`createProfitabilityAction > costo con centimos: fija el orden de la for
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "margen_ganancia": {
@@ -1966,10 +2110,6 @@ exports[`createProfitabilityAction > costo con centimos: fija el orden de la for
       },
     },
     "prisma": "costeo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2039,6 +2179,19 @@ exports[`createProfitabilityAction > costo total en cero > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "margen_ganancia": {
@@ -2053,6 +2206,10 @@ exports[`createProfitabilityAction > costo total en cero > llamadas 1`] = `
       },
     },
     "prisma": "costeo.findUnique",
+  },
+  {
+    "args": "No se puede calcular rentabilidad porque el costo total debe ser mayor que cero.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2068,6 +2225,19 @@ exports[`createProfitabilityAction > el costeo no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "margen_ganancia": {
@@ -2082,6 +2252,10 @@ exports[`createProfitabilityAction > el costeo no existe > llamadas 1`] = `
       },
     },
     "prisma": "costeo.findUnique",
+  },
+  {
+    "args": "El costeo seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2097,6 +2271,19 @@ exports[`createProfitabilityAction > ingreso estimado en cero > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "margen_ganancia": {
@@ -2111,6 +2298,10 @@ exports[`createProfitabilityAction > ingreso estimado en cero > llamadas 1`] = `
       },
     },
     "prisma": "costeo.findUnique",
+  },
+  {
+    "args": "No se puede calcular rentabilidad porque el ingreso estimado debe ser mayor que cero.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2126,6 +2317,19 @@ exports[`createProfitabilityAction > margen real igual al esperado: no es margen
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "margen_ganancia": {
@@ -2140,10 +2344,6 @@ exports[`createProfitabilityAction > margen real igual al esperado: no es margen
       },
     },
     "prisma": "costeo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2213,6 +2413,19 @@ exports[`createProfitabilityAction > precio final bajo el margen esperado: alert
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "margen_ganancia": {
@@ -2227,10 +2440,6 @@ exports[`createProfitabilityAction > precio final bajo el margen esperado: alert
       },
     },
     "prisma": "costeo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2313,6 +2522,19 @@ exports[`createProfitabilityAction > sin margen aplicado > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "margen_ganancia": {
@@ -2327,6 +2549,10 @@ exports[`createProfitabilityAction > sin margen aplicado > llamadas 1`] = `
       },
     },
     "prisma": "costeo.findUnique",
+  },
+  {
+    "args": "Primero debes aplicar un margen de ganancia antes de calcular la rentabilidad.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2342,6 +2568,19 @@ exports[`createProfitabilityAction > sin precio final usa el sugerido: rentable,
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "margen_ganancia": {
@@ -2356,10 +2595,6 @@ exports[`createProfitabilityAction > sin precio final usa el sugerido: rentable,
       },
     },
     "prisma": "costeo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2431,6 +2666,15 @@ exports[`recalculateCostingAction > cantidad base en cero: el costo unitario que
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2545,6 +2789,15 @@ exports[`recalculateCostingAction > el costeo no existe: se revierte > llamadas 
   },
   {
     "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "id_costeo": true,
       },
@@ -2574,6 +2827,15 @@ exports[`recalculateCostingAction > recalcula con los costos indirectos vigentes
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2698,6 +2960,15 @@ exports[`updateLaborCostAction > actualiza la mano de obra y recalcula los total
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2836,6 +3107,15 @@ exports[`updateLaborCostAction > el costeo no existe: se revierte > llamadas 1`]
   },
   {
     "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "id_costeo": true,
       },
@@ -2878,6 +3158,15 @@ exports[`updateLaborCostAction > mano de obra sobre el maximo de la columna: hoy
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -3000,6 +3289,15 @@ exports[`updateLaborCostAction > mano de obra vacia: hoy guarda S/ 0 > llamadas 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {

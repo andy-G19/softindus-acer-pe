@@ -7,7 +7,7 @@ import { requireRole } from "@/lib/authz";
 import { recalculateCostingTotals } from "@/lib/costing";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { lockIndirectCostRow } from "@/lib/row-locks";
+import { lockCostingRow, lockIndirectCostRow } from "@/lib/row-locks";
 import { indirectCostSchema } from "@/schemas/costs/indirect-cost.schema";
 
 async function requireAdmin() {
@@ -56,6 +56,10 @@ export async function createIndirectCostAction(formData: FormData) {
   const data = parsedData.data;
 
   await prisma.$transaction(async (tx) => {
+    // Hallazgo 65 (10.8): el costeo, el padre, se bloquea antes de comprobarlo y de tomar
+    // el correlativo; antes solo lo bloqueaba el recalculo, despues de crear el indirecto.
+    await lockCostingRow(tx, data.id_costeo);
+
     const costing = await tx.costeo.findUnique({
       where: {
         id_costeo: data.id_costeo,

@@ -13,7 +13,7 @@ import { estimateMaterialCost } from "@/lib/costing-calculations";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { toNonNegativeNumber } from "@/lib/numbers";
-import { lockWorkOrderRow } from "@/lib/row-locks";
+import { lockCostingRow, lockWorkOrderRow } from "@/lib/row-locks";
 import { laborCostSchema } from "@/schemas/costs/labor-cost.schema";
 
 async function requireAdmin() {
@@ -232,6 +232,10 @@ export async function updateLaborCostAction(formData: FormData) {
   const data = parsedData.data;
 
   await prisma.$transaction(async (tx) => {
+    // Hallazgo 65 (10.8): se bloquea el costeo antes de comprobarlo y de escribir su mano
+    // de obra; antes la escritura llegaba sin bloqueo y solo el recalculo lo tomaba.
+    await lockCostingRow(tx, data.id_costeo);
+
     const costing = await tx.costeo.findUnique({
       where: {
         id_costeo: data.id_costeo,
@@ -281,6 +285,9 @@ export async function recalculateCostingAction(formData: FormData) {
   }
 
   await prisma.$transaction(async (tx) => {
+    // Se bloquea antes de comprobar que existe, como las demas acciones que tocan el costeo.
+    await lockCostingRow(tx, idCosteo);
+
     const costing = await tx.costeo.findUnique({
       where: {
         id_costeo: idCosteo,

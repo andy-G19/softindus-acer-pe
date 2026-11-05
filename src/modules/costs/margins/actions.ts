@@ -8,6 +8,7 @@ import { getNextCorrelativeId } from "@/lib/correlatives";
 import { calculateSuggestedPrice } from "@/lib/costing-calculations";
 import { prisma } from "@/lib/db";
 import { toNumber } from "@/lib/numbers";
+import { lockCostingRow } from "@/lib/row-locks";
 import { marginSchema } from "@/schemas/costs/margin.schema";
 
 async function requireAdmin() {
@@ -34,38 +35,43 @@ export async function createMarginAction(formData: FormData) {
 
   const data = parsedData.data;
 
-  const costing = await prisma.costeo.findUnique({
-    where: {
-      id_costeo: data.id_costeo,
-    },
-    select: {
-      id_costeo: true,
-      costo_total: true,
-    },
-  });
-
-  if (!costing) {
-    throw new Error("El costeo seleccionado no existe.");
-  }
-
-  const totalCost = toNumber(costing.costo_total);
-
-  if (totalCost <= 0) {
-    throw new Error(
-      "No se puede aplicar margen porque el costo total debe ser mayor que cero.",
-    );
-  }
-
-  const suggestedPrice = calculateSuggestedPrice(totalCost, data.porcentaje_margen);
-  const finalPrice = data.precio_final ?? suggestedPrice;
-
-  if (finalPrice < totalCost) {
-    throw new Error(
-      "El precio final no puede ser menor que el costo total del producto.",
-    );
-  }
-
   await prisma.$transaction(async (tx) => {
+    // Hallazgo 64 (10.8): el costeo se bloquea y se lee dentro de la transaccion, antes de
+    // decidir con su costo total; antes se leia fuera y un recalculo a la vez dejaba el
+    // margen calculado con un costo viejo.
+    await lockCostingRow(tx, data.id_costeo);
+
+    const costing = await tx.costeo.findUnique({
+      where: {
+        id_costeo: data.id_costeo,
+      },
+      select: {
+        id_costeo: true,
+        costo_total: true,
+      },
+    });
+
+    if (!costing) {
+      throw new Error("El costeo seleccionado no existe.");
+    }
+
+    const totalCost = toNumber(costing.costo_total);
+
+    if (totalCost <= 0) {
+      throw new Error(
+        "No se puede aplicar margen porque el costo total debe ser mayor que cero.",
+      );
+    }
+
+    const suggestedPrice = calculateSuggestedPrice(totalCost, data.porcentaje_margen);
+    const finalPrice = data.precio_final ?? suggestedPrice;
+
+    if (finalPrice < totalCost) {
+      throw new Error(
+        "El precio final no puede ser menor que el costo total del producto.",
+      );
+    }
+
     const idMargen = await getNextCorrelativeId(tx, {
       codigoEntidad: "margen_ganancia",
       prefijo: "MGN",
