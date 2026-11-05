@@ -1,17 +1,26 @@
 import { z } from "zod";
 
+import { toDateInputValue } from "@/lib/date-range";
+
+// Cada campo obligatorio lleva su mensaje en espanol: sin el, un POST que lo
+// omite recibe el de Zod en ingles (hallazgo 73). Una fecha debe existir: new
+// Date convierte el 30 de febrero en el 2 de marzo sin avisar (hallazgo 68).
+const isRealDate = (value: string) => toDateInputValue(value) === value;
+
 const paymentModes = ["semanal", "quincenal", "mensual"];
-const operatorStatuses = ["activo", "inactivo"];
+// operario.tarifa es numeric(12,2): un valor mayor llegaba a la base y daba un
+// error 500 (hallazgo 69).
+const MAX_RATE = 9_999_999_999.99;
 
 export const operatorSchema = z.object({
   nombres: z
-    .string()
+    .string({ error: "Los nombres son obligatorios." })
     .trim()
     .min(2, "Los nombres deben tener al menos 2 caracteres.")
     .max(100, "Los nombres no deben superar los 100 caracteres."),
 
   apellidos: z
-    .string()
+    .string({ error: "Los apellidos son obligatorios." })
     .trim()
     .min(2, "Los apellidos deben tener al menos 2 caracteres.")
     .max(100, "Los apellidos no deben superar los 100 caracteres."),
@@ -45,7 +54,7 @@ export const operatorSchema = z.object({
     .or(z.literal("")),
 
   modalidad_pago: z
-    .string()
+    .string({ error: "Seleccione una modalidad de pago válida." })
     .trim()
     .refine(
       (value) => paymentModes.includes(value),
@@ -82,6 +91,15 @@ export const operatorSchema = z.object({
         return z.NEVER;
       }
 
+      if (amount > MAX_RATE) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La tarifa no debe superar S/ 9,999,999,999.99.",
+        });
+
+        return z.NEVER;
+      }
+
       return amount;
     }),
 
@@ -90,6 +108,7 @@ export const operatorSchema = z.object({
     .trim()
     .optional()
     .or(z.literal(""))
+    .refine((value) => !value || isRealDate(value), "La fecha de ingreso no es válida.")
     .transform((value) => {
       if (!value) {
         return null;
@@ -97,14 +116,6 @@ export const operatorSchema = z.object({
 
       return new Date(`${value}T00:00:00`);
     }),
-
-  estado: z
-    .string()
-    .trim()
-    .refine(
-      (value) => operatorStatuses.includes(value),
-      "Seleccione un estado válido.",
-    ),
 
   observaciones: z
     .string()

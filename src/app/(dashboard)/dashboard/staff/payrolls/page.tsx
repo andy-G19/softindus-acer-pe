@@ -1,6 +1,9 @@
 import { Ban, CheckCircle2, Clock, FileSpreadsheet } from "lucide-react";
 import Link from "next/link";
 
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
@@ -13,7 +16,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -102,7 +104,7 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
   });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Planillas de pago"
         description="Genera y consulta planillas de pago según operario, periodo, modalidad, tarifa configurada, asistencias válidas y descuentos."
@@ -119,69 +121,47 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
         }
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
-            <div className="space-y-2">
-              <Label htmlFor="q">Buscar</Label>
-              <Input id="q" name="q" defaultValue={q} placeholder="Buscar planilla u operario" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="operario">ID operario</Label>
-              <Input id="operario" name="operario" defaultValue={operario} placeholder="ID operario" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="periodo">Periodo</Label>
-              <Input id="periodo" name="periodo" type="month" defaultValue={periodo} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="modalidad">Modalidad</Label>
-              <NativeSelect id="modalidad" name="modalidad" defaultValue={modalidad}>
-                <option value="">Todas las modalidades</option>
-                <option value="semanal">Semanal</option>
-                <option value="quincenal">Quincenal</option>
-                <option value="mensual">Mensual</option>
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="estado">Estado</Label>
-              <NativeSelect id="estado" name="estado" defaultValue={estado}>
-                <option value="">Todos los estados</option>
-                <option value="pendiente">Pendiente</option>
-                <option value="pagado">Pagado</option>
-                <option value="anulada">Anulada</option>
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="from">Desde</Label>
-              <Input
-                id="from"
-                name="from"
-                type="date"
-                defaultValue={parseStringParam(params, "from")}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="to">Hasta</Label>
-              <Input
-                id="to"
-                name="to"
-                type="date"
-                defaultValue={parseStringParam(params, "to")}
-              />
-            </div>
-            <div className="flex items-end gap-2 md:col-span-3 xl:col-span-7">
-              <Button type="submit">Filtrar</Button>
-              <Button variant="clear" asChild>
-                <Link href="/dashboard/staff/payrolls">Limpiar filtros</Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <FilterBar action={navigationHrefs.payrolls} label="Filtros de planillas" clearHref={navigationHrefs.payrolls}>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar planilla u operario" />}
+        </Field>
+
+        <Field id="operario" label="ID operario">
+          {(control) => <Input {...control} name="operario" defaultValue={operario} placeholder="ID operario" />}
+        </Field>
+
+        <Field id="periodo" label="Periodo">
+          {(control) => <Input {...control} name="periodo" type="month" defaultValue={periodo} />}
+        </Field>
+
+        <Field id="modalidad" label="Modalidad">
+          {(control) => (
+            <NativeSelect {...control} name="modalidad" defaultValue={modalidad}>
+              <option value="">Todas las modalidades</option>
+              <option value="semanal">Semanal</option>
+              <option value="quincenal">Quincenal</option>
+              <option value="mensual">Mensual</option>
+            </NativeSelect>
+          )}
+        </Field>
+
+        <Field id="estado" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="estado" defaultValue={estado}>
+              <option value="">Todos los estados</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="pagado">Pagado</option>
+              <option value="anulada">Anulada</option>
+            </NativeSelect>
+          )}
+        </Field>
+
+        <DateRangeFields
+          id="fecha"
+          defaultFrom={parseStringParam(params, "from")}
+          defaultTo={parseStringParam(params, "to")}
+        />
+      </FilterBar>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <KpiCard title="Planillas generadas" value={totalPayrolls.toString()} description="Total histórico registrado." tone="info" icon={FileSpreadsheet} />
@@ -302,6 +282,6 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

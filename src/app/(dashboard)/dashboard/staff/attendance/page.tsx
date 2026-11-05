@@ -1,6 +1,9 @@
 import { CalendarCheck, ClipboardList, Clock, UserX } from "lucide-react";
 import Link from "next/link";
 
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +15,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -25,7 +27,12 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { formatDate } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import {
@@ -96,6 +103,8 @@ export default async function AttendancePage({
   await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
   const params = (await searchParams) ?? {};
+  // El panel de registro vuelve a la lista con sus filtros.
+  const returnTo = createReturnToHref(navigationHrefs.attendance, params);
   const q = parseStringParam(params, "q");
   const operario = parseStringParam(params, "operario");
   const estado = parseStringParam(params, "estado");
@@ -112,7 +121,7 @@ export default async function AttendancePage({
   } = await getAttendanceListData({ q, operario, estado, from, to }, today);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Asistencia diaria"
         description="Registra y consulta la asistencia de los operarios del taller, incluyendo ingreso, salida, tardanzas, faltas, horas trabajadas y observaciones."
@@ -124,70 +133,39 @@ export default async function AttendancePage({
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/staff/attendance/new">
+            <Link href={withReturnTo(`${navigationHrefs.attendance}/new`, returnTo)}>
               Registrar asistencia
             </Link>
           </Button>
         }
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
-            <div className="space-y-2">
-              <Label htmlFor="q">Buscar</Label>
-              <Input
-                id="q"
-                name="q"
-                defaultValue={q}
-                placeholder="Buscar operario o codigo"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="operario">ID operario</Label>
-              <Input id="operario" name="operario" defaultValue={operario} placeholder="ID operario" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="estado">Estado</Label>
-              <NativeSelect id="estado" name="estado" defaultValue={estado}>
-                <option value="">Todos los estados</option>
-                <option value="presente">Presente</option>
-                <option value="tardanza">Tardanza</option>
-                <option value="falta">Falta</option>
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="from">Desde</Label>
-              <Input
-                id="from"
-                name="from"
-                type="date"
-                defaultValue={parseStringParam(params, "from")}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="to">Hasta</Label>
-              <Input
-                id="to"
-                name="to"
-                type="date"
-                defaultValue={parseStringParam(params, "to")}
-              />
-            </div>
-            <div className="flex items-end gap-2">
-              <Button type="submit" className="flex-1">
-                Filtrar
-              </Button>
-              <Button variant="clear" asChild>
-                <Link href="/dashboard/staff/attendance">Limpiar</Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <FilterBar action={navigationHrefs.attendance} label="Filtros de asistencia" clearHref={navigationHrefs.attendance}>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar operario o codigo" />}
+        </Field>
+
+        <Field id="operario" label="ID operario">
+          {(control) => <Input {...control} name="operario" defaultValue={operario} placeholder="ID operario" />}
+        </Field>
+
+        <Field id="estado" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="estado" defaultValue={estado}>
+              <option value="">Todos los estados</option>
+              <option value="presente">Presente</option>
+              <option value="tardanza">Tardanza</option>
+              <option value="falta">Falta</option>
+            </NativeSelect>
+          )}
+        </Field>
+
+        <DateRangeFields
+          id="fecha"
+          defaultFrom={parseStringParam(params, "from")}
+          defaultTo={parseStringParam(params, "to")}
+        />
+      </FilterBar>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <KpiCard title="Registros totales" value={totalAttendance.toString()} description="Historial general de asistencia." tone="info" icon={ClipboardList} />
@@ -211,7 +189,7 @@ export default async function AttendancePage({
               description="Registra la primera asistencia diaria para empezar a reemplazar el control manual en cuaderno."
               action={
                 <Button asChild>
-                  <Link href="/dashboard/staff/attendance/new">
+                  <Link href={withReturnTo(`${navigationHrefs.attendance}/new`, returnTo)}>
                     Registrar primera asistencia
                   </Link>
                 </Button>
@@ -274,6 +252,6 @@ export default async function AttendancePage({
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

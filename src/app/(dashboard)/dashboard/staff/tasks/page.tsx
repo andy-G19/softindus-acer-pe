@@ -8,7 +8,6 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import {
   Card,
   CardContent,
@@ -31,8 +30,10 @@ import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
+import { staffNotifications } from "@/modules/staff/notifications";
 import { cancelOperatorTaskAction } from "@/modules/staff/tasks/actions";
 import { getOperatorTaskData } from "@/modules/staff/tasks/queries";
+import { TaskCancelAction } from "@/modules/staff/tasks/task-cancel-action";
 
 function formatHours(value: unknown) {
   if (value === null || value === undefined) {
@@ -80,7 +81,7 @@ export default async function OperatorTasksPage() {
   }, 0);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Tareas diarias por operario"
         description="Registra y consulta qué actividad realizó cada operario, asociándola con una orden de trabajo, etapa productiva, fecha, horas dedicadas y responsable del registro."
@@ -195,22 +196,14 @@ export default async function OperatorTasksPage() {
                           Sin acción
                         </span>
                       ) : (
-                        <form action={cancelOperatorTaskAction}>
-                          <input
-                            type="hidden"
-                            name="id_tarea_operario"
-                            value={task.id_tarea_operario}
-                          />
-
-                          <ConfirmDeleteButton
-                            title="¿Anular tarea?"
-                            description="Esta acción anulará la tarea del operador y no se puede deshacer."
-                            confirmText="Confirmar anulación"
-                            entityName="tarea"
-                          >
-                            Anular
-                          </ConfirmDeleteButton>
-                        </form>
+                        <TaskCancelAction
+                          task={{
+                            id_tarea_operario: task.id_tarea_operario,
+                            descripcion: task.descripcion,
+                          }}
+                          action={cancelOperatorTaskAction}
+                          successNotification={staffNotifications["operator-task-annulled"]}
+                        />
                       )}
                     </TableCell>
                   </TableRow>
@@ -220,6 +213,6 @@ export default async function OperatorTasksPage() {
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

@@ -1,10 +1,9 @@
 ﻿import { CheckCircle2, Users, XCircle } from "lucide-react";
 import Link from "next/link";
 
-import {
-  RowEditLink,
-  RowToggleStatusButton,
-} from "@/components/table/row-actions";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
+import { RowEditLink } from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +15,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -29,9 +27,16 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
-import { toggleOperatorStatusAction } from "@/modules/staff/operators/actions";
+import { staffNotifications } from "@/modules/staff/notifications";
+import { updateOperatorStatusAction } from "@/modules/staff/operators/actions";
+import { OperatorStatusActions } from "@/modules/staff/operators/operator-status-actions";
 import { getOperatorListData } from "@/modules/staff/operators/queries";
 
 type OperatorsPageProps = {
@@ -65,6 +70,8 @@ export default async function OperatorsPage({
 
   const canManageOperators = session.user.role === APP_ROLES.ADMIN;
   const params = (await searchParams) ?? {};
+  // El panel de alta o edicion vuelve a la lista con sus filtros.
+  const returnTo = createReturnToHref(navigationHrefs.operators, params);
   const q = getSearchParam(params, "q");
   const cargo = getSearchParam(params, "cargo");
   const especialidad = getSearchParam(params, "especialidad");
@@ -81,7 +88,7 @@ export default async function OperatorsPage({
   );
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Operarios"
         description="Consulta operarios del taller, modalidad de pago y trazabilidad relacionada con asistencia, tareas y planillas."
@@ -92,7 +99,7 @@ export default async function OperatorsPage({
         actions={
           canManageOperators ? (
             <Button asChild>
-              <Link href={`${navigationHrefs.operators}/new`}>
+              <Link href={withReturnTo(`${navigationHrefs.operators}/new`, returnTo)}>
                 Registrar operario
               </Link>
             </Button>
@@ -106,84 +113,64 @@ export default async function OperatorsPage({
         <KpiCard title="Inactivos" value={inactiveOperators.length.toString()} description="Retirados o suspendidos." tone="warning" icon={XCircle} />
       </section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form
-            action="/dashboard/staff/operators"
-            className="grid gap-3 md:grid-cols-6"
-          >
-            <div className="space-y-2">
-              <Label htmlFor="q">Buscar</Label>
-              <Input
-                id="q"
-                name="q"
-                defaultValue={q}
-                placeholder="Buscar operario..."
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="cargo">Cargo</Label>
-              <NativeSelect id="cargo" name="cargo" defaultValue={cargo}>
-                <option value="">Todos los cargos</option>
-                {cargos.map((item) =>
-                  item.cargo ? (
-                    <option key={item.cargo} value={item.cargo}>
-                      {item.cargo}
-                    </option>
-                  ) : null,
-                )}
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="especialidad">Especialidad</Label>
-              <NativeSelect
-                id="especialidad"
-                name="especialidad"
-                defaultValue={especialidad}
-              >
-                <option value="">Especialidad</option>
-                {especialidades.map((item) =>
-                  item.especialidad ? (
-                    <option key={item.especialidad} value={item.especialidad}>
-                      {item.especialidad}
-                    </option>
-                  ) : null,
-                )}
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="modalidad">Modalidad</Label>
-              <NativeSelect id="modalidad" name="modalidad" defaultValue={modalidad}>
-                <option value="">Modalidad</option>
-                {modalidades.map((item) => (
-                  <option key={item.modalidad_pago} value={item.modalidad_pago}>
-                    {item.modalidad_pago}
+      <FilterBar action={navigationHrefs.operators} label="Filtros de operarios" clearHref={navigationHrefs.operators}>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar operario..." />}
+        </Field>
+
+        <Field id="cargo" label="Cargo">
+          {(control) => (
+            <NativeSelect {...control} name="cargo" defaultValue={cargo}>
+              <option value="">Todos los cargos</option>
+              {cargos.map((item) =>
+                item.cargo ? (
+                  <option key={item.cargo} value={item.cargo}>
+                    {item.cargo}
                   </option>
-                ))}
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="status">Estado</Label>
-              <NativeSelect id="status" name="status" defaultValue={status}>
-                <option value="">Todos los estados</option>
-                <option value="activo">Activo</option>
-                <option value="inactivo">Inactivo</option>
-              </NativeSelect>
-            </div>
-            <div className="flex items-end gap-2">
-              <Button type="submit" className="flex-1">
-                Filtrar
-              </Button>
-              <Button variant="clear" asChild>
-                <Link href="/dashboard/staff/operators">Limpiar</Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+                ) : null,
+              )}
+            </NativeSelect>
+          )}
+        </Field>
+
+        <Field id="especialidad" label="Especialidad">
+          {(control) => (
+            <NativeSelect {...control} name="especialidad" defaultValue={especialidad}>
+              <option value="">Especialidad</option>
+              {especialidades.map((item) =>
+                item.especialidad ? (
+                  <option key={item.especialidad} value={item.especialidad}>
+                    {item.especialidad}
+                  </option>
+                ) : null,
+              )}
+            </NativeSelect>
+          )}
+        </Field>
+
+        <Field id="modalidad" label="Modalidad">
+          {(control) => (
+            <NativeSelect {...control} name="modalidad" defaultValue={modalidad}>
+              <option value="">Modalidad</option>
+              {modalidades.map((item) => (
+                <option key={item.modalidad_pago} value={item.modalidad_pago}>
+                  {item.modalidad_pago}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="activo">Activo</option>
+              <option value="inactivo">Inactivo</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
       <Card>
         <CardHeader>
@@ -254,13 +241,17 @@ export default async function OperatorsPage({
                       <TableCell>
                         <div className="flex justify-end gap-2">
                           <RowEditLink
-                            href={`/dashboard/staff/operators/${operator.id_operario}/edit`}
+                            href={withReturnTo(`${navigationHrefs.operators}/${operator.id_operario}/edit`, returnTo)}
                           />
-                          <RowToggleStatusButton
-                            action={toggleOperatorStatusAction}
-                            hiddenFieldName="id_operario"
-                            hiddenFieldValue={operator.id_operario}
-                            isActive={operator.estado === "activo"}
+                          <OperatorStatusActions
+                            operator={{
+                              id_operario: operator.id_operario,
+                              nombre: `${operator.nombres} ${operator.apellidos}`,
+                              estado: operator.estado,
+                            }}
+                            action={updateOperatorStatusAction}
+                            activatedNotification={staffNotifications["operator-activated"]}
+                            deactivatedNotification={staffNotifications["operator-deactivated"]}
                           />
                         </div>
                       </TableCell>
@@ -272,7 +263,7 @@ export default async function OperatorsPage({
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
 

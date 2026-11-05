@@ -1,15 +1,23 @@
 import { z } from "zod";
 
-const taskStatuses = ["registrada", "en_proceso", "terminada", "anulada"];
+import { toDateInputValue } from "@/lib/date-range";
+
+// Cada campo obligatorio lleva su mensaje en espanol: sin el, un POST que lo
+// omite recibe el de Zod en ingles (hallazgo 73). Una fecha debe existir: new
+// Date convierte el 30 de febrero en el 2 de marzo sin avisar (hallazgo 68).
+const isRealDate = (value: string) => toDateInputValue(value) === value;
+
+// Estados con los que nace una tarea: solo se anula desde la fila (hallazgo 70).
+const taskStatuses = ["registrada", "en_proceso", "terminada"];
 
 export const operatorTaskSchema = z.object({
   id_operario: z
-    .string()
+    .string({ error: "Debe seleccionar un operario." })
     .trim()
     .min(1, "Debe seleccionar un operario."),
 
   id_orden_trabajo: z
-    .string()
+    .string({ error: "Debe seleccionar una orden de trabajo." })
     .trim()
     .min(1, "Debe seleccionar una orden de trabajo."),
 
@@ -20,13 +28,14 @@ export const operatorTaskSchema = z.object({
     .or(z.literal("")),
 
   fecha_tarea: z
-    .string()
+    .string({ error: "La fecha de la tarea es obligatoria." })
     .trim()
     .min(1, "La fecha de la tarea es obligatoria.")
+    .refine((value) => !value || isRealDate(value), "La fecha de la tarea no es válida.")
     .transform((value) => new Date(`${value}T00:00:00`)),
 
   descripcion: z
-    .string()
+    .string({ error: "La descripción es obligatoria." })
     .trim()
     .min(5, "La descripción debe tener al menos 5 caracteres.")
     .max(255, "La descripción no debe superar los 255 caracteres."),
@@ -74,7 +83,7 @@ export const operatorTaskSchema = z.object({
     }),
 
   estado: z
-    .string()
+    .string({ error: "Seleccione un estado válido para la tarea." })
     .trim()
     .refine(
       (value) => taskStatuses.includes(value),

@@ -18,6 +18,8 @@ Pantallas renovadas hasta ahora:
   botella y la lista de órdenes de trabajo.
 - Mermas y chatarra: el inicio, la chatarra y los retazos reutilizables.
 - Usuarios: toda la pantalla.
+- Personal: el inicio, operarios, asistencia diaria, tareas diarias y la
+  lista de planillas.
 - Reportes: los ocho reportes con filtros, el historial de exportaciones y
   la bitácora de auditoría.
 
@@ -159,7 +161,7 @@ revés, el mensaje aparece igual y la barra no se envía.
 
 Cada pantalla muestra solo lo que tu usuario puede hacer. Si un rol solo
 puede consultar, verás la lista con la indicación **Solo lectura** y sin los
-botones de crear, editar o inactivar. Los inicios de Inventario y de
-Mantenimiento muestran solo las tarjetas de las pantallas que tu usuario
-puede abrir. Los permisos de
+botones de crear, editar o inactivar. Los inicios de Inventario, de
+Mantenimiento y de Personal muestran solo las tarjetas de las pantallas que
+tu usuario puede abrir. Los permisos de
 cada pantalla están en el capítulo de su área.

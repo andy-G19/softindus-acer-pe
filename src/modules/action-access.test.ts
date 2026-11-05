@@ -312,6 +312,7 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/staff/attendance/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createAttendanceAction"],
+    rechazanConResultado: ["createAttendanceAction"],
   },
   {
     ruta: "staff/operators/actions",
@@ -320,8 +321,9 @@ const MODULOS: ModuloDeAcciones[] = [
     acciones: [
       "createOperatorAction",
       "updateOperatorAction",
-      "toggleOperatorStatusAction",
+      "updateOperatorStatusAction",
     ],
+    rechazanConResultado: ["createOperatorAction", "updateOperatorAction", "updateOperatorStatusAction"],
   },
   {
     ruta: "staff/payment-history/actions",
@@ -340,6 +342,7 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/staff/tasks/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createOperatorTaskAction", "cancelOperatorTaskAction"],
+    rechazanConResultado: ["createOperatorTaskAction", "cancelOperatorTaskAction"],
   },
   {
     ruta: "users/actions",

@@ -55,7 +55,7 @@ export default async function PaymentHistoryPage() {
   } = await getOperatorPaymentHistoryData(today);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Historial de pagos por operario"
         description="Consulta los pagos realizados a operarios a partir de planillas generadas, registrando fecha, método de pago, monto pagado, periodo y usuario responsable."
@@ -158,6 +158,6 @@ export default async function PaymentHistoryPage() {
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

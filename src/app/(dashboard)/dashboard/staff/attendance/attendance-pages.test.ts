@@ -1,3 +1,4 @@
+import { createElement, type ReactNode } from "react";
 import { vi } from "vitest";
 
 import { definePageSuite } from "@/testing/page-characterization";
@@ -15,8 +16,17 @@ vi.mock("next/navigation", async (importOriginal) =>
   ),
 );
 
+// RouteSheet pinta su contenido en un portal, que no existe en el render de
+// servidor: el HTML de un panel sale vacio. El doble lo deja en linea para que la
+// prueba vea el titulo y el formulario del panel.
+vi.mock("@/components/navigation/route-sheet", () => ({
+  RouteSheet: ({ title, description, children }: { title: string; description?: string; children: ReactNode }) =>
+    createElement("section", null, createElement("h2", null, title), createElement("p", null, description), children),
+}));
+
 // Caracterizacion de Asistencia (entrega 4.5), escrita antes
-// de mover sus consultas a modules/staff/attendance/queries.ts.
+// de mover sus consultas a modules/staff/attendance/queries.ts. Desde A8 de la
+// 10.8a el registro tambien se abre en un panel sobre la lista.
 
 definePageSuite([
   {
@@ -43,6 +53,14 @@ definePageSuite([
     load: () => import("./new/page"),
     cases: [
       { name: "formulario" },
+      { name: "vuelve al returnTo", searchParams: { returnTo: "/dashboard/staff/attendance?estado=falta" } },
+      { name: "un returnTo ajeno vuelve a la lista", searchParams: { returnTo: "https://otro.example/x" } },
+      { name: "sin operarios activos", data: { "operario.findMany": [] } },
     ],
+  },
+  {
+    route: "/dashboard/staff/attendance/@panel/(.)new",
+    load: () => import("./@panel/(.)new/page"),
+    cases: [{ name: "panel de alta" }, { name: "maestro de taller", role: "WORKSHOP_MASTER" }],
   },
 ]);

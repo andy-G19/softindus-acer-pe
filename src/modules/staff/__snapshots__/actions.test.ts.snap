@@ -1,0 +1,5141 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`cancelOperatorTaskAction > ADMIN anula con compare-and-set y la bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_tarea_operario": "TAR00000007",
+      },
+    },
+    "prisma": "tarea_operario.updateMany",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Tarea de operario anulada: TAR00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "tarea_operario",
+      "id_registro_afectado": "TAR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/tasks",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`cancelOperatorTaskAction > ADMIN anula con compare-and-set y la bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "TAR00000007",
+    },
+  },
+}
+`;
+
+exports[`cancelOperatorTaskAction > SELLER no puede anular > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`cancelOperatorTaskAction > SELLER no puede anular > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar tareas.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "TAR00000007",
+    },
+  },
+}
+`;
+
+exports[`cancelOperatorTaskAction > WORKSHOP_MASTER tambien anula > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_tarea_operario": "TAR00000007",
+      },
+    },
+    "prisma": "tarea_operario.updateMany",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Tarea de operario anulada: TAR00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "tarea_operario",
+      "id_registro_afectado": "TAR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/tasks",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`cancelOperatorTaskAction > WORKSHOP_MASTER tambien anula > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "TAR00000007",
+    },
+  },
+}
+`;
+
+exports[`cancelOperatorTaskAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`cancelOperatorTaskAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió la tarea del operario.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`cancelOperatorTaskAction > una tarea inexistente se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_tarea_operario": "TAR00000007",
+      },
+    },
+    "prisma": "tarea_operario.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_tarea_operario": true,
+      },
+      "where": {
+        "id_tarea_operario": "TAR00000007",
+      },
+    },
+    "prisma": "tarea_operario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`cancelOperatorTaskAction > una tarea inexistente se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "La tarea seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "TAR00000007",
+    },
+  },
+}
+`;
+
+exports[`cancelOperatorTaskAction > una tarea terminada tambien se anula > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_tarea_operario": "TAR00000007",
+      },
+    },
+    "prisma": "tarea_operario.updateMany",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Tarea de operario anulada: TAR00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "tarea_operario",
+      "id_registro_afectado": "TAR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/tasks",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`cancelOperatorTaskAction > una tarea terminada tambien se anula > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "TAR00000007",
+    },
+  },
+}
+`;
+
+exports[`cancelOperatorTaskAction > una tarea ya anulada se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_tarea_operario": "TAR00000007",
+      },
+    },
+    "prisma": "tarea_operario.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_tarea_operario": true,
+      },
+      "where": {
+        "id_tarea_operario": "TAR00000007",
+      },
+    },
+    "prisma": "tarea_operario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`cancelOperatorTaskAction > una tarea ya anulada se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "La tarea ya se encuentra anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "TAR00000007",
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > 20 minutos se guardan como 0.33 horas > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "asistencia",
+      "prefijo": "ASI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "falta": false,
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "hora_ingreso": 1970-01-01T08:00:00.000Z,
+        "hora_salida": 1970-01-01T08:20:00.000Z,
+        "horas_trabajadas": "0.33",
+        "id_asistencia": "ASI00000012",
+        "id_operario": "OPE00000003",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+        "tardanza": false,
+      },
+    },
+    "prisma": "asistencia.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Asistencia registrada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "asistencia",
+      "id_registro_afectado": "ASI00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/attendance",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createAttendanceAction > 20 minutos se guardan como 0.33 horas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_asistencia": "ASI00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "08:20",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > ADMIN registra ingreso y salida: 9 horas, con bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "asistencia",
+      "prefijo": "ASI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "falta": false,
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "hora_ingreso": 1970-01-01T08:00:00.000Z,
+        "hora_salida": 1970-01-01T17:00:00.000Z,
+        "horas_trabajadas": "9.00",
+        "id_asistencia": "ASI00000012",
+        "id_operario": "OPE00000003",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+        "tardanza": false,
+      },
+    },
+    "prisma": "asistencia.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Asistencia registrada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "asistencia",
+      "id_registro_afectado": "ASI00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/attendance",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createAttendanceAction > ADMIN registra ingreso y salida: 9 horas, con bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_asistencia": "ASI00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > SELLER no puede registrar > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createAttendanceAction > SELLER no puede registrar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar asistencia.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > WORKSHOP_MASTER tambien registra > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "asistencia",
+      "prefijo": "ASI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "falta": false,
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "hora_ingreso": 1970-01-01T08:00:00.000Z,
+        "hora_salida": 1970-01-01T17:00:00.000Z,
+        "horas_trabajadas": "9.00",
+        "id_asistencia": "ASI00000012",
+        "id_operario": "OPE00000003",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+        "tardanza": false,
+      },
+    },
+    "prisma": "asistencia.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Asistencia registrada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "asistencia",
+      "id_registro_afectado": "ASI00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/attendance",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createAttendanceAction > WORKSHOP_MASTER tambien registra > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_asistencia": "ASI00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > con tardanza se guarda la tardanza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "asistencia",
+      "prefijo": "ASI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "falta": false,
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "hora_ingreso": 1970-01-01T08:00:00.000Z,
+        "hora_salida": 1970-01-01T17:00:00.000Z,
+        "horas_trabajadas": "9.00",
+        "id_asistencia": "ASI00000012",
+        "id_operario": "OPE00000003",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+        "tardanza": true,
+      },
+    },
+    "prisma": "asistencia.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Asistencia registrada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "asistencia",
+      "id_registro_afectado": "ASI00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/attendance",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createAttendanceAction > con tardanza se guarda la tardanza > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_asistencia": "ASI00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": true,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > el 30 de febrero se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createAttendanceAction > el 30 de febrero se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "fecha": [
+        "La fecha de asistencia no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-02-30",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > el operario no existe o esta inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createAttendanceAction > el operario no existe o esta inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "El operario seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_operario": [
+        "El operario seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > el operario ya tiene asistencia en esa fecha > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createAttendanceAction > el operario ya tiene asistencia en esa fecha > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este operario ya tiene asistencia registrada en la fecha seleccionada.",
+    "fieldErrors": {
+      "fecha": [
+        "Este operario ya tiene asistencia registrada en la fecha seleccionada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > salida antes del ingreso se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createAttendanceAction > salida antes del ingreso se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "hora_salida": [
+        "La hora de salida debe ser mayor que la hora de ingreso.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "07:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > salida igual al ingreso se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createAttendanceAction > salida igual al ingreso se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "hora_salida": [
+        "La hora de salida debe ser mayor que la hora de ingreso.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "08:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > sin falta ni ingreso se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createAttendanceAction > sin falta ni ingreso se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "hora_ingreso": [
+        "Si no marca falta, debe registrar al menos la hora de ingreso.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "",
+      "hora_salida": "",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > solo ingreso: sin horas trabajadas > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "asistencia",
+      "prefijo": "ASI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "falta": false,
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "hora_ingreso": 1970-01-01T08:00:00.000Z,
+        "hora_salida": null,
+        "horas_trabajadas": null,
+        "id_asistencia": "ASI00000012",
+        "id_operario": "OPE00000003",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+        "tardanza": false,
+      },
+    },
+    "prisma": "asistencia.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Asistencia registrada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "asistencia",
+      "id_registro_afectado": "ASI00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/attendance",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createAttendanceAction > solo ingreso: sin horas trabajadas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_asistencia": "ASI00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createAttendanceAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "fecha": [
+        "La fecha de asistencia es obligatoria.",
+      ],
+      "hora_ingreso": [
+        "Si no marca falta, debe registrar al menos la hora de ingreso.",
+      ],
+      "id_operario": [
+        "Debe seleccionar un operario.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "",
+      "hora_ingreso": "",
+      "hora_salida": "",
+      "id_operario": "",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > una carrera por la misma fecha (P2002) responde como duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "asistencia",
+      "prefijo": "ASI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "falta": false,
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "hora_ingreso": 1970-01-01T08:00:00.000Z,
+        "hora_salida": 1970-01-01T17:00:00.000Z,
+        "horas_trabajadas": "9.00",
+        "id_asistencia": "ASI00000012",
+        "id_operario": "OPE00000003",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+        "tardanza": false,
+      },
+    },
+    "prisma": "asistencia.create",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createAttendanceAction > una carrera por la misma fecha (P2002) responde como duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este operario ya tiene asistencia registrada en la fecha seleccionada.",
+    "fieldErrors": {
+      "fecha": [
+        "Este operario ya tiene asistencia registrada en la fecha seleccionada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > una falta con horas se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createAttendanceAction > una falta con horas se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "falta": [
+        "Si el operario tiene falta, no debe registrar hora de ingreso ni hora de salida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": true,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > una falta no guarda horas y descarta la tardanza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "asistencia",
+      "prefijo": "ASI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "falta": true,
+        "fecha": 2026-07-15T00:00:00.000Z,
+        "hora_ingreso": null,
+        "hora_salida": null,
+        "horas_trabajadas": null,
+        "id_asistencia": "ASI00000012",
+        "id_operario": "OPE00000003",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+        "tardanza": false,
+      },
+    },
+    "prisma": "asistencia.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Asistencia registrada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "asistencia",
+      "id_registro_afectado": "ASI00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/attendance",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createAttendanceAction > una falta no guarda horas y descarta la tardanza > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_asistencia": "ASI00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "falta": true,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "",
+      "hora_salida": "",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": true,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > una fecha que no es fecha se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createAttendanceAction > una fecha que no es fecha se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "fecha": [
+        "La fecha de asistencia no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "abc",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > una hora con otro formato se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createAttendanceAction > una hora con otro formato se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "hora_ingreso": [
+        "La hora debe tener el formato HH:mm.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "8:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createAttendanceAction > unas observaciones de mas de 500 caracteres se rechazan > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createAttendanceAction > unas observaciones de mas de 500 caracteres se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asistencia.",
+    "fieldErrors": {
+      "observaciones": [
+        "Las observaciones no deben superar los 500 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "falta": false,
+      "fecha": "2026-07-15",
+      "hora_ingreso": "08:00",
+      "hora_salida": "17:00",
+      "id_operario": "OPE00000003",
+      "observaciones": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "tardanza": false,
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > ADMIN registra el operario con correlativo y bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "apellidos": {
+          "equals": "Huaman",
+          "mode": "insensitive",
+        },
+        "nombres": {
+          "equals": "Luis",
+          "mode": "insensitive",
+        },
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "operario",
+      "prefijo": "OPE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Huaman",
+        "cargo": "Soldador",
+        "direccion": "Av. Industrial 123",
+        "especialidad": "Soldadura MIG",
+        "estado": "activo",
+        "fecha_ingreso": 2026-03-02T00:00:00.000Z,
+        "id_operario": "OPE00000012",
+        "modalidad_pago": "semanal",
+        "nombres": "Luis",
+        "observaciones": null,
+        "tarifa": 80.5,
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Operario creado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOperatorAction > ADMIN registra el operario con correlativo y bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > SELLER no puede registrar > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorAction > SELLER no puede registrar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar operarios.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > WORKSHOP_MASTER no puede registrar > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorAction > WORKSHOP_MASTER no puede registrar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar operarios.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > el 30 de febrero se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorAction > el 30 de febrero se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del operario.",
+    "fieldErrors": {
+      "fecha_ingreso": [
+        "La fecha de ingreso no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-02-30",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > el alta ignora el estado del formulario: nace activo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "apellidos": {
+          "equals": "Huaman",
+          "mode": "insensitive",
+        },
+        "nombres": {
+          "equals": "Luis",
+          "mode": "insensitive",
+        },
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "operario",
+      "prefijo": "OPE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Huaman",
+        "cargo": "Soldador",
+        "direccion": "Av. Industrial 123",
+        "especialidad": "Soldadura MIG",
+        "estado": "activo",
+        "fecha_ingreso": 2026-03-02T00:00:00.000Z,
+        "id_operario": "OPE00000012",
+        "modalidad_pago": "semanal",
+        "nombres": "Luis",
+        "observaciones": null,
+        "tarifa": 80.5,
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Operario creado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOperatorAction > el alta ignora el estado del formulario: nace activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > los campos opcionales vacios se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "apellidos": {
+          "equals": "Huaman",
+          "mode": "insensitive",
+        },
+        "nombres": {
+          "equals": "Luis",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "operario",
+      "prefijo": "OPE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Huaman",
+        "cargo": null,
+        "direccion": null,
+        "especialidad": null,
+        "estado": "activo",
+        "fecha_ingreso": null,
+        "id_operario": "OPE00000012",
+        "modalidad_pago": "semanal",
+        "nombres": "Luis",
+        "observaciones": null,
+        "tarifa": null,
+        "telefono": null,
+      },
+    },
+    "prisma": "operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Operario creado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOperatorAction > los campos opcionales vacios se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "",
+      "direccion": "",
+      "especialidad": "",
+      "fecha_ingreso": "",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "",
+      "telefono": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > nombres de una letra se rechazan > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorAction > nombres de una letra se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del operario.",
+    "fieldErrors": {
+      "nombres": [
+        "Los nombres deben tener al menos 2 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "L",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > sin telefono, el duplicado se busca solo por nombres y apellidos > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "apellidos": {
+          "equals": "Huaman",
+          "mode": "insensitive",
+        },
+        "nombres": {
+          "equals": "Luis",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "operario",
+      "prefijo": "OPE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Huaman",
+        "cargo": "Soldador",
+        "direccion": "Av. Industrial 123",
+        "especialidad": "Soldadura MIG",
+        "estado": "activo",
+        "fecha_ingreso": 2026-03-02T00:00:00.000Z,
+        "id_operario": "OPE00000012",
+        "modalidad_pago": "semanal",
+        "nombres": "Luis",
+        "observaciones": null,
+        "tarifa": 80.5,
+        "telefono": null,
+      },
+    },
+    "prisma": "operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Operario creado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOperatorAction > sin telefono, el duplicado se busca solo por nombres y apellidos > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del operario.",
+    "fieldErrors": {
+      "apellidos": [
+        "Los apellidos deben tener al menos 2 caracteres.",
+      ],
+      "modalidad_pago": [
+        "Seleccione una modalidad de pago válida.",
+      ],
+      "nombres": [
+        "Los nombres deben tener al menos 2 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "",
+      "cargo": "",
+      "direccion": "",
+      "especialidad": "",
+      "fecha_ingreso": "",
+      "modalidad_pago": "",
+      "nombres": "",
+      "observaciones": "",
+      "tarifa": "",
+      "telefono": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > un estado desconocido en el formulario se ignora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "apellidos": {
+          "equals": "Huaman",
+          "mode": "insensitive",
+        },
+        "nombres": {
+          "equals": "Luis",
+          "mode": "insensitive",
+        },
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "operario",
+      "prefijo": "OPE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Huaman",
+        "cargo": "Soldador",
+        "direccion": "Av. Industrial 123",
+        "especialidad": "Soldadura MIG",
+        "estado": "activo",
+        "fecha_ingreso": 2026-03-02T00:00:00.000Z,
+        "id_operario": "OPE00000012",
+        "modalidad_pago": "semanal",
+        "nombres": "Luis",
+        "observaciones": null,
+        "tarifa": 80.5,
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Operario creado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOperatorAction > un estado desconocido en el formulario se ignora > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > un operario con los mismos datos se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "apellidos": {
+          "equals": "Huaman",
+          "mode": "insensitive",
+        },
+        "nombres": {
+          "equals": "Luis",
+          "mode": "insensitive",
+        },
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+]
+`;
+
+exports[`createOperatorAction > un operario con los mismos datos se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un operario registrado con esos datos.",
+    "fieldErrors": {
+      "nombres": [
+        "Ya existe un operario registrado con esos datos.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > una modalidad fuera de la lista se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorAction > una modalidad fuera de la lista se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del operario.",
+    "fieldErrors": {
+      "modalidad_pago": [
+        "Seleccione una modalidad de pago válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "diaria",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > una tarifa de 0.004 pasa: la columna la deja en 0, una tarifa valida > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "apellidos": {
+          "equals": "Huaman",
+          "mode": "insensitive",
+        },
+        "nombres": {
+          "equals": "Luis",
+          "mode": "insensitive",
+        },
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "operario",
+      "prefijo": "OPE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Huaman",
+        "cargo": "Soldador",
+        "direccion": "Av. Industrial 123",
+        "especialidad": "Soldadura MIG",
+        "estado": "activo",
+        "fecha_ingreso": 2026-03-02T00:00:00.000Z,
+        "id_operario": "OPE00000012",
+        "modalidad_pago": "semanal",
+        "nombres": "Luis",
+        "observaciones": null,
+        "tarifa": 0.004,
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Operario creado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOperatorAction > una tarifa de 0.004 pasa: la columna la deja en 0, una tarifa valida > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "0.004",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > una tarifa de 1e12 se rechaza: desborda Decimal(12,2) > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorAction > una tarifa de 1e12 se rechaza: desborda Decimal(12,2) > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del operario.",
+    "fieldErrors": {
+      "tarifa": [
+        "La tarifa no debe superar S/ 9,999,999,999.99.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "1000000000000",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > una tarifa negativa se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorAction > una tarifa negativa se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del operario.",
+    "fieldErrors": {
+      "tarifa": [
+        "La tarifa no puede ser negativa.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "-1",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorAction > una tarifa que no es numero se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorAction > una tarifa que no es numero se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del operario.",
+    "fieldErrors": {
+      "tarifa": [
+        "La tarifa debe ser un número válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "abc",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > 0.004 horas se envian tal cual: la columna guarda 0.00 > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "tarea_operario",
+      "prefijo": "TAR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte de piezas para lote de lampas",
+        "estado": "registrada",
+        "fecha_tarea": 2026-07-15T00:00:00.000Z,
+        "horas_dedicadas": "0.004",
+        "id_etapa_ruta": null,
+        "id_operario": "OPE00000003",
+        "id_orden_trabajo": "OTR00000006",
+        "id_tarea_operario": "TAR00000012",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+      },
+    },
+    "prisma": "tarea_operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Tarea registrada para el operario OPE00000003 en la orden OTR00000006.",
+      "enTransaccion": true,
+      "entidad_afectada": "tarea_operario",
+      "id_registro_afectado": "TAR00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/tasks",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > 0.004 horas se envian tal cual: la columna guarda 0.00 > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_tarea_operario": "TAR00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "0.004",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > 3.005 horas se envian tal cual: la columna guarda 3.01 > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "tarea_operario",
+      "prefijo": "TAR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte de piezas para lote de lampas",
+        "estado": "registrada",
+        "fecha_tarea": 2026-07-15T00:00:00.000Z,
+        "horas_dedicadas": "3.005",
+        "id_etapa_ruta": null,
+        "id_operario": "OPE00000003",
+        "id_orden_trabajo": "OTR00000006",
+        "id_tarea_operario": "TAR00000012",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+      },
+    },
+    "prisma": "tarea_operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Tarea registrada para el operario OPE00000003 en la orden OTR00000006.",
+      "enTransaccion": true,
+      "entidad_afectada": "tarea_operario",
+      "id_registro_afectado": "TAR00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/tasks",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > 3.005 horas se envian tal cual: la columna guarda 3.01 > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_tarea_operario": "TAR00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "3.005",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > ADMIN registra la tarea sin etapa, con bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "tarea_operario",
+      "prefijo": "TAR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte de piezas para lote de lampas",
+        "estado": "registrada",
+        "fecha_tarea": 2026-07-15T00:00:00.000Z,
+        "horas_dedicadas": "4.5",
+        "id_etapa_ruta": null,
+        "id_operario": "OPE00000003",
+        "id_orden_trabajo": "OTR00000006",
+        "id_tarea_operario": "TAR00000012",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+      },
+    },
+    "prisma": "tarea_operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Tarea registrada para el operario OPE00000003 en la orden OTR00000006.",
+      "enTransaccion": true,
+      "entidad_afectada": "tarea_operario",
+      "id_registro_afectado": "TAR00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/tasks",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > ADMIN registra la tarea sin etapa, con bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_tarea_operario": "TAR00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > SELLER no puede registrar > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > SELLER no puede registrar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar tareas.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > WORKSHOP_MASTER tambien registra > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "tarea_operario",
+      "prefijo": "TAR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte de piezas para lote de lampas",
+        "estado": "registrada",
+        "fecha_tarea": 2026-07-15T00:00:00.000Z,
+        "horas_dedicadas": "4.5",
+        "id_etapa_ruta": null,
+        "id_operario": "OPE00000003",
+        "id_orden_trabajo": "OTR00000006",
+        "id_tarea_operario": "TAR00000012",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+      },
+    },
+    "prisma": "tarea_operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Tarea registrada para el operario OPE00000003 en la orden OTR00000006.",
+      "enTransaccion": true,
+      "entidad_afectada": "tarea_operario",
+      "id_registro_afectado": "TAR00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/tasks",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > WORKSHOP_MASTER tambien registra > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_tarea_operario": "TAR00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > con una etapa de la ruta de la orden > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_etapa_ruta": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000005",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "tarea_operario",
+      "prefijo": "TAR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte de piezas para lote de lampas",
+        "estado": "registrada",
+        "fecha_tarea": 2026-07-15T00:00:00.000Z,
+        "horas_dedicadas": "4.5",
+        "id_etapa_ruta": "ETA00000005",
+        "id_operario": "OPE00000003",
+        "id_orden_trabajo": "OTR00000006",
+        "id_tarea_operario": "TAR00000012",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+      },
+    },
+    "prisma": "tarea_operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Tarea registrada para el operario OPE00000003 en la orden OTR00000006.",
+      "enTransaccion": true,
+      "entidad_afectada": "tarea_operario",
+      "id_registro_afectado": "TAR00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/tasks",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > con una etapa de la ruta de la orden > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_tarea_operario": "TAR00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "ETA00000005",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > el 30 de febrero se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > el 30 de febrero se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "fecha_tarea": [
+        "La fecha de la tarea no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-02-30",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > el alta rechaza una tarea anulada enviada a mano > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > el alta rechaza una tarea anulada enviada a mano > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "estado": [
+        "Seleccione un estado válido para la tarea.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "anulada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > el operario no existe o esta inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > el operario no existe o esta inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "El operario seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_operario": [
+        "El operario seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > horas negativas se rechazan > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > horas negativas se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "horas_dedicadas": [
+        "Las horas dedicadas no pueden ser negativas.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "-1",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > horas que no son numero se rechazan > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > horas que no son numero se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "horas_dedicadas": [
+        "Las horas dedicadas deben ser un número válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "abc",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > la etapa es de otra ruta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_etapa_ruta": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000005",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > la etapa es de otra ruta > resultado 1`] = `
+{
+  "estado": {
+    "error": "La etapa seleccionada no pertenece a la ruta de fabricación de la orden.",
+    "fieldErrors": {
+      "id_etapa_ruta": [
+        "La etapa seleccionada no pertenece a la ruta de fabricación de la orden.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "ETA00000005",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > la etapa esta inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_etapa_ruta": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000005",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > la etapa esta inactiva > resultado 1`] = `
+{
+  "estado": {
+    "error": "La etapa seleccionada no existe o está inactiva.",
+    "fieldErrors": {
+      "id_etapa_ruta": [
+        "La etapa seleccionada no existe o está inactiva.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "ETA00000005",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > la etapa no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_etapa_ruta": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000005",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > la etapa no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La etapa seleccionada no existe o está inactiva.",
+    "fieldErrors": {
+      "id_etapa_ruta": [
+        "La etapa seleccionada no existe o está inactiva.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "ETA00000005",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > la orden no existe o esta anulada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > la orden no existe o esta anulada > resultado 1`] = `
+{
+  "estado": {
+    "error": "La orden de trabajo seleccionada no existe o está anulada.",
+    "fieldErrors": {
+      "id_orden_trabajo": [
+        "La orden de trabajo seleccionada no existe o está anulada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > la orden no tiene ruta y se eligio etapa > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_etapa_ruta": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000005",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > la orden no tiene ruta y se eligio etapa > resultado 1`] = `
+{
+  "estado": {
+    "error": "La orden de trabajo seleccionada no tiene una ruta de fabricación asignada.",
+    "fieldErrors": {
+      "id_etapa_ruta": [
+        "La orden de trabajo seleccionada no tiene una ruta de fabricación asignada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "ETA00000005",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > mas de 24 horas se rechazan > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > mas de 24 horas se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "horas_dedicadas": [
+        "Las horas dedicadas no pueden superar 24 horas.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "24.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > sin horas: horas null > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000006",
+      },
+    },
+    "prisma": "orden_trabajo.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "tarea_operario",
+      "prefijo": "TAR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte de piezas para lote de lampas",
+        "estado": "registrada",
+        "fecha_tarea": 2026-07-15T00:00:00.000Z,
+        "horas_dedicadas": null,
+        "id_etapa_ruta": null,
+        "id_operario": "OPE00000003",
+        "id_orden_trabajo": "OTR00000006",
+        "id_tarea_operario": "TAR00000012",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": null,
+      },
+    },
+    "prisma": "tarea_operario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Tarea registrada para el operario OPE00000003 en la orden OTR00000006.",
+      "enTransaccion": true,
+      "entidad_afectada": "tarea_operario",
+      "id_registro_afectado": "TAR00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/tasks",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > sin horas: horas null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_tarea_operario": "TAR00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > un POST sin campos se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > un POST sin campos se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "descripcion": [
+        "La descripción debe tener al menos 5 caracteres.",
+      ],
+      "estado": [
+        "Seleccione un estado válido para la tarea.",
+      ],
+      "fecha_tarea": [
+        "La fecha de la tarea es obligatoria.",
+      ],
+      "id_operario": [
+        "Debe seleccionar un operario.",
+      ],
+      "id_orden_trabajo": [
+        "Debe seleccionar una orden de trabajo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "",
+      "estado": "",
+      "fecha_tarea": "",
+      "horas_dedicadas": "",
+      "id_etapa_ruta": "",
+      "id_operario": "",
+      "id_orden_trabajo": "",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > un estado fuera de la lista se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > un estado fuera de la lista se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "estado": [
+        "Seleccione un estado válido para la tarea.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte de piezas para lote de lampas",
+      "estado": "pausada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`createOperatorTaskAction > una descripcion corta se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createOperatorTaskAction > una descripcion corta se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la tarea.",
+    "fieldErrors": {
+      "descripcion": [
+        "La descripción debe tener al menos 5 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Cort",
+      "estado": "registrada",
+      "fecha_tarea": "2026-07-15",
+      "horas_dedicadas": "4.5",
+      "id_etapa_ruta": "",
+      "id_operario": "OPE00000003",
+      "id_orden_trabajo": "OTR00000006",
+      "observaciones": "",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorAction > ADMIN actualiza bloqueando la fila, con escritura y bitacora en la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_operario FROM aceros.operario WHERE id_operario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OPE00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "apellidos": {
+          "equals": "Huaman",
+          "mode": "insensitive",
+        },
+        "nombres": {
+          "equals": "Luis",
+          "mode": "insensitive",
+        },
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Huaman",
+        "cargo": "Soldador",
+        "direccion": "Av. Industrial 123",
+        "especialidad": "Soldadura MIG",
+        "fecha_ingreso": 2026-03-02T00:00:00.000Z,
+        "modalidad_pago": "semanal",
+        "nombres": "Luis",
+        "observaciones": null,
+        "tarifa": 80.5,
+        "telefono": "987654321",
+      },
+      "where": {
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Operario actualizado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOperatorAction > ADMIN actualiza bloqueando la fila, con escritura y bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorAction > WORKSHOP_MASTER no puede actualizar > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateOperatorAction > WORKSHOP_MASTER no puede actualizar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar operarios.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorAction > datos invalidos se rechazan sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateOperatorAction > datos invalidos se rechazan sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del operario.",
+    "fieldErrors": {
+      "apellidos": [
+        "Los apellidos deben tener al menos 2 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "H",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorAction > el operario no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_operario FROM aceros.operario WHERE id_operario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OPE00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateOperatorAction > el operario no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El operario no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorAction > encontrarse a si mismo como duplicado no es duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_operario FROM aceros.operario WHERE id_operario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OPE00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "apellidos": {
+          "equals": "Huaman",
+          "mode": "insensitive",
+        },
+        "nombres": {
+          "equals": "Luis",
+          "mode": "insensitive",
+        },
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Huaman",
+        "cargo": "Soldador",
+        "direccion": "Av. Industrial 123",
+        "especialidad": "Soldadura MIG",
+        "fecha_ingreso": 2026-03-02T00:00:00.000Z,
+        "modalidad_pago": "semanal",
+        "nombres": "Luis",
+        "observaciones": null,
+        "tarifa": 80.5,
+        "telefono": "987654321",
+      },
+      "where": {
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Operario actualizado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOperatorAction > encontrarse a si mismo como duplicado no es duplicado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorAction > la edicion ignora el estado del formulario > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_operario FROM aceros.operario WHERE id_operario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OPE00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "apellidos": {
+          "equals": "Huaman",
+          "mode": "insensitive",
+        },
+        "nombres": {
+          "equals": "Luis",
+          "mode": "insensitive",
+        },
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "apellidos": "Huaman",
+        "cargo": "Soldador",
+        "direccion": "Av. Industrial 123",
+        "especialidad": "Soldadura MIG",
+        "fecha_ingreso": 2026-03-02T00:00:00.000Z,
+        "modalidad_pago": "semanal",
+        "nombres": "Luis",
+        "observaciones": null,
+        "tarifa": 80.5,
+        "telefono": "987654321",
+      },
+      "where": {
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Operario actualizado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOperatorAction > la edicion ignora el estado del formulario > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_operario": "OPE00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorAction > otro operario con los mismos datos se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_operario FROM aceros.operario WHERE id_operario = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OPE00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "apellidos": {
+          "equals": "Huaman",
+          "mode": "insensitive",
+        },
+        "nombres": {
+          "equals": "Luis",
+          "mode": "insensitive",
+        },
+        "telefono": "987654321",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateOperatorAction > otro operario con los mismos datos se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otro operario registrado con esos datos.",
+    "fieldErrors": {
+      "nombres": [
+        "Ya existe otro operario registrado con esos datos.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateOperatorAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El operario no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "apellidos": "Huaman",
+      "cargo": "Soldador",
+      "direccion": "Av. Industrial 123",
+      "especialidad": "Soldadura MIG",
+      "fecha_ingreso": "2026-03-02",
+      "modalidad_pago": "semanal",
+      "nombres": "Luis",
+      "observaciones": "",
+      "tarifa": "80.50",
+      "telefono": "987654321",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorStatusAction > WORKSHOP_MASTER no puede cambiar el estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateOperatorStatusAction > WORKSHOP_MASTER no puede cambiar el estado > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar operarios.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "OPE00000003",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorStatusAction > activar un operario inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "activo",
+      },
+      "select": {
+        "apellidos": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": {
+          "not": "activo",
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Operario activado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOperatorStatusAction > activar un operario inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "activo",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "OPE00000003",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorStatusAction > inactivar un operario activo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactivo",
+      },
+      "select": {
+        "apellidos": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": {
+          "not": "inactivo",
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Operario inactivado: Luis Huaman",
+      "enTransaccion": true,
+      "entidad_afectada": "operario",
+      "id_registro_afectado": "OPE00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/operators",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOperatorStatusAction > inactivar un operario activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "inactivo",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "OPE00000003",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorStatusAction > inactivar un operario ya inactivo responde el motivo sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactivo",
+      },
+      "select": {
+        "apellidos": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": {
+          "not": "inactivo",
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateOperatorStatusAction > inactivar un operario ya inactivo responde el motivo sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El operario ya está inactivo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "OPE00000003",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorStatusAction > sin id se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateOperatorStatusAction > sin id se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El operario no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateOperatorStatusAction > un operario inexistente responde el motivo sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactivo",
+      },
+      "select": {
+        "apellidos": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": {
+          "not": "inactivo",
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_operario": true,
+      },
+      "where": {
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateOperatorStatusAction > un operario inexistente responde el motivo sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El operario no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "OPE00000003",
+    },
+  },
+}
+`;
