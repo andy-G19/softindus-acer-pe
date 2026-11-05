@@ -136,7 +136,7 @@ const CLAVES = [
   // Costos
   "indirect-cost-created", "indirect-cost-annulled", "costing-created",
   "costing-updated", "costing-recalculated", "profitability-created",
-  "margin-created",
+  "margin-created", "costing-already-exists",
 
   // Personal
   "operator-created", "operator-updated", "operator-activated",
@@ -164,9 +164,9 @@ beforeEach(() => {
   mount();
 });
 
-it("la lista fija tiene las 129 claves sin repetir", () => {
-  expect(CLAVES).toHaveLength(129);
-  expect(new Set(CLAVES).size).toBe(129);
+it("la lista fija tiene las 130 claves sin repetir", () => {
+  expect(CLAVES).toHaveLength(130);
+  expect(new Set(CLAVES).size).toBe(130);
 });
 
 // Una clave nueva en el registro tambien entra en la lista y en el snapshot:

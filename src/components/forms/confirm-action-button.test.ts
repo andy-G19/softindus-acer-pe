@@ -197,6 +197,65 @@ describe("ConfirmActionButton con confirmacion", () => {
   });
 });
 
+// B6 de la 10.8b (D5): generar un costeo navega al costeo con el resultado, y el aviso
+// depende de si la orden ya tenia uno. onSuccess recibe los datos despues del aviso, y el
+// aviso puede depender de ellos. Los usos que no los pasan no cambian.
+describe("ConfirmActionButton con onSuccess y aviso segun el resultado", () => {
+  const CREATED = { type: "success" as const, message: "Creado" };
+  const EXISTING = { type: "info" as const, message: "Ya existia" };
+
+  async function renderWithResult(state: State, onSuccess: (data: { estado: boolean }) => void) {
+    const action = vi.fn(async () => state);
+
+    await act(async () =>
+      root.render(
+        h(ConfirmActionButton<{ id: string }, { estado: boolean }>, {
+          action,
+          fields: { id: "TPR00000003" },
+          variant: "default",
+          successNotification: (data: { estado: boolean }) => (data.estado ? EXISTING : CREATED),
+          onSuccess,
+          confirm: { title: "¿Generar?", description: "Consecuencia.", confirmText: "Generar", variant: "default" },
+          children: "Generar",
+        }),
+      ),
+    );
+  }
+
+  it("con exito da el aviso que corresponde a los datos y despues llama a onSuccess con ellos", async () => {
+    const order: string[] = [];
+    notifications.notify.mockImplementation(() => order.push("aviso"));
+    const onSuccess = vi.fn(() => order.push("onSuccess"));
+    await renderWithResult(
+      { status: "success", data: { estado: true }, values: { id: "TPR00000003" }, operationId: "op-existente" },
+      onSuccess,
+    );
+
+    await act(async () => button("Generar").click());
+    await act(async () => [...confirmation()!.querySelectorAll("button")].find((item) => item.textContent === "Generar")!.click());
+    await settle();
+
+    expect(notifications.notify).toHaveBeenCalledTimes(1);
+    expect(notifications.notify).toHaveBeenCalledWith(EXISTING);
+    expect(onSuccess).toHaveBeenCalledTimes(1);
+    expect(onSuccess).toHaveBeenCalledWith({ estado: true });
+    expect(order).toEqual(["aviso", "onSuccess"]);
+    notifications.notify.mockReset();
+  });
+
+  it("con error no llama a onSuccess y el mensaje queda dentro", async () => {
+    const onSuccess = vi.fn();
+    await renderWithResult(failure("La orden no existe."), onSuccess);
+
+    await act(async () => button("Generar").click());
+    await act(async () => [...confirmation()!.querySelectorAll("button")].find((item) => item.textContent === "Generar")!.click());
+    await settle();
+
+    expect(onSuccess).not.toHaveBeenCalled();
+    expect(confirmation()?.textContent).toContain("La orden no existe.");
+  });
+});
+
 describe("ConfirmActionButton sin confirmacion", () => {
   async function renderActivate(action: (prev: State, formData: FormData) => Promise<State>) {
     await act(async () =>

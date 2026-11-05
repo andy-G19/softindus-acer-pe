@@ -1,11 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import type { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import {
   calculateEstimatedLaborCost,
   recalculateCostingTotals,
@@ -22,10 +21,6 @@ import { laborCostSchema } from "@/schemas/costs/labor-cost.schema";
 
 const PERMISSION_ERROR = "No tienes permisos para gestionar costeos.";
 const COSTING_NOT_FOUND = "El costeo seleccionado no existe.";
-
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
 
 function normalizeText(value: FormDataEntryValue | null) {
   if (!value) {
@@ -63,7 +58,7 @@ async function createCostingInTransaction(
   tx: Prisma.TransactionClient,
   idOrdenTrabajo: string,
   idUsuario: string,
-): Promise<CostingFromWorkOrderResult> {
+): Promise<CostingFromWorkOrderResult | { problem: string }> {
   await lockWorkOrderRow(tx, idOrdenTrabajo);
 
   const existingCosting = await tx.costeo.findFirst({
@@ -100,35 +95,29 @@ async function createCostingInTransaction(
   });
 
   if (!workOrder) {
-    throw new Error("La orden de trabajo seleccionada no existe.");
+    return { problem: "La orden de trabajo seleccionada no existe." };
   }
 
   if (workOrder.estado === "anulada") {
-    throw new Error("No se puede generar costeo para una orden anulada.");
+    return { problem: "No se puede generar costeo para una orden anulada." };
   }
 
   if (!workOrder.version_receta) {
-    throw new Error(
-      "La orden de trabajo no tiene una versión de receta asociada.",
-    );
+    return { problem: "La orden de trabajo no tiene una versión de receta asociada." };
   }
 
   if (workOrder.version_receta.estado === "anulada") {
-    throw new Error(
-      "La versión de receta asociada a la orden está anulada y no puede costearse.",
-    );
+    return { problem: "La versión de receta asociada a la orden está anulada y no puede costearse." };
   }
 
   if (workOrder.version_receta.detalle_receta.length === 0) {
-    throw new Error(
-      "La versión de receta no tiene materiales registrados para calcular el costeo.",
-    );
+    return { problem: "La versión de receta no tiene materiales registrados para calcular el costeo." };
   }
 
   const quantityToProduce = toNonNegativeNumber(workOrder.cantidad);
 
   if (quantityToProduce <= 0) {
-    throw new Error("La cantidad de la orden debe ser mayor que cero.");
+    return { problem: "La cantidad de la orden debe ser mayor que cero." };
   }
 
   let materialCost = 0;
@@ -197,27 +186,58 @@ async function createCostingInTransaction(
   return { idCosteo, existente: false };
 }
 
-export async function createCostingFromWorkOrderAction(formData: FormData) {
-  const session = await requireAdmin();
+/** Lo que el boton de generar envio y, con exito, el costeo y si ya existia. */
+export type CostingFromWorkOrderState = FormActionState<
+  { id_orden_trabajo: string },
+  { id_costeo: string; existente: boolean }
+>;
 
+// B6 de la 10.8b (D5): generar se pide desde la lista de ordenes con ConfirmActionButton
+// y la accion devuelve el costeo; el boton navega a el. Si la orden ya tenia costeo (una
+// lista vieja o un doble clic) responde con ese, sin escribir ni revalidar. Un rechazo
+// queda en la confirmacion y tampoco revalida.
+export async function createCostingFromWorkOrderAction(
+  _prevState: CostingFromWorkOrderState,
+  formData: FormData,
+): Promise<CostingFromWorkOrderState> {
   const idOrdenTrabajo = normalizeText(formData.get("id_orden_trabajo"));
+  const values = { id_orden_trabajo: idOrdenTrabajo };
+  const fail = (error: string): CostingFromWorkOrderState => ({
+    status: "error",
+    error,
+    values,
+    operationId: newOperationId(),
+  });
 
-  if (!idOrdenTrabajo) {
-    throw new Error("Debe seleccionar una orden de trabajo válida.");
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return fail(PERMISSION_ERROR);
   }
 
-  const { idCosteo, existente } = await prisma.$transaction((tx) =>
+  if (!idOrdenTrabajo) {
+    return fail("Debe seleccionar una orden de trabajo válida.");
+  }
+
+  const result = await prisma.$transaction((tx) =>
     createCostingInTransaction(tx, idOrdenTrabajo, session.user.id),
   );
 
-  if (existente) {
-    redirect(`/dashboard/costs/costings/${idCosteo}`);
+  if ("problem" in result) {
+    return fail(result.problem);
   }
 
-  revalidateCostingPaths(idCosteo);
-  revalidatePath("/dashboard/production/work-orders");
+  if (!result.existente) {
+    revalidateCostingPaths(result.idCosteo);
+    revalidatePath("/dashboard/production/work-orders");
+  }
 
-  redirect(`/dashboard/costs/costings/${idCosteo}?toast=costing-created`);
+  return {
+    status: "success",
+    data: { id_costeo: result.idCosteo, existente: result.existente },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 /** Lo que el formulario de mano de obra envio, para volver a mostrarlo. */

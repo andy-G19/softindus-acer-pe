@@ -308,13 +308,13 @@ const marginForm = {
 // Casos
 // ---------------------------------------------------------------------------
 
-defineActionSuite("createCostingFromWorkOrderAction", createCostingFromWorkOrderAction, [
+defineActionSuite("createCostingFromWorkOrderAction", fromIdle(createCostingFromWorkOrderAction), [
   {
     name: "sin orden en el formulario",
     form: { id_orden_trabajo: "   " },
   },
   {
-    name: "la orden ya tiene costeo: vuelve a ese costeo sin toast",
+    name: "la orden ya tiene costeo: responde con el existente",
     form: { id_orden_trabajo: OT },
     data: { "costeo.findFirst": { id_costeo: COSTEO } },
   },
@@ -884,6 +884,74 @@ describe("B5: recalcular y anular responden con RowStatusState", () => {
 });
 
 // ---------------------------------------------------------------------------
+// B6 (10.8b): generar el costeo responde a su confirmacion y la pantalla navega
+// ---------------------------------------------------------------------------
+
+// Generar el costeo se pide desde la lista de ordenes con ConfirmActionButton (D5).
+// Antes lanzaba (pagina de error) o redirigia; ahora devuelve el costeo creado o el que
+// la orden ya tenia (una lista vieja o un doble clic), y el boton navega a el. Solo
+// revalida cuando crea: el existente no cambio, y un rechazo deja su mensaje en la
+// confirmacion.
+describe("B6: generar el costeo responde con el costeo y si ya existia", () => {
+  const OPERATION = "operacion-de-prueba";
+  const rejected = (error: string, id = OT): unknown => ({
+    status: "error",
+    error,
+    values: { id_orden_trabajo: id },
+    operationId: OPERATION,
+  });
+
+  const expected: [string, unknown, boolean][] = [
+    [
+      "genera el costeo con materiales, consumibles y mano de obra estimada",
+      {
+        status: "success",
+        data: { id_costeo: "COS00000001", existente: false },
+        values: { id_orden_trabajo: OT },
+        operationId: OPERATION,
+      },
+      true,
+    ],
+    [
+      "la orden ya tiene costeo: responde con el existente",
+      {
+        status: "success",
+        data: { id_costeo: COSTEO, existente: true },
+        values: { id_orden_trabajo: OT },
+        operationId: OPERATION,
+      },
+      false,
+    ],
+    ["sin orden en el formulario", rejected("Debe seleccionar una orden de trabajo válida.", ""), false],
+    ["la orden no existe", rejected("La orden de trabajo seleccionada no existe."), false],
+    ["orden anulada", rejected("No se puede generar costeo para una orden anulada."), false],
+    ["orden sin version de receta", rejected("La orden de trabajo no tiene una versión de receta asociada."), false],
+    [
+      "version de receta anulada",
+      rejected("La versión de receta asociada a la orden está anulada y no puede costearse."),
+      false,
+    ],
+    [
+      "version sin materiales",
+      rejected("La versión de receta no tiene materiales registrados para calcular el costeo."),
+      false,
+    ],
+    ["cantidad de la orden en cero", rejected("La cantidad de la orden debe ser mayor que cero."), false],
+  ];
+
+  for (const [caseName, outcome, revalidates] of expected) {
+    it(caseName, async () => {
+      const { action, actionCase } = findCase("createCostingFromWorkOrderAction", caseName);
+      // Una redireccion aparece en el resultado («redirect:…») y toEqual la rechaza.
+      const { calls, outcome: actual } = await runAction(action, actionCase);
+
+      expect(actual).toEqual(outcome);
+      expect(calls.some((call) => "effect" in call && call.effect === "revalidatePath")).toBe(revalidates);
+    });
+  }
+});
+
+// ---------------------------------------------------------------------------
 // H3 (grupo 1 de fixes): el recalculo bloquea el costeo antes de leer sus montos
 // ---------------------------------------------------------------------------
 
@@ -952,7 +1020,7 @@ describe("H4: generar el costeo decide con la orden bloqueada", () => {
 
   for (const actionCase of casesWithWorkOrder) {
     it(actionCase.name, async () => {
-      const { calls } = await runAction(createCostingFromWorkOrderAction, actionCase);
+      const { calls } = await runAction(fromIdle(createCostingFromWorkOrderAction), actionCase);
 
       expectRowLockedBefore(calls, { table: "orden_trabajo", id: OT, reads: isPrismaRead });
     });

@@ -23,8 +23,14 @@ type ConfirmActionButtonProps<Values, Data> = {
   variant?: ButtonProps["variant"];
   /** Sin tamanos de icono: el boton siempre lleva texto. */
   size?: "default" | "xs" | "sm" | "lg";
-  /** Aviso del catalogo del area al terminar bien; la pagina lo pasa con su clave literal. */
-  successNotification: NotificationDefinition;
+  /**
+   * Aviso del catalogo del area al terminar bien; la pagina lo pasa con su clave literal.
+   * Puede depender de los datos de la respuesta (B6 de la 10.8b: generar un costeo avisa
+   * distinto si la orden ya tenia uno); quien lo calcula es un componente cliente.
+   */
+  successNotification: NotificationDefinition | ((data: Data) => NotificationDefinition);
+  /** Se llama con los datos de la respuesta despues del aviso, por ejemplo para navegar. */
+  onSuccess?: (data: Data) => void;
   /**
    * Confirmacion con la entidad, la consecuencia y el verbo. Sin ella la accion
    * se ejecuta al pulsar: activar no es destructivo.
@@ -90,6 +96,7 @@ export function ConfirmActionButton<Values, Data>({
   pendingText,
   disabled = false,
   onError,
+  onSuccess,
 }: ConfirmActionButtonProps<Values, Data>) {
   const [pending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
@@ -139,9 +146,10 @@ export function ConfirmActionButton<Values, Data>({
       const result = await action(IDLE, formData);
 
       if (result.status === "success") {
-        notify(successNotification);
+        notify(typeof successNotification === "function" ? successNotification(result.data) : successNotification);
         setError(null);
         setOpen(false);
+        onSuccess?.(result.data);
       } else if (result.status === "error") {
         if (confirm) {
           setError(result.error);

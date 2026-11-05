@@ -121,7 +121,7 @@ const MODULOS: ModuloDeAcciones[] = [
       "updateLaborCostAction",
       "recalculateCostingAction",
     ],
-    rechazanConResultado: ["updateLaborCostAction", "recalculateCostingAction"],
+    rechazanConResultado: ["createCostingFromWorkOrderAction", "updateLaborCostAction", "recalculateCostingAction"],
   },
   {
     ruta: "costs/indirect-costs/actions",

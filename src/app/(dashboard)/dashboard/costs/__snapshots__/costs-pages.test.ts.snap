@@ -7873,10 +7873,7 @@ exports[`/dashboard/costs/work-orders > con ordenes > resultado 1`] = `
 <span data-variant="secondary">estado-1</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="default" type="submit">Generar costeo</button>
-</form>
+<button data-variant="default" type="button">Generar costeo</button>
 </td>
 </tr>
 <tr>
@@ -7899,10 +7896,7 @@ exports[`/dashboard/costs/work-orders > con ordenes > resultado 1`] = `
 <span data-variant="secondary">estado-2</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-2"/>
-<button data-variant="default" type="submit">Generar costeo</button>
-</form>
+<button data-variant="default" type="button">Generar costeo</button>
 </td>
 </tr>
 </tbody>
@@ -7936,8 +7930,7 @@ exports[`/dashboard/costs/work-orders > con ordenes > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</main>",
   "outcome": "render",
 }
 `;
@@ -8193,10 +8186,7 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 <span data-variant="secondary">estado-1</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="default" type="submit">Generar costeo</button>
-</form>
+<button data-variant="default" type="button">Generar costeo</button>
 </td>
 </tr>
 <tr>
@@ -8219,10 +8209,7 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 <span data-variant="secondary">estado-1</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="OTR00000003"/>
-<button data-variant="default" type="submit">Generar costeo</button>
-</form>
+<button data-variant="default" type="button">Generar costeo</button>
 </td>
 </tr>
 <tr>
@@ -8245,10 +8232,7 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 <span data-variant="secondary">estado-1</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="OTR00000004"/>
-<button data-variant="default" type="submit">Generar costeo</button>
-</form>
+<button data-variant="default" type="button">Generar costeo</button>
 </td>
 </tr>
 <tr>
@@ -8305,8 +8289,7 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 </div>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</main>",
   "outcome": "render",
 }
 `;
