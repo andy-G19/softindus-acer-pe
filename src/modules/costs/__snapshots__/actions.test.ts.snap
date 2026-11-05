@@ -1174,6 +1174,264 @@ exports[`createIndirectCostAction > el costeo no existe: se revierte > llamadas 
 
 exports[`createIndirectCostAction > el costeo no existe: se revierte > resultado 1`] = `"error: El costeo seleccionado no existe."`;
 
+exports[`createIndirectCostAction > monto sobre el maximo de la columna: hoy pasa el esquema > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "costo_indirecto",
+      "prefijo": "CIN",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "luz",
+        "concepto": "Consumo de luz del lote",
+        "criterio_prorrateo": "Prorrateado por lote",
+        "id_costeo": "COS00000004",
+        "id_costo_indirecto": "CIN00000001",
+        "monto": 10000000000,
+        "observaciones": null,
+        "periodo": "2026-07",
+      },
+    },
+    "prisma": "costo_indirecto.create",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_base": true,
+        "costo_consumibles": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costo_indirecto.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_indirecto_total": 62.65,
+        "costo_total": 1524.5800000000002,
+        "costo_unitario": 60.983200000000004,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Costo indirecto agregado al costeo COS00000004: Consumo de luz del lote.",
+      "enTransaccion": true,
+      "entidad_afectada": "costo_indirecto",
+      "id_registro_afectado": "CIN00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createIndirectCostAction > monto sobre el maximo de la columna: hoy pasa el esquema > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=indirect-cost-created"`;
+
+exports[`createIndirectCostAction > monto vacio: hoy crea un costo indirecto de S/ 0 > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "costo_indirecto",
+      "prefijo": "CIN",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "luz",
+        "concepto": "Consumo de luz del lote",
+        "criterio_prorrateo": "Prorrateado por lote",
+        "id_costeo": "COS00000004",
+        "id_costo_indirecto": "CIN00000001",
+        "monto": 0,
+        "observaciones": null,
+        "periodo": "2026-07",
+      },
+    },
+    "prisma": "costo_indirecto.create",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_base": true,
+        "costo_consumibles": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costo_indirecto.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_indirecto_total": 62.65,
+        "costo_total": 1524.5800000000002,
+        "costo_unitario": 60.983200000000004,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Costo indirecto agregado al costeo COS00000004: Consumo de luz del lote.",
+      "enTransaccion": true,
+      "entidad_afectada": "costo_indirecto",
+      "id_registro_afectado": "CIN00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createIndirectCostAction > monto vacio: hoy crea un costo indirecto de S/ 0 > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=indirect-cost-created"`;
+
 exports[`createIndirectCostAction > registra el costo indirecto y recalcula > llamadas 1`] = `
 [
   {
@@ -1528,6 +1786,19 @@ exports[`createMarginAction > margen fuera de rango > llamadas 1`] = `
 
 exports[`createMarginAction > margen fuera de rango > resultado 1`] = `"error: El margen máximo permitido es 20%."`;
 
+exports[`createMarginAction > margen vacio > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMarginAction > margen vacio > resultado 1`] = `"error: El margen mínimo permitido es 15%."`;
+
 exports[`createMarginAction > precio final menor que el costo total > llamadas 1`] = `
 [
   {
@@ -1552,6 +1823,44 @@ exports[`createMarginAction > precio final menor que el costo total > llamadas 1
 `;
 
 exports[`createMarginAction > precio final menor que el costo total > resultado 1`] = `"error: El precio final no puede ser menor que el costo total del producto."`;
+
+exports[`createMarginAction > precio final no numerico: hoy responde en ingles > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMarginAction > precio final no numerico: hoy responde en ingles > resultado 1`] = `"error: Invalid input"`;
+
+exports[`createMarginAction > sin el campo de precio final: hoy se vuelve 0 > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "costo_total": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`createMarginAction > sin el campo de precio final: hoy se vuelve 0 > resultado 1`] = `"error: El precio final no puede ser menor que el costo total del producto."`;
 
 exports[`createMarginAction > sin precio final: usa el precio sugerido > llamadas 1`] = `
 [
@@ -2544,3 +2853,260 @@ exports[`updateLaborCostAction > el costeo no existe: se revierte > llamadas 1`]
 `;
 
 exports[`updateLaborCostAction > el costeo no existe: se revierte > resultado 1`] = `"error: El costeo seleccionado no existe."`;
+
+exports[`updateLaborCostAction > mano de obra no numerica > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateLaborCostAction > mano de obra no numerica > resultado 1`] = `"error: El costo de mano de obra debe ser numérico."`;
+
+exports[`updateLaborCostAction > mano de obra sobre el maximo de la columna: hoy pasa el esquema > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_mano_obra": 10000000000,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_base": true,
+        "costo_consumibles": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costo_indirecto.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_indirecto_total": 62.65,
+        "costo_total": 1524.5800000000002,
+        "costo_unitario": 60.983200000000004,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Costo de mano de obra actualizado a S/ 10000000000.00.",
+      "enTransaccion": true,
+      "entidad_afectada": "costeo",
+      "id_registro_afectado": "COS00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateLaborCostAction > mano de obra sobre el maximo de la columna: hoy pasa el esquema > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=costing-updated"`;
+
+exports[`updateLaborCostAction > mano de obra vacia: hoy guarda S/ 0 > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_mano_obra": 0,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_base": true,
+        "costo_consumibles": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costo_indirecto.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_indirecto_total": 62.65,
+        "costo_total": 1524.5800000000002,
+        "costo_unitario": 60.983200000000004,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Costo de mano de obra actualizado a S/ 0.00.",
+      "enTransaccion": true,
+      "entidad_afectada": "costeo",
+      "id_registro_afectado": "COS00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateLaborCostAction > mano de obra vacia: hoy guarda S/ 0 > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=costing-updated"`;

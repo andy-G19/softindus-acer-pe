@@ -385,6 +385,28 @@ defineActionSuite("updateLaborCostAction", updateLaborCostAction, [
       "costo_indirecto.findMany": indirectAmounts,
     },
   },
+  // Hallazgo 66 (10.8): z.coerce.number convierte el campo vacio en 0 y no hay
+  // maximo para Decimal(12, 2). Estos casos fijan lo que pasa hoy.
+  {
+    name: "mano de obra vacia: hoy guarda S/ 0",
+    form: { id_costeo: COSTEO, costo_mano_obra: "" },
+    data: {
+      "costeo.findUnique": costingTotals(),
+      "costo_indirecto.findMany": indirectAmounts,
+    },
+  },
+  {
+    name: "mano de obra sobre el maximo de la columna: hoy pasa el esquema",
+    form: { id_costeo: COSTEO, costo_mano_obra: "10000000000" },
+    data: {
+      "costeo.findUnique": costingTotals(),
+      "costo_indirecto.findMany": indirectAmounts,
+    },
+  },
+  {
+    name: "mano de obra no numerica",
+    form: { id_costeo: COSTEO, costo_mano_obra: "abc" },
+  },
 ]);
 
 defineActionSuite("recalculateCostingAction", recalculateCostingAction, [
@@ -428,6 +450,24 @@ defineActionSuite("createIndirectCostAction", createIndirectCostAction, [
   {
     name: "registra el costo indirecto y recalcula",
     form: indirectForm,
+    data: {
+      "costeo.findUnique": costingTotals(),
+      "costo_indirecto.findMany": indirectAmounts,
+    },
+  },
+  // Hallazgo 66 (10.8): el monto vacio crea un costo indirecto de S/ 0 y no hay
+  // maximo para Decimal(12, 2). Estos casos fijan lo que pasa hoy.
+  {
+    name: "monto vacio: hoy crea un costo indirecto de S/ 0",
+    form: { ...indirectForm, monto: "" },
+    data: {
+      "costeo.findUnique": costingTotals(),
+      "costo_indirecto.findMany": indirectAmounts,
+    },
+  },
+  {
+    name: "monto sobre el maximo de la columna: hoy pasa el esquema",
+    form: { ...indirectForm, monto: "10000000000" },
     data: {
       "costeo.findUnique": costingTotals(),
       "costo_indirecto.findMany": indirectAmounts,
@@ -518,6 +558,21 @@ defineActionSuite("createMarginAction", createMarginAction, [
       motivo_ajuste: "Redondeo por negociacion con el cliente",
     },
     data: { "costeo.findUnique": { id_costeo: COSTEO, costo_total: D("1524.58") } },
+  },
+  // Hallazgo 72 (10.8): el precio final es una union de "" y z.coerce.number.
+  // Estos casos fijan lo que pasa hoy.
+  {
+    name: "precio final no numerico: hoy responde en ingles",
+    form: { ...marginForm, precio_final: "abc" },
+  },
+  {
+    name: "sin el campo de precio final: hoy se vuelve 0",
+    form: { id_costeo: COSTEO, porcentaje_margen: "17", motivo_ajuste: "" },
+    data: { "costeo.findUnique": { id_costeo: COSTEO, costo_total: D("1524.58") } },
+  },
+  {
+    name: "margen vacio",
+    form: { ...marginForm, porcentaje_margen: "" },
   },
 ]);
 
