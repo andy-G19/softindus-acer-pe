@@ -1,22 +1,49 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { calculateProfitability } from "@/lib/costing-calculations";
 import { prisma } from "@/lib/db";
+import type { FieldErrors } from "@/lib/errors";
 import { toNumber } from "@/lib/numbers";
+import { APP_ROLES } from "@/lib/permissions";
 import { lockCostingRow } from "@/lib/row-locks";
 import { profitabilitySchema } from "@/schemas/costs/profitability.schema";
 
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
+/** Lo que el formulario de rentabilidad envio, para volver a mostrarlo. */
+export type ProfitabilityFormValues = {
+  observaciones: string;
+};
 
-export async function createProfitabilityAction(formData: FormData) {
-  const session = await requireAdmin();
+// B4 de la 10.8b (D4): la rentabilidad se calcula desde su seccion del detalle y la accion
+// devuelve el resultado; sin permiso responde con un error, no redirige.
+export type ProfitabilityFormState = FormActionState<ProfitabilityFormValues, { id_rentabilidad: string }>;
+
+const PERMISSION_ERROR = "No tienes permisos para gestionar costeos.";
+
+export async function createProfitabilityAction(
+  _prevState: ProfitabilityFormState,
+  formData: FormData,
+): Promise<ProfitabilityFormState> {
+  const values: ProfitabilityFormValues = {
+    observaciones: formData.get("observaciones")?.toString() ?? "",
+  };
+  const fail = (error: string, fieldErrors?: FieldErrors): ProfitabilityFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return fail(PERMISSION_ERROR);
+  }
 
   const parsedData = profitabilitySchema.safeParse({
     id_costeo: formData.get("id_costeo"),
@@ -24,16 +51,12 @@ export async function createProfitabilityAction(formData: FormData) {
   });
 
   if (!parsedData.success) {
-    const message = parsedData.error.issues
-      .map((issue) => issue.message)
-      .join(" ");
-
-    throw new Error(message);
+    return fail("Revisa los datos de la rentabilidad.", parsedData.error.flatten().fieldErrors);
   }
 
   const data = parsedData.data;
 
-  await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx): Promise<{ problem: string } | { idRentabilidad: string }> => {
     // Hallazgo 64 (10.8): el costeo se bloquea y se lee con su ultimo margen dentro de la
     // transaccion; antes se leia fuera y la rentabilidad podia quedar con un costo viejo.
     // Aplicar un margen toma el mismo bloqueo, asi que el ultimo margen tampoco cambia.
@@ -53,16 +76,15 @@ export async function createProfitabilityAction(formData: FormData) {
       },
     });
 
+    // Nada se escribio todavia: cada problema se devuelve y la accion responde con el.
     if (!costing) {
-      throw new Error("El costeo seleccionado no existe.");
+      return { problem: "El costeo seleccionado no existe." };
     }
 
     const latestMargin = costing.margen_ganancia[0];
 
     if (!latestMargin) {
-      throw new Error(
-        "Primero debes aplicar un margen de ganancia antes de calcular la rentabilidad.",
-      );
+      return { problem: "Primero debes aplicar un margen de ganancia antes de calcular la rentabilidad." };
     }
 
     const totalCost = toNumber(costing.costo_total);
@@ -71,15 +93,11 @@ export async function createProfitabilityAction(formData: FormData) {
     );
 
     if (totalCost <= 0) {
-      throw new Error(
-        "No se puede calcular rentabilidad porque el costo total debe ser mayor que cero.",
-      );
+      return { problem: "No se puede calcular rentabilidad porque el costo total debe ser mayor que cero." };
     }
 
     if (estimatedIncome <= 0) {
-      throw new Error(
-        "No se puede calcular rentabilidad porque el ingreso estimado debe ser mayor que cero.",
-      );
+      return { problem: "No se puede calcular rentabilidad porque el ingreso estimado debe ser mayor que cero." };
     }
 
     const expectedMargin = toNumber(latestMargin.porcentaje_margen);
@@ -123,12 +141,23 @@ export async function createProfitabilityAction(formData: FormData) {
       detalle: `Rentabilidad calculada para el costeo ${costing.id_costeo}. Utilidad estimada: S/ ${estimatedProfit.toFixed(2)}.`,
       tx,
     });
+
+    return { idRentabilidad };
   });
+
+  if ("problem" in result) {
+    return fail(result.problem);
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/costs");
   revalidatePath("/dashboard/costs/costings");
   revalidatePath(`/dashboard/costs/costings/${data.id_costeo}`);
 
-  redirect(`/dashboard/costs/costings/${data.id_costeo}?toast=profitability-created`);
+  return {
+    status: "success",
+    data: { id_rentabilidad: result.idRentabilidad },
+    values,
+    operationId: newOperationId(),
+  };
 }

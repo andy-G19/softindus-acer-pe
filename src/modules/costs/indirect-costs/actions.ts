@@ -2,11 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { recalculateCostingTotals } from "@/lib/costing";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { FieldErrors } from "@/lib/errors";
+import { APP_ROLES } from "@/lib/permissions";
 import { lockCostingRow, lockIndirectCostRow } from "@/lib/row-locks";
 import { indirectCostSchema } from "@/schemas/costs/indirect-cost.schema";
 
@@ -32,8 +35,53 @@ function revalidateCostingPaths(idCosteo?: string) {
   }
 }
 
-export async function createIndirectCostAction(formData: FormData) {
-  const session = await requireAdmin();
+/** Lo que el formulario de costo indirecto envio, para volver a mostrarlo. */
+export type IndirectCostFormValues = {
+  concepto: string;
+  categoria: string;
+  monto: string;
+  criterio_prorrateo: string;
+  periodo: string;
+  observaciones: string;
+};
+
+// B4 de la 10.8b (D4): el costo indirecto se registra desde su seccion del detalle y la
+// accion devuelve el resultado; sin permiso responde con un error, no redirige.
+export type IndirectCostFormState = FormActionState<IndirectCostFormValues, { id_costo_indirecto: string }>;
+
+const PERMISSION_ERROR = "No tienes permisos para gestionar costeos.";
+
+function getIndirectCostFormValues(formData: FormData): IndirectCostFormValues {
+  const text = (name: keyof IndirectCostFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    concepto: text("concepto"),
+    categoria: text("categoria"),
+    monto: text("monto"),
+    criterio_prorrateo: text("criterio_prorrateo"),
+    periodo: text("periodo"),
+    observaciones: text("observaciones"),
+  };
+}
+
+export async function createIndirectCostAction(
+  _prevState: IndirectCostFormState,
+  formData: FormData,
+): Promise<IndirectCostFormState> {
+  const values = getIndirectCostFormValues(formData);
+  const fail = (error: string, fieldErrors?: FieldErrors): IndirectCostFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return fail(PERMISSION_ERROR);
+  }
 
   const parsedData = indirectCostSchema.safeParse({
     id_costeo: formData.get("id_costeo"),
@@ -46,16 +94,12 @@ export async function createIndirectCostAction(formData: FormData) {
   });
 
   if (!parsedData.success) {
-    const message = parsedData.error.issues
-      .map((issue) => issue.message)
-      .join(" ");
-
-    throw new Error(message);
+    return fail("Revisa los datos del costo indirecto.", parsedData.error.flatten().fieldErrors);
   }
 
   const data = parsedData.data;
 
-  await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx): Promise<{ problem: string } | { idCostoIndirecto: string }> => {
     // Hallazgo 65 (10.8): el costeo, el padre, se bloquea antes de comprobarlo y de tomar
     // el correlativo; antes solo lo bloqueaba el recalculo, despues de crear el indirecto.
     await lockCostingRow(tx, data.id_costeo);
@@ -69,8 +113,9 @@ export async function createIndirectCostAction(formData: FormData) {
       },
     });
 
+    // Nada se escribio todavia: el problema se devuelve y la accion responde con el.
     if (!costing) {
-      throw new Error("El costeo seleccionado no existe.");
+      return { problem: "El costeo seleccionado no existe." };
     }
 
     const idCostoIndirecto = await getNextCorrelativeId(tx, {
@@ -101,11 +146,22 @@ export async function createIndirectCostAction(formData: FormData) {
       detalle: `Costo indirecto agregado al costeo ${data.id_costeo}: ${data.concepto}.`,
       tx,
     });
+
+    return { idCostoIndirecto };
   });
+
+  if ("problem" in result) {
+    return fail(result.problem);
+  }
 
   revalidateCostingPaths(data.id_costeo);
 
-  redirect(`/dashboard/costs/costings/${data.id_costeo}?toast=indirect-cost-created`);
+  return {
+    status: "success",
+    data: { id_costo_indirecto: result.idCostoIndirecto },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 export async function annulIndirectCostAction(formData: FormData) {

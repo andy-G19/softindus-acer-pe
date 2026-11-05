@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { formatDate } from "@/lib/formatters";
+import type { NotificationDefinition } from "@/lib/notification-catalog";
 import { formatCostingDecimal } from "@/modules/costs/costing-format";
 import {
   recalculateCostingAction,
   updateLaborCostAction,
 } from "@/modules/costs/costings/actions";
+import { LaborCostForm } from "@/modules/costs/costings/labor-cost-form";
 import type { CostingDetail } from "@/modules/costs/costings/queries";
 
 // Datos del costeo y los dos casos de uso de su mano de obra: ajustarla y recalcular.
@@ -18,9 +18,11 @@ type CostingDataCardProps = {
     "id_costeo" | "fecha_costeo" | "cantidad_base" | "usuario" | "costo_mano_obra"
   >;
   clientName: string | null;
+  /** Aviso al ajustar la mano de obra; la pagina lo pasa con su clave literal. */
+  laborNotification: NotificationDefinition;
 };
 
-export function CostingDataCard({ costing, clientName }: CostingDataCardProps) {
+export function CostingDataCard({ costing, clientName, laborNotification }: CostingDataCardProps) {
   return (
     <Card>
       <CardHeader>
@@ -63,30 +65,12 @@ export function CostingDataCard({ costing, clientName }: CostingDataCardProps) {
             faltan datos operativos.
           </p>
 
-          <form
+          <LaborCostForm
             action={updateLaborCostAction}
-            className="mt-4 grid gap-3 md:grid-cols-[1fr_auto]"
-          >
-            <input type="hidden" name="id_costeo" value={costing.id_costeo} />
-
-            <div className="space-y-2">
-              <Label htmlFor="costo_mano_obra">
-                Costo de mano de obra
-              </Label>
-              <Input
-                id="costo_mano_obra"
-                name="costo_mano_obra"
-                type="number"
-                min="0"
-                step="0.01"
-                defaultValue={formatCostingDecimal(costing.costo_mano_obra)}
-              />
-            </div>
-
-            <Button type="submit" className="self-end">
-              Actualizar
-            </Button>
-          </form>
+            idCosteo={costing.id_costeo}
+            defaultValue={formatCostingDecimal(costing.costo_mano_obra)}
+            successNotification={laborNotification}
+          />
 
           <form action={recalculateCostingAction} className="mt-3">
             <input type="hidden" name="id_costeo" value={costing.id_costeo} />

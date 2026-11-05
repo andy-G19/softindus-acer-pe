@@ -50,6 +50,12 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Las acciones de las secciones del detalle (B4 de la 10.8b) devuelven un FormActionState
+// con un operationId aleatorio: se fija para que el snapshot sea estable.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -121,9 +127,9 @@ async function runAction(action: Action, actionCase: ActionCase) {
 
   const { calls, result } = await characterizeHandler(async () => {
     try {
-      await action(formData);
+      const returned = await action(formData);
 
-      return "termino sin redirigir";
+      return returned === undefined ? "termino sin redirigir" : returned;
     } catch (error) {
       return (
         describeNavigationError(error) ??
@@ -133,6 +139,15 @@ async function runAction(action: Action, actionCase: ActionCase) {
   }, actionCase.data);
 
   return { calls, outcome: result };
+}
+
+// Las acciones de las secciones del detalle (B4 de la 10.8b) se usan con useActionState:
+// reciben el estado anterior y devuelven el nuevo, sin redirigir. Se ejecutan desde el
+// estado inicial.
+const IDLE = { status: "idle" } as const;
+
+function fromIdle(action: (prevState: typeof IDLE, formData: FormData) => Promise<unknown>): Action {
+  return (formData) => action(IDLE, formData);
 }
 
 // Las suites por nombre, para que las pruebas de los fixes repitan los mismos
@@ -368,7 +383,7 @@ defineActionSuite("createCostingFromWorkOrderAction", createCostingFromWorkOrder
   },
 ]);
 
-defineActionSuite("updateLaborCostAction", updateLaborCostAction, [
+defineActionSuite("updateLaborCostAction", fromIdle(updateLaborCostAction), [
   {
     name: "datos invalidos: une todos los mensajes de Zod",
     form: { id_costeo: "", costo_mano_obra: "-5" },
@@ -438,7 +453,7 @@ defineActionSuite("recalculateCostingAction", recalculateCostingAction, [
   },
 ]);
 
-defineActionSuite("createIndirectCostAction", createIndirectCostAction, [
+defineActionSuite("createIndirectCostAction", fromIdle(createIndirectCostAction), [
   {
     name: "datos invalidos: une todos los mensajes de Zod",
     form: { ...indirectForm, concepto: "ab", categoria: "agua", monto: "-1" },
@@ -520,7 +535,7 @@ defineActionSuite("annulIndirectCostAction", annulIndirectCostAction, [
   },
 ]);
 
-defineActionSuite("createMarginAction", createMarginAction, [
+defineActionSuite("createMarginAction", fromIdle(createMarginAction), [
   {
     name: "margen fuera de rango",
     form: { ...marginForm, porcentaje_margen: "25" },
@@ -578,7 +593,7 @@ defineActionSuite("createMarginAction", createMarginAction, [
   },
 ]);
 
-defineActionSuite("createProfitabilityAction", createProfitabilityAction, [
+defineActionSuite("createProfitabilityAction", fromIdle(createProfitabilityAction), [
   {
     name: "sin costeo en el formulario",
     form: { id_costeo: "", observaciones: "" },
@@ -641,6 +656,143 @@ defineActionSuite("createProfitabilityAction", createProfitabilityAction, [
     },
   },
 ]);
+
+// ---------------------------------------------------------------------------
+// B4 (10.8b): las secciones del detalle responden con FormActionState, sin navegar
+// ---------------------------------------------------------------------------
+
+// Mano de obra, costos indirectos, margen y rentabilidad se guardan desde el detalle del
+// costeo. Antes lanzaban (pagina de error) o redirigian con ?toast=; ahora devuelven el
+// resultado al formulario: el error queda en la seccion con lo escrito, y el exito da los
+// datos minimos y deja que la revalidacion repinte el detalle.
+describe("B4: las secciones del detalle responden con FormActionState", () => {
+  const OPERATION = "operacion-de-prueba";
+  const indirectValues = {
+    concepto: "Consumo de luz del lote",
+    categoria: "luz",
+    monto: "37.80",
+    criterio_prorrateo: "Prorrateado por lote",
+    periodo: "2026-07",
+    observaciones: "",
+  };
+  const marginValues = { porcentaje_margen: "17", precio_final: "", motivo_ajuste: "" };
+
+  const expected: [string, string, unknown][] = [
+    [
+      "updateLaborCostAction",
+      "actualiza la mano de obra y recalcula los totales",
+      { status: "success", data: { id_costeo: COSTEO }, values: { costo_mano_obra: "180.5" }, operationId: OPERATION },
+    ],
+    [
+      "updateLaborCostAction",
+      "mano de obra vacia: se rechaza",
+      {
+        status: "error",
+        error: "Revisa el costo de mano de obra.",
+        fieldErrors: { costo_mano_obra: ["El costo de mano de obra es obligatorio."] },
+        values: { costo_mano_obra: "" },
+        operationId: OPERATION,
+      },
+    ],
+    [
+      "updateLaborCostAction",
+      "el costeo no existe: se revierte",
+      { status: "error", error: "El costeo seleccionado no existe.", values: { costo_mano_obra: "180" }, operationId: OPERATION },
+    ],
+    [
+      "createIndirectCostAction",
+      "registra el costo indirecto y recalcula",
+      { status: "success", data: { id_costo_indirecto: "CIN00000001" }, values: indirectValues, operationId: OPERATION },
+    ],
+    [
+      "createIndirectCostAction",
+      "datos invalidos: une todos los mensajes de Zod",
+      {
+        status: "error",
+        error: "Revisa los datos del costo indirecto.",
+        fieldErrors: {
+          concepto: ["El concepto debe tener al menos 3 caracteres."],
+          categoria: ["Debe seleccionar una categoría válida."],
+          monto: ["El monto no puede ser negativo."],
+        },
+        values: { ...indirectValues, concepto: "ab", categoria: "agua", monto: "-1" },
+        operationId: OPERATION,
+      },
+    ],
+    [
+      "createIndirectCostAction",
+      "el costeo no existe: se revierte",
+      { status: "error", error: "El costeo seleccionado no existe.", values: indirectValues, operationId: OPERATION },
+    ],
+    [
+      "createMarginAction",
+      "sin precio final: usa el precio sugerido",
+      { status: "success", data: { id_margen: "MGN00000001" }, values: marginValues, operationId: OPERATION },
+    ],
+    [
+      "createMarginAction",
+      "margen fuera de rango",
+      {
+        status: "error",
+        error: "Revisa los datos del margen.",
+        fieldErrors: { porcentaje_margen: ["El margen máximo permitido es 20%."] },
+        values: { ...marginValues, porcentaje_margen: "25" },
+        operationId: OPERATION,
+      },
+    ],
+    [
+      "createMarginAction",
+      "precio final menor que el costo total",
+      {
+        status: "error",
+        error: "El precio final no puede ser menor que el costo total del producto.",
+        fieldErrors: { precio_final: ["El precio final no puede ser menor que el costo total del producto."] },
+        values: { ...marginValues, precio_final: "1500" },
+        operationId: OPERATION,
+      },
+    ],
+    [
+      "createMarginAction",
+      "costo total en cero",
+      {
+        status: "error",
+        error: "No se puede aplicar margen porque el costo total debe ser mayor que cero.",
+        values: marginValues,
+        operationId: OPERATION,
+      },
+    ],
+    [
+      "createProfitabilityAction",
+      "sin precio final usa el sugerido: rentable, con observaciones",
+      {
+        status: "success",
+        data: { id_rentabilidad: "REN00000001" },
+        values: { observaciones: "Rentabilidad aceptable" },
+        operationId: OPERATION,
+      },
+    ],
+    [
+      "createProfitabilityAction",
+      "sin margen aplicado",
+      {
+        status: "error",
+        error: "Primero debes aplicar un margen de ganancia antes de calcular la rentabilidad.",
+        values: { observaciones: "" },
+        operationId: OPERATION,
+      },
+    ],
+  ];
+
+  for (const [suite, caseName, outcome] of expected) {
+    it(`${suite}: ${caseName}`, async () => {
+      const { action, actionCase } = findCase(suite, caseName);
+      // Una redireccion aparece en el resultado («redirect:…») y toEqual la rechaza.
+      const { outcome: actual } = await runAction(action, actionCase);
+
+      expect(actual).toEqual(outcome);
+    });
+  }
+});
 
 // ---------------------------------------------------------------------------
 // H3 (grupo 1 de fixes): el recalculo bloquea el costeo antes de leer sus montos
@@ -822,7 +974,7 @@ describe("Hallazgos 64 y 65: las acciones que tocan el costeo lo bloquean primer
 // como margen_real no cambia; cambia la alerta que lo acompana.
 describe("H7: la alerta de bajo margen usa el margen que se guarda", () => {
   async function storedProfitability(costing: Row) {
-    const { calls } = await runAction(createProfitabilityAction, {
+    const { calls } = await runAction(fromIdle(createProfitabilityAction), {
       name: "H7",
       form: { id_costeo: COSTEO, observaciones: "" },
       data: { "costeo.findUnique": costing },

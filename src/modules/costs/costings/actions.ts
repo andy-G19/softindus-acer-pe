@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import {
   calculateEstimatedLaborCost,
   recalculateCostingTotals,
@@ -12,9 +13,14 @@ import {
 import { estimateMaterialCost } from "@/lib/costing-calculations";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { FieldErrors } from "@/lib/errors";
 import { toNonNegativeNumber } from "@/lib/numbers";
+import { APP_ROLES } from "@/lib/permissions";
 import { lockCostingRow, lockWorkOrderRow } from "@/lib/row-locks";
 import { laborCostSchema } from "@/schemas/costs/labor-cost.schema";
+
+const PERMISSION_ERROR = "No tienes permisos para gestionar costeos.";
+const COSTING_NOT_FOUND = "El costeo seleccionado no existe.";
 
 async function requireAdmin() {
   return requireRole(["ADMIN"]);
@@ -213,8 +219,36 @@ export async function createCostingFromWorkOrderAction(formData: FormData) {
   redirect(`/dashboard/costs/costings/${idCosteo}?toast=costing-created`);
 }
 
-export async function updateLaborCostAction(formData: FormData) {
-  const session = await requireAdmin();
+/** Lo que el formulario de mano de obra envio, para volver a mostrarlo. */
+export type LaborCostFormValues = {
+  costo_mano_obra: string;
+};
+
+// B4 de la 10.8b (D4): la mano de obra se ajusta desde su seccion del detalle y la accion
+// devuelve el resultado; sin permiso responde con un error, no redirige. El detalle se
+// repinta por la revalidacion.
+export type LaborCostFormState = FormActionState<LaborCostFormValues, { id_costeo: string }>;
+
+export async function updateLaborCostAction(
+  _prevState: LaborCostFormState,
+  formData: FormData,
+): Promise<LaborCostFormState> {
+  const values: LaborCostFormValues = {
+    costo_mano_obra: formData.get("costo_mano_obra")?.toString() ?? "",
+  };
+  const fail = (error: string, fieldErrors?: FieldErrors): LaborCostFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return fail(PERMISSION_ERROR);
+  }
 
   const parsedData = laborCostSchema.safeParse({
     id_costeo: formData.get("id_costeo"),
@@ -222,16 +256,12 @@ export async function updateLaborCostAction(formData: FormData) {
   });
 
   if (!parsedData.success) {
-    const message = parsedData.error.issues
-      .map((issue) => issue.message)
-      .join(" ");
-
-    throw new Error(message);
+    return fail("Revisa el costo de mano de obra.", parsedData.error.flatten().fieldErrors);
   }
 
   const data = parsedData.data;
 
-  await prisma.$transaction(async (tx) => {
+  const problem = await prisma.$transaction(async (tx) => {
     // Hallazgo 65 (10.8): se bloquea el costeo antes de comprobarlo y de escribir su mano
     // de obra; antes la escritura llegaba sin bloqueo y solo el recalculo lo tomaba.
     await lockCostingRow(tx, data.id_costeo);
@@ -245,8 +275,9 @@ export async function updateLaborCostAction(formData: FormData) {
       },
     });
 
+    // Nada se escribio todavia: el problema se devuelve y la accion responde con el.
     if (!costing) {
-      throw new Error("El costeo seleccionado no existe.");
+      return COSTING_NOT_FOUND;
     }
 
     await tx.costeo.update({
@@ -268,11 +299,22 @@ export async function updateLaborCostAction(formData: FormData) {
       detalle: `Costo de mano de obra actualizado a S/ ${data.costo_mano_obra.toFixed(2)}.`,
       tx,
     });
+
+    return null;
   });
+
+  if (problem) {
+    return fail(problem);
+  }
 
   revalidateCostingPaths(data.id_costeo);
 
-  redirect(`/dashboard/costs/costings/${data.id_costeo}?toast=costing-updated`);
+  return {
+    status: "success",
+    data: { id_costeo: data.id_costeo },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 export async function recalculateCostingAction(formData: FormData) {
