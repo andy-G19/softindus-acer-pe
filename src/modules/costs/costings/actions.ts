@@ -16,6 +16,7 @@ import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
 import { toNonNegativeNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockCostingRow, lockWorkOrderRow } from "@/lib/row-locks";
 import { laborCostSchema } from "@/schemas/costs/labor-cost.schema";
 
@@ -317,16 +318,26 @@ export async function updateLaborCostAction(
   };
 }
 
-export async function recalculateCostingAction(formData: FormData) {
-  const session = await requireAdmin();
-
+// B5 de la 10.8b (D6): recalcular se pide desde el detalle con ConfirmActionButton y la
+// accion devuelve RowStatusState. Un rechazo no revalida: el repintado se llevaria el
+// boton y su mensaje.
+export async function recalculateCostingAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
   const idCosteo = normalizeText(formData.get("id_costeo"));
 
-  if (!idCosteo) {
-    throw new Error("Debe seleccionar un costeo válido.");
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return rowStatusError(idCosteo, PERMISSION_ERROR);
   }
 
-  await prisma.$transaction(async (tx) => {
+  if (!idCosteo) {
+    return rowStatusError(idCosteo, "Debe seleccionar un costeo válido.");
+  }
+
+  const problem = await prisma.$transaction(async (tx) => {
     // Se bloquea antes de comprobar que existe, como las demas acciones que tocan el costeo.
     await lockCostingRow(tx, idCosteo);
 
@@ -339,8 +350,9 @@ export async function recalculateCostingAction(formData: FormData) {
       },
     });
 
+    // Nada se escribio todavia: el problema se devuelve y la accion responde con el.
     if (!costing) {
-      throw new Error("El costeo seleccionado no existe.");
+      return COSTING_NOT_FOUND;
     }
 
     await recalculateCostingTotals(tx, idCosteo);
@@ -354,9 +366,15 @@ export async function recalculateCostingAction(formData: FormData) {
         "Costeo recalculado manteniendo materiales, consumibles y mano de obra, y sumando costos indirectos vigentes.",
       tx,
     });
+
+    return null;
   });
+
+  if (problem) {
+    return rowStatusError(idCosteo, problem);
+  }
 
   revalidateCostingPaths(idCosteo);
 
-  redirect(`/dashboard/costs/costings/${idCosteo}?toast=costing-recalculated`);
+  return rowStatusDone(idCosteo, "recalculado");
 }

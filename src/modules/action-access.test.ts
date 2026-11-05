@@ -121,14 +121,14 @@ const MODULOS: ModuloDeAcciones[] = [
       "updateLaborCostAction",
       "recalculateCostingAction",
     ],
-    rechazanConResultado: ["updateLaborCostAction"],
+    rechazanConResultado: ["updateLaborCostAction", "recalculateCostingAction"],
   },
   {
     ruta: "costs/indirect-costs/actions",
     cargar: () => import("@/modules/costs/indirect-costs/actions"),
     roles: SOLO_ADMIN,
     acciones: ["createIndirectCostAction", "annulIndirectCostAction"],
-    rechazanConResultado: ["createIndirectCostAction"],
+    rechazanConResultado: ["createIndirectCostAction", "annulIndirectCostAction"],
   },
   {
     ruta: "costs/margins/actions",

@@ -1,21 +1,17 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { recalculateCostingTotals } from "@/lib/costing";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
 import { APP_ROLES } from "@/lib/permissions";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockCostingRow, lockIndirectCostRow } from "@/lib/row-locks";
 import { indirectCostSchema } from "@/schemas/costs/indirect-cost.schema";
-
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
 
 function normalizeText(value: FormDataEntryValue | null) {
   if (!value) {
@@ -164,18 +160,26 @@ export async function createIndirectCostAction(
   };
 }
 
-export async function annulIndirectCostAction(formData: FormData) {
-  const session = await requireAdmin();
-
+// B5 de la 10.8b (D6): anular se pide desde la fila del detalle con ConfirmActionButton y
+// la accion devuelve RowStatusState. Un rechazo no revalida: el repintado se llevaria el
+// boton y su mensaje.
+export async function annulIndirectCostAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
   const idCostoIndirecto = normalizeText(formData.get("id_costo_indirecto"));
 
-  if (!idCostoIndirecto) {
-    throw new Error("Debe seleccionar un costo indirecto válido.");
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return rowStatusError(idCostoIndirecto, PERMISSION_ERROR);
   }
 
-  let idCosteo = "";
+  if (!idCostoIndirecto) {
+    return rowStatusError(idCostoIndirecto, "Debe seleccionar un costo indirecto válido.");
+  }
 
-  await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx): Promise<{ problem: string } | { idCosteo: string }> => {
     // H10: se bloquea el costo indirecto antes de leerlo. Dos anulaciones simultaneas
     // pasaban las dos la comprobacion de [ANULADO] y la bitacora registraba dos; ahora la
     // segunda espera y lo encuentra anulado. Despues, el recalculo bloquea el costeo.
@@ -194,19 +198,20 @@ export async function annulIndirectCostAction(formData: FormData) {
       },
     });
 
+    // Nada se escribio todavia: cada problema se devuelve y la accion responde con el.
     if (!indirectCost) {
-      throw new Error("El costo indirecto seleccionado no existe.");
+      return { problem: "El costo indirecto seleccionado no existe." };
     }
 
     if (!indirectCost.id_costeo) {
-      throw new Error("El costo indirecto no está asociado a un costeo.");
+      return { problem: "El costo indirecto no está asociado a un costeo." };
     }
 
     if (indirectCost.observaciones?.includes("[ANULADO]")) {
-      throw new Error("El costo indirecto ya se encuentra anulado.");
+      return { problem: "El costo indirecto ya se encuentra anulado." };
     }
 
-    idCosteo = indirectCost.id_costeo;
+    const idCosteo = indirectCost.id_costeo;
 
     await tx.costo_indirecto.update({
       where: {
@@ -235,9 +240,15 @@ export async function annulIndirectCostAction(formData: FormData) {
       detalle: `Costo indirecto anulado del costeo ${idCosteo}: ${indirectCost.concepto}.`,
       tx,
     });
+
+    return { idCosteo };
   });
 
-  revalidateCostingPaths(idCosteo);
+  if ("problem" in result) {
+    return rowStatusError(idCostoIndirecto, result.problem);
+  }
 
-  redirect(`/dashboard/costs/costings/${idCosteo}?toast=indirect-cost-annulled`);
+  revalidateCostingPaths(result.idCosteo);
+
+  return rowStatusDone(idCostoIndirecto, "anulado");
 }

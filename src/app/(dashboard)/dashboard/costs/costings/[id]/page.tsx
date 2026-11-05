@@ -80,6 +80,7 @@ export default async function CostingDetailPage({
           costing={costing}
           clientName={clientName}
           laborNotification={costsNotifications["costing-updated"]}
+          recalculatedNotification={costsNotifications["costing-recalculated"]}
         />
 
         <EconomicStatusCard
@@ -108,6 +109,7 @@ export default async function CostingDetailPage({
       <IndirectCostsSection
         costing={costing}
         createdNotification={costsNotifications["indirect-cost-created"]}
+        annulledNotification={costsNotifications["indirect-cost-annulled"]}
       />
 
       <MarginsSection

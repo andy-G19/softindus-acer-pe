@@ -1,6 +1,3 @@
-import {
-  ConfirmDeleteButton,
-} from "@/components/notifications/confirm-delete-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import {
@@ -17,6 +14,7 @@ import {
   annulIndirectCostAction,
   createIndirectCostAction,
 } from "@/modules/costs/indirect-costs/actions";
+import { IndirectCostAnnulAction } from "@/modules/costs/indirect-costs/indirect-cost-annul-action";
 import { IndirectCostForm } from "@/modules/costs/indirect-costs/indirect-cost-form";
 import type { CostingDetail } from "@/modules/costs/costings/queries";
 
@@ -53,9 +51,15 @@ type IndirectCostsSectionProps = {
   costing: Pick<CostingDetail, "id_costeo" | "costo_indirecto">;
   /** Aviso al registrar un costo indirecto; la pagina lo pasa con su clave literal. */
   createdNotification: NotificationDefinition;
+  /** Aviso al anular un costo indirecto; la pagina lo pasa con su clave literal. */
+  annulledNotification: NotificationDefinition;
 };
 
-export function IndirectCostsSection({ costing, createdNotification }: IndirectCostsSectionProps) {
+export function IndirectCostsSection({
+  costing,
+  createdNotification,
+  annulledNotification,
+}: IndirectCostsSectionProps) {
   return (
     <section className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
       <Card>
@@ -138,22 +142,14 @@ export function IndirectCostsSection({ costing, createdNotification }: IndirectC
                           Anulado
                         </span>
                       ) : (
-                        <form action={annulIndirectCostAction}>
-                          <input
-                            type="hidden"
-                            name="id_costo_indirecto"
-                            value={item.id_costo_indirecto}
-                          />
-                          <ConfirmDeleteButton
-                            title="¿Anular costo indirecto?"
-                            description="Esta acción anulará el costo indirecto y no se puede deshacer."
-                            confirmText="Confirmar anulación"
-                            entityName="costo indirecto"
-                            className="rounded-none border-0 bg-transparent px-0 py-0 hover:bg-transparent"
-                          >
-                            Anular
-                          </ConfirmDeleteButton>
-                        </form>
+                        <IndirectCostAnnulAction
+                          indirectCost={{
+                            id_costo_indirecto: item.id_costo_indirecto,
+                            concepto: item.concepto,
+                          }}
+                          action={annulIndirectCostAction}
+                          successNotification={annulledNotification}
+                        />
                       )}
                     </TableCell>
                   </TableRow>

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate } from "@/lib/formatters";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
@@ -7,6 +6,7 @@ import {
   recalculateCostingAction,
   updateLaborCostAction,
 } from "@/modules/costs/costings/actions";
+import { CostingRecalculateAction } from "@/modules/costs/costings/costing-recalculate-action";
 import { LaborCostForm } from "@/modules/costs/costings/labor-cost-form";
 import type { CostingDetail } from "@/modules/costs/costings/queries";
 
@@ -20,9 +20,16 @@ type CostingDataCardProps = {
   clientName: string | null;
   /** Aviso al ajustar la mano de obra; la pagina lo pasa con su clave literal. */
   laborNotification: NotificationDefinition;
+  /** Aviso al recalcular el costeo; la pagina lo pasa con su clave literal. */
+  recalculatedNotification: NotificationDefinition;
 };
 
-export function CostingDataCard({ costing, clientName, laborNotification }: CostingDataCardProps) {
+export function CostingDataCard({
+  costing,
+  clientName,
+  laborNotification,
+  recalculatedNotification,
+}: CostingDataCardProps) {
   return (
     <Card>
       <CardHeader>
@@ -72,13 +79,13 @@ export function CostingDataCard({ costing, clientName, laborNotification }: Cost
             successNotification={laborNotification}
           />
 
-          <form action={recalculateCostingAction} className="mt-3">
-            <input type="hidden" name="id_costeo" value={costing.id_costeo} />
-
-            <Button type="submit" variant="outline">
-              Recalcular costeo
-            </Button>
-          </form>
+          <div className="mt-3">
+            <CostingRecalculateAction
+              idCosteo={costing.id_costeo}
+              action={recalculateCostingAction}
+              successNotification={recalculatedNotification}
+            />
+          </div>
         </div>
       </CardContent>
     </Card>

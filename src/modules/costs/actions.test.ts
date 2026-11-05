@@ -425,7 +425,7 @@ defineActionSuite("updateLaborCostAction", fromIdle(updateLaborCostAction), [
   },
 ]);
 
-defineActionSuite("recalculateCostingAction", recalculateCostingAction, [
+defineActionSuite("recalculateCostingAction", fromIdle(recalculateCostingAction), [
   {
     name: "sin costeo en el formulario",
     form: { id_costeo: "" },
@@ -491,7 +491,7 @@ defineActionSuite("createIndirectCostAction", fromIdle(createIndirectCostAction)
   },
 ]);
 
-defineActionSuite("annulIndirectCostAction", annulIndirectCostAction, [
+defineActionSuite("annulIndirectCostAction", fromIdle(annulIndirectCostAction), [
   {
     name: "sin costo indirecto en el formulario",
     form: { id_costo_indirecto: "" },
@@ -795,6 +795,95 @@ describe("B4: las secciones del detalle responden con FormActionState", () => {
 });
 
 // ---------------------------------------------------------------------------
+// B5 (10.8b): recalcular y anular un costo indirecto responden a su confirmacion
+// ---------------------------------------------------------------------------
+
+// Recalcular y anular un costo indirecto se piden con ConfirmActionButton (D6). Antes
+// lanzaban o redirigian con ?toast=; ahora devuelven RowStatusState: con exito el estado
+// que quedo, y un rechazo con su mensaje, que queda dentro de la confirmacion. Un rechazo
+// no revalida: el repintado se llevaria el boton y su mensaje.
+describe("B5: recalcular y anular responden con RowStatusState", () => {
+  const OPERATION = "operacion-de-prueba";
+
+  const expected: [string, string, unknown, boolean][] = [
+    [
+      "recalculateCostingAction",
+      "recalcula con los costos indirectos vigentes",
+      { status: "success", data: { estado: "recalculado" }, values: { id: COSTEO }, operationId: OPERATION },
+      true,
+    ],
+    [
+      "recalculateCostingAction",
+      "sin costeo en el formulario",
+      { status: "error", error: "Debe seleccionar un costeo válido.", values: { id: "" }, operationId: OPERATION },
+      false,
+    ],
+    [
+      "recalculateCostingAction",
+      "el costeo no existe: se revierte",
+      { status: "error", error: "El costeo seleccionado no existe.", values: { id: COSTEO }, operationId: OPERATION },
+      false,
+    ],
+    [
+      "annulIndirectCostAction",
+      "anula conservando las observaciones previas y recalcula",
+      { status: "success", data: { estado: "anulado" }, values: { id: "CIN00000002" }, operationId: OPERATION },
+      true,
+    ],
+    [
+      "annulIndirectCostAction",
+      "sin costo indirecto en el formulario",
+      { status: "error", error: "Debe seleccionar un costo indirecto válido.", values: { id: "" }, operationId: OPERATION },
+      false,
+    ],
+    [
+      "annulIndirectCostAction",
+      "el costo indirecto no existe",
+      {
+        status: "error",
+        error: "El costo indirecto seleccionado no existe.",
+        values: { id: "CIN00000002" },
+        operationId: OPERATION,
+      },
+      false,
+    ],
+    [
+      "annulIndirectCostAction",
+      "costo indirecto sin costeo asociado",
+      {
+        status: "error",
+        error: "El costo indirecto no está asociado a un costeo.",
+        values: { id: "CIN00000002" },
+        operationId: OPERATION,
+      },
+      false,
+    ],
+    [
+      "annulIndirectCostAction",
+      "costo indirecto ya anulado",
+      {
+        status: "error",
+        error: "El costo indirecto ya se encuentra anulado.",
+        values: { id: "CIN00000002" },
+        operationId: OPERATION,
+      },
+      false,
+    ],
+  ];
+
+  for (const [suite, caseName, outcome, revalidates] of expected) {
+    it(`${suite}: ${caseName}`, async () => {
+      const { action, actionCase } = findCase(suite, caseName);
+      // Una redireccion aparece en el resultado («redirect:…») y toEqual la rechaza.
+      const { calls, outcome: actual } = await runAction(action, actionCase);
+
+      expect(actual).toEqual(outcome);
+      expect(calls.some((call) => "effect" in call && call.effect === "revalidatePath")).toBe(revalidates);
+    });
+  }
+});
+
+// ---------------------------------------------------------------------------
 // H3 (grupo 1 de fixes): el recalculo bloquea el costeo antes de leer sus montos
 // ---------------------------------------------------------------------------
 
@@ -889,7 +978,7 @@ describe("H10: anular un costo indirecto lo bloquea antes de leerlo", () => {
 
   for (const actionCase of casesWithIndirectCost) {
     it(actionCase.name, async () => {
-      const { calls } = await runAction(annulIndirectCostAction, actionCase);
+      const { calls } = await runAction(fromIdle(annulIndirectCostAction), actionCase);
 
       expectRowLockedBefore(calls, {
         table: "costo_indirecto",

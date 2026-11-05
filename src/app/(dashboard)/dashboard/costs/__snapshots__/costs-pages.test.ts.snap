@@ -3199,10 +3199,9 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <button data-variant="default" type="submit">Actualizar</button>
 </div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -3343,10 +3342,7 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -3358,10 +3354,7 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <td>-</td>
 <td>S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -3777,10 +3770,9 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <button data-variant="default" type="submit">Actualizar</button>
 </div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -3921,10 +3913,7 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -3936,10 +3925,7 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <td>-</td>
 <td>S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -4437,10 +4423,9 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <button data-variant="default" type="submit">Actualizar</button>
 </div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -4620,10 +4605,7 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -4635,10 +4617,7 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <td>-</td>
 <td>S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -5047,10 +5026,9 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <button data-variant="default" type="submit">Actualizar</button>
 </div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -5191,10 +5169,7 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -5206,10 +5181,7 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <td>-</td>
 <td>S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -5625,10 +5597,9 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <button data-variant="default" type="submit">Actualizar</button>
 </div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -5808,10 +5779,7 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -5823,10 +5791,7 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <td>-</td>
 <td>S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -6242,10 +6207,9 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <button data-variant="default" type="submit">Actualizar</button>
 </div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -6431,10 +6395,7 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="CIN00000002"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -6833,10 +6794,9 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 <button data-variant="default" type="submit">Actualizar</button>
 </div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -7315,10 +7275,9 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <button data-variant="default" type="submit">Actualizar</button>
 </div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -7490,10 +7449,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -7505,10 +7461,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <td>-</td>
 <td>S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
