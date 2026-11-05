@@ -62,7 +62,7 @@ export default async function CostingWorkOrdersPage() {
   } = await getCostableWorkOrdersData();
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Generar costeo desde producción"
         description="Selecciona una orden de trabajo con versión de receta registrada para calcular automáticamente el costo estimado de materiales y consumibles."
@@ -284,6 +284,6 @@ export default async function CostingWorkOrdersPage() {
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

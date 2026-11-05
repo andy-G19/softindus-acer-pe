@@ -177,7 +177,7 @@ exports[`/dashboard/costs > con datos > llamadas 1`] = `
 
 exports[`/dashboard/costs > con datos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -388,7 +388,7 @@ exports[`/dashboard/costs > con datos > resultado 1`] = `
 </div>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -570,7 +570,7 @@ exports[`/dashboard/costs > sin datos: modulo sin informacion economica > llamad
 
 exports[`/dashboard/costs > sin datos: modulo sin informacion economica > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -753,7 +753,7 @@ exports[`/dashboard/costs > sin datos: modulo sin informacion economica > result
 </div>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -935,7 +935,7 @@ exports[`/dashboard/costs > solo ordenes sin costeo: modulo operativo > llamadas
 
 exports[`/dashboard/costs > solo ordenes sin costeo: modulo operativo > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1118,7 +1118,7 @@ exports[`/dashboard/costs > solo ordenes sin costeo: modulo operativo > resultad
 </div>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1207,7 +1207,7 @@ exports[`/dashboard/costs/costings > estado margen bajo > llamadas 1`] = `
 
 exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1238,7 +1238,7 @@ exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -1255,14 +1255,17 @@ exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
 <label for="producto">Producto</label>
 <input id="producto" placeholder="Producto" name="producto" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -1405,7 +1408,7 @@ exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1490,7 +1493,7 @@ exports[`/dashboard/costs/costings > estado pendiente > llamadas 1`] = `
 
 exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1521,7 +1524,7 @@ exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -1538,14 +1541,17 @@ exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
 <label for="producto">Producto</label>
 <input id="producto" placeholder="Producto" name="producto" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -1688,7 +1694,7 @@ exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1757,7 +1763,7 @@ exports[`/dashboard/costs/costings > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1788,7 +1794,7 @@ exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -1805,14 +1811,17 @@ exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
 <label for="producto">Producto</label>
 <input id="producto" placeholder="Producto" name="producto" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -1955,7 +1964,7 @@ exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -2024,7 +2033,7 @@ exports[`/dashboard/costs/costings > sin resultados > llamadas 1`] = `
 
 exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2055,7 +2064,7 @@ exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -2072,14 +2081,17 @@ exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 <label for="producto">Producto</label>
 <input id="producto" placeholder="Producto" name="producto" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -2181,7 +2193,7 @@ exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -2430,7 +2442,7 @@ exports[`/dashboard/costs/costings > todos los filtros, estado rentable > llamad
 
 exports[`/dashboard/costs/costings > todos los filtros, estado rentable > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2461,7 +2473,7 @@ exports[`/dashboard/costs/costings > todos los filtros, estado rentable > result
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value="puerta"/>
@@ -2478,14 +2490,17 @@ exports[`/dashboard/costs/costings > todos los filtros, estado rentable > result
 <label for="producto">Producto</label>
 <input id="producto" placeholder="Producto" name="producto" value="Puerta"/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
+</fieldset>
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -2628,7 +2643,7 @@ exports[`/dashboard/costs/costings > todos los filtros, estado rentable > result
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -2697,7 +2712,7 @@ exports[`/dashboard/costs/costings > un costeo de cada origen > llamadas 1`] = `
 
 exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2728,7 +2743,7 @@ exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = 
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -2745,14 +2760,17 @@ exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = 
 <label for="producto">Producto</label>
 <input id="producto" placeholder="Producto" name="producto" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -2970,7 +2988,7 @@ exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = 
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -7741,7 +7759,7 @@ exports[`/dashboard/costs/work-orders > con ordenes > llamadas 1`] = `
 
 exports[`/dashboard/costs/work-orders > con ordenes > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -7930,7 +7948,7 @@ exports[`/dashboard/costs/work-orders > con ordenes > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -8054,7 +8072,7 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 
 exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -8289,7 +8307,7 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -8413,7 +8431,7 @@ exports[`/dashboard/costs/work-orders > sin ordenes pendientes ni costeos > llam
 
 exports[`/dashboard/costs/work-orders > sin ordenes pendientes ni costeos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -8540,7 +8558,7 @@ exports[`/dashboard/costs/work-orders > sin ordenes pendientes ni costeos > resu
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
