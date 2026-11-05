@@ -1,34 +1,33 @@
 import { z } from "zod";
 
+import {
+  MAX_COST_AMOUNT,
+  MAX_COST_AMOUNT_TEXT,
+  optionalAmount,
+  requiredAmount,
+} from "@/schemas/costs/cost-amount";
+
 export const marginSchema = z.object({
   id_costeo: z
-    .string()
+    .string({ error: "El costeo es obligatorio." })
     .trim()
     .min(1, "El costeo es obligatorio.")
     .max(11, "El identificador del costeo no debe superar 11 caracteres."),
 
-  porcentaje_margen: z.coerce
-    .number({
-      message: "El porcentaje de margen debe ser numérico.",
-    })
-    .min(15, "El margen mínimo permitido es 15%.")
-    .max(20, "El margen máximo permitido es 20%."),
+  porcentaje_margen: requiredAmount("El porcentaje de margen", {
+    min: 15,
+    minMessage: "El margen mínimo permitido es 15%.",
+    max: 20,
+    maxMessage: "El margen máximo permitido es 20%.",
+  }),
 
-  precio_final: z
-    .union([
-      z.literal(""),
-      z.coerce.number({
-        message: "El precio final debe ser numérico.",
-      }),
-    ])
-    .optional()
-    .transform((value) => {
-      if (value === "" || value === undefined) {
-        return null;
-      }
-
-      return value;
-    }),
+  // Sin precio final (vacio o sin el campo) la accion usa el precio sugerido.
+  precio_final: optionalAmount("El precio final", {
+    min: 0,
+    minMessage: "El precio final no puede ser negativo.",
+    max: MAX_COST_AMOUNT,
+    maxMessage: `El precio final no debe superar ${MAX_COST_AMOUNT_TEXT}.`,
+  }),
 
   motivo_ajuste: z
     .string()

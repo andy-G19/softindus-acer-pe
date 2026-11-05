@@ -386,10 +386,10 @@ defineActionSuite("updateLaborCostAction", updateLaborCostAction, [
       "costo_indirecto.findMany": indirectAmounts,
     },
   },
-  // Hallazgo 66 (10.8): z.coerce.number convierte el campo vacio en 0 y no hay
-  // maximo para Decimal(12, 2). Estos casos fijan lo que pasa hoy.
+  // Hallazgo 66 (10.8): z.coerce.number convertia el campo vacio en 0 y no habia
+  // maximo para Decimal(12, 2). Ahora los dos se rechazan antes de la base.
   {
-    name: "mano de obra vacia: hoy guarda S/ 0",
+    name: "mano de obra vacia: se rechaza",
     form: { id_costeo: COSTEO, costo_mano_obra: "" },
     data: {
       "costeo.findUnique": costingTotals(),
@@ -397,7 +397,7 @@ defineActionSuite("updateLaborCostAction", updateLaborCostAction, [
     },
   },
   {
-    name: "mano de obra sobre el maximo de la columna: hoy pasa el esquema",
+    name: "mano de obra sobre el maximo de la columna: se rechaza",
     form: { id_costeo: COSTEO, costo_mano_obra: "10000000000" },
     data: {
       "costeo.findUnique": costingTotals(),
@@ -456,10 +456,10 @@ defineActionSuite("createIndirectCostAction", createIndirectCostAction, [
       "costo_indirecto.findMany": indirectAmounts,
     },
   },
-  // Hallazgo 66 (10.8): el monto vacio crea un costo indirecto de S/ 0 y no hay
-  // maximo para Decimal(12, 2). Estos casos fijan lo que pasa hoy.
+  // Hallazgo 66 (10.8): el monto vacio creaba un costo indirecto de S/ 0 y no habia
+  // maximo para Decimal(12, 2). Ahora los dos se rechazan antes de la base.
   {
-    name: "monto vacio: hoy crea un costo indirecto de S/ 0",
+    name: "monto vacio: se rechaza",
     form: { ...indirectForm, monto: "" },
     data: {
       "costeo.findUnique": costingTotals(),
@@ -467,7 +467,7 @@ defineActionSuite("createIndirectCostAction", createIndirectCostAction, [
     },
   },
   {
-    name: "monto sobre el maximo de la columna: hoy pasa el esquema",
+    name: "monto sobre el maximo de la columna: se rechaza",
     form: { ...indirectForm, monto: "10000000000" },
     data: {
       "costeo.findUnique": costingTotals(),
@@ -560,14 +560,15 @@ defineActionSuite("createMarginAction", createMarginAction, [
     },
     data: { "costeo.findUnique": { id_costeo: COSTEO, costo_total: D("1524.58") } },
   },
-  // Hallazgo 72 (10.8): el precio final es una union de "" y z.coerce.number.
-  // Estos casos fijan lo que pasa hoy.
+  // Hallazgo 72 (10.8): el precio final era una union de "" y z.coerce.number:
+  // respondia «Invalid input» y, sin el campo, se volvia 0. Ahora el mensaje esta en
+  // espanol y sin el campo se usa el precio sugerido, como con el campo vacio.
   {
-    name: "precio final no numerico: hoy responde en ingles",
+    name: "precio final no numerico: mensaje en espanol",
     form: { ...marginForm, precio_final: "abc" },
   },
   {
-    name: "sin el campo de precio final: hoy se vuelve 0",
+    name: "sin el campo de precio final: usa el precio sugerido",
     form: { id_costeo: COSTEO, porcentaje_margen: "17", motivo_ajuste: "" },
     data: { "costeo.findUnique": { id_costeo: COSTEO, costo_total: D("1524.58") } },
   },
