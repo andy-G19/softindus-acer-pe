@@ -7140,9 +7140,9 @@ Datos leídos de la API de GitHub el 2026-11-03 (UTC) y comparados con git:
 
 ### Sub-entrega 10.8a — Personal
 
-Fecha: del 2026-11-03 al 2026-11-04 (Lima). Estado: código y registro hechos, pendiente de
-verificar en staging. El paso C0 (`ff4b05a`) registró la integración de la 10.7b. 10 commits
-de código y pruebas, de `6dd333f` a `e168e16`, y este registro. Plan en
+Fecha: del 2026-11-03 al 2026-11-04 (Lima). Estado: verificada en staging el 2026-11-05 UTC,
+pendiente de integrar. El paso C0 (`ff4b05a`) registró la integración de la 10.7b. 10 commits
+de código y pruebas, de `6dd333f` a `e168e16`, el registro `df4df62` y el cierre. Plan en
 `tmp/e10-diff/plan-10-8.md`, aprobado con D1 a D10. La 10.8 se partió en 10.8a (Personal:
 ADMIN y, en asistencia y tareas, WORKSHOP_MASTER) y 10.8b (Costos: solo ADMIN y dinero en
 staging). Decisión del responsable (D8): la tarifa del operario conserva el texto «Tarifa» y
@@ -7161,7 +7161,8 @@ ningún cálculo cambia (hallazgo 57).
 | c8ca141 | feat | Asistencia en panel; cada rechazo en su campo; las reglas de uso como ayudas (D10); la lista con `FilterBar` y `DateRangeFields`. |
 | 63d2c03 | feat | Tareas en panel con las ayudas corregidas (71, D8); anular desde la fila con confirmación destructiva. |
 | e168e16 | feat | Inicio de Personal según el rol y `staff-links.test.ts` (67); planillas y pagos con `FilterBar`, `DateRangeFields` y `<div>`, sin tocar sus acciones (E11). |
-| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| df4df62 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| este | docs | Cierre: verificación en staging y manual de Personal. |
 
 Ajustes al plan:
 
@@ -7248,6 +7249,82 @@ Hallazgos de la implementación:
 83. Método: los comandos de `git` escritos antes de la caja de la pregunta no se ven; van en el
     mensaje final.
 
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e108-huella`) y etiquetas `e108/`, copiadas de las de la 10.7b
+  por `c-e108-guiones.py`, que se niega a sobrescribir. El lector de formularios parte del de la
+  10.7b, que ya no devuelve contraseñas. Los guiones se cargaron desde el texto exacto de sus
+  archivos y la página comprobó sus 5 SHA-256. Plan en `plan-verificacion-10-8a.md`.
+- 17 capturas por fase: 14 de pantallas (12 a 1281×900 y 2 a 376×900) y 3 de control (campañas,
+  clientes y galería).
+- Datos elegidos en el «antes», solo leyendo (`datos-verificacion-10-8a.md`): `<OPE>` OPE00000002,
+  `<ASI>` ASI00000003 y `<OTR>` OTR00000009. Predicción antes del push en `prediccion-10-8a.md`;
+  resultados en `resultados-10-8a.md`; registro en `registro-10-8a.tsv` (34 filas).
+- Solo ADMIN, por decisión del responsable: las tarjetas y enlaces del maestro de taller los fija
+  `staff-links.test.ts`, y sus permisos `action-access.test.ts`.
+- Antes de cada envío que debía rechazarse se comprobó la condición por id (`FormData`); antes de
+  cada guardado, lo elegido; antes de cada clic en una lista con varias filas, la fila del botón
+  con hover y script.
+
+Publicación y medición, todo el 2026-11-05 UTC (de las 00:01 a las 01:24):
+
+- «Antes» sobre `9ecc334` (CSS servido `33d76ftdzcx_9.css`, 112.525 bytes).
+- Push de 12 commits (de `ff4b05a` a `df4df62`): CI #136 en verde, de 01:01:27 a 01:06:09 UTC, y
+  Vercel `success` (despliegue de las 01:02:51 UTC). El CSS servido cambió a `3-zkl1ajmwbdw.css`,
+  112.462 bytes: 63 menos, sin `md:grid-cols-6`, como se predijo.
+- Los 3 controles dieron hash y texto iguales. Pagos, nueva planilla y nuevo pago cambian solo la
+  etiqueta `main` → `div`, con el mismo texto y sin cambios de estilo ni de posición. Las otras 11
+  pantallas cambian como se predijo; el inicio, además, por los datos del «antes» (hallazgo 85).
+
+Tareas (ADMIN):
+
+| Tarea | Antes (`9ecc334`) | Después |
+|---|---|---|
+| T119 Inicio | Operarios y Asistencia «Acceso: ADMIN.» | Operarios «ADMIN; maestro de taller, solo consulta.», Asistencia «ADMIN / Maestro de taller.» |
+| T120 Nombres de una letra | Alerta general y toast de error; el mensaje sin `aria-invalid`; foco en `body`; se pierden Nombres y Apellidos | Panel; error en Nombres con `aria-invalid` y el foco; Apellidos conservado; sin toast |
+| T121 Cancelar con cambios | Sale sin preguntar | «¿Descartar el operario nuevo?»; descartar devuelve el foco a «Registrar operario» |
+| T122 Ranuras | No había panel | Alta y edición de operario, alta de asistencia y de tarea en panel; Atrás cierra, Adelante reabre, recargar da la página completa sin `main` anidado |
+| T123 Salida antes del ingreso | Página de error | Error en Hora de salida con el foco; todo conservado |
+| T124 Descripción de 4 caracteres | Página de error | Error en Descripción con el foco; operario, orden y horas conservados |
+| T125 Asistencia duplicada | Página de error | Error en Fecha con el foco |
+| T126 Rango invertido | Se envía y filtra sin aviso | «Hasta» con `min`; el navegador no envía (asistencia y planillas) |
+| T127 Alta | Lista con `?toast=`; un toast | Panel; un aviso; sin `?toast=`; foco en «Registrar operario» |
+| T128 Asistencia | Lista con toast | Panel; un aviso; el buscador no ofrece al operario inactivo del «antes» |
+| T129 Tarea, 3.25 h | Guarda 3.25 | Guarda 3.25; panel; un aviso |
+| T130 Anular la tarea | SweetAlert genérico | Confirmación destructiva con la consecuencia sobre los costeos; un aviso; foco en la fila |
+| T131 Edición | Página con Estado | Panel sin Estado; un aviso |
+| T132 Inactivar, activar e inactivar | Cada cambio al pulsar, sin confirmar; el botón solo enviaba el id | Inactivar confirma con la consecuencia real; activar al pulsar; un aviso por cambio; el foco sigue al botón de la fila |
+| T133 Bitácora | 8 entradas | 8 entradas con las mismas acciones y detalles |
+
+Datos de prueba, con autorización del responsable en cada turno de escritura:
+
+- «Antes»: OPE00000003 («Prueba 108a Antes»), ASI00000004 y TAR00000001 sobre OTR00000009.
+- «Después»: OPE00000004 («Prueba 108a Despues»), ASI00000005 y TAR00000002 sobre OTR00000009.
+- Los dos operarios quedan inactivos y sin tarifa, y las dos tareas anuladas: ningún costeo cambia.
+  Los rechazos de T120 y T123 a T125 no crearon nada. Ningún operario real se editó ni cambió de
+  estado.
+
+Hallazgos de la verificación:
+
+84. T129 del plan no se podía hacer desde la interfaz: el campo de horas tiene `step="0.01"` en
+    los dos formularios, así que el navegador no envía 3.005. El hallazgo 62 solo aplica a un POST
+    armado fuera del formulario, y ya lo fijan las pruebas. La tarea de prueba usó 3.25 h en las
+    dos fases.
+85. Fallo de la predicción: el inicio de Personal tiene paneles con datos (operarios, inactivos,
+    tareas del mes, último operario y última asistencia) y las escrituras del «antes» los llenaron
+    (374 → 386 elementos, +77,6 px). La predicción solo contó los textos de acceso, que cambiaron
+    como se predijo.
+86. Método: a mitad del «antes» el panel del navegador se cerró y, al reabrirlo, cayó en el
+    `/login` de producción. No se hizo nada allí; el responsable entró a staging, se comprobó el
+    origen en una llamada aparte y los guiones (5 SHA-256) y las 17 capturas seguían en la página.
+87. El formulario viejo de tarea ya no ofrecía «Anulada» en su select (solo el esquema la
+    aceptaba): la captura de la tarea nueva no cambia por eso.
+
+El manual suma el capítulo de Personal, y el de patrones lo cuenta entre las pantallas renovadas
+y entre los inicios que muestran solo las tarjetas permitidas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -7272,7 +7349,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, cerrada, con CI #131 verde en main, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos; la 10.7b, cerrada, con CI #135 verde en main, 9 huellas del «después» (3 controles iguales y 6 como se predijo) y los hallazgos 17 a 22 y 26 corregidos; la 10.8, partida en 10.8a y 10.8b; la 10.8a, código y registro hechos, pendiente de verificar en staging) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, cerrada, con CI #131 verde en main, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos; la 10.7b, cerrada, con CI #135 verde en main, 9 huellas del «después» (3 controles iguales y 6 como se predijo) y los hallazgos 17 a 22 y 26 corregidos; la 10.8, partida en 10.8a y 10.8b; la 10.8a, verificada en staging con CI #136 verde, 17 huellas del «después» (3 controles iguales, 3 solo con `main` → `div` y 11 como se predijo, el inicio además con los datos de prueba) y los hallazgos 58 a 63, 67 a 71 y 73 corregidos, pendiente de integrar) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
