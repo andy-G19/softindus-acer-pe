@@ -22,7 +22,6 @@ import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { createCostingFromWorkOrderAction } from "@/modules/costs/costings/actions";
 import { GenerateCostingAction } from "@/modules/costs/costings/generate-costing-action";
-import { costsNotifications } from "@/modules/costs/notifications";
 import { getCostableWorkOrdersData } from "@/modules/costs/costings/queries";
 
 function formatDecimal(value: unknown) {
@@ -219,8 +218,6 @@ export default async function CostingWorkOrdersPage() {
                           <GenerateCostingAction
                             idOrdenTrabajo={order.id_orden_trabajo}
                             action={createCostingFromWorkOrderAction}
-                            createdNotification={costsNotifications["costing-created"]}
-                            existingNotification={costsNotifications["costing-already-exists"]}
                           />
                         ) : (
                           <span className="text-xs text-destructive">

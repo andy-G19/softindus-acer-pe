@@ -25,12 +25,12 @@ type ConfirmActionButtonProps<Values, Data> = {
   size?: "default" | "xs" | "sm" | "lg";
   /**
    * Aviso del catalogo del area al terminar bien; la pagina lo pasa con su clave literal.
-   * Puede depender de los datos de la respuesta (B6 de la 10.8b: generar un costeo avisa
-   * distinto si la orden ya tenia uno); quien lo calcula es un componente cliente.
+   * Se omite solo cuando la accion no responde con exito sino que navega con redirect y su
+   * aviso va en la URL (generar un costeo, hallazgo 95 de la 10.8b): un router.push despues
+   * de la respuesta choca con la navegacion de la revalidacion y pierde la entrada del
+   * historial.
    */
-  successNotification: NotificationDefinition | ((data: Data) => NotificationDefinition);
-  /** Se llama con los datos de la respuesta despues del aviso, por ejemplo para navegar. */
-  onSuccess?: (data: Data) => void;
+  successNotification?: NotificationDefinition;
   /**
    * Confirmacion con la entidad, la consecuencia y el verbo. Sin ella la accion
    * se ejecuta al pulsar: activar no es destructivo.
@@ -96,7 +96,6 @@ export function ConfirmActionButton<Values, Data>({
   pendingText,
   disabled = false,
   onError,
-  onSuccess,
 }: ConfirmActionButtonProps<Values, Data>) {
   const [pending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
@@ -146,10 +145,11 @@ export function ConfirmActionButton<Values, Data>({
       const result = await action(IDLE, formData);
 
       if (result.status === "success") {
-        notify(typeof successNotification === "function" ? successNotification(result.data) : successNotification);
+        if (successNotification) {
+          notify(successNotification);
+        }
         setError(null);
         setOpen(false);
-        onSuccess?.(result.data);
       } else if (result.status === "error") {
         if (confirm) {
           setError(result.error);

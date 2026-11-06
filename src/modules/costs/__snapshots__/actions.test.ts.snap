@@ -683,19 +683,7 @@ exports[`createCostingFromWorkOrderAction > genera el costeo con materiales, con
 ]
 `;
 
-exports[`createCostingFromWorkOrderAction > genera el costeo con materiales, consumibles y mano de obra estimada > resultado 1`] = `
-{
-  "data": {
-    "existente": false,
-    "id_costeo": "COS00000001",
-  },
-  "operationId": "operacion-de-prueba",
-  "status": "success",
-  "values": {
-    "id_orden_trabajo": "OTR00000007",
-  },
-}
-`;
+exports[`createCostingFromWorkOrderAction > genera el costeo con materiales, consumibles y mano de obra estimada > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000001?toast=costing-created"`;
 
 exports[`createCostingFromWorkOrderAction > la orden no existe > llamadas 1`] = `
 [
@@ -808,19 +796,7 @@ exports[`createCostingFromWorkOrderAction > la orden ya tiene costeo: responde c
 ]
 `;
 
-exports[`createCostingFromWorkOrderAction > la orden ya tiene costeo: responde con el existente > resultado 1`] = `
-{
-  "data": {
-    "existente": true,
-    "id_costeo": "COS00000004",
-  },
-  "operationId": "operacion-de-prueba",
-  "status": "success",
-  "values": {
-    "id_orden_trabajo": "OTR00000007",
-  },
-}
-`;
+exports[`createCostingFromWorkOrderAction > la orden ya tiene costeo: responde con el existente > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=costing-already-exists"`;
 
 exports[`createCostingFromWorkOrderAction > orden anulada > llamadas 1`] = `
 [
@@ -1034,19 +1010,7 @@ exports[`createCostingFromWorkOrderAction > orden sin pedido ni tareas: sin pedi
 ]
 `;
 
-exports[`createCostingFromWorkOrderAction > orden sin pedido ni tareas: sin pedido y sin mano de obra > resultado 1`] = `
-{
-  "data": {
-    "existente": false,
-    "id_costeo": "COS00000001",
-  },
-  "operationId": "operacion-de-prueba",
-  "status": "success",
-  "values": {
-    "id_orden_trabajo": "OTR00000007",
-  },
-}
-`;
+exports[`createCostingFromWorkOrderAction > orden sin pedido ni tareas: sin pedido y sin mano de obra > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000001?toast=costing-created"`;
 
 exports[`createCostingFromWorkOrderAction > orden sin version de receta > llamadas 1`] = `
 [

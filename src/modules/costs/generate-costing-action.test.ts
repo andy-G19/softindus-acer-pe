@@ -8,9 +8,9 @@ import { GenerateCostingAction } from "@/modules/costs/costings/generate-costing
 import { costsNotifications } from "@/modules/costs/notifications";
 
 // Generar el costeo desde la lista de ordenes (B6 de la 10.8b, D5), con el Radix real.
-// No anula nada: confirma con el boton normal y dice lo que calcula el codigo. Al
-// terminar navega al costeo: el creado, con su aviso, o el que la orden ya tenia (una
-// lista vieja o un doble clic), con un aviso informativo.
+// No anula nada: confirma con el boton normal y dice lo que calcula el codigo. Con exito la
+// accion redirige al costeo con su aviso en la URL (hallazgo 95): el boton no navega ni
+// avisa por su cuenta; actions.test.ts fija el redirect y su clave.
 
 const navigation = vi.hoisted(() => ({ push: vi.fn(), back: vi.fn(), refresh: vi.fn(), replace: vi.fn(), prefetch: vi.fn(), forward: vi.fn() }));
 const notifications = vi.hoisted(() => ({ notify: vi.fn() }));
@@ -81,8 +81,6 @@ async function render(action: ReturnType<typeof actionWith>) {
       h(GenerateCostingAction, {
         idOrdenTrabajo: OT,
         action,
-        createdNotification: costsNotifications["costing-created"],
-        existingNotification: costsNotifications["costing-already-exists"],
       }),
     ),
   );
@@ -107,38 +105,20 @@ describe("GenerateCostingAction", () => {
     expect(buttonIn(confirmation()!, "Generar costeo").getAttribute("data-variant")).toBe("default");
   });
 
-  it("al crear el costeo da su aviso y navega a el", async () => {
-    const action = actionWith({
-      status: "success",
-      data: { id_costeo: "COS00000007", existente: false },
-      values: { id_orden_trabajo: OT },
-      operationId: "op",
-    });
+  // La accion que redirige no responde: su promesa no se resuelve con un resultado. Aqui
+  // queda pendiente, como mientras el reductor de Next aplica el redirect.
+  it("envia la orden una vez y no avisa ni navega por su cuenta: la accion redirige", async () => {
+    const action = vi.fn<(prev: CostingFromWorkOrderState, formData: FormData) => Promise<CostingFromWorkOrderState>>(
+      () => new Promise<CostingFromWorkOrderState>(() => {}),
+    );
     await render(action);
 
     await confirmGenerate();
 
+    expect(action).toHaveBeenCalledTimes(1);
     expect(Object.fromEntries(action.mock.calls[0]?.[1] as FormData)).toEqual({ id_orden_trabajo: OT });
-    expect(notifications.notify).toHaveBeenCalledTimes(1);
-    expect(notifications.notify).toHaveBeenCalledWith(costsNotifications["costing-created"]);
-    expect(navigation.push).toHaveBeenCalledWith("/dashboard/costs/costings/COS00000007");
-  });
-
-  it("si la orden ya tenia costeo, avisa que se abre el existente y navega a el", async () => {
-    await render(
-      actionWith({
-        status: "success",
-        data: { id_costeo: "COS00000003", existente: true },
-        values: { id_orden_trabajo: OT },
-        operationId: "op",
-      }),
-    );
-
-    await confirmGenerate();
-
-    expect(notifications.notify).toHaveBeenCalledTimes(1);
-    expect(notifications.notify).toHaveBeenCalledWith(costsNotifications["costing-already-exists"]);
-    expect(navigation.push).toHaveBeenCalledWith("/dashboard/costs/costings/COS00000003");
+    expect(notifications.notify).not.toHaveBeenCalled();
+    expect(Object.values(navigation).some((fn) => fn.mock.calls.length > 0)).toBe(false);
   });
 
   it("un rechazo queda dentro de la confirmacion, sin aviso ni navegacion", async () => {

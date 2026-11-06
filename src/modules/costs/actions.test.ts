@@ -888,11 +888,16 @@ describe("B5: recalcular y anular responden con RowStatusState", () => {
 // ---------------------------------------------------------------------------
 
 // Generar el costeo se pide desde la lista de ordenes con ConfirmActionButton (D5).
-// Antes lanzaba (pagina de error) o redirigia; ahora devuelve el costeo creado o el que
-// la orden ya tenia (una lista vieja o un doble clic), y el boton navega a el. Solo
-// revalida cuando crea: el existente no cambio, y un rechazo deja su mensaje en la
-// confirmacion.
-describe("B6: generar el costeo responde con el costeo y si ya existia", () => {
+// Antes lanzaba (pagina de error) en cada rechazo; ahora un rechazo deja su mensaje en la
+// confirmacion. Con exito redirige al costeo creado, o al que la orden ya tenia (una lista
+// vieja o un doble clic), con su aviso en la URL. Solo revalida cuando crea.
+//
+// Hallazgo 95 de la 10.8b: B6 navegaba en el cliente con router.push despues de la
+// respuesta, y ese push chocaba con la navegacion que Next aplica por la revalidacion: el
+// historial reemplazaba la entrada y Atras saltaba las ordenes por costear. Mover el push a
+// un efecto (9917160, revertido) no navegaba, porque la fila y su boton se desmontan con la
+// revalidacion. El redirect lo aplica el propio reductor de la accion con push, sin carrera.
+describe("B6 y hallazgo 95: generar el costeo redirige al costeo con su aviso; un rechazo responde con el error", () => {
   const OPERATION = "operacion-de-prueba";
   const rejected = (error: string, id = OT): unknown => ({
     status: "error",
@@ -904,22 +909,12 @@ describe("B6: generar el costeo responde con el costeo y si ya existia", () => {
   const expected: [string, unknown, boolean][] = [
     [
       "genera el costeo con materiales, consumibles y mano de obra estimada",
-      {
-        status: "success",
-        data: { id_costeo: "COS00000001", existente: false },
-        values: { id_orden_trabajo: OT },
-        operationId: OPERATION,
-      },
+      "redirect:/dashboard/costs/costings/COS00000001?toast=costing-created",
       true,
     ],
     [
       "la orden ya tiene costeo: responde con el existente",
-      {
-        status: "success",
-        data: { id_costeo: COSTEO, existente: true },
-        values: { id_orden_trabajo: OT },
-        operationId: OPERATION,
-      },
+      `redirect:/dashboard/costs/costings/${COSTEO}?toast=costing-already-exists`,
       false,
     ],
     ["sin orden en el formulario", rejected("Debe seleccionar una orden de trabajo válida.", ""), false],

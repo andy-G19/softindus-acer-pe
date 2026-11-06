@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import type { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
@@ -186,16 +187,21 @@ async function createCostingInTransaction(
   return { idCosteo, existente: false };
 }
 
-/** Lo que el boton de generar envio y, con exito, el costeo y si ya existia. */
-export type CostingFromWorkOrderState = FormActionState<
-  { id_orden_trabajo: string },
-  { id_costeo: string; existente: boolean }
->;
+/**
+ * Lo que el boton de generar envio, para un rechazo. Con exito no responde: redirige al
+ * costeo (hallazgo 95 de la 10.8b).
+ */
+export type CostingFromWorkOrderState = FormActionState<{ id_orden_trabajo: string }, never>;
 
-// B6 de la 10.8b (D5): generar se pide desde la lista de ordenes con ConfirmActionButton
-// y la accion devuelve el costeo; el boton navega a el. Si la orden ya tenia costeo (una
-// lista vieja o un doble clic) responde con ese, sin escribir ni revalidar. Un rechazo
-// queda en la confirmacion y tampoco revalida.
+const COSTINGS_PATH = "/dashboard/costs/costings";
+
+// B6 de la 10.8b (D5): generar se pide desde la lista de ordenes con ConfirmActionButton.
+// Un rechazo responde con el error, que queda en la confirmacion, y no revalida. Con exito
+// redirige al costeo con su aviso en la URL: el creado, o el que la orden ya tenia (una
+// lista vieja o un doble clic), sin escribir ni revalidar. Hallazgo 95: navegar en el
+// cliente con router.push despues de la respuesta chocaba con la navegacion que Next
+// aplica por la revalidacion, y el historial perdia la entrada de las ordenes por costear;
+// el redirect lo aplica el propio reductor de la accion, con push.
 export async function createCostingFromWorkOrderAction(
   _prevState: CostingFromWorkOrderState,
   formData: FormData,
@@ -227,17 +233,13 @@ export async function createCostingFromWorkOrderAction(
     return fail(result.problem);
   }
 
-  if (!result.existente) {
-    revalidateCostingPaths(result.idCosteo);
-    revalidatePath("/dashboard/production/work-orders");
+  if (result.existente) {
+    redirect(`${COSTINGS_PATH}/${result.idCosteo}?toast=costing-already-exists`);
   }
 
-  return {
-    status: "success",
-    data: { id_costeo: result.idCosteo, existente: result.existente },
-    values,
-    operationId: newOperationId(),
-  };
+  revalidateCostingPaths(result.idCosteo);
+  revalidatePath("/dashboard/production/work-orders");
+  redirect(`${COSTINGS_PATH}/${result.idCosteo}?toast=costing-created`);
 }
 
 /** Lo que el formulario de mano de obra envio, para volver a mostrarlo. */
