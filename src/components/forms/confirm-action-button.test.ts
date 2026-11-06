@@ -243,45 +243,6 @@ describe("ConfirmActionButton con onSuccess y aviso segun el resultado", () => {
     notifications.notify.mockReset();
   });
 
-  // Hallazgo 95 (verificacion de la 10.8b): el reductor de la server action de Next resuelve
-  // la promesa antes de aplicar su propia navegacion (la de la revalidacion). Un router.push
-  // dentro de la transicion llega mientras la accion sigue pendiente: la cola la descarta, el
-  // push y el REFRESH que deja la revalidacion se confirman juntos y el historial reemplaza la
-  // entrada en lugar de sumar una (Atras saltaba las ordenes por costear). onSuccess se llama
-  // cuando la transicion ya termino, despues del render que cierra la confirmacion.
-  it("llama a onSuccess cuando la transicion ya termino: la confirmacion ya se cerro", async () => {
-    const openWhenCalled: boolean[] = [];
-    const onSuccess = vi.fn(() => openWhenCalled.push(confirmation() !== null));
-    await renderWithResult(
-      { status: "success", data: { estado: false }, values: { id: "TPR00000003" }, operationId: "op-creado" },
-      onSuccess,
-    );
-
-    await act(async () => button("Generar").click());
-    await act(async () => [...confirmation()!.querySelectorAll("button")].find((item) => item.textContent === "Generar")!.click());
-    await settle();
-
-    expect(onSuccess).toHaveBeenCalledTimes(1);
-    expect(openWhenCalled).toEqual([false]);
-  });
-
-  it("llama a onSuccess una sola vez aunque el componente vuelva a pintarse con otro onSuccess", async () => {
-    const first = vi.fn();
-    const state: State = { status: "success", data: { estado: false }, values: { id: "TPR00000003" }, operationId: "op-creado" };
-    await renderWithResult(state, first);
-
-    await act(async () => button("Generar").click());
-    await act(async () => [...confirmation()!.querySelectorAll("button")].find((item) => item.textContent === "Generar")!.click());
-    await settle();
-
-    const second = vi.fn();
-    await renderWithResult(state, second);
-    await settle();
-
-    expect(first).toHaveBeenCalledTimes(1);
-    expect(second).not.toHaveBeenCalled();
-  });
-
   it("con error no llama a onSuccess y el mensaje queda dentro", async () => {
     const onSuccess = vi.fn();
     await renderWithResult(failure("La orden no existe."), onSuccess);

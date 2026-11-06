@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState, useTransition, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, useTransition, type ReactNode } from "react";
 
 import { ConfirmDialog } from "@/components/notifications/confirm-dialog";
 import { Button, type ButtonProps } from "@/components/ui/button";
@@ -29,10 +29,7 @@ type ConfirmActionButtonProps<Values, Data> = {
    * distinto si la orden ya tenia uno); quien lo calcula es un componente cliente.
    */
   successNotification: NotificationDefinition | ((data: Data) => NotificationDefinition);
-  /**
-   * Se llama con los datos de la respuesta despues del aviso, por ejemplo para navegar,
-   * cuando la transicion de la accion ya termino (hallazgo 95 de la 10.8b).
-   */
+  /** Se llama con los datos de la respuesta despues del aviso, por ejemplo para navegar. */
   onSuccess?: (data: Data) => void;
   /**
    * Confirmacion con la entidad, la consecuencia y el verbo. Sin ella la accion
@@ -106,25 +103,6 @@ export function ConfirmActionButton<Values, Data>({
   const [error, setError] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const anchorRef = useRef<FocusAnchor>({ row: null, table: null });
-  const succeededRef = useRef<{ data: Data } | null>(null);
-
-  // onSuccess fuera de la transicion (hallazgo 95 de la 10.8b): el reductor de la server
-  // action de Next resuelve la promesa antes de aplicar su propia navegacion, la de la
-  // revalidacion. Un router.push dentro de la transicion llegaba con la accion pendiente: la
-  // cola la descartaba, el push y el REFRESH de la revalidacion se confirmaban juntos y el
-  // historial reemplazaba la entrada (Atras saltaba la pagina de origen). La respuesta se
-  // guarda en un ref al final de la transicion, y el render siguiente es el que pone pending
-  // en false: este efecto corre despues de ese render, cuando la navegacion de la accion ya se aplico.
-  // Se borra al usarla: otro render, o otro onSuccess, no la repite.
-  useEffect(() => {
-    const succeeded = succeededRef.current;
-    if (!succeeded) {
-      return;
-    }
-
-    succeededRef.current = null;
-    onSuccess?.(succeeded.data);
-  }, [pending, onSuccess]);
 
   // La fila (con key) y la tabla del boton no cambian mientras esta montado; el
   // boton tampoco: al pasar de Inactivar a Activar React conserva su nodo.
@@ -171,7 +149,7 @@ export function ConfirmActionButton<Values, Data>({
         notify(typeof successNotification === "function" ? successNotification(result.data) : successNotification);
         setError(null);
         setOpen(false);
-        succeededRef.current = { data: result.data };
+        onSuccess?.(result.data);
       } else if (result.status === "error") {
         if (confirm) {
           setError(result.error);
