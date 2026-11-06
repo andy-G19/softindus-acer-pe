@@ -3218,10 +3218,10 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Operarios | Personal | ADMIN | Páginas, desviación | Panel lateral; sin Estado (D3) | 10.8a | Migrado |
 | Asistencia | Personal | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral; las reglas de uso como ayudas (D10) | 10.8a | Migrado |
 | Tareas de operario | Personal | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral; las reglas de uso como ayudas (D10) | 10.8a | Migrado |
-| Mano de obra del costeo | Costos | ADMIN | Sección del detalle, lanza | Superficie amplia (el detalle) | 10.8 | Pendiente |
-| Costos indirectos | Costos | ADMIN | Sección del detalle, lanza | Superficie amplia (el detalle) | 10.8 | Pendiente |
-| Márgenes | Costos | ADMIN | Sección del detalle, lanza | Superficie amplia (el detalle) | 10.8 | Pendiente |
-| Rentabilidad | Costos | ADMIN | Sección del detalle, lanza | Superficie amplia (el detalle) | 10.8 | Pendiente |
+| Mano de obra del costeo | Costos | ADMIN | Sección del detalle, lanza | Sección del detalle con resultado de acción (D4) | 10.8b | Migrado |
+| Costos indirectos | Costos | ADMIN | Sección del detalle, lanza | Sección del detalle con resultado de acción (D4) | 10.8b | Migrado |
+| Márgenes | Costos | ADMIN | Sección del detalle, lanza | Sección del detalle con resultado de acción (D4) | 10.8b | Migrado |
+| Rentabilidad | Costos | ADMIN | Sección del detalle, lanza | Sección del detalle con resultado de acción (D4) | 10.8b | Migrado |
 
 Cobertura de acciones de fila; todas pasan a devolver un resultado y las
 destructivas confirman:
@@ -3234,7 +3234,7 @@ destructivas confirman:
 | 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
 | 10.6 | Inactivar ruta y etapa (10.6a, migradas); inactivar receta; marcar versión vigente; anular versión; borrar detalle de receta (10.6b, migradas) |
 | 10.7 | Cambiar el estado de campaña y de retazo (10.7a); activar y desactivar usuario (10.7b); todas migradas |
-| 10.8 | Inactivar operario y cancelar tarea (10.8a, migradas); generar costeo desde una orden; recalcular costeo; anular costo indirecto (10.8b) |
+| 10.8 | Inactivar operario y cancelar tarea (10.8a); generar costeo desde una orden, recalcular costeo y anular costo indirecto (10.8b): todas migradas |
 
 ### Sub-entrega 10.1 — Bases y catálogos breves
 
@@ -7344,6 +7344,100 @@ Datos leídos de la API de GitHub el 2026-11-05 (UTC) y comparados con git:
   las 02:24:51 UTC). La sub-entrega no trae migraciones (sin cambios en
   `prisma/`).
 
+### Sub-entrega 10.8b — Costos
+
+Fecha: 2026-11-05 (Lima). Estado: código y registro hechos, pendiente de verificar en staging.
+El paso B0 (`4aaef92`) registró la integración de la 10.8a. 7 commits de código y pruebas, de
+`30e5c66` a `4da59aa`, y este registro. Plan en `tmp/e10-diff/plan-10-8b.md`, sobre los pasos y
+las decisiones D4 a D9 de `plan-10-8.md`, con 4 ajustes aprobados. Solo ADMIN. Ninguna fórmula
+de Costos cambia: los montos se guardan como antes y las diferencias de cada snapshot se
+comprobaron por programa.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 4aaef92 | docs | B0: integración de la 10.8a en `main`. |
+| 30e5c66 | test | 8 casos más en la caracterización de Costos: vacíos que se guardan como S/ 0, máximos de columna, «Invalid input» y precio final ausente (66, 72). |
+| 8c33046 | fix | `lockCostingRow` antes de cualquier lectura, escritura o correlativo en mano de obra, recalcular, alta de indirecto, margen y rentabilidad; margen y rentabilidad deciden dentro de la transacción (64, 65). |
+| 90a16fd | fix | `cost-amount.ts`: importes obligatorios, máximo de `Decimal(12,2)` y mensajes en español; sin precio final se usa el sugerido (66, 72). |
+| 29ce822 | feat | Las 4 secciones del detalle con `FormActionState` y formularios cliente, sin navegar (D4); el detalle sin `<main>`. |
+| 0de5240 | feat | Recalcular (botón normal) y anular indirecto (destructivo) con `ConfirmActionButton` y la consecuencia real (D6). |
+| ec754b1 | feat | Generar costeo con confirmación y navegación; aviso `costing-already-exists`; `ConfirmActionButton` con `onSuccess` y aviso según los datos (D5). |
+| 4da59aa | feat | Costeos con `FilterBar` y `DateRangeFields`; inicio y órdenes sin `<main>`; `costs-links.test.ts`. |
+| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Ajustes al plan:
+
+- B2 incluye recalcular: comprobaba el costeo antes de que el recálculo lo bloqueara. Las cinco
+  acciones que tocan el costeo bloquean su fila primero. Anular un indirecto sigue bloqueando el
+  hijo (el indirecto) y después el padre (el costeo).
+- Generar un costeo de una orden que ya lo tenía navegaba sin aviso; ahora abre el existente con
+  el aviso informativo `costing-already-exists` (cambio visible, dentro del `feat` de B6).
+- La confirmación de generar dice lo que hace `createCostingInTransaction`: materiales y
+  consumibles con la receta guardada y el costo actual, mano de obra con las tareas no anuladas y
+  la tarifa, indirectos en cero.
+- `costs-links.test.ts` usa solo ADMIN y fija además que el inicio del sistema no muestra Costos
+  al vendedor ni al maestro de taller (ya era así; queda como guarda).
+
+Diseño:
+
+- Las secciones del detalle (mano de obra, costos indirectos, margen y rentabilidad) siguen en el
+  detalle: cada formulario con `ActionForm`, `Field` y `useFormResult`; el error queda en su
+  sección con lo escrito, el campo marcado y enfocado, y el éxito da un solo aviso; la
+  revalidación repinta el detalle. Los que crean un registro (indirecto, margen, rentabilidad) se
+  vacían tras guardar; la mano de obra conserva el monto. Las vistas previas siguen en el servidor.
+- Las acciones devuelven `FormActionState` o `RowStatusState` con `getAuthorizedSession`. Un
+  problema detectado dentro de la transacción, antes de escribir, se devuelve desde el callback
+  (la transacción termina en `commit` sin escrituras). Un rechazo no revalida.
+- `ConfirmActionButton` suma `onSuccess(data)`, llamado después del aviso, y un aviso que puede
+  depender de los datos de la respuesta (lo calcula un componente cliente). Los usos anteriores no
+  cambian.
+- Las páginas pasan cada aviso con su clave literal: las 7 claves de Costos se emiten ahora desde
+  el detalle y la lista de órdenes, ninguna por `?toast=`.
+
+Evidencia:
+
+1. Rojo antes de cada paso en `rojo-108-<paso>.txt` (B1 es la caracterización).
+2. Cada `.snap` de acciones se comparó antes y después de cada paso por programa, línea por línea
+   sin importar el orden: B2 solo suma bloqueos y transacciones; B4 a B6 solo cambian la
+   autorización (`requireRole` → `getAuthorizedSession`), el final de las transacciones sin
+   escrituras (`rollback` → `commit`) y el resultado; ningún monto ni escritura cambia.
+3. Mutaciones: B1 7 de 7, B2 8 de 8, B3 13 de 13, B4 15 de 15, B5 12 de 12, B6 13 de 13 y B7 8 de
+   8; en total, 76 de 76.
+4. CSS compilado igual byte a byte hasta B6 (112.463 bytes); en B7 salen `md:col-span-3`,
+   `xl:col-span-7` y `xl:grid-cols-7`, que solo usaba el filtro viejo de costeos (112.316).
+5. `npm run check` terminó con código 0 antes de cada commit, hasta 4.587 pruebas en 249 archivos.
+
+Tiempo de preparación, aproximado: del rojo de cada paso al último `npm run check` en verde,
+leído de la fecha de esos archivos. Las esperas al responsable quedan fuera:
+
+| Paso | B1 | B2 | B3 | B4 | B5 | B6 | B7 |
+|---|---|---|---|---|---|---|---|
+| Minutos | 10 | 8 | 11 | 12 | 10 | 8 | 7 |
+
+Suman 66 minutos frente a 270 estimados en bruto: un factor de 0,24.
+
+Hallazgos de la auditoría corregidos: 64, 65, 66 y 72. El 57 (la tarifa diaria en la planilla y
+por hora en el costeo) sigue registrado (D8).
+
+Hallazgos de la implementación:
+
+88. B0: el primer `npm run check` falló por el tiempo de `versions-confirmation.test.ts` (hallazgo
+    42 de la 10.7b) con la máquina cargada; sola pasa en 2,8 s y la segunda vuelta pasó. No se tocó.
+89. B3: `z.string().pipe(z.coerce.number())` no compila en Zod 4: la entrada del esquema interior
+    se declara con `z.coerce.number<string>()`. Las mutaciones se repitieron tras corregirlo.
+90. B4: los casos «el costeo no existe: se revierte» de mano de obra e indirecto terminan ahora en
+    `commit` sin escrituras: el nombre ya no describe la transacción, sí el resultado.
+91. Método: al correr el rojo de B6, Vitest escribió el snapshot del caso renombrado con el
+    comportamiento viejo; se reemplazó al actualizar con el código.
+92. Método: el rojo del rango de fechas de B7 fallaba también por un error propio (la consulta iba
+    en la ruta y el arnés la toma de `searchParams`). Se corrigió la prueba y se comprobó que sigue
+    fallando con el código viejo (las tres páginas apartadas con `git stash`).
+93. Método: una mutación que rompe la compilación sale «DETECTADA (0 casos fallan)» en
+    `mut_107.py`: el archivo de pruebas no carga, y no cuenta. En B7 se rehicieron tres cambiando
+    la apertura y el cierre del `<main>`.
+94. `ConfirmDeleteButton` deja de usarse en Costos (la sección de indirectos, un módulo): las
+    páginas que lo usan siguen siendo 9.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -7368,7 +7462,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, cerrada, con CI #131 verde en main, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos; la 10.7b, cerrada, con CI #135 verde en main, 9 huellas del «después» (3 controles iguales y 6 como se predijo) y los hallazgos 17 a 22 y 26 corregidos; la 10.8, partida en 10.8a y 10.8b; la 10.8a, cerrada, con CI #139 verde en main, 17 huellas del «después» (3 controles iguales, 3 solo con `main` → `div` y 11 como se predijo, el inicio además con los datos de prueba) y los hallazgos 58 a 63, 67 a 71 y 73 corregidos; la 10.8b, en curso) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, cerrada, con CI #131 verde en main, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos; la 10.7b, cerrada, con CI #135 verde en main, 9 huellas del «después» (3 controles iguales y 6 como se predijo) y los hallazgos 17 a 22 y 26 corregidos; la 10.8, partida en 10.8a y 10.8b; la 10.8a, cerrada, con CI #139 verde en main, 17 huellas del «después» (3 controles iguales, 3 solo con `main` → `div` y 11 como se predijo, el inicio además con los datos de prueba) y los hallazgos 58 a 63, 67 a 71 y 73 corregidos; la 10.8b, código y registro hechos, pendiente de verificar en staging) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -7392,7 +7486,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 244 / 4.467 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 249 / 4.587 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -7412,14 +7506,14 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
 | Copias locales de `FieldError` | 16 | 1 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 13 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 4 (4 formularios) | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 9 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 3 (3 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
 | Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 1 | 10 |
 | Acciones de activar e inactivar que leen el estado y escriben el contrario | 12 | 0 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
-| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 2 | 10 |
+| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 1 | 10 |
 | Archivos de acciones de inventario sin caracterizar (materiales, alertas, proveedores y materiales de proveedor) | 4 | 0 | 10 |
 | Altas que deciden el kárdex o la alerta con los números del formulario y no con la fila escrita | 1 | 0 | 10 |
 | Listados que cortan el último día con `lte` (con `buildDateRangeFilter` o con una copia local) | 17 | 1 (copia local) | 10 |
@@ -7439,6 +7533,8 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Acciones de recetas, versiones y detalles que deciden fuera de la transacción | 8 | 0 | 10 |
 | Acciones de Personal (operarios, asistencia y tareas) sin caracterizar / que lanzan o redirigen | 6 / 6 | 0 / 0 | 10 |
 | Enlaces de Personal que un rol ve y su pantalla rechaza | 2 | 0 | 10 |
+| Acciones de Costos que lanzan o redirigen | 7 | 0 | 10 |
+| Acciones de Costos que leen o escriben el costeo antes de bloquearlo | 5 | 0 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -7791,6 +7887,19 @@ Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e8d77ae`:
 Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de
 `FieldError` en 6; y los cambios de estado que voltean en 2.
+
+Actualizado en la sub-entrega 10.8b (2026-11-05) sobre `4da59aa`:
+
+- Pruebas: 249 / 4.587.
+- El `<main>` anidado baja a 9: salen los 4 de Costos. Quedan los de caja chica y dos de
+  proformas.
+- Los formularios GET bajan a 3 y las pantallas con rango sin `DateRangeFields` a 1 (los
+  movimientos de caja chica): sale la lista de costeos.
+- Las claves `?toast=` suben a 130 con `costing-already-exists`; las 7 de Costos se emiten ahora
+  desde sus páginas, ninguna por la URL.
+- `ConfirmDeleteButton` sigue en 9 páginas: sale su uso en la sección de indirectos (un módulo).
+- La desviación conocida sigue en 1 (salida de inventario): las acciones de Costos no usaban
+  `useActionState`.
 
 Actualizado en la sub-entrega 10.8a (2026-11-04) sobre `e168e16`:
 
