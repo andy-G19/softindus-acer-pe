@@ -11,6 +11,7 @@ import { CostingKpis } from "@/modules/costs/costings/costing-kpis";
 import { EconomicStatusCard } from "@/modules/costs/costings/economic-status-card";
 import { RecipeCostBreakdown } from "@/modules/costs/costings/recipe-cost-breakdown";
 import { getCostingDetail } from "@/modules/costs/costings/queries";
+import { costsNotifications } from "@/modules/costs/notifications";
 import { IndirectCostsSection } from "@/modules/costs/indirect-costs/indirect-costs-section";
 import { MarginsSection } from "@/modules/costs/margins/margins-section";
 import { ProfitabilitySection } from "@/modules/costs/profitability/profitability-section";
@@ -52,7 +53,7 @@ export default async function CostingDetailPage({
     null;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title={`Costeo ${costing.id_costeo}`}
         description={sourceLabel}
@@ -75,7 +76,12 @@ export default async function CostingDetailPage({
       <CostingKpis costing={costing} />
 
       <section className="grid gap-4 md:grid-cols-2">
-        <CostingDataCard costing={costing} clientName={clientName} />
+        <CostingDataCard
+          costing={costing}
+          clientName={clientName}
+          laborNotification={costsNotifications["costing-updated"]}
+          recalculatedNotification={costsNotifications["costing-recalculated"]}
+        />
 
         <EconomicStatusCard
           latestMargin={latestMargin}
@@ -100,11 +106,22 @@ export default async function CostingDetailPage({
 
       <RecipeCostBreakdown workOrder={workOrder} />
 
-      <IndirectCostsSection costing={costing} />
+      <IndirectCostsSection
+        costing={costing}
+        createdNotification={costsNotifications["indirect-cost-created"]}
+        annulledNotification={costsNotifications["indirect-cost-annulled"]}
+      />
 
-      <MarginsSection costing={costing} />
+      <MarginsSection
+        costing={costing}
+        createdNotification={costsNotifications["margin-created"]}
+      />
 
-      <ProfitabilitySection costing={costing} latestMargin={latestMargin} />
-    </main>
+      <ProfitabilitySection
+        costing={costing}
+        latestMargin={latestMargin}
+        createdNotification={costsNotifications["profitability-created"]}
+      />
+    </div>
   );
 }

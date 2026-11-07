@@ -68,7 +68,7 @@ export default async function CostsDashboardPage() {
     profitabilityCalculations > 0;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Costos y rentabilidad"
         description="Controla costeos de producción, costos indirectos, márgenes, precios sugeridos, precios finales, utilidad estimada y alertas de bajo margen."
@@ -258,6 +258,6 @@ export default async function CostsDashboardPage() {
           </CardContent>
         </Card>
       </section>
-    </main>
+    </div>
   );
 }

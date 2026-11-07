@@ -1,21 +1,58 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { calculateSuggestedPrice } from "@/lib/costing-calculations";
 import { prisma } from "@/lib/db";
+import type { FieldErrors } from "@/lib/errors";
 import { toNumber } from "@/lib/numbers";
+import { APP_ROLES } from "@/lib/permissions";
+import { lockCostingRow } from "@/lib/row-locks";
 import { marginSchema } from "@/schemas/costs/margin.schema";
 
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
+/** Lo que el formulario de margen envio, para volver a mostrarlo. */
+export type MarginFormValues = {
+  porcentaje_margen: string;
+  precio_final: string;
+  motivo_ajuste: string;
+};
 
-export async function createMarginAction(formData: FormData) {
-  const session = await requireAdmin();
+// B4 de la 10.8b (D4): el margen se aplica desde su seccion del detalle y la accion
+// devuelve el resultado; sin permiso responde con un error, no redirige.
+export type MarginFormState = FormActionState<MarginFormValues, { id_margen: string }>;
+
+const PERMISSION_ERROR = "No tienes permisos para gestionar costeos.";
+const FINAL_PRICE_BELOW_COST = "El precio final no puede ser menor que el costo total del producto.";
+
+/** Un problema que el formulario muestra: mensaje general y, si aplica, el del campo. */
+type MarginProblem = { error: string; fieldErrors?: FieldErrors };
+
+export async function createMarginAction(
+  _prevState: MarginFormState,
+  formData: FormData,
+): Promise<MarginFormState> {
+  const text = (name: keyof MarginFormValues) => formData.get(name)?.toString() ?? "";
+  const values: MarginFormValues = {
+    porcentaje_margen: text("porcentaje_margen"),
+    precio_final: text("precio_final"),
+    motivo_ajuste: text("motivo_ajuste"),
+  };
+  const fail = ({ error, fieldErrors }: MarginProblem): MarginFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return fail({ error: PERMISSION_ERROR });
+  }
 
   const parsedData = marginSchema.safeParse({
     id_costeo: formData.get("id_costeo"),
@@ -25,47 +62,49 @@ export async function createMarginAction(formData: FormData) {
   });
 
   if (!parsedData.success) {
-    const message = parsedData.error.issues
-      .map((issue) => issue.message)
-      .join(" ");
-
-    throw new Error(message);
+    return fail({ error: "Revisa los datos del margen.", fieldErrors: parsedData.error.flatten().fieldErrors });
   }
 
   const data = parsedData.data;
 
-  const costing = await prisma.costeo.findUnique({
-    where: {
-      id_costeo: data.id_costeo,
-    },
-    select: {
-      id_costeo: true,
-      costo_total: true,
-    },
-  });
+  const result = await prisma.$transaction(async (tx): Promise<{ problem: MarginProblem } | { idMargen: string }> => {
+    // Hallazgo 64 (10.8): el costeo se bloquea y se lee dentro de la transaccion, antes de
+    // decidir con su costo total; antes se leia fuera y un recalculo a la vez dejaba el
+    // margen calculado con un costo viejo.
+    await lockCostingRow(tx, data.id_costeo);
 
-  if (!costing) {
-    throw new Error("El costeo seleccionado no existe.");
-  }
+    const costing = await tx.costeo.findUnique({
+      where: {
+        id_costeo: data.id_costeo,
+      },
+      select: {
+        id_costeo: true,
+        costo_total: true,
+      },
+    });
 
-  const totalCost = toNumber(costing.costo_total);
+    // Nada se escribio todavia: cada problema se devuelve y la accion responde con el.
+    if (!costing) {
+      return { problem: { error: "El costeo seleccionado no existe." } };
+    }
 
-  if (totalCost <= 0) {
-    throw new Error(
-      "No se puede aplicar margen porque el costo total debe ser mayor que cero.",
-    );
-  }
+    const totalCost = toNumber(costing.costo_total);
 
-  const suggestedPrice = calculateSuggestedPrice(totalCost, data.porcentaje_margen);
-  const finalPrice = data.precio_final ?? suggestedPrice;
+    if (totalCost <= 0) {
+      return {
+        problem: { error: "No se puede aplicar margen porque el costo total debe ser mayor que cero." },
+      };
+    }
 
-  if (finalPrice < totalCost) {
-    throw new Error(
-      "El precio final no puede ser menor que el costo total del producto.",
-    );
-  }
+    const suggestedPrice = calculateSuggestedPrice(totalCost, data.porcentaje_margen);
+    const finalPrice = data.precio_final ?? suggestedPrice;
 
-  await prisma.$transaction(async (tx) => {
+    if (finalPrice < totalCost) {
+      return {
+        problem: { error: FINAL_PRICE_BELOW_COST, fieldErrors: { precio_final: [FINAL_PRICE_BELOW_COST] } },
+      };
+    }
+
     const idMargen = await getNextCorrelativeId(tx, {
       codigoEntidad: "margen_ganancia",
       prefijo: "MGN",
@@ -91,12 +130,23 @@ export async function createMarginAction(formData: FormData) {
       detalle: `Margen aplicado al costeo ${data.id_costeo}.`,
       tx,
     });
+
+    return { idMargen };
   });
+
+  if ("problem" in result) {
+    return fail(result.problem);
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/costs");
   revalidatePath("/dashboard/costs/costings");
   revalidatePath(`/dashboard/costs/costings/${data.id_costeo}`);
 
-  redirect(`/dashboard/costs/costings/${data.id_costeo}?toast=margin-created`);
+  return {
+    status: "success",
+    data: { id_margen: result.idMargen },
+    values,
+    operationId: newOperationId(),
+  };
 }

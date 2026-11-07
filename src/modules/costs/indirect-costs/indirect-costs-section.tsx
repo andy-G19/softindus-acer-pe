@@ -1,12 +1,5 @@
-import {
-  ConfirmDeleteButton,
-} from "@/components/notifications/confirm-delete-button";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
   TableBody,
@@ -15,12 +8,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
 import { formatMoney } from "@/lib/formatters";
+import type { NotificationDefinition } from "@/lib/notification-catalog";
 import {
   annulIndirectCostAction,
   createIndirectCostAction,
 } from "@/modules/costs/indirect-costs/actions";
+import { IndirectCostAnnulAction } from "@/modules/costs/indirect-costs/indirect-cost-annul-action";
+import { IndirectCostForm } from "@/modules/costs/indirect-costs/indirect-cost-form";
 import type { CostingDetail } from "@/modules/costs/costings/queries";
 
 // Costos indirectos del costeo: registrar uno nuevo y anular los registrados.
@@ -54,9 +49,17 @@ function getIndirectCostCategoryLabel(category: string) {
 
 type IndirectCostsSectionProps = {
   costing: Pick<CostingDetail, "id_costeo" | "costo_indirecto">;
+  /** Aviso al registrar un costo indirecto; la pagina lo pasa con su clave literal. */
+  createdNotification: NotificationDefinition;
+  /** Aviso al anular un costo indirecto; la pagina lo pasa con su clave literal. */
+  annulledNotification: NotificationDefinition;
 };
 
-export function IndirectCostsSection({ costing }: IndirectCostsSectionProps) {
+export function IndirectCostsSection({
+  costing,
+  createdNotification,
+  annulledNotification,
+}: IndirectCostsSectionProps) {
   return (
     <section className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
       <Card>
@@ -72,96 +75,11 @@ export function IndirectCostsSection({ costing }: IndirectCostsSectionProps) {
         </CardHeader>
 
         <CardContent>
-          <form action={createIndirectCostAction} className="space-y-4">
-            <input type="hidden" name="id_costeo" value={costing.id_costeo} />
-
-            <div className="space-y-2">
-              <Label htmlFor="concepto">Concepto</Label>
-              <Input
-                id="concepto"
-                name="concepto"
-                type="text"
-                required
-                maxLength={100}
-                placeholder="Ejemplo: Consumo de luz del lote"
-              />
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="categoria">Categoría</Label>
-                <NativeSelect
-                  id="categoria"
-                  name="categoria"
-                  required
-                  defaultValue="luz"
-                >
-                  <option value="luz">Luz</option>
-                  <option value="desgaste_maquinaria">
-                    Desgaste de maquinaria
-                  </option>
-                  <option value="transporte">Transporte</option>
-                  <option value="mantenimiento">Mantenimiento</option>
-                  <option value="alquiler">Alquiler</option>
-                  <option value="mano_obra_indirecta">
-                    Mano de obra indirecta
-                  </option>
-                  <option value="otros">Otros</option>
-                </NativeSelect>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="monto">Monto</Label>
-                <Input
-                  id="monto"
-                  name="monto"
-                  type="number"
-                  required
-                  min="0"
-                  step="0.01"
-                  placeholder="0.00"
-                />
-              </div>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="criterio_prorrateo">
-                  Criterio de prorrateo
-                </Label>
-                <Input
-                  id="criterio_prorrateo"
-                  name="criterio_prorrateo"
-                  type="text"
-                  maxLength={100}
-                  placeholder="Ejemplo: Prorrateado por lote"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="periodo">Periodo</Label>
-                <Input
-                  id="periodo"
-                  name="periodo"
-                  type="text"
-                  maxLength={30}
-                  placeholder="Ejemplo: 2026-06"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="observaciones">Observaciones</Label>
-              <Textarea
-                id="observaciones"
-                name="observaciones"
-                rows={3}
-                placeholder="Detalle adicional del costo indirecto registrado."
-              />
-            </div>
-
-            <Button type="submit">Registrar costo indirecto</Button>
-          </form>
+          <IndirectCostForm
+            action={createIndirectCostAction}
+            idCosteo={costing.id_costeo}
+            successNotification={createdNotification}
+          />
         </CardContent>
       </Card>
 
@@ -224,22 +142,14 @@ export function IndirectCostsSection({ costing }: IndirectCostsSectionProps) {
                           Anulado
                         </span>
                       ) : (
-                        <form action={annulIndirectCostAction}>
-                          <input
-                            type="hidden"
-                            name="id_costo_indirecto"
-                            value={item.id_costo_indirecto}
-                          />
-                          <ConfirmDeleteButton
-                            title="¿Anular costo indirecto?"
-                            description="Esta acción anulará el costo indirecto y no se puede deshacer."
-                            confirmText="Confirmar anulación"
-                            entityName="costo indirecto"
-                            className="rounded-none border-0 bg-transparent px-0 py-0 hover:bg-transparent"
-                          >
-                            Anular
-                          </ConfirmDeleteButton>
-                        </form>
+                        <IndirectCostAnnulAction
+                          indirectCost={{
+                            id_costo_indirecto: item.id_costo_indirecto,
+                            concepto: item.concepto,
+                          }}
+                          action={annulIndirectCostAction}
+                          successNotification={annulledNotification}
+                        />
                       )}
                     </TableCell>
                   </TableRow>

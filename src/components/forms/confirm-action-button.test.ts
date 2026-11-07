@@ -197,6 +197,55 @@ describe("ConfirmActionButton con confirmacion", () => {
   });
 });
 
+// Hallazgo 95 de la 10.8b: generar un costeo no responde con exito sino que redirige al
+// costeo con su aviso en la URL, asi que su boton no pasa aviso. Si una accion sin aviso
+// llegara a responder con exito, el boton se cierra sin avisar; un error sigue dentro.
+describe("ConfirmActionButton sin aviso de exito", () => {
+  async function renderWithoutNotification(state: State) {
+    const action = vi.fn(async () => state);
+
+    await act(async () =>
+      root.render(
+        h(ConfirmActionButton<{ id: string }, { estado: boolean }>, {
+          action,
+          fields: { id: "TPR00000003" },
+          variant: "default",
+          confirm: { title: "¿Generar?", description: "Consecuencia.", confirmText: "Generar", variant: "default" },
+          children: "Generar",
+        }),
+      ),
+    );
+
+    return action;
+  }
+
+  const confirmButton = () =>
+    [...confirmation()!.querySelectorAll("button")].find((item) => item.textContent === "Generar")!;
+
+  it("con exito se cierra sin dar aviso", async () => {
+    const action = await renderWithoutNotification(success());
+
+    await act(async () => button("Generar").click());
+    await act(async () => confirmButton().click());
+    await settle();
+
+    expect(action).toHaveBeenCalledTimes(1);
+    expect(notifications.notify).not.toHaveBeenCalled();
+    expect(confirmation()).toBeNull();
+  });
+
+  it("con error el mensaje queda dentro, sin aviso", async () => {
+    await renderWithoutNotification(failure("La orden no existe."));
+
+    await act(async () => button("Generar").click());
+    await act(async () => confirmButton().click());
+    await settle();
+
+    expect(notifications.notify).not.toHaveBeenCalled();
+    expect(confirmation()?.textContent).toContain("La orden no existe.");
+  });
+});
+
 describe("ConfirmActionButton sin confirmacion", () => {
   async function renderActivate(action: (prev: State, formData: FormData) => Promise<State>) {
     await act(async () =>

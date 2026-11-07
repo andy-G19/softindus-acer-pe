@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import {
   calculateEstimatedLaborCost,
   recalculateCostingTotals,
@@ -12,13 +13,15 @@ import {
 import { estimateMaterialCost } from "@/lib/costing-calculations";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { FieldErrors } from "@/lib/errors";
 import { toNonNegativeNumber } from "@/lib/numbers";
-import { lockWorkOrderRow } from "@/lib/row-locks";
+import { APP_ROLES } from "@/lib/permissions";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
+import { lockCostingRow, lockWorkOrderRow } from "@/lib/row-locks";
 import { laborCostSchema } from "@/schemas/costs/labor-cost.schema";
 
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
+const PERMISSION_ERROR = "No tienes permisos para gestionar costeos.";
+const COSTING_NOT_FOUND = "El costeo seleccionado no existe.";
 
 function normalizeText(value: FormDataEntryValue | null) {
   if (!value) {
@@ -56,7 +59,7 @@ async function createCostingInTransaction(
   tx: Prisma.TransactionClient,
   idOrdenTrabajo: string,
   idUsuario: string,
-): Promise<CostingFromWorkOrderResult> {
+): Promise<CostingFromWorkOrderResult | { problem: string }> {
   await lockWorkOrderRow(tx, idOrdenTrabajo);
 
   const existingCosting = await tx.costeo.findFirst({
@@ -93,35 +96,29 @@ async function createCostingInTransaction(
   });
 
   if (!workOrder) {
-    throw new Error("La orden de trabajo seleccionada no existe.");
+    return { problem: "La orden de trabajo seleccionada no existe." };
   }
 
   if (workOrder.estado === "anulada") {
-    throw new Error("No se puede generar costeo para una orden anulada.");
+    return { problem: "No se puede generar costeo para una orden anulada." };
   }
 
   if (!workOrder.version_receta) {
-    throw new Error(
-      "La orden de trabajo no tiene una versión de receta asociada.",
-    );
+    return { problem: "La orden de trabajo no tiene una versión de receta asociada." };
   }
 
   if (workOrder.version_receta.estado === "anulada") {
-    throw new Error(
-      "La versión de receta asociada a la orden está anulada y no puede costearse.",
-    );
+    return { problem: "La versión de receta asociada a la orden está anulada y no puede costearse." };
   }
 
   if (workOrder.version_receta.detalle_receta.length === 0) {
-    throw new Error(
-      "La versión de receta no tiene materiales registrados para calcular el costeo.",
-    );
+    return { problem: "La versión de receta no tiene materiales registrados para calcular el costeo." };
   }
 
   const quantityToProduce = toNonNegativeNumber(workOrder.cantidad);
 
   if (quantityToProduce <= 0) {
-    throw new Error("La cantidad de la orden debe ser mayor que cero.");
+    return { problem: "La cantidad de la orden debe ser mayor que cero." };
   }
 
   let materialCost = 0;
@@ -190,31 +187,91 @@ async function createCostingInTransaction(
   return { idCosteo, existente: false };
 }
 
-export async function createCostingFromWorkOrderAction(formData: FormData) {
-  const session = await requireAdmin();
+/**
+ * Lo que el boton de generar envio, para un rechazo. Con exito no responde: redirige al
+ * costeo (hallazgo 95 de la 10.8b).
+ */
+export type CostingFromWorkOrderState = FormActionState<{ id_orden_trabajo: string }, never>;
 
+const COSTINGS_PATH = "/dashboard/costs/costings";
+
+// B6 de la 10.8b (D5): generar se pide desde la lista de ordenes con ConfirmActionButton.
+// Un rechazo responde con el error, que queda en la confirmacion, y no revalida. Con exito
+// redirige al costeo con su aviso en la URL: el creado, o el que la orden ya tenia (una
+// lista vieja o un doble clic), sin escribir ni revalidar. Hallazgo 95: navegar en el
+// cliente con router.push despues de la respuesta chocaba con la navegacion que Next
+// aplica por la revalidacion, y el historial perdia la entrada de las ordenes por costear;
+// el redirect lo aplica el propio reductor de la accion, con push.
+export async function createCostingFromWorkOrderAction(
+  _prevState: CostingFromWorkOrderState,
+  formData: FormData,
+): Promise<CostingFromWorkOrderState> {
   const idOrdenTrabajo = normalizeText(formData.get("id_orden_trabajo"));
+  const values = { id_orden_trabajo: idOrdenTrabajo };
+  const fail = (error: string): CostingFromWorkOrderState => ({
+    status: "error",
+    error,
+    values,
+    operationId: newOperationId(),
+  });
 
-  if (!idOrdenTrabajo) {
-    throw new Error("Debe seleccionar una orden de trabajo válida.");
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return fail(PERMISSION_ERROR);
   }
 
-  const { idCosteo, existente } = await prisma.$transaction((tx) =>
+  if (!idOrdenTrabajo) {
+    return fail("Debe seleccionar una orden de trabajo válida.");
+  }
+
+  const result = await prisma.$transaction((tx) =>
     createCostingInTransaction(tx, idOrdenTrabajo, session.user.id),
   );
 
-  if (existente) {
-    redirect(`/dashboard/costs/costings/${idCosteo}`);
+  if ("problem" in result) {
+    return fail(result.problem);
   }
 
-  revalidateCostingPaths(idCosteo);
-  revalidatePath("/dashboard/production/work-orders");
+  if (result.existente) {
+    redirect(`${COSTINGS_PATH}/${result.idCosteo}?toast=costing-already-exists`);
+  }
 
-  redirect(`/dashboard/costs/costings/${idCosteo}?toast=costing-created`);
+  revalidateCostingPaths(result.idCosteo);
+  revalidatePath("/dashboard/production/work-orders");
+  redirect(`${COSTINGS_PATH}/${result.idCosteo}?toast=costing-created`);
 }
 
-export async function updateLaborCostAction(formData: FormData) {
-  const session = await requireAdmin();
+/** Lo que el formulario de mano de obra envio, para volver a mostrarlo. */
+export type LaborCostFormValues = {
+  costo_mano_obra: string;
+};
+
+// B4 de la 10.8b (D4): la mano de obra se ajusta desde su seccion del detalle y la accion
+// devuelve el resultado; sin permiso responde con un error, no redirige. El detalle se
+// repinta por la revalidacion.
+export type LaborCostFormState = FormActionState<LaborCostFormValues, { id_costeo: string }>;
+
+export async function updateLaborCostAction(
+  _prevState: LaborCostFormState,
+  formData: FormData,
+): Promise<LaborCostFormState> {
+  const values: LaborCostFormValues = {
+    costo_mano_obra: formData.get("costo_mano_obra")?.toString() ?? "",
+  };
+  const fail = (error: string, fieldErrors?: FieldErrors): LaborCostFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return fail(PERMISSION_ERROR);
+  }
 
   const parsedData = laborCostSchema.safeParse({
     id_costeo: formData.get("id_costeo"),
@@ -222,16 +279,16 @@ export async function updateLaborCostAction(formData: FormData) {
   });
 
   if (!parsedData.success) {
-    const message = parsedData.error.issues
-      .map((issue) => issue.message)
-      .join(" ");
-
-    throw new Error(message);
+    return fail("Revisa el costo de mano de obra.", parsedData.error.flatten().fieldErrors);
   }
 
   const data = parsedData.data;
 
-  await prisma.$transaction(async (tx) => {
+  const problem = await prisma.$transaction(async (tx) => {
+    // Hallazgo 65 (10.8): se bloquea el costeo antes de comprobarlo y de escribir su mano
+    // de obra; antes la escritura llegaba sin bloqueo y solo el recalculo lo tomaba.
+    await lockCostingRow(tx, data.id_costeo);
+
     const costing = await tx.costeo.findUnique({
       where: {
         id_costeo: data.id_costeo,
@@ -241,8 +298,9 @@ export async function updateLaborCostAction(formData: FormData) {
       },
     });
 
+    // Nada se escribio todavia: el problema se devuelve y la accion responde con el.
     if (!costing) {
-      throw new Error("El costeo seleccionado no existe.");
+      return COSTING_NOT_FOUND;
     }
 
     await tx.costeo.update({
@@ -264,23 +322,47 @@ export async function updateLaborCostAction(formData: FormData) {
       detalle: `Costo de mano de obra actualizado a S/ ${data.costo_mano_obra.toFixed(2)}.`,
       tx,
     });
+
+    return null;
   });
+
+  if (problem) {
+    return fail(problem);
+  }
 
   revalidateCostingPaths(data.id_costeo);
 
-  redirect(`/dashboard/costs/costings/${data.id_costeo}?toast=costing-updated`);
+  return {
+    status: "success",
+    data: { id_costeo: data.id_costeo },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
-export async function recalculateCostingAction(formData: FormData) {
-  const session = await requireAdmin();
-
+// B5 de la 10.8b (D6): recalcular se pide desde el detalle con ConfirmActionButton y la
+// accion devuelve RowStatusState. Un rechazo no revalida: el repintado se llevaria el
+// boton y su mensaje.
+export async function recalculateCostingAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
   const idCosteo = normalizeText(formData.get("id_costeo"));
 
-  if (!idCosteo) {
-    throw new Error("Debe seleccionar un costeo válido.");
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return rowStatusError(idCosteo, PERMISSION_ERROR);
   }
 
-  await prisma.$transaction(async (tx) => {
+  if (!idCosteo) {
+    return rowStatusError(idCosteo, "Debe seleccionar un costeo válido.");
+  }
+
+  const problem = await prisma.$transaction(async (tx) => {
+    // Se bloquea antes de comprobar que existe, como las demas acciones que tocan el costeo.
+    await lockCostingRow(tx, idCosteo);
+
     const costing = await tx.costeo.findUnique({
       where: {
         id_costeo: idCosteo,
@@ -290,8 +372,9 @@ export async function recalculateCostingAction(formData: FormData) {
       },
     });
 
+    // Nada se escribio todavia: el problema se devuelve y la accion responde con el.
     if (!costing) {
-      throw new Error("El costeo seleccionado no existe.");
+      return COSTING_NOT_FOUND;
     }
 
     await recalculateCostingTotals(tx, idCosteo);
@@ -305,9 +388,15 @@ export async function recalculateCostingAction(formData: FormData) {
         "Costeo recalculado manteniendo materiales, consumibles y mano de obra, y sumando costos indirectos vigentes.",
       tx,
     });
+
+    return null;
   });
+
+  if (problem) {
+    return rowStatusError(idCosteo, problem);
+  }
 
   revalidateCostingPaths(idCosteo);
 
-  redirect(`/dashboard/costs/costings/${idCosteo}?toast=costing-recalculated`);
+  return rowStatusDone(idCosteo, "recalculado");
 }

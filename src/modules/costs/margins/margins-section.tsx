@@ -1,9 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
   TableBody,
@@ -12,12 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
 import { calculateSuggestedPrice } from "@/lib/costing-calculations";
 import { formatDateTime, formatMoney } from "@/lib/formatters";
+import type { NotificationDefinition } from "@/lib/notification-catalog";
 import { toNumber } from "@/lib/numbers";
 import { formatCostingPercent } from "@/modules/costs/costing-format";
 import { createMarginAction } from "@/modules/costs/margins/actions";
+import { MarginForm } from "@/modules/costs/margins/margin-form";
 import type { CostingDetail } from "@/modules/costs/costings/queries";
 
 // Margen de ganancia: aplicar un margen sobre el costo total y su historial.
@@ -28,9 +25,11 @@ function getSuggestedPrice(totalCost: unknown, marginPercentage: number) {
 
 type MarginsSectionProps = {
   costing: Pick<CostingDetail, "id_costeo" | "costo_total" | "margen_ganancia">;
+  /** Aviso al aplicar un margen; la pagina lo pasa con su clave literal. */
+  createdNotification: NotificationDefinition;
 };
 
-export function MarginsSection({ costing }: MarginsSectionProps) {
+export function MarginsSection({ costing, createdNotification }: MarginsSectionProps) {
   return (
     <section className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
       <Card>
@@ -73,55 +72,11 @@ export function MarginsSection({ costing }: MarginsSectionProps) {
             </div>
           </div>
 
-          <form action={createMarginAction} className="mt-5 space-y-4">
-            <input type="hidden" name="id_costeo" value={costing.id_costeo} />
-
-            <div className="space-y-2">
-              <Label htmlFor="porcentaje_margen">Margen de ganancia</Label>
-              <NativeSelect
-                id="porcentaje_margen"
-                name="porcentaje_margen"
-                required
-                defaultValue="15"
-              >
-                <option value="15">15%</option>
-                <option value="16">16%</option>
-                <option value="17">17%</option>
-                <option value="18">18%</option>
-                <option value="19">19%</option>
-                <option value="20">20%</option>
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="precio_final">Precio final ajustado</Label>
-              <Input
-                id="precio_final"
-                name="precio_final"
-                type="number"
-                min="0"
-                step="0.01"
-                placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido."
-              />
-              <p className="text-xs text-muted-foreground">
-                Usa este campo si el administrador decide ajustar
-                manualmente el precio por negociación, redondeo o
-                estrategia comercial.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="motivo_ajuste">Motivo de ajuste</Label>
-              <Textarea
-                id="motivo_ajuste"
-                name="motivo_ajuste"
-                rows={3}
-                placeholder="Ejemplo: Se redondea el precio final por negociación con el cliente."
-              />
-            </div>
-
-            <Button type="submit">Aplicar margen</Button>
-          </form>
+          <MarginForm
+            action={createMarginAction}
+            idCosteo={costing.id_costeo}
+            successNotification={createdNotification}
+          />
         </CardContent>
       </Card>
 

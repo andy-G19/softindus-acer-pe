@@ -23,8 +23,14 @@ type ConfirmActionButtonProps<Values, Data> = {
   variant?: ButtonProps["variant"];
   /** Sin tamanos de icono: el boton siempre lleva texto. */
   size?: "default" | "xs" | "sm" | "lg";
-  /** Aviso del catalogo del area al terminar bien; la pagina lo pasa con su clave literal. */
-  successNotification: NotificationDefinition;
+  /**
+   * Aviso del catalogo del area al terminar bien; la pagina lo pasa con su clave literal.
+   * Se omite solo cuando la accion no responde con exito sino que navega con redirect y su
+   * aviso va en la URL (generar un costeo, hallazgo 95 de la 10.8b): un router.push despues
+   * de la respuesta choca con la navegacion de la revalidacion y pierde la entrada del
+   * historial.
+   */
+  successNotification?: NotificationDefinition;
   /**
    * Confirmacion con la entidad, la consecuencia y el verbo. Sin ella la accion
    * se ejecuta al pulsar: activar no es destructivo.
@@ -139,7 +145,9 @@ export function ConfirmActionButton<Values, Data>({
       const result = await action(IDLE, formData);
 
       if (result.status === "success") {
-        notify(successNotification);
+        if (successNotification) {
+          notify(successNotification);
+        }
         setError(null);
         setOpen(false);
       } else if (result.status === "error") {

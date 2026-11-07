@@ -5,13 +5,15 @@ import {
   TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -110,7 +112,7 @@ export default async function CostingsPage({
   }).length;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Costeos"
         description="Consulta los costeos generados, su origen productivo o comercial, el costo total, margen aplicado, precio final y rentabilidad estimada."
@@ -125,47 +127,40 @@ export default async function CostingsPage({
         }
       />
 
-      <form className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-3 xl:grid-cols-7">
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Costeo, cliente, pedido" />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="pedido">Pedido</Label>
-          <Input id="pedido" name="pedido" defaultValue={pedido} placeholder="Pedido" />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="orden">Orden de trabajo</Label>
-          <Input id="orden" name="orden" defaultValue={orden} placeholder="Orden de trabajo" />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="producto">Producto</Label>
-          <Input id="producto" name="producto" defaultValue={producto} placeholder="Producto" />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="from">Desde</Label>
-          <Input id="from" name="from" type="date" defaultValue={parseStringParam(params, "from")} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="to">Hasta</Label>
-          <Input id="to" name="to" type="date" defaultValue={parseStringParam(params, "to")} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="estado">Estado</Label>
-          <NativeSelect id="estado" name="estado" defaultValue={estado}>
-            <option value="">Todos los estados</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="rentable">Rentable</option>
-            <option value="margen_bajo">Margen bajo</option>
-          </NativeSelect>
-        </div>
-        <div className="flex items-end gap-2 md:col-span-3 xl:col-span-7">
-          <Button type="submit">Filtrar</Button>
-          <Button variant="clear" asChild>
-            <Link href="/dashboard/costs/costings">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+      <FilterBar action={navigationHrefs.costings} label="Filtros de costeos" clearHref={navigationHrefs.costings}>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Costeo, cliente, pedido" />}
+        </Field>
+
+        <Field id="pedido" label="Pedido">
+          {(control) => <Input {...control} name="pedido" defaultValue={pedido} placeholder="Pedido" />}
+        </Field>
+
+        <Field id="orden" label="Orden de trabajo">
+          {(control) => <Input {...control} name="orden" defaultValue={orden} placeholder="Orden de trabajo" />}
+        </Field>
+
+        <Field id="producto" label="Producto">
+          {(control) => <Input {...control} name="producto" defaultValue={producto} placeholder="Producto" />}
+        </Field>
+
+        <DateRangeFields
+          id="fecha"
+          defaultFrom={parseStringParam(params, "from")}
+          defaultTo={parseStringParam(params, "to")}
+        />
+
+        <Field id="estado" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="estado" defaultValue={estado}>
+              <option value="">Todos los estados</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="rentable">Rentable</option>
+              <option value="margen_bajo">Margen bajo</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
       <section className="grid gap-4 md:grid-cols-4">
         <KpiCard title="Costeos listados" value={totalCostings.toString()} description="Últimos 50 registros." tone="info" icon={ClipboardList} />
@@ -316,6 +311,6 @@ export default async function CostingsPage({
           ) : null}
         </TableBody>
       </Table>
-    </main>
+    </div>
   );
 }

@@ -20,6 +20,7 @@ import {
   expectRowLockedBefore,
   isPrismaCall,
   isPrismaRead,
+  isRowLock,
   type DataOverrides,
   type PrismaCall,
 } from "@/testing/page-characterization";
@@ -49,6 +50,12 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Las acciones de las secciones del detalle (B4 de la 10.8b) devuelven un FormActionState
+// con un operationId aleatorio: se fija para que el snapshot sea estable.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -120,9 +127,9 @@ async function runAction(action: Action, actionCase: ActionCase) {
 
   const { calls, result } = await characterizeHandler(async () => {
     try {
-      await action(formData);
+      const returned = await action(formData);
 
-      return "termino sin redirigir";
+      return returned === undefined ? "termino sin redirigir" : returned;
     } catch (error) {
       return (
         describeNavigationError(error) ??
@@ -132,6 +139,15 @@ async function runAction(action: Action, actionCase: ActionCase) {
   }, actionCase.data);
 
   return { calls, outcome: result };
+}
+
+// Las acciones de las secciones del detalle (B4 de la 10.8b) se usan con useActionState:
+// reciben el estado anterior y devuelven el nuevo, sin redirigir. Se ejecutan desde el
+// estado inicial.
+const IDLE = { status: "idle" } as const;
+
+function fromIdle(action: (prevState: typeof IDLE, formData: FormData) => Promise<unknown>): Action {
+  return (formData) => action(IDLE, formData);
 }
 
 // Las suites por nombre, para que las pruebas de los fixes repitan los mismos
@@ -292,13 +308,13 @@ const marginForm = {
 // Casos
 // ---------------------------------------------------------------------------
 
-defineActionSuite("createCostingFromWorkOrderAction", createCostingFromWorkOrderAction, [
+defineActionSuite("createCostingFromWorkOrderAction", fromIdle(createCostingFromWorkOrderAction), [
   {
     name: "sin orden en el formulario",
     form: { id_orden_trabajo: "   " },
   },
   {
-    name: "la orden ya tiene costeo: vuelve a ese costeo sin toast",
+    name: "la orden ya tiene costeo: responde con el existente",
     form: { id_orden_trabajo: OT },
     data: { "costeo.findFirst": { id_costeo: COSTEO } },
   },
@@ -367,7 +383,7 @@ defineActionSuite("createCostingFromWorkOrderAction", createCostingFromWorkOrder
   },
 ]);
 
-defineActionSuite("updateLaborCostAction", updateLaborCostAction, [
+defineActionSuite("updateLaborCostAction", fromIdle(updateLaborCostAction), [
   {
     name: "datos invalidos: une todos los mensajes de Zod",
     form: { id_costeo: "", costo_mano_obra: "-5" },
@@ -385,9 +401,31 @@ defineActionSuite("updateLaborCostAction", updateLaborCostAction, [
       "costo_indirecto.findMany": indirectAmounts,
     },
   },
+  // Hallazgo 66 (10.8): z.coerce.number convertia el campo vacio en 0 y no habia
+  // maximo para Decimal(12, 2). Ahora los dos se rechazan antes de la base.
+  {
+    name: "mano de obra vacia: se rechaza",
+    form: { id_costeo: COSTEO, costo_mano_obra: "" },
+    data: {
+      "costeo.findUnique": costingTotals(),
+      "costo_indirecto.findMany": indirectAmounts,
+    },
+  },
+  {
+    name: "mano de obra sobre el maximo de la columna: se rechaza",
+    form: { id_costeo: COSTEO, costo_mano_obra: "10000000000" },
+    data: {
+      "costeo.findUnique": costingTotals(),
+      "costo_indirecto.findMany": indirectAmounts,
+    },
+  },
+  {
+    name: "mano de obra no numerica",
+    form: { id_costeo: COSTEO, costo_mano_obra: "abc" },
+  },
 ]);
 
-defineActionSuite("recalculateCostingAction", recalculateCostingAction, [
+defineActionSuite("recalculateCostingAction", fromIdle(recalculateCostingAction), [
   {
     name: "sin costeo en el formulario",
     form: { id_costeo: "" },
@@ -415,7 +453,7 @@ defineActionSuite("recalculateCostingAction", recalculateCostingAction, [
   },
 ]);
 
-defineActionSuite("createIndirectCostAction", createIndirectCostAction, [
+defineActionSuite("createIndirectCostAction", fromIdle(createIndirectCostAction), [
   {
     name: "datos invalidos: une todos los mensajes de Zod",
     form: { ...indirectForm, concepto: "ab", categoria: "agua", monto: "-1" },
@@ -433,9 +471,27 @@ defineActionSuite("createIndirectCostAction", createIndirectCostAction, [
       "costo_indirecto.findMany": indirectAmounts,
     },
   },
+  // Hallazgo 66 (10.8): el monto vacio creaba un costo indirecto de S/ 0 y no habia
+  // maximo para Decimal(12, 2). Ahora los dos se rechazan antes de la base.
+  {
+    name: "monto vacio: se rechaza",
+    form: { ...indirectForm, monto: "" },
+    data: {
+      "costeo.findUnique": costingTotals(),
+      "costo_indirecto.findMany": indirectAmounts,
+    },
+  },
+  {
+    name: "monto sobre el maximo de la columna: se rechaza",
+    form: { ...indirectForm, monto: "10000000000" },
+    data: {
+      "costeo.findUnique": costingTotals(),
+      "costo_indirecto.findMany": indirectAmounts,
+    },
+  },
 ]);
 
-defineActionSuite("annulIndirectCostAction", annulIndirectCostAction, [
+defineActionSuite("annulIndirectCostAction", fromIdle(annulIndirectCostAction), [
   {
     name: "sin costo indirecto en el formulario",
     form: { id_costo_indirecto: "" },
@@ -479,7 +535,7 @@ defineActionSuite("annulIndirectCostAction", annulIndirectCostAction, [
   },
 ]);
 
-defineActionSuite("createMarginAction", createMarginAction, [
+defineActionSuite("createMarginAction", fromIdle(createMarginAction), [
   {
     name: "margen fuera de rango",
     form: { ...marginForm, porcentaje_margen: "25" },
@@ -519,9 +575,25 @@ defineActionSuite("createMarginAction", createMarginAction, [
     },
     data: { "costeo.findUnique": { id_costeo: COSTEO, costo_total: D("1524.58") } },
   },
+  // Hallazgo 72 (10.8): el precio final era una union de "" y z.coerce.number:
+  // respondia «Invalid input» y, sin el campo, se volvia 0. Ahora el mensaje esta en
+  // espanol y sin el campo se usa el precio sugerido, como con el campo vacio.
+  {
+    name: "precio final no numerico: mensaje en espanol",
+    form: { ...marginForm, precio_final: "abc" },
+  },
+  {
+    name: "sin el campo de precio final: usa el precio sugerido",
+    form: { id_costeo: COSTEO, porcentaje_margen: "17", motivo_ajuste: "" },
+    data: { "costeo.findUnique": { id_costeo: COSTEO, costo_total: D("1524.58") } },
+  },
+  {
+    name: "margen vacio",
+    form: { ...marginForm, porcentaje_margen: "" },
+  },
 ]);
 
-defineActionSuite("createProfitabilityAction", createProfitabilityAction, [
+defineActionSuite("createProfitabilityAction", fromIdle(createProfitabilityAction), [
   {
     name: "sin costeo en el formulario",
     form: { id_costeo: "", observaciones: "" },
@@ -584,6 +656,295 @@ defineActionSuite("createProfitabilityAction", createProfitabilityAction, [
     },
   },
 ]);
+
+// ---------------------------------------------------------------------------
+// B4 (10.8b): las secciones del detalle responden con FormActionState, sin navegar
+// ---------------------------------------------------------------------------
+
+// Mano de obra, costos indirectos, margen y rentabilidad se guardan desde el detalle del
+// costeo. Antes lanzaban (pagina de error) o redirigian con ?toast=; ahora devuelven el
+// resultado al formulario: el error queda en la seccion con lo escrito, y el exito da los
+// datos minimos y deja que la revalidacion repinte el detalle.
+describe("B4: las secciones del detalle responden con FormActionState", () => {
+  const OPERATION = "operacion-de-prueba";
+  const indirectValues = {
+    concepto: "Consumo de luz del lote",
+    categoria: "luz",
+    monto: "37.80",
+    criterio_prorrateo: "Prorrateado por lote",
+    periodo: "2026-07",
+    observaciones: "",
+  };
+  const marginValues = { porcentaje_margen: "17", precio_final: "", motivo_ajuste: "" };
+
+  const expected: [string, string, unknown][] = [
+    [
+      "updateLaborCostAction",
+      "actualiza la mano de obra y recalcula los totales",
+      { status: "success", data: { id_costeo: COSTEO }, values: { costo_mano_obra: "180.5" }, operationId: OPERATION },
+    ],
+    [
+      "updateLaborCostAction",
+      "mano de obra vacia: se rechaza",
+      {
+        status: "error",
+        error: "Revisa el costo de mano de obra.",
+        fieldErrors: { costo_mano_obra: ["El costo de mano de obra es obligatorio."] },
+        values: { costo_mano_obra: "" },
+        operationId: OPERATION,
+      },
+    ],
+    [
+      "updateLaborCostAction",
+      "el costeo no existe: se revierte",
+      { status: "error", error: "El costeo seleccionado no existe.", values: { costo_mano_obra: "180" }, operationId: OPERATION },
+    ],
+    [
+      "createIndirectCostAction",
+      "registra el costo indirecto y recalcula",
+      { status: "success", data: { id_costo_indirecto: "CIN00000001" }, values: indirectValues, operationId: OPERATION },
+    ],
+    [
+      "createIndirectCostAction",
+      "datos invalidos: une todos los mensajes de Zod",
+      {
+        status: "error",
+        error: "Revisa los datos del costo indirecto.",
+        fieldErrors: {
+          concepto: ["El concepto debe tener al menos 3 caracteres."],
+          categoria: ["Debe seleccionar una categoría válida."],
+          monto: ["El monto no puede ser negativo."],
+        },
+        values: { ...indirectValues, concepto: "ab", categoria: "agua", monto: "-1" },
+        operationId: OPERATION,
+      },
+    ],
+    [
+      "createIndirectCostAction",
+      "el costeo no existe: se revierte",
+      { status: "error", error: "El costeo seleccionado no existe.", values: indirectValues, operationId: OPERATION },
+    ],
+    [
+      "createMarginAction",
+      "sin precio final: usa el precio sugerido",
+      { status: "success", data: { id_margen: "MGN00000001" }, values: marginValues, operationId: OPERATION },
+    ],
+    [
+      "createMarginAction",
+      "margen fuera de rango",
+      {
+        status: "error",
+        error: "Revisa los datos del margen.",
+        fieldErrors: { porcentaje_margen: ["El margen máximo permitido es 20%."] },
+        values: { ...marginValues, porcentaje_margen: "25" },
+        operationId: OPERATION,
+      },
+    ],
+    [
+      "createMarginAction",
+      "precio final menor que el costo total",
+      {
+        status: "error",
+        error: "El precio final no puede ser menor que el costo total del producto.",
+        fieldErrors: { precio_final: ["El precio final no puede ser menor que el costo total del producto."] },
+        values: { ...marginValues, precio_final: "1500" },
+        operationId: OPERATION,
+      },
+    ],
+    [
+      "createMarginAction",
+      "costo total en cero",
+      {
+        status: "error",
+        error: "No se puede aplicar margen porque el costo total debe ser mayor que cero.",
+        values: marginValues,
+        operationId: OPERATION,
+      },
+    ],
+    [
+      "createProfitabilityAction",
+      "sin precio final usa el sugerido: rentable, con observaciones",
+      {
+        status: "success",
+        data: { id_rentabilidad: "REN00000001" },
+        values: { observaciones: "Rentabilidad aceptable" },
+        operationId: OPERATION,
+      },
+    ],
+    [
+      "createProfitabilityAction",
+      "sin margen aplicado",
+      {
+        status: "error",
+        error: "Primero debes aplicar un margen de ganancia antes de calcular la rentabilidad.",
+        values: { observaciones: "" },
+        operationId: OPERATION,
+      },
+    ],
+  ];
+
+  for (const [suite, caseName, outcome] of expected) {
+    it(`${suite}: ${caseName}`, async () => {
+      const { action, actionCase } = findCase(suite, caseName);
+      // Una redireccion aparece en el resultado («redirect:…») y toEqual la rechaza.
+      const { outcome: actual } = await runAction(action, actionCase);
+
+      expect(actual).toEqual(outcome);
+    });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// B5 (10.8b): recalcular y anular un costo indirecto responden a su confirmacion
+// ---------------------------------------------------------------------------
+
+// Recalcular y anular un costo indirecto se piden con ConfirmActionButton (D6). Antes
+// lanzaban o redirigian con ?toast=; ahora devuelven RowStatusState: con exito el estado
+// que quedo, y un rechazo con su mensaje, que queda dentro de la confirmacion. Un rechazo
+// no revalida: el repintado se llevaria el boton y su mensaje.
+describe("B5: recalcular y anular responden con RowStatusState", () => {
+  const OPERATION = "operacion-de-prueba";
+
+  const expected: [string, string, unknown, boolean][] = [
+    [
+      "recalculateCostingAction",
+      "recalcula con los costos indirectos vigentes",
+      { status: "success", data: { estado: "recalculado" }, values: { id: COSTEO }, operationId: OPERATION },
+      true,
+    ],
+    [
+      "recalculateCostingAction",
+      "sin costeo en el formulario",
+      { status: "error", error: "Debe seleccionar un costeo válido.", values: { id: "" }, operationId: OPERATION },
+      false,
+    ],
+    [
+      "recalculateCostingAction",
+      "el costeo no existe: se revierte",
+      { status: "error", error: "El costeo seleccionado no existe.", values: { id: COSTEO }, operationId: OPERATION },
+      false,
+    ],
+    [
+      "annulIndirectCostAction",
+      "anula conservando las observaciones previas y recalcula",
+      { status: "success", data: { estado: "anulado" }, values: { id: "CIN00000002" }, operationId: OPERATION },
+      true,
+    ],
+    [
+      "annulIndirectCostAction",
+      "sin costo indirecto en el formulario",
+      { status: "error", error: "Debe seleccionar un costo indirecto válido.", values: { id: "" }, operationId: OPERATION },
+      false,
+    ],
+    [
+      "annulIndirectCostAction",
+      "el costo indirecto no existe",
+      {
+        status: "error",
+        error: "El costo indirecto seleccionado no existe.",
+        values: { id: "CIN00000002" },
+        operationId: OPERATION,
+      },
+      false,
+    ],
+    [
+      "annulIndirectCostAction",
+      "costo indirecto sin costeo asociado",
+      {
+        status: "error",
+        error: "El costo indirecto no está asociado a un costeo.",
+        values: { id: "CIN00000002" },
+        operationId: OPERATION,
+      },
+      false,
+    ],
+    [
+      "annulIndirectCostAction",
+      "costo indirecto ya anulado",
+      {
+        status: "error",
+        error: "El costo indirecto ya se encuentra anulado.",
+        values: { id: "CIN00000002" },
+        operationId: OPERATION,
+      },
+      false,
+    ],
+  ];
+
+  for (const [suite, caseName, outcome, revalidates] of expected) {
+    it(`${suite}: ${caseName}`, async () => {
+      const { action, actionCase } = findCase(suite, caseName);
+      // Una redireccion aparece en el resultado («redirect:…») y toEqual la rechaza.
+      const { calls, outcome: actual } = await runAction(action, actionCase);
+
+      expect(actual).toEqual(outcome);
+      expect(calls.some((call) => "effect" in call && call.effect === "revalidatePath")).toBe(revalidates);
+    });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// B6 (10.8b): generar el costeo responde a su confirmacion y la pantalla navega
+// ---------------------------------------------------------------------------
+
+// Generar el costeo se pide desde la lista de ordenes con ConfirmActionButton (D5).
+// Antes lanzaba (pagina de error) en cada rechazo; ahora un rechazo deja su mensaje en la
+// confirmacion. Con exito redirige al costeo creado, o al que la orden ya tenia (una lista
+// vieja o un doble clic), con su aviso en la URL. Solo revalida cuando crea.
+//
+// Hallazgo 95 de la 10.8b: B6 navegaba en el cliente con router.push despues de la
+// respuesta, y ese push chocaba con la navegacion que Next aplica por la revalidacion: el
+// historial reemplazaba la entrada y Atras saltaba las ordenes por costear. Mover el push a
+// un efecto (9917160, revertido) no navegaba, porque la fila y su boton se desmontan con la
+// revalidacion. El redirect lo aplica el propio reductor de la accion con push, sin carrera.
+describe("B6 y hallazgo 95: generar el costeo redirige al costeo con su aviso; un rechazo responde con el error", () => {
+  const OPERATION = "operacion-de-prueba";
+  const rejected = (error: string, id = OT): unknown => ({
+    status: "error",
+    error,
+    values: { id_orden_trabajo: id },
+    operationId: OPERATION,
+  });
+
+  const expected: [string, unknown, boolean][] = [
+    [
+      "genera el costeo con materiales, consumibles y mano de obra estimada",
+      "redirect:/dashboard/costs/costings/COS00000001?toast=costing-created",
+      true,
+    ],
+    [
+      "la orden ya tiene costeo: responde con el existente",
+      `redirect:/dashboard/costs/costings/${COSTEO}?toast=costing-already-exists`,
+      false,
+    ],
+    ["sin orden en el formulario", rejected("Debe seleccionar una orden de trabajo válida.", ""), false],
+    ["la orden no existe", rejected("La orden de trabajo seleccionada no existe."), false],
+    ["orden anulada", rejected("No se puede generar costeo para una orden anulada."), false],
+    ["orden sin version de receta", rejected("La orden de trabajo no tiene una versión de receta asociada."), false],
+    [
+      "version de receta anulada",
+      rejected("La versión de receta asociada a la orden está anulada y no puede costearse."),
+      false,
+    ],
+    [
+      "version sin materiales",
+      rejected("La versión de receta no tiene materiales registrados para calcular el costeo."),
+      false,
+    ],
+    ["cantidad de la orden en cero", rejected("La cantidad de la orden debe ser mayor que cero."), false],
+  ];
+
+  for (const [caseName, outcome, revalidates] of expected) {
+    it(caseName, async () => {
+      const { action, actionCase } = findCase("createCostingFromWorkOrderAction", caseName);
+      // Una redireccion aparece en el resultado («redirect:…») y toEqual la rechaza.
+      const { calls, outcome: actual } = await runAction(action, actionCase);
+
+      expect(actual).toEqual(outcome);
+      expect(calls.some((call) => "effect" in call && call.effect === "revalidatePath")).toBe(revalidates);
+    });
+  }
+});
 
 // ---------------------------------------------------------------------------
 // H3 (grupo 1 de fixes): el recalculo bloquea el costeo antes de leer sus montos
@@ -654,7 +1015,7 @@ describe("H4: generar el costeo decide con la orden bloqueada", () => {
 
   for (const actionCase of casesWithWorkOrder) {
     it(actionCase.name, async () => {
-      const { calls } = await runAction(createCostingFromWorkOrderAction, actionCase);
+      const { calls } = await runAction(fromIdle(createCostingFromWorkOrderAction), actionCase);
 
       expectRowLockedBefore(calls, { table: "orden_trabajo", id: OT, reads: isPrismaRead });
     });
@@ -680,13 +1041,77 @@ describe("H10: anular un costo indirecto lo bloquea antes de leerlo", () => {
 
   for (const actionCase of casesWithIndirectCost) {
     it(actionCase.name, async () => {
-      const { calls } = await runAction(annulIndirectCostAction, actionCase);
+      const { calls } = await runAction(fromIdle(annulIndirectCostAction), actionCase);
 
       expectRowLockedBefore(calls, {
         table: "costo_indirecto",
         id: actionCase.form.id_costo_indirecto.trim(),
         reads: isPrismaRead,
       });
+    });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Hallazgos 64 y 65 (10.8): las acciones que tocan el costeo lo bloquean primero
+// ---------------------------------------------------------------------------
+
+// Margen y rentabilidad leian el costeo fuera de la transaccion y decidian con
+// el (costo mayor que cero, precio no menor que el costo, ultimo margen): con un
+// recalculo a la vez, guardaban un margen o una rentabilidad con un costo viejo
+// (64). El alta de costo indirecto tomaba el correlativo antes de que el
+// recalculo bloqueara el costeo, y la mano de obra escribia el costeo antes del
+// bloqueo (65); recalcular comprobaba que existiera antes de bloquearlo. Ahora
+// las cinco bloquean la fila del costeo antes de cualquier lectura o escritura
+// y antes del correlativo, dentro de la transaccion.
+function touchesCosting(call: PrismaCall) {
+  return call.prisma !== "$queryRaw";
+}
+
+describe("Hallazgos 64 y 65: las acciones que tocan el costeo lo bloquean primero", () => {
+  const casesReachingCosting = [
+    ["updateLaborCostAction", "el costeo no existe: se revierte"],
+    ["updateLaborCostAction", "actualiza la mano de obra y recalcula los totales"],
+    ["recalculateCostingAction", "el costeo no existe: se revierte"],
+    ["recalculateCostingAction", "recalcula con los costos indirectos vigentes"],
+    ["recalculateCostingAction", "cantidad base en cero: el costo unitario queda vacio"],
+    ["createIndirectCostAction", "el costeo no existe: se revierte"],
+    ["createIndirectCostAction", "registra el costo indirecto y recalcula"],
+    ["createMarginAction", "el costeo no existe"],
+    ["createMarginAction", "costo total en cero"],
+    ["createMarginAction", "precio final menor que el costo total"],
+    ["createMarginAction", "sin precio final: usa el precio sugerido"],
+    ["createMarginAction", "costo con centimos: fija el orden de la formula del precio sugerido"],
+    ["createMarginAction", "con precio final ajustado y motivo"],
+    ["createProfitabilityAction", "el costeo no existe"],
+    ["createProfitabilityAction", "sin margen aplicado"],
+    ["createProfitabilityAction", "costo total en cero"],
+    ["createProfitabilityAction", "ingreso estimado en cero"],
+    ["createProfitabilityAction", "precio final bajo el margen esperado: alerta de bajo margen"],
+    ["createProfitabilityAction", "margen real igual al esperado: no es margen bajo"],
+    ["createProfitabilityAction", "costo con centimos: fija el orden de la formula del margen real"],
+    ["createProfitabilityAction", "sin precio final usa el sugerido: rentable, con observaciones"],
+  ];
+
+  it("cubre los 21 casos que llegan a la base", () => {
+    expect(casesReachingCosting).toHaveLength(21);
+  });
+
+  for (const [suite, caseName] of casesReachingCosting) {
+    it(`${suite}: ${caseName}`, async () => {
+      const { action, actionCase } = findCase(suite, caseName);
+      const { calls } = await runAction(action, actionCase);
+
+      expectRowLockedBefore(calls, { table: "costeo", id: COSTEO, reads: touchesCosting });
+
+      const lock = calls.findIndex((call) => isRowLock(call, "costeo", COSTEO));
+      const correlative = calls.findIndex(
+        (call) => "effect" in call && call.effect === "getNextCorrelativeId",
+      );
+
+      if (correlative >= 0) {
+        expect(lock, "el correlativo se toma antes de bloquear el costeo").toBeLessThan(correlative);
+      }
     });
   }
 });
@@ -701,7 +1126,7 @@ describe("H10: anular un costo indirecto lo bloquea antes de leerlo", () => {
 // como margen_real no cambia; cambia la alerta que lo acompana.
 describe("H7: la alerta de bajo margen usa el margen que se guarda", () => {
   async function storedProfitability(costing: Row) {
-    const { calls } = await runAction(createProfitabilityAction, {
+    const { calls } = await runAction(fromIdle(createProfitabilityAction), {
       name: "H7",
       form: { id_costeo: COSTEO, observaciones: "" },
       data: { "costeo.findUnique": costing },

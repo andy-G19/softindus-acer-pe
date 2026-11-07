@@ -177,7 +177,7 @@ exports[`/dashboard/costs > con datos > llamadas 1`] = `
 
 exports[`/dashboard/costs > con datos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -388,7 +388,7 @@ exports[`/dashboard/costs > con datos > resultado 1`] = `
 </div>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -570,7 +570,7 @@ exports[`/dashboard/costs > sin datos: modulo sin informacion economica > llamad
 
 exports[`/dashboard/costs > sin datos: modulo sin informacion economica > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -753,7 +753,7 @@ exports[`/dashboard/costs > sin datos: modulo sin informacion economica > result
 </div>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -935,7 +935,7 @@ exports[`/dashboard/costs > solo ordenes sin costeo: modulo operativo > llamadas
 
 exports[`/dashboard/costs > solo ordenes sin costeo: modulo operativo > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1118,7 +1118,7 @@ exports[`/dashboard/costs > solo ordenes sin costeo: modulo operativo > resultad
 </div>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1207,7 +1207,7 @@ exports[`/dashboard/costs/costings > estado margen bajo > llamadas 1`] = `
 
 exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1238,7 +1238,7 @@ exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -1255,14 +1255,17 @@ exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
 <label for="producto">Producto</label>
 <input id="producto" placeholder="Producto" name="producto" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -1405,7 +1408,7 @@ exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1490,7 +1493,7 @@ exports[`/dashboard/costs/costings > estado pendiente > llamadas 1`] = `
 
 exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1521,7 +1524,7 @@ exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -1538,14 +1541,17 @@ exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
 <label for="producto">Producto</label>
 <input id="producto" placeholder="Producto" name="producto" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -1688,7 +1694,7 @@ exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1757,7 +1763,7 @@ exports[`/dashboard/costs/costings > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1788,7 +1794,7 @@ exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -1805,14 +1811,17 @@ exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
 <label for="producto">Producto</label>
 <input id="producto" placeholder="Producto" name="producto" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -1955,7 +1964,7 @@ exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -2024,7 +2033,7 @@ exports[`/dashboard/costs/costings > sin resultados > llamadas 1`] = `
 
 exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2055,7 +2064,7 @@ exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -2072,14 +2081,17 @@ exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 <label for="producto">Producto</label>
 <input id="producto" placeholder="Producto" name="producto" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -2181,7 +2193,7 @@ exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -2430,7 +2442,7 @@ exports[`/dashboard/costs/costings > todos los filtros, estado rentable > llamad
 
 exports[`/dashboard/costs/costings > todos los filtros, estado rentable > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2461,7 +2473,7 @@ exports[`/dashboard/costs/costings > todos los filtros, estado rentable > result
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value="puerta"/>
@@ -2478,14 +2490,17 @@ exports[`/dashboard/costs/costings > todos los filtros, estado rentable > result
 <label for="producto">Producto</label>
 <input id="producto" placeholder="Producto" name="producto" value="Puerta"/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
+</fieldset>
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -2628,7 +2643,7 @@ exports[`/dashboard/costs/costings > todos los filtros, estado rentable > result
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -2697,7 +2712,7 @@ exports[`/dashboard/costs/costings > un costeo de cada origen > llamadas 1`] = `
 
 exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2728,7 +2743,7 @@ exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = 
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -2745,14 +2760,17 @@ exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = 
 <label for="producto">Producto</label>
 <input id="producto" placeholder="Producto" name="producto" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -2970,7 +2988,7 @@ exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = 
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -3052,7 +3070,7 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > llamad
 
 exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -3191,15 +3209,17 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="costo_mano_obra">Costo de mano de obra</label>
-<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_mano_obra" required="" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
 </div>
 <button data-variant="default" type="submit">Actualizar</button>
+</div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -3268,13 +3288,15 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="concepto">Concepto</label>
-<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+<label for="concepto">Concepto<span aria-hidden="true">*</span>
+</label>
+<input id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto" value=""/>
 </div>
 <div>
 <div>
-<label for="categoria">Categoría</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
 <option value="transporte">Transporte</option>
@@ -3285,18 +3307,19 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 </select>
 </div>
 <div>
-<label for="monto">Monto</label>
-<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+<label for="monto">Monto<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto" value=""/>
 </div>
 </div>
 <div>
 <div>
 <label for="criterio_prorrateo">Criterio de prorrateo</label>
-<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+<input id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo" value=""/>
 </div>
 <div>
 <label for="periodo">Periodo</label>
-<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+<input id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo" value=""/>
 </div>
 </div>
 <div>
@@ -3337,10 +3360,7 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -3352,10 +3372,7 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <td>-</td>
 <td>S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -3391,8 +3408,9 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="porcentaje_margen">Margen de ganancia</label>
-<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
+</label>
+<select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
 <option value="17">17%</option>
@@ -3403,8 +3421,8 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
-<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
-<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+<input type="number" id="precio_final" aria-describedby="precio_final-ayuda" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final" value=""/>
+<p id="precio_final-ayuda">Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
 </div>
 <div>
 <label for="motivo_ajuste">Motivo de ajuste</label>
@@ -3540,7 +3558,7 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 </div>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -3623,7 +3641,7 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > llamadas 1`] = `
 
 exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -3762,15 +3780,17 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="costo_mano_obra">Costo de mano de obra</label>
-<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_mano_obra" required="" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
 </div>
 <button data-variant="default" type="submit">Actualizar</button>
+</div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -3839,13 +3859,15 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="concepto">Concepto</label>
-<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+<label for="concepto">Concepto<span aria-hidden="true">*</span>
+</label>
+<input id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto" value=""/>
 </div>
 <div>
 <div>
-<label for="categoria">Categoría</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
 <option value="transporte">Transporte</option>
@@ -3856,18 +3878,19 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 </select>
 </div>
 <div>
-<label for="monto">Monto</label>
-<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+<label for="monto">Monto<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto" value=""/>
 </div>
 </div>
 <div>
 <div>
 <label for="criterio_prorrateo">Criterio de prorrateo</label>
-<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+<input id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo" value=""/>
 </div>
 <div>
 <label for="periodo">Periodo</label>
-<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+<input id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo" value=""/>
 </div>
 </div>
 <div>
@@ -3908,10 +3931,7 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -3923,10 +3943,7 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <td>-</td>
 <td>S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -3962,8 +3979,9 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="porcentaje_margen">Margen de ganancia</label>
-<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
+</label>
+<select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
 <option value="17">17%</option>
@@ -3974,8 +3992,8 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
-<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
-<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+<input type="number" id="precio_final" aria-describedby="precio_final-ayuda" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final" value=""/>
+<p id="precio_final-ayuda">Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
 </div>
 <div>
 <label for="motivo_ajuste">Motivo de ajuste</label>
@@ -4111,7 +4129,7 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 </div>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -4276,7 +4294,7 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 
 exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista previa usa el precio final > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -4415,15 +4433,17 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="costo_mano_obra">Costo de mano de obra</label>
-<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_mano_obra" required="" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
 </div>
 <button data-variant="default" type="submit">Actualizar</button>
+</div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -4531,13 +4551,15 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="concepto">Concepto</label>
-<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+<label for="concepto">Concepto<span aria-hidden="true">*</span>
+</label>
+<input id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto" value=""/>
 </div>
 <div>
 <div>
-<label for="categoria">Categoría</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
 <option value="transporte">Transporte</option>
@@ -4548,18 +4570,19 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 </select>
 </div>
 <div>
-<label for="monto">Monto</label>
-<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+<label for="monto">Monto<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto" value=""/>
 </div>
 </div>
 <div>
 <div>
 <label for="criterio_prorrateo">Criterio de prorrateo</label>
-<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+<input id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo" value=""/>
 </div>
 <div>
 <label for="periodo">Periodo</label>
-<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+<input id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo" value=""/>
 </div>
 </div>
 <div>
@@ -4600,10 +4623,7 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -4615,10 +4635,7 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <td>-</td>
 <td>S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -4654,8 +4671,9 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="porcentaje_margen">Margen de ganancia</label>
-<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
+</label>
+<select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
 <option value="17">17%</option>
@@ -4666,8 +4684,8 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
-<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
-<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+<input type="number" id="precio_final" aria-describedby="precio_final-ayuda" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final" value=""/>
+<p id="precio_final-ayuda">Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
 </div>
 <div>
 <label for="motivo_ajuste">Motivo de ajuste</label>
@@ -4796,7 +4814,7 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 </div>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -4879,7 +4897,7 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 
 exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -5018,15 +5036,17 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="costo_mano_obra">Costo de mano de obra</label>
-<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_mano_obra" required="" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
 </div>
 <button data-variant="default" type="submit">Actualizar</button>
+</div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -5095,13 +5115,15 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="concepto">Concepto</label>
-<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+<label for="concepto">Concepto<span aria-hidden="true">*</span>
+</label>
+<input id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto" value=""/>
 </div>
 <div>
 <div>
-<label for="categoria">Categoría</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
 <option value="transporte">Transporte</option>
@@ -5112,18 +5134,19 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 </select>
 </div>
 <div>
-<label for="monto">Monto</label>
-<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+<label for="monto">Monto<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto" value=""/>
 </div>
 </div>
 <div>
 <div>
 <label for="criterio_prorrateo">Criterio de prorrateo</label>
-<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+<input id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo" value=""/>
 </div>
 <div>
 <label for="periodo">Periodo</label>
-<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+<input id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo" value=""/>
 </div>
 </div>
 <div>
@@ -5164,10 +5187,7 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -5179,10 +5199,7 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <td>-</td>
 <td>S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -5218,8 +5235,9 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="porcentaje_margen">Margen de ganancia</label>
-<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
+</label>
+<select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
 <option value="17">17%</option>
@@ -5230,8 +5248,8 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
-<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
-<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+<input type="number" id="precio_final" aria-describedby="precio_final-ayuda" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final" value=""/>
+<p id="precio_final-ayuda">Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
 </div>
 <div>
 <label for="motivo_ajuste">Motivo de ajuste</label>
@@ -5367,7 +5385,7 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 </div>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -5450,7 +5468,7 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 
 exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabilidad con margen bajo > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -5589,15 +5607,17 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="costo_mano_obra">Costo de mano de obra</label>
-<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_mano_obra" required="" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
 </div>
 <button data-variant="default" type="submit">Actualizar</button>
+</div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -5705,13 +5725,15 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="concepto">Concepto</label>
-<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+<label for="concepto">Concepto<span aria-hidden="true">*</span>
+</label>
+<input id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto" value=""/>
 </div>
 <div>
 <div>
-<label for="categoria">Categoría</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
 <option value="transporte">Transporte</option>
@@ -5722,18 +5744,19 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 </select>
 </div>
 <div>
-<label for="monto">Monto</label>
-<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+<label for="monto">Monto<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto" value=""/>
 </div>
 </div>
 <div>
 <div>
 <label for="criterio_prorrateo">Criterio de prorrateo</label>
-<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+<input id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo" value=""/>
 </div>
 <div>
 <label for="periodo">Periodo</label>
-<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+<input id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo" value=""/>
 </div>
 </div>
 <div>
@@ -5774,10 +5797,7 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -5789,10 +5809,7 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <td>-</td>
 <td>S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -5828,8 +5845,9 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="porcentaje_margen">Margen de ganancia</label>
-<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
+</label>
+<select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
 <option value="17">17%</option>
@@ -5840,8 +5858,8 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
-<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
-<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+<input type="number" id="precio_final" aria-describedby="precio_final-ayuda" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final" value=""/>
+<p id="precio_final-ayuda">Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
 </div>
 <div>
 <label for="motivo_ajuste">Motivo de ajuste</label>
@@ -5977,7 +5995,7 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 </div>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -6060,7 +6078,7 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 
 exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anulado y sin precio final > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -6199,15 +6217,17 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="costo_mano_obra">Costo de mano de obra</label>
-<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_mano_obra" required="" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
 </div>
 <button data-variant="default" type="submit">Actualizar</button>
+</div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -6309,13 +6329,15 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="concepto">Concepto</label>
-<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+<label for="concepto">Concepto<span aria-hidden="true">*</span>
+</label>
+<input id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto" value=""/>
 </div>
 <div>
 <div>
-<label for="categoria">Categoría</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
 <option value="transporte">Transporte</option>
@@ -6326,18 +6348,19 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 </select>
 </div>
 <div>
-<label for="monto">Monto</label>
-<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+<label for="monto">Monto<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto" value=""/>
 </div>
 </div>
 <div>
 <div>
 <label for="criterio_prorrateo">Criterio de prorrateo</label>
-<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+<input id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo" value=""/>
 </div>
 <div>
 <label for="periodo">Periodo</label>
-<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+<input id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo" value=""/>
 </div>
 </div>
 <div>
@@ -6390,10 +6413,7 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="CIN00000002"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -6429,8 +6449,9 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="porcentaje_margen">Margen de ganancia</label>
-<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
+</label>
+<select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
 <option value="17">17%</option>
@@ -6441,8 +6462,8 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
-<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
-<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+<input type="number" id="precio_final" aria-describedby="precio_final-ayuda" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final" value=""/>
+<p id="precio_final-ayuda">Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
 </div>
 <div>
 <label for="motivo_ajuste">Motivo de ajuste</label>
@@ -6561,7 +6582,7 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 </div>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -6644,7 +6665,7 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 
 exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilidad > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -6783,15 +6804,17 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="costo_mano_obra">Costo de mano de obra</label>
-<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_mano_obra" required="" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
 </div>
 <button data-variant="default" type="submit">Actualizar</button>
+</div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -6891,13 +6914,15 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="concepto">Concepto</label>
-<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+<label for="concepto">Concepto<span aria-hidden="true">*</span>
+</label>
+<input id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto" value=""/>
 </div>
 <div>
 <div>
-<label for="categoria">Categoría</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
 <option value="transporte">Transporte</option>
@@ -6908,18 +6933,19 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 </select>
 </div>
 <div>
-<label for="monto">Monto</label>
-<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+<label for="monto">Monto<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto" value=""/>
 </div>
 </div>
 <div>
 <div>
 <label for="criterio_prorrateo">Criterio de prorrateo</label>
-<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+<input id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo" value=""/>
 </div>
 <div>
 <label for="periodo">Periodo</label>
-<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+<input id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo" value=""/>
 </div>
 </div>
 <div>
@@ -6972,8 +6998,9 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="porcentaje_margen">Margen de ganancia</label>
-<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
+</label>
+<select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
 <option value="17">17%</option>
@@ -6984,8 +7011,8 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
-<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
-<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+<input type="number" id="precio_final" aria-describedby="precio_final-ayuda" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final" value=""/>
+<p id="precio_final-ayuda">Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
 </div>
 <div>
 <label for="motivo_ajuste">Motivo de ajuste</label>
@@ -7036,7 +7063,7 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 </div>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -7119,7 +7146,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 
 exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: margen bajo > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -7258,15 +7285,17 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="costo_mano_obra">Costo de mano de obra</label>
-<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_mano_obra" required="" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
 </div>
 <button data-variant="default" type="submit">Actualizar</button>
+</div>
 </form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costeo" value="id_costeo-1"/>
-<button data-variant="outline" type="submit">Recalcular costeo</button>
-</form>
+<div>
+<button data-variant="outline" type="button">Recalcular costeo</button>
+</div>
 </div>
 </div>
 </div>
@@ -7366,13 +7395,15 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="concepto">Concepto</label>
-<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+<label for="concepto">Concepto<span aria-hidden="true">*</span>
+</label>
+<input id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto" value=""/>
 </div>
 <div>
 <div>
-<label for="categoria">Categoría</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
 <option value="transporte">Transporte</option>
@@ -7383,18 +7414,19 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 </select>
 </div>
 <div>
-<label for="monto">Monto</label>
-<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+<label for="monto">Monto<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto" value=""/>
 </div>
 </div>
 <div>
 <div>
 <label for="criterio_prorrateo">Criterio de prorrateo</label>
-<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+<input id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo" value=""/>
 </div>
 <div>
 <label for="periodo">Periodo</label>
-<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+<input id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo" value=""/>
 </div>
 </div>
 <div>
@@ -7435,10 +7467,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <td>periodo-1</td>
 <td>S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -7450,10 +7479,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <td>-</td>
 <td>S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -7489,8 +7515,9 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_costeo" value="id_costeo-1"/>
 <div>
-<label for="porcentaje_margen">Margen de ganancia</label>
-<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
+</label>
+<select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
 <option value="17">17%</option>
@@ -7501,8 +7528,8 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
-<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
-<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+<input type="number" id="precio_final" aria-describedby="precio_final-ayuda" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final" value=""/>
+<p id="precio_final-ayuda">Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
 </div>
 <div>
 <label for="motivo_ajuste">Motivo de ajuste</label>
@@ -7607,7 +7634,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 </div>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -7732,7 +7759,7 @@ exports[`/dashboard/costs/work-orders > con ordenes > llamadas 1`] = `
 
 exports[`/dashboard/costs/work-orders > con ordenes > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -7864,10 +7891,7 @@ exports[`/dashboard/costs/work-orders > con ordenes > resultado 1`] = `
 <span data-variant="secondary">estado-1</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="default" type="submit">Generar costeo</button>
-</form>
+<button data-variant="default" type="button">Generar costeo</button>
 </td>
 </tr>
 <tr>
@@ -7890,10 +7914,7 @@ exports[`/dashboard/costs/work-orders > con ordenes > resultado 1`] = `
 <span data-variant="secondary">estado-2</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-2"/>
-<button data-variant="default" type="submit">Generar costeo</button>
-</form>
+<button data-variant="default" type="button">Generar costeo</button>
 </td>
 </tr>
 </tbody>
@@ -7927,8 +7948,7 @@ exports[`/dashboard/costs/work-orders > con ordenes > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -8052,7 +8072,7 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 
 exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -8184,10 +8204,7 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 <span data-variant="secondary">estado-1</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="default" type="submit">Generar costeo</button>
-</form>
+<button data-variant="default" type="button">Generar costeo</button>
 </td>
 </tr>
 <tr>
@@ -8210,10 +8227,7 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 <span data-variant="secondary">estado-1</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="OTR00000003"/>
-<button data-variant="default" type="submit">Generar costeo</button>
-</form>
+<button data-variant="default" type="button">Generar costeo</button>
 </td>
 </tr>
 <tr>
@@ -8236,10 +8250,7 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 <span data-variant="secondary">estado-1</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="OTR00000004"/>
-<button data-variant="default" type="submit">Generar costeo</button>
-</form>
+<button data-variant="default" type="button">Generar costeo</button>
 </td>
 </tr>
 <tr>
@@ -8296,8 +8307,7 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 </div>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -8421,7 +8431,7 @@ exports[`/dashboard/costs/work-orders > sin ordenes pendientes ni costeos > llam
 
 exports[`/dashboard/costs/work-orders > sin ordenes pendientes ni costeos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -8548,7 +8558,7 @@ exports[`/dashboard/costs/work-orders > sin ordenes pendientes ni costeos > resu
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;

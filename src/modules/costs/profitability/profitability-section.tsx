@@ -1,9 +1,7 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -12,14 +10,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
 import { calculateProfitability } from "@/lib/costing-calculations";
 import { formatDateTime, formatMoney } from "@/lib/formatters";
+import type { NotificationDefinition } from "@/lib/notification-catalog";
 import { toNumber } from "@/lib/numbers";
 import { formatCostingPercent } from "@/modules/costs/costing-format";
-import {
-  createProfitabilityAction,
-} from "@/modules/costs/profitability/actions";
+import { createProfitabilityAction } from "@/modules/costs/profitability/actions";
+import { ProfitabilityForm } from "@/modules/costs/profitability/profitability-form";
 import type { CostingDetail } from "@/modules/costs/costings/queries";
 
 // Rentabilidad: vista previa con el ultimo margen, calculo y su historial. La vista
@@ -61,11 +58,14 @@ type ProfitabilitySectionProps = {
   costing: Pick<CostingDetail, "id_costeo" | "costo_total" | "rentabilidad">;
   // arr[0] tiene tipo de elemento siempre presente: se declara que puede faltar.
   latestMargin: CostingDetail["margen_ganancia"][number] | undefined;
+  /** Aviso al calcular la rentabilidad; la pagina lo pasa con su clave literal. */
+  createdNotification: NotificationDefinition;
 };
 
 export function ProfitabilitySection({
   costing,
   latestMargin,
+  createdNotification,
 }: ProfitabilitySectionProps) {
   const profitabilityReference = latestMargin
     ? getProfitabilityReference(
@@ -146,30 +146,11 @@ export function ProfitabilitySection({
                 </div>
               </div>
 
-              <form
+              <ProfitabilityForm
                 action={createProfitabilityAction}
-                className="mt-5 space-y-4"
-              >
-                <input
-                  type="hidden"
-                  name="id_costeo"
-                  value={costing.id_costeo}
-                />
-
-                <div className="space-y-2">
-                  <Label htmlFor="observaciones_rentabilidad">
-                    Observaciones
-                  </Label>
-                  <Textarea
-                    id="observaciones_rentabilidad"
-                    name="observaciones"
-                    rows={3}
-                    placeholder="Ejemplo: Rentabilidad aceptable según margen comercial aplicado."
-                  />
-                </div>
-
-                <Button type="submit">Calcular rentabilidad</Button>
-              </form>
+                idCosteo={costing.id_costeo}
+                successNotification={createdNotification}
+              />
             </>
           )}
         </CardContent>

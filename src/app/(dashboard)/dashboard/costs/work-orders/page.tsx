@@ -21,6 +21,7 @@ import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { createCostingFromWorkOrderAction } from "@/modules/costs/costings/actions";
+import { GenerateCostingAction } from "@/modules/costs/costings/generate-costing-action";
 import { getCostableWorkOrdersData } from "@/modules/costs/costings/queries";
 
 function formatDecimal(value: unknown) {
@@ -60,7 +61,7 @@ export default async function CostingWorkOrdersPage() {
   } = await getCostableWorkOrdersData();
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Generar costeo desde producción"
         description="Selecciona una orden de trabajo con versión de receta registrada para calcular automáticamente el costo estimado de materiales y consumibles."
@@ -214,16 +215,10 @@ export default async function CostingWorkOrdersPage() {
 
                       <TableCell>
                         {canGenerateCosting ? (
-                          <form action={createCostingFromWorkOrderAction}>
-                            <input
-                              type="hidden"
-                              name="id_orden_trabajo"
-                              value={order.id_orden_trabajo}
-                            />
-                            <Button type="submit" size="sm">
-                              Generar costeo
-                            </Button>
-                          </form>
+                          <GenerateCostingAction
+                            idOrdenTrabajo={order.id_orden_trabajo}
+                            action={createCostingFromWorkOrderAction}
+                          />
                         ) : (
                           <span className="text-xs text-destructive">
                             Sin materiales
@@ -286,6 +281,6 @@ export default async function CostingWorkOrdersPage() {
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

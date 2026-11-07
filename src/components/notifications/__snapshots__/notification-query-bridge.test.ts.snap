@@ -208,6 +208,22 @@ exports[`cada clave del catalogo > client-updated: muestra su toast y limpia la 
 ]
 `;
 
+exports[`cada clave del catalogo > costing-already-exists: muestra su toast y limpia la URL 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">La orden ya tenía un costeo: se abrió el existente</p></div>",
+    "options": {
+      "className": "toast-industrial-info",
+      "progressClassName": "toast-industrial-progress-info",
+    },
+    "toast": "info",
+  },
+  {
+    "effect": "router.replace /dashboard {"scroll":false}",
+  },
+]
+`;
+
 exports[`cada clave del catalogo > costing-created: muestra su toast y limpia la URL 1`] = `
 [
   {

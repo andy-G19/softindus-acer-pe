@@ -3,7 +3,7 @@
 exports[`annulIndirectCostAction > anula conservando las observaciones previas y recalcula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -131,12 +131,23 @@ exports[`annulIndirectCostAction > anula conservando las observaciones previas y
 ]
 `;
 
-exports[`annulIndirectCostAction > anula conservando las observaciones previas y recalcula > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=indirect-cost-annulled"`;
+exports[`annulIndirectCostAction > anula conservando las observaciones previas y recalcula > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "CIN00000002",
+  },
+}
+`;
 
 exports[`annulIndirectCostAction > anula un costo sin observaciones > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -263,12 +274,23 @@ exports[`annulIndirectCostAction > anula un costo sin observaciones > llamadas 1
 ]
 `;
 
-exports[`annulIndirectCostAction > anula un costo sin observaciones > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=indirect-cost-annulled"`;
+exports[`annulIndirectCostAction > anula un costo sin observaciones > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "CIN00000002",
+  },
+}
+`;
 
 exports[`annulIndirectCostAction > costo indirecto sin costeo asociado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -302,18 +324,27 @@ exports[`annulIndirectCostAction > costo indirecto sin costeo asociado > llamada
     "prisma": "costo_indirecto.findUnique",
   },
   {
-    "args": "El costo indirecto no está asociado a un costeo.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`annulIndirectCostAction > costo indirecto sin costeo asociado > resultado 1`] = `"error: El costo indirecto no está asociado a un costeo."`;
+exports[`annulIndirectCostAction > costo indirecto sin costeo asociado > resultado 1`] = `
+{
+  "error": "El costo indirecto no está asociado a un costeo.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "CIN00000002",
+  },
+}
+`;
 
 exports[`annulIndirectCostAction > costo indirecto ya anulado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -347,18 +378,27 @@ exports[`annulIndirectCostAction > costo indirecto ya anulado > llamadas 1`] = `
     "prisma": "costo_indirecto.findUnique",
   },
   {
-    "args": "El costo indirecto ya se encuentra anulado.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`annulIndirectCostAction > costo indirecto ya anulado > resultado 1`] = `"error: El costo indirecto ya se encuentra anulado."`;
+exports[`annulIndirectCostAction > costo indirecto ya anulado > resultado 1`] = `
+{
+  "error": "El costo indirecto ya se encuentra anulado.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "CIN00000002",
+  },
+}
+`;
 
 exports[`annulIndirectCostAction > el costo indirecto no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -392,18 +432,27 @@ exports[`annulIndirectCostAction > el costo indirecto no existe > llamadas 1`] =
     "prisma": "costo_indirecto.findUnique",
   },
   {
-    "args": "El costo indirecto seleccionado no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`annulIndirectCostAction > el costo indirecto no existe > resultado 1`] = `"error: El costo indirecto seleccionado no existe."`;
+exports[`annulIndirectCostAction > el costo indirecto no existe > resultado 1`] = `
+{
+  "error": "El costo indirecto seleccionado no existe.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "CIN00000002",
+  },
+}
+`;
 
 exports[`annulIndirectCostAction > sin costo indirecto en el formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -411,12 +460,21 @@ exports[`annulIndirectCostAction > sin costo indirecto en el formulario > llamad
 ]
 `;
 
-exports[`annulIndirectCostAction > sin costo indirecto en el formulario > resultado 1`] = `"error: Debe seleccionar un costo indirecto válido."`;
+exports[`annulIndirectCostAction > sin costo indirecto en el formulario > resultado 1`] = `
+{
+  "error": "Debe seleccionar un costo indirecto válido.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "",
+  },
+}
+`;
 
 exports[`createCostingFromWorkOrderAction > cantidad de la orden en cero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -468,18 +526,27 @@ exports[`createCostingFromWorkOrderAction > cantidad de la orden en cero > llama
     "prisma": "orden_trabajo.findUnique",
   },
   {
-    "args": "La cantidad de la orden debe ser mayor que cero.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createCostingFromWorkOrderAction > cantidad de la orden en cero > resultado 1`] = `"error: La cantidad de la orden debe ser mayor que cero."`;
+exports[`createCostingFromWorkOrderAction > cantidad de la orden en cero > resultado 1`] = `
+{
+  "error": "La cantidad de la orden debe ser mayor que cero.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_orden_trabajo": "OTR00000007",
+  },
+}
+`;
 
 exports[`createCostingFromWorkOrderAction > genera el costeo con materiales, consumibles y mano de obra estimada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -621,7 +688,7 @@ exports[`createCostingFromWorkOrderAction > genera el costeo con materiales, con
 exports[`createCostingFromWorkOrderAction > la orden no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -673,18 +740,27 @@ exports[`createCostingFromWorkOrderAction > la orden no existe > llamadas 1`] = 
     "prisma": "orden_trabajo.findUnique",
   },
   {
-    "args": "La orden de trabajo seleccionada no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createCostingFromWorkOrderAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo seleccionada no existe."`;
+exports[`createCostingFromWorkOrderAction > la orden no existe > resultado 1`] = `
+{
+  "error": "La orden de trabajo seleccionada no existe.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_orden_trabajo": "OTR00000007",
+  },
+}
+`;
 
-exports[`createCostingFromWorkOrderAction > la orden ya tiene costeo: vuelve a ese costeo sin toast > llamadas 1`] = `
+exports[`createCostingFromWorkOrderAction > la orden ya tiene costeo: responde con el existente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -720,12 +796,12 @@ exports[`createCostingFromWorkOrderAction > la orden ya tiene costeo: vuelve a e
 ]
 `;
 
-exports[`createCostingFromWorkOrderAction > la orden ya tiene costeo: vuelve a ese costeo sin toast > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004"`;
+exports[`createCostingFromWorkOrderAction > la orden ya tiene costeo: responde con el existente > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=costing-already-exists"`;
 
 exports[`createCostingFromWorkOrderAction > orden anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -777,18 +853,27 @@ exports[`createCostingFromWorkOrderAction > orden anulada > llamadas 1`] = `
     "prisma": "orden_trabajo.findUnique",
   },
   {
-    "args": "No se puede generar costeo para una orden anulada.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createCostingFromWorkOrderAction > orden anulada > resultado 1`] = `"error: No se puede generar costeo para una orden anulada."`;
+exports[`createCostingFromWorkOrderAction > orden anulada > resultado 1`] = `
+{
+  "error": "No se puede generar costeo para una orden anulada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_orden_trabajo": "OTR00000007",
+  },
+}
+`;
 
 exports[`createCostingFromWorkOrderAction > orden sin pedido ni tareas: sin pedido y sin mano de obra > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -930,7 +1015,7 @@ exports[`createCostingFromWorkOrderAction > orden sin pedido ni tareas: sin pedi
 exports[`createCostingFromWorkOrderAction > orden sin version de receta > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -982,18 +1067,27 @@ exports[`createCostingFromWorkOrderAction > orden sin version de receta > llamad
     "prisma": "orden_trabajo.findUnique",
   },
   {
-    "args": "La orden de trabajo no tiene una versión de receta asociada.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createCostingFromWorkOrderAction > orden sin version de receta > resultado 1`] = `"error: La orden de trabajo no tiene una versión de receta asociada."`;
+exports[`createCostingFromWorkOrderAction > orden sin version de receta > resultado 1`] = `
+{
+  "error": "La orden de trabajo no tiene una versión de receta asociada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_orden_trabajo": "OTR00000007",
+  },
+}
+`;
 
 exports[`createCostingFromWorkOrderAction > sin orden en el formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1001,12 +1095,21 @@ exports[`createCostingFromWorkOrderAction > sin orden en el formulario > llamada
 ]
 `;
 
-exports[`createCostingFromWorkOrderAction > sin orden en el formulario > resultado 1`] = `"error: Debe seleccionar una orden de trabajo válida."`;
+exports[`createCostingFromWorkOrderAction > sin orden en el formulario > resultado 1`] = `
+{
+  "error": "Debe seleccionar una orden de trabajo válida.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_orden_trabajo": "",
+  },
+}
+`;
 
 exports[`createCostingFromWorkOrderAction > version de receta anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1058,18 +1161,27 @@ exports[`createCostingFromWorkOrderAction > version de receta anulada > llamadas
     "prisma": "orden_trabajo.findUnique",
   },
   {
-    "args": "La versión de receta asociada a la orden está anulada y no puede costearse.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createCostingFromWorkOrderAction > version de receta anulada > resultado 1`] = `"error: La versión de receta asociada a la orden está anulada y no puede costearse."`;
+exports[`createCostingFromWorkOrderAction > version de receta anulada > resultado 1`] = `
+{
+  "error": "La versión de receta asociada a la orden está anulada y no puede costearse.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_orden_trabajo": "OTR00000007",
+  },
+}
+`;
 
 exports[`createCostingFromWorkOrderAction > version sin materiales > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1121,18 +1233,27 @@ exports[`createCostingFromWorkOrderAction > version sin materiales > llamadas 1`
     "prisma": "orden_trabajo.findUnique",
   },
   {
-    "args": "La versión de receta no tiene materiales registrados para calcular el costeo.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createCostingFromWorkOrderAction > version sin materiales > resultado 1`] = `"error: La versión de receta no tiene materiales registrados para calcular el costeo."`;
+exports[`createCostingFromWorkOrderAction > version sin materiales > resultado 1`] = `
+{
+  "error": "La versión de receta no tiene materiales registrados para calcular el costeo.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_orden_trabajo": "OTR00000007",
+  },
+}
+`;
 
 exports[`createIndirectCostAction > datos invalidos: une todos los mensajes de Zod > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1140,12 +1261,37 @@ exports[`createIndirectCostAction > datos invalidos: une todos los mensajes de Z
 ]
 `;
 
-exports[`createIndirectCostAction > datos invalidos: une todos los mensajes de Zod > resultado 1`] = `"error: El concepto debe tener al menos 3 caracteres. Debe seleccionar una categoría válida. El monto no puede ser negativo."`;
+exports[`createIndirectCostAction > datos invalidos: une todos los mensajes de Zod > resultado 1`] = `
+{
+  "error": "Revisa los datos del costo indirecto.",
+  "fieldErrors": {
+    "categoria": [
+      "Debe seleccionar una categoría válida.",
+    ],
+    "concepto": [
+      "El concepto debe tener al menos 3 caracteres.",
+    ],
+    "monto": [
+      "El monto no puede ser negativo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "categoria": "agua",
+    "concepto": "ab",
+    "criterio_prorrateo": "Prorrateado por lote",
+    "monto": "-1",
+    "observaciones": "",
+    "periodo": "2026-07",
+  },
+}
+`;
 
 exports[`createIndirectCostAction > el costeo no existe: se revierte > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1153,6 +1299,15 @@ exports[`createIndirectCostAction > el costeo no existe: se revierte > llamadas 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1166,18 +1321,97 @@ exports[`createIndirectCostAction > el costeo no existe: se revierte > llamadas 
     "prisma": "costeo.findUnique",
   },
   {
-    "args": "El costeo seleccionado no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createIndirectCostAction > el costeo no existe: se revierte > resultado 1`] = `"error: El costeo seleccionado no existe."`;
+exports[`createIndirectCostAction > el costeo no existe: se revierte > resultado 1`] = `
+{
+  "error": "El costeo seleccionado no existe.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "categoria": "luz",
+    "concepto": "Consumo de luz del lote",
+    "criterio_prorrateo": "Prorrateado por lote",
+    "monto": "37.80",
+    "observaciones": "",
+    "periodo": "2026-07",
+  },
+}
+`;
+
+exports[`createIndirectCostAction > monto sobre el maximo de la columna: se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createIndirectCostAction > monto sobre el maximo de la columna: se rechaza > resultado 1`] = `
+{
+  "error": "Revisa los datos del costo indirecto.",
+  "fieldErrors": {
+    "monto": [
+      "El monto no debe superar S/ 9,999,999,999.99.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "categoria": "luz",
+    "concepto": "Consumo de luz del lote",
+    "criterio_prorrateo": "Prorrateado por lote",
+    "monto": "10000000000",
+    "observaciones": "",
+    "periodo": "2026-07",
+  },
+}
+`;
+
+exports[`createIndirectCostAction > monto vacio: se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createIndirectCostAction > monto vacio: se rechaza > resultado 1`] = `
+{
+  "error": "Revisa los datos del costo indirecto.",
+  "fieldErrors": {
+    "monto": [
+      "El monto es obligatorio.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "categoria": "luz",
+    "concepto": "Consumo de luz del lote",
+    "criterio_prorrateo": "Prorrateado por lote",
+    "monto": "",
+    "observaciones": "",
+    "periodo": "2026-07",
+  },
+}
+`;
 
 exports[`createIndirectCostAction > registra el costo indirecto y recalcula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1185,6 +1419,15 @@ exports[`createIndirectCostAction > registra el costo indirecto y recalcula > ll
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1301,15 +1544,44 @@ exports[`createIndirectCostAction > registra el costo indirecto y recalcula > ll
 ]
 `;
 
-exports[`createIndirectCostAction > registra el costo indirecto y recalcula > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=indirect-cost-created"`;
+exports[`createIndirectCostAction > registra el costo indirecto y recalcula > resultado 1`] = `
+{
+  "data": {
+    "id_costo_indirecto": "CIN00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "categoria": "luz",
+    "concepto": "Consumo de luz del lote",
+    "criterio_prorrateo": "Prorrateado por lote",
+    "monto": "37.80",
+    "observaciones": "",
+    "periodo": "2026-07",
+  },
+}
+`;
 
 exports[`createMarginAction > con precio final ajustado y motivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1322,10 +1594,6 @@ exports[`createMarginAction > con precio final ajustado y motivo > llamadas 1`] 
       },
     },
     "prisma": "costeo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1382,15 +1650,41 @@ exports[`createMarginAction > con precio final ajustado y motivo > llamadas 1`] 
 ]
 `;
 
-exports[`createMarginAction > con precio final ajustado y motivo > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=margin-created"`;
+exports[`createMarginAction > con precio final ajustado y motivo > resultado 1`] = `
+{
+  "data": {
+    "id_margen": "MGN00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "motivo_ajuste": "Redondeo por negociacion con el cliente",
+    "porcentaje_margen": "15",
+    "precio_final": "1800",
+  },
+}
+`;
 
 exports[`createMarginAction > costo con centimos: fija el orden de la formula del precio sugerido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1403,10 +1697,6 @@ exports[`createMarginAction > costo con centimos: fija el orden de la formula de
       },
     },
     "prisma": "costeo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1463,103 +1753,41 @@ exports[`createMarginAction > costo con centimos: fija el orden de la formula de
 ]
 `;
 
-exports[`createMarginAction > costo con centimos: fija el orden de la formula del precio sugerido > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=margin-created"`;
+exports[`createMarginAction > costo con centimos: fija el orden de la formula del precio sugerido > resultado 1`] = `
+{
+  "data": {
+    "id_margen": "MGN00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "motivo_ajuste": "",
+    "porcentaje_margen": "17",
+    "precio_final": "",
+  },
+}
+`;
 
 exports[`createMarginAction > costo total en cero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
-      "select": {
-        "costo_total": true,
-        "id_costeo": true,
-      },
-      "where": {
-        "id_costeo": "COS00000004",
-      },
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
     },
-    "prisma": "costeo.findUnique",
-  },
-]
-`;
-
-exports[`createMarginAction > costo total en cero > resultado 1`] = `"error: No se puede aplicar margen porque el costo total debe ser mayor que cero."`;
-
-exports[`createMarginAction > el costeo no existe > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "costo_total": true,
-        "id_costeo": true,
-      },
-      "where": {
-        "id_costeo": "COS00000004",
-      },
-    },
-    "prisma": "costeo.findUnique",
-  },
-]
-`;
-
-exports[`createMarginAction > el costeo no existe > resultado 1`] = `"error: El costeo seleccionado no existe."`;
-
-exports[`createMarginAction > margen fuera de rango > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`createMarginAction > margen fuera de rango > resultado 1`] = `"error: El margen máximo permitido es 20%."`;
-
-exports[`createMarginAction > precio final menor que el costo total > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "costo_total": true,
-        "id_costeo": true,
-      },
-      "where": {
-        "id_costeo": "COS00000004",
-      },
-    },
-    "prisma": "costeo.findUnique",
-  },
-]
-`;
-
-exports[`createMarginAction > precio final menor que el costo total > resultado 1`] = `"error: El precio final no puede ser menor que el costo total del producto."`;
-
-exports[`createMarginAction > sin precio final: usa el precio sugerido > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1575,7 +1803,256 @@ exports[`createMarginAction > sin precio final: usa el precio sugerido > llamada
   },
   {
     "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createMarginAction > costo total en cero > resultado 1`] = `
+{
+  "error": "No se puede aplicar margen porque el costo total debe ser mayor que cero.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "motivo_ajuste": "",
+    "porcentaje_margen": "17",
+    "precio_final": "",
+  },
+}
+`;
+
+exports[`createMarginAction > el costeo no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "costo_total": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createMarginAction > el costeo no existe > resultado 1`] = `
+{
+  "error": "El costeo seleccionado no existe.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "motivo_ajuste": "",
+    "porcentaje_margen": "17",
+    "precio_final": "",
+  },
+}
+`;
+
+exports[`createMarginAction > margen fuera de rango > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMarginAction > margen fuera de rango > resultado 1`] = `
+{
+  "error": "Revisa los datos del margen.",
+  "fieldErrors": {
+    "porcentaje_margen": [
+      "El margen máximo permitido es 20%.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "motivo_ajuste": "",
+    "porcentaje_margen": "25",
+    "precio_final": "",
+  },
+}
+`;
+
+exports[`createMarginAction > margen vacio > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMarginAction > margen vacio > resultado 1`] = `
+{
+  "error": "Revisa los datos del margen.",
+  "fieldErrors": {
+    "porcentaje_margen": [
+      "El porcentaje de margen es obligatorio.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "motivo_ajuste": "",
+    "porcentaje_margen": "",
+    "precio_final": "",
+  },
+}
+`;
+
+exports[`createMarginAction > precio final menor que el costo total > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "costo_total": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createMarginAction > precio final menor que el costo total > resultado 1`] = `
+{
+  "error": "El precio final no puede ser menor que el costo total del producto.",
+  "fieldErrors": {
+    "precio_final": [
+      "El precio final no puede ser menor que el costo total del producto.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "motivo_ajuste": "",
+    "porcentaje_margen": "17",
+    "precio_final": "1500",
+  },
+}
+`;
+
+exports[`createMarginAction > precio final no numerico: mensaje en espanol > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMarginAction > precio final no numerico: mensaje en espanol > resultado 1`] = `
+{
+  "error": "Revisa los datos del margen.",
+  "fieldErrors": {
+    "precio_final": [
+      "El precio final debe ser numérico.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "motivo_ajuste": "",
+    "porcentaje_margen": "17",
+    "precio_final": "abc",
+  },
+}
+`;
+
+exports[`createMarginAction > sin el campo de precio final: usa el precio sugerido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "costo_total": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
   },
   {
     "args": {
@@ -1632,15 +2109,144 @@ exports[`createMarginAction > sin precio final: usa el precio sugerido > llamada
 ]
 `;
 
-exports[`createMarginAction > sin precio final: usa el precio sugerido > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=margin-created"`;
+exports[`createMarginAction > sin el campo de precio final: usa el precio sugerido > resultado 1`] = `
+{
+  "data": {
+    "id_margen": "MGN00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "motivo_ajuste": "",
+    "porcentaje_margen": "17",
+    "precio_final": "",
+  },
+}
+`;
+
+exports[`createMarginAction > sin precio final: usa el precio sugerido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "costo_total": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "margen_ganancia",
+      "prefijo": "MGN",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "id_costeo": "COS00000004",
+        "id_margen": "MGN00000001",
+        "id_usuario_aplica": "USU00000001",
+        "motivo_ajuste": null,
+        "porcentaje_margen": 17,
+        "precio_final": 1783.7586,
+        "precio_sugerido": 1783.7586,
+      },
+    },
+    "prisma": "margen_ganancia.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Margen aplicado al costeo COS00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "margen_ganancia",
+      "id_registro_afectado": "MGN00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMarginAction > sin precio final: usa el precio sugerido > resultado 1`] = `
+{
+  "data": {
+    "id_margen": "MGN00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "motivo_ajuste": "",
+    "porcentaje_margen": "17",
+    "precio_final": "",
+  },
+}
+`;
 
 exports[`createProfitabilityAction > costo con centimos: fija el orden de la formula del margen real > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1657,10 +2263,6 @@ exports[`createProfitabilityAction > costo con centimos: fija el orden de la for
       },
     },
     "prisma": "costeo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1719,102 +2321,39 @@ exports[`createProfitabilityAction > costo con centimos: fija el orden de la for
 ]
 `;
 
-exports[`createProfitabilityAction > costo con centimos: fija el orden de la formula del margen real > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=profitability-created"`;
+exports[`createProfitabilityAction > costo con centimos: fija el orden de la formula del margen real > resultado 1`] = `
+{
+  "data": {
+    "id_rentabilidad": "REN00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`createProfitabilityAction > costo total en cero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
-      "include": {
-        "margen_ganancia": {
-          "orderBy": {
-            "fecha_aplicacion": "desc",
-          },
-          "take": 1,
-        },
-      },
-      "where": {
-        "id_costeo": "COS00000004",
-      },
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
     },
-    "prisma": "costeo.findUnique",
-  },
-]
-`;
-
-exports[`createProfitabilityAction > costo total en cero > resultado 1`] = `"error: No se puede calcular rentabilidad porque el costo total debe ser mayor que cero."`;
-
-exports[`createProfitabilityAction > el costeo no existe > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "include": {
-        "margen_ganancia": {
-          "orderBy": {
-            "fecha_aplicacion": "desc",
-          },
-          "take": 1,
-        },
-      },
-      "where": {
-        "id_costeo": "COS00000004",
-      },
-    },
-    "prisma": "costeo.findUnique",
-  },
-]
-`;
-
-exports[`createProfitabilityAction > el costeo no existe > resultado 1`] = `"error: El costeo seleccionado no existe."`;
-
-exports[`createProfitabilityAction > ingreso estimado en cero > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "include": {
-        "margen_ganancia": {
-          "orderBy": {
-            "fecha_aplicacion": "desc",
-          },
-          "take": 1,
-        },
-      },
-      "where": {
-        "id_costeo": "COS00000004",
-      },
-    },
-    "prisma": "costeo.findUnique",
-  },
-]
-`;
-
-exports[`createProfitabilityAction > ingreso estimado en cero > resultado 1`] = `"error: No se puede calcular rentabilidad porque el ingreso estimado debe ser mayor que cero."`;
-
-exports[`createProfitabilityAction > margen real igual al esperado: no es margen bajo > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1834,7 +2373,171 @@ exports[`createProfitabilityAction > margen real igual al esperado: no es margen
   },
   {
     "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createProfitabilityAction > costo total en cero > resultado 1`] = `
+{
+  "error": "No se puede calcular rentabilidad porque el costo total debe ser mayor que cero.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createProfitabilityAction > el costeo no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createProfitabilityAction > el costeo no existe > resultado 1`] = `
+{
+  "error": "El costeo seleccionado no existe.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createProfitabilityAction > ingreso estimado en cero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createProfitabilityAction > ingreso estimado en cero > resultado 1`] = `
+{
+  "error": "No se puede calcular rentabilidad porque el ingreso estimado debe ser mayor que cero.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createProfitabilityAction > margen real igual al esperado: no es margen bajo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
   },
   {
     "args": {
@@ -1893,15 +2596,39 @@ exports[`createProfitabilityAction > margen real igual al esperado: no es margen
 ]
 `;
 
-exports[`createProfitabilityAction > margen real igual al esperado: no es margen bajo > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=profitability-created"`;
+exports[`createProfitabilityAction > margen real igual al esperado: no es margen bajo > resultado 1`] = `
+{
+  "data": {
+    "id_rentabilidad": "REN00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`createProfitabilityAction > precio final bajo el margen esperado: alerta de bajo margen > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1918,10 +2645,6 @@ exports[`createProfitabilityAction > precio final bajo el margen esperado: alert
       },
     },
     "prisma": "costeo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1980,12 +2703,23 @@ exports[`createProfitabilityAction > precio final bajo el margen esperado: alert
 ]
 `;
 
-exports[`createProfitabilityAction > precio final bajo el margen esperado: alerta de bajo margen > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=profitability-created"`;
+exports[`createProfitabilityAction > precio final bajo el margen esperado: alerta de bajo margen > resultado 1`] = `
+{
+  "data": {
+    "id_rentabilidad": "REN00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`createProfitabilityAction > sin costeo en el formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1993,44 +2727,42 @@ exports[`createProfitabilityAction > sin costeo en el formulario > llamadas 1`] 
 ]
 `;
 
-exports[`createProfitabilityAction > sin costeo en el formulario > resultado 1`] = `"error: El costeo es obligatorio."`;
+exports[`createProfitabilityAction > sin costeo en el formulario > resultado 1`] = `
+{
+  "error": "Revisa los datos de la rentabilidad.",
+  "fieldErrors": {
+    "id_costeo": [
+      "El costeo es obligatorio.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`createProfitabilityAction > sin margen aplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
-      "include": {
-        "margen_ganancia": {
-          "orderBy": {
-            "fecha_aplicacion": "desc",
-          },
-          "take": 1,
-        },
-      },
-      "where": {
-        "id_costeo": "COS00000004",
-      },
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
     },
-    "prisma": "costeo.findUnique",
-  },
-]
-`;
-
-exports[`createProfitabilityAction > sin margen aplicado > resultado 1`] = `"error: Primero debes aplicar un margen de ganancia antes de calcular la rentabilidad."`;
-
-exports[`createProfitabilityAction > sin precio final usa el sugerido: rentable, con observaciones > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2050,7 +2782,59 @@ exports[`createProfitabilityAction > sin precio final usa el sugerido: rentable,
   },
   {
     "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createProfitabilityAction > sin margen aplicado > resultado 1`] = `
+{
+  "error": "Primero debes aplicar un margen de ganancia antes de calcular la rentabilidad.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createProfitabilityAction > sin precio final usa el sugerido: rentable, con observaciones > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
   },
   {
     "args": {
@@ -2109,12 +2893,23 @@ exports[`createProfitabilityAction > sin precio final usa el sugerido: rentable,
 ]
 `;
 
-exports[`createProfitabilityAction > sin precio final usa el sugerido: rentable, con observaciones > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=profitability-created"`;
+exports[`createProfitabilityAction > sin precio final usa el sugerido: rentable, con observaciones > resultado 1`] = `
+{
+  "data": {
+    "id_rentabilidad": "REN00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "observaciones": "Rentabilidad aceptable",
+  },
+}
+`;
 
 exports[`recalculateCostingAction > cantidad base en cero: el costo unitario queda vacio > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -2122,6 +2917,15 @@ exports[`recalculateCostingAction > cantidad base en cero: el costo unitario que
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2220,12 +3024,23 @@ exports[`recalculateCostingAction > cantidad base en cero: el costo unitario que
 ]
 `;
 
-exports[`recalculateCostingAction > cantidad base en cero: el costo unitario queda vacio > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=costing-recalculated"`;
+exports[`recalculateCostingAction > cantidad base en cero: el costo unitario queda vacio > resultado 1`] = `
+{
+  "data": {
+    "estado": "recalculado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "COS00000004",
+  },
+}
+`;
 
 exports[`recalculateCostingAction > el costeo no existe: se revierte > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -2233,6 +3048,15 @@ exports[`recalculateCostingAction > el costeo no existe: se revierte > llamadas 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2246,18 +3070,27 @@ exports[`recalculateCostingAction > el costeo no existe: se revierte > llamadas 
     "prisma": "costeo.findUnique",
   },
   {
-    "args": "El costeo seleccionado no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`recalculateCostingAction > el costeo no existe: se revierte > resultado 1`] = `"error: El costeo seleccionado no existe."`;
+exports[`recalculateCostingAction > el costeo no existe: se revierte > resultado 1`] = `
+{
+  "error": "El costeo seleccionado no existe.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "COS00000004",
+  },
+}
+`;
 
 exports[`recalculateCostingAction > recalcula con los costos indirectos vigentes > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -2265,6 +3098,15 @@ exports[`recalculateCostingAction > recalcula con los costos indirectos vigentes
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2363,12 +3205,23 @@ exports[`recalculateCostingAction > recalcula con los costos indirectos vigentes
 ]
 `;
 
-exports[`recalculateCostingAction > recalcula con los costos indirectos vigentes > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=costing-recalculated"`;
+exports[`recalculateCostingAction > recalcula con los costos indirectos vigentes > resultado 1`] = `
+{
+  "data": {
+    "estado": "recalculado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "COS00000004",
+  },
+}
+`;
 
 exports[`recalculateCostingAction > sin costeo en el formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -2376,12 +3229,21 @@ exports[`recalculateCostingAction > sin costeo en el formulario > llamadas 1`] =
 ]
 `;
 
-exports[`recalculateCostingAction > sin costeo en el formulario > resultado 1`] = `"error: Debe seleccionar un costeo válido."`;
+exports[`recalculateCostingAction > sin costeo en el formulario > resultado 1`] = `
+{
+  "error": "Debe seleccionar un costeo válido.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "",
+  },
+}
+`;
 
 exports[`updateLaborCostAction > actualiza la mano de obra y recalcula los totales > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -2389,6 +3251,15 @@ exports[`updateLaborCostAction > actualiza la mano de obra y recalcula los total
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2498,12 +3369,23 @@ exports[`updateLaborCostAction > actualiza la mano de obra y recalcula los total
 ]
 `;
 
-exports[`updateLaborCostAction > actualiza la mano de obra y recalcula los totales > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=costing-updated"`;
+exports[`updateLaborCostAction > actualiza la mano de obra y recalcula los totales > resultado 1`] = `
+{
+  "data": {
+    "id_costeo": "COS00000004",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "costo_mano_obra": "180.5",
+  },
+}
+`;
 
 exports[`updateLaborCostAction > datos invalidos: une todos los mensajes de Zod > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -2511,12 +3393,29 @@ exports[`updateLaborCostAction > datos invalidos: une todos los mensajes de Zod 
 ]
 `;
 
-exports[`updateLaborCostAction > datos invalidos: une todos los mensajes de Zod > resultado 1`] = `"error: El costeo es obligatorio. El costo de mano de obra no puede ser negativo."`;
+exports[`updateLaborCostAction > datos invalidos: une todos los mensajes de Zod > resultado 1`] = `
+{
+  "error": "Revisa el costo de mano de obra.",
+  "fieldErrors": {
+    "costo_mano_obra": [
+      "El costo de mano de obra no puede ser negativo.",
+    ],
+    "id_costeo": [
+      "El costeo es obligatorio.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "costo_mano_obra": "-5",
+  },
+}
+`;
 
 exports[`updateLaborCostAction > el costeo no existe: se revierte > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -2524,6 +3423,15 @@ exports[`updateLaborCostAction > el costeo no existe: se revierte > llamadas 1`]
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2537,10 +3445,101 @@ exports[`updateLaborCostAction > el costeo no existe: se revierte > llamadas 1`]
     "prisma": "costeo.findUnique",
   },
   {
-    "args": "El costeo seleccionado no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateLaborCostAction > el costeo no existe: se revierte > resultado 1`] = `"error: El costeo seleccionado no existe."`;
+exports[`updateLaborCostAction > el costeo no existe: se revierte > resultado 1`] = `
+{
+  "error": "El costeo seleccionado no existe.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "costo_mano_obra": "180",
+  },
+}
+`;
+
+exports[`updateLaborCostAction > mano de obra no numerica > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateLaborCostAction > mano de obra no numerica > resultado 1`] = `
+{
+  "error": "Revisa el costo de mano de obra.",
+  "fieldErrors": {
+    "costo_mano_obra": [
+      "El costo de mano de obra debe ser numérico.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "costo_mano_obra": "abc",
+  },
+}
+`;
+
+exports[`updateLaborCostAction > mano de obra sobre el maximo de la columna: se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateLaborCostAction > mano de obra sobre el maximo de la columna: se rechaza > resultado 1`] = `
+{
+  "error": "Revisa el costo de mano de obra.",
+  "fieldErrors": {
+    "costo_mano_obra": [
+      "El costo de mano de obra no debe superar S/ 9,999,999,999.99.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "costo_mano_obra": "10000000000",
+  },
+}
+`;
+
+exports[`updateLaborCostAction > mano de obra vacia: se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateLaborCostAction > mano de obra vacia: se rechaza > resultado 1`] = `
+{
+  "error": "Revisa el costo de mano de obra.",
+  "fieldErrors": {
+    "costo_mano_obra": [
+      "El costo de mano de obra es obligatorio.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "costo_mano_obra": "",
+  },
+}
+`;

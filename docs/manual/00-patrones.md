@@ -20,6 +20,8 @@ Pantallas renovadas hasta ahora:
 - Usuarios: toda la pantalla.
 - Personal: el inicio, operarios, asistencia diaria, tareas diarias y la
   lista de planillas.
+- Costos: toda el área (inicio, generar costeo, la lista y el detalle de
+  costeos).
 - Reportes: los ocho reportes con filtros, el historial de exportaciones y
   la bitácora de auditoría.
 

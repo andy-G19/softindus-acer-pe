@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { MAX_COST_AMOUNT, MAX_COST_AMOUNT_TEXT, requiredAmount } from "@/schemas/costs/cost-amount";
+
 const validCategories = [
   "luz",
   "desgaste_maquinaria",
@@ -12,13 +14,13 @@ const validCategories = [
 
 export const indirectCostSchema = z.object({
   id_costeo: z
-    .string()
+    .string({ error: "El costeo es obligatorio." })
     .trim()
     .min(1, "El costeo es obligatorio.")
     .max(11, "El identificador del costeo no debe superar 11 caracteres."),
 
   concepto: z
-    .string()
+    .string({ error: "El concepto es obligatorio." })
     .trim()
     .min(3, "El concepto debe tener al menos 3 caracteres.")
     .max(100, "El concepto no debe superar 100 caracteres."),
@@ -27,11 +29,12 @@ export const indirectCostSchema = z.object({
     message: "Debe seleccionar una categoría válida.",
   }),
 
-  monto: z.coerce
-    .number({
-      message: "El monto debe ser numérico.",
-    })
-    .min(0, "El monto no puede ser negativo."),
+  monto: requiredAmount("El monto", {
+    min: 0,
+    minMessage: "El monto no puede ser negativo.",
+    max: MAX_COST_AMOUNT,
+    maxMessage: `El monto no debe superar ${MAX_COST_AMOUNT_TEXT}.`,
+  }),
 
   criterio_prorrateo: z
     .string()

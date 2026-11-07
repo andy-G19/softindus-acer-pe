@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 878 |
+| Archivos fuente analizados | 891 |
 | Páginas | 179 |
 | Páginas en ranuras paralelas (@ranura) | 53 |
 | Páginas que interceptan una ruta | 33 |
-| Declaraciones JSX de formulario | 47 |
+| Declaraciones JSX de formulario | 39 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 111 |
 
@@ -67,9 +67,9 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/commercial/quotes` | — | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 1 | — |
 | `/dashboard/commercial/receipts` | — | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 1 | — |
 | `/dashboard/costs/costings/[id]` | — | `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 0 | — |
-| `/dashboard/costs/costings` | — | `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 1 | — |
+| `/dashboard/costs/costings` | — | `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 0 | — |
 | `/dashboard/costs` | — | `src/app/(dashboard)/dashboard/costs/page.tsx` | 0 | — |
-| `/dashboard/costs/work-orders` | — | `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 1 | — |
+| `/dashboard/costs/work-orders` | — | `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 0 | — |
 | `/dashboard/gallery` | — | `src/app/(dashboard)/dashboard/gallery/page.tsx` | 0 | — |
 | `/dashboard/inventory/alerts` | — | `src/app/(dashboard)/dashboard/inventory/alerts/page.tsx` | 0 | — |
 | `/dashboard/inventory/entries` | — | `src/app/(dashboard)/dashboard/inventory/entries/page.tsx` | 0 | — |
@@ -228,8 +228,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 79 | `{annulQuoteAction}` |
 | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 203 | `{annulQuoteAction}` |
 | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 136 | `{annulReceiptAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 128 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 217 | `{createCostingFromWorkOrderAction}` |
 | `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 83 | `{annulPurchaseAction}` |
 | `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 210 | `{annulPurchaseAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 46 | `{createPettyCashBoxAction}` |
@@ -260,12 +258,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/components/table/row-actions.tsx` | 44 | `{action}` |
 | `src/modules/auth/components/login-form.tsx` | 162 | `{formAction}` |
 | `src/modules/auth/components/logout-button.tsx` | 8 | `{async () => { "use server"; await signOut({ redirectTo: "/login", }); }}` |
-| `src/modules/costs/costings/costing-data-card.tsx` | 66 | `{updateLaborCostAction}` |
-| `src/modules/costs/costings/costing-data-card.tsx` | 91 | `{recalculateCostingAction}` |
-| `src/modules/costs/indirect-costs/indirect-costs-section.tsx` | 75 | `{createIndirectCostAction}` |
-| `src/modules/costs/indirect-costs/indirect-costs-section.tsx` | 227 | `{annulIndirectCostAction}` |
-| `src/modules/costs/margins/margins-section.tsx` | 76 | `{createMarginAction}` |
-| `src/modules/costs/profitability/profitability-section.tsx` | 149 | `{createProfitabilityAction}` |
 | `src/modules/gallery/dialog-demo.tsx` | 72 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/modules/inventory/movements/inventory-output-form.tsx` | 62 | `{formAction}` |
 | `src/modules/production/work-orders/close-materials-form.tsx` | 60 | `{closeWorkOrderMaterialsAction}` |
