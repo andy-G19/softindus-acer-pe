@@ -7346,9 +7346,10 @@ Datos leídos de la API de GitHub el 2026-11-05 (UTC) y comparados con git:
 
 ### Sub-entrega 10.8b — Costos
 
-Fecha: 2026-11-05 (Lima). Estado: código y registro hechos, pendiente de verificar en staging.
-El paso B0 (`4aaef92`) registró la integración de la 10.8a. 7 commits de código y pruebas, de
-`30e5c66` a `4da59aa`, y este registro. Plan en `tmp/e10-diff/plan-10-8b.md`, sobre los pasos y
+Fecha: del 2026-11-05 al 2026-11-06 (Lima). Estado: verificada en staging el 2026-11-06 UTC,
+pendiente de integrar. El paso B0 (`4aaef92`) registró la integración de la 10.8a. 7 commits de
+código y pruebas, de `30e5c66` a `4da59aa`, el registro `0617ba1`, el arreglo del hallazgo 95
+(`9917160`, revertido en `8fbe530`, y `4515b83`) y el cierre. Plan en `tmp/e10-diff/plan-10-8b.md`, sobre los pasos y
 las decisiones D4 a D9 de `plan-10-8.md`, con 4 ajustes aprobados. Solo ADMIN. Ninguna fórmula
 de Costos cambia: los montos se guardan como antes y las diferencias de cada snapshot se
 comprobaron por programa.
@@ -7363,7 +7364,11 @@ comprobaron por programa.
 | 0de5240 | feat | Recalcular (botón normal) y anular indirecto (destructivo) con `ConfirmActionButton` y la consecuencia real (D6). |
 | ec754b1 | feat | Generar costeo con confirmación y navegación; aviso `costing-already-exists`; `ConfirmActionButton` con `onSuccess` y aviso según los datos (D5). |
 | 4da59aa | feat | Costeos con `FilterBar` y `DateRangeFields`; inicio y órdenes sin `<main>`; `costs-links.test.ts`. |
-| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 0617ba1 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 9917160 | fix | `onSuccess` desde un efecto al terminar la transición (hallazgo 95); rompía la navegación. |
+| 8fbe530 | revert | Revierte `9917160`. |
+| 4515b83 | fix | Generar redirige al costeo con su aviso en la URL; `ConfirmActionButton` sin `onSuccess` (hallazgo 95). |
+| este | docs | Cierre: verificación en staging y manual de Costos. |
 
 Ajustes al plan:
 
@@ -7388,11 +7393,10 @@ Diseño:
 - Las acciones devuelven `FormActionState` o `RowStatusState` con `getAuthorizedSession`. Un
   problema detectado dentro de la transacción, antes de escribir, se devuelve desde el callback
   (la transacción termina en `commit` sin escrituras). Un rechazo no revalida.
-- `ConfirmActionButton` suma `onSuccess(data)`, llamado después del aviso, y un aviso que puede
-  depender de los datos de la respuesta (lo calcula un componente cliente). Los usos anteriores no
-  cambian.
-- Las páginas pasan cada aviso con su clave literal: las 7 claves de Costos se emiten ahora desde
-  el detalle y la lista de órdenes, ninguna por `?toast=`.
+- `ConfirmActionButton` sumó `onSuccess(data)` y un aviso según los datos para generar; los quitó
+  `4515b83`, que hace redirigir a la acción (hallazgo 95). `successNotification` queda opcional.
+- Las páginas pasan cada aviso con su clave literal: 5 claves de Costos se emiten desde el detalle;
+  `costing-created` y `costing-already-exists`, desde el `?toast=` de la acción de generar.
 
 Evidencia:
 
@@ -7438,6 +7442,119 @@ Hallazgos de la implementación:
 94. `ConfirmDeleteButton` deja de usarse en Costos (la sección de indirectos, un módulo): las
     páginas que lo usan siguen siendo 9.
 
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e108b-huella`) y etiquetas `e108b/`, copiadas de las de la 10.8a
+  por `c-e108b-guiones.py`; la página comprobó los 5 SHA-256 de `e108b-guiones.sha256`. Plan en
+  `plan-verificacion-10-8b.md`.
+- 9 capturas por fase: 6 de Costos (4 a 1281×900 y 2 a 376×900) y 3 de control (campañas,
+  clientes y galería).
+- Datos elegidos en el «antes», solo leyendo (`datos-verificacion-10-8b.md`): `<COS>` COS00000002,
+  con sus 9 indirectos ya anulados. Predicción antes de cada push en `prediccion-10-8b.md`;
+  resultados en `resultados-10-8b.md`; registro en `registro-10-8b.tsv` (18 filas).
+- Solo ADMIN: Costos es solo del administrador; el vendedor y el maestro de taller los fijan
+  `costs-links.test.ts` y `action-access.test.ts`.
+- Antes de cada envío que debía rechazarse se comprobó la condición por id (`FormData` y el costo
+  total en pantalla); antes de cada guardado, lo elegido; antes de cada clic en una lista con
+  varias filas, la fila del botón con hover y script. Cada escritura de dinero se autorizó en su
+  turno con la orden y los montos esperados.
+
+Publicación y medición, todo el 2026-11-06 UTC (de las 01:00 a las 12:17):
+
+- «Antes» sobre `7b56516` (CSS servido `3-zkl1ajmwbdw.css`, 112.462 bytes).
+- Push de 9 commits (de `4aaef92` a `0617ba1`): CI #140 en verde, de 01:20:13 a 01:25:07 UTC, y
+  Vercel `success` (despliegue de las 01:21:58 UTC). El CSS servido cambió a `3zy2beb8e6sdq.css`,
+  112.315 bytes: 147 menos, sin `xl:grid-cols-7`, como se predijo.
+- Los 3 controles dieron hash y texto iguales. Las 6 capturas de Costos cambian de hash y de texto
+  como se predijo (inicio 390 → 398 elementos, lista 406 → 427, detalle 649 → 665, órdenes
+  404 → 375); se revisaron por el número de elementos y por las tareas, no registro a registro.
+- El fix `9917160` (CI #141), su reversión `8fbe530` (CI #142) y el arreglo `4515b83` (CI #143,
+  Vercel `success` a las 11:46:42) no cambiaron el CSS servido.
+
+Ajustes al plan de verificación:
+
+- No había órdenes de reposición de stock sin costeo: los costeos de prueba se hicieron sobre
+  pedidos de clientes (OTR00000004 en el «antes» y OTR00000002 en el «después»).
+- T137 (mano de obra sobre el máximo) se pasó al costeo de prueba: con el código viejo el intento
+  llegaba a la base sobre un costeo real.
+- T140 (anular y cancelar) no se pudo hacer sobre COS00000002, con todos sus indirectos anulados;
+  anular se midió en T148. T144 se saltó: al volver, la lista ya venía actualizada. T145 se saltó:
+  sin margen, la sección de rentabilidad no tiene formulario.
+
+Tareas (ADMIN):
+
+| Tarea | Antes (`7b56516`) | Después |
+|---|---|---|
+| T134 Inicio de Costos | 1 `main` anidado | Ninguno; los mismos enlaces más COS00000006 |
+| T135 Concepto «ab» | Página de error | Error en Concepto con el foco; alerta en la sección; el monto conservado |
+| T136 Precio final bajo el costo | Página de error | Error en Precio final con el foco; el 15 % conservado |
+| T137 Mano de obra sobre el máximo | Página de error; nada guardado | Error en el campo con el foco; no llega a la base |
+| T138 Rango invertido | Se envía y filtra sin aviso | «Hasta» con `min`; el navegador no envía |
+| T139 Recalcular y cancelar | Recalculaba al pulsar | Confirmación con el botón normal; Cancelar no ejecuta nada y devuelve el foco |
+| T141 Generar y cancelar | Generaba al pulsar | Confirmación con lo que calcula; Cancelar no ejecuta nada |
+| T143 Generar | COS00000006: 62.30 / 6.23, con `?toast=` | COS00000007: 1,233.94 / 103.00; un aviso; navega al costeo |
+| T146 Mano de obra 25.00 | 87.30 / 8.73 | 1,258.94 / 105.09; el campo conserva el monto, sin navegar |
+| T147 Indirecto «Prueba 108b» | CIN00000013: 97.30 / 9.73 | CIN00000014: 1,268.94 / 105.92; el formulario se vacía |
+| T148 Anular el indirecto | SweetAlert genérico; 87.30 | Confirmación destructiva con la consecuencia; foco en la fila; 1,258.94 |
+| T149 Recalcular | Al pulsar; sin cambio | Confirmación con el botón normal; sin cambio |
+| T150 Margen 15 % | MGN00000005: 100.40 | MGN00000006: 1,447.78 |
+| T151 Rentabilidad | REN00000006: 13.10, 15.01 %, Rentable | REN00000007: 188.84, 15.00 %, Rentable, sin alerta |
+| T142 Bitácora | 7 entradas | 7 entradas con las mismas acciones; ninguna de los rechazos |
+
+Todos los montos salieron como se predijeron antes de pulsar, salvo T151 del «antes» (hallazgo 98).
+
+Hallazgo 95 y su arreglo:
+
+- En T143 del «después», Atrás desde el costeo nuevo no volvía a las órdenes por costear: la
+  entrada se había reemplazado. Reproducido en una app mínima con el mismo Next en producción
+  (`tmp/e10-diff/nav-repro`): el reductor de la server action resuelve la promesa antes de aplicar
+  su propia navegación por la revalidación; el `router.push` del botón llega con la acción
+  pendiente, la cola la descarta y el push y el `REFRESH` se confirman juntos, con
+  `replaceState`. Perdía la entrada 5 de 7 veces.
+- `9917160` llamó a `onSuccess` desde un efecto al terminar la transición (7 de 7 en la app
+  mínima). En staging, sobre OTR00000005 (COS00000008: 5,100,000.00 / 51,000.00), **no navegó**:
+  el mismo render que termina la transición repinta la lista sin la orden y el botón se desmonta
+  antes de su efecto. La app mínima y la prueba dejaban el botón montado. Se revirtió en `8fbe530`.
+- `4515b83` (opción A, aprobada): la acción de generar redirige al costeo con
+  `?toast=costing-created` o `?toast=costing-already-exists`, como recomienda la guía de Next para
+  navegar después de una mutación; el reductor de la acción aplica la navegación con `push`.
+  `ConfirmActionButton` deja `successNotification` opcional y pierde `onSuccess` y el aviso según
+  los datos, sin otros usos. En la app mínima, con el botón desmontándose: el código viejo perdía
+  la entrada 2 de 3, el efecto no navegaba 2 de 2, y `redirect` dio `push` 8 de 8. Mutaciones 10
+  de 10; 4.586 pruebas (una menos: la prueba del botón de generar pasa de 2 casos de éxito a 1).
+- En staging, sobre OTR00000003: COS00000009 (5,100,000.00 / 51,000.00), `push` al costeo con
+  `?toast=costing-created`, el aviso y la URL limpia; **Atrás vuelve a las órdenes por costear**.
+
+Datos de prueba, con autorización del responsable en cada turno de escritura:
+
+- COS00000006 (OTR00000004) y COS00000007 (OTR00000002), cada uno con mano de obra 25.00, un
+  indirecto «Prueba 108b» anulado (CIN00000013, CIN00000014), un margen del 15 % (MGN00000005,
+  MGN00000006) y una rentabilidad (REN00000006, REN00000007).
+- COS00000008 (OTR00000005) y COS00000009 (OTR00000003), solo generados.
+- 16 entradas de bitácora. Ningún costeo existente cambió; ya no quedan órdenes sin costeo en
+  staging.
+
+Hallazgos de la verificación:
+
+95. Generar un costeo borraba del historial las órdenes por costear (carrera entre el
+    `router.push` del cliente y la navegación de la revalidación). Corregido en `4515b83`.
+96. Método: el primer arreglo se validó en una app mínima a la que le faltaba una condición de la
+    pantalla real (el botón se desmonta con su fila) y rompió la navegación en staging. La app
+    mínima se rehízo con esa condición antes de elegir el segundo.
+97. Método: el panel del navegador perdió la sesión cuatro veces: dos por inactividad
+    (`/login?reason=idle` de producción), una al cerrarse y otra por la protección de Vercel
+    (`accounts.google.com`). No se hizo nada en ninguna; el responsable entró cada vez y se
+    comprobó el origen en una llamada aparte.
+98. Fallo de la predicción: T151 del «antes» se predijo 13.095 y 15.00 %, sin contar que la
+    rentabilidad lee el precio final ya guardado con dos decimales (100.40). Se corrigió antes de
+    pulsar: 13.10 y 15.01 %.
+99. Método: un clic de T148 del «antes» se mandó con un `ref` equivocado y la herramienta lo
+    rechazó sin pulsar nada.
+
+El manual suma el capítulo de Costos, y el de patrones lo cuenta entre las pantallas renovadas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -7462,7 +7579,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, cerrada, con CI #131 verde en main, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos; la 10.7b, cerrada, con CI #135 verde en main, 9 huellas del «después» (3 controles iguales y 6 como se predijo) y los hallazgos 17 a 22 y 26 corregidos; la 10.8, partida en 10.8a y 10.8b; la 10.8a, cerrada, con CI #139 verde en main, 17 huellas del «después» (3 controles iguales, 3 solo con `main` → `div` y 11 como se predijo, el inicio además con los datos de prueba) y los hallazgos 58 a 63, 67 a 71 y 73 corregidos; la 10.8b, código y registro hechos, pendiente de verificar en staging) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, cerrada, con CI #131 verde en main, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos; la 10.7b, cerrada, con CI #135 verde en main, 9 huellas del «después» (3 controles iguales y 6 como se predijo) y los hallazgos 17 a 22 y 26 corregidos; la 10.8, partida en 10.8a y 10.8b; la 10.8a, cerrada, con CI #139 verde en main, 17 huellas del «después» (3 controles iguales, 3 solo con `main` → `div` y 11 como se predijo, el inicio además con los datos de prueba) y los hallazgos 58 a 63, 67 a 71 y 73 corregidos; la 10.8b, verificada en staging con CI #140 a #143 verdes, 9 huellas del «después» (3 controles iguales y 6 como se predijo), los hallazgos 64, 65, 66 y 72 corregidos y el 95 corregido en `4515b83`, pendiente de integrar) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
