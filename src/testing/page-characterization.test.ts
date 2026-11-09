@@ -803,7 +803,7 @@ describe("esquema real", () => {
     const { readFileSync } = await import("node:fs");
     const schema = parsePrismaSchema(readFileSync("prisma/schema.prisma", "utf8"));
 
-    expect(schema.size).toBe(62);
+    expect(schema.size).toBe(63);
     expect(schema.get("cliente")?.find((field) => field.name === "pedido")).toMatchObject({
       isList: true,
       isRelation: true,
