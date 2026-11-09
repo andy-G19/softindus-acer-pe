@@ -3065,9 +3065,10 @@ Datos leídos de la API de GitHub el 2026-10-15 y comparados con git:
 
 ## Entrega 10 — Catálogos, listados y resto de dominios
 
-Fecha: desde el 2026-10-15. Estado: en curso; plan aprobado por el
-responsable el 2026-10-15. El paso 0 (`62640e1`) registró la integración de
-la entrega 9 en `main`.
+Fecha: del 2026-10-15 al 2026-11-07, día en que se integró la 10.8b. Estado:
+cerrada el 2026-11-09; plan aprobado por el responsable el 2026-10-15. El
+paso 0 (`62640e1`) registró la integración de la entrega 9 en `main`. El
+balance está en «Cierre de la entrega 10», después de la 10.8b.
 
 Es la tercera entrega de la pista B y cubre las fases 4 y 7 del plan maestro:
 los catálogos, los listados y el resto de dominios adoptan los patrones del
@@ -3198,7 +3199,7 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3a | Migrado |
 | Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Migrado |
 | Productos | Comercial | ADMIN | Páginas, desviación | Panel lateral | 10.4a | Migrado |
-| Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4c | Pendiente |
+| Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4c | Migrado |
 | Máquinas | Mantenimiento | ADMIN | Páginas, desviación | Panel lateral | 10.5a | Migrado |
 | Repuestos | Mantenimiento | ADMIN | Páginas, desviación; alta auxiliar de proveedor | Panel lateral | 10.5a | Migrado |
 | Fallas | Mantenimiento | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.5b | Migrado |
@@ -3231,7 +3232,7 @@ destructivas confirman:
 | 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto (migradas) |
 | 10.3 | Inactivar material y atender alerta de stock (10.3a, migradas); inactivar proveedor y material de proveedor (10.3b, migradas) |
 | 10.4 | Inactivar cliente, producto y categoría de producto (10.4a, migradas) |
-| 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
+| 10.5 | Inactivar máquina y repuesto (10.5a; se retiran `updateMachineStatusAction`, D4, y `updateSparePartStatusAction`, sin pantalla); cambiar el estado de falla, preventivo y reparación (10.5b); todas migradas |
 | 10.6 | Inactivar ruta y etapa (10.6a, migradas); inactivar receta; marcar versión vigente; anular versión; borrar detalle de receta (10.6b, migradas) |
 | 10.7 | Cambiar el estado de campaña y de retazo (10.7a); activar y desactivar usuario (10.7b); todas migradas |
 | 10.8 | Inactivar operario y cancelar tarea (10.8a); generar costeo desde una orden, recalcular costeo y anular costo indirecto (10.8b): todas migradas |
@@ -7574,6 +7575,173 @@ Datos leídos de la API de GitHub el 2026-11-09 (UTC) y comparados con git:
   las 12:19:29 UTC). La sub-entrega no trae migraciones (sin cambios en
   `prisma/`).
 
+### Cierre de la entrega 10
+
+Cerrada el 2026-11-09, con la 10.8b integrada en `main` (CI #146). La entrega se partió en 16
+sub-entregas, cada una publicada, verificada en staging e integrada por separado. El paso C0 del
+cierre (`9987085`) registró la integración de la 10.8b. Este cierre solo cambia documentación.
+
+| Sub-entrega | Área | PR | Merge commit | Fecha del merge (UTC) | CI en `main` |
+|---|---|---|---|---|---|
+| 10.1 | Bases y catálogos breves | #23 | `9f52808` | 2026-10-17 | #79 |
+| 10.2 | Reportes y auditoría | #24 | `9dc6dd9` | 2026-10-18 | #84 |
+| 10.3a | Materiales y alertas | #25 | `13ea654` | 2026-10-19 | #89 |
+| 10.3b | Proveedores y asociaciones | #26 | `28d12a7` | 2026-10-21 | #93 |
+| 10.3c | Listados con fechas e inicio de Inventario | #27 | `cb43290` | 2026-10-24 | #97 |
+| 10.4a | Productos, estados e inicio de Comercial | #28 | `3545faf` | 2026-10-27 | #101 |
+| 10.4b | Listados de Comercial con fechas y `Badge` | #29 | `745229c` | 2026-10-28 | #105 |
+| 10.4c | Pedidos, la superficie amplia | #30 | `3ed8001` | 2026-10-29 | #109 |
+| 10.5a | Máquinas, repuestos e inicio de Mantenimiento | #31 | `1cd778b` | 2026-10-30 | #114 |
+| 10.5b | Fallas, preventivos y reparaciones | #32 | `27070b0` | 2026-11-01 | #118 |
+| 10.6a | Rutas, etapas y listados | #33 | `59f288e` | 2026-11-02 | #122 |
+| 10.6b | Recetas, versiones y detalles | #34 | `6c4e605` | 2026-11-02 | #127 |
+| 10.7a | Campañas y mermas | #35 | `a57b520` | 2026-11-03 | #131 |
+| 10.7b | Usuarios | #36 | `24163e7` | 2026-11-03 | #135 |
+| 10.8a | Personal | #37 | `6bfb5ae` | 2026-11-05 | #139 |
+| 10.8b | Costos | #38 | `aefe1df` | 2026-11-07 | #146 |
+
+La fecha es la del commit de merge en UTC (`TZ=UTC git log --date=format-local`); el estado de
+cada CI y el despliegue de producción están en la «Integración en `main`» de cada sub-entrega.
+
+#### Cobertura del plan contra lo hecho
+
+- Formularios: los 31 de las tablas de cobertura están migrados, más los 2 de la entrega 9. Cada
+  uno tiene la presentación decidida (ventana breve, panel lateral, superficie amplia o sección
+  del detalle) y devuelve un resultado; ninguno redirige al negar el permiso.
+- Acciones de fila: las 32 están migradas. Las destructivas confirman con la entidad, la
+  consecuencia real y el verbo; las que fijan un estado lo hacen con un `compare-and-set` o con
+  la fila bloqueada.
+- Listados: todos usan `FilterBar` salvo 3 formularios GET de la entrega 11 o que piden un
+  parámetro: los movimientos de caja chica, el mes del resumen de caja y la cantidad de los
+  requerimientos de una versión.
+- Enlaces: cada área renovada tiene su prueba (`*-links.test.ts`), que abre cada enlace con
+  cada rol y falla si la pantalla de destino lo rechaza.
+- Manual: un capítulo por área renovada en `docs/manual/` y las reglas comunes en
+  `00-patrones.md`.
+
+Quedan para la entrega 11, según el límite del plan, 29 operaciones en 16 archivos de acciones:
+
+| Área | Operaciones | Acciones | Caracterizadas |
+|---|---|---|---|
+| Comercial | Proformas (crear, anular), comprobantes (crear, anular), pagos de cliente, cancelar pedido | 6 | Ninguna (`orders/actions.test.ts` no cubre cancelar) |
+| Inventario | Compras (crear, anular), pago a proveedor, salida de inventario | 4 | Compras y salida |
+| Producción | Órdenes de trabajo (crear y 7 operaciones) y avances (3) | 11 | Todas |
+| Caja chica | Apertura, gasto, ingreso o ajuste, anulación de movimiento | 4 | Ninguna |
+| Mermas | Venta de chatarra (crea un movimiento de caja) | 1 | No |
+| Personal | Generar y anular planilla, registrar el pago a un operario | 3 | No |
+
+Con ellas quedan: la salida de inventario, única función de `useActionState` que redirige al
+negar el permiso, y la última copia local de `FieldError`; 9 páginas con `<main>` anidado (7 de
+caja chica y 2 de proformas); 9 páginas con `ConfirmDeleteButton`, que con la demo de la
+galería es el único uso de `showConfirm` de SweetAlert; `StatusBadge` (solo en la galería) y `RowToggleStatusButton` (sin
+usos, hallazgo 74); el adaptador `legacy-industrial-dark.css` (25 reglas, 40 selectores; lo
+consumen el shell y el login); un `error.tsx` para el panel; y la paridad de filtros de 5
+reportes (hallazgo 1 de la 10.2).
+
+#### Métricas al inicio y al final
+
+Medidas con `/verificar` y los guiones de la entrega sobre `62640e1` (inicio) y `82b6335`
+(final, igual a `main` en `aefe1df`). `npm run check` terminó con código 0 sobre `82b6335`:
+lint sin errores (un aviso anterior, `_line` sin usar en `orders/actions.ts`, de `8626f18`), 249
+archivos de prueba con 4.586 pruebas y el build. El CSS compilado es igual byte a byte al de B7
+de la 10.8b (112.316 bytes).
+
+| Métrica | Inicio (`62640e1`) | Final (`82b6335`) |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 125 / 1.975 | 249 / 4.586 |
+| Páginas `page.tsx` (las rutas interceptadas suman paneles) | 131 | 179 |
+| Funciones de `useActionState` que redirigen al negar el permiso | 30 | 1 |
+| Activar e inactivar que leen el estado y escriben el contrario | 12 | 0 |
+| Copias locales de `FieldError` | 14 | 1 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 109 | 9 |
+| Formularios GET / combinaciones de clases | 42 / 26 | 3 / 3 |
+| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 1 |
+| Listados que cortan el último día con `lte` (sobre `2d9ca08`) | 17 | 1 |
+| Claves `?toast=` caracterizadas | 125 / 125 | 130 / 130 |
+| Páginas con `ConfirmDeleteButton` | 14 | 9 |
+| Archivos con `StatusBadge`, sin pruebas ni snapshots | 8 | 3 (el componente y 2 secciones de la galería) |
+| Archivos con `RowToggleStatusButton`, sin pruebas ni snapshots | 11 | 1 (su definición) |
+| Usos de `showConfirm` fuera de la fachada (`ConfirmDeleteButton` y la demo de la galería) | 2 | 2 |
+| Definiciones locales de `formatDecimal` | 17 | 15 |
+| Páginas con Prisma directo / `auth()` directo en `src/modules` / copias de `toNumber`, `formatMoney` y `formatDate` / archivos que importan las librerías de notificaciones | 0 / 0 / 0 / 2 | 0 / 0 / 0 / 2 |
+
+Contra la última sub-entrega (10.8b sobre `4da59aa`) solo cambian las pruebas: 4.587 → 4.586,
+porque `4515b83` deja un solo caso de éxito en el botón de generar costeo.
+
+Los archivos más grandes de `src` son pruebas y el arnés (1.335, 1.180 y 1.180 líneas). Los de
+producción son el reporte de mantenimiento (748), `commercial/products/actions.ts` (696) y el
+detalle de orden de trabajo (643).
+
+Tiempo de preparación medido desde la 10.4c (del rojo de cada paso al último `npm run check` en
+verde, sin esperas ni verificación): entre 0,24 y 0,47 de lo estimado en bruto por sub-entrega.
+La verificación en staging no se midió igual: con datos, predicción y autorizaciones, cada una
+llevó varias horas.
+
+#### Hallazgos abiertos y su destino
+
+Todos los hallazgos de las sub-entregas que no están corregidos ni son de método. Destinos: la
+entrega 11 con su sub-entrega propuesta, un `fix` propio (grupo 5 de fixes, con prueba que falla
+primero) o una decisión de negocio del responsable. «Sin acción» es lo que se registró como
+diseño o sin forma de comprobarlo.
+
+| Origen | Hallazgo | Destino |
+|---|---|---|
+| 10.8a (D8) | 57: tarifa diaria en la planilla y por hora en el costeo | Decisión de negocio |
+| 10.3c | 3 y 4: los filtros y los valores por defecto usan el día UTC; una fecha inexistente en la URL; también 8 de la 10.4a (pedidos después de las 19:00) y 12 de la 10.5b | Decisión de negocio |
+| 10.3a | 2: la alerta compara el stock actual y «Críticos» el disponible | Decisión de negocio |
+| 10.3a | 8: atender una alerta no escribe bitácora | Decisión de negocio |
+| 10.3a, 10.4a | 5 y 10: los filtros de proveedor y de cliente de dos reportes solo ofrecen activos | Decisión de negocio |
+| 10.4a | 15: el filtro «Producto» de pedidos ofrece inactivos | Decisión de negocio |
+| 10.4b | 3: el filtro «Estado» de pedidos no ofrece «en producción» | Decisión de negocio |
+| 10.4c | 2: «Cantidad» con `min="1"` y el esquema acepta cualquier positivo | Decisión de negocio |
+| Auditoría de la 10.5 | 12, y 1 y 2 de la 10.5b: reglas de anular y ejecutar reparaciones sobre la falla y la máquina | Decisión de negocio |
+| 10.5b | 3: totales de reparaciones anteriores a `03dbb97` (migración de datos) | Decisión de negocio |
+| 10.6a | R3 y R4: anular una versión sin receta activa; base anulada para una versión nueva | Decisión de negocio |
+| 10.7a | 9: nadie escribe `cantidad_producida` de campañas (D5), antes de la 11.6 | Decisión de negocio |
+| 10.7a | 10: finalizar o anular pisa `fecha_fin` | Decisión de negocio |
+| 10.7a | 28: campañas redondea con `toFixed` (1.005 → 1.00) y la base daría 1.01 | Decisión de negocio |
+| 10.7b | 23: restablecer no cierra sesiones (columna nueva); 24: último administrador; 25: `usuario` distingue mayúsculas | Decisión de negocio |
+| 10.2 | 1: paridad de filtros de 5 reportes en `screen-parity.test.ts` | E11 (11.1) |
+| 10.3a | 3: las salidas no crean alertas y editar el mínimo no las reevalúa | E11 (11.2), con decisión |
+| 10.3c | 5: pagos a proveedores sin paginar | E11 (11.2) |
+| 10.4a | 7: `updateOrderAction` decide fuera de la transacción, como cancelar (H11) | E11 (11.3) |
+| 10.4a | 9: proformas, comprobantes y pagos de cliente sin paginar | E11 (11.3) |
+| 10.4b | 4: tipo y método de pago se muestran como se guardan | E11 (11.3) |
+| 10.4b | 5: el detalle de proforma no recibe `returnTo` | E11 (11.3) |
+| 10.4c | 1: la edición muestra el formulario de un pedido anulado | E11 (11.3) |
+| 10.3c | 2: la última copia que corta con `lte` (movimientos de caja chica) | E11 (11.4) |
+| 10.3a | 7: una entrega a una orden puede actualizar una alerta recién atendida | E11 (11.6) |
+| 10.6a, 10.7a | R5 y 11: `createWorkOrder` decide fuera de la transacción y sin bloquear | E11 (11.6) |
+| 10.6b | 27: el detalle de orden resta el stock reservado sin redondear | E11 (11.6) |
+| 10.8a | 74: `RowToggleStatusButton` sin usos | E11 (11.7) |
+| 10.3b | 12: con un dato repetido, el mismo mensaje en la alerta y en el campo | E11 (11.7), con decisión |
+| 10.3b | 5: el alta rápida de proveedor desde repuestos no tiene unicidad | E11 (11.7), con la idempotencia |
+| 10.6a | 13: el tipo del alta rápida de proveedor es un `<select>` controlado dentro de `ActionForm` | E11 (11.7) |
+| 10.3c, 10.6a | 6 y 22: «Todavía no hay … registradas» también con un filtro sin resultados | E11 (11.7) |
+| 10.6a | 15: los paneles de otras áreas no doblan `RouteSheet` en el arnés | E11 (11.7) |
+| 10.7a | 36: Atrás restaura los filtros GET escritos (todas las listas con `FilterBar`) | Fix propio, con `autoComplete="off"` y verificación en navegador |
+| 10.2 | 5: el maestro de taller no tiene enlace a los reportes de inventario y mantenimiento | Fix propio (navegación) |
+| 10.4c, 10.6b | 5 y 30: los errores de línea van por posición y se desalinean al quitar una línea | Fix propio |
+| 10.6b | 29: «La versión ya estaba vigente.» sin revalidar la lista | Fix propio |
+| 10.6a | R2: los KPI «Total» de etapas y recetas cuentan lo filtrado | Fix propio |
+| 10.5a, 10.5b, 10.6a, 10.7a | 2; 4, 5 y 13; R1 y R6; 15 y 34: textos y copias (tarjeta «Acceso: ADMIN.», «Recomendacion», mensajes sin tilde, ejemplo cortado, nota de stock de la receta, comentario sobrante, «Disponible» en chatarra, «Volver a chatarra») | Fix propio (textos) |
+| 10.7b | 42: `versions-confirmation.test.ts` roza su límite de 5 s con la máquina cargada | Fix propio (pruebas) |
+| 10.5a | 8: el buscador de `SearchableSelect` abre filtrado por la opción elegida | Fix propio, con decisión |
+| 10.2 | 6: Safari no enfoca el botón pulsado | Sin acción (no se pudo comprobar sin Safari) |
+| 10.5a | 3: la marca «Inactivo» no está en el HTML del servidor | Sin acción (la cubre una prueba) |
+| 10.7b | 47: `count_105b_get_forms.py` no cuenta `action={variable}` | Sin acción en el código (guion de medición) |
+
+Lecciones que pasan a la entrega 11, además de las de cada sub-entrega:
+
+- Una acción que debe llevar a otra página redirige ella; nunca `router.push` después de una
+  acción que revalida (hallazgo 95, en `CLAUDE.md`).
+- Una app mínima que reproduce un fallo tiene todas las condiciones de la pantalla real
+  (hallazgo 96), y un arreglo de navegación se verifica en staging.
+- Antes de cada escritura en staging se comprueba el origen en una llamada aparte; antes de un
+  envío que debe rechazarse, la condición por id; antes de guardar, lo elegido (hallazgos 37 y
+  38 de la 10.6b, 97 de la 10.8b).
+- Una predicción de montos usa lo que la base guarda (hallazgo 98).
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -7598,8 +7766,8 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, cerrada, con CI #131 verde en main, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos; la 10.7b, cerrada, con CI #135 verde en main, 9 huellas del «después» (3 controles iguales y 6 como se predijo) y los hallazgos 17 a 22 y 26 corregidos; la 10.8, partida en 10.8a y 10.8b; la 10.8a, cerrada, con CI #139 verde en main, 17 huellas del «después» (3 controles iguales, 3 solo con `main` → `div` y 11 como se predijo, el inicio además con los datos de prueba) y los hallazgos 58 a 63, 67 a 71 y 73 corregidos; la 10.8b, cerrada, con CI #146 verde en main, 9 huellas del «después» (3 controles iguales y 6 como se predijo), los hallazgos 64, 65, 66 y 72 corregidos y el 95 corregido en `4515b83`) |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
+| 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Siguiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
@@ -7622,7 +7790,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 249 / 4.587 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 249 / 4.586 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -8023,6 +8191,15 @@ Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e8d77ae`:
 Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de
 `FieldError` en 6; y los cambios de estado que voltean en 2.
+
+Actualizado en el cierre de la entrega 10 (2026-11-09) sobre `82b6335`, igual a `main`
+(`aefe1df`): pruebas 249 / 4.586, una menos que en `4da59aa` por `4515b83`. Las demás filas
+no cambian, medidas de nuevo: páginas con Prisma directo 0, `auth()` directo 0, copias
+locales de conversión y formato 0, `import` de las librerías de notificaciones en 2
+archivos, desviación 1, cambios de estado que voltean 0, copias de `FieldError` 1, `<main>`
+anidado 9, formularios GET 3 con 3 combinaciones, pantallas con rango sin `DateRangeFields`
+1, claves `?toast=` 130 y el adaptador `industrial-dark` con 25 reglas y 40 selectores. La
+comparación con el inicio de la entrega está en «Cierre de la entrega 10».
 
 Actualizado en la sub-entrega 10.8b (2026-11-05) sobre `4da59aa`:
 
