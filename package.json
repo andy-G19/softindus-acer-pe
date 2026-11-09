@@ -19,6 +19,7 @@
     "db:migrate": "prisma migrate dev",
     "postinstall": "prisma generate",
     "test": "vitest run",
+    "test:integration": "vitest run --project integration",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
   },
