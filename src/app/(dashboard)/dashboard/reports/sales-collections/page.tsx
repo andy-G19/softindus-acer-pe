@@ -41,6 +41,10 @@ import {
   getSalesCollectionsReportData,
   getSalesCollectionsReportFilterOptions,
 } from "@/modules/reports/sales-collections/queries";
+import {
+  getCollectionSummary,
+  matchesCollectionStatus,
+} from "@/modules/reports/sales-collections/collection-status";
 import { ExportRangeNotice } from "@/modules/reports/export-range-notice";
 import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
@@ -75,42 +79,6 @@ function getCollectionStatusLabel(status: string) {
     COLLECTION_STATUS_OPTIONS.find((option) => option.value === status)?.label ??
     status
   );
-}
-
-function getPaymentTotalByType(
-  payments: {
-    tipo_pago: string;
-    monto_pagado: unknown;
-  }[],
-  type: string,
-) {
-  return payments.reduce((sum, payment) => {
-    if (payment.tipo_pago !== type) {
-      return sum;
-    }
-
-    return sum + toNumber(payment.monto_pagado);
-  }, 0);
-}
-
-function getCollectionStatus(data: {
-  hasQuote: boolean;
-  totalPaid: number;
-  pendingBalance: number;
-}) {
-  if (!data.hasQuote) {
-    return "sin_proforma";
-  }
-
-  if (data.totalPaid <= 0 && data.pendingBalance > 0) {
-    return "sin_pago";
-  }
-
-  if (data.pendingBalance > 0) {
-    return "con_saldo";
-  }
-
-  return "pagado";
 }
 
 type ReportFilterValues = Record<
@@ -273,52 +241,16 @@ export default async function SalesCollectionsReportPage({
       const payments = quote?.pago_cliente ?? [];
 
       const quotedAmount = toNumber(quote?.monto_total);
-      const initialAdvance = toNumber(quote?.adelanto_inicial);
-      const advancePayments = getPaymentTotalByType(payments, "adelanto");
-      const amortizationPayments = getPaymentTotalByType(
-        payments,
-        "amortizacion",
-      );
-      const cancellationPayments = getPaymentTotalByType(
-        payments,
-        "cancelacion",
-      );
-
-      const totalPaid =
-        initialAdvance +
-        advancePayments +
-        amortizationPayments +
-        cancellationPayments;
-
-      const pendingBalance = quote ? toNumber(quote.saldo) : 0;
-
-      const currentCollectionStatus = getCollectionStatus({
-        hasQuote: Boolean(quote),
-        totalPaid,
-        pendingBalance,
-      });
 
       return {
         order,
         quote,
         payments,
         quotedAmount,
-        initialAdvance,
-        advancePayments,
-        amortizationPayments,
-        cancellationPayments,
-        totalPaid,
-        pendingBalance,
-        collectionStatus: currentCollectionStatus,
+        ...getCollectionSummary(quote),
       };
     })
-    .filter((row) => {
-      if (!collectionStatus) {
-        return true;
-      }
-
-      return row.collectionStatus === collectionStatus;
-    });
+    .filter((row) => matchesCollectionStatus(row.collectionStatus, collectionStatus));
 
   const totalOrders = reportRows.length;
 
