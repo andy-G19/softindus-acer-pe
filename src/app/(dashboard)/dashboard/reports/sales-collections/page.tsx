@@ -36,6 +36,7 @@ import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import { parseStringParam } from "@/lib/search-params";
 import {
   getSalesCollectionsReportData,
   getSalesCollectionsReportFilterOptions,
@@ -61,19 +62,6 @@ const COLLECTION_STATUS_OPTIONS = [
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0] ?? "";
-  }
-
-  return value ?? "";
-}
 
 function getOrderStatusLabel(status: string) {
   return (
@@ -217,12 +205,12 @@ export default async function SalesCollectionsReportPage({
 
   const params = searchParams ? await searchParams : {};
 
-  const dateFrom = getSearchParam(params, "dateFrom");
-  const dateTo = getSearchParam(params, "dateTo");
-  const clientId = getSearchParam(params, "clientId");
-  const orderStatus = getSearchParam(params, "orderStatus");
-  const collectionStatus = getSearchParam(params, "collectionStatus");
-  const searchCode = getSearchParam(params, "searchCode").trim();
+  const dateFrom = parseStringParam(params, "dateFrom");
+  const dateTo = parseStringParam(params, "dateTo");
+  const clientId = parseStringParam(params, "clientId");
+  const orderStatus = parseStringParam(params, "orderStatus");
+  const collectionStatus = parseStringParam(params, "collectionStatus");
+  const searchCode = parseStringParam(params, "searchCode");
 
   const filters = { dateFrom, dateTo, clientId, orderStatus, collectionStatus, searchCode };
   const pageHeader = {

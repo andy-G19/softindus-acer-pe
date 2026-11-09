@@ -66,6 +66,20 @@ type ParityReport = {
 
 const loadRoute = () => import("./route");
 
+// Entrega 11.1 (D5): la pantalla lee sus filtros como la exportacion, sin
+// espacios alrededor y hasta 200 caracteres. Un texto mas largo filtraba la
+// pantalla por 201 caracteres y el archivo por 200; un id con espacios no
+// encontraba nada en la pantalla y si en el archivo.
+function readingCases(textParam: string, idParam: string, id: string): ParityCase[] {
+  return [
+    {
+      name: "texto de mas de 200 caracteres",
+      searchParams: { [textParam]: "X".repeat(201) },
+    },
+    { name: "id con espacios alrededor", searchParams: { [idParam]: ` ${id} ` } },
+  ];
+}
+
 const REPORTS: ParityReport[] = [
   {
     report: "production",
@@ -74,6 +88,7 @@ const REPORTS: ParityReport[] = [
     mainQueries: ["orden_trabajo.findMany"],
     cases: [
       { name: "sin filtros", searchParams: {} },
+      ...readingCases("orderId", "productId", "PRO00000001"),
       { name: "rango de fechas", searchParams: { dateFrom: "2026-07-01", dateTo: "2026-07-31" } },
       { name: "un solo dia", searchParams: { dateFrom: "2026-07-15", dateTo: "2026-07-15" } },
       { name: "codigo de orden en minusculas", searchParams: { orderId: " ord0000 " } },
@@ -96,6 +111,7 @@ const REPORTS: ParityReport[] = [
     mainQueries: ["movimiento_inventario.findMany"],
     cases: [
       { name: "sin filtros", searchParams: {} },
+      ...readingCases("workOrderId", "materialId", "MAT00000001"),
       { name: "rango de fechas", searchParams: { dateFrom: "2026-07-01", dateTo: "2026-07-31" } },
       { name: "un solo dia", searchParams: { dateFrom: "2026-07-15", dateTo: "2026-07-15" } },
       { name: "orden de trabajo en minusculas", searchParams: { workOrderId: " ord0000 " } },
@@ -119,6 +135,7 @@ const REPORTS: ParityReport[] = [
     mainQueries: ["pedido.findMany"],
     cases: [
       { name: "sin filtros", searchParams: {} },
+      ...readingCases("searchCode", "clientId", "CLI00000001"),
       { name: "rango de fechas", searchParams: { dateFrom: "2026-07-01", dateTo: "2026-07-31" } },
       { name: "un solo dia", searchParams: { dateFrom: "2026-07-15", dateTo: "2026-07-15" } },
       { name: "codigo en minusculas", searchParams: { searchCode: " ped0000 " } },
@@ -142,6 +159,7 @@ const REPORTS: ParityReport[] = [
     mainQueries: ["compra.findMany"],
     cases: [
       { name: "sin filtros", searchParams: {} },
+      ...readingCases("searchCode", "supplierId", "PRV00000001"),
       { name: "rango de fechas", searchParams: { dateFrom: "2026-07-01", dateTo: "2026-07-31" } },
       { name: "un solo dia", searchParams: { dateFrom: "2026-07-15", dateTo: "2026-07-15" } },
       { name: "comprobante en minusculas", searchParams: { searchCode: " f001-12 " } },
@@ -176,6 +194,7 @@ const REPORTS: ParityReport[] = [
     ],
     cases: [
       { name: "sin filtros", searchParams: {} },
+      ...readingCases("searchText", "cashBoxId", "CAJ00000001"),
       { name: "rango de fechas", searchParams: { dateFrom: "2026-07-01", dateTo: "2026-07-31" } },
       { name: "un solo dia", searchParams: { dateFrom: "2026-07-15", dateTo: "2026-07-15" } },
       { name: "busqueda con espacios", searchParams: { searchText: " soldadura " } },
@@ -199,6 +218,7 @@ const REPORTS: ParityReport[] = [
     mainQueries: ["falla_maquina.findMany", "mantenimiento_preventivo.findMany"],
     cases: [
       { name: "sin filtros", searchParams: {} },
+      ...readingCases("searchText", "machineId", "MAQ00000001"),
       { name: "busqueda por codigo interno", searchParams: { searchText: " MAQ-01 " } },
       {
         name: "todos los filtros",

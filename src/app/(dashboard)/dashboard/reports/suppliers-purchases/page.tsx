@@ -36,6 +36,7 @@ import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import { parseStringParam } from "@/lib/search-params";
 import {
   getSuppliersPurchasesReportData,
   getSuppliersPurchasesReportFilterOptions,
@@ -58,19 +59,6 @@ const PAYMENT_STATUS_OPTIONS = [
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0] ?? "";
-  }
-
-  return value ?? "";
-}
 
 function formatQuantity(value: unknown) {
   return toNumber(value).toFixed(2);
@@ -206,13 +194,13 @@ export default async function SuppliersPurchasesReportPage({
 
   const params = searchParams ? await searchParams : {};
 
-  const dateFrom = getSearchParam(params, "dateFrom");
-  const dateTo = getSearchParam(params, "dateTo");
-  const supplierId = getSearchParam(params, "supplierId");
-  const materialId = getSearchParam(params, "materialId");
-  const purchaseStatus = getSearchParam(params, "purchaseStatus");
-  const paymentStatus = getSearchParam(params, "paymentStatus");
-  const searchCode = getSearchParam(params, "searchCode").trim();
+  const dateFrom = parseStringParam(params, "dateFrom");
+  const dateTo = parseStringParam(params, "dateTo");
+  const supplierId = parseStringParam(params, "supplierId");
+  const materialId = parseStringParam(params, "materialId");
+  const purchaseStatus = parseStringParam(params, "purchaseStatus");
+  const paymentStatus = parseStringParam(params, "paymentStatus");
+  const searchCode = parseStringParam(params, "searchCode");
 
   const filters = {
     dateFrom,

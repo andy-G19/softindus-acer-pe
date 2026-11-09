@@ -36,6 +36,7 @@ import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import { parseStringParam } from "@/lib/search-params";
 import {
   getFinancialReportData,
   getFinancialReportFilterOptions,
@@ -51,19 +52,6 @@ const CASH_MOVEMENT_TYPE_OPTIONS = [
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0] ?? "";
-  }
-
-  return value ?? "";
-}
 
 function getCashMovementTypeLabel(type: string) {
   return (
@@ -175,12 +163,12 @@ export default async function FinancialReportPage({
 
   const params = searchParams ? await searchParams : {};
 
-  const dateFrom = getSearchParam(params, "dateFrom");
-  const dateTo = getSearchParam(params, "dateTo");
-  const cashBoxId = getSearchParam(params, "cashBoxId");
-  const movementType = getSearchParam(params, "movementType");
-  const categoryId = getSearchParam(params, "categoryId");
-  const searchText = getSearchParam(params, "searchText").trim();
+  const dateFrom = parseStringParam(params, "dateFrom");
+  const dateTo = parseStringParam(params, "dateTo");
+  const cashBoxId = parseStringParam(params, "cashBoxId");
+  const movementType = parseStringParam(params, "movementType");
+  const categoryId = parseStringParam(params, "categoryId");
+  const searchText = parseStringParam(params, "searchText");
 
   const filters = { dateFrom, dateTo, cashBoxId, movementType, categoryId, searchText };
   const pageHeader = {
