@@ -7,6 +7,7 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
 } from "@/testing/page-characterization";
 
@@ -186,6 +187,35 @@ describe("createSupplierPaymentAction", () => {
       expectAuthorizesBeforePrisma(calls);
       expect(calls).toMatchSnapshot("llamadas");
       expect(outcome).toMatchSnapshot("resultado");
+    });
+  }
+});
+
+// C3 de la 11.2a: el pago decide con la compra y sus pagos. Los leia antes de
+// abrir la transaccion y sin bloqueo: dos pagos simultaneos veian el mismo
+// saldo y los dos pasaban, y una anulacion podia confirmar en medio. Ahora la
+// compra se bloquea (FOR NO KEY UPDATE, el mismo candado que toma la anulacion)
+// antes de leerla, y todo lo que decide va dentro de la transaccion. La prueba
+// fija el protocolo; la carrera misma no se reproduce en una prueba unitaria.
+describe("C3 de la 11.2a: el pago decide con la compra bloqueada", () => {
+  const decides = cases.filter(
+    (actionCase) => !["datos invalidos", "metodo de pago fuera de la lista"].includes(actionCase.name),
+  );
+
+  it("cubre los 6 casos que leen la compra", () => {
+    expect(decides).toHaveLength(6);
+  });
+
+  for (const actionCase of decides) {
+    it(actionCase.name, async () => {
+      const { calls } = await runAction(actionCase);
+
+      expectRowLockedBefore(calls, {
+        table: "compra",
+        id: COMPRA,
+        reads: (call) =>
+          call.prisma === "compra.findUnique" || call.prisma === "pago_proveedor.findMany",
+      });
     });
   }
 });

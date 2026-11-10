@@ -121,6 +121,15 @@ export async function lockPreventiveMaintenanceRow(tx: RowLockClient, idMantenim
   `);
 }
 
+export async function lockPurchaseRow(tx: RowLockClient, idCompra: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_compra
+    FROM aceros.compra
+    WHERE id_compra = ${idCompra}
+    FOR NO KEY UPDATE
+  `);
+}
+
 export async function lockRepairRow(tx: RowLockClient, idReparacion: string) {
   await tx.$queryRaw(Prisma.sql`
     SELECT id_reparacion

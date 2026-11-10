@@ -6,6 +6,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockPurchaseRow } from "@/lib/row-locks";
 import { calculateSupplierPayment } from "@/lib/supplier-payment-amounts";
 import { supplierPaymentSchema } from "@/schemas/inventory/supplier-payment.schema";
 
@@ -30,48 +31,55 @@ export async function createSupplierPaymentAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const purchase = await prisma.compra.findUnique({
-    where: {
-      id_compra: data.id_compra,
-    },
-  });
-
-  if (!purchase) {
-    throw new Error("La compra seleccionada no existe.");
-  }
-
-  if (purchase.estado_compra === "anulada") {
-    throw new Error("No se puede registrar pagos en una compra anulada.");
-  }
-
-  if (purchase.estado_pago === "pagado") {
-    throw new Error("Esta compra ya está pagada.");
-  }
-
-  const previousPayments = await prisma.pago_proveedor.findMany({
-    where: {
-      id_compra: data.id_compra,
-    },
-    select: {
-      monto_pagado: true,
-    },
-  });
-
-  // Hallazgos 1 y 2 de la 11.2a: el saldo se cuenta en centesimos enteros, con
-  // el redondeo de las columnas, y se guarda exactamente lo que devuelve.
-  const payment = calculateSupplierPayment({
-    total: purchase.monto_total,
-    previousPayments: previousPayments.map((previous) => previous.monto_pagado),
-    amount: data.monto_pagado,
-  });
-
-  if (!payment.accepted) {
-    throw new Error(
-      `El pago no puede superar el saldo pendiente. Saldo actual: S/ ${payment.balance}`,
-    );
-  }
-
   await prisma.$transaction(async (tx) => {
+    // C3 de la 11.2a: la compra se bloquea antes de leer lo que decide el pago (su
+    // estado y los pagos anteriores). Dos pagos simultaneos, o un pago y una
+    // anulacion, que toman el mismo candado se ponen en fila: el segundo ve lo que
+    // el primero confirmo. Un rechazo lanza dentro de la transaccion, que se
+    // deshace sin haber escrito nada.
+    await lockPurchaseRow(tx, data.id_compra);
+
+    const purchase = await tx.compra.findUnique({
+      where: {
+        id_compra: data.id_compra,
+      },
+    });
+
+    if (!purchase) {
+      throw new Error("La compra seleccionada no existe.");
+    }
+
+    if (purchase.estado_compra === "anulada") {
+      throw new Error("No se puede registrar pagos en una compra anulada.");
+    }
+
+    if (purchase.estado_pago === "pagado") {
+      throw new Error("Esta compra ya está pagada.");
+    }
+
+    const previousPayments = await tx.pago_proveedor.findMany({
+      where: {
+        id_compra: data.id_compra,
+      },
+      select: {
+        monto_pagado: true,
+      },
+    });
+
+    // Hallazgos 1 y 2 de la 11.2a: el saldo se cuenta en centesimos enteros, con
+    // el redondeo de las columnas, y se guarda exactamente lo que devuelve.
+    const payment = calculateSupplierPayment({
+      total: purchase.monto_total,
+      previousPayments: previousPayments.map((previous) => previous.monto_pagado),
+      amount: data.monto_pagado,
+    });
+
+    if (!payment.accepted) {
+      throw new Error(
+        `El pago no puede superar el saldo pendiente. Saldo actual: S/ ${payment.balance}`,
+      );
+    }
+
     const idPagoProveedor = await getNextCorrelativeId(tx, {
       codigoEntidad: "pago_proveedor",
       prefijo: "PPR",

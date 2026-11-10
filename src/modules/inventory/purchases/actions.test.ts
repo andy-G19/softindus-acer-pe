@@ -43,7 +43,8 @@ const mocks = vi.hoisted(() => {
       $transaction: vi.fn(),
     },
     tx: {
-      compra: { create: vi.fn(), updateMany: vi.fn() },
+      $queryRaw: vi.fn(),
+      compra: { create: vi.fn(), updateMany: vi.fn(), findUnique: vi.fn() },
       detalle_compra: { create: vi.fn() },
       material: { update: vi.fn(), updateManyAndReturn: vi.fn() },
       alerta_stock: { updateMany: vi.fn() },
@@ -53,6 +54,8 @@ const mocks = vi.hoisted(() => {
   };
 });
 
+// row-locks.ts (C3 de la 11.2a) importa server-only.
+vi.mock("server-only", () => ({}));
 vi.mock("next/cache", () => ({ revalidatePath: mocks.revalidatePath }));
 vi.mock("next/navigation", () => ({ redirect: mocks.redirect }));
 vi.mock("@/lib/authz", () => ({ requireRole: mocks.requireRole }));
@@ -334,6 +337,8 @@ beforeEach(() => {
   mocks.prisma.compra.findUnique.mockImplementation(readPurchase);
 
   mocks.prisma.$transaction.mockImplementation(runTransaction);
+  mocks.tx.compra.findUnique.mockImplementation(readPurchase);
+  mocks.tx.$queryRaw.mockResolvedValue([]);
 
   mocks.tx.material.update.mockImplementation(
     async ({
@@ -861,10 +866,11 @@ describe("annulPurchaseAction", () => {
     seedMaterial(PLANCHA, { stock: "15" });
     seedPurchase([[PLANCHA, "5"]]);
 
-    mocks.prisma.compra.findUnique.mockImplementationOnce(async (args) => {
-      const snapshot = await readPurchase(args);
-
-      // Otra solicitud anula la misma compra y confirma despues de esta lectura.
+    // C3 de la 11.2a: la anulacion ya no lee la compra antes de su transaccion.
+    // La otra anulacion confirma justo antes de que esta abra la suya (con el
+    // bloqueo, esta la esperaria y leeria despues de su commit): la misma
+    // carrera, en el punto donde ahora puede ocurrir.
+    mocks.prisma.$transaction.mockImplementationOnce(async (callback) => {
       materialRow(PLANCHA).stock_actual = toColumn("10");
       Object.assign(db.compras.get(PURCHASE_ID) ?? {}, {
         estado_compra: "anulada",
@@ -878,7 +884,7 @@ describe("annulPurchaseAction", () => {
         stock_resultante: "10",
       });
 
-      return snapshot;
+      return runTransaction(callback);
     });
 
     const url = await redirectOf(annulPurchaseAction(annulForm()));
@@ -895,6 +901,61 @@ describe("annulPurchaseAction", () => {
         stock_resultante: "10.00",
       },
     ]);
+    expect(mocks.registerAuditLog).not.toHaveBeenCalled();
+    expect(mocks.revalidatePath).not.toHaveBeenCalled();
+  });
+});
+
+// C3 de la 11.2a: anular decide si la compra tiene pagos. Lo leia antes de abrir
+// la transaccion y sin bloqueo, asi que un pago confirmado en medio no lo veia.
+// Ahora la anulacion bloquea la compra (FOR NO KEY UPDATE, el mismo candado que
+// toma el pago) y la lee dentro de la transaccion.
+describe("C3 de la 11.2a: la anulacion decide con la compra bloqueada", () => {
+  function lockSql() {
+    const [call] = mocks.tx.$queryRaw.mock.calls;
+    // Prisma.Sql: `text` lleva los parametros como $1 (sql, como ?).
+    const query = call?.[0] as { text?: string; values?: unknown[] } | undefined;
+
+    return { sql: query?.text?.replace(/\s+/g, " ").trim(), values: query?.values };
+  }
+
+  it("bloquea la compra antes de leerla dentro de la transaccion", async () => {
+    seedMaterial(PLANCHA, { stock: "15" });
+    seedPurchase([[PLANCHA, "5"]]);
+
+    await redirectOf(annulPurchaseAction(annulForm()));
+
+    expect(lockSql()).toEqual({
+      sql: "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      values: [PURCHASE_ID],
+    });
+    expect(mocks.tx.compra.findUnique).toHaveBeenCalled();
+    expect(mocks.tx.$queryRaw.mock.invocationCallOrder[0]).toBeLessThan(
+      mocks.tx.compra.findUnique.mock.invocationCallOrder[0],
+    );
+    expect(mocks.prisma.compra.findUnique).not.toHaveBeenCalled();
+  });
+
+  it("no anula una compra que recibe un pago justo antes de su transaccion", async () => {
+    seedMaterial(PLANCHA, { stock: "15" });
+    seedPurchase([[PLANCHA, "5"]]);
+
+    mocks.prisma.$transaction.mockImplementationOnce(async (callback) => {
+      // Un pago a proveedor confirma entre la solicitud y la transaccion.
+      db.compras.get(PURCHASE_ID)?.pagos.push("PPR00000001");
+
+      return runTransaction(callback);
+    });
+
+    const url = await redirectOf(annulPurchaseAction(annulForm()));
+
+    expect(url).toBe(PURCHASE_DETAIL_PATH);
+    expect(stockOf(PLANCHA)).toBe("15.00");
+    expect(kardexSummary()).toEqual([]);
+    expect(purchaseState()).toEqual({
+      estado_compra: "confirmada",
+      estado_pago: "pendiente",
+    });
     expect(mocks.registerAuditLog).not.toHaveBeenCalled();
     expect(mocks.revalidatePath).not.toHaveBeenCalled();
   });

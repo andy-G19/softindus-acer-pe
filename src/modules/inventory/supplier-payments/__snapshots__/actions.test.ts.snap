@@ -9,12 +9,29 @@ exports[`createSupplierPaymentAction > compra anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "where": {
         "id_compra": "COM00000003",
       },
     },
     "prisma": "compra.findUnique",
+  },
+  {
+    "args": "No se puede registrar pagos en una compra anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -30,12 +47,29 @@ exports[`createSupplierPaymentAction > compra inexistente > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "where": {
         "id_compra": "COM00000003",
       },
     },
     "prisma": "compra.findUnique",
+  },
+  {
+    "args": "La compra seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -51,12 +85,29 @@ exports[`createSupplierPaymentAction > compra ya pagada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "where": {
         "id_compra": "COM00000003",
       },
     },
     "prisma": "compra.findUnique",
+  },
+  {
+    "args": "Esta compra ya está pagada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -98,6 +149,19 @@ exports[`createSupplierPaymentAction > pago mayor que el saldo > llamadas 1`] = 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "where": {
         "id_compra": "COM00000003",
@@ -115,6 +179,10 @@ exports[`createSupplierPaymentAction > pago mayor que el saldo > llamadas 1`] = 
       },
     },
     "prisma": "pago_proveedor.findMany",
+  },
+  {
+    "args": "El pago no puede superar el saldo pendiente. Saldo actual: S/ 60.00",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -130,6 +198,19 @@ exports[`createSupplierPaymentAction > pago que completa el saldo > llamadas 1`]
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "where": {
         "id_compra": "COM00000003",
@@ -147,10 +228,6 @@ exports[`createSupplierPaymentAction > pago que completa el saldo > llamadas 1`]
       },
     },
     "prisma": "pago_proveedor.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -228,6 +305,19 @@ exports[`createSupplierPaymentAction > primer pago parcial > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "where": {
         "id_compra": "COM00000003",
@@ -245,10 +335,6 @@ exports[`createSupplierPaymentAction > primer pago parcial > llamadas 1`] = `
       },
     },
     "prisma": "pago_proveedor.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {

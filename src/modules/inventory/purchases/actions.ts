@@ -7,6 +7,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockPurchaseRow } from "@/lib/row-locks";
 import { calculateIgv } from "@/lib/taxes";
 import { purchaseSchema } from "@/schemas/inventory/purchase.schema";
 
@@ -17,6 +18,8 @@ function toNullable(value: string | undefined) {
 class PurchaseAlreadyAnnulledError extends Error {}
 
 class InsufficientStockForAnnulmentError extends Error {}
+
+class PurchaseHasPaymentsError extends Error {}
 
 export async function createPurchaseAction(formData: FormData) {
   const session = await requireRole(["ADMIN"]);
@@ -252,45 +255,51 @@ export async function annulPurchaseAction(formData: FormData) {
     redirect("/dashboard/inventory/purchases");
   }
 
-  const purchase = await prisma.compra.findUnique({
-    where: {
-      id_compra: purchaseId,
-    },
-    include: {
-      pago_proveedor: {
-        select: {
-          id_pago_proveedor: true,
-        },
-      },
-      movimiento_inventario: {
-        where: {
-          tipo_movimiento: "entrada",
-        },
-      },
-    },
-  });
-
-  if (!purchase || purchase.estado_compra === "anulada") {
-    redirect("/dashboard/inventory/purchases");
-  }
-
-  if (purchase.pago_proveedor.length > 0) {
-    redirect(`/dashboard/inventory/purchases/${purchaseId}`);
-  }
-
   let rejectionPath: string | null = null;
 
   try {
     await prisma.$transaction(async (tx) => {
+      // C3 de la 11.2a: la compra se bloquea antes de leer si tiene pagos. El pago a
+      // proveedor toma el mismo candado, asi que uno que confirme en medio ya se ve
+      // aqui y la anulacion se rechaza en lugar de dejar un pago en una compra
+      // anulada.
+      await lockPurchaseRow(tx, purchaseId);
+
+      const purchase = await tx.compra.findUnique({
+        where: {
+          id_compra: purchaseId,
+        },
+        include: {
+          pago_proveedor: {
+            select: {
+              id_pago_proveedor: true,
+            },
+          },
+          movimiento_inventario: {
+            where: {
+              tipo_movimiento: "entrada",
+            },
+          },
+        },
+      });
+
+      if (!purchase || purchase.estado_compra === "anulada") {
+        throw new PurchaseAlreadyAnnulledError();
+      }
+
+      if (purchase.pago_proveedor.length > 0) {
+        throw new PurchaseHasPaymentsError();
+      }
+
       const reversalIds = await getNextCorrelativeIds(tx, {
         codigoEntidad: "movimiento_inventario",
         prefijo: "MVI",
         cantidad: purchase.movimiento_inventario.length,
       });
 
-      // La condicion y la escritura van en la misma sentencia: si otra solicitud anulo
-      // la compra despues de la lectura previa, count es 0 y el stock no se revierte
-      // por segunda vez.
+      // La condicion y la escritura van en la misma sentencia. Con la fila bloqueada
+      // ya no puede cambiar entre la lectura y aqui; se conserva como segunda
+      // defensa: si cambiara, count es 0 y el stock no se revierte dos veces.
       const annulment = await tx.compra.updateMany({
         where: {
           id_compra: purchaseId,
@@ -363,7 +372,10 @@ export async function annulPurchaseAction(formData: FormData) {
   } catch (error) {
     if (error instanceof PurchaseAlreadyAnnulledError) {
       rejectionPath = "/dashboard/inventory/purchases";
-    } else if (error instanceof InsufficientStockForAnnulmentError) {
+    } else if (
+      error instanceof InsufficientStockForAnnulmentError ||
+      error instanceof PurchaseHasPaymentsError
+    ) {
       rejectionPath = `/dashboard/inventory/purchases/${purchaseId}`;
     } else {
       throw error;
