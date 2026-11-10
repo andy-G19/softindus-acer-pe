@@ -1,6 +1,11 @@
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { definePageSuite, type DataOverrides } from "@/testing/page-characterization";
+import {
+  characterizePage,
+  definePageSuite,
+  isPrismaCall,
+  type DataOverrides,
+} from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
 vi.mock("@/lib/db", async () =>
@@ -23,6 +28,7 @@ vi.mock("next/navigation", async (importOriginal) =>
 // rango invertido la base no devuelve filas: el caso deja la lista vacia.
 const EMPTY_LIST: DataOverrides = {
   "pago_proveedor.findMany": [],
+  "pago_proveedor.count": 0,
 };
 
 definePageSuite([
@@ -55,3 +61,30 @@ definePageSuite([
     ],
   },
 ]);
+
+// C6 de la 11.2a (hallazgo 5 de la 10.3c): la lista cargaba todos los pagos de una vez.
+// Ahora pagina como Compras: 20 por pagina, con el total contado aparte y un orden
+// completo (fecha y luego id), para que una fila no salte de pagina entre dos consultas.
+describe("C6 de la 11.2a: pagos a proveedores paginados", () => {
+  it("la segunda pagina pide los pagos 21 a 40 y cuenta el total con el mismo filtro", async () => {
+    const { calls, html } = await characterizePage(
+      () => import("./page"),
+      { name: "segunda pagina", searchParams: { page: "2", status: "pagado" } },
+      "/dashboard/inventory/supplier-payments",
+    );
+
+    const prismaCalls = calls.filter(isPrismaCall);
+    const list = prismaCalls.find((call) => call.prisma === "pago_proveedor.findMany");
+    const count = prismaCalls.find((call) => call.prisma === "pago_proveedor.count");
+    const listArgs = list?.args as { where?: unknown; skip?: number; take?: number; orderBy?: unknown };
+
+    expect(listArgs).toMatchObject({
+      skip: 20,
+      take: 20,
+      orderBy: [{ fecha_pago: "desc" }, { id_pago_proveedor: "desc" }],
+    });
+    expect(count?.args).toEqual({ where: listArgs.where });
+    expect(html).toContain("pagos");
+    expect(html).toMatch(/P[áa]gina 2/);
+  });
+});
