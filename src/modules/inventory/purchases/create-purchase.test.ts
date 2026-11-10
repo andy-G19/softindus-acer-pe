@@ -5,17 +5,18 @@ import { createPurchaseAction } from "@/modules/inventory/purchases/actions";
 import {
   characterizeHandler,
   decimalSnapshotSerializer,
-  describeNavigationError,
   expectAuthorizesBeforePrisma,
   type DataOverrides,
+  type RecordedCall,
   type PrismaArgs,
 } from "@/testing/page-characterization";
 
 // Caracterizacion de crear compra con el arnes (11.2b), escrita antes de tocar la accion.
 // Las pruebas de actions.test.ts fijan el stock, el kardex y las alertas con una base en
-// memoria; estas fijan en un snapshot la secuencia: la autorizacion, las lecturas (y si van
-// fuera de la transaccion), la transaccion con sus correlativos y escrituras, la bitacora, su
-// final, las revalidaciones y el resultado (la redireccion o el error exacto).
+// memoria; estas fijan en un snapshot la secuencia: la autorizacion, el reclamo de la clave,
+// las lecturas, la transaccion con sus correlativos y escrituras, la bitacora, su final, las
+// revalidaciones y el resultado que recibe el formulario. Desde C3 la accion devuelve un
+// FormActionState: no redirige ni lanza.
 //
 // Los montos de estos casos no llegan al borde del redondeo: los hallazgos 1 a 3 y 6 de la
 // 11.2b (montos con number) tienen sus propias pruebas.
@@ -25,6 +26,11 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio: se fija para que el snapshot sea estable.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -92,6 +98,8 @@ expect.addSnapshotSerializer(decimalSnapshotSerializer);
 const D = (value: string) => new Prisma.Decimal(value);
 
 const PROVEEDOR = "PVE00000001";
+const CLAVE = "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f";
+const TIPO = "crear_compra";
 const PLANCHA = "MAT00000001";
 const TUBO = "MAT00000002";
 
@@ -101,10 +109,12 @@ type ActionCase = {
   header?: Record<string, string>;
   lines?: Line[];
   data?: DataOverrides;
+  role?: "ADMIN" | "SELLER" | "WORKSHOP_MASTER";
 };
 
 const baseHeader: Record<string, string> = {
   id_proveedor: PROVEEDOR,
+  clave_operacion: CLAVE,
   fecha_compra: "2026-07-14",
   tipo_comprobante: "",
   numero_comprobante: "",
@@ -157,21 +167,33 @@ function formOf({ header, lines }: ActionCase) {
   return formData;
 }
 
+/** La clave ya estaba en la tabla: el INSERT no devuelve filas y se lee la guardada. */
+function storedKey(changes: Record<string, unknown> = {}): DataOverrides {
+  return {
+    "operacion_idempotente.createManyAndReturn": [],
+    "operacion_idempotente.findUniqueOrThrow": {
+      tipo_operacion: TIPO,
+      id_usuario: "USU00000001",
+      id_registro_resultado: "COM00000007",
+      ...changes,
+    },
+  };
+}
+
 async function runAction(actionCase: ActionCase) {
   mocks.correlatives.clear();
 
-  const { calls, result } = await characterizeHandler(async () => {
-    try {
-      await createPurchaseAction(formOf(actionCase));
-
-      return "termino sin redirigir";
-    } catch (error) {
-      return (
-        describeNavigationError(error) ??
-        `error: ${error instanceof Error ? error.message : String(error)}`
-      );
-    }
-  }, { ...found, ...actionCase.data });
+  const { calls, result } = await characterizeHandler(
+    async () => {
+      try {
+        return await createPurchaseAction({ status: "idle" }, formOf(actionCase));
+      } catch (error) {
+        return `lanzo: ${error instanceof Error ? error.message : String(error)}`;
+      }
+    },
+    { ...found, ...actionCase.data },
+    { role: actionCase.role },
+  );
 
   return { calls, outcome: result };
 }
@@ -197,8 +219,16 @@ const cases: ActionCase[] = [
       "material.update": () => ({ stock_actual: D("5.00"), stock_minimo: D("5.00") }),
     },
   },
+  { name: "sin permiso", role: "SELLER" },
+  { name: "sin clave de operacion", header: { clave_operacion: "" } },
   { name: "sin proveedor", header: { id_proveedor: "" } },
-  { name: "cantidad cero", lines: [{ id_material: PLANCHA, cantidad: "0", costo_unitario: "10" }] },
+  {
+    name: "cantidad cero en la segunda linea",
+    lines: [
+      { id_material: PLANCHA, cantidad: "1", costo_unitario: "10" },
+      { id_material: TUBO, cantidad: "0", costo_unitario: "10" },
+    ],
+  },
   {
     name: "material repetido",
     lines: [
@@ -209,8 +239,13 @@ const cases: ActionCase[] = [
   { name: "proveedor inexistente o inactivo", data: { "proveedor.findFirst": null } },
   {
     name: "material inexistente o inactivo",
-    lines: [{ id_material: "MAT00000099", cantidad: "1", costo_unitario: "10" }],
+    lines: [
+      { id_material: PLANCHA, cantidad: "1", costo_unitario: "10" },
+      { id_material: "MAT00000099", cantidad: "1", costo_unitario: "10" },
+    ],
   },
+  { name: "clave repetida: responde con la compra guardada sin escribir", data: storedKey() },
+  { name: "clave de otro usuario", data: storedKey({ id_usuario: "USU00000009" }) },
 ];
 
 describe("createPurchaseAction", () => {
@@ -223,6 +258,55 @@ describe("createPurchaseAction", () => {
       expect(outcome).toMatchSnapshot("resultado");
     });
   }
+});
+
+const isPrisma = (call: RecordedCall, name: string) => "prisma" in call && call.prisma === name;
+
+// C3 de la 11.2b: la clave del formulario se reclama como primera sentencia de la
+// transaccion, y el proveedor y los materiales se comprueban despues, dentro de ella (D20).
+describe("C3 de la 11.2b: idempotencia y lecturas dentro de la transaccion", () => {
+  it("reclama la clave, lee dentro de la transaccion y completa la clave con la compra", async () => {
+    const { calls, outcome } = await runAction(cases[0]);
+    const index = (name: string) => calls.findIndex((call) => isPrisma(call, name));
+    const transaction = calls.findIndex((call) => "effect" in call && call.effect === "prisma.$transaction");
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_compra: "COM00000001", clave_operacion: CLAVE },
+    });
+    expect(transaction).toBeGreaterThan(-1);
+    expect(index("operacion_idempotente.createManyAndReturn")).toBeGreaterThan(transaction);
+    expect(index("proveedor.findFirst")).toBeGreaterThan(index("operacion_idempotente.createManyAndReturn"));
+    expect(index("material.findMany")).toBeGreaterThan(transaction);
+    expect(index("compra.create")).toBeLessThan(index("operacion_idempotente.updateMany"));
+    expect(calls[index("operacion_idempotente.updateMany")]).toMatchObject({
+      args: { where: { clave: CLAVE }, data: { id_registro_resultado: "COM00000001" } },
+    });
+  });
+
+  it("una clave repetida responde con la compra guardada sin leer ni escribir", async () => {
+    const { calls, outcome } = await runAction({ name: "repetida", data: storedKey() });
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_compra: "COM00000007", clave_operacion: CLAVE },
+    });
+    expect(calls.some((call) => isPrisma(call, "proveedor.findFirst"))).toBe(false);
+    expect(calls.some((call) => isPrisma(call, "compra.create"))).toBe(false);
+    expect(calls.some((call) => isPrisma(call, "material.update"))).toBe(false);
+  });
+
+  it("cada error de linea va con la clave de su linea", async () => {
+    const zero = await runAction(cases.find((item) => item.name === "cantidad cero en la segunda linea")!);
+    const repeated = await runAction(cases.find((item) => item.name === "material repetido")!);
+    const inactive = await runAction(cases.find((item) => item.name === "material inexistente o inactivo")!);
+
+    expect(zero.outcome).toMatchObject({ fieldErrors: { "items.1.cantidad": ["La cantidad debe ser mayor que cero."] } });
+    expect(repeated.outcome).toMatchObject({ fieldErrors: { "items.1.id_material": [expect.any(String)] } });
+    expect(inactive.outcome).toMatchObject({
+      fieldErrors: { "items.1.id_material": ["El material seleccionado no existe o está inactivo."] },
+    });
+  });
 });
 
 // Hallazgos 1 a 3 y 6 de la 11.2b: los montos se calculaban con number y cada columna

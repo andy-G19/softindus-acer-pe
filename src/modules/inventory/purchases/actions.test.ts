@@ -45,9 +45,15 @@ const mocks = vi.hoisted(() => {
     },
     tx: {
       $queryRaw: vi.fn(),
+      operacion_idempotente: {
+        createManyAndReturn: vi.fn(),
+        findUniqueOrThrow: vi.fn(),
+        updateMany: vi.fn(),
+      },
+      proveedor: { findFirst: vi.fn() },
       compra: { create: vi.fn(), updateMany: vi.fn(), findUnique: vi.fn() },
       detalle_compra: { create: vi.fn() },
-      material: { update: vi.fn(), updateManyAndReturn: vi.fn() },
+      material: { update: vi.fn(), updateManyAndReturn: vi.fn(), findMany: vi.fn() },
       alerta_stock: { updateMany: vi.fn() },
       movimiento_inventario: { create: vi.fn() },
       historial_precio_proveedor: { create: vi.fn() },
@@ -98,6 +104,12 @@ const PURCHASE_DETAIL_PATH = `${PURCHASES_PATH}/${PURCHASE_ID}`;
 // C5 de la 11.2a: anular responde con un RowStatusState en lugar de redirigir; el
 // rechazo dice por que, dentro de la confirmacion.
 const IDLE = { status: "idle" } as const;
+const CLAVE = "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f";
+
+/** Crear compra responde con su estado (C3 de la 11.2b): ya no redirige. */
+async function saved(action: Promise<unknown>) {
+  return action;
+}
 const NOT_ENOUGH_STOCK =
   "No hay stock suficiente para revertir la compra: parte de lo que ingresó ya salió del inventario.";
 const HAS_PAYMENTS = "No se puede anular una compra con pagos registrados.";
@@ -307,6 +319,7 @@ function purchaseForm(lines: PurchaseLine[]) {
   const formData = new FormData();
 
   formData.set("id_proveedor", SUPPLIER_ID);
+  formData.set("clave_operacion", CLAVE);
   formData.set("fecha_compra", "2026-09-28");
   formData.set("tipo_comprobante", "factura");
   formData.set("numero_comprobante", "F001-00000123");
@@ -332,20 +345,6 @@ function annulForm() {
   return formData;
 }
 
-/** Ejecuta la accion y devuelve la URL a la que redirige. */
-async function redirectOf(action: Promise<unknown>) {
-  const outcome = await action.then(
-    () => new Error("La accion termino sin redirigir."),
-    (error: unknown) => error,
-  );
-
-  if (outcome instanceof mocks.RedirectSignal) {
-    return outcome.url;
-  }
-
-  throw outcome;
-}
-
 beforeEach(() => {
   vi.resetAllMocks();
 
@@ -365,6 +364,13 @@ beforeEach(() => {
 
   mocks.prisma.$transaction.mockImplementation(runTransaction);
   mocks.tx.compra.findUnique.mockImplementation(readPurchase);
+  mocks.tx.proveedor.findFirst.mockResolvedValue({ id_proveedor: SUPPLIER_ID, estado: true });
+  mocks.tx.material.findMany.mockImplementation(readMaterials);
+  // Una clave nueva: el INSERT ... ON CONFLICT DO NOTHING devuelve su fila.
+  mocks.tx.operacion_idempotente.createManyAndReturn.mockImplementation(
+    async ({ data }: { data: Array<{ clave: string }> }) => data.map(({ clave }) => ({ clave })),
+  );
+  mocks.tx.operacion_idempotente.updateMany.mockResolvedValue({ count: 1 });
   mocks.tx.$queryRaw.mockResolvedValue([]);
 
   mocks.tx.material.update.mockImplementation(
@@ -445,12 +451,13 @@ beforeEach(() => {
 });
 
 describe("createPurchaseAction", () => {
-  it("registra compra, detalle, entrada de kardex e historial de precio y redirige con el toast", async () => {
+  it("registra compra, detalle, entrada de kardex e historial de precio y responde con el exito", async () => {
     seedMaterial(PLANCHA, { stock: "10" });
     seedMaterial(TUBO, { stock: "4" });
 
-    const url = await redirectOf(
+    const state = await saved(
       createPurchaseAction(
+        IDLE,
         purchaseForm([
           { id_material: PLANCHA, cantidad: "5", costo_unitario: "12.50" },
           { id_material: TUBO, cantidad: "2.5", costo_unitario: "8" },
@@ -458,8 +465,11 @@ describe("createPurchaseAction", () => {
       ),
     );
 
-    expect(url).toBe(`${PURCHASES_PATH}?toast=purchase-created`);
-    expect(mocks.requireRole).toHaveBeenCalledWith(["ADMIN"]);
+    expect(state).toMatchObject({
+      status: "success",
+      data: { id_compra: PURCHASE_ID, clave_operacion: CLAVE },
+    });
+    expect(mocks.getAuthorizedSession).toHaveBeenCalledWith(["ADMIN"]);
 
     // Los montos se comparan por el valor que guardaria la columna, no por el tipo de
     // JavaScript (desde la 11.2b la accion envia texto con dos decimales).
@@ -572,8 +582,9 @@ describe("createPurchaseAction", () => {
   it("atiende las alertas activas cuando el stock resultante supera el minimo", async () => {
     seedMaterial(PLANCHA, { stock: "2", minimo: "5" });
 
-    await redirectOf(
+    await saved(
       createPurchaseAction(
+        IDLE,
         purchaseForm([{ id_material: PLANCHA, cantidad: "5", costo_unitario: "10" }]),
       ),
     );
@@ -594,8 +605,9 @@ describe("createPurchaseAction", () => {
   it("no atiende alertas si el stock resultante queda igual al minimo", async () => {
     seedMaterial(PLANCHA, { stock: "3", minimo: "8" });
 
-    await redirectOf(
+    await saved(
       createPurchaseAction(
+        IDLE,
         purchaseForm([{ id_material: PLANCHA, cantidad: "5", costo_unitario: "10" }]),
       ),
     );
@@ -607,21 +619,29 @@ describe("createPurchaseAction", () => {
   it("rechaza materiales inactivos sin tocar el stock", async () => {
     seedMaterial(PLANCHA, { stock: "10", estado: false });
 
-    await expect(
-      createPurchaseAction(
-        purchaseForm([{ id_material: PLANCHA, cantidad: "5", costo_unitario: "10" }]),
-      ),
-    ).rejects.toThrow("Uno o más materiales no existen o están inactivos.");
+    const state = await createPurchaseAction(
+      IDLE,
+      purchaseForm([{ id_material: PLANCHA, cantidad: "5", costo_unitario: "10" }]),
+    );
 
-    expect(mocks.prisma.$transaction).not.toHaveBeenCalled();
+    expect(state).toMatchObject({
+      status: "error",
+      error: "Uno o más materiales no existen o están inactivos.",
+      fieldErrors: { "items.0.id_material": ["El material seleccionado no existe o está inactivo."] },
+    });
+    // Desde C3 de la 11.2b los materiales se leen dentro de la transaccion: se abre y se
+    // deshace sin escribir nada.
+    expect(mocks.tx.compra.create).not.toHaveBeenCalled();
+    expect(mocks.tx.material.update).not.toHaveBeenCalled();
     expect(stockOf(PLANCHA)).toBe("10.00");
   });
 
   it("suma el stock con increment atomico y un Decimal, dentro de la transaccion", async () => {
     seedMaterial(PLANCHA, { stock: "10" });
 
-    await redirectOf(
+    await saved(
       createPurchaseAction(
+        IDLE,
         purchaseForm([{ id_material: PLANCHA, cantidad: "5", costo_unitario: "12.50" }]),
       ),
     );
@@ -644,7 +664,7 @@ describe("createPurchaseAction", () => {
   it("no pierde una compra concurrente: el kardex parte del stock que devuelve la base", async () => {
     seedMaterial(PLANCHA, { stock: "10" });
 
-    mocks.prisma.material.findMany.mockImplementationOnce(async (args) => {
+    mocks.tx.material.findMany.mockImplementationOnce(async (args) => {
       const snapshot = await readMaterials(args);
 
       // Otra compra de 10 unidades confirma despues de esta lectura.
@@ -653,8 +673,9 @@ describe("createPurchaseAction", () => {
       return snapshot;
     });
 
-    await redirectOf(
+    await saved(
       createPurchaseAction(
+        IDLE,
         purchaseForm([{ id_material: PLANCHA, cantidad: "5", costo_unitario: "10" }]),
       ),
     );
@@ -674,8 +695,9 @@ describe("createPurchaseAction", () => {
   it("redondea la cantidad como la columna para que el kardex cuadre", async () => {
     seedMaterial(PLANCHA, { stock: "10" });
 
-    await redirectOf(
+    await saved(
       createPurchaseAction(
+        IDLE,
         purchaseForm([{ id_material: PLANCHA, cantidad: "1.005", costo_unitario: "10" }]),
       ),
     );

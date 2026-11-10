@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { operationKeySchema } from "@/schemas/operation-key.schema";
+
 function optionalText(max: number) {
   return z.preprocess(
     (value) => {
@@ -49,6 +51,9 @@ export const purchaseItemSchema = z.object({
 
 export const purchaseSchema = z.object({
   id_proveedor: z.string().trim().min(1, "Seleccione un proveedor."),
+
+  // Clave de idempotencia del formulario (11.2b).
+  clave_operacion: operationKeySchema,
 
   fecha_compra: z
     .string()

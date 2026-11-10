@@ -1,9 +1,9 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`createPurchaseAction > cantidad cero > llamadas 1`] = `
+exports[`createPurchaseAction > cantidad cero en la segunda linea > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -11,15 +11,232 @@ exports[`createPurchaseAction > cantidad cero > llamadas 1`] = `
 ]
 `;
 
-exports[`createPurchaseAction > cantidad cero > resultado 1`] = `"error: La cantidad debe ser mayor que cero."`;
+exports[`createPurchaseAction > cantidad cero en la segunda linea > resultado 1`] = `
+{
+  "error": "Revisa los datos de la compra.",
+  "fieldErrors": {
+    "items.1.cantidad": [
+      "La cantidad debe ser mayor que cero.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "aplica_igv": false,
+    "fecha_compra": "2026-07-14",
+    "id_proveedor": "PVE00000001",
+    "items": [
+      {
+        "cantidad": "1",
+        "costo_unitario": "10",
+        "id_material": "MAT00000001",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+      {
+        "cantidad": "0",
+        "costo_unitario": "10",
+        "id_material": "MAT00000002",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+    ],
+    "numero_comprobante": "",
+    "observaciones": "",
+    "tipo_comprobante": "",
+  },
+}
+`;
+
+exports[`createPurchaseAction > clave de otro usuario > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_compra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPurchaseAction > clave de otro usuario > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "aplica_igv": false,
+    "fecha_compra": "2026-07-14",
+    "id_proveedor": "PVE00000001",
+    "items": [
+      {
+        "cantidad": "2",
+        "costo_unitario": "10.50",
+        "id_material": "MAT00000001",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+    ],
+    "numero_comprobante": "",
+    "observaciones": "",
+    "tipo_comprobante": "",
+  },
+}
+`;
+
+exports[`createPurchaseAction > clave repetida: responde con la compra guardada sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_compra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPurchaseAction > clave repetida: responde con la compra guardada sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_compra": "COM00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "aplica_igv": false,
+    "fecha_compra": "2026-07-14",
+    "id_proveedor": "PVE00000001",
+    "items": [
+      {
+        "cantidad": "2",
+        "costo_unitario": "10.50",
+        "id_material": "MAT00000001",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+    ],
+    "numero_comprobante": "",
+    "observaciones": "",
+    "tipo_comprobante": "",
+  },
+}
+`;
 
 exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_compra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -43,10 +260,6 @@ exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
       },
     },
     "prisma": "material.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -266,6 +479,17 @@ exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "COM00000001",
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -284,15 +508,68 @@ exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
 ]
 `;
 
-exports[`createPurchaseAction > dos lineas con factura e IGV > resultado 1`] = `"redirect:/dashboard/inventory/purchases?toast=purchase-created"`;
+exports[`createPurchaseAction > dos lineas con factura e IGV > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_compra": "COM00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "aplica_igv": true,
+    "fecha_compra": "2026-07-14",
+    "id_proveedor": "PVE00000001",
+    "items": [
+      {
+        "cantidad": "3",
+        "costo_unitario": "12.50",
+        "id_material": "MAT00000001",
+        "observaciones": " corte a medida ",
+        "unidad_medida": "UND",
+      },
+      {
+        "cantidad": "2",
+        "costo_unitario": "7.25",
+        "id_material": "MAT00000002",
+        "observaciones": "",
+        "unidad_medida": "m",
+      },
+    ],
+    "numero_comprobante": "F001-000123",
+    "observaciones": "  compra mensual  ",
+    "tipo_comprobante": "factura",
+  },
+}
+`;
 
 exports[`createPurchaseAction > el stock resultante queda igual al minimo: no atiende alertas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_compra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -315,10 +592,6 @@ exports[`createPurchaseAction > el stock resultante queda igual al minimo: no at
       },
     },
     "prisma": "material.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -446,6 +719,17 @@ exports[`createPurchaseAction > el stock resultante queda igual al minimo: no at
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "COM00000001",
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -464,15 +748,61 @@ exports[`createPurchaseAction > el stock resultante queda igual al minimo: no at
 ]
 `;
 
-exports[`createPurchaseAction > el stock resultante queda igual al minimo: no atiende alertas > resultado 1`] = `"redirect:/dashboard/inventory/purchases?toast=purchase-created"`;
+exports[`createPurchaseAction > el stock resultante queda igual al minimo: no atiende alertas > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_compra": "COM00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "aplica_igv": false,
+    "fecha_compra": "2026-07-14",
+    "id_proveedor": "PVE00000001",
+    "items": [
+      {
+        "cantidad": "2",
+        "costo_unitario": "10.50",
+        "id_material": "MAT00000001",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+    ],
+    "numero_comprobante": "",
+    "observaciones": "",
+    "tipo_comprobante": "",
+  },
+}
+`;
 
 exports[`createPurchaseAction > material inexistente o inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_compra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -489,6 +819,7 @@ exports[`createPurchaseAction > material inexistente o inactivo > llamadas 1`] =
         "estado": true,
         "id_material": {
           "in": [
+            "MAT00000001",
             "MAT00000099",
           ],
         },
@@ -496,15 +827,54 @@ exports[`createPurchaseAction > material inexistente o inactivo > llamadas 1`] =
     },
     "prisma": "material.findMany",
   },
+  {
+    "args": "Uno o más materiales no existen o están inactivos.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
-exports[`createPurchaseAction > material inexistente o inactivo > resultado 1`] = `"error: Uno o más materiales no existen o están inactivos."`;
+exports[`createPurchaseAction > material inexistente o inactivo > resultado 1`] = `
+{
+  "error": "Uno o más materiales no existen o están inactivos.",
+  "fieldErrors": {
+    "items.1.id_material": [
+      "El material seleccionado no existe o está inactivo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "aplica_igv": false,
+    "fecha_compra": "2026-07-14",
+    "id_proveedor": "PVE00000001",
+    "items": [
+      {
+        "cantidad": "1",
+        "costo_unitario": "10",
+        "id_material": "MAT00000001",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+      {
+        "cantidad": "1",
+        "costo_unitario": "10",
+        "id_material": "MAT00000099",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+    ],
+    "numero_comprobante": "",
+    "observaciones": "",
+    "tipo_comprobante": "",
+  },
+}
+`;
 
 exports[`createPurchaseAction > material repetido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -512,15 +882,70 @@ exports[`createPurchaseAction > material repetido > llamadas 1`] = `
 ]
 `;
 
-exports[`createPurchaseAction > material repetido > resultado 1`] = `"error: No repitas el mismo material dentro de la compra. Ajusta la cantidad en una sola fila."`;
+exports[`createPurchaseAction > material repetido > resultado 1`] = `
+{
+  "error": "No repitas el mismo material dentro de la compra. Ajusta la cantidad en una sola fila.",
+  "fieldErrors": {
+    "items.1.id_material": [
+      "No repitas el mismo material dentro de la compra. Ajusta la cantidad en una sola fila.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "aplica_igv": false,
+    "fecha_compra": "2026-07-14",
+    "id_proveedor": "PVE00000001",
+    "items": [
+      {
+        "cantidad": "1",
+        "costo_unitario": "10",
+        "id_material": "MAT00000001",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+      {
+        "cantidad": "2",
+        "costo_unitario": "10",
+        "id_material": "MAT00000001",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+    ],
+    "numero_comprobante": "",
+    "observaciones": "",
+    "tipo_comprobante": "",
+  },
+}
+`;
 
 exports[`createPurchaseAction > proveedor inexistente o inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_compra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -531,15 +956,47 @@ exports[`createPurchaseAction > proveedor inexistente o inactivo > llamadas 1`] 
     },
     "prisma": "proveedor.findFirst",
   },
+  {
+    "args": "El proveedor seleccionado no existe o está inactivo.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
-exports[`createPurchaseAction > proveedor inexistente o inactivo > resultado 1`] = `"error: El proveedor seleccionado no existe o está inactivo."`;
+exports[`createPurchaseAction > proveedor inexistente o inactivo > resultado 1`] = `
+{
+  "error": "El proveedor seleccionado no existe o está inactivo.",
+  "fieldErrors": {
+    "id_proveedor": [
+      "El proveedor seleccionado no existe o está inactivo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "aplica_igv": false,
+    "fecha_compra": "2026-07-14",
+    "id_proveedor": "PVE00000001",
+    "items": [
+      {
+        "cantidad": "2",
+        "costo_unitario": "10.50",
+        "id_material": "MAT00000001",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+    ],
+    "numero_comprobante": "",
+    "observaciones": "",
+    "tipo_comprobante": "",
+  },
+}
+`;
 
-exports[`createPurchaseAction > sin proveedor > llamadas 1`] = `
+exports[`createPurchaseAction > sin clave de operacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -547,15 +1004,141 @@ exports[`createPurchaseAction > sin proveedor > llamadas 1`] = `
 ]
 `;
 
-exports[`createPurchaseAction > sin proveedor > resultado 1`] = `"error: Seleccione un proveedor."`;
+exports[`createPurchaseAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "aplica_igv": false,
+    "fecha_compra": "2026-07-14",
+    "id_proveedor": "PVE00000001",
+    "items": [
+      {
+        "cantidad": "2",
+        "costo_unitario": "10.50",
+        "id_material": "MAT00000001",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+    ],
+    "numero_comprobante": "",
+    "observaciones": "",
+    "tipo_comprobante": "",
+  },
+}
+`;
+
+exports[`createPurchaseAction > sin permiso > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPurchaseAction > sin permiso > resultado 1`] = `
+{
+  "error": "No tienes permisos para registrar compras.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "aplica_igv": false,
+    "fecha_compra": "2026-07-14",
+    "id_proveedor": "PVE00000001",
+    "items": [
+      {
+        "cantidad": "2",
+        "costo_unitario": "10.50",
+        "id_material": "MAT00000001",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+    ],
+    "numero_comprobante": "",
+    "observaciones": "",
+    "tipo_comprobante": "",
+  },
+}
+`;
+
+exports[`createPurchaseAction > sin proveedor > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPurchaseAction > sin proveedor > resultado 1`] = `
+{
+  "error": "Revisa los datos de la compra.",
+  "fieldErrors": {
+    "id_proveedor": [
+      "Seleccione un proveedor.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "aplica_igv": false,
+    "fecha_compra": "2026-07-14",
+    "id_proveedor": "",
+    "items": [
+      {
+        "cantidad": "2",
+        "costo_unitario": "10.50",
+        "id_material": "MAT00000001",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+    ],
+    "numero_comprobante": "",
+    "observaciones": "",
+    "tipo_comprobante": "",
+  },
+}
+`;
 
 exports[`createPurchaseAction > una linea sin IGV > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_compra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -578,10 +1161,6 @@ exports[`createPurchaseAction > una linea sin IGV > llamadas 1`] = `
       },
     },
     "prisma": "material.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -723,6 +1302,17 @@ exports[`createPurchaseAction > una linea sin IGV > llamadas 1`] = `
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "COM00000001",
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -741,4 +1331,30 @@ exports[`createPurchaseAction > una linea sin IGV > llamadas 1`] = `
 ]
 `;
 
-exports[`createPurchaseAction > una linea sin IGV > resultado 1`] = `"redirect:/dashboard/inventory/purchases?toast=purchase-created"`;
+exports[`createPurchaseAction > una linea sin IGV > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_compra": "COM00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "aplica_igv": false,
+    "fecha_compra": "2026-07-14",
+    "id_proveedor": "PVE00000001",
+    "items": [
+      {
+        "cantidad": "2",
+        "costo_unitario": "10.50",
+        "id_material": "MAT00000001",
+        "observaciones": "",
+        "unidad_medida": "UND",
+      },
+    ],
+    "numero_comprobante": "",
+    "observaciones": "",
+    "tipo_comprobante": "",
+  },
+}
+`;
