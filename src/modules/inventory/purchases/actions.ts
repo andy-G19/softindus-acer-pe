@@ -7,10 +7,10 @@ import { registerAuditLog } from "@/lib/audit";
 import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { calculatePurchaseAmounts } from "@/lib/purchase-amounts";
 import { APP_ROLES } from "@/lib/permissions";
 import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockPurchaseRow } from "@/lib/row-locks";
-import { calculateIgv } from "@/lib/taxes";
 import { purchaseSchema } from "@/schemas/inventory/purchase.schema";
 
 const ALREADY_ANNULLED = "La compra ya está anulada.";
@@ -92,12 +92,9 @@ export async function createPurchaseAction(formData: FormData) {
     throw new Error("Uno o más materiales no existen o están inactivos.");
   }
 
-  const subtotal = data.items.reduce((acc, item) => {
-    return acc + item.cantidad * item.costo_unitario;
-  }, 0);
-
-  const igv = data.aplica_igv ? calculateIgv(subtotal) : 0;
-  const montoTotal = Number((subtotal + igv).toFixed(2));
+  // Hallazgos 1 a 3 y 6 de la 11.2b: los montos se cuentan en centesimos enteros, con el
+  // redondeo de las columnas, y se guarda exactamente lo que devuelve la funcion.
+  const amounts = calculatePurchaseAmounts({ items: data.items, aplicaIgv: data.aplica_igv });
 
   const materialById = new Map(
     materials.map((material) => [material.id_material, material]),
@@ -132,9 +129,9 @@ export async function createPurchaseAction(formData: FormData) {
         fecha_compra: new Date(data.fecha_compra),
         tipo_comprobante: data.tipo_comprobante ?? null,
         numero_comprobante: data.numero_comprobante ?? null,
-        subtotal,
-        igv,
-        monto_total: montoTotal,
+        subtotal: amounts.subtotal,
+        igv: amounts.igv,
+        monto_total: amounts.total,
         estado_pago: "pendiente",
         estado_compra: "confirmada",
         observaciones: toNullable(data.observaciones),
@@ -148,23 +145,20 @@ export async function createPurchaseAction(formData: FormData) {
         throw new Error("Material no encontrado durante la transacción.");
       }
 
-      // Se redondea como lo haria la columna Decimal(10, 2): asi el stock anterior que se
-      // deduce abajo (resultante - cantidad) coincide con el que habia en la base.
-      const cantidad = new Prisma.Decimal(item.cantidad).toDecimalPlaces(
-        2,
-        Prisma.Decimal.ROUND_HALF_UP,
-      );
-      const itemSubtotal = item.cantidad * item.costo_unitario;
+      // La cantidad ya viene redondeada como la columna Decimal(10, 2): asi el stock anterior
+      // que se deduce abajo (resultante - cantidad) coincide con el que habia en la base.
+      const line = amounts.lines[index];
+      const cantidad = new Prisma.Decimal(line.cantidad);
 
       await tx.detalle_compra.create({
         data: {
           id_detalle_compra: detailIds[index],
           id_compra: idCompra,
           id_material: item.id_material,
-          cantidad: item.cantidad,
+          cantidad: line.cantidad,
           unidad_medida: item.unidad_medida,
-          costo_unitario: item.costo_unitario,
-          subtotal: itemSubtotal,
+          costo_unitario: line.costo_unitario,
+          subtotal: line.subtotal,
           observaciones: toNullable(item.observaciones),
         },
       });
@@ -180,7 +174,7 @@ export async function createPurchaseAction(formData: FormData) {
           stock_actual: {
             increment: cantidad,
           },
-          costo_unitario_actual: item.costo_unitario,
+          costo_unitario_actual: line.costo_unitario,
         },
         select: {
           stock_actual: true,
@@ -225,7 +219,7 @@ export async function createPurchaseAction(formData: FormData) {
           id_proveedor: data.id_proveedor,
           id_material: item.id_material,
           id_compra: idCompra,
-          precio_unitario: item.costo_unitario,
+          precio_unitario: line.costo_unitario,
           fecha_registro: new Date(data.fecha_compra),
           origen_registro: "compra",
           observaciones: "Precio registrado automáticamente desde compra.",

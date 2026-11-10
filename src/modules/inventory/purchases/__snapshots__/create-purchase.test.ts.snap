@@ -88,11 +88,11 @@ exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
         "id_compra": "COM00000001",
         "id_proveedor": "PVE00000001",
         "id_usuario_registro": "USU00000001",
-        "igv": 9.36,
-        "monto_total": 61.36,
+        "igv": "9.36",
+        "monto_total": "61.36",
         "numero_comprobante": "F001-000123",
         "observaciones": "compra mensual",
-        "subtotal": 52,
+        "subtotal": "52.00",
         "tipo_comprobante": "factura",
       },
     },
@@ -101,13 +101,13 @@ exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
   {
     "args": {
       "data": {
-        "cantidad": 3,
-        "costo_unitario": 12.5,
+        "cantidad": "3.00",
+        "costo_unitario": "12.50",
         "id_compra": "COM00000001",
         "id_detalle_compra": "DCO00000001",
         "id_material": "MAT00000001",
         "observaciones": "corte a medida",
-        "subtotal": 37.5,
+        "subtotal": "37.50",
         "unidad_medida": "UND",
       },
     },
@@ -116,7 +116,7 @@ exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
   {
     "args": {
       "data": {
-        "costo_unitario_actual": 12.5,
+        "costo_unitario_actual": "12.50",
         "stock_actual": {
           "increment": Decimal(3),
         },
@@ -171,7 +171,7 @@ exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
         "id_proveedor": "PVE00000001",
         "observaciones": "Precio registrado automáticamente desde compra.",
         "origen_registro": "compra",
-        "precio_unitario": 12.5,
+        "precio_unitario": "12.50",
       },
     },
     "prisma": "historial_precio_proveedor.create",
@@ -179,13 +179,13 @@ exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
   {
     "args": {
       "data": {
-        "cantidad": 2,
-        "costo_unitario": 7.25,
+        "cantidad": "2.00",
+        "costo_unitario": "7.25",
         "id_compra": "COM00000001",
         "id_detalle_compra": "DCO00000002",
         "id_material": "MAT00000002",
         "observaciones": null,
-        "subtotal": 14.5,
+        "subtotal": "14.50",
         "unidad_medida": "m",
       },
     },
@@ -194,7 +194,7 @@ exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
   {
     "args": {
       "data": {
-        "costo_unitario_actual": 7.25,
+        "costo_unitario_actual": "7.25",
         "stock_actual": {
           "increment": Decimal(2),
         },
@@ -249,7 +249,7 @@ exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
         "id_proveedor": "PVE00000001",
         "observaciones": "Precio registrado automáticamente desde compra.",
         "origen_registro": "compra",
-        "precio_unitario": 7.25,
+        "precio_unitario": "7.25",
       },
     },
     "prisma": "historial_precio_proveedor.create",
@@ -360,11 +360,11 @@ exports[`createPurchaseAction > el stock resultante queda igual al minimo: no at
         "id_compra": "COM00000001",
         "id_proveedor": "PVE00000001",
         "id_usuario_registro": "USU00000001",
-        "igv": 0,
-        "monto_total": 21,
+        "igv": "0.00",
+        "monto_total": "21.00",
         "numero_comprobante": null,
         "observaciones": null,
-        "subtotal": 21,
+        "subtotal": "21.00",
         "tipo_comprobante": null,
       },
     },
@@ -373,13 +373,13 @@ exports[`createPurchaseAction > el stock resultante queda igual al minimo: no at
   {
     "args": {
       "data": {
-        "cantidad": 2,
-        "costo_unitario": 10.5,
+        "cantidad": "2.00",
+        "costo_unitario": "10.50",
         "id_compra": "COM00000001",
         "id_detalle_compra": "DCO00000001",
         "id_material": "MAT00000001",
         "observaciones": null,
-        "subtotal": 21,
+        "subtotal": "21.00",
         "unidad_medida": "UND",
       },
     },
@@ -388,7 +388,7 @@ exports[`createPurchaseAction > el stock resultante queda igual al minimo: no at
   {
     "args": {
       "data": {
-        "costo_unitario_actual": 10.5,
+        "costo_unitario_actual": "10.50",
         "stock_actual": {
           "increment": Decimal(2),
         },
@@ -429,7 +429,7 @@ exports[`createPurchaseAction > el stock resultante queda igual al minimo: no at
         "id_proveedor": "PVE00000001",
         "observaciones": "Precio registrado automáticamente desde compra.",
         "origen_registro": "compra",
-        "precio_unitario": 10.5,
+        "precio_unitario": "10.50",
       },
     },
     "prisma": "historial_precio_proveedor.create",
@@ -623,11 +623,11 @@ exports[`createPurchaseAction > una linea sin IGV > llamadas 1`] = `
         "id_compra": "COM00000001",
         "id_proveedor": "PVE00000001",
         "id_usuario_registro": "USU00000001",
-        "igv": 0,
-        "monto_total": 21,
+        "igv": "0.00",
+        "monto_total": "21.00",
         "numero_comprobante": null,
         "observaciones": null,
-        "subtotal": 21,
+        "subtotal": "21.00",
         "tipo_comprobante": null,
       },
     },
@@ -636,13 +636,13 @@ exports[`createPurchaseAction > una linea sin IGV > llamadas 1`] = `
   {
     "args": {
       "data": {
-        "cantidad": 2,
-        "costo_unitario": 10.5,
+        "cantidad": "2.00",
+        "costo_unitario": "10.50",
         "id_compra": "COM00000001",
         "id_detalle_compra": "DCO00000001",
         "id_material": "MAT00000001",
         "observaciones": null,
-        "subtotal": 21,
+        "subtotal": "21.00",
         "unidad_medida": "UND",
       },
     },
@@ -651,7 +651,7 @@ exports[`createPurchaseAction > una linea sin IGV > llamadas 1`] = `
   {
     "args": {
       "data": {
-        "costo_unitario_actual": 10.5,
+        "costo_unitario_actual": "10.50",
         "stock_actual": {
           "increment": Decimal(2),
         },
@@ -706,7 +706,7 @@ exports[`createPurchaseAction > una linea sin IGV > llamadas 1`] = `
         "id_proveedor": "PVE00000001",
         "observaciones": "Precio registrado automáticamente desde compra.",
         "origen_registro": "compra",
-        "precio_unitario": 10.5,
+        "precio_unitario": "10.50",
       },
     },
     "prisma": "historial_precio_proveedor.create",

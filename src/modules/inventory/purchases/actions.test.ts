@@ -461,51 +461,54 @@ describe("createPurchaseAction", () => {
     expect(url).toBe(`${PURCHASES_PATH}?toast=purchase-created`);
     expect(mocks.requireRole).toHaveBeenCalledWith(["ADMIN"]);
 
-    expect(mocks.tx.compra.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        id_compra: PURCHASE_ID,
-        id_proveedor: SUPPLIER_ID,
-        id_usuario_registro: USER_ID,
-        tipo_comprobante: "factura",
-        numero_comprobante: "F001-00000123",
-        subtotal: 82.5,
-        igv: 14.85,
-        monto_total: 97.35,
-        estado_pago: "pendiente",
-        estado_compra: "confirmada",
-        observaciones: null,
-      }),
-    });
+    // Los montos se comparan por el valor que guardaria la columna, no por el tipo de
+    // JavaScript (desde la 11.2b la accion envia texto con dos decimales).
+    const [[{ data: compra }]] = mocks.tx.compra.create.mock.calls;
 
-    expect(mocks.tx.detalle_compra.create.mock.calls).toEqual([
-      [
-        {
-          data: {
-            id_detalle_compra: "DCO00000001",
-            id_compra: PURCHASE_ID,
-            id_material: PLANCHA,
-            cantidad: 5,
-            unidad_medida: "UND",
-            costo_unitario: 12.5,
-            subtotal: 62.5,
-            observaciones: null,
-          },
-        },
-      ],
-      [
-        {
-          data: {
-            id_detalle_compra: "DCO00000002",
-            id_compra: PURCHASE_ID,
-            id_material: TUBO,
-            cantidad: 2.5,
-            unidad_medida: "UND",
-            costo_unitario: 8,
-            subtotal: 20,
-            observaciones: null,
-          },
-        },
-      ],
+    expect(compra).toMatchObject({
+      id_compra: PURCHASE_ID,
+      id_proveedor: SUPPLIER_ID,
+      id_usuario_registro: USER_ID,
+      tipo_comprobante: "factura",
+      numero_comprobante: "F001-00000123",
+      estado_pago: "pendiente",
+      estado_compra: "confirmada",
+      observaciones: null,
+    });
+    expect({
+      subtotal: stored(compra.subtotal),
+      igv: stored(compra.igv),
+      monto_total: stored(compra.monto_total),
+    }).toEqual({ subtotal: "82.50", igv: "14.85", monto_total: "97.35" });
+
+    expect(
+      mocks.tx.detalle_compra.create.mock.calls.map(([{ data }]) => ({
+        ...data,
+        cantidad: stored(data.cantidad),
+        costo_unitario: stored(data.costo_unitario),
+        subtotal: stored(data.subtotal),
+      })),
+    ).toEqual([
+      {
+        id_detalle_compra: "DCO00000001",
+        id_compra: PURCHASE_ID,
+        id_material: PLANCHA,
+        cantidad: "5.00",
+        unidad_medida: "UND",
+        costo_unitario: "12.50",
+        subtotal: "62.50",
+        observaciones: null,
+      },
+      {
+        id_detalle_compra: "DCO00000002",
+        id_compra: PURCHASE_ID,
+        id_material: TUBO,
+        cantidad: "2.50",
+        unidad_medida: "UND",
+        costo_unitario: "8.00",
+        subtotal: "20.00",
+        observaciones: null,
+      },
     ]);
 
     expect(stockOf(PLANCHA)).toBe("15.00");
@@ -537,17 +540,17 @@ describe("createPurchaseAction", () => {
     });
     expect(db.kardex[1]).toMatchObject({ id_movimiento: "MVI00000002" });
 
-    expect(mocks.tx.historial_precio_proveedor.create).toHaveBeenCalledWith({
-      data: {
-        id_historial_precio: "HPP00000001",
-        id_proveedor: SUPPLIER_ID,
-        id_material: PLANCHA,
-        id_compra: PURCHASE_ID,
-        precio_unitario: 12.5,
-        fecha_registro: new Date("2026-09-28"),
-        origen_registro: "compra",
-        observaciones: "Precio registrado automáticamente desde compra.",
-      },
+    const [[{ data: history }]] = mocks.tx.historial_precio_proveedor.create.mock.calls;
+
+    expect({ ...history, precio_unitario: stored(history.precio_unitario) }).toEqual({
+      id_historial_precio: "HPP00000001",
+      id_proveedor: SUPPLIER_ID,
+      id_material: PLANCHA,
+      id_compra: PURCHASE_ID,
+      precio_unitario: "12.50",
+      fecha_registro: new Date("2026-09-28"),
+      origen_registro: "compra",
+      observaciones: "Precio registrado automáticamente desde compra.",
     });
 
     expect(mocks.registerAuditLog).toHaveBeenCalledWith({
@@ -631,8 +634,9 @@ describe("createPurchaseAction", () => {
     expect(where).toEqual({ id_material: PLANCHA });
     expect(data).toEqual({
       stock_actual: { increment: expect.any(Prisma.Decimal) },
-      costo_unitario_actual: 12.5,
+      costo_unitario_actual: expect.anything(),
     });
+    expect(stored(data.costo_unitario_actual)).toBe("12.50");
     expect(data.stock_actual.increment.toFixed(2)).toBe("5.00");
     expect(select).toEqual({ stock_actual: true, stock_minimo: true });
   });

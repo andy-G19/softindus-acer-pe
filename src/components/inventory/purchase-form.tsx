@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Switch } from "@/components/ui/switch";
-import { IGV_RATE_LABEL, calculateIgv } from "@/lib/taxes";
+import { calculatePurchaseAmounts } from "@/lib/purchase-amounts";
+import { IGV_RATE_LABEL } from "@/lib/taxes";
 import { createPurchaseAction } from "@/modules/inventory/purchases/actions";
 
 type MaterialOption = {
@@ -67,17 +68,11 @@ export function PurchaseForm({ suppliers, materials }: PurchaseFormProps) {
     }));
   }, [materials]);
 
-  const total = useMemo(() => {
-    return items.reduce((acc, item) => {
-      const quantity = Number(item.cantidad || 0);
-      const unitCost = Number(item.costo_unitario || 0);
-
-      return acc + quantity * unitCost;
-    }, 0);
-  }, [items]);
-
-  const igvAmount = appliesIgv ? calculateIgv(total) : 0;
-  const totalWithIgv = total + igvAmount;
+  // Vista previa con la misma regla que guarda la accion (src/lib/purchase-amounts.ts).
+  const amounts = useMemo(
+    () => calculatePurchaseAmounts({ items, aplicaIgv: appliesIgv }),
+    [items, appliesIgv],
+  );
 
   function addItem() {
     setItems((currentItems) => {
@@ -232,8 +227,7 @@ export function PurchaseForm({ suppliers, materials }: PurchaseFormProps) {
 
         <div className="space-y-4">
           {items.map((item, index) => {
-            const subtotal =
-              Number(item.cantidad || 0) * Number(item.costo_unitario || 0);
+            const subtotal = amounts.lines[index].subtotal;
 
             return (
               <div
@@ -317,7 +311,7 @@ export function PurchaseForm({ suppliers, materials }: PurchaseFormProps) {
                   <div className="space-y-2">
                     <Label>Subtotal</Label>
                     <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm font-medium">
-                      S/ {subtotal.toFixed(2)}
+                      S/ {subtotal}
                     </div>
                   </div>
                 </div>
@@ -340,20 +334,20 @@ export function PurchaseForm({ suppliers, materials }: PurchaseFormProps) {
         <div className="space-y-2 rounded-lg bg-muted p-4 text-right">
           <div className="flex items-center justify-between gap-4 text-sm">
             <span className="text-muted-foreground">Subtotal calculado</span>
-            <span className="font-medium">S/ {total.toFixed(2)}</span>
+            <span className="font-medium">S/ {amounts.subtotal}</span>
           </div>
 
           <div className="flex items-center justify-between gap-4 text-sm">
             <span className="text-muted-foreground">
               IGV {appliesIgv ? `(${IGV_RATE_LABEL})` : "(no aplica)"}
             </span>
-            <span className="font-medium">S/ {igvAmount.toFixed(2)}</span>
+            <span className="font-medium">S/ {amounts.igv}</span>
           </div>
 
           <div className="flex items-center justify-between gap-4 border-t border-border/80 pt-2">
             <span className="font-semibold">Total de la compra</span>
             <span className="text-2xl font-bold">
-              S/ {totalWithIgv.toFixed(2)}
+              S/ {amounts.total}
             </span>
           </div>
         </div>

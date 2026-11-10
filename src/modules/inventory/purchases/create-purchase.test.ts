@@ -224,3 +224,85 @@ describe("createPurchaseAction", () => {
     });
   }
 });
+
+// Hallazgos 1 a 3 y 6 de la 11.2b: los montos se calculaban con number y cada columna
+// redondeaba por su cuenta. Lo que importa es el valor que guarda la columna numeric(_, 2),
+// no el tipo de JavaScript: `stored` lo redondea como Postgres (mitad lejos del cero).
+describe("hallazgos 1 a 3 y 6 de la 11.2b: montos de la compra", () => {
+  const stored = (value: unknown) => new Prisma.Decimal(String(value)).toFixed(2);
+
+  function writesOf(calls: Awaited<ReturnType<typeof runAction>>["calls"], name: string) {
+    return calls
+      .filter((call) => "prisma" in call && call.prisma === name)
+      .map((call) => (call as { args: { data: Record<string, unknown> } }).args.data);
+  }
+
+  function purchaseOf(calls: Awaited<ReturnType<typeof runAction>>["calls"]) {
+    const [compra] = writesOf(calls, "compra.create");
+
+    return {
+      subtotal: stored(compra.subtotal),
+      igv: stored(compra.igv),
+      total: stored(compra.monto_total),
+    };
+  }
+
+  it("hallazgo 1: subtotal + IGV = total con dos lineas de 1.25 x 10.25", async () => {
+    const { calls } = await runAction({
+      name: "1.25 x 10.25 dos veces",
+      header: { tipo_comprobante: "factura", numero_comprobante: "F001-000777", aplica_igv: "on" },
+      lines: [
+        { id_material: PLANCHA, cantidad: "1.25", costo_unitario: "10.25" },
+        { id_material: TUBO, cantidad: "1.25", costo_unitario: "10.25" },
+      ],
+    });
+
+    expect(writesOf(calls, "detalle_compra.create").map((line) => stored(line.subtotal))).toEqual([
+      "12.81",
+      "12.81",
+    ]);
+    expect(purchaseOf(calls)).toEqual({ subtotal: "25.62", igv: "4.61", total: "30.23" });
+  });
+
+  it("hallazgo 2: el subtotal de la linea sale de la cantidad redondeada: 1.005 x 10", async () => {
+    const { calls } = await runAction({
+      name: "1.005 x 10",
+      lines: [{ id_material: PLANCHA, cantidad: "1.005", costo_unitario: "10" }],
+    });
+
+    const [line] = writesOf(calls, "detalle_compra.create");
+
+    expect({ cantidad: stored(line.cantidad), subtotal: stored(line.subtotal) }).toEqual({
+      cantidad: "1.01",
+      subtotal: "10.10",
+    });
+    expect(purchaseOf(calls)).toEqual({ subtotal: "10.10", igv: "0.00", total: "10.10" });
+  });
+
+  it("hallazgo 3: con montos pequenos el total es subtotal + IGV: 0.5 x 0.15 con IGV", async () => {
+    const { calls } = await runAction({
+      name: "0.5 x 0.15",
+      header: { aplica_igv: "on" },
+      lines: [{ id_material: PLANCHA, cantidad: "0.5", costo_unitario: "0.15" }],
+    });
+
+    expect(purchaseOf(calls)).toEqual({ subtotal: "0.08", igv: "0.01", total: "0.09" });
+  });
+
+  it("hallazgo 6: el costo se guarda redondeado igual en la linea, el material y el historial", async () => {
+    const { calls } = await runAction({
+      name: "costo 10.255",
+      lines: [{ id_material: PLANCHA, cantidad: "1", costo_unitario: "10.255" }],
+    });
+
+    const [line] = writesOf(calls, "detalle_compra.create");
+    const [materialUpdate] = writesOf(calls, "material.update");
+    const [history] = writesOf(calls, "historial_precio_proveedor.create");
+
+    // Lo que se envia es lo que se guarda: el texto ya redondeado, no el number.
+    expect(line.costo_unitario).toBe("10.26");
+    expect(materialUpdate.costo_unitario_actual).toBe("10.26");
+    expect(history.precio_unitario).toBe("10.26");
+    expect(stored(line.subtotal)).toBe("10.26");
+  });
+});
