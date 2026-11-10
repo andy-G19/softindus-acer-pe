@@ -7762,7 +7762,7 @@ Plan aprobado el 2026-11-09 con cuatro decisiones:
 
 ### Sub-entrega 11.1 — Base de integración, paridad de reportes e idempotencia
 
-Fecha: 2026-11-09 (Lima). Estado: preparada en `staging` (C1 a C9), sin publicar. Plan en
+Fecha: 2026-11-09 (Lima). Estado: verificada en staging, pendiente de integrar en `main`. Plan en
 `tmp/e11-diff/plan-11-1.md`, con las decisiones D5 a D9 aprobadas: corregir la lectura de
 filtros de 6 reportes (D5), un solo cálculo del estado de cobranza (D6), clave UUID sin
 correlativo (D7), el ayudante de idempotencia en la 11.1 aunque su primer consumidor sea la
@@ -7849,18 +7849,37 @@ Hallazgos:
 8. `npm audit` informa 48 vulnerabilidades en el árbol de dependencias. No se evaluaron ni se
    aplicó `npm audit fix`. Tarea aparte.
 9. C1: el primer `npm run check` falló por el tiempo de `versions-confirmation.test.ts` con la
-   máquina cargada (hallazgo 42 de la 10.7b); sola pasa en 1,5 s. No se tocó.
+   máquina cargada (hallazgo 42 de la 10.7b); sola pasa en 1,5 s. Al registrar la verificación
+   falló tres veces seguidas (5.024 a 5.471 ms). Causa: la prueba importaba la página dentro del
+   caso, y la carga en frío contaba para su límite de 5 s; las demás suites de páginas la cargan
+   con `preloadPages` en un `beforeAll`. Corregido con autorización del responsable en un commit
+   `test` aparte: la misma aserción y el mismo límite, la página precargada; el caso tarda 77 ms.
 
 #### Publicación, CI y verificación en staging
 
-Pendiente. Pasos previstos:
+1. Push de los 9 commits (hasta `6eb7a9d`). CI #147 en verde en 5:01, con 3:35 en el paso de
+   comprobación; los CI anteriores tardaron entre 3:13 y 5:03, así que PGlite y la prueba de
+   migraciones en Ubuntu no se notan. Vercel desplegó staging con éxito (00:04 UTC del 10).
+2. El responsable comprobó que su `DATABASE_URL` apunta a staging y ejecutó `npx prisma migrate
+   status` (20 migraciones, una pendiente: `20261109201052_add_operacion_idempotente`),
+   `migrate deploy` (aplicada) y otra vez `status` («Database schema is up to date!»). La salida
+   de `status` no distingue staging de producción (el host es el pooler de la región y las dos
+   bases estaban en el mismo punto): el destino se confirmó por el id del proyecto en la URL.
+3. Con ADMIN (sesión y origen comprobados en llamadas aparte), solo lecturas, sin abrir ningún
+   enlace de `/api/`: en los 5 reportes, un texto con espacios alrededor y un id con espacios
+   dan las mismas filas que sin espacios, el campo muestra el valor recortado y el enlace de
+   Excel lleva el valor recortado. Con datos en los dos lados:
 
-1. Push a `staging` y CI en verde, anotando su duración (primera vez con PGlite en Ubuntu).
-2. El responsable ejecuta `npx prisma migrate status` contra staging (debe mostrar 1
-   pendiente), `npx prisma migrate deploy` y otra vez `status`.
-3. Con ADMIN, abrir los 5 reportes con filtros y un filtro con espacios alrededor; sin exportar
-   salvo permiso (exportar escribe en `exportacion_datos` y en la bitácora).
-4. Antes del PR a `main`: `migrate status` y `migrate deploy` contra producción, por el
+   | Reporte | Texto (filas) | Id (filas) |
+   |---|---|---|
+   | Producción | `otr0000000`: 9 y 9 | `PRO00000001`: 3 y 3 |
+   | Inventario | `otr0000000`: 38 y 38 | `MAT00000009`: 2 y 2 |
+   | Ventas y cobranzas | `ped0000000`: 9 y 9 | `CLI00000007`: 2 y 2 |
+   | Proveedores y compras | `com0000000`: 9 y 9 | `PVE00000001`: 6 y 6 |
+   | Financiero | `chatarra`: 2 y 2 | `CAJ00000001`: 2 y 2 |
+
+4. El CSS servido es el mismo archivo que tras la 10.8b (`3zy2beb8e6sdq.css`, 112.315 bytes).
+5. Pendiente antes del PR a `main`: `migrate status` y `migrate deploy` contra producción, por el
    responsable.
 
 ## Secuencia de próximas entregas
@@ -7888,7 +7907,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 preparada en `staging` (C1 a C9), pendiente de publicar y verificar |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 verificada en staging (CI #147, migración aplicada), pendiente de integrar en `main` |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
