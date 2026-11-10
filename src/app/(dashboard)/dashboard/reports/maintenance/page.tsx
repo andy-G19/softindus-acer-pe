@@ -39,6 +39,7 @@ import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import { parseStringParam } from "@/lib/search-params";
 import {
   getMaintenanceReportData,
   getMaintenanceReportFilterOptions,
@@ -72,19 +73,6 @@ const OPEN_FAILURE_STATES = ["pendiente", "en_atencion"];
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0] ?? "";
-  }
-
-  return value ?? "";
-}
 
 function formatHours(value: unknown) {
   return `${toNumber(value).toFixed(2)} h`;
@@ -240,13 +228,13 @@ export default async function MaintenanceReportPage({
 
   const params = searchParams ? await searchParams : {};
 
-  const dateFrom = getSearchParam(params, "dateFrom");
-  const dateTo = getSearchParam(params, "dateTo");
-  const machineId = getSearchParam(params, "machineId");
-  const failureStatus = getSearchParam(params, "failureStatus");
-  const repairStatus = getSearchParam(params, "repairStatus");
-  const preventiveStatus = getSearchParam(params, "preventiveStatus");
-  const searchText = getSearchParam(params, "searchText").trim();
+  const dateFrom = parseStringParam(params, "dateFrom");
+  const dateTo = parseStringParam(params, "dateTo");
+  const machineId = parseStringParam(params, "machineId");
+  const failureStatus = parseStringParam(params, "failureStatus");
+  const repairStatus = parseStringParam(params, "repairStatus");
+  const preventiveStatus = parseStringParam(params, "preventiveStatus");
+  const searchText = parseStringParam(params, "searchText");
 
   const filters = {
     dateFrom,

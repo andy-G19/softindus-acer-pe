@@ -36,6 +36,7 @@ import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import { parseStringParam } from "@/lib/search-params";
 import {
   getProductionReportData,
   getProductionReportFilterOptions,
@@ -56,19 +57,6 @@ const WORK_ORDER_STATUS_OPTIONS = [
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0] ?? "";
-  }
-
-  return value ?? "";
-}
 
 function formatQuantity(value: unknown) {
   return toNumber(value).toFixed(2);
@@ -180,11 +168,11 @@ export default async function ProductionReportPage({
 
   const params = searchParams ? await searchParams : {};
 
-  const dateFrom = getSearchParam(params, "dateFrom");
-  const dateTo = getSearchParam(params, "dateTo");
-  const productId = getSearchParam(params, "productId");
-  const status = getSearchParam(params, "status");
-  const orderId = getSearchParam(params, "orderId").trim();
+  const dateFrom = parseStringParam(params, "dateFrom");
+  const dateTo = parseStringParam(params, "dateTo");
+  const productId = parseStringParam(params, "productId");
+  const status = parseStringParam(params, "status");
+  const orderId = parseStringParam(params, "orderId");
 
   const filters = { dateFrom, dateTo, productId, status, orderId };
   const pageHeader = {

@@ -14,7 +14,8 @@ Pantallas renovadas hasta ahora:
   crítico, entradas, salidas, compras (la lista) y pagos a proveedores.
 - Caja chica: categorías de gasto.
 - Mantenimiento: todas sus pantallas.
-- Producción: rutas de fabricación, etapas, recetas, campañas, cuellos de
+- Producción: el inicio, rutas de fabricación, etapas, recetas, las versiones
+  de una receta y sus materiales, calcular materiales, campañas, cuellos de
   botella y la lista de órdenes de trabajo.
 - Mermas y chatarra: el inicio, la chatarra y los retazos reutilizables.
 - Usuarios: toda la pantalla.
@@ -40,9 +41,16 @@ lista. Así no pierdes la lista ni los filtros que tenías puestos.
   dirección: si recargas la página o copias el enlace, el mismo formulario
   se abre a pantalla completa, y allí **Cancelar** te devuelve a la lista
   con los filtros que tenía.
-- Los formularios con líneas que se agregan, como los pedidos y las
-  reparaciones, se abren en una página completa. **Cancelar** pregunta antes de
-  salir si cambiaste algo.
+- Los formularios con líneas que se agregan, como los pedidos, las
+  reparaciones y las versiones de una receta, se abren en una página completa.
+  **Cancelar** pregunta antes de salir si cambiaste algo.
+- Algunas ventanas se abren desde un detalle o desde una fila, como agregar
+  un producto a una campaña o restablecer la contraseña de un usuario. Al
+  guardar, la ventana se cierra y sigues en la misma página.
+- En el detalle de un costeo, cada sección (mano de obra, costos indirectos,
+  margen y rentabilidad) tiene su propio formulario dentro de la página, sin
+  ventana: si algo está mal, el mensaje queda en la sección; al guardar
+  aparece un aviso y los montos se actualizan sin salir del detalle.
 - En el teléfono, la ventana y el panel ocupan toda la pantalla.
 
 Los campos marcados con un asterisco (*) son obligatorios.
@@ -82,7 +90,10 @@ Puedes cerrar la ventana con **Cancelar**, con la **X**, con la tecla
 Los registros de los catálogos no se borran: se **inactivan**. Esto vale
 para tipos de proveedor, proveedores, materiales de proveedor, categorías de
 materiales, materiales, categorías de gasto, clientes, productos,
-categorías de producto, máquinas y repuestos.
+categorías de producto, máquinas y repuestos. Las rutas, las etapas y las
+recetas de Producción, los operarios y los usuarios (que se **desactivan**)
+siguen las mismas reglas de confirmar y avisar; dónde queda su fila depende
+del orden de cada lista.
 
 - **Inactivar** pide confirmación. La pregunta nombra el registro y explica
   qué pasa, por ejemplo: «Dejará de ofrecerse al registrar proveedores; los
@@ -119,6 +130,15 @@ las reparaciones, tienen en su fila una lista de estados y el botón **Guardar**
 - Si otra persona ya había hecho el cambio, el sistema te avisa de que «ya
   estaba en ese estado» y no escribe nada.
 
+Otros cambios tienen su propio botón, sin lista de estados: en la fila, marcar
+vigente y anular una versión de receta; activar, finalizar y anular una
+campaña; reutilizar y descartar un retazo; anular una tarea diaria o un costo
+indirecto, y en el detalle de un costeo, recalcularlo. Siguen las mismas
+reglas: lo que no se
+puede deshacer pide confirmar, con el botón rojo para anular y descartar, y
+con el normal para marcar vigente, finalizar, reutilizar y recalcular.
+Activar una campaña se aplica al pulsar.
+
 ## Filtrar las listas
 
 Las listas renovadas tienen una barra de filtros arriba. Completa los campos
@@ -144,8 +164,7 @@ se incluyen completos. **Hasta** no ofrece días anteriores a **Desde**; si
 quedan al revés, muestra «La fecha inicial no puede ser mayor que la fecha
 final.» y la barra no se envía hasta corregirlo. Si llegas con un enlace que
 ya trae el rango al revés, **Hasta** muestra el mismo mensaje: los reportes
-no muestran datos y piden corregir el rango, y las listas de Inventario, de
-Comercial y de Mantenimiento salen vacías.
+no muestran datos y piden corregir el rango, y las listas salen vacías.
 
 Las fechas cuentan aunque las elijas mientras la página todavía carga, o
 aunque el navegador las recupere al volver con **Atrás**: si quedan al
@@ -165,5 +184,6 @@ Cada pantalla muestra solo lo que tu usuario puede hacer. Si un rol solo
 puede consultar, verás la lista con la indicación **Solo lectura** y sin los
 botones de crear, editar o inactivar. Los inicios de Inventario, de
 Mantenimiento y de Personal muestran solo las tarjetas de las pantallas que
-tu usuario puede abrir. Los permisos de
-cada pantalla están en el capítulo de su área.
+tu usuario puede abrir; el de Mermas muestra **Registrar venta** solo al
+administrador, y el inicio del sistema muestra Costos solo al administrador.
+Los permisos de cada pantalla están en el capítulo de su área.

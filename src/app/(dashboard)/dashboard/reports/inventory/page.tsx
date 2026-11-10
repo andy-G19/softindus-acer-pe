@@ -36,6 +36,7 @@ import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import { parseStringParam } from "@/lib/search-params";
 import {
   getInventoryReportData,
   getInventoryReportFilterOptions,
@@ -54,19 +55,6 @@ const INVENTORY_MOVEMENT_OPTIONS = [
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0] ?? "";
-  }
-
-  return value ?? "";
-}
 
 function formatQuantity(value: unknown) {
   return toNumber(value).toFixed(2);
@@ -172,12 +160,12 @@ export default async function InventoryReportPage({
 
   const params = searchParams ? await searchParams : {};
 
-  const dateFrom = getSearchParam(params, "dateFrom");
-  const dateTo = getSearchParam(params, "dateTo");
-  const materialId = getSearchParam(params, "materialId");
-  const movementType = getSearchParam(params, "movementType");
-  const userId = getSearchParam(params, "userId");
-  const workOrderId = getSearchParam(params, "workOrderId").trim();
+  const dateFrom = parseStringParam(params, "dateFrom");
+  const dateTo = parseStringParam(params, "dateTo");
+  const materialId = parseStringParam(params, "materialId");
+  const movementType = parseStringParam(params, "movementType");
+  const userId = parseStringParam(params, "userId");
+  const workOrderId = parseStringParam(params, "workOrderId");
 
   const filters = { dateFrom, dateTo, materialId, movementType, userId, workOrderId };
   const pageHeader = {

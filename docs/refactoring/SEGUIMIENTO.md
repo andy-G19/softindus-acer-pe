@@ -3065,9 +3065,10 @@ Datos leídos de la API de GitHub el 2026-10-15 y comparados con git:
 
 ## Entrega 10 — Catálogos, listados y resto de dominios
 
-Fecha: desde el 2026-10-15. Estado: en curso; plan aprobado por el
-responsable el 2026-10-15. El paso 0 (`62640e1`) registró la integración de
-la entrega 9 en `main`.
+Fecha: del 2026-10-15 al 2026-11-07, día en que se integró la 10.8b. Estado:
+cerrada el 2026-11-09; plan aprobado por el responsable el 2026-10-15. El
+paso 0 (`62640e1`) registró la integración de la entrega 9 en `main`. El
+balance está en «Cierre de la entrega 10», después de la 10.8b.
 
 Es la tercera entrega de la pista B y cubre las fases 4 y 7 del plan maestro:
 los catálogos, los listados y el resto de dominios adoptan los patrones del
@@ -3198,7 +3199,7 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3a | Migrado |
 | Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Migrado |
 | Productos | Comercial | ADMIN | Páginas, desviación | Panel lateral | 10.4a | Migrado |
-| Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4c | Pendiente |
+| Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4c | Migrado |
 | Máquinas | Mantenimiento | ADMIN | Páginas, desviación | Panel lateral | 10.5a | Migrado |
 | Repuestos | Mantenimiento | ADMIN | Páginas, desviación; alta auxiliar de proveedor | Panel lateral | 10.5a | Migrado |
 | Fallas | Mantenimiento | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.5b | Migrado |
@@ -3231,7 +3232,7 @@ destructivas confirman:
 | 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto (migradas) |
 | 10.3 | Inactivar material y atender alerta de stock (10.3a, migradas); inactivar proveedor y material de proveedor (10.3b, migradas) |
 | 10.4 | Inactivar cliente, producto y categoría de producto (10.4a, migradas) |
-| 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
+| 10.5 | Inactivar máquina y repuesto (10.5a; se retiran `updateMachineStatusAction`, D4, y `updateSparePartStatusAction`, sin pantalla); cambiar el estado de falla, preventivo y reparación (10.5b); todas migradas |
 | 10.6 | Inactivar ruta y etapa (10.6a, migradas); inactivar receta; marcar versión vigente; anular versión; borrar detalle de receta (10.6b, migradas) |
 | 10.7 | Cambiar el estado de campaña y de retazo (10.7a); activar y desactivar usuario (10.7b); todas migradas |
 | 10.8 | Inactivar operario y cancelar tarea (10.8a); generar costeo desde una orden, recalcular costeo y anular costo indirecto (10.8b): todas migradas |
@@ -7346,10 +7347,11 @@ Datos leídos de la API de GitHub el 2026-11-05 (UTC) y comparados con git:
 
 ### Sub-entrega 10.8b — Costos
 
-Fecha: del 2026-11-05 al 2026-11-06 (Lima). Estado: verificada en staging el 2026-11-06 UTC,
-pendiente de integrar. El paso B0 (`4aaef92`) registró la integración de la 10.8a. 7 commits de
-código y pruebas, de `30e5c66` a `4da59aa`, el registro `0617ba1`, el arreglo del hallazgo 95
-(`9917160`, revertido en `8fbe530`, y `4515b83`) y el cierre. Plan en `tmp/e10-diff/plan-10-8b.md`, sobre los pasos y
+Fecha: del 2026-11-05 al 2026-11-06 (Lima). Estado: cerrada e integrada en `main` con el PR #38
+(merge commit `aefe1df`, CI #146 en verde). El paso B0 (`4aaef92`) registró la integración de la
+10.8a. 7 commits de código y pruebas, de `30e5c66` a `4da59aa`, el registro `0617ba1`, el arreglo
+del hallazgo 95 (`9917160`, revertido en `8fbe530`, y `4515b83`) y el cierre `82b6335`. Plan en
+`tmp/e10-diff/plan-10-8b.md`, sobre los pasos y
 las decisiones D4 a D9 de `plan-10-8.md`, con 4 ajustes aprobados. Solo ADMIN. Ninguna fórmula
 de Costos cambia: los montos se guardan como antes y las diferencias de cada snapshot se
 comprobaron por programa.
@@ -7368,7 +7370,7 @@ comprobaron por programa.
 | 9917160 | fix | `onSuccess` desde un efecto al terminar la transición (hallazgo 95); rompía la navegación. |
 | 8fbe530 | revert | Revierte `9917160`. |
 | 4515b83 | fix | Generar redirige al costeo con su aviso en la URL; `ConfirmActionButton` sin `onSuccess` (hallazgo 95). |
-| este | docs | Cierre: verificación en staging y manual de Costos. |
+| 82b6335 | docs | Cierre: verificación en staging y manual de Costos. |
 
 Ajustes al plan:
 
@@ -7555,6 +7557,331 @@ Hallazgos de la verificación:
 
 El manual suma el capítulo de Costos, y el de patrones lo cuenta entre las pantallas renovadas.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-09 (UTC) y comparados con git:
+
+- El cierre `82b6335` se publicó en `staging`: CI #144 en verde (3m 54s, de
+  11:55:30 a 11:59:24 UTC del 2026-11-07), y Vercel lo desplegó (`success` a las
+  11:57:02 UTC).
+- PR #38, abierto a las 12:12:31 UTC y fusionado con merge commit a las
+  12:17:54 UTC del 2026-11-07: 13 commits, de `4aaef92` a `82b6335`, y 43
+  archivos (+4.346 −982). Su CI, el #145, sobre `82b6335`, terminó en verde
+  (5m 3s).
+- El merge commit `aefe1df` tiene como padres `6bfb5ae` (`main`) y `82b6335`
+  (`staging`), y su árbol es el de `82b6335` (`e3dc48ff`): `main` y `staging`
+  tienen el mismo contenido. CI #146 en verde (4m 47s).
+- Vercel desplegó `aefe1df` en producción con un solo despliegue (`success` a
+  las 12:19:29 UTC). La sub-entrega no trae migraciones (sin cambios en
+  `prisma/`).
+
+### Cierre de la entrega 10
+
+Cerrada el 2026-11-09, con la 10.8b integrada en `main` (CI #146). La entrega se partió en 16
+sub-entregas, cada una publicada, verificada en staging e integrada por separado. El paso C0 del
+cierre (`9987085`) registró la integración de la 10.8b. Este cierre solo cambia documentación.
+
+| Sub-entrega | Área | PR | Merge commit | Fecha del merge (UTC) | CI en `main` |
+|---|---|---|---|---|---|
+| 10.1 | Bases y catálogos breves | #23 | `9f52808` | 2026-10-17 | #79 |
+| 10.2 | Reportes y auditoría | #24 | `9dc6dd9` | 2026-10-18 | #84 |
+| 10.3a | Materiales y alertas | #25 | `13ea654` | 2026-10-19 | #89 |
+| 10.3b | Proveedores y asociaciones | #26 | `28d12a7` | 2026-10-21 | #93 |
+| 10.3c | Listados con fechas e inicio de Inventario | #27 | `cb43290` | 2026-10-24 | #97 |
+| 10.4a | Productos, estados e inicio de Comercial | #28 | `3545faf` | 2026-10-27 | #101 |
+| 10.4b | Listados de Comercial con fechas y `Badge` | #29 | `745229c` | 2026-10-28 | #105 |
+| 10.4c | Pedidos, la superficie amplia | #30 | `3ed8001` | 2026-10-29 | #109 |
+| 10.5a | Máquinas, repuestos e inicio de Mantenimiento | #31 | `1cd778b` | 2026-10-30 | #114 |
+| 10.5b | Fallas, preventivos y reparaciones | #32 | `27070b0` | 2026-11-01 | #118 |
+| 10.6a | Rutas, etapas y listados | #33 | `59f288e` | 2026-11-02 | #122 |
+| 10.6b | Recetas, versiones y detalles | #34 | `6c4e605` | 2026-11-02 | #127 |
+| 10.7a | Campañas y mermas | #35 | `a57b520` | 2026-11-03 | #131 |
+| 10.7b | Usuarios | #36 | `24163e7` | 2026-11-03 | #135 |
+| 10.8a | Personal | #37 | `6bfb5ae` | 2026-11-05 | #139 |
+| 10.8b | Costos | #38 | `aefe1df` | 2026-11-07 | #146 |
+
+La fecha es la del commit de merge en UTC (`TZ=UTC git log --date=format-local`); el estado de
+cada CI y el despliegue de producción están en la «Integración en `main`» de cada sub-entrega.
+
+#### Cobertura del plan contra lo hecho
+
+- Formularios: los 31 de las tablas de cobertura están migrados, más los 2 de la entrega 9. Cada
+  uno tiene la presentación decidida (ventana breve, panel lateral, superficie amplia o sección
+  del detalle) y devuelve un resultado; ninguno redirige al negar el permiso.
+- Acciones de fila: las 32 están migradas. Las destructivas confirman con la entidad, la
+  consecuencia real y el verbo; las que fijan un estado lo hacen con un `compare-and-set` o con
+  la fila bloqueada.
+- Listados: todos usan `FilterBar` salvo 3 formularios GET de la entrega 11 o que piden un
+  parámetro: los movimientos de caja chica, el mes del resumen de caja y la cantidad de los
+  requerimientos de una versión.
+- Enlaces: cada área renovada tiene su prueba (`*-links.test.ts`), que abre cada enlace con
+  cada rol y falla si la pantalla de destino lo rechaza.
+- Manual: un capítulo por área renovada en `docs/manual/` y las reglas comunes en
+  `00-patrones.md`.
+
+Quedan para la entrega 11, según el límite del plan, 29 operaciones en 16 archivos de acciones:
+
+| Área | Operaciones | Acciones | Caracterizadas |
+|---|---|---|---|
+| Comercial | Proformas (crear, anular), comprobantes (crear, anular), pagos de cliente, cancelar pedido | 6 | Ninguna (`orders/actions.test.ts` no cubre cancelar) |
+| Inventario | Compras (crear, anular), pago a proveedor, salida de inventario | 4 | Compras y salida |
+| Producción | Órdenes de trabajo (crear y 7 operaciones) y avances (3) | 11 | Todas |
+| Caja chica | Apertura, gasto, ingreso o ajuste, anulación de movimiento | 4 | Ninguna |
+| Mermas | Venta de chatarra (crea un movimiento de caja) | 1 | No |
+| Personal | Generar y anular planilla, registrar el pago a un operario | 3 | No |
+
+Con ellas quedan: la salida de inventario, única función de `useActionState` que redirige al
+negar el permiso, y la última copia local de `FieldError`; 9 páginas con `<main>` anidado (7 de
+caja chica y 2 de proformas); 9 páginas con `ConfirmDeleteButton`, que con la demo de la
+galería es el único uso de `showConfirm` de SweetAlert; `StatusBadge` (solo en la galería) y `RowToggleStatusButton` (sin
+usos, hallazgo 74); el adaptador `legacy-industrial-dark.css` (25 reglas, 40 selectores; lo
+consumen el shell y el login); un `error.tsx` para el panel; y la paridad de filtros de 5
+reportes (hallazgo 1 de la 10.2).
+
+#### Métricas al inicio y al final
+
+Medidas con `/verificar` y los guiones de la entrega sobre `62640e1` (inicio) y `82b6335`
+(final, igual a `main` en `aefe1df`). `npm run check` terminó con código 0 sobre `82b6335`:
+lint sin errores (un aviso anterior, `_line` sin usar en `orders/actions.ts`, de `8626f18`), 249
+archivos de prueba con 4.586 pruebas y el build. El CSS compilado es igual byte a byte al de B7
+de la 10.8b (112.316 bytes).
+
+| Métrica | Inicio (`62640e1`) | Final (`82b6335`) |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 125 / 1.975 | 249 / 4.586 |
+| Páginas `page.tsx` (las rutas interceptadas suman paneles) | 131 | 179 |
+| Funciones de `useActionState` que redirigen al negar el permiso | 30 | 1 |
+| Activar e inactivar que leen el estado y escriben el contrario | 12 | 0 |
+| Copias locales de `FieldError` | 14 | 1 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 109 | 9 |
+| Formularios GET / combinaciones de clases | 42 / 26 | 3 / 3 |
+| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 1 |
+| Listados que cortan el último día con `lte` (sobre `2d9ca08`) | 17 | 1 |
+| Claves `?toast=` caracterizadas | 125 / 125 | 130 / 130 |
+| Páginas con `ConfirmDeleteButton` | 14 | 9 |
+| Archivos con `StatusBadge`, sin pruebas ni snapshots | 8 | 3 (el componente y 2 secciones de la galería) |
+| Archivos con `RowToggleStatusButton`, sin pruebas ni snapshots | 11 | 1 (su definición) |
+| Usos de `showConfirm` fuera de la fachada (`ConfirmDeleteButton` y la demo de la galería) | 2 | 2 |
+| Definiciones locales de `formatDecimal` | 17 | 15 |
+| Páginas con Prisma directo / `auth()` directo en `src/modules` / copias de `toNumber`, `formatMoney` y `formatDate` / archivos que importan las librerías de notificaciones | 0 / 0 / 0 / 2 | 0 / 0 / 0 / 2 |
+
+Contra la última sub-entrega (10.8b sobre `4da59aa`) solo cambian las pruebas: 4.587 → 4.586,
+porque `4515b83` deja un solo caso de éxito en el botón de generar costeo.
+
+Los archivos más grandes de `src` son pruebas y el arnés (1.335, 1.180 y 1.180 líneas). Los de
+producción son el reporte de mantenimiento (748), `commercial/products/actions.ts` (696) y el
+detalle de orden de trabajo (643).
+
+Tiempo de preparación medido desde la 10.4c (del rojo de cada paso al último `npm run check` en
+verde, sin esperas ni verificación): entre 0,24 y 0,47 de lo estimado en bruto por sub-entrega.
+La verificación en staging no se midió igual: con datos, predicción y autorizaciones, cada una
+llevó varias horas.
+
+#### Hallazgos abiertos y su destino
+
+Todos los hallazgos de las sub-entregas que no están corregidos ni son de método. Destinos: la
+entrega 11 con su sub-entrega propuesta, un `fix` propio (grupo 5 de fixes, con prueba que falla
+primero) o una decisión de negocio del responsable. «Sin acción» es lo que se registró como
+diseño o sin forma de comprobarlo.
+
+| Origen | Hallazgo | Destino |
+|---|---|---|
+| 10.8a (D8) | 57: tarifa diaria en la planilla y por hora en el costeo | Decisión de negocio |
+| 10.3c | 3 y 4: los filtros y los valores por defecto usan el día UTC; una fecha inexistente en la URL; también 8 de la 10.4a (pedidos después de las 19:00) y 12 de la 10.5b | Decisión de negocio |
+| 10.3a | 2: la alerta compara el stock actual y «Críticos» el disponible | Decisión de negocio |
+| 10.3a | 8: atender una alerta no escribe bitácora | Decisión de negocio |
+| 10.3a, 10.4a | 5 y 10: los filtros de proveedor y de cliente de dos reportes solo ofrecen activos | Decisión de negocio |
+| 10.4a | 15: el filtro «Producto» de pedidos ofrece inactivos | Decisión de negocio |
+| 10.4b | 3: el filtro «Estado» de pedidos no ofrece «en producción» | Decisión de negocio |
+| 10.4c | 2: «Cantidad» con `min="1"` y el esquema acepta cualquier positivo | Decisión de negocio |
+| Auditoría de la 10.5 | 12, y 1 y 2 de la 10.5b: reglas de anular y ejecutar reparaciones sobre la falla y la máquina | Decisión de negocio |
+| 10.5b | 3: totales de reparaciones anteriores a `03dbb97` (migración de datos) | Decisión de negocio |
+| 10.6a | R3 y R4: anular una versión sin receta activa; base anulada para una versión nueva | Decisión de negocio |
+| 10.7a | 9: nadie escribe `cantidad_producida` de campañas (D5), antes de la 11.6 | Decisión de negocio |
+| 10.7a | 10: finalizar o anular pisa `fecha_fin` | Decisión de negocio |
+| 10.7a | 28: campañas redondea con `toFixed` (1.005 → 1.00) y la base daría 1.01 | Decisión de negocio |
+| 10.7b | 23: restablecer no cierra sesiones (columna nueva); 24: último administrador; 25: `usuario` distingue mayúsculas | Decisión de negocio |
+| 10.2 | 1: paridad de filtros de 5 reportes en `screen-parity.test.ts` | E11 (11.1) |
+| 10.3a | 3: las salidas no crean alertas y editar el mínimo no las reevalúa | E11 (11.2), con decisión |
+| 10.3c | 5: pagos a proveedores sin paginar | E11 (11.2) |
+| 10.4a | 7: `updateOrderAction` decide fuera de la transacción, como cancelar (H11) | E11 (11.3) |
+| 10.4a | 9: proformas, comprobantes y pagos de cliente sin paginar | E11 (11.3) |
+| 10.4b | 4: tipo y método de pago se muestran como se guardan | E11 (11.3) |
+| 10.4b | 5: el detalle de proforma no recibe `returnTo` | E11 (11.3) |
+| 10.4c | 1: la edición muestra el formulario de un pedido anulado | E11 (11.3) |
+| 10.3c | 2: la última copia que corta con `lte` (movimientos de caja chica) | E11 (11.4) |
+| 10.3a | 7: una entrega a una orden puede actualizar una alerta recién atendida | E11 (11.6) |
+| 10.6a, 10.7a | R5 y 11: `createWorkOrder` decide fuera de la transacción y sin bloquear | E11 (11.6) |
+| 10.6b | 27: el detalle de orden resta el stock reservado sin redondear | E11 (11.6) |
+| 10.8a | 74: `RowToggleStatusButton` sin usos | E11 (11.7) |
+| 10.3b | 12: con un dato repetido, el mismo mensaje en la alerta y en el campo | E11 (11.7), con decisión |
+| 10.3b | 5: el alta rápida de proveedor desde repuestos no tiene unicidad | E11 (11.7), con la idempotencia |
+| 10.6a | 13: el tipo del alta rápida de proveedor es un `<select>` controlado dentro de `ActionForm` | E11 (11.7) |
+| 10.3c, 10.6a | 6 y 22: «Todavía no hay … registradas» también con un filtro sin resultados | E11 (11.7) |
+| 10.6a | 15: los paneles de otras áreas no doblan `RouteSheet` en el arnés | E11 (11.7) |
+| 10.7a | 36: Atrás restaura los filtros GET escritos (todas las listas con `FilterBar`) | Fix propio, con `autoComplete="off"` y verificación en navegador |
+| 10.2 | 5: el maestro de taller no tiene enlace a los reportes de inventario y mantenimiento | Fix propio (navegación) |
+| 10.4c, 10.6b | 5 y 30: los errores de línea van por posición y se desalinean al quitar una línea | Fix propio |
+| 10.6b | 29: «La versión ya estaba vigente.» sin revalidar la lista | Fix propio |
+| 10.6a | R2: los KPI «Total» de etapas y recetas cuentan lo filtrado | Fix propio |
+| 10.5a, 10.5b, 10.6a, 10.7a | 2; 4, 5 y 13; R1 y R6; 15 y 34: textos y copias (tarjeta «Acceso: ADMIN.», «Recomendacion», mensajes sin tilde, ejemplo cortado, nota de stock de la receta, comentario sobrante, «Disponible» en chatarra, «Volver a chatarra») | Fix propio (textos) |
+| 10.7b | 42: `versions-confirmation.test.ts` roza su límite de 5 s con la máquina cargada | Fix propio (pruebas) |
+| 10.5a | 8: el buscador de `SearchableSelect` abre filtrado por la opción elegida | Fix propio, con decisión |
+| 10.2 | 6: Safari no enfoca el botón pulsado | Sin acción (no se pudo comprobar sin Safari) |
+| 10.5a | 3: la marca «Inactivo» no está en el HTML del servidor | Sin acción (la cubre una prueba) |
+| 10.7b | 47: `count_105b_get_forms.py` no cuenta `action={variable}` | Sin acción en el código (guion de medición) |
+
+Lecciones que pasan a la entrega 11, además de las de cada sub-entrega:
+
+- Una acción que debe llevar a otra página redirige ella; nunca `router.push` después de una
+  acción que revalida (hallazgo 95, en `CLAUDE.md`).
+- Una app mínima que reproduce un fallo tiene todas las condiciones de la pantalla real
+  (hallazgo 96), y un arreglo de navegación se verifica en staging.
+- Antes de cada escritura en staging se comprueba el origen en una llamada aparte; antes de un
+  envío que debe rechazarse, la condición por id; antes de guardar, lo elegido (hallazgos 37 y
+  38 de la 10.6b, 97 de la 10.8b).
+- Una predicción de montos usa lo que la base guarda (hallazgo 98).
+
+## Entrega 11 — Operaciones críticas con integración e idempotencia
+
+Plan aprobado el 2026-11-09 con cuatro decisiones:
+
+- D1. Las pruebas de integración corren contra PGlite (Postgres 17 en WebAssembly, en memoria):
+  sin red, sin Docker y sin Supabase, dentro de `npm test` y del CI.
+- D2. Una tabla genérica de idempotencia, `operacion_idempotente`, para todas las operaciones
+  que la necesiten.
+- D3. Sub-entregas en este orden: 11.1 base de integración, los 5 reportes que faltaban en la
+  paridad e idempotencia; 11.2 Inventario (compras, pagos a proveedores y salidas); 11.3
+  Comercial (proformas, comprobantes, pagos y cancelar pedido); 11.4 Caja chica y venta de
+  chatarra; 11.5 planillas y su pago, sin tocar la tarifa; 11.6a y 11.6b órdenes de trabajo y
+  avances; 11.7 consolidación (retirar `ConfirmDeleteButton`, `showConfirm`, SweetAlert2,
+  `StatusBadge`, `RowToggleStatusButton` y el CSS heredado; las 15 copias de `formatDecimal`;
+  `error.tsx`). El destino de cada hallazgo abierto de la entrega 10 está en «Hallazgos
+  abiertos y su destino» de su cierre.
+- D4. Se conserva el contrato `?toast=`.
+
+### Sub-entrega 11.1 — Base de integración, paridad de reportes e idempotencia
+
+Fecha: 2026-11-09 (Lima). Estado: verificada en staging, pendiente de integrar en `main`. Plan en
+`tmp/e11-diff/plan-11-1.md`, con las decisiones D5 a D9 aprobadas: corregir la lectura de
+filtros de 6 reportes (D5), un solo cálculo del estado de cobranza (D6), clave UUID sin
+correlativo (D7), el ayudante de idempotencia en la 11.1 aunque su primer consumidor sea la
+11.2 (D8) y las pruebas de integración dentro de `npm test` (D9).
+
+Antes del plan, dos sondas fuera del código (`tmp/e11-diff/sonda`, ignorada) comprobaron que el
+cliente Prisma real corre contra PGlite dentro de Vitest y que `prisma migrate diff` compara
+una base PGlite con `schema.prisma`.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| af87413 | chore | `@electric-sql/pglite` 0.4.1 y `pglite-socket` 0.1.1 como dependencias de desarrollo, con versión exacta (antes llegaban solo a través de Prisma). |
+| 07c8100 | test | Proyectos `unit` e `integration` en Vitest; `test-database.ts` (PGlite con las migraciones, socket en el puerto 0, `PrismaPg` con `max: 1`); `integration-setup.ts` (`@/lib/db` y `server-only`); 6 pruebas de correlativos en Postgres, incluido el rollback que libera el número. |
+| f2ac3d5 | test | Las migraciones construyen exactamente `schema.prisma`, salvo la diferencia conocida `uq_version_receta_vigente`. |
+| 299d167 | test | `screen-parity.test.ts` cubre los 5 reportes que faltaban (25 casos) y falla si una consulta principal no se encuentra en uno de los lados. |
+| 69bbbbf | fix | Las páginas de producción, inventario, ventas y cobranzas, proveedores y compras, financiero y mantenimiento leen sus filtros con `parseStringParam`, como la exportación (12 casos rojos antes). |
+| a881c5a | refactor | `collection-status.ts`: la cobranza de un pedido y su filtro, una sola vez para la página y el exportador. |
+| ab48505 | feat | Modelo y migración `20261109201052_add_operacion_idempotente`; el esquema pasa a 63 modelos. |
+| 650bc45 | feat | `claimOperation`, `completeOperation` e `IdempotencyConflictError` en `src/lib/idempotency.ts`, con 7 pruebas en Postgres. |
+| (este) | docs | Registro de la sub-entrega y `CLAUDE.md`. |
+
+Diseño:
+
+- Una base PGlite por archivo de prueba, creada al primer uso y cerrada en `afterAll`. Antes de
+  migrar fija `TIME ZONE 'UTC'` y `search_path = aceros`: la primera migración crea sus tablas
+  sin nombrar el esquema. Si una migración falla, el error la nombra.
+- El servidor de socket atiende todas las conexiones con un solo backend; por eso el pool tiene
+  una conexión. No se puede probar concurrencia real (R1): las pruebas lo dicen en su encabezado.
+- La prueba de migraciones escribe su propia configuración de Prisma en una carpeta temporal (la
+  de la raíz importa `dotenv` y leería el `.env`) y arranca el CLI con `spawn` asíncrono y un
+  entorno mínimo: `spawnSync` bloquearía el socket que atiende el mismo proceso.
+- La tabla `operacion_idempotente` es técnica, como `login_attempt`: la clave UUID nace en el
+  formulario. `id_registro_resultado` no tiene FK porque la tabla es genérica; el índice por
+  fecha sirve para limpiar claves viejas. La migración solo crea objetos nuevos.
+- `claimOperation` reclama con `createManyAndReturn` y `skipDuplicates` (`INSERT ... ON CONFLICT
+  DO NOTHING`): una clave repetida no aborta la transacción. Va primera en la transacción, antes
+  de bloqueos y correlativos.
+
+Evidencia:
+
+1. Rojo antes de cada `fix` y `feat`: C5 con 12 casos (201 caracteres e id con espacios, 2 por
+   reporte); C7 con la prueba de migraciones (el modelo sin su `CREATE TABLE`); C8 con el módulo
+   ausente.
+2. Mutaciones: C2 5 de 5, C3 2 de 2, C4 4 de 4, C6 3 de 3 (cada una rompe a la vez la prueba
+   unitaria, la página y la exportación), C7 3 de 3 y C8 6 de 6; en total, 23 de 23.
+3. Ningún snapshot cambió en C5 ni en C6.
+4. CSS compilado igual byte a byte en cada commit (112.316 bytes). En C6 salió `.\!filter`
+   antes del commit; se renombró el parámetro.
+5. `npm run check` terminó con código 0 antes de cada commit, hasta 4.644 pruebas en 253
+   archivos; las 14 de integración tardan unos 6 s.
+
+Tiempo: de C1 a C8, entre las 13:20 y las 18:26 (Lima), con las esperas al responsable dentro,
+frente a 6 horas estimadas con la verificación en staging.
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 249 / 4.586 | 253 / 4.644 |
+| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 3 / 14 |
+| Reportes con la paridad de filtro probada | 4 de 9 (19 casos) | 9 de 9 (56 casos) |
+| Páginas de reporte que leen sus filtros distinto que su exportación | 6 | 0 |
+| Cálculos del estado de cobranza (pantalla y exportación) | 2 | 1 |
+| Migraciones | 19 | 20 |
+
+Hallazgos:
+
+1. Financiero: la pantalla suma «Ingresos/Egresos caja chica» y «Compras por pagar» sobre listas
+   cortadas en 100 filas; la exportación, sobre hasta 5.000. Con más de 100 filas los totales
+   difieren. Destino: 11.4.
+2. Seis páginas de reporte no recortaban ni cortaban sus filtros como su exportación: un id con
+   espacios dejaba la pantalla vacía y el archivo con filas. La métrica de G4 («0 de 9») se midió
+   con filtros normales. Corregido en `69bbbbf` (D5).
+3. El estado de cobranza se calculaba dos veces. Corregido en `a881c5a` (D6).
+4. `uq_version_receta_vigente` no está modelado en `schema.prisma`. Sin acción: la prueba de
+   migraciones lo lista con su motivo.
+5. Quedan 15 copias locales de `getSearchParam` en páginas que no exportan (listas de Comercial,
+   Inventario, Mantenimiento, Producción, Personal, Caja chica y el historial de exportaciones).
+   No hay paridad que romper. Destino: 11.7.
+6. `prisma format --check` ya fallaba antes de la 11.1 (alineación en `etapa_ruta` y otros
+   modelos); las líneas nuevas están formateadas. Destino: 11.7.
+7. `npm install` avisa `EBADENGINE`: `@prisma/streams-local` (de Prisma 7.8) pide Node 22 y el
+   proyecto y el CI usan Node 20. No se usa. Decisión pendiente: subir a Node 22.
+8. `npm audit` informa 48 vulnerabilidades en el árbol de dependencias. No se evaluaron ni se
+   aplicó `npm audit fix`. Tarea aparte.
+9. C1: el primer `npm run check` falló por el tiempo de `versions-confirmation.test.ts` con la
+   máquina cargada (hallazgo 42 de la 10.7b); sola pasa en 1,5 s. Al registrar la verificación
+   falló tres veces seguidas (5.024 a 5.471 ms). Causa: la prueba importaba la página dentro del
+   caso, y la carga en frío contaba para su límite de 5 s; las demás suites de páginas la cargan
+   con `preloadPages` en un `beforeAll`. Corregido con autorización del responsable en un commit
+   `test` aparte: la misma aserción y el mismo límite, la página precargada; el caso tarda 77 ms.
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 9 commits (hasta `6eb7a9d`). CI #147 en verde en 5:01, con 3:35 en el paso de
+   comprobación; los CI anteriores tardaron entre 3:13 y 5:03, así que PGlite y la prueba de
+   migraciones en Ubuntu no se notan. Vercel desplegó staging con éxito (00:04 UTC del 10).
+2. El responsable comprobó que su `DATABASE_URL` apunta a staging y ejecutó `npx prisma migrate
+   status` (20 migraciones, una pendiente: `20261109201052_add_operacion_idempotente`),
+   `migrate deploy` (aplicada) y otra vez `status` («Database schema is up to date!»). La salida
+   de `status` no distingue staging de producción (el host es el pooler de la región y las dos
+   bases estaban en el mismo punto): el destino se confirmó por el id del proyecto en la URL.
+3. Con ADMIN (sesión y origen comprobados en llamadas aparte), solo lecturas, sin abrir ningún
+   enlace de `/api/`: en los 5 reportes, un texto con espacios alrededor y un id con espacios
+   dan las mismas filas que sin espacios, el campo muestra el valor recortado y el enlace de
+   Excel lleva el valor recortado. Con datos en los dos lados:
+
+   | Reporte | Texto (filas) | Id (filas) |
+   |---|---|---|
+   | Producción | `otr0000000`: 9 y 9 | `PRO00000001`: 3 y 3 |
+   | Inventario | `otr0000000`: 38 y 38 | `MAT00000009`: 2 y 2 |
+   | Ventas y cobranzas | `ped0000000`: 9 y 9 | `CLI00000007`: 2 y 2 |
+   | Proveedores y compras | `com0000000`: 9 y 9 | `PVE00000001`: 6 y 6 |
+   | Financiero | `chatarra`: 2 y 2 | `CAJ00000001`: 2 y 2 |
+
+4. El CSS servido es el mismo archivo que tras la 10.8b (`3zy2beb8e6sdq.css`, 112.315 bytes).
+5. Pendiente antes del PR a `main`: `migrate status` y `migrate deploy` contra producción, por el
+   responsable.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -7579,8 +7906,8 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b; la 10.6a, cerrada, con CI #122 verde en main, 20 huellas del «después» (18 como se predijo y 2 con un detalle explicado) y los hallazgos 2, 7, 10, 11 y 13 corregidos, y el 6 de la 10.3a en dos listas más; la 10.6b, cerrada, con CI #127 verde en main, 16 huellas del «después» (3 controles iguales, 8 como se predijo y 5 a 376 px sin revisar una a una) y los hallazgos 1, 3, 4, 5, 8, 9 y 10 corregidos; la 10.7, partida en 10.7a y 10.7b; la 10.7a, cerrada, con CI #131 verde en main, 17 huellas del «después» (3 controles iguales y 14 como se predijo) y los hallazgos 1 a 8, 12, 13, 14 y 16 corregidos; la 10.7b, cerrada, con CI #135 verde en main, 9 huellas del «después» (3 controles iguales y 6 como se predijo) y los hallazgos 17 a 22 y 26 corregidos; la 10.8, partida en 10.8a y 10.8b; la 10.8a, cerrada, con CI #139 verde en main, 17 huellas del «después» (3 controles iguales, 3 solo con `main` → `div` y 11 como se predijo, el inicio además con los datos de prueba) y los hallazgos 58 a 63, 67 a 71 y 73 corregidos; la 10.8b, verificada en staging con CI #140 a #143 verdes, 9 huellas del «después» (3 controles iguales y 6 como se predijo), los hallazgos 64, 65, 66 y 72 corregidos y el 95 corregido en `4515b83`, pendiente de integrar) |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
+| 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 verificada en staging (CI #147, migración aplicada), pendiente de integrar en `main` |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
@@ -7603,7 +7930,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 249 / 4.587 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 253 / 4.644 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -7615,6 +7942,10 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Escrituras del kárdex que anotan un stock leído antes de escribir | 2 | 0 | G2 |
 | Defectos del puente `?toast=` fijados por la caracterización / entradas declaradas sin emisor | 3 / 1 | 0 / 0 | G3 |
 | Reportes cuyo enlace de exportación filtra distinto que su pantalla | 4 de 9 | 0 de 9 | G4 |
+| Reportes con la paridad de filtro probada en `screen-parity.test.ts` | 0 de 9 | 9 de 9 | G4 y 11 |
+| Páginas de reporte que leen sus filtros distinto que su exportación (medido en la 11.1) | 6 | 0 | 11 |
+| Cálculos del estado de cobranza (pantalla y exportación) | 2 | 1 | 11 |
+| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 3 / 14 | 11 |
 | Nombres de parámetro que la exportación acepta sin que ninguna pantalla los genere | 17 | 0 | G4 |
 | Enlaces a `/api/` con `next/link` (su prefetch ejecuta la ruta) | 6 | 0 | G4 |
 | Colores literales en los `.tsx` de la interfaz | 25 | 0 (regla de ESLint) | 8 |
@@ -8004,6 +8335,15 @@ Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e8d77ae`:
 Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de
 `FieldError` en 6; y los cambios de estado que voltean en 2.
+
+Actualizado en el cierre de la entrega 10 (2026-11-09) sobre `82b6335`, igual a `main`
+(`aefe1df`): pruebas 249 / 4.586, una menos que en `4da59aa` por `4515b83`. Las demás filas
+no cambian, medidas de nuevo: páginas con Prisma directo 0, `auth()` directo 0, copias
+locales de conversión y formato 0, `import` de las librerías de notificaciones en 2
+archivos, desviación 1, cambios de estado que voltean 0, copias de `FieldError` 1, `<main>`
+anidado 9, formularios GET 3 con 3 combinaciones, pantallas con rango sin `DateRangeFields`
+1, claves `?toast=` 130 y el adaptador `industrial-dark` con 25 reglas y 40 selectores. La
+comparación con el inicio de la entrega está en «Cierre de la entrega 10».
 
 Actualizado en la sub-entrega 10.8b (2026-11-05) sobre `4da59aa`:
 

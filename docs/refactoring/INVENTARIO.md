@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 891 |
+| Archivos fuente analizados | 899 |
 | Páginas | 179 |
 | Páginas en ranuras paralelas (@ranura) | 53 |
 | Páginas que interceptan una ruta | 33 |

@@ -754,6 +754,22 @@ model movimiento_inventario {
   @@schema("aceros")
 }
 
+/// Clave de idempotencia de una operacion (entrega 11.1). El formulario genera
+/// la clave (UUID) antes de enviar y la accion la reclama como primera
+/// instruccion de su transaccion: un reenvio con la misma clave no repite la
+/// operacion. Tabla tecnica: la clave no usa correlativo_sistema.
+model operacion_idempotente {
+  clave                 String   @id @db.Uuid
+  tipo_operacion        String   @db.VarChar(60)
+  id_usuario            String   @db.Char(11)
+  id_registro_resultado String?  @db.Char(11)
+  fecha_registro        DateTime @default(now()) @db.Timestamptz(6)
+  usuario               usuario  @relation(fields: [id_usuario], references: [id_usuario], map: "fk_operacion_idempotente_usuario")
+
+  @@index([fecha_registro], map: "idx_operacion_idempotente_fecha")
+  @@schema("aceros")
+}
+
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model operario {
@@ -1305,6 +1321,7 @@ model usuario {
   margen_ganancia            margen_ganancia[]
   movimiento_caja            movimiento_caja[]
   movimiento_inventario      movimiento_inventario[]
+  operacion_idempotente      operacion_idempotente[]
   orden_trabajo              orden_trabajo[]
   pago_cliente               pago_cliente[]
   pago_proveedor             pago_proveedor[]

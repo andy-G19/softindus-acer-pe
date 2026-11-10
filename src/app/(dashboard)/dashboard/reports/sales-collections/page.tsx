@@ -36,10 +36,15 @@ import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import { parseStringParam } from "@/lib/search-params";
 import {
   getSalesCollectionsReportData,
   getSalesCollectionsReportFilterOptions,
 } from "@/modules/reports/sales-collections/queries";
+import {
+  getCollectionSummary,
+  matchesCollectionStatus,
+} from "@/modules/reports/sales-collections/collection-status";
 import { ExportRangeNotice } from "@/modules/reports/export-range-notice";
 import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
@@ -62,19 +67,6 @@ type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0] ?? "";
-  }
-
-  return value ?? "";
-}
-
 function getOrderStatusLabel(status: string) {
   return (
     ORDER_STATUS_OPTIONS.find((option) => option.value === status)?.label ??
@@ -87,42 +79,6 @@ function getCollectionStatusLabel(status: string) {
     COLLECTION_STATUS_OPTIONS.find((option) => option.value === status)?.label ??
     status
   );
-}
-
-function getPaymentTotalByType(
-  payments: {
-    tipo_pago: string;
-    monto_pagado: unknown;
-  }[],
-  type: string,
-) {
-  return payments.reduce((sum, payment) => {
-    if (payment.tipo_pago !== type) {
-      return sum;
-    }
-
-    return sum + toNumber(payment.monto_pagado);
-  }, 0);
-}
-
-function getCollectionStatus(data: {
-  hasQuote: boolean;
-  totalPaid: number;
-  pendingBalance: number;
-}) {
-  if (!data.hasQuote) {
-    return "sin_proforma";
-  }
-
-  if (data.totalPaid <= 0 && data.pendingBalance > 0) {
-    return "sin_pago";
-  }
-
-  if (data.pendingBalance > 0) {
-    return "con_saldo";
-  }
-
-  return "pagado";
 }
 
 type ReportFilterValues = Record<
@@ -217,12 +173,12 @@ export default async function SalesCollectionsReportPage({
 
   const params = searchParams ? await searchParams : {};
 
-  const dateFrom = getSearchParam(params, "dateFrom");
-  const dateTo = getSearchParam(params, "dateTo");
-  const clientId = getSearchParam(params, "clientId");
-  const orderStatus = getSearchParam(params, "orderStatus");
-  const collectionStatus = getSearchParam(params, "collectionStatus");
-  const searchCode = getSearchParam(params, "searchCode").trim();
+  const dateFrom = parseStringParam(params, "dateFrom");
+  const dateTo = parseStringParam(params, "dateTo");
+  const clientId = parseStringParam(params, "clientId");
+  const orderStatus = parseStringParam(params, "orderStatus");
+  const collectionStatus = parseStringParam(params, "collectionStatus");
+  const searchCode = parseStringParam(params, "searchCode");
 
   const filters = { dateFrom, dateTo, clientId, orderStatus, collectionStatus, searchCode };
   const pageHeader = {
@@ -285,52 +241,16 @@ export default async function SalesCollectionsReportPage({
       const payments = quote?.pago_cliente ?? [];
 
       const quotedAmount = toNumber(quote?.monto_total);
-      const initialAdvance = toNumber(quote?.adelanto_inicial);
-      const advancePayments = getPaymentTotalByType(payments, "adelanto");
-      const amortizationPayments = getPaymentTotalByType(
-        payments,
-        "amortizacion",
-      );
-      const cancellationPayments = getPaymentTotalByType(
-        payments,
-        "cancelacion",
-      );
-
-      const totalPaid =
-        initialAdvance +
-        advancePayments +
-        amortizationPayments +
-        cancellationPayments;
-
-      const pendingBalance = quote ? toNumber(quote.saldo) : 0;
-
-      const currentCollectionStatus = getCollectionStatus({
-        hasQuote: Boolean(quote),
-        totalPaid,
-        pendingBalance,
-      });
 
       return {
         order,
         quote,
         payments,
         quotedAmount,
-        initialAdvance,
-        advancePayments,
-        amortizationPayments,
-        cancellationPayments,
-        totalPaid,
-        pendingBalance,
-        collectionStatus: currentCollectionStatus,
+        ...getCollectionSummary(quote),
       };
     })
-    .filter((row) => {
-      if (!collectionStatus) {
-        return true;
-      }
-
-      return row.collectionStatus === collectionStatus;
-    });
+    .filter((row) => matchesCollectionStatus(row.collectionStatus, collectionStatus));
 
   const totalOrders = reportRows.length;
 

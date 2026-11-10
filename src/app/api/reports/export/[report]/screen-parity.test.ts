@@ -66,7 +66,151 @@ type ParityReport = {
 
 const loadRoute = () => import("./route");
 
+// Entrega 11.1 (D5): la pantalla lee sus filtros como la exportacion, sin
+// espacios alrededor y hasta 200 caracteres. Un texto mas largo filtraba la
+// pantalla por 201 caracteres y el archivo por 200; un id con espacios no
+// encontraba nada en la pantalla y si en el archivo.
+function readingCases(textParam: string, idParam: string, id: string): ParityCase[] {
+  return [
+    {
+      name: "texto de mas de 200 caracteres",
+      searchParams: { [textParam]: "X".repeat(201) },
+    },
+    { name: "id con espacios alrededor", searchParams: { [idParam]: ` ${id} ` } },
+  ];
+}
+
 const REPORTS: ParityReport[] = [
+  {
+    report: "production",
+    route: "/dashboard/reports/production",
+    load: () => import("@/app/(dashboard)/dashboard/reports/production/page"),
+    mainQueries: ["orden_trabajo.findMany"],
+    cases: [
+      { name: "sin filtros", searchParams: {} },
+      ...readingCases("orderId", "productId", "PRO00000001"),
+      { name: "rango de fechas", searchParams: { dateFrom: "2026-07-01", dateTo: "2026-07-31" } },
+      { name: "un solo dia", searchParams: { dateFrom: "2026-07-15", dateTo: "2026-07-15" } },
+      { name: "codigo de orden en minusculas", searchParams: { orderId: " ord0000 " } },
+      {
+        name: "todos los filtros",
+        searchParams: {
+          dateFrom: "2026-07-01",
+          dateTo: "2026-07-31",
+          productId: "PRO00000001",
+          status: "en_proceso",
+          orderId: "ORD00000001",
+        },
+      },
+    ],
+  },
+  {
+    report: "inventory",
+    route: "/dashboard/reports/inventory",
+    load: () => import("@/app/(dashboard)/dashboard/reports/inventory/page"),
+    mainQueries: ["movimiento_inventario.findMany"],
+    cases: [
+      { name: "sin filtros", searchParams: {} },
+      ...readingCases("workOrderId", "materialId", "MAT00000001"),
+      { name: "rango de fechas", searchParams: { dateFrom: "2026-07-01", dateTo: "2026-07-31" } },
+      { name: "un solo dia", searchParams: { dateFrom: "2026-07-15", dateTo: "2026-07-15" } },
+      { name: "orden de trabajo en minusculas", searchParams: { workOrderId: " ord0000 " } },
+      {
+        name: "todos los filtros",
+        searchParams: {
+          dateFrom: "2026-07-01",
+          dateTo: "2026-07-31",
+          materialId: "MAT00000001",
+          movementType: "salida",
+          userId: "USU00000001",
+          workOrderId: "ORD00000001",
+        },
+      },
+    ],
+  },
+  {
+    report: "sales-collections",
+    route: "/dashboard/reports/sales-collections",
+    load: () => import("@/app/(dashboard)/dashboard/reports/sales-collections/page"),
+    mainQueries: ["pedido.findMany"],
+    cases: [
+      { name: "sin filtros", searchParams: {} },
+      ...readingCases("searchCode", "clientId", "CLI00000001"),
+      { name: "rango de fechas", searchParams: { dateFrom: "2026-07-01", dateTo: "2026-07-31" } },
+      { name: "un solo dia", searchParams: { dateFrom: "2026-07-15", dateTo: "2026-07-15" } },
+      { name: "codigo en minusculas", searchParams: { searchCode: " ped0000 " } },
+      {
+        name: "todos los filtros",
+        searchParams: {
+          dateFrom: "2026-07-01",
+          dateTo: "2026-07-31",
+          clientId: "CLI00000001",
+          orderStatus: "aprobado",
+          collectionStatus: "con_saldo",
+          searchCode: "PED00000001",
+        },
+      },
+    ],
+  },
+  {
+    report: "suppliers-purchases",
+    route: "/dashboard/reports/suppliers-purchases",
+    load: () => import("@/app/(dashboard)/dashboard/reports/suppliers-purchases/page"),
+    mainQueries: ["compra.findMany"],
+    cases: [
+      { name: "sin filtros", searchParams: {} },
+      ...readingCases("searchCode", "supplierId", "PRV00000001"),
+      { name: "rango de fechas", searchParams: { dateFrom: "2026-07-01", dateTo: "2026-07-31" } },
+      { name: "un solo dia", searchParams: { dateFrom: "2026-07-15", dateTo: "2026-07-15" } },
+      { name: "comprobante en minusculas", searchParams: { searchCode: " f001-12 " } },
+      {
+        name: "todos los filtros",
+        searchParams: {
+          dateFrom: "2026-07-01",
+          dateTo: "2026-07-31",
+          supplierId: "PRV00000001",
+          materialId: "MAT00000001",
+          purchaseStatus: "confirmada",
+          paymentStatus: "parcial",
+          searchCode: "COM00000001",
+        },
+      },
+    ],
+  },
+  {
+    report: "financial",
+    route: "/dashboard/reports/financial",
+    load: () => import("@/app/(dashboard)/dashboard/reports/financial/page"),
+    // Los movimientos de caja llevan todos los filtros; los totales y las
+    // compras por pagar, solo el rango de fechas.
+    mainQueries: [
+      "movimiento_caja.findMany",
+      "caja_chica.aggregate",
+      "pago_cliente.aggregate",
+      "costeo.aggregate",
+      "rentabilidad.aggregate",
+      "proforma.aggregate",
+      "compra.findMany",
+    ],
+    cases: [
+      { name: "sin filtros", searchParams: {} },
+      ...readingCases("searchText", "cashBoxId", "CAJ00000001"),
+      { name: "rango de fechas", searchParams: { dateFrom: "2026-07-01", dateTo: "2026-07-31" } },
+      { name: "un solo dia", searchParams: { dateFrom: "2026-07-15", dateTo: "2026-07-15" } },
+      { name: "busqueda con espacios", searchParams: { searchText: " soldadura " } },
+      {
+        name: "todos los filtros",
+        searchParams: {
+          dateFrom: "2026-07-01",
+          dateTo: "2026-07-31",
+          cashBoxId: "CAJ00000001",
+          movementType: "egreso",
+          categoryId: "CGA00000001",
+          searchText: "soldadura",
+        },
+      },
+    ],
+  },
   {
     report: "maintenance",
     route: "/dashboard/reports/maintenance",
@@ -74,6 +218,7 @@ const REPORTS: ParityReport[] = [
     mainQueries: ["falla_maquina.findMany", "mantenimiento_preventivo.findMany"],
     cases: [
       { name: "sin filtros", searchParams: {} },
+      ...readingCases("searchText", "machineId", "MAQ00000001"),
       { name: "busqueda por codigo interno", searchParams: { searchText: " MAQ-01 " } },
       {
         name: "todos los filtros",
@@ -340,6 +485,13 @@ describe("paridad entre pantalla y exportacion", () => {
           const { status, screen, exported } = await screenAndExport(parityReport, parityCase);
 
           expect(status).toBe(200);
+
+          // Una consulta que no se encuentra daria undefined a los dos lados
+          // y la comparacion pasaria sin comparar nada.
+          for (const name of parityReport.mainQueries) {
+            expect(screen[name], `${name} en la pantalla`).toBeDefined();
+            expect(exported[name], `${name} en la exportacion`).toBeDefined();
+          }
 
           const { dateField } = parityReport;
 

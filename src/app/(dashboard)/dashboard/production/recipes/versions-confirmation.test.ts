@@ -1,7 +1,7 @@
 import { createElement, type ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 
-import { characterizePage, generatedRow } from "@/testing/page-characterization";
+import { characterizePage, generatedRow, preloadPages } from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
 // La confirmacion cerrada no pinta nada en el render de servidor: el doble la deja
@@ -32,11 +32,18 @@ const versionRow = (id: string, numero_version: string, estado: string) => ({
   _count: { detalle_receta: 0, orden_trabajo: 0 },
 });
 
+const loadVersionsPage = () => import("./[id]/versions/page");
+
 // B6: la confirmacion de marcar vigente nombra la version que queda reemplazada.
 describe("confirmacion de marcar vigente", () => {
+  // La carga de la pagina en frio va en un beforeAll, como en las demas suites
+  // de paginas: dentro del caso contaba para su limite de 5 s y con la maquina
+  // cargada lo superaba (hallazgo 42 de la 10.7b).
+  preloadPages(loadVersionsPage);
+
   it("nombra la version vigente de la receta", async () => {
     const { html } = await characterizePage(
-      () => import("./[id]/versions/page"),
+      loadVersionsPage,
       {
         name: "historial",
         params: { id: "REC00000001" },

@@ -1,29 +1,16 @@
 import "server-only";
 
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { toNumber } from "@/lib/numbers";
 import {
   getExportDateStamp,
   getExportParam,
   type ExportReport,
 } from "@/modules/reports/export-report";
+import {
+  getCollectionSummary,
+  matchesCollectionStatus,
+} from "@/modules/reports/sales-collections/collection-status";
 import { getSalesCollectionsExportRows } from "@/modules/reports/sales-collections/queries";
-
-function getPaymentTotalByType(
-  payments: {
-    tipo_pago: string;
-    monto_pagado: unknown;
-  }[],
-  type: string,
-) {
-  return payments.reduce((sum, payment) => {
-    if (payment.tipo_pago !== type) {
-      return sum;
-    }
-
-    return sum + toNumber(payment.monto_pagado);
-  }, 0);
-}
 
 export async function exportSalesCollectionsReport(
   searchParams: URLSearchParams,
@@ -45,54 +32,10 @@ export async function exportSalesCollectionsReport(
   const rows = orders
     .map((order) => {
       const quote = order.proforma[0] ?? null;
-      const payments = quote?.pago_cliente ?? [];
 
-      const initialAdvance = toNumber(quote?.adelanto_inicial);
-      const advancePayments = getPaymentTotalByType(payments, "adelanto");
-      const amortizationPayments = getPaymentTotalByType(
-        payments,
-        "amortizacion",
-      );
-      const cancellationPayments = getPaymentTotalByType(
-        payments,
-        "cancelacion",
-      );
-
-      const totalPaid =
-        initialAdvance +
-        advancePayments +
-        amortizationPayments +
-        cancellationPayments;
-
-      const pendingBalance = quote ? toNumber(quote.saldo) : 0;
-
-      const currentCollectionStatus = !quote
-        ? "sin_proforma"
-        : totalPaid <= 0 && pendingBalance > 0
-          ? "sin_pago"
-          : pendingBalance > 0
-            ? "con_saldo"
-            : "pagado";
-
-      return {
-        order,
-        quote,
-        initialAdvance,
-        advancePayments,
-        amortizationPayments,
-        cancellationPayments,
-        totalPaid,
-        pendingBalance,
-        currentCollectionStatus,
-      };
+      return { order, quote, ...getCollectionSummary(quote) };
     })
-    .filter((row) => {
-      if (!collectionStatus) {
-        return true;
-      }
-
-      return row.currentCollectionStatus === collectionStatus;
-    });
+    .filter((row) => matchesCollectionStatus(row.collectionStatus, collectionStatus));
 
   return {
     filename: `reporte_ventas_cobranzas_${getExportDateStamp()}.xlsx`,
@@ -133,7 +76,7 @@ export async function exportSalesCollectionsReport(
       formatMoney(row.cancellationPayments),
       formatMoney(row.totalPaid),
       formatMoney(row.pendingBalance),
-      row.currentCollectionStatus,
+      row.collectionStatus,
       row.quote?.comprobante_venta
         .map((receipt) => receipt.numero_comprobante)
         .join(" | ") ?? "",
