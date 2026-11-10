@@ -173,3 +173,28 @@ describe("crear compra en Postgres", () => {
     expect(await prisma.operacion_idempotente.count({ where: { clave } })).toBe(0);
   });
 });
+
+// C4 de la 11.2b: el indice unico uq_compra_comprobante, el real.
+describe("comprobante repetido en Postgres", () => {
+  it("la segunda compra con el mismo comprobante se rechaza en su campo, sin escribir y liberando la clave", async () => {
+    const line = [{ id_material: TUBO, cantidad: "1", costo_unitario: "3" }];
+    const first = await createPurchaseAction({ status: "idle" }, purchaseForm(line, { numero: "F001-000950" }));
+    const comprasAntes = await prisma.compra.count();
+    const stockAntes = await stockOf(TUBO);
+    const clave = randomUUID();
+
+    const second = await createPurchaseAction(
+      { status: "idle" },
+      purchaseForm(line, { numero: "F001-000950", clave }),
+    );
+
+    expect(first).toMatchObject({ status: "success" });
+    expect(second).toMatchObject({
+      status: "error",
+      fieldErrors: { numero_comprobante: ["Ya existe una compra con ese tipo y número de comprobante."] },
+    });
+    expect(await prisma.compra.count()).toBe(comprasAntes);
+    expect(await stockOf(TUBO)).toBe(stockAntes);
+    expect(await prisma.operacion_idempotente.count({ where: { clave } })).toBe(0);
+  });
+});

@@ -263,6 +263,18 @@ exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
   },
   {
     "args": {
+      "select": {
+        "id_compra": true,
+      },
+      "where": {
+        "numero_comprobante": "F001-000123",
+        "tipo_comprobante": "factura",
+      },
+    },
+    "prisma": "compra.findFirst",
+  },
+  {
+    "args": {
       "codigoEntidad": "compra",
       "prefijo": "COM",
     },

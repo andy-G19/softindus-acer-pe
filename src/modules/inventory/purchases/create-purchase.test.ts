@@ -141,6 +141,8 @@ function stockAfterIncrement(args: PrismaArgs) {
 
 const found: DataOverrides = {
   "proveedor.findFirst": supplier,
+  // Ninguna compra con el mismo comprobante (C4 de la 11.2b).
+  "compra.findFirst": null,
   "material.findMany": (args: PrismaArgs) => {
     const ids = ((args?.where as { id_material: { in: string[] } }).id_material.in);
 
@@ -388,5 +390,71 @@ describe("hallazgos 1 a 3 y 6 de la 11.2b: montos de la compra", () => {
     expect(materialUpdate.costo_unitario_actual).toBe("10.26");
     expect(history.precio_unitario).toBe("10.26");
     expect(stored(line.subtotal)).toBe("10.26");
+  });
+});
+
+// C4 de la 11.2b (hallazgos 4 y 5): un comprobante repetido rompia en el indice unico
+// uq_compra_comprobante (P2002) y una fecha inexistente llegaba a Prisma; los dos mostraban la
+// pagina de error. Ahora responden en su campo y no escriben nada.
+describe("C4 de la 11.2b: comprobante repetido y fecha invalida", () => {
+  const withReceipt = { tipo_comprobante: "factura", numero_comprobante: "F001-000123", aplica_igv: "on" };
+  const RECEIPT_TAKEN = "Ya existe una compra con ese tipo y número de comprobante.";
+
+  it("un comprobante ya registrado se rechaza en su campo, dentro de la transaccion", async () => {
+    const { calls, outcome } = await runAction({
+      name: "comprobante registrado",
+      header: withReceipt,
+      data: { "compra.findFirst": { id_compra: "COM00000003" } },
+    });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: RECEIPT_TAKEN,
+      fieldErrors: { numero_comprobante: [RECEIPT_TAKEN] },
+    });
+    expect(calls.some((call) => isPrisma(call, "compra.create"))).toBe(false);
+    expect(calls.at(-1)).toMatchObject({ effect: "prisma.$transaction:rollback" });
+  });
+
+  it("si otra compra gana la carrera, el indice unico responde igual en su campo", async () => {
+    const { outcome } = await runAction({
+      name: "comprobante en carrera",
+      header: withReceipt,
+      data: {
+        "compra.create": () => {
+          throw new Prisma.PrismaClientKnownRequestError("Unique constraint failed", {
+            code: "P2002",
+            clientVersion: "7.8.0",
+            meta: { target: ["tipo_comprobante", "numero_comprobante"] },
+          });
+        },
+      },
+    });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: RECEIPT_TAKEN,
+      fieldErrors: { numero_comprobante: [RECEIPT_TAKEN] },
+    });
+  });
+
+  it("sin numero no se busca un comprobante repetido", async () => {
+    const { calls, outcome } = await runAction({
+      name: "boleta sin numero",
+      header: { tipo_comprobante: "boleta", numero_comprobante: "" },
+    });
+
+    expect(outcome).toMatchObject({ status: "success" });
+    expect(calls.some((call) => isPrisma(call, "compra.findFirst"))).toBe(false);
+  });
+
+  it.each(["2026-02-30", "hola", "2026-7-1"])("la fecha %s se rechaza en su campo sin abrir la transaccion", async (fecha) => {
+    const { calls, outcome } = await runAction({ name: `fecha ${fecha}`, header: { fecha_compra: fecha } });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      fieldErrors: { fecha_compra: ["La fecha de compra no es válida."] },
+    });
+    expect(calls.some((call) => "effect" in call && call.effect === "prisma.$transaction")).toBe(false);
   });
 });

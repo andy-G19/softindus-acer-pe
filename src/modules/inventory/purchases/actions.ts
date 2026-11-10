@@ -57,9 +57,26 @@ export type PurchaseFormState = FormActionState<
 >;
 
 const CREATE_OPERATION = "crear_compra";
+
+/** Crea la compra y traduce el P2002 de su comprobante a un rechazo en su campo. */
+async function createPurchaseRow(
+  tx: Prisma.TransactionClient,
+  args: Prisma.compraCreateArgs,
+) {
+  try {
+    return await tx.compra.create(args);
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      throw new PurchaseRejectedError(RECEIPT_TAKEN, { numero_comprobante: [RECEIPT_TAKEN] });
+    }
+
+    throw error;
+  }
+}
 const REPEATED_MATERIAL =
   "No repitas el mismo material dentro de la compra. Ajusta la cantidad en una sola fila.";
 const INACTIVE_MATERIAL = "El material seleccionado no existe o está inactivo.";
+const RECEIPT_TAKEN = "Ya existe una compra con ese tipo y número de comprobante.";
 
 /** Un rechazo dentro de la transaccion: la deshace, y con ella el reclamo de la clave. */
 class PurchaseRejectedError extends Error {
@@ -231,6 +248,25 @@ export async function createPurchaseAction(
         throw new PurchaseRejectedError("Uno o más materiales no existen o están inactivos.", inactive);
       }
 
+      // Hallazgo 4 de la 11.2b: el tipo y el numero de comprobante son unicos
+      // (uq_compra_comprobante). Antes el create rompia con P2002 y se veia la pagina de error.
+      // Sin numero no hay nada que repetir: el indice admite varios nulos.
+      if (data.tipo_comprobante && data.numero_comprobante) {
+        const taken = await tx.compra.findFirst({
+          where: {
+            tipo_comprobante: data.tipo_comprobante,
+            numero_comprobante: data.numero_comprobante,
+          },
+          select: {
+            id_compra: true,
+          },
+        });
+
+        if (taken) {
+          throw new PurchaseRejectedError(RECEIPT_TAKEN, { numero_comprobante: [RECEIPT_TAKEN] });
+        }
+      }
+
       const newId = await getNextCorrelativeId(tx, {
         codigoEntidad: "compra",
         prefijo: "COM",
@@ -251,7 +287,10 @@ export async function createPurchaseAction(
         cantidad: data.items.length,
       });
 
-      await tx.compra.create({
+      // Respaldo de la comprobacion de arriba: otra compra con el mismo comprobante puede
+      // confirmar en medio. El unico indice unico de compra, ademas de su clave, es el del
+      // comprobante (los ids salen del correlativo), asi que un P2002 aqui es ese.
+      await createPurchaseRow(tx, {
         data: {
           id_compra: newId,
           id_proveedor: data.id_proveedor,

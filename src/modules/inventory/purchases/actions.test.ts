@@ -51,7 +51,7 @@ const mocks = vi.hoisted(() => {
         updateMany: vi.fn(),
       },
       proveedor: { findFirst: vi.fn() },
-      compra: { create: vi.fn(), updateMany: vi.fn(), findUnique: vi.fn() },
+      compra: { create: vi.fn(), updateMany: vi.fn(), findUnique: vi.fn(), findFirst: vi.fn() },
       detalle_compra: { create: vi.fn() },
       material: { update: vi.fn(), updateManyAndReturn: vi.fn(), findMany: vi.fn() },
       alerta_stock: { updateMany: vi.fn() },
@@ -365,6 +365,8 @@ beforeEach(() => {
   mocks.prisma.$transaction.mockImplementation(runTransaction);
   mocks.tx.compra.findUnique.mockImplementation(readPurchase);
   mocks.tx.proveedor.findFirst.mockResolvedValue({ id_proveedor: SUPPLIER_ID, estado: true });
+  // Ninguna compra con el mismo comprobante (C4 de la 11.2b).
+  mocks.tx.compra.findFirst.mockResolvedValue(null);
   mocks.tx.material.findMany.mockImplementation(readMaterials);
   // Una clave nueva: el INSERT ... ON CONFLICT DO NOTHING devuelve su fila.
   mocks.tx.operacion_idempotente.createManyAndReturn.mockImplementation(
