@@ -292,9 +292,12 @@ describe("anulacion de compra en Postgres", () => {
     const formData = new FormData();
     formData.set("id_compra", "COM00000104");
 
-    const outcome = await outcomeOf(annulPurchaseAction(formData));
+    const outcome = await outcomeOf(annulPurchaseAction({ status: "idle" }, formData));
 
-    expect(outcome).toBe("redirect:/dashboard/inventory/purchases/COM00000104");
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "No se puede anular una compra con pagos registrados.",
+    });
     expect(await purchaseState("COM00000104")).toEqual({
       estado_compra: "confirmada",
       estado_pago: "parcial",

@@ -4,22 +4,26 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { APP_ROLES } from "@/lib/permissions";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockPurchaseRow } from "@/lib/row-locks";
 import { calculateIgv } from "@/lib/taxes";
 import { purchaseSchema } from "@/schemas/inventory/purchase.schema";
+
+const ALREADY_ANNULLED = "La compra ya está anulada.";
 
 function toNullable(value: string | undefined) {
   return value && value.trim() !== "" ? value.trim() : null;
 }
 
-class PurchaseAlreadyAnnulledError extends Error {}
-
-class InsufficientStockForAnnulmentError extends Error {}
-
-class PurchaseHasPaymentsError extends Error {}
+/**
+ * Un rechazo de la anulacion dentro de su transaccion: la deshace (incluido el stock
+ * ya revertido de otros materiales) y su mensaje es la respuesta.
+ */
+class PurchaseAnnulmentRejectedError extends Error {}
 
 export async function createPurchaseAction(formData: FormData) {
   const session = await requireRole(["ADMIN"]);
@@ -246,16 +250,25 @@ export async function createPurchaseAction(formData: FormData) {
   redirect("/dashboard/inventory/purchases?toast=purchase-created");
 }
 
-export async function annulPurchaseAction(formData: FormData) {
-  const session = await requireRole(["ADMIN"]);
+// C5 de la 11.2a: anular se pide desde la fila del listado o desde el detalle con
+// ConfirmActionButton y la accion devuelve RowStatusState. Antes redirigia al listado o al
+// detalle sin decir por que no se anulaba; ahora el rechazo queda en la confirmacion. Un
+// rechazo no revalida: el repintado se llevaria el boton y su mensaje.
+export async function annulPurchaseAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
+  const purchaseId = formData.get("id_compra")?.toString().trim() ?? "";
 
-  const purchaseId = formData.get("id_compra")?.toString().trim();
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
 
-  if (!purchaseId) {
-    redirect("/dashboard/inventory/purchases");
+  if (!session) {
+    return rowStatusError(purchaseId, "No tienes permisos para anular compras.");
   }
 
-  let rejectionPath: string | null = null;
+  if (!purchaseId) {
+    return rowStatusError(purchaseId, "Debe seleccionar una compra válida.");
+  }
 
   try {
     await prisma.$transaction(async (tx) => {
@@ -283,12 +296,18 @@ export async function annulPurchaseAction(formData: FormData) {
         },
       });
 
-      if (!purchase || purchase.estado_compra === "anulada") {
-        throw new PurchaseAlreadyAnnulledError();
+      if (!purchase) {
+        throw new PurchaseAnnulmentRejectedError("La compra seleccionada no existe.");
+      }
+
+      if (purchase.estado_compra === "anulada") {
+        throw new PurchaseAnnulmentRejectedError(ALREADY_ANNULLED);
       }
 
       if (purchase.pago_proveedor.length > 0) {
-        throw new PurchaseHasPaymentsError();
+        throw new PurchaseAnnulmentRejectedError(
+          "No se puede anular una compra con pagos registrados.",
+        );
       }
 
       const reversalIds = await getNextCorrelativeIds(tx, {
@@ -314,7 +333,7 @@ export async function annulPurchaseAction(formData: FormData) {
       });
 
       if (annulment.count !== 1) {
-        throw new PurchaseAlreadyAnnulledError();
+        throw new PurchaseAnnulmentRejectedError(ALREADY_ANNULLED);
       }
 
       for (const [index, movement] of purchase.movimiento_inventario.entries()) {
@@ -339,7 +358,9 @@ export async function annulPurchaseAction(formData: FormData) {
         });
 
         if (!updatedMaterial) {
-          throw new InsufficientStockForAnnulmentError();
+          throw new PurchaseAnnulmentRejectedError(
+            "No hay stock suficiente para revertir la compra: parte de lo que ingresó ya salió del inventario.",
+          );
         }
 
         const stockResultante = updatedMaterial.stock_actual;
@@ -370,21 +391,11 @@ export async function annulPurchaseAction(formData: FormData) {
       });
     });
   } catch (error) {
-    if (error instanceof PurchaseAlreadyAnnulledError) {
-      rejectionPath = "/dashboard/inventory/purchases";
-    } else if (
-      error instanceof InsufficientStockForAnnulmentError ||
-      error instanceof PurchaseHasPaymentsError
-    ) {
-      rejectionPath = `/dashboard/inventory/purchases/${purchaseId}`;
-    } else {
-      throw error;
+    if (error instanceof PurchaseAnnulmentRejectedError) {
+      return rowStatusError(purchaseId, error.message);
     }
-  }
 
-  // redirect lanza una excepcion: se llama fuera del try/catch.
-  if (rejectionPath) {
-    redirect(rejectionPath);
+    throw error;
   }
 
   revalidatePath("/dashboard/inventory");
@@ -392,5 +403,5 @@ export async function annulPurchaseAction(formData: FormData) {
   revalidatePath("/dashboard/inventory/purchases");
   revalidatePath(`/dashboard/inventory/purchases/${purchaseId}`);
 
-  redirect("/dashboard/inventory/purchases?toast=purchase-annulled");
+  return rowStatusDone(purchaseId, "anulada");
 }

@@ -189,10 +189,7 @@ exports[`/dashboard/inventory/purchases > con una compra anulable > resultado 1`
 <td>
 <div>
 <a data-variant="outline" href="/dashboard/inventory/purchases/id_compra-1?returnTo=%2Fdashboard%2Finventory%2Fpurchases">Ver detalle</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_compra" value="id_compra-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
 </tr>
@@ -224,8 +221,7 @@ exports[`/dashboard/inventory/purchases > con una compra anulable > resultado 1`
 <a data-variant="outline" href="/dashboard/inventory/purchases?page=2">Siguiente</a>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1623,10 +1619,7 @@ exports[`/dashboard/inventory/purchases/[id] > pendiente y sin pagos > resultado
 <div>
 <button type="button" aria-label="Volver a compras">
 <svg/>Volver a compras</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_compra" value="id_compra-1"/>
-<button type="submit">Anular compra</button>
-</form>
+<button data-variant="destructive" type="button">Anular compra</button>
 </div>
 </div>
 </section>

@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -24,6 +23,7 @@ import {
 } from "@/lib/navigation";
 import { inventoryNotifications } from "@/modules/inventory/notifications";
 import { annulPurchaseAction } from "@/modules/inventory/purchases/actions";
+import { PurchaseAnnulAction } from "@/modules/inventory/purchases/purchase-annul-action";
 import { createSupplierPaymentAction } from "@/modules/inventory/supplier-payments/actions";
 import { SupplierPaymentForm } from "@/modules/inventory/supplier-payments/supplier-payment-form";
 import { getPurchaseDetail } from "@/modules/inventory/purchases/queries";
@@ -83,17 +83,12 @@ export default async function PurchaseDetailPage({
         ])}
         actions={
           canAnnul ? (
-            <form action={annulPurchaseAction}>
-              <input type="hidden" name="id_compra" value={purchase.id_compra} />
-              <ConfirmDeleteButton
-                title="¿Anular compra?"
-                description="Esta acción anulará la compra y no se puede deshacer."
-                confirmText="Confirmar anulación"
-                entityName="compra"
-              >
-                Anular compra
-              </ConfirmDeleteButton>
-            </form>
+            <PurchaseAnnulAction
+              idCompra={purchase.id_compra}
+              action={annulPurchaseAction}
+              successNotification={inventoryNotifications["purchase-annulled"]}
+              label="Anular compra"
+            />
           ) : null
         }
       />
