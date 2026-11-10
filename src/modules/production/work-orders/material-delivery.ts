@@ -4,6 +4,7 @@ import {
   type CorrelativeTransactionClient,
 } from "@/lib/correlatives-core";
 import { toNumber } from "@/lib/numbers";
+import { syncStockAlert } from "@/modules/inventory/alerts/stock-alert-sync";
 
 /**
  * Entrega de material del almacen a una orden de trabajo.
@@ -214,89 +215,5 @@ export async function returnMaterial(
     stockMinimo: toNumber(material.stock_minimo),
     idOrdenTrabajo: params.idOrdenTrabajo,
     idUsuario: params.idUsuario,
-  });
-}
-
-/**
- * Abre o actualiza la alerta de stock critico tras mover el stock de un material.
- *
- * Se resuelve la alerta cuando el stock vuelve por encima del minimo: sin esto, una
- * devolucion dejaria la alerta activa sobre un material que ya no esta en riesgo.
- */
-export async function syncStockAlert(
-  tx: Pick<Prisma.TransactionClient, "alerta_stock"> &
-    CorrelativeTransactionClient,
-  params: {
-    idMaterial: string;
-    materialName: string;
-    stockResultante: number;
-    stockMinimo: number;
-    idOrdenTrabajo: string;
-    idUsuario: string;
-  },
-) {
-  const { idMaterial, materialName, stockResultante, stockMinimo } = params;
-
-  const alertaActiva = await tx.alerta_stock.findFirst({
-    where: {
-      id_material: idMaterial,
-      estado_alerta: "activa",
-    },
-    select: {
-      id_alerta: true,
-    },
-  });
-
-  if (stockResultante > stockMinimo) {
-    if (alertaActiva) {
-      await tx.alerta_stock.update({
-        where: {
-          id_alerta: alertaActiva.id_alerta,
-        },
-        data: {
-          estado_alerta: "atendida",
-          fecha_atencion: new Date(),
-          id_usuario_atencion: params.idUsuario,
-          stock_detectado: stockResultante,
-          mensaje: `El material ${materialName} recupero stock por encima del minimo.`,
-        },
-      });
-    }
-
-    return;
-  }
-
-  const mensaje = `El material ${materialName} quedo en stock critico tras mover la orden ${params.idOrdenTrabajo}.`;
-
-  if (alertaActiva) {
-    await tx.alerta_stock.update({
-      where: {
-        id_alerta: alertaActiva.id_alerta,
-      },
-      data: {
-        stock_detectado: stockResultante,
-        stock_minimo: stockMinimo,
-        mensaje,
-      },
-    });
-
-    return;
-  }
-
-  const [idAlerta] = await getNextCorrelativeIds(tx, {
-    codigoEntidad: "alerta_stock",
-    prefijo: "ALE",
-    cantidad: 1,
-  });
-
-  await tx.alerta_stock.create({
-    data: {
-      id_alerta: idAlerta,
-      id_material: idMaterial,
-      stock_detectado: stockResultante,
-      stock_minimo: stockMinimo,
-      estado_alerta: "activa",
-      mensaje,
-    },
   });
 }
