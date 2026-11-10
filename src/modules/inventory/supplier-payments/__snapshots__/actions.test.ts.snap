@@ -1,9 +1,9 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`createSupplierPaymentAction > compra anulada > llamadas 1`] = `
+exports[`createSupplierPaymentAction > clave de otro usuario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -11,6 +11,162 @@ exports[`createSupplierPaymentAction > compra anulada > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > clave de otro usuario > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > clave repetida: responde con el pago guardado sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases/COM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > clave repetida: responde con el pago guardado sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_pago_proveedor": "PPR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > compra anulada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -36,12 +192,25 @@ exports[`createSupplierPaymentAction > compra anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`createSupplierPaymentAction > compra anulada > resultado 1`] = `"error: No se puede registrar pagos en una compra anulada."`;
+exports[`createSupplierPaymentAction > compra anulada > resultado 1`] = `
+{
+  "error": "No se puede registrar pagos en una compra anulada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`createSupplierPaymentAction > compra inexistente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -49,6 +218,22 @@ exports[`createSupplierPaymentAction > compra inexistente > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -74,12 +259,25 @@ exports[`createSupplierPaymentAction > compra inexistente > llamadas 1`] = `
 ]
 `;
 
-exports[`createSupplierPaymentAction > compra inexistente > resultado 1`] = `"error: La compra seleccionada no existe."`;
+exports[`createSupplierPaymentAction > compra inexistente > resultado 1`] = `
+{
+  "error": "La compra seleccionada no existe.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`createSupplierPaymentAction > compra ya pagada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -87,6 +285,22 @@ exports[`createSupplierPaymentAction > compra ya pagada > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -112,12 +326,25 @@ exports[`createSupplierPaymentAction > compra ya pagada > llamadas 1`] = `
 ]
 `;
 
-exports[`createSupplierPaymentAction > compra ya pagada > resultado 1`] = `"error: Esta compra ya está pagada."`;
+exports[`createSupplierPaymentAction > compra ya pagada > resultado 1`] = `
+{
+  "error": "Esta compra ya está pagada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`createSupplierPaymentAction > datos invalidos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -125,12 +352,29 @@ exports[`createSupplierPaymentAction > datos invalidos > llamadas 1`] = `
 ]
 `;
 
-exports[`createSupplierPaymentAction > datos invalidos > resultado 1`] = `"error: El monto pagado debe ser mayor que cero."`;
+exports[`createSupplierPaymentAction > datos invalidos > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "El monto pagado debe ser mayor que cero.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "0",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`createSupplierPaymentAction > metodo de pago fuera de la lista > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -138,12 +382,59 @@ exports[`createSupplierPaymentAction > metodo de pago fuera de la lista > llamad
 ]
 `;
 
-exports[`createSupplierPaymentAction > metodo de pago fuera de la lista > resultado 1`] = `"error: Seleccione un método de pago válido."`;
+exports[`createSupplierPaymentAction > metodo de pago fuera de la lista > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "metodo_pago": [
+      "Seleccione un método de pago válido.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "cheque",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > monto que la columna guardaria como cero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > monto que la columna guardaria como cero > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "El monto pagado debe ser mayor que cero.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "0.004",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`createSupplierPaymentAction > pago mayor que el saldo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -151,6 +442,22 @@ exports[`createSupplierPaymentAction > pago mayor que el saldo > llamadas 1`] = 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -187,12 +494,29 @@ exports[`createSupplierPaymentAction > pago mayor que el saldo > llamadas 1`] = 
 ]
 `;
 
-exports[`createSupplierPaymentAction > pago mayor que el saldo > resultado 1`] = `"error: El pago no puede superar el saldo pendiente. Saldo actual: S/ 60.00"`;
+exports[`createSupplierPaymentAction > pago mayor que el saldo > resultado 1`] = `
+{
+  "error": "El pago no puede superar el saldo pendiente. Saldo actual: S/ 60.00",
+  "fieldErrors": {
+    "monto_pagado": [
+      "El pago no puede superar el saldo pendiente. Saldo actual: S/ 60.00",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "70",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`createSupplierPaymentAction > pago que completa el saldo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -200,6 +524,22 @@ exports[`createSupplierPaymentAction > pago que completa el saldo > llamadas 1`]
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -276,6 +616,17 @@ exports[`createSupplierPaymentAction > pago que completa el saldo > llamadas 1`]
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PPR00000001",
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -294,12 +645,27 @@ exports[`createSupplierPaymentAction > pago que completa el saldo > llamadas 1`]
 ]
 `;
 
-exports[`createSupplierPaymentAction > pago que completa el saldo > resultado 1`] = `"redirect:/dashboard/inventory/purchases/COM00000003?toast=supplier-payment-registered"`;
+exports[`createSupplierPaymentAction > pago que completa el saldo > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_pago_proveedor": "PPR00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "60",
+    "observaciones": "  saldo final  ",
+  },
+}
+`;
 
 exports[`createSupplierPaymentAction > primer pago parcial > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -307,6 +673,22 @@ exports[`createSupplierPaymentAction > primer pago parcial > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -383,6 +765,17 @@ exports[`createSupplierPaymentAction > primer pago parcial > llamadas 1`] = `
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PPR00000001",
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -401,4 +794,75 @@ exports[`createSupplierPaymentAction > primer pago parcial > llamadas 1`] = `
 ]
 `;
 
-exports[`createSupplierPaymentAction > primer pago parcial > resultado 1`] = `"redirect:/dashboard/inventory/purchases/COM00000003?toast=supplier-payment-registered"`;
+exports[`createSupplierPaymentAction > primer pago parcial > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_pago_proveedor": "PPR00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > sin permiso > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > sin permiso > resultado 1`] = `
+{
+  "error": "No tienes permisos para registrar pagos a proveedores.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;

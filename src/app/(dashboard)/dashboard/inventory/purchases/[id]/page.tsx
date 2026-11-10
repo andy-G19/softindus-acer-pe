@@ -22,8 +22,10 @@ import {
   getSafeReturnTo,
   navigationHrefs,
 } from "@/lib/navigation";
-import { SupplierPaymentForm } from "@/components/inventory/supplier-payment-form";
+import { inventoryNotifications } from "@/modules/inventory/notifications";
 import { annulPurchaseAction } from "@/modules/inventory/purchases/actions";
+import { createSupplierPaymentAction } from "@/modules/inventory/supplier-payments/actions";
+import { SupplierPaymentForm } from "@/modules/inventory/supplier-payments/supplier-payment-form";
 import { getPurchaseDetail } from "@/modules/inventory/purchases/queries";
 
 type PurchaseDetailPageProps = {
@@ -233,8 +235,10 @@ export default async function PurchaseDetailPage({
 
       {canPay ? (
         <SupplierPaymentForm
+          action={createSupplierPaymentAction}
           idCompra={purchase.id_compra}
-          saldoPendiente={saldoPendiente}
+          saldoPendiente={balance}
+          successNotification={inventoryNotifications["supplier-payment-registered"]}
         />
       ) : null}
 

@@ -5,28 +5,35 @@ import { createSupplierPaymentAction } from "@/modules/inventory/supplier-paymen
 import {
   characterizeHandler,
   decimalSnapshotSerializer,
-  describeNavigationError,
   expectAuthorizesBeforePrisma,
   expectRowLockedBefore,
   type DataOverrides,
+  type RecordedCall,
 } from "@/testing/page-characterization";
 
 // Caracterizacion del pago a proveedor (11.2a), escrita antes de tocar la
-// accion: hasta aqui no tenia ninguna prueba.
+// accion: hasta aqui no tenia ninguna prueba. Desde C4 la accion devuelve un
+// FormActionState (no redirige ni lanza) y reclama la clave de la operacion.
 //
 // Cada caso ejecuta la accion real con Prisma, la sesion, la cache, la
 // bitacora y los correlativos simulados, y fija en un snapshot, en orden: la
 // autorizacion con sus roles, las lecturas (y si van fuera de la
 // transaccion), la transaccion con sus escrituras y su final, el correlativo,
-// la bitacora, las revalidaciones y el resultado: la redireccion o el mensaje
-// de error exacto. Mover una lectura dentro de la transaccion, o cambiar el
-// saldo o el estado que se guardan, cambia el snapshot.
+// la bitacora, las revalidaciones y el resultado que recibe el formulario.
+// Mover una lectura dentro o fuera de la transaccion, o cambiar el saldo o el
+// estado que se guardan, cambia el snapshot.
 //
 // Los montos de estos casos son exactos en binario o no llegan al borde del
 // redondeo: el saldo con decimales (hallazgos 1 y 2 de la 11.2a) tiene sus
 // propias pruebas.
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio: se fija para que el snapshot
+// sea estable.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -77,15 +84,23 @@ vi.mock("@/lib/correlatives-core", async (importOriginal) => {
 expect.addSnapshotSerializer(decimalSnapshotSerializer);
 
 type FormFields = Record<string, string>;
-type ActionCase = { name: string; form?: FormFields; data?: DataOverrides };
+type ActionCase = {
+  name: string;
+  form?: FormFields;
+  data?: DataOverrides;
+  role?: "ADMIN" | "SELLER" | "WORKSHOP_MASTER";
+};
 
 const D = (value: string) => new Prisma.Decimal(value);
 
 const COMPRA = "COM00000003";
 const PROVEEDOR = "PVE00000001";
+const CLAVE = "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f";
+const TIPO = "registrar_pago_proveedor";
 
 const baseForm: FormFields = {
   id_compra: COMPRA,
+  clave_operacion: CLAVE,
   fecha_pago: "2026-07-14",
   monto_pagado: "40",
   metodo_pago: "transferencia",
@@ -106,6 +121,19 @@ function purchaseRow(changes: Record<string, unknown> = {}) {
 const payments = (...amounts: string[]) =>
   amounts.map((amount) => ({ monto_pagado: D(amount) }));
 
+/** La clave ya estaba en la tabla: el INSERT no devuelve filas y se lee la guardada. */
+function storedKey(changes: Record<string, unknown> = {}): DataOverrides {
+  return {
+    "operacion_idempotente.createManyAndReturn": [],
+    "operacion_idempotente.findUniqueOrThrow": {
+      tipo_operacion: TIPO,
+      id_usuario: "USU00000001",
+      id_registro_resultado: "PPR00000007",
+      ...changes,
+    },
+  };
+}
+
 function formOf(fields: FormFields) {
   const formData = new FormData();
 
@@ -117,18 +145,20 @@ function formOf(fields: FormFields) {
 }
 
 async function runAction(actionCase: ActionCase) {
-  const { calls, result } = await characterizeHandler(async () => {
-    try {
-      await createSupplierPaymentAction(formOf({ ...baseForm, ...actionCase.form }));
-
-      return "termino sin redirigir";
-    } catch (error) {
-      return (
-        describeNavigationError(error) ??
-        `error: ${error instanceof Error ? error.message : String(error)}`
-      );
-    }
-  }, actionCase.data);
+  const { calls, result } = await characterizeHandler(
+    async () => {
+      try {
+        return await createSupplierPaymentAction(
+          { status: "idle" },
+          formOf({ ...baseForm, ...actionCase.form }),
+        );
+      } catch (error) {
+        return `lanzo: ${error instanceof Error ? error.message : String(error)}`;
+      }
+    },
+    actionCase.data,
+    { role: actionCase.role },
+  );
 
   return { calls, outcome: result };
 }
@@ -150,12 +180,24 @@ const cases: ActionCase[] = [
     },
   },
   {
+    name: "sin permiso",
+    role: "SELLER",
+  },
+  {
     name: "datos invalidos",
     form: { monto_pagado: "0" },
   },
   {
     name: "metodo de pago fuera de la lista",
     form: { metodo_pago: "cheque" },
+  },
+  {
+    name: "monto que la columna guardaria como cero",
+    form: { monto_pagado: "0.004" },
+  },
+  {
+    name: "sin clave de operacion",
+    form: { clave_operacion: "" },
   },
   {
     name: "compra inexistente",
@@ -177,6 +219,14 @@ const cases: ActionCase[] = [
       "pago_proveedor.findMany": payments("40.00"),
     },
   },
+  {
+    name: "clave repetida: responde con el pago guardado sin escribir",
+    data: storedKey(),
+  },
+  {
+    name: "clave de otro usuario",
+    data: storedKey({ id_usuario: "USU00000009" }),
+  },
 ];
 
 describe("createSupplierPaymentAction", () => {
@@ -191,6 +241,37 @@ describe("createSupplierPaymentAction", () => {
   }
 });
 
+const isPrisma = (call: RecordedCall, name: string) => "prisma" in call && call.prisma === name;
+
+// C4 de la 11.2a: la clave del formulario se reclama como primera sentencia de
+// la transaccion, antes del bloqueo y del correlativo. Dos envios con la misma
+// clave chocan en ese INSERT: el segundo espera al primero y lo ve repetido.
+describe("C4 de la 11.2a: idempotencia del pago", () => {
+  it("reclama la clave antes de bloquear la compra y la completa con el pago", async () => {
+    const { calls } = await runAction(cases[0]);
+    const index = (name: string) => calls.findIndex((call) => isPrisma(call, name));
+
+    expect(index("operacion_idempotente.createManyAndReturn")).toBeGreaterThan(-1);
+    expect(index("operacion_idempotente.createManyAndReturn")).toBeLessThan(index("$queryRaw"));
+    expect(index("pago_proveedor.create")).toBeLessThan(index("operacion_idempotente.updateMany"));
+    expect(calls[index("operacion_idempotente.updateMany")]).toMatchObject({
+      args: { where: { clave: CLAVE }, data: { id_registro_resultado: "PPR00000001" } },
+    });
+  });
+
+  it("una clave repetida no bloquea, no lee la compra ni escribe", async () => {
+    const { calls, outcome } = await runAction({ name: "repetida", data: storedKey() });
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_pago_proveedor: "PPR00000007", clave_operacion: CLAVE },
+    });
+    expect(calls.some((call) => isPrisma(call, "$queryRaw"))).toBe(false);
+    expect(calls.some((call) => isPrisma(call, "compra.findUnique"))).toBe(false);
+    expect(calls.some((call) => isPrisma(call, "pago_proveedor.create"))).toBe(false);
+  });
+});
+
 // C3 de la 11.2a: el pago decide con la compra y sus pagos. Los leia antes de
 // abrir la transaccion y sin bloqueo: dos pagos simultaneos veian el mismo
 // saldo y los dos pasaban, y una anulacion podia confirmar en medio. Ahora la
@@ -198,8 +279,15 @@ describe("createSupplierPaymentAction", () => {
 // antes de leerla, y todo lo que decide va dentro de la transaccion. La prueba
 // fija el protocolo; la carrera misma no se reproduce en una prueba unitaria.
 describe("C3 de la 11.2a: el pago decide con la compra bloqueada", () => {
-  const decides = cases.filter(
-    (actionCase) => !["datos invalidos", "metodo de pago fuera de la lista"].includes(actionCase.name),
+  const decides = cases.filter((actionCase) =>
+    [
+      "primer pago parcial",
+      "pago que completa el saldo",
+      "compra inexistente",
+      "compra anulada",
+      "compra ya pagada",
+      "pago mayor que el saldo",
+    ].includes(actionCase.name),
   );
 
   it("cubre los 6 casos que leen la compra", () => {
@@ -226,8 +314,8 @@ describe("C3 de la 11.2a: el pago decide con la compra bloqueada", () => {
 describe("hallazgos 1 y 2 de la 11.2a: el saldo con decimales", () => {
   const stored = (value: unknown) => new Prisma.Decimal(String(value)).toFixed(2);
 
-  function writeOf(calls: Awaited<ReturnType<typeof runAction>>["calls"], name: string) {
-    const call = calls.find((item) => "prisma" in item && item.prisma === name);
+  function writeOf(calls: RecordedCall[], name: string) {
+    const call = calls.find((item) => isPrisma(item, name));
 
     expect(call, `no se llamo a ${name}`).toBeDefined();
 
@@ -244,9 +332,7 @@ describe("hallazgos 1 y 2 de la 11.2a: el saldo con decimales", () => {
       },
     });
 
-    expect(outcome).toBe(
-      `redirect:/dashboard/inventory/purchases/${COMPRA}?toast=supplier-payment-registered`,
-    );
+    expect(outcome).toMatchObject({ status: "success", data: { id_pago_proveedor: "PPR00000001" } });
 
     const payment = writeOf(calls, "pago_proveedor.create");
 
@@ -282,11 +368,10 @@ describe("hallazgos 1 y 2 de la 11.2a: el saldo con decimales", () => {
       },
     });
 
-    expect(outcome).toBe(
-      "error: El pago no puede superar el saldo pendiente. Saldo actual: S/ 50.20",
-    );
-    expect(calls.some((item) => "prisma" in item && item.prisma === "pago_proveedor.create")).toBe(
-      false,
-    );
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "El pago no puede superar el saldo pendiente. Saldo actual: S/ 50.20",
+    });
+    expect(calls.some((item) => isPrisma(item, "pago_proveedor.create"))).toBe(false);
   });
 });

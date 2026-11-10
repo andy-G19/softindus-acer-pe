@@ -466,6 +466,7 @@ const PRISMA_METHODS = new Set([
 const WRITE_METHODS = new Set([
   "create",
   "createMany",
+  "createManyAndReturn",
   "update",
   "updateMany",
   "updateManyAndReturn",
@@ -477,7 +478,9 @@ const WRITE_METHODS = new Set([
 // que es lo que esperan las guardas que comprueban `count` (un caso simula la
 // guarda que falla con `{ count: 0 }`); createMany, una por elemento.
 // deleteMany borra una fila, como updateMany (10.4c: la edicion de un pedido
-// reemplaza su detalle).
+// reemplaza su detalle). createManyAndReturn devuelve cada fila de `data`
+// (11.2a: el reclamo de una clave nueva con claimOperation; un caso simula la
+// clave repetida con []).
 // updateManyAndReturn tambien afecta una fila y la devuelve generada segun su
 // select, sin aplicar `data` (grupo 2 de fixes): el caso que necesita el valor
 // que dejaria la escritura lo fija, y `[]` simula la guarda que falla.
@@ -492,6 +495,10 @@ function defaultWriteResult(modelName: string, method: string, args: PrismaArgs)
 
   if (method === "createMany") {
     return { count: Array.isArray(args?.data) ? args.data.length : 1 };
+  }
+
+  if (method === "createManyAndReturn") {
+    return Array.isArray(args?.data) ? args.data : [args?.data];
   }
 
   return args?.data ?? null;

@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import { Prisma, type PrismaClient } from "@/generated/prisma/client";
@@ -7,9 +9,9 @@ import { getTestDatabase } from "@/testing/test-database";
 
 // El pago a proveedor y la anulacion de compra contra Postgres real (PGlite),
 // 11.2a. Corre la accion entera: el bloqueo de la compra (su SQL se ejecuta de
-// verdad), las lecturas dentro de la transaccion, el correlativo, la bitacora y
-// el rollback de un rechazo. Solo se reemplazan la sesion y Next (cache y
-// redireccion).
+// verdad), la clave de la operacion, las lecturas dentro de la transaccion, el
+// correlativo, la bitacora y el rollback de un rechazo. Solo se reemplazan la
+// sesion y Next (cache y redireccion).
 //
 // Lo que no se puede probar aqui: dos pagos simultaneos sobre la misma compra.
 // En Postgres el segundo espera el candado del primero y decide con su saldo ya
@@ -28,6 +30,7 @@ const mocks = vi.hoisted(() => {
 
 vi.mock("@/lib/authz", () => ({
   requireRole: async () => ({ user: { id: "USU00000001" } }),
+  getAuthorizedSession: async () => ({ user: { id: "USU00000001" } }),
 }));
 vi.mock("next/cache", () => ({ revalidatePath: () => undefined }));
 vi.mock("next/navigation", () => ({
@@ -103,10 +106,11 @@ async function seedPurchase(idCompra: string, total: string, pagos: string[] = [
   }
 }
 
-function paymentForm(idCompra: string, monto: string) {
+function paymentForm(idCompra: string, monto: string, clave: string = randomUUID()) {
   const formData = new FormData();
 
   formData.set("id_compra", idCompra);
+  formData.set("clave_operacion", clave);
   formData.set("fecha_pago", "2026-07-14");
   formData.set("monto_pagado", monto);
   formData.set("metodo_pago", "transferencia");
@@ -117,8 +121,7 @@ function paymentForm(idCompra: string, monto: string) {
 
 async function outcomeOf(action: Promise<unknown>) {
   try {
-    await action;
-    return "termino sin redirigir";
+    return await action;
   } catch (error) {
     if (error instanceof mocks.RedirectSignal) {
       return `redirect:${error.url}`;
@@ -147,11 +150,11 @@ describe("pago a proveedor en Postgres", () => {
   it("paga el saldo exacto: 50.20 de 100.30 tras 50.10 deja la compra pagada", async () => {
     await seedPurchase("COM00000101", "100.30", ["50.10"]);
 
-    const outcome = await outcomeOf(createSupplierPaymentAction(paymentForm("COM00000101", "50.20")));
-
-    expect(outcome).toBe(
-      "redirect:/dashboard/inventory/purchases/COM00000101?toast=supplier-payment-registered",
+    const outcome = await outcomeOf(
+      createSupplierPaymentAction({ status: "idle" }, paymentForm("COM00000101", "50.20")),
     );
+
+    expect(outcome).toMatchObject({ status: "success", data: { id_pago_proveedor: "PPR00000001" } });
     expect(await purchaseState("COM00000101")).toEqual({
       estado_compra: "confirmada",
       estado_pago: "pagado",
@@ -179,11 +182,14 @@ describe("pago a proveedor en Postgres", () => {
     await seedPurchase("COM00000102", "100.30", ["50.10"]);
     const bitacoraAntes = await prisma.bitacora_operacion.count();
 
-    const outcome = await outcomeOf(createSupplierPaymentAction(paymentForm("COM00000102", "50.21")));
-
-    expect(outcome).toBe(
-      "error: El pago no puede superar el saldo pendiente. Saldo actual: S/ 50.20",
+    const outcome = await outcomeOf(
+      createSupplierPaymentAction({ status: "idle" }, paymentForm("COM00000102", "50.21")),
     );
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "El pago no puede superar el saldo pendiente. Saldo actual: S/ 50.20",
+    });
     expect(await paymentsOf("COM00000102")).toHaveLength(1);
     expect(await purchaseState("COM00000102")).toEqual({
       estado_compra: "confirmada",
@@ -199,10 +205,80 @@ describe("pago a proveedor en Postgres", () => {
       data: { estado_compra: "anulada", estado_pago: "anulada" },
     });
 
-    const outcome = await outcomeOf(createSupplierPaymentAction(paymentForm("COM00000103", "10")));
+    const outcome = await outcomeOf(
+      createSupplierPaymentAction({ status: "idle" }, paymentForm("COM00000103", "10")),
+    );
 
-    expect(outcome).toBe("error: No se puede registrar pagos en una compra anulada.");
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "No se puede registrar pagos en una compra anulada.",
+    });
     expect(await paymentsOf("COM00000103")).toHaveLength(0);
+  });
+});
+
+// C4 de la 11.2a: la clave del formulario. En Postgres un segundo envio
+// simultaneo esperaria en el INSERT de la clave; aqui los envios van uno tras
+// otro, que es el caso de un reenvio tras una respuesta perdida.
+describe("idempotencia del pago en Postgres", () => {
+  it("la misma clave dos veces deja un solo pago y responde con el mismo id", async () => {
+    await seedPurchase("COM00000105", "100.00");
+    const clave = randomUUID();
+
+    const first = await outcomeOf(
+      createSupplierPaymentAction({ status: "idle" }, paymentForm("COM00000105", "40", clave)),
+    );
+    const second = await outcomeOf(
+      createSupplierPaymentAction({ status: "idle" }, paymentForm("COM00000105", "40", clave)),
+    );
+
+    expect(first).toMatchObject({ status: "success", data: { clave_operacion: clave } });
+    expect(second).toMatchObject({
+      status: "success",
+      data: (first as { data: unknown }).data,
+    });
+    expect(await paymentsOf("COM00000105")).toHaveLength(1);
+    expect(await purchaseState("COM00000105")).toEqual({
+      estado_compra: "confirmada",
+      estado_pago: "parcial",
+    });
+    expect(
+      await prisma.bitacora_operacion.count({
+        where: { entidad_afectada: "pago_proveedor", detalle: { contains: "COM00000105" } },
+      }),
+    ).toBe(1);
+    expect(
+      await prisma.operacion_idempotente.findUnique({
+        where: { clave },
+        select: { tipo_operacion: true, id_usuario: true, id_registro_resultado: true },
+      }),
+    ).toEqual({
+      tipo_operacion: "registrar_pago_proveedor",
+      id_usuario: USUARIO,
+      id_registro_resultado: (first as { data: { id_pago_proveedor: string } }).data.id_pago_proveedor,
+    });
+  });
+
+  it("un rechazo libera la clave: el mismo envio corregido se registra", async () => {
+    await seedPurchase("COM00000106", "100.00");
+    const clave = randomUUID();
+
+    const rejected = await outcomeOf(
+      createSupplierPaymentAction({ status: "idle" }, paymentForm("COM00000106", "150", clave)),
+    );
+    expect(rejected).toMatchObject({ status: "error" });
+    expect(await prisma.operacion_idempotente.count({ where: { clave } })).toBe(0);
+
+    const accepted = await outcomeOf(
+      createSupplierPaymentAction({ status: "idle" }, paymentForm("COM00000106", "100", clave)),
+    );
+
+    expect(accepted).toMatchObject({ status: "success" });
+    expect(await paymentsOf("COM00000106")).toHaveLength(1);
+    expect(await purchaseState("COM00000106")).toEqual({
+      estado_compra: "confirmada",
+      estado_pago: "pagado",
+    });
   });
 });
 
