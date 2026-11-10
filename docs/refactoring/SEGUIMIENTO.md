@@ -7762,7 +7762,7 @@ Plan aprobado el 2026-11-09 con cuatro decisiones:
 
 ### Sub-entrega 11.1 — Base de integración, paridad de reportes e idempotencia
 
-Fecha: 2026-11-09 (Lima). Estado: verificada en staging, pendiente de integrar en `main`. Plan en
+Fecha: 2026-11-09 (Lima). Estado: integrada en `main` (PR #39, merge `26e8a9b`). Plan en
 `tmp/e11-diff/plan-11-1.md`, con las decisiones D5 a D9 aprobadas: corregir la lectura de
 filtros de 6 reportes (D5), un solo cálculo del estado de cobranza (D6), clave UUID sin
 correlativo (D7), el ayudante de idempotencia en la 11.1 aunque su primer consumidor sea la
@@ -7879,8 +7879,44 @@ Hallazgos:
    | Financiero | `chatarra`: 2 y 2 | `CAJ00000001`: 2 y 2 |
 
 4. El CSS servido es el mismo archivo que tras la 10.8b (`3zy2beb8e6sdq.css`, 112.315 bytes).
-5. Pendiente antes del PR a `main`: `migrate status` y `migrate deploy` contra producción, por el
-   responsable.
+5. El push de `3a7a213` (hallazgo 42) y `972b920` (esta verificación) dio el CI #148 en verde
+   (4m 35s) y Vercel desplegó staging (01:34:57 UTC del 10).
+
+#### Migración en producción
+
+Antes del PR, el responsable aplicó la migración en producción desde una terminal aparte, con
+`DATABASE_URL` definida solo en ella (su `.env` sigue apuntando a staging). Dos trampas
+aparecieron por el camino y ninguna llegó a escribir:
+
+1. El primer `migrate status` respondió «Database schema is up to date!» con el host
+   `aws-1-ca-central-1`, que es el de staging. `prisma.config.ts` carga el `.env` con
+   `dotenv/config`, que no pisa una variable ya definida, y la URL vigente era la de staging.
+2. Con la URL que copia el panel de Supabase (*Session pooler*, puerto 5432), `status` mostró
+   las 20 migraciones pendientes. A esa URL le falta `?schema=aceros`: sin él Prisma busca
+   `_prisma_migrations` en `public`, y la de producción vive en `aceros` desde el 2026-08-01
+   (`docs/fase-13-cambios-operativos.md`). Un `deploy` con esa URL habría intentado aplicar
+   la línea base sobre la base en uso.
+
+El destino se comprobó antes de cada lectura con un comando que imprime el usuario, el host y
+los parámetros de la URL, sin la contraseña: `postgres.qozzuikctcgsfpioibeq`,
+`aws-0-ca-central-1.pooler.supabase.com:5432` y `?schema=aceros`. Con esa URL, `migrate status`
+mostró 20 migraciones y una pendiente (`20261109201052_add_operacion_idempotente`),
+`migrate deploy` la aplicó y otra vez `status` respondió «Database schema is up to date!».
+
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-10 (UTC) y comparados con git:
+
+- PR #39, abierto a las 04:01:34 UTC y fusionado con merge commit a las 04:06:55 UTC del
+  2026-11-10: 14 commits, de `9987085` a `972b920`, y 27 archivos (+1.470 −301). Entran
+  también los 3 commits de documentación del cierre de la entrega 10 (`9987085`, `407cd9d` y
+  `28c3855`), que no se habían publicado en `main`. Su CI, el #149, sobre `972b920`, terminó en
+  verde (4m 54s).
+- El merge commit `26e8a9b` tiene como padres `aefe1df` (`main`) y `972b920` (`staging`), y su
+  árbol es el de `972b920` (`76e650e7`): `main` y `staging` tienen el mismo contenido. CI #150
+  en verde (5m 17s).
+- Vercel desplegó `26e8a9b` en producción (`success` a las 04:08:23 UTC). La migración ya
+  estaba aplicada antes del merge: primero la base, después el código que podría usarla.
 
 ## Secuencia de próximas entregas
 
@@ -7907,7 +7943,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 verificada en staging (CI #147, migración aplicada), pendiente de integrar en `main` |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a en preparación |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
