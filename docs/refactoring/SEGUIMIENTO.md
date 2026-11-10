@@ -8073,7 +8073,7 @@ Datos leídos de la API de GitHub el 2026-11-10 (UTC) y comparados con git:
 
 ### Sub-entrega 11.2b — Crear compra
 
-Fecha: 2026-11-10 (Lima). Estado: preparada en `staging` (C0 a C5), sin publicar. Plan en
+Fecha: 2026-11-10 (Lima). Estado: verificada en staging, pendiente de integrar en `main`. Plan en
 `tmp/e11-diff/plan-11-2b.md`, con las decisiones D17 a D21 aprobadas: página completa como
 pedidos (D17), montos en céntimos (D18), proveedor y materiales comprobados dentro de la
 transacción sin bloquear su fila (D20) y comprobante repetido y fecha inválida en su campo
@@ -8093,7 +8093,8 @@ El efecto sobre Atrás se comprueba en staging.
 | 5160d78 | fix | `src/lib/purchase-amounts.ts`: los montos de la compra en céntimos, en la acción y en la vista previa; se retira `calculateIgv` y `taxes.ts` define `IGV_PERCENT` (hallazgos 1 a 3 y 6, 4 casos rojos antes). |
 | 7c145d7 | feat | Crear compra en página completa: `FormActionState`, `getAuthorizedSession`, `claimOperation` primero, lecturas dentro de la transacción, errores por línea, `returnTo`, guardia de descarte y `OperationKeyField`. El formulario pasa a `modules/inventory/purchases`; el esquema de la clave se comparte (`operation-key.schema.ts`). Arregla además el campo de la clave (hallazgo 7). |
 | f6d4b96 | fix | Comprobante repetido y fecha inválida responden en su campo (hallazgos 4 y 5, 6 casos rojos antes, uno contra el índice único real). |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| e1d6936 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -8159,8 +8160,35 @@ Hallazgos:
    envío. Lo encontró la prueba del formulario; corregido en `7c145d7` con su prueba roja.
 8. D19 y la clave guardada no podían convivir (ver arriba). Resuelto con la opción A.
 9. Pedidos (10.4c) y ahora compras navegan con `router.push` tras una acción que revalida, que la
-   regla del hallazgo 95 de la 10.8b desaconseja. Destino: verificar Atrás en staging en esta
-   sub-entrega y revisar pedidos en la 11.3.
+   regla del hallazgo 95 de la 10.8b desaconseja. Verificado en staging: en crear compra el
+   `router.push` añadió una entrada al historial (de 15 a 16) y Atrás llevó al formulario vacío
+   con la clave nueva, sin saltarse el listado. Se revisa pedidos en la 11.3.
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 6 commits (hasta `e1d6936`): CI #156 en verde en 4:04; Vercel desplegó staging
+   (19:48 UTC). Sin migraciones.
+2. Con ADMIN (origen y sesión comprobados en llamadas aparte), sin escribir: «Nueva compra»
+   desde el listado filtrado lleva `returnTo` con `payment=pendiente` y Cancelar apunta a él; las
+   etiquetas van unidas a su campo, los ids de línea son estables y «Quitar» está deshabilitado con
+   una línea; elegir Factura activa el IGV; la vista previa de dos líneas de 1.25 × 10.25 da 12.81
+   + 12.81, subtotal 25.62, IGV 4.61 y total 30.23. La clave del formulario se mantiene igual
+   después de elegir el comprobante, agregar líneas y escribir cantidades y costos (hallazgo 7).
+   Cancelar con datos pregunta «¿Descartar la compra nueva?» y, al descartar, vuelve al listado
+   filtrado. En un primer intento el comprobante y el IGV volvieron a su valor inicial mientras el
+   navegador registraba clics ajenos a la sesión de verificación; al repetir la secuencia sin
+   intervención no volvió a pasar.
+3. Escrituras autorizadas por el responsable, con los materiales de prueba «PRUEBA E1 PLANCHA»
+   (MAT00000010, stock 4.00 al empezar) y «PRUEBA E1 TUBO» (MAT00000011, stock 1.00):
+
+   | Paso | Resultado |
+   |---|---|
+   | Compra D: doris.SAC, factura F001-E112B01 con IGV, dos líneas de 1.25 × 10.25 | COM00000013 con subtotal S/ 25.62, IGV S/ 4.61 y total S/ 30.23; líneas de 12.81; un solo aviso con la nota de filtros; vuelve a `?payment=pendiente`; la clave se renueva (`b2d7d12b` a `3cefb0a1`); stock de 4.00 a 5.25 y de 1.00 a 2.25; costo de los dos materiales S/ 10.25 |
+   | Atrás tras guardar | el historial pasó de 15 a 16 (la navegación añadió una entrada); Atrás muestra el formulario vacío con la clave nueva |
+   | La misma factura F001-E112B01 con una línea de 1 × 1.00 | «Ya existe una compra con ese tipo y número de comprobante.» en el formulario y en su campo, con el foco en él; lo escrito se conserva con la misma clave; sin aviso; el stock sigue en 5.25 y solo COM00000013 tiene ese comprobante |
+
+4. Datos de prueba que quedan en staging: COM00000013 (pendiente, S/ 30.23); «PRUEBA E1 PLANCHA»
+   con stock 5.25 y «PRUEBA E1 TUBO» con stock 2.25, los dos con costo S/ 10.25.
 
 ## Secuencia de próximas entregas
 
@@ -8187,7 +8215,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b preparada en `staging` (C0 a C5), pendiente de publicar y verificar |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b verificada en staging (CI #156), pendiente de integrar en `main` |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
