@@ -8206,7 +8206,7 @@ Datos leídos de la API de GitHub el 2026-11-10 (UTC) y comparados con git:
 
 ### Sub-entrega 11.2c — Salida de inventario
 
-Fecha: 2026-11-10 (Lima). Estado: preparada en `staging`, sin publicar. Plan en
+Fecha: 2026-11-10 (Lima). Estado: verificada en `staging` (CI #160). Plan en
 `tmp/e11-diff/plan-11-2c.md`, con las decisiones aprobadas: las salidas aplican la regla de
 alertas de stock de la entrega a una orden (D16), la salida se queda en su página con `returnTo`
 y guardia de descarte (D22), la cantidad se redondea como la columna (D23), clave de operación
@@ -8219,7 +8219,8 @@ con alcance `salida:nueva` y se conserva el `FOR UPDATE` del material.
 | cbef1b4 | feat | Salida con `FormActionState` y `getAuthorizedSession` (**se retira la desviación conocida**), `claimOperation` como primera sentencia, `ActionForm` sin el segundo aviso de `showError`, `OperationKeyField`, `returnTo` desde el listado y guardia de descarte. Pruebas del formulario en jsdom y de la acción en Postgres. |
 | db80ab5 | refactor | `syncStockAlert` pasa de `production/work-orders/material-delivery.ts` a `src/modules/inventory/alerts/stock-alert-sync.ts`, sin cambios: las caracterizaciones de órdenes de trabajo no cambian. |
 | 5c3be73 | feat | La salida abre, actualiza o atiende la alerta de stock (D16) con el stock calculado bajo el bloqueo del material; el mensaje nombra la orden solo si la hay; se revalida el listado de alertas. |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 85eb66b | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -8277,6 +8278,34 @@ Hallazgos:
 2. Una salida de 0.004 se guardaba como un movimiento de 0.00. Corregido en `83f7466`.
 3. Las salidas no abrían alertas de stock (hallazgo 3 de la 10.3a, mitad de la salida). Corregido
    en `5c3be73` (D16).
+4. En staging, el campo Cantidad (`step="0.01"`) no deja enviar 1.005 desde el navegador: «Los
+   dos valores válidos más aproximados son 1 y 1,01». No es un defecto: es una primera barrera, y
+   la regla de `83f7466` sigue siendo la que protege el kárdex de un cliente que no la respete.
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 6 commits (hasta `85eb66b`): CI #160 en verde en 5:14; Vercel desplegó staging
+   (23:24 UTC). Sin migraciones. La sesión de staging había caducado y el rechazo redirigió al
+   login del host de `AUTH_URL` (conducta conocida de la 10.3c); el responsable inició sesión en
+   el host de staging.
+2. Con ADMIN (origen comprobado en llamadas aparte), sin escribir: «Registrar salida» desde el
+   listado filtrado por PRUEBA E1 PLANCHA lleva `returnTo=/dashboard/inventory/outputs?material=MAT00000010`
+   y Cancelar apunta a él; la clave del formulario es la guardada para `salida:nueva`; Cancelar
+   con el motivo escrito pregunta «¿Descartar la salida?» y, al descartar, vuelve al listado
+   filtrado sin renovar la clave. Partida: PRUEBA E1 PLANCHA (MAT00000010) con stock 5.25 y
+   mínimo 7.00, PRUEBA E1 TUBO (MAT00000011) con 2.25 y mínimo 0.00, ninguna alerta activa.
+3. Envíos autorizados por el responsable:
+
+   | Paso | Resultado |
+   |---|---|
+   | A: PRUEBA E1 PLANCHA, sin orden, 1.005 (con el botón, el navegador lo frena por el `step`; se envió sin su validación) | MVI00000072 con cantidad 1.01 y stock resultante 4.24 (5.25 − 1.01); un solo aviso con la nota de filtros; vuelve a `?material=MAT00000010`; el historial pasa de 11 a 12; la clave se renueva (`1c9c715d` a `421aab97`). Se abre una alerta **activa** con stock detectado 4.24, mínimo 7.00 y «…quedo en stock critico tras una salida de inventario.» |
+   | B: la clave de A devuelta a `sessionStorage` antes de abrir el formulario y el mismo envío | Responde con el éxito de A y renueva la clave; no hay movimiento nuevo (sigue MVI00000072), el stock sigue en 4.24 y sigue una sola alerta activa sin cambios |
+   | C: PRUEBA E1 TUBO por 5 con 2.25 disponible (comprobado antes) | «No hay stock suficiente para registrar la salida.» en el formulario y en su campo, con el foco en él; se conservan el material, la cantidad, el motivo y la clave; sin aviso; TUBO sin movimiento nuevo |
+
+4. La salida con WORKSHOP_MASTER no se probó en staging: la cubre la caracterización («el maestro
+   de taller registra la salida igual»).
+5. Datos de prueba que quedan en staging: MVI00000072 y la alerta activa de PRUEBA E1 PLANCHA,
+   con stock 4.24.
 
 ## Secuencia de próximas entregas
 
@@ -8303,7 +8332,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c preparada en `staging`, sin publicar (se retira la desviación conocida) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c verificada en `staging` (CI #160; se retira la desviación conocida) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
