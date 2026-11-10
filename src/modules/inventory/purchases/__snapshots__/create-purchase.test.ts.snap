@@ -1,0 +1,744 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createPurchaseAction > cantidad cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPurchaseAction > cantidad cero > resultado 1`] = `"error: La cantidad debe ser mayor que cero."`;
+
+exports[`createPurchaseAction > dos lineas con factura e IGV > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000001",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+            "MAT00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "compra",
+      "prefijo": "COM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_compra",
+      "prefijo": "DCO",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "historial_precio_proveedor",
+      "prefijo": "HPP",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_compra": "confirmada",
+        "estado_pago": "pendiente",
+        "fecha_compra": 2026-07-14T00:00:00.000Z,
+        "id_compra": "COM00000001",
+        "id_proveedor": "PVE00000001",
+        "id_usuario_registro": "USU00000001",
+        "igv": 9.36,
+        "monto_total": 61.36,
+        "numero_comprobante": "F001-000123",
+        "observaciones": "compra mensual",
+        "subtotal": 52,
+        "tipo_comprobante": "factura",
+      },
+    },
+    "prisma": "compra.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 3,
+        "costo_unitario": 12.5,
+        "id_compra": "COM00000001",
+        "id_detalle_compra": "DCO00000001",
+        "id_material": "MAT00000001",
+        "observaciones": "corte a medida",
+        "subtotal": 37.5,
+        "unidad_medida": "UND",
+      },
+    },
+    "prisma": "detalle_compra.create",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario_actual": 12.5,
+        "stock_actual": {
+          "increment": Decimal(3),
+        },
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+      "where": {
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "alerta_stock.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": Decimal(3),
+        "id_compra": "COM00000001",
+        "id_material": "MAT00000001",
+        "id_movimiento": "MVI00000001",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Entrada automática generada por compra confirmada",
+        "stock_anterior": Decimal(10),
+        "stock_resultante": Decimal(13),
+        "tipo_movimiento": "entrada",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_registro": 2026-07-14T00:00:00.000Z,
+        "id_compra": "COM00000001",
+        "id_historial_precio": "HPP00000001",
+        "id_material": "MAT00000001",
+        "id_proveedor": "PVE00000001",
+        "observaciones": "Precio registrado automáticamente desde compra.",
+        "origen_registro": "compra",
+        "precio_unitario": 12.5,
+      },
+    },
+    "prisma": "historial_precio_proveedor.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 2,
+        "costo_unitario": 7.25,
+        "id_compra": "COM00000001",
+        "id_detalle_compra": "DCO00000002",
+        "id_material": "MAT00000002",
+        "observaciones": null,
+        "subtotal": 14.5,
+        "unidad_medida": "m",
+      },
+    },
+    "prisma": "detalle_compra.create",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario_actual": 7.25,
+        "stock_actual": {
+          "increment": Decimal(2),
+        },
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+      "where": {
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "alerta_stock.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": Decimal(2),
+        "id_compra": "COM00000001",
+        "id_material": "MAT00000002",
+        "id_movimiento": "MVI00000002",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Entrada automática generada por compra confirmada",
+        "stock_anterior": Decimal(10),
+        "stock_resultante": Decimal(12),
+        "tipo_movimiento": "entrada",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_registro": 2026-07-14T00:00:00.000Z,
+        "id_compra": "COM00000001",
+        "id_historial_precio": "HPP00000002",
+        "id_material": "MAT00000002",
+        "id_proveedor": "PVE00000001",
+        "observaciones": "Precio registrado automáticamente desde compra.",
+        "origen_registro": "compra",
+        "precio_unitario": 7.25,
+      },
+    },
+    "prisma": "historial_precio_proveedor.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Compra creada con 2 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "compra",
+      "id_registro_afectado": "COM00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPurchaseAction > dos lineas con factura e IGV > resultado 1`] = `"redirect:/dashboard/inventory/purchases?toast=purchase-created"`;
+
+exports[`createPurchaseAction > el stock resultante queda igual al minimo: no atiende alertas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000001",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "compra",
+      "prefijo": "COM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_compra",
+      "prefijo": "DCO",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "historial_precio_proveedor",
+      "prefijo": "HPP",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_compra": "confirmada",
+        "estado_pago": "pendiente",
+        "fecha_compra": 2026-07-14T00:00:00.000Z,
+        "id_compra": "COM00000001",
+        "id_proveedor": "PVE00000001",
+        "id_usuario_registro": "USU00000001",
+        "igv": 0,
+        "monto_total": 21,
+        "numero_comprobante": null,
+        "observaciones": null,
+        "subtotal": 21,
+        "tipo_comprobante": null,
+      },
+    },
+    "prisma": "compra.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 2,
+        "costo_unitario": 10.5,
+        "id_compra": "COM00000001",
+        "id_detalle_compra": "DCO00000001",
+        "id_material": "MAT00000001",
+        "observaciones": null,
+        "subtotal": 21,
+        "unidad_medida": "UND",
+      },
+    },
+    "prisma": "detalle_compra.create",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario_actual": 10.5,
+        "stock_actual": {
+          "increment": Decimal(2),
+        },
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+      "where": {
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": Decimal(2),
+        "id_compra": "COM00000001",
+        "id_material": "MAT00000001",
+        "id_movimiento": "MVI00000001",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Entrada automática generada por compra confirmada",
+        "stock_anterior": Decimal(3),
+        "stock_resultante": Decimal(5),
+        "tipo_movimiento": "entrada",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_registro": 2026-07-14T00:00:00.000Z,
+        "id_compra": "COM00000001",
+        "id_historial_precio": "HPP00000001",
+        "id_material": "MAT00000001",
+        "id_proveedor": "PVE00000001",
+        "observaciones": "Precio registrado automáticamente desde compra.",
+        "origen_registro": "compra",
+        "precio_unitario": 10.5,
+      },
+    },
+    "prisma": "historial_precio_proveedor.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Compra creada con 1 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "compra",
+      "id_registro_afectado": "COM00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPurchaseAction > el stock resultante queda igual al minimo: no atiende alertas > resultado 1`] = `"redirect:/dashboard/inventory/purchases?toast=purchase-created"`;
+
+exports[`createPurchaseAction > material inexistente o inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000001",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000099",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`createPurchaseAction > material inexistente o inactivo > resultado 1`] = `"error: Uno o más materiales no existen o están inactivos."`;
+
+exports[`createPurchaseAction > material repetido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPurchaseAction > material repetido > resultado 1`] = `"error: No repitas el mismo material dentro de la compra. Ajusta la cantidad en una sola fila."`;
+
+exports[`createPurchaseAction > proveedor inexistente o inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000001",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+]
+`;
+
+exports[`createPurchaseAction > proveedor inexistente o inactivo > resultado 1`] = `"error: El proveedor seleccionado no existe o está inactivo."`;
+
+exports[`createPurchaseAction > sin proveedor > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPurchaseAction > sin proveedor > resultado 1`] = `"error: Seleccione un proveedor."`;
+
+exports[`createPurchaseAction > una linea sin IGV > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000001",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_material": {
+          "in": [
+            "MAT00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "compra",
+      "prefijo": "COM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_compra",
+      "prefijo": "DCO",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "historial_precio_proveedor",
+      "prefijo": "HPP",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_compra": "confirmada",
+        "estado_pago": "pendiente",
+        "fecha_compra": 2026-07-14T00:00:00.000Z,
+        "id_compra": "COM00000001",
+        "id_proveedor": "PVE00000001",
+        "id_usuario_registro": "USU00000001",
+        "igv": 0,
+        "monto_total": 21,
+        "numero_comprobante": null,
+        "observaciones": null,
+        "subtotal": 21,
+        "tipo_comprobante": null,
+      },
+    },
+    "prisma": "compra.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 2,
+        "costo_unitario": 10.5,
+        "id_compra": "COM00000001",
+        "id_detalle_compra": "DCO00000001",
+        "id_material": "MAT00000001",
+        "observaciones": null,
+        "subtotal": 21,
+        "unidad_medida": "UND",
+      },
+    },
+    "prisma": "detalle_compra.create",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario_actual": 10.5,
+        "stock_actual": {
+          "increment": Decimal(2),
+        },
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+      "where": {
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "alerta_stock.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": Decimal(2),
+        "id_compra": "COM00000001",
+        "id_material": "MAT00000001",
+        "id_movimiento": "MVI00000001",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Entrada automática generada por compra confirmada",
+        "stock_anterior": Decimal(10),
+        "stock_resultante": Decimal(12),
+        "tipo_movimiento": "entrada",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_registro": 2026-07-14T00:00:00.000Z,
+        "id_compra": "COM00000001",
+        "id_historial_precio": "HPP00000001",
+        "id_material": "MAT00000001",
+        "id_proveedor": "PVE00000001",
+        "observaciones": "Precio registrado automáticamente desde compra.",
+        "origen_registro": "compra",
+        "precio_unitario": 10.5,
+      },
+    },
+    "prisma": "historial_precio_proveedor.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Compra creada con 1 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "compra",
+      "id_registro_afectado": "COM00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPurchaseAction > una linea sin IGV > resultado 1`] = `"redirect:/dashboard/inventory/purchases?toast=purchase-created"`;
