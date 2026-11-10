@@ -28,12 +28,22 @@ import {
 // transaccion, que existiera, y las ordenes anuladas, finalizadas o con los
 // materiales cerrados recibian la salida. Desde H9 la transaccion bloquea la
 // orden y rechaza esos casos en el campo de la orden.
+//
+// Desde C2 de la 11.2c la accion devuelve un FormActionState (no redirige),
+// rechaza un rol sin permiso con un error en lugar de redirigir (era la
+// desviacion conocida) y reclama la clave de la operacion como primera
+// sentencia de la transaccion.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio: se fija para que el snapshot sea estable.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -91,7 +101,12 @@ expect.addSnapshotSerializer(decimalSnapshotSerializer);
 // Ejecucion
 // ---------------------------------------------------------------------------
 
-type ActionCase = { name: string; form: Record<string, string>; data?: DataOverrides };
+type ActionCase = {
+  name: string;
+  form: Record<string, string>;
+  data?: DataOverrides;
+  role?: "ADMIN" | "SELLER" | "WORKSHOP_MASTER";
+};
 
 async function runAction(actionCase: ActionCase) {
   mocks.correlatives.clear();
@@ -102,17 +117,21 @@ async function runAction(actionCase: ActionCase) {
     formData.append(key, value);
   }
 
-  const { calls, result } = await characterizeHandler(async () => {
-    try {
-      // El mismo estado inicial que usa el formulario con useActionState.
-      return { estado: await createInventoryOutputAction({ error: "" }, formData) };
-    } catch (error) {
-      return (
-        describeNavigationError(error) ??
-        `error: ${error instanceof Error ? error.message : String(error)}`
-      );
-    }
-  }, actionCase.data);
+  const { calls, result } = await characterizeHandler(
+    async () => {
+      try {
+        // El mismo estado inicial que usa el formulario con useActionState.
+        return await createInventoryOutputAction({ status: "idle" }, formData);
+      } catch (error) {
+        return (
+          describeNavigationError(error) ??
+          `lanzo: ${error instanceof Error ? error.message : String(error)}`
+        );
+      }
+    },
+    actionCase.data,
+    { role: actionCase.role },
+  );
 
   return { calls, outcome: result };
 }
@@ -173,8 +192,24 @@ function workOrderRow(changes: Row = {}) {
   };
 }
 
+const CLAVE = "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f";
+
+/** La clave ya estaba en la tabla: el INSERT no devuelve filas y se lee la guardada. */
+function storedKey(changes: Row = {}): DataOverrides {
+  return {
+    "operacion_idempotente.createManyAndReturn": [],
+    "operacion_idempotente.findUniqueOrThrow": {
+      tipo_operacion: "registrar_salida",
+      id_usuario: "USU00000001",
+      id_registro_resultado: "MVI00000009",
+      ...changes,
+    },
+  };
+}
+
 const form = (changes: Record<string, string> = {}) => ({
   id_material: MATERIAL,
+  clave_operacion: CLAVE,
   id_orden_trabajo: "",
   cantidad: "3.75",
   motivo: "Corte de prueba",
@@ -250,6 +285,31 @@ defineCases([
     },
   },
   {
+    name: "el maestro de taller registra la salida igual",
+    form: form(),
+    data: { $queryRaw: lockedRows(materialRow()) },
+    role: "WORKSHOP_MASTER",
+  },
+  {
+    name: "sin permiso: responde con un error en el formulario, sin redirigir",
+    form: form(),
+    role: "SELLER",
+  },
+  {
+    name: "sin clave de operacion",
+    form: form({ clave_operacion: "" }),
+  },
+  {
+    name: "clave repetida: responde con la salida guardada sin escribir",
+    form: form(),
+    data: storedKey(),
+  },
+  {
+    name: "clave de otro usuario",
+    form: form(),
+    data: storedKey({ id_usuario: "USU00000009" }),
+  },
+  {
     name: "un error inesperado dentro de la transaccion se relanza",
     form: form(),
     data: {
@@ -310,8 +370,10 @@ describe("H9: rechaza la salida a una orden que ya no admite material", () => {
         (call) => "prisma" in call && /\.(create|update)$/.test(call.prisma),
       );
 
-      expect(outcome).toEqual({
-        estado: { error: message, fieldErrors: { id_orden_trabajo: [message] } },
+      expect(outcome).toMatchObject({
+        status: "error",
+        error: message,
+        fieldErrors: { id_orden_trabajo: [message] },
       });
       expect(writes).toEqual([]);
     });
@@ -361,18 +423,60 @@ describe("C1 de la 11.2c: la cantidad de la salida redondeada como la columna", 
       data: { $queryRaw: lockedRows(materialRow({ stock_actual: D("1.00"), stock_reservado: D("0.00") })) },
     });
 
-    expect(outcome).toBe("redirect:/dashboard/inventory/outputs?toast=inventory-movement-created");
+    expect(outcome).toMatchObject({ status: "success" });
   });
 
   it("una cantidad que se guardaria como 0.00 se rechaza en su campo sin abrir la transaccion", async () => {
     const { calls, outcome } = await runAction({ name: "0.004", form: form({ cantidad: "0.004" }), data: ten });
 
-    expect(outcome).toEqual({
-      estado: {
-        error: "Revisa los datos de la salida.",
-        fieldErrors: { cantidad: ["La cantidad debe ser mayor que cero."] },
-      },
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "Revisa los datos de la salida.",
+      fieldErrors: { cantidad: ["La cantidad debe ser mayor que cero."] },
     });
     expect(calls.some((call) => "effect" in call && call.effect === "prisma.$transaction")).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C2 de la 11.2c: idempotencia de la salida
+// ---------------------------------------------------------------------------
+
+// La clave se reclama como primera sentencia de la transaccion, antes del bloqueo de la orden y
+// del material y antes del correlativo: un reenvio responde con la salida ya guardada y no
+// descuenta el stock otra vez.
+describe("C2 de la 11.2c: idempotencia de la salida", () => {
+  const isPrisma = (call: { prisma?: string }, name: string) => call.prisma === name;
+
+  it("reclama la clave antes de bloquear y la completa con el movimiento", async () => {
+    const { calls, outcome } = await runAction(findCase("con orden en proceso: la asocia al movimiento y a la bitacora"));
+    const index = (name: string) => calls.findIndex((call) => "prisma" in call && isPrisma(call, name));
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_movimiento: "MVI00000001", clave_operacion: CLAVE },
+    });
+    expect(index("operacion_idempotente.createManyAndReturn")).toBeGreaterThan(-1);
+    expect(index("operacion_idempotente.createManyAndReturn")).toBeLessThan(index("$queryRaw"));
+    expect(index("movimiento_inventario.create")).toBeLessThan(index("operacion_idempotente.updateMany"));
+  });
+
+  it("una clave repetida no bloquea, no descuenta stock ni escribe el kardex", async () => {
+    const { calls, outcome } = await runAction(findCase("clave repetida: responde con la salida guardada sin escribir"));
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_movimiento: "MVI00000009", clave_operacion: CLAVE },
+    });
+    expect(calls.some((call) => "prisma" in call && isPrisma(call, "$queryRaw"))).toBe(false);
+    expect(calls.some((call) => "prisma" in call && isPrisma(call, "material.update"))).toBe(false);
+    expect(calls.some((call) => "prisma" in call && isPrisma(call, "movimiento_inventario.create"))).toBe(false);
+  });
+
+  it("sin permiso responde en el formulario y no redirige (se retira la desviacion conocida)", async () => {
+    const { calls, outcome } = await runAction(findCase("sin permiso: responde con un error en el formulario, sin redirigir"));
+
+    expect(outcome).toMatchObject({ status: "error", error: "No tienes permisos para registrar salidas de inventario." });
+    expect(calls.some((call) => "prisma" in call)).toBe(false);
   });
 });

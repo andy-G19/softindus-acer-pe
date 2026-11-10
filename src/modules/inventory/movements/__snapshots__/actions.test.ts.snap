@@ -1,9 +1,9 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimiento y a la bitacora > llamadas 1`] = `
+exports[`createInventoryOutputAction > clave de otro usuario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -12,6 +12,164 @@ exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimi
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > clave de otro usuario > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3.75",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "",
+    "motivo": "Corte de prueba",
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > clave repetida: responde con la salida guardada sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/outputs",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > clave repetida: responde con la salida guardada sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_movimiento": "MVI00000009",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "3.75",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "",
+    "motivo": "Corte de prueba",
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimiento y a la bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -90,6 +248,17 @@ exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimi
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "MVI00000001",
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -108,12 +277,27 @@ exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimi
 ]
 `;
 
-exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimiento y a la bitacora > resultado 1`] = `"redirect:/dashboard/inventory/outputs?toast=inventory-movement-created"`;
+exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimiento y a la bitacora > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_movimiento": "MVI00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "3.75",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "OTR00000007",
+    "motivo": "Corte de prueba",
+  },
+}
+`;
 
 exports[`createInventoryOutputAction > datos invalidos: devuelve los errores de campo sin consultar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -124,27 +308,33 @@ exports[`createInventoryOutputAction > datos invalidos: devuelve los errores de 
 
 exports[`createInventoryOutputAction > datos invalidos: devuelve los errores de campo sin consultar > resultado 1`] = `
 {
-  "estado": {
-    "error": "Revisa los datos de la salida.",
-    "fieldErrors": {
-      "cantidad": [
-        "La cantidad debe ser mayor que cero.",
-      ],
-      "id_material": [
-        "Seleccione un material.",
-      ],
-      "motivo": [
-        "El motivo es obligatorio.",
-      ],
-    },
+  "error": "Revisa los datos de la salida.",
+  "fieldErrors": {
+    "cantidad": [
+      "La cantidad debe ser mayor que cero.",
+    ],
+    "id_material": [
+      "Seleccione un material.",
+    ],
+    "motivo": [
+      "El motivo es obligatorio.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "0",
+    "id_material": " ",
+    "id_orden_trabajo": "",
+    "motivo": "ab",
   },
 }
 `;
 
-exports[`createInventoryOutputAction > el material no existe: error en el campo del material y se revierte > llamadas 1`] = `
+exports[`createInventoryOutputAction > el maestro de taller registra la salida igual > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -153,6 +343,152 @@ exports[`createInventoryOutputAction > el material no existe: error en el campo 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "values": [
+        "MAT00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": Decimal(8.75),
+      },
+      "where": {
+        "id_material": "MAT00000006",
+      },
+    },
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": Decimal(3.75),
+        "id_material": "MAT00000006",
+        "id_movimiento": "MVI00000001",
+        "id_orden_trabajo": null,
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Corte de prueba",
+        "stock_anterior": Decimal(12.5),
+        "stock_resultante": Decimal(8.75),
+        "tipo_movimiento": "salida",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Salida de inventario registrada: Plancha LAC 2 mm",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_inventario",
+      "id_registro_afectado": "MVI00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "MVI00000001",
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/outputs",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > el maestro de taller registra la salida igual > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_movimiento": "MVI00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "3.75",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "",
+    "motivo": "Corte de prueba",
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > el material no existe: error en el campo del material y se revierte > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -179,13 +515,19 @@ exports[`createInventoryOutputAction > el material no existe: error en el campo 
 
 exports[`createInventoryOutputAction > el material no existe: error en el campo del material y se revierte > resultado 1`] = `
 {
-  "estado": {
-    "error": "El material seleccionado no existe o esta inactivo.",
-    "fieldErrors": {
-      "id_material": [
-        "El material seleccionado no existe o esta inactivo.",
-      ],
-    },
+  "error": "El material seleccionado no existe o esta inactivo.",
+  "fieldErrors": {
+    "id_material": [
+      "El material seleccionado no existe o esta inactivo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3.75",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "",
+    "motivo": "Corte de prueba",
   },
 }
 `;
@@ -193,7 +535,7 @@ exports[`createInventoryOutputAction > el material no existe: error en el campo 
 exports[`createInventoryOutputAction > la orden no existe: error en el campo de la orden y se revierte > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -202,6 +544,22 @@ exports[`createInventoryOutputAction > la orden no existe: error en el campo de 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -234,13 +592,19 @@ exports[`createInventoryOutputAction > la orden no existe: error en el campo de 
 
 exports[`createInventoryOutputAction > la orden no existe: error en el campo de la orden y se revierte > resultado 1`] = `
 {
-  "estado": {
-    "error": "La orden de trabajo seleccionada no existe.",
-    "fieldErrors": {
-      "id_orden_trabajo": [
-        "La orden de trabajo seleccionada no existe.",
-      ],
-    },
+  "error": "La orden de trabajo seleccionada no existe.",
+  "fieldErrors": {
+    "id_orden_trabajo": [
+      "La orden de trabajo seleccionada no existe.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3.75",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": " OTR00000007 ",
+    "motivo": "Corte de prueba",
   },
 }
 `;
@@ -248,7 +612,7 @@ exports[`createInventoryOutputAction > la orden no existe: error en el campo de 
 exports[`createInventoryOutputAction > material inactivo: error en el campo del material > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -257,6 +621,22 @@ exports[`createInventoryOutputAction > material inactivo: error en el campo del 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -283,13 +663,19 @@ exports[`createInventoryOutputAction > material inactivo: error en el campo del 
 
 exports[`createInventoryOutputAction > material inactivo: error en el campo del material > resultado 1`] = `
 {
-  "estado": {
-    "error": "El material seleccionado no existe o esta inactivo.",
-    "fieldErrors": {
-      "id_material": [
-        "El material seleccionado no existe o esta inactivo.",
-      ],
-    },
+  "error": "El material seleccionado no existe o esta inactivo.",
+  "fieldErrors": {
+    "id_material": [
+      "El material seleccionado no existe o esta inactivo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3.75",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "",
+    "motivo": "Corte de prueba",
   },
 }
 `;
@@ -297,7 +683,7 @@ exports[`createInventoryOutputAction > material inactivo: error en el campo del 
 exports[`createInventoryOutputAction > orden anulada: rechaza la salida en el campo de la orden > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -306,6 +692,22 @@ exports[`createInventoryOutputAction > orden anulada: rechaza la salida en el ca
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -338,13 +740,19 @@ exports[`createInventoryOutputAction > orden anulada: rechaza la salida en el ca
 
 exports[`createInventoryOutputAction > orden anulada: rechaza la salida en el campo de la orden > resultado 1`] = `
 {
-  "estado": {
-    "error": "No se puede entregar material a una orden anulada o finalizada.",
-    "fieldErrors": {
-      "id_orden_trabajo": [
-        "No se puede entregar material a una orden anulada o finalizada.",
-      ],
-    },
+  "error": "No se puede entregar material a una orden anulada o finalizada.",
+  "fieldErrors": {
+    "id_orden_trabajo": [
+      "No se puede entregar material a una orden anulada o finalizada.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3.75",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "OTR00000007",
+    "motivo": "Corte de prueba",
   },
 }
 `;
@@ -352,7 +760,7 @@ exports[`createInventoryOutputAction > orden anulada: rechaza la salida en el ca
 exports[`createInventoryOutputAction > orden con materiales cerrados: rechaza la salida en el campo de la orden > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -361,6 +769,22 @@ exports[`createInventoryOutputAction > orden con materiales cerrados: rechaza la
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -393,13 +817,19 @@ exports[`createInventoryOutputAction > orden con materiales cerrados: rechaza la
 
 exports[`createInventoryOutputAction > orden con materiales cerrados: rechaza la salida en el campo de la orden > resultado 1`] = `
 {
-  "estado": {
-    "error": "Los materiales de esta orden ya fueron cerrados.",
-    "fieldErrors": {
-      "id_orden_trabajo": [
-        "Los materiales de esta orden ya fueron cerrados.",
-      ],
-    },
+  "error": "Los materiales de esta orden ya fueron cerrados.",
+  "fieldErrors": {
+    "id_orden_trabajo": [
+      "Los materiales de esta orden ya fueron cerrados.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3.75",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "OTR00000007",
+    "motivo": "Corte de prueba",
   },
 }
 `;
@@ -407,7 +837,7 @@ exports[`createInventoryOutputAction > orden con materiales cerrados: rechaza la
 exports[`createInventoryOutputAction > orden finalizada: rechaza la salida en el campo de la orden > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -416,6 +846,22 @@ exports[`createInventoryOutputAction > orden finalizada: rechaza la salida en el
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -448,13 +894,50 @@ exports[`createInventoryOutputAction > orden finalizada: rechaza la salida en el
 
 exports[`createInventoryOutputAction > orden finalizada: rechaza la salida en el campo de la orden > resultado 1`] = `
 {
-  "estado": {
-    "error": "No se puede entregar material a una orden anulada o finalizada.",
-    "fieldErrors": {
-      "id_orden_trabajo": [
-        "No se puede entregar material a una orden anulada o finalizada.",
-      ],
-    },
+  "error": "No se puede entregar material a una orden anulada o finalizada.",
+  "fieldErrors": {
+    "id_orden_trabajo": [
+      "No se puede entregar material a una orden anulada o finalizada.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3.75",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "OTR00000007",
+    "motivo": "Corte de prueba",
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3.75",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "",
+    "motivo": "Corte de prueba",
   },
 }
 `;
@@ -462,7 +945,7 @@ exports[`createInventoryOutputAction > orden finalizada: rechaza la salida en el
 exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra el kardex y la bitacora con el material > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -471,6 +954,22 @@ exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra e
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -527,6 +1026,17 @@ exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra e
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "MVI00000001",
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -545,12 +1055,54 @@ exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra e
 ]
 `;
 
-exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra el kardex y la bitacora con el material > resultado 1`] = `"redirect:/dashboard/inventory/outputs?toast=inventory-movement-created"`;
+exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra el kardex y la bitacora con el material > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_movimiento": "MVI00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "10.25",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "",
+    "motivo": "Corte de prueba",
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > sin permiso: responde con un error en el formulario, sin redirigir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > sin permiso: responde con un error en el formulario, sin redirigir > resultado 1`] = `
+{
+  "error": "No tienes permisos para registrar salidas de inventario.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3.75",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "",
+    "motivo": "Corte de prueba",
+  },
+}
+`;
 
 exports[`createInventoryOutputAction > stock disponible insuficiente: descuenta lo reservado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -559,6 +1111,22 @@ exports[`createInventoryOutputAction > stock disponible insuficiente: descuenta 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -585,13 +1153,19 @@ exports[`createInventoryOutputAction > stock disponible insuficiente: descuenta 
 
 exports[`createInventoryOutputAction > stock disponible insuficiente: descuenta lo reservado > resultado 1`] = `
 {
-  "estado": {
-    "error": "No hay stock suficiente para registrar la salida.",
-    "fieldErrors": {
-      "cantidad": [
-        "No hay stock suficiente para registrar la salida.",
-      ],
-    },
+  "error": "No hay stock suficiente para registrar la salida.",
+  "fieldErrors": {
+    "cantidad": [
+      "No hay stock suficiente para registrar la salida.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "10.26",
+    "id_material": "MAT00000006",
+    "id_orden_trabajo": "",
+    "motivo": "Corte de prueba",
   },
 }
 `;
@@ -599,7 +1173,7 @@ exports[`createInventoryOutputAction > stock disponible insuficiente: descuenta 
 exports[`createInventoryOutputAction > un error inesperado dentro de la transaccion se relanza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -608,6 +1182,22 @@ exports[`createInventoryOutputAction > un error inesperado dentro de la transacc
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_salida",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -643,4 +1233,4 @@ exports[`createInventoryOutputAction > un error inesperado dentro de la transacc
 ]
 `;
 
-exports[`createInventoryOutputAction > un error inesperado dentro de la transaccion se relanza > resultado 1`] = `"error: Conexion interrumpida."`;
+exports[`createInventoryOutputAction > un error inesperado dentro de la transaccion se relanza > resultado 1`] = `"lanzo: Conexion interrumpida."`;
