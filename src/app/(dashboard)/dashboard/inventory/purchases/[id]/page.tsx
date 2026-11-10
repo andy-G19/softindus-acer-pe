@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -16,13 +15,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDate, formatMoney } from "@/lib/formatters";
+import { calculatePurchaseBalance } from "@/lib/supplier-payment-amounts";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
   navigationHrefs,
 } from "@/lib/navigation";
-import { SupplierPaymentForm } from "@/components/inventory/supplier-payment-form";
+import { inventoryNotifications } from "@/modules/inventory/notifications";
 import { annulPurchaseAction } from "@/modules/inventory/purchases/actions";
+import { PurchaseAnnulAction } from "@/modules/inventory/purchases/purchase-annul-action";
+import { createSupplierPaymentAction } from "@/modules/inventory/supplier-payments/actions";
+import { SupplierPaymentForm } from "@/modules/inventory/supplier-payments/supplier-payment-form";
 import { getPurchaseDetail } from "@/modules/inventory/purchases/queries";
 
 type PurchaseDetailPageProps = {
@@ -53,12 +56,12 @@ export default async function PurchaseDetailPage({
     materials.map((material) => [material.id_material, material]),
   );
 
-  const totalPaid = payments.reduce((acc, payment) => {
-    return acc + Number(payment.monto_pagado.toString());
-  }, 0);
-
-  const purchaseTotal = Number(purchase.monto_total.toString());
-  const saldoPendiente = purchaseTotal - totalPaid;
+  // Hallazgo 2 de la 11.2a: el saldo en centesimos, con la regla que usa el pago.
+  const { totalPaid, balance } = calculatePurchaseBalance(
+    purchase.monto_total,
+    payments.map((payment) => payment.monto_pagado),
+  );
+  const saldoPendiente = Number(balance);
   const canPay = purchase.estado_compra !== "anulada" && saldoPendiente > 0;
   const canAnnul = purchase.estado_compra !== "anulada" && payments.length === 0;
   const backHref = getSafeReturnTo(
@@ -80,17 +83,12 @@ export default async function PurchaseDetailPage({
         ])}
         actions={
           canAnnul ? (
-            <form action={annulPurchaseAction}>
-              <input type="hidden" name="id_compra" value={purchase.id_compra} />
-              <ConfirmDeleteButton
-                title="¿Anular compra?"
-                description="Esta acción anulará la compra y no se puede deshacer."
-                confirmText="Confirmar anulación"
-                entityName="compra"
-              >
-                Anular compra
-              </ConfirmDeleteButton>
-            </form>
+            <PurchaseAnnulAction
+              idCompra={purchase.id_compra}
+              action={annulPurchaseAction}
+              successNotification={inventoryNotifications["purchase-annulled"]}
+              label="Anular compra"
+            />
           ) : null
         }
       />
@@ -111,14 +109,14 @@ export default async function PurchaseDetailPage({
         />
         <KpiCard
           title="Pagado"
-          value={`S/ ${totalPaid.toFixed(2)}`}
+          value={`S/ ${totalPaid}`}
           description="Suma de pagos registrados."
           tone="success"
           icon={CircleDollarSign}
         />
         <KpiCard
           title="Saldo pendiente"
-          value={`S/ ${saldoPendiente.toFixed(2)}`}
+          value={`S/ ${balance}`}
           description="Monto restante por pagar."
           tone="warning"
           icon={Landmark}
@@ -230,12 +228,15 @@ export default async function PurchaseDetailPage({
         </CardContent>
       </Card>
 
-      {canPay ? (
-        <SupplierPaymentForm
-          idCompra={purchase.id_compra}
-          saldoPendiente={saldoPendiente}
-        />
-      ) : null}
+      {/* Siempre renderizado: el pago que salda la compra da su aviso aunque el
+          formulario ya no se muestre (hallazgo 9 de la 11.2a). */}
+      <SupplierPaymentForm
+        action={createSupplierPaymentAction}
+        idCompra={purchase.id_compra}
+        saldoPendiente={balance}
+        canPay={canPay}
+        successNotification={inventoryNotifications["supplier-payment-registered"]}
+      />
 
       <Card>
         <CardHeader>

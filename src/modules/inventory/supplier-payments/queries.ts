@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import type { PaginationParams } from "@/lib/pagination";
 import { buildDateRangeFilter } from "@/lib/search-params";
 import { findPurchaseFilterOptions } from "@/modules/inventory/purchases/queries";
 import { findSupplierFilterOptions } from "@/modules/inventory/suppliers/queries";
@@ -69,17 +70,21 @@ function buildSupplierPaymentListConditions(
   return conditions;
 }
 
+// C6 de la 11.2a (hallazgo 5 de la 10.3c): la lista pagina como Compras. El orden termina
+// en el id para que dos pagos de la misma fecha no cambien de pagina entre consultas.
 export async function getSupplierPaymentListData(
   filters: SupplierPaymentListFilters,
+  { skip, take }: Pick<PaginationParams, "skip" | "take">,
 ) {
   const conditions = buildSupplierPaymentListConditions(filters);
+  const where: Prisma.pago_proveedorWhereInput = conditions.length > 0 ? { AND: conditions } : {};
 
-  const [payments, suppliers, purchases] = await Promise.all([
+  const [payments, totalItems, suppliers, purchases] = await Promise.all([
     prisma.pago_proveedor.findMany({
-      where: conditions.length > 0 ? { AND: conditions } : {},
-      orderBy: {
-        fecha_pago: "desc",
-      },
+      where,
+      orderBy: [{ fecha_pago: "desc" }, { id_pago_proveedor: "desc" }],
+      skip,
+      take,
       include: {
         compra: {
           include: {
@@ -88,9 +93,10 @@ export async function getSupplierPaymentListData(
         },
       },
     }),
+    prisma.pago_proveedor.count({ where }),
     findSupplierFilterOptions(),
     findPurchaseFilterOptions(),
   ]);
 
-  return { payments, suppliers, purchases };
+  return { payments, totalItems, suppliers, purchases };
 }

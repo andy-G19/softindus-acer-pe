@@ -35,6 +35,7 @@ const mocks = vi.hoisted(() => {
     }),
     revalidatePath: vi.fn(),
     requireRole: vi.fn(),
+    getAuthorizedSession: vi.fn(),
     registerAuditLog: vi.fn(),
     prisma: {
       proveedor: { findFirst: vi.fn() },
@@ -43,7 +44,8 @@ const mocks = vi.hoisted(() => {
       $transaction: vi.fn(),
     },
     tx: {
-      compra: { create: vi.fn(), updateMany: vi.fn() },
+      $queryRaw: vi.fn(),
+      compra: { create: vi.fn(), updateMany: vi.fn(), findUnique: vi.fn() },
       detalle_compra: { create: vi.fn() },
       material: { update: vi.fn(), updateManyAndReturn: vi.fn() },
       alerta_stock: { updateMany: vi.fn() },
@@ -53,9 +55,14 @@ const mocks = vi.hoisted(() => {
   };
 });
 
+// row-locks.ts (C3 de la 11.2a) importa server-only.
+vi.mock("server-only", () => ({}));
 vi.mock("next/cache", () => ({ revalidatePath: mocks.revalidatePath }));
 vi.mock("next/navigation", () => ({ redirect: mocks.redirect }));
-vi.mock("@/lib/authz", () => ({ requireRole: mocks.requireRole }));
+vi.mock("@/lib/authz", () => ({
+  requireRole: mocks.requireRole,
+  getAuthorizedSession: mocks.getAuthorizedSession,
+}));
 vi.mock("@/lib/audit", () => ({ registerAuditLog: mocks.registerAuditLog }));
 vi.mock("@/lib/db", () => ({ prisma: mocks.prisma }));
 vi.mock("@/lib/correlatives", async () => {
@@ -87,6 +94,28 @@ const TUBO = "MAT00000002";
 
 const PURCHASES_PATH = "/dashboard/inventory/purchases";
 const PURCHASE_DETAIL_PATH = `${PURCHASES_PATH}/${PURCHASE_ID}`;
+
+// C5 de la 11.2a: anular responde con un RowStatusState en lugar de redirigir; el
+// rechazo dice por que, dentro de la confirmacion.
+const IDLE = { status: "idle" } as const;
+const NOT_ENOUGH_STOCK =
+  "No hay stock suficiente para revertir la compra: parte de lo que ingresó ya salió del inventario.";
+const HAS_PAYMENTS = "No se puede anular una compra con pagos registrados.";
+const ALREADY_ANNULLED = "La compra ya está anulada.";
+
+const annulled = () => ({
+  status: "success",
+  data: { estado: "anulada" },
+  values: { id: PURCHASE_ID },
+  operationId: expect.any(String),
+});
+
+const rejected = (error: string) => ({
+  status: "error",
+  error,
+  values: { id: PURCHASE_ID },
+  operationId: expect.any(String),
+});
 
 type MaterialRow = {
   id_material: string;
@@ -326,6 +355,7 @@ beforeEach(() => {
     throw new mocks.RedirectSignal(url);
   });
   mocks.requireRole.mockResolvedValue({ user: { id: USER_ID } });
+  mocks.getAuthorizedSession.mockResolvedValue({ user: { id: USER_ID } });
   mocks.prisma.proveedor.findFirst.mockResolvedValue({
     id_proveedor: SUPPLIER_ID,
     estado: true,
@@ -334,6 +364,8 @@ beforeEach(() => {
   mocks.prisma.compra.findUnique.mockImplementation(readPurchase);
 
   mocks.prisma.$transaction.mockImplementation(runTransaction);
+  mocks.tx.compra.findUnique.mockImplementation(readPurchase);
+  mocks.tx.$queryRaw.mockResolvedValue([]);
 
   mocks.tx.material.update.mockImplementation(
     async ({
@@ -659,7 +691,39 @@ describe("createPurchaseAction", () => {
 });
 
 describe("annulPurchaseAction", () => {
-  it("revierte el stock, registra la salida en kardex, anula la compra y redirige con el toast", async () => {
+  it("sin permiso responde con un error y no toca nada", async () => {
+    seedMaterial(PLANCHA, { stock: "15" });
+    seedPurchase([[PLANCHA, "5"]]);
+    mocks.getAuthorizedSession.mockResolvedValue(null);
+
+    const state = await annulPurchaseAction(IDLE, annulForm());
+
+    expect(state).toEqual(rejected("No tienes permisos para anular compras."));
+    expect(mocks.prisma.$transaction).not.toHaveBeenCalled();
+    expect(stockOf(PLANCHA)).toBe("15.00");
+    expect(mocks.revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("sin compra en el formulario responde con un error", async () => {
+    const state = await annulPurchaseAction(IDLE, new FormData());
+
+    expect(state).toEqual({
+      status: "error",
+      error: "Debe seleccionar una compra válida.",
+      values: { id: "" },
+      operationId: expect.any(String),
+    });
+    expect(mocks.prisma.$transaction).not.toHaveBeenCalled();
+  });
+
+  it("una compra inexistente se rechaza con su mensaje", async () => {
+    const state = await annulPurchaseAction(IDLE, annulForm());
+
+    expect(state).toEqual(rejected("La compra seleccionada no existe."));
+    expect(mocks.revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("revierte el stock, registra la salida en kardex, anula la compra y responde con exito", async () => {
     seedMaterial(PLANCHA, { stock: "15" });
     seedMaterial(TUBO, { stock: "6.5" });
     seedPurchase([
@@ -667,10 +731,10 @@ describe("annulPurchaseAction", () => {
       [TUBO, "2.5"],
     ]);
 
-    const url = await redirectOf(annulPurchaseAction(annulForm()));
+    const state = await annulPurchaseAction(IDLE, annulForm());
 
-    expect(url).toBe(`${PURCHASES_PATH}?toast=purchase-annulled`);
-    expect(mocks.requireRole).toHaveBeenCalledWith(["ADMIN"]);
+    expect(state).toEqual(annulled());
+    expect(mocks.getAuthorizedSession).toHaveBeenCalledWith(["ADMIN"]);
 
     expect(stockOf(PLANCHA)).toBe("10.00");
     expect(stockOf(TUBO)).toBe("4.00");
@@ -720,7 +784,7 @@ describe("annulPurchaseAction", () => {
     ]);
   });
 
-  it("vuelve al detalle sin revertir ningun material si uno no tiene stock suficiente", async () => {
+  it("rechaza sin revertir ningun material si uno no tiene stock suficiente", async () => {
     seedMaterial(PLANCHA, { stock: "15" });
     seedMaterial(TUBO, { stock: "2" });
     seedPurchase([
@@ -728,9 +792,9 @@ describe("annulPurchaseAction", () => {
       [TUBO, "2.5"],
     ]);
 
-    const url = await redirectOf(annulPurchaseAction(annulForm()));
+    const state = await annulPurchaseAction(IDLE, annulForm());
 
-    expect(url).toBe(PURCHASE_DETAIL_PATH);
+    expect(state).toEqual(rejected(NOT_ENOUGH_STOCK));
     expect(stockOf(PLANCHA)).toBe("15.00");
     expect(stockOf(TUBO)).toBe("2.00");
     expect(kardexSummary()).toEqual([]);
@@ -745,7 +809,7 @@ describe("annulPurchaseAction", () => {
     seedMaterial(PLANCHA, { stock: "15" });
     seedPurchase([[PLANCHA, "5"]]);
 
-    await redirectOf(annulPurchaseAction(annulForm()));
+    await annulPurchaseAction(IDLE, annulForm());
 
     expect(mocks.prisma.material.findMany).not.toHaveBeenCalled();
     expect(mocks.tx.material.update).not.toHaveBeenCalled();
@@ -777,9 +841,9 @@ describe("annulPurchaseAction", () => {
       return runTransaction(callback);
     });
 
-    const url = await redirectOf(annulPurchaseAction(annulForm()));
+    const state = await annulPurchaseAction(IDLE, annulForm());
 
-    expect(url).toBe(`${PURCHASES_PATH}?toast=purchase-annulled`);
+    expect(state).toEqual(annulled());
     expect(stockOf(PLANCHA)).toBe("20.00");
     expect(kardexSummary()).toEqual([
       {
@@ -792,7 +856,7 @@ describe("annulPurchaseAction", () => {
     ]);
   });
 
-  it("si una salida concurrente deja el stock corto, aborta la anulacion y vuelve al detalle", async () => {
+  it("si una salida concurrente deja el stock corto, aborta la anulacion y lo dice", async () => {
     seedMaterial(PLANCHA, { stock: "15" });
     seedPurchase([[PLANCHA, "5"]]);
 
@@ -803,9 +867,9 @@ describe("annulPurchaseAction", () => {
       return runTransaction(callback);
     });
 
-    const url = await redirectOf(annulPurchaseAction(annulForm()));
+    const state = await annulPurchaseAction(IDLE, annulForm());
 
-    expect(url).toBe(PURCHASE_DETAIL_PATH);
+    expect(state).toEqual(rejected(NOT_ENOUGH_STOCK));
     expect(stockOf(PLANCHA)).toBe("3.00");
     expect(kardexSummary()).toEqual([]);
     expect(purchaseState()).toEqual({
@@ -816,25 +880,25 @@ describe("annulPurchaseAction", () => {
     expect(mocks.revalidatePath).not.toHaveBeenCalled();
   });
 
-  it("vuelve al detalle sin revertir nada si la compra tiene pagos", async () => {
+  it("rechaza sin revertir nada si la compra tiene pagos", async () => {
     seedMaterial(PLANCHA, { stock: "15" });
     seedPurchase([[PLANCHA, "5"]], { pagos: ["PPR00000001"] });
 
-    const url = await redirectOf(annulPurchaseAction(annulForm()));
+    const state = await annulPurchaseAction(IDLE, annulForm());
 
-    expect(url).toBe(PURCHASE_DETAIL_PATH);
+    expect(state).toEqual(rejected(HAS_PAYMENTS));
     expect(stockOf(PLANCHA)).toBe("15.00");
     expect(kardexSummary()).toEqual([]);
     expect(purchaseState()?.estado_compra).toBe("confirmada");
   });
 
-  it("vuelve al listado sin revertir nada si la compra ya esta anulada", async () => {
+  it("rechaza sin revertir nada si la compra ya esta anulada", async () => {
     seedMaterial(PLANCHA, { stock: "15" });
     seedPurchase([[PLANCHA, "5"]], { estado: "anulada" });
 
-    const url = await redirectOf(annulPurchaseAction(annulForm()));
+    const state = await annulPurchaseAction(IDLE, annulForm());
 
-    expect(url).toBe(PURCHASES_PATH);
+    expect(state).toEqual(rejected(ALREADY_ANNULLED));
     expect(stockOf(PLANCHA)).toBe("15.00");
     expect(kardexSummary()).toEqual([]);
   });
@@ -843,7 +907,7 @@ describe("annulPurchaseAction", () => {
     seedMaterial(PLANCHA, { stock: "15" });
     seedPurchase([[PLANCHA, "5"]]);
 
-    await redirectOf(annulPurchaseAction(annulForm()));
+    await annulPurchaseAction(IDLE, annulForm());
 
     expect(mocks.tx.compra.updateMany).toHaveBeenCalledWith({
       where: {
@@ -861,10 +925,11 @@ describe("annulPurchaseAction", () => {
     seedMaterial(PLANCHA, { stock: "15" });
     seedPurchase([[PLANCHA, "5"]]);
 
-    mocks.prisma.compra.findUnique.mockImplementationOnce(async (args) => {
-      const snapshot = await readPurchase(args);
-
-      // Otra solicitud anula la misma compra y confirma despues de esta lectura.
+    // C3 de la 11.2a: la anulacion ya no lee la compra antes de su transaccion.
+    // La otra anulacion confirma justo antes de que esta abra la suya (con el
+    // bloqueo, esta la esperaria y leeria despues de su commit): la misma
+    // carrera, en el punto donde ahora puede ocurrir.
+    mocks.prisma.$transaction.mockImplementationOnce(async (callback) => {
       materialRow(PLANCHA).stock_actual = toColumn("10");
       Object.assign(db.compras.get(PURCHASE_ID) ?? {}, {
         estado_compra: "anulada",
@@ -878,13 +943,13 @@ describe("annulPurchaseAction", () => {
         stock_resultante: "10",
       });
 
-      return snapshot;
+      return runTransaction(callback);
     });
 
-    const url = await redirectOf(annulPurchaseAction(annulForm()));
+    const state = await annulPurchaseAction(IDLE, annulForm());
 
-    // Misma respuesta que ante una compra ya anulada: el listado, sin toast.
-    expect(url).toBe(PURCHASES_PATH);
+    // Misma respuesta que ante una compra ya anulada.
+    expect(state).toEqual(rejected(ALREADY_ANNULLED));
     expect(stockOf(PLANCHA)).toBe("10.00");
     expect(kardexSummary()).toEqual([
       {
@@ -895,6 +960,61 @@ describe("annulPurchaseAction", () => {
         stock_resultante: "10.00",
       },
     ]);
+    expect(mocks.registerAuditLog).not.toHaveBeenCalled();
+    expect(mocks.revalidatePath).not.toHaveBeenCalled();
+  });
+});
+
+// C3 de la 11.2a: anular decide si la compra tiene pagos. Lo leia antes de abrir
+// la transaccion y sin bloqueo, asi que un pago confirmado en medio no lo veia.
+// Ahora la anulacion bloquea la compra (FOR NO KEY UPDATE, el mismo candado que
+// toma el pago) y la lee dentro de la transaccion.
+describe("C3 de la 11.2a: la anulacion decide con la compra bloqueada", () => {
+  function lockSql() {
+    const [call] = mocks.tx.$queryRaw.mock.calls;
+    // Prisma.Sql: `text` lleva los parametros como $1 (sql, como ?).
+    const query = call?.[0] as { text?: string; values?: unknown[] } | undefined;
+
+    return { sql: query?.text?.replace(/\s+/g, " ").trim(), values: query?.values };
+  }
+
+  it("bloquea la compra antes de leerla dentro de la transaccion", async () => {
+    seedMaterial(PLANCHA, { stock: "15" });
+    seedPurchase([[PLANCHA, "5"]]);
+
+    await annulPurchaseAction(IDLE, annulForm());
+
+    expect(lockSql()).toEqual({
+      sql: "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      values: [PURCHASE_ID],
+    });
+    expect(mocks.tx.compra.findUnique).toHaveBeenCalled();
+    expect(mocks.tx.$queryRaw.mock.invocationCallOrder[0]).toBeLessThan(
+      mocks.tx.compra.findUnique.mock.invocationCallOrder[0],
+    );
+    expect(mocks.prisma.compra.findUnique).not.toHaveBeenCalled();
+  });
+
+  it("no anula una compra que recibe un pago justo antes de su transaccion", async () => {
+    seedMaterial(PLANCHA, { stock: "15" });
+    seedPurchase([[PLANCHA, "5"]]);
+
+    mocks.prisma.$transaction.mockImplementationOnce(async (callback) => {
+      // Un pago a proveedor confirma entre la solicitud y la transaccion.
+      db.compras.get(PURCHASE_ID)?.pagos.push("PPR00000001");
+
+      return runTransaction(callback);
+    });
+
+    const state = await annulPurchaseAction(IDLE, annulForm());
+
+    expect(state).toEqual(rejected(HAS_PAYMENTS));
+    expect(stockOf(PLANCHA)).toBe("15.00");
+    expect(kardexSummary()).toEqual([]);
+    expect(purchaseState()).toEqual({
+      estado_compra: "confirmada",
+      estado_pago: "pendiente",
+    });
     expect(mocks.registerAuditLog).not.toHaveBeenCalled();
     expect(mocks.revalidatePath).not.toHaveBeenCalled();
   });

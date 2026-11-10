@@ -4,7 +4,6 @@ import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,7 +32,9 @@ import {
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { inventoryNotifications } from "@/modules/inventory/notifications";
 import { annulPurchaseAction } from "@/modules/inventory/purchases/actions";
+import { PurchaseAnnulAction } from "@/modules/inventory/purchases/purchase-annul-action";
 import { getPurchaseListData } from "@/modules/inventory/purchases/queries";
 
 type PurchasesPageProps = {
@@ -207,22 +208,11 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
                       </Link>
                     </Button>
                     {canAnnul ? (
-                      <form action={annulPurchaseAction}>
-                        <input
-                          type="hidden"
-                          name="id_compra"
-                          value={purchase.id_compra}
-                        />
-                        <ConfirmDeleteButton
-                          title="¿Anular compra?"
-                          description="Esta acción marcará la compra como anulada. Verifique antes de continuar."
-                          confirmText="Confirmar anulación"
-                          entityName="compra"
-                          className="hover:bg-destructive/20"
-                        >
-                          Anular
-                        </ConfirmDeleteButton>
-                      </form>
+                      <PurchaseAnnulAction
+                        idCompra={purchase.id_compra}
+                        action={annulPurchaseAction}
+                        successNotification={inventoryNotifications["purchase-annulled"]}
+                      />
                     ) : null}
                   </div>
                 </TableCell>

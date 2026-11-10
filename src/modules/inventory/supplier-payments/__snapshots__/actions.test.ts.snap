@@ -1,0 +1,868 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createSupplierPaymentAction > clave de otro usuario > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > clave de otro usuario > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > clave repetida: responde con el pago guardado sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases/COM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > clave repetida: responde con el pago guardado sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_pago_proveedor": "PPR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > compra anulada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.findUnique",
+  },
+  {
+    "args": "No se puede registrar pagos en una compra anulada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > compra anulada > resultado 1`] = `
+{
+  "error": "No se puede registrar pagos en una compra anulada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > compra inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.findUnique",
+  },
+  {
+    "args": "La compra seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > compra inexistente > resultado 1`] = `
+{
+  "error": "La compra seleccionada no existe.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > compra ya pagada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.findUnique",
+  },
+  {
+    "args": "Esta compra ya está pagada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > compra ya pagada > resultado 1`] = `
+{
+  "error": "Esta compra ya está pagada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > datos invalidos > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > datos invalidos > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "El monto pagado debe ser mayor que cero.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "0",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > metodo de pago fuera de la lista > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > metodo de pago fuera de la lista > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "metodo_pago": [
+      "Seleccione un método de pago válido.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "cheque",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > monto que la columna guardaria como cero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > monto que la columna guardaria como cero > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "El monto pagado debe ser mayor que cero.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "0.004",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > pago mayor que el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "pago_proveedor.findMany",
+  },
+  {
+    "args": "El pago no puede superar el saldo pendiente. Saldo actual: S/ 60.00",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > pago mayor que el saldo > resultado 1`] = `
+{
+  "error": "El pago no puede superar el saldo pendiente. Saldo actual: S/ 60.00",
+  "fieldErrors": {
+    "monto_pagado": [
+      "El pago no puede superar el saldo pendiente. Saldo actual: S/ 60.00",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "70",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > pago que completa el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "pago_proveedor.findMany",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_proveedor",
+      "prefijo": "PPR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "pagado",
+        "fecha_pago": 2026-07-14T00:00:00.000Z,
+        "id_compra": "COM00000003",
+        "id_pago_proveedor": "PPR00000001",
+        "id_proveedor": "PVE00000001",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "efectivo",
+        "monto_pagado": "60.00",
+        "observaciones": "saldo final",
+        "saldo_pendiente": "0.00",
+      },
+    },
+    "prisma": "pago_proveedor.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "pagado",
+      },
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago a proveedor registrado para la compra COM00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_proveedor",
+      "id_registro_afectado": "PPR00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PPR00000001",
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases/COM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > pago que completa el saldo > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_pago_proveedor": "PPR00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "60",
+    "observaciones": "  saldo final  ",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > primer pago parcial > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_proveedor",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_compra FROM aceros.compra WHERE id_compra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COM00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "pago_proveedor.findMany",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_proveedor",
+      "prefijo": "PPR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "parcial",
+        "fecha_pago": 2026-07-14T00:00:00.000Z,
+        "id_compra": "COM00000003",
+        "id_pago_proveedor": "PPR00000001",
+        "id_proveedor": "PVE00000001",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "transferencia",
+        "monto_pagado": "40.00",
+        "observaciones": null,
+        "saldo_pendiente": "60.00",
+      },
+    },
+    "prisma": "pago_proveedor.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "parcial",
+      },
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago a proveedor registrado para la compra COM00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_proveedor",
+      "id_registro_afectado": "PPR00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PPR00000001",
+      },
+      "where": {
+        "clave": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases/COM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > primer pago parcial > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "0b6f1d9e-3c4a-4f2b-9e7d-5a6b7c8d9e0f",
+    "id_pago_proveedor": "PPR00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`createSupplierPaymentAction > sin permiso > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > sin permiso > resultado 1`] = `
+{
+  "error": "No tienes permisos para registrar pagos a proveedores.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-07-14",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "40",
+    "observaciones": "",
+  },
+}
+`;

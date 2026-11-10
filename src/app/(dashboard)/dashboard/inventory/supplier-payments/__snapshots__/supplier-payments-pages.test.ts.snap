@@ -17,9 +17,16 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > llamadas 1
           },
         },
       },
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_proveedor": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -31,6 +38,20 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > llamadas 1
       },
     },
     "prisma": "pago_proveedor.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "fecha_pago": {
+              "gte": 2026-03-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pago_proveedor.count",
   },
   {
     "args": {
@@ -191,6 +212,13 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > resultado 
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-payments?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -213,9 +241,16 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > llamadas 1`]
           },
         },
       },
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_proveedor": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -228,6 +263,21 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > llamadas 1`]
       },
     },
     "prisma": "pago_proveedor.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "fecha_pago": {
+              "gte": 2026-07-31T00:00:00.000Z,
+              "lt": 2026-07-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pago_proveedor.count",
   },
   {
     "args": {
@@ -370,6 +420,13 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > resultado 1`
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 0-0 de 0 pagos · Página 1 de 1</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<button data-variant="outline" disabled="">Siguiente</button>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -392,12 +449,25 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > llamadas 1`] = `
           },
         },
       },
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_proveedor": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "pago_proveedor.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "pago_proveedor.count",
   },
   {
     "args": {
@@ -558,6 +628,13 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > resultado 1`] = 
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-payments?page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -580,9 +657,16 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > llamadas 1
           },
         },
       },
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_proveedor": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -635,6 +719,61 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > llamadas 1
       },
     },
     "prisma": "pago_proveedor.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_compra": {
+                  "contains": "F001",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "compra": {
+                  "numero_comprobante": {
+                    "contains": "F001",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+              {
+                "compra": {
+                  "proveedor": {
+                    "razon_social": {
+                      "contains": "F001",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "id_proveedor": "PRV00000001",
+          },
+          {
+            "id_compra": "COM00000001",
+          },
+          {
+            "metodo_pago": "transferencia",
+          },
+          {
+            "estado_pago": "pagado",
+          },
+          {
+            "fecha_pago": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pago_proveedor.count",
   },
   {
     "args": {
@@ -794,6 +933,13 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > resultado 
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-payments?q=F001&amp;supplier=PRV00000001&amp;purchase=COM00000001&amp;method=transferencia&amp;status=pagado&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",

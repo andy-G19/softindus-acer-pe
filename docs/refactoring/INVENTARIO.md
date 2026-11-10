@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 899 |
+| Archivos fuente analizados | 908 |
 | Páginas | 179 |
 | Páginas en ranuras paralelas (@ranura) | 53 |
 | Páginas que interceptan una ruta | 33 |
-| Declaraciones JSX de formulario | 39 |
+| Declaraciones JSX de formulario | 36 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 111 |
 
@@ -83,9 +83,9 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/inventory/outputs/new` | — | `src/app/(dashboard)/dashboard/inventory/outputs/new/page.tsx` | 0 | InventoryOutputForm |
 | `/dashboard/inventory/outputs` | — | `src/app/(dashboard)/dashboard/inventory/outputs/page.tsx` | 0 | — |
 | `/dashboard/inventory` | — | `src/app/(dashboard)/dashboard/inventory/page.tsx` | 0 | — |
-| `/dashboard/inventory/purchases/[id]` | — | `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 1 | SupplierPaymentForm |
+| `/dashboard/inventory/purchases/[id]` | — | `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 0 | SupplierPaymentForm |
 | `/dashboard/inventory/purchases/new` | — | `src/app/(dashboard)/dashboard/inventory/purchases/new/page.tsx` | 0 | PurchaseForm |
-| `/dashboard/inventory/purchases` | — | `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 1 | — |
+| `/dashboard/inventory/purchases` | — | `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 0 | — |
 | `/dashboard/inventory/supplier-materials/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/inventory/supplier-materials/@panel/(.)[id]/edit/page.tsx` | 0 | SupplierMaterialForm |
 | `/dashboard/inventory/supplier-materials/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/inventory/supplier-materials/@panel/(.)new/page.tsx` | 0 | SupplierMaterialForm |
 | `/dashboard/inventory/supplier-materials` | `@panel` | `src/app/(dashboard)/dashboard/inventory/supplier-materials/@panel/page.tsx` | 0 | — |
@@ -228,8 +228,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 79 | `{annulQuoteAction}` |
 | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 203 | `{annulQuoteAction}` |
 | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 136 | `{annulReceiptAction}` |
-| `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 83 | `{annulPurchaseAction}` |
-| `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 210 | `{annulPurchaseAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 46 | `{createPettyCashBoxAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 90 | `{createPettyCashExpenseAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 115 | `{createPettyCashIncomeAdjustmentAction}` |
@@ -254,7 +252,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/components/forms/action-form.tsx` | 48 | `{action}` |
 | `src/components/forms/filter-bar.tsx` | 39 | `{action}` |
 | `src/components/inventory/purchase-form.tsx` | 142 | `{createPurchaseAction}` |
-| `src/components/inventory/supplier-payment-form.tsx` | 31 | `{createSupplierPaymentAction}` |
 | `src/components/table/row-actions.tsx` | 44 | `{action}` |
 | `src/modules/auth/components/login-form.tsx` | 162 | `{formAction}` |
 | `src/modules/auth/components/logout-button.tsx` | 8 | `{async () => { "use server"; await signOut({ redirectTo: "/login", }); }}` |
