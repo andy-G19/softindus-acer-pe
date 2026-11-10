@@ -8071,6 +8071,97 @@ Datos leídos de la API de GitHub el 2026-11-10 (UTC) y comparados con git:
 - Vercel desplegó `469feb2` en producción (`success` a las 17:39:56 UTC). La sub-entrega no trae
   migraciones: `operacion_idempotente` ya estaba en producción desde la 11.1.
 
+### Sub-entrega 11.2b — Crear compra
+
+Fecha: 2026-11-10 (Lima). Estado: preparada en `staging` (C0 a C5), sin publicar. Plan en
+`tmp/e11-diff/plan-11-2b.md`, con las decisiones D17 a D21 aprobadas: página completa como
+pedidos (D17), montos en céntimos (D18), proveedor y materiales comprobados dentro de la
+transacción sin bloquear su fila (D20) y comprobante repetido y fecha inválida en su campo
+(D21).
+
+D19 se revisó antes de C3. El plan decía que la acción redirigiera al guardar (la lección del
+hallazgo 95 de la 10.8b), pero con `redirect` el formulario no recibe el éxito, la clave
+guardada en `sessionStorage` no se renueva y la siguiente compra de la misma pestaña se habría
+tomado por repetida, sin guardarse. El responsable eligió la opción A: como pedidos, la acción
+devuelve el éxito con la clave, el formulario la renueva y vuelve al listado con `router.push`.
+El efecto sobre Atrás se comprueba en staging.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| bb19b9c | docs | Integración de la 11.2a en `main` (PR #40). |
+| 61bd657 | test | Caracterización de crear compra con el arnés (8 casos). |
+| 5160d78 | fix | `src/lib/purchase-amounts.ts`: los montos de la compra en céntimos, en la acción y en la vista previa; se retira `calculateIgv` y `taxes.ts` define `IGV_PERCENT` (hallazgos 1 a 3 y 6, 4 casos rojos antes). |
+| 7c145d7 | feat | Crear compra en página completa: `FormActionState`, `getAuthorizedSession`, `claimOperation` primero, lecturas dentro de la transacción, errores por línea, `returnTo`, guardia de descarte y `OperationKeyField`. El formulario pasa a `modules/inventory/purchases`; el esquema de la clave se comparte (`operation-key.schema.ts`). Arregla además el campo de la clave (hallazgo 7). |
+| f6d4b96 | fix | Comprobante repetido y fecha inválida responden en su campo (hallazgos 4 y 5, 6 casos rojos antes, uno contra el índice único real). |
+| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Diseño:
+
+- El orden de los montos es el de pedidos: cantidad y costo redondeados, subtotal de línea de
+  los valores ya redondeados, subtotal de la compra como suma de líneas, IGV del 18 % del
+  subtotal redondeado, y total igual a subtotal más IGV. La acción envía el texto ya redondeado,
+  así que lo que se envía es lo que se guarda, y el kárdex usa la misma cantidad.
+- La clave de crear compra tiene el alcance `compra:nueva`: recargar tras una respuesta perdida
+  la reusa y el servidor responde con la compra ya guardada, sin duplicar su entrada de stock.
+- El comprobante se busca dentro de la transacción, después de los materiales y antes del
+  correlativo. Si otra compra con el mismo comprobante confirma en medio, el P2002 de
+  `compra.create` se traduce al mismo rechazo en su campo; es el único índice único de `compra`
+  además de su clave.
+- Todas las líneas se envían, así que la posición del error es la del formulario.
+
+Evidencia:
+
+1. Rojo antes de cada `fix` y del `feat`: C2 con 4 casos (más la vista previa, comprobada contra
+   el formulario anterior), C3 con 29 (en modo `CI=true`) y el campo de la clave con 1, C4 con 6.
+2. Mutaciones: C1 9 de 9, C2 10 de 10, C3 17 de 17 y C4 6 de 6; en total, 42 de 42. En C1 se
+   descartó una equivalente (el esquema recorta las observaciones) y se movió el caso del stock
+   al borde (igual al mínimo) para matar «alerta con >=».
+3. Snapshots revisados uno por uno. En C2 solo cambió el tipo de lo enviado. En C3, el listado
+   lleva `returnTo` en «Nueva compra» y el formulario tiene etiquetas unidas a su campo, ids
+   estables por línea, el subtotal en un `<output>` y «Quitar» deshabilitado con una sola línea.
+   En C4 solo se añade la búsqueda del comprobante.
+4. Dos aserciones de `actions.test.ts` pasaron a comparar por `stored()`, como pide su
+   encabezado, con los mismos valores; «rechaza materiales inactivos» ya no exige que no se abra
+   la transacción (las lecturas van dentro, D20) sino que no se cree la compra ni se toque el
+   stock.
+5. CSS compilado igual byte a byte en cada commit (112.316 bytes).
+6. `npm run check` terminó con código 0 antes de cada commit, hasta 4.754 pruebas en 264
+   archivos; las de integración pasan de 20 a 24 en 5 archivos.
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 260 / 4.711 | 264 / 4.754 |
+| Pruebas contra Postgres real (archivos / pruebas) | 4 / 20 | 5 / 24 |
+| Acciones con clave de operación | 1 | 2 |
+| Acciones de Inventario que mandan a la página de error | 1 | 0 |
+| Formularios de Inventario sin `ActionForm` | 2 | 1 (salida, 11.2c) |
+| Cálculos del IGV con `number` (acción y formulario) | 2 | 0 |
+| Crear compra caracterizada con el arnés | no | sí |
+
+Hallazgos:
+
+1. Subtotal más IGV no daba el total: dos líneas de 1.25 × 10.25 guardaban subtotal 25.63, IGV
+   4.61 y total 30.23. Corregido en `5160d78`.
+2. La línea no cuadraba consigo misma: 1.005 × 10 guardaba la cantidad 1.01 y el subtotal 10.05.
+   Corregido en `5160d78`.
+3. Con montos pequeños el total no era subtotal más IGV: 0.5 × 0.15 con IGV daba 0.08 + 0.01 y un
+   total de 0.08. Corregido en `5160d78`.
+4. Un comprobante repetido rompía en `uq_compra_comprobante` y mostraba la página de error.
+   Corregido en `f6d4b96`.
+5. Una fecha inexistente llegaba a Prisma. Corregido en `f6d4b96`.
+6. El costo del material y el historial de precios recibían el `number` sin redondear.
+   Corregido en `5160d78`.
+7. `OperationKeyField` (11.2a) llevaba `defaultValue=""`: en un campo oculto el valor es el
+   atributo y React lo reescribía con cada render del formulario, borrando la clave. El pago no
+   lo notaba (no se vuelve a renderizar al escribir); la compra lo habría enviado vacío en cada
+   envío. Lo encontró la prueba del formulario; corregido en `7c145d7` con su prueba roja.
+8. D19 y la clave guardada no podían convivir (ver arriba). Resuelto con la opción A.
+9. Pedidos (10.4c) y ahora compras navegan con `router.push` tras una acción que revalida, que la
+   regla del hallazgo 95 de la 10.8b desaconseja. Destino: verificar Atrás en staging en esta
+   sub-entrega y revisar pedidos en la 11.3.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -8096,7 +8187,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b en preparación |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b preparada en `staging` (C0 a C5), pendiente de publicar y verificar |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
@@ -8119,7 +8210,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 260 / 4.711 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 264 / 4.754 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -8134,8 +8225,9 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reportes con la paridad de filtro probada en `screen-parity.test.ts` | 0 de 9 | 9 de 9 | G4 y 11 |
 | Páginas de reporte que leen sus filtros distinto que su exportación (medido en la 11.1) | 6 | 0 | 11 |
 | Cálculos del estado de cobranza (pantalla y exportación) | 2 | 1 | 11 |
-| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 4 / 20 | 11 |
-| Acciones con clave de operación (`operacion_idempotente`) | 0 | 1 | 11 |
+| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 5 / 24 | 11 |
+| Acciones con clave de operación (`operacion_idempotente`) | 0 | 2 | 11 |
+| Cálculos del IGV con `number` (acción y formulario de compra) | 2 | 0 | 11 |
 | Operaciones que deciden sobre una compra sin bloquearla (pago y anulación) | 2 | 0 | 11 |
 | Saldos de pago a proveedor calculados con `number` (acción y detalle) | 2 | 0 | 11 |
 | Nombres de parámetro que la exportación acepta sin que ninguna pantalla los genere | 17 | 0 | G4 |
@@ -8527,6 +8619,11 @@ Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e8d77ae`:
 Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de
 `FieldError` en 6; y los cambios de estado que voltean en 2.
+
+Actualizado en la sub-entrega 11.2b (2026-11-10) sobre `f6d4b96`: pruebas 264 / 4.754, de ellas
+24 contra Postgres en 5 archivos. Acciones con clave de operación de 1 a 2 (crear compra). Fila
+nueva: cálculos del IGV con `number` (2 a 0), medida sobre `bb19b9c`. La desviación conocida
+sigue en 1 (salida de inventario, 11.2c).
 
 Actualizado en la sub-entrega 11.2a (2026-11-10) sobre `b369472` (pruebas 260 / 4.711 tras `529cd46`): pruebas 259 / 4.707, de ellas
 20 contra Postgres en 4 archivos. Filas nuevas: acciones con clave de operación (0 a 1),
