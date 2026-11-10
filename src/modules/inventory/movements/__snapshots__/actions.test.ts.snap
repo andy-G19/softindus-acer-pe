@@ -65,7 +65,7 @@ exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimi
   {
     "args": {
       "data": {
-        "cantidad": 3.75,
+        "cantidad": Decimal(3.75),
         "id_material": "MAT00000006",
         "id_movimiento": "MVI00000001",
         "id_orden_trabajo": "OTR00000007",
@@ -502,7 +502,7 @@ exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra e
   {
     "args": {
       "data": {
-        "cantidad": 10.25,
+        "cantidad": Decimal(10.25),
         "id_material": "MAT00000006",
         "id_movimiento": "MVI00000001",
         "id_orden_trabajo": null,

@@ -317,3 +317,62 @@ describe("H9: rechaza la salida a una orden que ya no admite material", () => {
     });
   }
 });
+
+// ---------------------------------------------------------------------------
+// C1 de la 11.2c (hallazgos 1 y 2): la cantidad como la guarda la columna
+// ---------------------------------------------------------------------------
+
+// La accion restaba la cantidad sin redondear y cada columna redondeaba por su cuenta: con un
+// stock de 10.00, una salida de 1.005 guardaba cantidad 1.01 y resultante 9.00, y el kardex no
+// cuadraba (10.00 - 1.01 = 8.99). Una de 0.004 se guardaba como un movimiento de 0.00. Lo que
+// importa es el valor que guarda la columna numeric(10, 2), no el tipo de JavaScript.
+describe("C1 de la 11.2c: la cantidad de la salida redondeada como la columna", () => {
+  const stored = (value: unknown) => new Prisma.Decimal(String(value)).toFixed(2);
+  const ten = { $queryRaw: lockedRows(materialRow({ stock_actual: D("10.00"), stock_reservado: D("0.00") })) };
+
+  function writeOf(calls: Awaited<ReturnType<typeof runAction>>["calls"], name: string) {
+    const call = calls.find((item) => "prisma" in item && item.prisma === name);
+
+    expect(call, `no se llamo a ${name}`).toBeDefined();
+
+    return (call as { args: { data: Record<string, unknown> } }).args.data;
+  }
+
+  it.each([
+    ["1.005", "1.01", "8.99"],
+    ["2.675", "2.68", "7.32"],
+  ])("una salida de %s: el kardex cuadra con lo que guardan las columnas", async (cantidad, guardada, resultante) => {
+    const { calls } = await runAction({ name: `salida de ${cantidad}`, form: form({ cantidad }), data: ten });
+
+    const kardex = writeOf(calls, "movimiento_inventario.create");
+
+    expect({
+      cantidad: stored(kardex.cantidad),
+      anterior: stored(kardex.stock_anterior),
+      resultante: stored(kardex.stock_resultante),
+    }).toEqual({ cantidad: guardada, anterior: "10.00", resultante });
+    expect(stored(writeOf(calls, "material.update").stock_actual)).toBe(resultante);
+  });
+
+  it("compara con el disponible la cantidad redondeada: 1.004 es 1.00 y cabe en 1.00", async () => {
+    const { outcome } = await runAction({
+      name: "1.004 con 1.00 disponible",
+      form: form({ cantidad: "1.004" }),
+      data: { $queryRaw: lockedRows(materialRow({ stock_actual: D("1.00"), stock_reservado: D("0.00") })) },
+    });
+
+    expect(outcome).toBe("redirect:/dashboard/inventory/outputs?toast=inventory-movement-created");
+  });
+
+  it("una cantidad que se guardaria como 0.00 se rechaza en su campo sin abrir la transaccion", async () => {
+    const { calls, outcome } = await runAction({ name: "0.004", form: form({ cantidad: "0.004" }), data: ten });
+
+    expect(outcome).toEqual({
+      estado: {
+        error: "Revisa los datos de la salida.",
+        fieldErrors: { cantidad: ["La cantidad debe ser mayor que cero."] },
+      },
+    });
+    expect(calls.some((call) => "effect" in call && call.effect === "prisma.$transaction")).toBe(false);
+  });
+});

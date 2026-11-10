@@ -8,6 +8,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
+import { formatCents, toCents } from "@/lib/decimal-cents";
 import { prisma } from "@/lib/db";
 import type { ActionErrorState } from "@/lib/errors";
 import { lockWorkOrderRow } from "@/lib/row-locks";
@@ -25,7 +26,12 @@ export type InventoryOutputFormState = ActionErrorState;
 const outputSchema = z.object({
   id_material: z.string().trim().min(1, "Seleccione un material."),
   id_orden_trabajo: z.string().trim().optional().or(z.literal("")),
-  cantidad: z.coerce.number().positive("La cantidad debe ser mayor que cero."),
+  // Hallazgo 2 de la 11.2c: la columna numeric(10, 2) guardaria 0.004 como 0.00. La cantidad se
+  // mide en centesimos, con el redondeo de la columna: una sola regla rechaza el cero, los
+  // negativos y lo que se guardaria como cero.
+  cantidad: z.coerce
+    .number()
+    .refine((value) => (toCents(value) ?? 0n) > 0n, "La cantidad debe ser mayor que cero."),
   motivo: z
     .string()
     .trim()
@@ -69,7 +75,10 @@ export async function createInventoryOutputAction(
 
   const data = parsed.data;
 
-  const cantidad = new Prisma.Decimal(data.cantidad);
+  // Hallazgo 1 de la 11.2c: la cantidad se redondea como la columna antes de compararla con el
+  // disponible y de restarla, asi el kardex cuadra (anterior - cantidad = resultante) con lo que
+  // guardan las columnas.
+  const cantidad = new Prisma.Decimal(formatCents(toCents(data.cantidad) ?? 0n));
 
   try {
     await prisma.$transaction(async (tx) => {
@@ -160,7 +169,7 @@ export async function createInventoryOutputAction(
           id_material: data.id_material,
           id_orden_trabajo: data.id_orden_trabajo || null,
           tipo_movimiento: "salida",
-          cantidad: data.cantidad,
+          cantidad,
           stock_anterior: material.stock_actual,
           stock_resultante: stockResultante,
           motivo: data.motivo,
