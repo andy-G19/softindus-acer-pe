@@ -1,0 +1,318 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createSupplierPaymentAction > compra anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.findUnique",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > compra anulada > resultado 1`] = `"error: No se puede registrar pagos en una compra anulada."`;
+
+exports[`createSupplierPaymentAction > compra inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.findUnique",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > compra inexistente > resultado 1`] = `"error: La compra seleccionada no existe."`;
+
+exports[`createSupplierPaymentAction > compra ya pagada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.findUnique",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > compra ya pagada > resultado 1`] = `"error: Esta compra ya está pagada."`;
+
+exports[`createSupplierPaymentAction > datos invalidos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > datos invalidos > resultado 1`] = `"error: El monto pagado debe ser mayor que cero."`;
+
+exports[`createSupplierPaymentAction > metodo de pago fuera de la lista > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > metodo de pago fuera de la lista > resultado 1`] = `"error: Seleccione un método de pago válido."`;
+
+exports[`createSupplierPaymentAction > pago mayor que el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "pago_proveedor.findMany",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > pago mayor que el saldo > resultado 1`] = `"error: El pago no puede superar el saldo pendiente. Saldo actual: S/ 60.00"`;
+
+exports[`createSupplierPaymentAction > pago que completa el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "pago_proveedor.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_proveedor",
+      "prefijo": "PPR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "pagado",
+        "fecha_pago": 2026-07-14T00:00:00.000Z,
+        "id_compra": "COM00000003",
+        "id_pago_proveedor": "PPR00000001",
+        "id_proveedor": "PVE00000001",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "efectivo",
+        "monto_pagado": 60,
+        "observaciones": "saldo final",
+        "saldo_pendiente": 0,
+      },
+    },
+    "prisma": "pago_proveedor.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "pagado",
+      },
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago a proveedor registrado para la compra COM00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_proveedor",
+      "id_registro_afectado": "PPR00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases/COM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > pago que completa el saldo > resultado 1`] = `"redirect:/dashboard/inventory/purchases/COM00000003?toast=supplier-payment-registered"`;
+
+exports[`createSupplierPaymentAction > primer pago parcial > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "pago_proveedor.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_proveedor",
+      "prefijo": "PPR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "parcial",
+        "fecha_pago": 2026-07-14T00:00:00.000Z,
+        "id_compra": "COM00000003",
+        "id_pago_proveedor": "PPR00000001",
+        "id_proveedor": "PVE00000001",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "transferencia",
+        "monto_pagado": 40,
+        "observaciones": null,
+        "saldo_pendiente": 60,
+      },
+    },
+    "prisma": "pago_proveedor.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "parcial",
+      },
+      "where": {
+        "id_compra": "COM00000003",
+      },
+    },
+    "prisma": "compra.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago a proveedor registrado para la compra COM00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_proveedor",
+      "id_registro_afectado": "PPR00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/purchases/COM00000003",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSupplierPaymentAction > primer pago parcial > resultado 1`] = `"redirect:/dashboard/inventory/purchases/COM00000003?toast=supplier-payment-registered"`;
