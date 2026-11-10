@@ -189,3 +189,74 @@ describe("createSupplierPaymentAction", () => {
     });
   }
 });
+
+// Hallazgos 1 y 2 de la 11.2a: el saldo se calculaba con number. Los montos son
+// los que una persona escribe; lo que importa es el valor que guarda la
+// columna numeric(12, 2), no el tipo de JavaScript.
+describe("hallazgos 1 y 2 de la 11.2a: el saldo con decimales", () => {
+  const stored = (value: unknown) => new Prisma.Decimal(String(value)).toFixed(2);
+
+  function writeOf(calls: Awaited<ReturnType<typeof runAction>>["calls"], name: string) {
+    const call = calls.find((item) => "prisma" in item && item.prisma === name);
+
+    expect(call, `no se llamo a ${name}`).toBeDefined();
+
+    return ((call as { args: { data: Record<string, unknown> } }).args).data;
+  }
+
+  it("acepta pagar el saldo exacto: 50.20 de 100.30 tras un pago de 50.10", async () => {
+    const { calls, outcome } = await runAction({
+      name: "saldo exacto",
+      form: { monto_pagado: "50.20" },
+      data: {
+        "compra.findUnique": purchaseRow({ monto_total: D("100.30"), estado_pago: "parcial" }),
+        "pago_proveedor.findMany": payments("50.10"),
+      },
+    });
+
+    expect(outcome).toBe(
+      `redirect:/dashboard/inventory/purchases/${COMPRA}?toast=supplier-payment-registered`,
+    );
+
+    const payment = writeOf(calls, "pago_proveedor.create");
+
+    expect(stored(payment.saldo_pendiente)).toBe("0.00");
+    expect(payment.estado_pago).toBe("pagado");
+    expect(writeOf(calls, "compra.update").estado_pago).toBe("pagado");
+  });
+
+  it("deja pagada la compra cuyo ultimo pago cubre el saldo: 34.23 de 1234.56", async () => {
+    const { calls } = await runAction({
+      name: "saldo con residuo",
+      form: { monto_pagado: "34.23" },
+      data: {
+        "compra.findUnique": purchaseRow({ monto_total: D("1234.56"), estado_pago: "parcial" }),
+        "pago_proveedor.findMany": payments("1000.11", "200.22"),
+      },
+    });
+
+    const payment = writeOf(calls, "pago_proveedor.create");
+
+    expect(stored(payment.saldo_pendiente)).toBe("0.00");
+    expect(payment.estado_pago).toBe("pagado");
+    expect(writeOf(calls, "compra.update").estado_pago).toBe("pagado");
+  });
+
+  it("rechaza un centimo por encima del saldo y muestra el saldo exacto", async () => {
+    const { calls, outcome } = await runAction({
+      name: "un centimo de mas",
+      form: { monto_pagado: "50.21" },
+      data: {
+        "compra.findUnique": purchaseRow({ monto_total: D("100.30"), estado_pago: "parcial" }),
+        "pago_proveedor.findMany": payments("50.10"),
+      },
+    });
+
+    expect(outcome).toBe(
+      "error: El pago no puede superar el saldo pendiente. Saldo actual: S/ 50.20",
+    );
+    expect(calls.some((item) => "prisma" in item && item.prisma === "pago_proveedor.create")).toBe(
+      false,
+    );
+  });
+});

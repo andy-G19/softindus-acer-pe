@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDate, formatMoney } from "@/lib/formatters";
+import { calculatePurchaseBalance } from "@/lib/supplier-payment-amounts";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
@@ -53,12 +54,12 @@ export default async function PurchaseDetailPage({
     materials.map((material) => [material.id_material, material]),
   );
 
-  const totalPaid = payments.reduce((acc, payment) => {
-    return acc + Number(payment.monto_pagado.toString());
-  }, 0);
-
-  const purchaseTotal = Number(purchase.monto_total.toString());
-  const saldoPendiente = purchaseTotal - totalPaid;
+  // Hallazgo 2 de la 11.2a: el saldo en centesimos, con la regla que usa el pago.
+  const { totalPaid, balance } = calculatePurchaseBalance(
+    purchase.monto_total,
+    payments.map((payment) => payment.monto_pagado),
+  );
+  const saldoPendiente = Number(balance);
   const canPay = purchase.estado_compra !== "anulada" && saldoPendiente > 0;
   const canAnnul = purchase.estado_compra !== "anulada" && payments.length === 0;
   const backHref = getSafeReturnTo(
@@ -111,14 +112,14 @@ export default async function PurchaseDetailPage({
         />
         <KpiCard
           title="Pagado"
-          value={`S/ ${totalPaid.toFixed(2)}`}
+          value={`S/ ${totalPaid}`}
           description="Suma de pagos registrados."
           tone="success"
           icon={CircleDollarSign}
         />
         <KpiCard
           title="Saldo pendiente"
-          value={`S/ ${saldoPendiente.toFixed(2)}`}
+          value={`S/ ${balance}`}
           description="Monto restante por pagar."
           tone="warning"
           icon={Landmark}

@@ -1,6 +1,8 @@
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
+import { Prisma } from "@/generated/prisma/client";
 import {
+  characterizePage,
   definePageSuite,
   generatedResult,
   generatedRow,
@@ -117,3 +119,43 @@ definePageSuite([
     ],
   },
 ]);
+
+// Hallazgo 2 de la 11.2a: el detalle restaba los pagos con number. Una compra
+// de 10.07 pagada con 10.04 y 0.03 daba un saldo de 1.8e-15, mayor que cero,
+// y seguia ofreciendo «Registrar pago» con un saldo de S/ 0.00.
+describe("hallazgo 2 de la 11.2a: el saldo del detalle con decimales", () => {
+  const D = (value: string) => new Prisma.Decimal(value);
+
+  it("no ofrece registrar pago a una compra pagada por completo", async () => {
+    const { html } = await characterizePage(
+      () => import("./[id]/page"),
+      {
+        name: "pagada con decimales",
+        params: { id: "COM00000001" },
+        data: {
+          "compra.findUnique": (args: PrismaArgs) => ({
+            ...generatedRow("compra", "findUnique", args),
+            monto_total: D("10.07"),
+            estado_compra: "confirmada",
+            estado_pago: "pagado",
+          }),
+          "pago_proveedor.findMany": (args: PrismaArgs) => {
+            const [first, second] = generatedResult("pago_proveedor", "findMany", args) as Record<
+              string,
+              unknown
+            >[];
+
+            return [
+              { ...first, monto_pagado: D("10.04") },
+              { ...second, monto_pagado: D("0.03") },
+            ];
+          },
+        },
+      },
+      "/dashboard/inventory/purchases/[id]",
+    );
+
+    expect(html).toContain("S/ 0.00");
+    expect(html).not.toContain("Registrar pago");
+  });
+});

@@ -6,6 +6,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { calculateSupplierPayment } from "@/lib/supplier-payment-amounts";
 import { supplierPaymentSchema } from "@/schemas/inventory/supplier-payment.schema";
 
 function toNullable(value: string | undefined) {
@@ -56,29 +57,18 @@ export async function createSupplierPaymentAction(formData: FormData) {
     },
   });
 
-  const totalPaid = previousPayments.reduce((acc, payment) => {
-    return acc + Number(payment.monto_pagado.toString());
-  }, 0);
+  // Hallazgos 1 y 2 de la 11.2a: el saldo se cuenta en centesimos enteros, con
+  // el redondeo de las columnas, y se guarda exactamente lo que devuelve.
+  const payment = calculateSupplierPayment({
+    total: purchase.monto_total,
+    previousPayments: previousPayments.map((previous) => previous.monto_pagado),
+    amount: data.monto_pagado,
+  });
 
-  const purchaseTotal = Number(purchase.monto_total.toString());
-  const currentBalance = purchaseTotal - totalPaid;
-
-  if (data.monto_pagado > currentBalance) {
+  if (!payment.accepted) {
     throw new Error(
-      `El pago no puede superar el saldo pendiente. Saldo actual: S/ ${currentBalance.toFixed(
-        2,
-      )}`,
+      `El pago no puede superar el saldo pendiente. Saldo actual: S/ ${payment.balance}`,
     );
-  }
-
-  const newBalance = currentBalance - data.monto_pagado;
-
-  let newPaymentStatus = "pendiente";
-
-  if (newBalance <= 0) {
-    newPaymentStatus = "pagado";
-  } else if (newBalance < purchaseTotal) {
-    newPaymentStatus = "parcial";
   }
 
   await prisma.$transaction(async (tx) => {
@@ -94,10 +84,10 @@ export async function createSupplierPaymentAction(formData: FormData) {
         id_proveedor: purchase.id_proveedor,
         id_usuario_registro: session.user.id,
         fecha_pago: new Date(data.fecha_pago),
-        monto_pagado: data.monto_pagado,
+        monto_pagado: payment.amount,
         metodo_pago: data.metodo_pago,
-        saldo_pendiente: newBalance,
-        estado_pago: newPaymentStatus,
+        saldo_pendiente: payment.newBalance,
+        estado_pago: payment.status,
         observaciones: toNullable(data.observaciones),
       },
     });
@@ -107,7 +97,7 @@ export async function createSupplierPaymentAction(formData: FormData) {
         id_compra: data.id_compra,
       },
       data: {
-        estado_pago: newPaymentStatus,
+        estado_pago: payment.status,
       },
     });
 
