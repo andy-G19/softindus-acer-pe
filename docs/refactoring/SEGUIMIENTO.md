@@ -7920,7 +7920,7 @@ Datos leídos de la API de GitHub el 2026-11-10 (UTC) y comparados con git:
 
 ### Sub-entrega 11.2a — Pago a proveedor y anulación de compra
 
-Fecha: 2026-11-10 (Lima). Estado: verificada en staging, pendiente de integrar en `main`. Plan en
+Fecha: 2026-11-10 (Lima). Estado: integrada en `main` (PR #40, merge `469feb2`). Plan en
 `tmp/e11-diff/plan-11-2.md`, con las decisiones D10 a D15 aprobadas: partir la 11.2 en a, b y
 c (D10), montos en céntimos exactos (D11), clave de operación del formulario (D12),
 `lockPurchaseRow` (D13), anular compra con `ConfirmActionButton` (D14) y paginar los pagos
@@ -8057,6 +8057,20 @@ Hallazgos:
 5. Datos de prueba que quedan en staging: COM00000010 (pagada con 2 pagos), COM00000011 (anulada),
    COM00000012 (pagada con 1 pago); «PRUEBA E1 PLANCHA» con stock 4.00 y costo S/ 5.00.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-10 (UTC) y comparados con git:
+
+- La verificación `27f9fa0` se publicó en `staging`: CI #153 en verde (5m 14s).
+- PR #40, abierto a las 17:34:12 UTC y fusionado con merge commit a las 17:38:32 UTC del
+  2026-11-10: 10 commits, de `a58bffa` a `27f9fa0`, y 31 archivos (+3.471 −368). Su CI, el #154,
+  sobre `27f9fa0`, terminó en verde (3m 20s) antes del merge.
+- El merge commit `469feb2` tiene como padres `26e8a9b` (`main`) y `27f9fa0` (`staging`), y su
+  árbol es el de `27f9fa0` (`a203fed7`): `main` y `staging` tienen el mismo contenido. CI #155 en
+  verde (5m 11s).
+- Vercel desplegó `469feb2` en producción (`success` a las 17:39:56 UTC). La sub-entrega no trae
+  migraciones: `operacion_idempotente` ya estaba en producción desde la 11.1.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -8082,7 +8096,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a verificada en staging (CI #151 y #152), pendiente de integrar en `main` |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b en preparación |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
