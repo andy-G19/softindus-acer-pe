@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act, createElement as h } from "react";
+import { act, createElement as h, useState } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -64,6 +64,7 @@ async function render(respond: (formData: FormData) => SupplierPaymentFormState)
         action,
         idCompra: COMPRA,
         saldoPendiente: "60.00",
+        canPay: true,
         successNotification: NOTIFICATION,
       }),
     );
@@ -151,5 +152,47 @@ describe("SupplierPaymentForm", () => {
 
     expect(received[1].get("clave_operacion")).toMatch(UUID);
     expect(received[1].get("clave_operacion")).not.toBe(received[0].get("clave_operacion"));
+  });
+});
+
+// Hallazgo 9 de la 11.2a (verificacion en staging): el pago que salda la compra no avisaba.
+// La misma respuesta trae el exito y el detalle repintado sin saldo; si el formulario
+// desaparece en ese render, su efecto no llega a dar el aviso. Ahora el componente sigue
+// montado y solo oculta el formulario (canPay), asi que da el aviso igual.
+describe("hallazgo 9 de la 11.2a: el pago que salda la compra", () => {
+  it("avisa una vez aunque la compra quede sin saldo y el formulario desaparezca", async () => {
+    let settle: (() => void) | undefined;
+
+    function Detail() {
+      const [canPay, setCanPay] = useState(true);
+      settle = () => setCanPay(false);
+
+      return h(SupplierPaymentForm, {
+        action: async (_prev: SupplierPaymentFormState, formData: FormData) => {
+          // La revalidacion repinta el detalle en la misma transicion que la respuesta.
+          settle?.();
+          return {
+            status: "success" as const,
+            data: { id_pago_proveedor: "PPR00000002", clave_operacion: String(formData.get("clave_operacion")) },
+            values: valuesOf(formData),
+            operationId: "op-1",
+          };
+        },
+        idCompra: COMPRA,
+        saldoPendiente: "50.20",
+        canPay,
+        successNotification: NOTIFICATION,
+      });
+    }
+
+    await act(async () => {
+      root.render(h(Detail));
+    });
+    await fill();
+    await submit();
+
+    expect(host.querySelector('[name="clave_operacion"]')).toBeNull();
+    expect(notifications.notify).toHaveBeenCalledTimes(1);
+    expect(notifications.notify).toHaveBeenCalledWith(NOTIFICATION);
   });
 });

@@ -228,14 +228,15 @@ export default async function PurchaseDetailPage({
         </CardContent>
       </Card>
 
-      {canPay ? (
-        <SupplierPaymentForm
-          action={createSupplierPaymentAction}
-          idCompra={purchase.id_compra}
-          saldoPendiente={balance}
-          successNotification={inventoryNotifications["supplier-payment-registered"]}
-        />
-      ) : null}
+      {/* Siempre renderizado: el pago que salda la compra da su aviso aunque el
+          formulario ya no se muestre (hallazgo 9 de la 11.2a). */}
+      <SupplierPaymentForm
+        action={createSupplierPaymentAction}
+        idCompra={purchase.id_compra}
+        saldoPendiente={balance}
+        canPay={canPay}
+        successNotification={inventoryNotifications["supplier-payment-registered"]}
+      />
 
       <Card>
         <CardHeader>

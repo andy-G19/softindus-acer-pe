@@ -26,6 +26,12 @@ type SupplierPaymentFormProps = {
   idCompra: string;
   /** Saldo pendiente con dos decimales (calculatePurchaseBalance). */
   saldoPendiente: string;
+  /**
+   * Si la compra admite pagos (no anulada y con saldo). Sin ellos el componente sigue
+   * montado y no muestra nada: el pago que salda la compra llega con el detalle ya sin
+   * saldo, y el aviso de su exito lo da este componente (hallazgo 9 de la 11.2a).
+   */
+  canPay: boolean;
   /** Aviso del catalogo de Inventario; la pagina lo pasa con su clave literal. */
   successNotification: NotificationDefinition;
 };
@@ -56,6 +62,7 @@ export function SupplierPaymentForm({
   action,
   idCompra,
   saldoPendiente,
+  canPay,
   successNotification,
 }: SupplierPaymentFormProps) {
   const [state, formAction, pending] = useActionState(action, initialState);
@@ -66,6 +73,11 @@ export function SupplierPaymentForm({
   const completedKey = state.status === "success" ? state.data.clave_operacion : undefined;
 
   useFormResult(state, pending, { successNotification });
+
+  // Los hooks van antes: el componente queda montado para dar el aviso del ultimo pago.
+  if (!canPay) {
+    return null;
+  }
 
   return (
     <Card>
