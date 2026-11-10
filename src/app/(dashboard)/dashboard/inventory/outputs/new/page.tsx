@@ -1,13 +1,21 @@
 
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
+import { inventoryNotifications } from "@/modules/inventory/notifications";
 import { createInventoryOutputAction } from "@/modules/inventory/movements/actions";
 import { InventoryOutputForm } from "@/modules/inventory/movements/inventory-output-form";
 import { getInventoryOutputFormOptions } from "@/modules/inventory/movements/queries";
 
-export default async function NewInventoryOutputPage() {
+type NewInventoryOutputPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function NewInventoryOutputPage({ searchParams }: NewInventoryOutputPageProps) {
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+
+  const queryParams = (await searchParams) ?? {};
+  const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.inventoryOutputs);
 
   const { materials, workOrders } = await getInventoryOutputFormOptions();
 
@@ -16,11 +24,11 @@ export default async function NewInventoryOutputPage() {
       <PageHeader
         title="Registrar salida de inventario"
         description="La salida descuenta stock actual y registra stock anterior/resultante."
-        backHref={navigationHrefs.inventoryOutputs}
+        backHref={backHref}
         backLabel="Volver a salidas"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Inventario", href: navigationHrefs.inventory },
-          { label: "Salidas", href: navigationHrefs.inventoryOutputs },
+          { label: "Salidas", href: backHref },
           { label: "Registrar salida" },
         ])}
       />
@@ -41,6 +49,8 @@ export default async function NewInventoryOutputPage() {
           id: order.id_orden_trabajo,
           label: `${order.id_orden_trabajo} - ${order.estado}`,
         }))}
+        successNotification={inventoryNotifications["inventory-movement-created"]}
+        returnTo={backHref}
       />
     </div>
   );

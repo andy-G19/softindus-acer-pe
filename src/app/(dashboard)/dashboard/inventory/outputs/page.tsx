@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { formatDate } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { createReturnToHref, dashboardBreadcrumbs, navigationHrefs, withReturnTo } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   parseDateParam,
@@ -44,6 +44,7 @@ export default async function InventoryOutputsPage({
   const from = parseDateParam(params, "from");
   const to = parseDateParam(params, "to");
   const { page, pageSize, skip, take } = getPaginationParams(params);
+  const returnTo = createReturnToHref(navigationHrefs.inventoryOutputs, params);
 
   const { movements, totalItems, materials, workOrders } =
     await getInventoryOutputListData(
@@ -64,7 +65,7 @@ export default async function InventoryOutputsPage({
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/inventory/outputs/new">
+            <Link href={withReturnTo(`${navigationHrefs.inventoryOutputs}/new`, returnTo)}>
               Registrar salida
             </Link>
           </Button>

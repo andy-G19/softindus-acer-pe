@@ -8073,7 +8073,7 @@ Datos leídos de la API de GitHub el 2026-11-10 (UTC) y comparados con git:
 
 ### Sub-entrega 11.2b — Crear compra
 
-Fecha: 2026-11-10 (Lima). Estado: verificada en staging, pendiente de integrar en `main`. Plan en
+Fecha: 2026-11-10 (Lima). Estado: integrada en `main` (PR #41, merge `7cdf6e2`). Plan en
 `tmp/e11-diff/plan-11-2b.md`, con las decisiones D17 a D21 aprobadas: página completa como
 pedidos (D17), montos en céntimos (D18), proveedor y materiales comprobados dentro de la
 transacción sin bloquear su fila (D20) y comprobante repetido y fecha inválida en su campo
@@ -8190,6 +8190,123 @@ Hallazgos:
 4. Datos de prueba que quedan en staging: COM00000013 (pendiente, S/ 30.23); «PRUEBA E1 PLANCHA»
    con stock 5.25 y «PRUEBA E1 TUBO» con stock 2.25, los dos con costo S/ 10.25.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-10 (UTC) y comparados con git:
+
+- La verificación `4033f71` se publicó en `staging`: CI #157 en verde (4m 56s).
+- PR #41, abierto a las 20:28:01 UTC y fusionado con merge commit a las 20:34:01 UTC del
+  2026-11-10: 7 commits, de `bb19b9c` a `4033f71`, y 23 archivos (+3.618 −694). Su CI, el #158,
+  sobre `4033f71`, terminó en verde (4m 4s) antes del merge.
+- El merge commit `7cdf6e2` tiene como padres `469feb2` (`main`) y `4033f71` (`staging`), y su
+  árbol es el de `4033f71` (`bbce6d35`): `main` y `staging` tienen el mismo contenido. CI #159 en
+  verde (6m 44s).
+- Vercel desplegó `7cdf6e2` en producción (`success` a las 20:35:25 UTC). La sub-entrega no trae
+  migraciones.
+
+### Sub-entrega 11.2c — Salida de inventario
+
+Fecha: 2026-11-10 (Lima). Estado: verificada en `staging` (CI #160). Plan en
+`tmp/e11-diff/plan-11-2c.md`, con las decisiones aprobadas: las salidas aplican la regla de
+alertas de stock de la entrega a una orden (D16), la salida se queda en su página con `returnTo`
+y guardia de descarte (D22), la cantidad se redondea como la columna (D23), clave de operación
+con alcance `salida:nueva` y se conserva el `FOR UPDATE` del material.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| e35b18f | docs | Integración de la 11.2b en `main` (PR #41). |
+| 83f7466 | fix | La cantidad de la salida se redondea como la columna antes de compararla con el disponible y de restarla; el esquema rechaza lo que se guardaría como 0.00 (hallazgos 1 y 2, 4 casos rojos antes). |
+| cbef1b4 | feat | Salida con `FormActionState` y `getAuthorizedSession` (**se retira la desviación conocida**), `claimOperation` como primera sentencia, `ActionForm` sin el segundo aviso de `showError`, `OperationKeyField`, `returnTo` desde el listado y guardia de descarte. Pruebas del formulario en jsdom y de la acción en Postgres. |
+| db80ab5 | refactor | `syncStockAlert` pasa de `production/work-orders/material-delivery.ts` a `src/modules/inventory/alerts/stock-alert-sync.ts`, sin cambios: las caracterizaciones de órdenes de trabajo no cambian. |
+| 5c3be73 | feat | La salida abre, actualiza o atiende la alerta de stock (D16) con el stock calculado bajo el bloqueo del material; el mensaje nombra la orden solo si la hay; se revalida el listado de alertas. |
+| 85eb66b | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
+
+Diseño:
+
+- La clave se reclama antes del bloqueo de la orden (H9), del correlativo y del bloqueo del
+  material. Un reenvío con la misma clave responde con la salida ya guardada sin descontar el
+  stock otra vez; un rechazo posterior lanza dentro de la transacción y libera la clave.
+- Sin permiso, la acción responde con un error en el formulario: era la última función de
+  `useActionState` que redirigía (la desviación conocida desde la entrega 10). El maestro de
+  taller sigue registrando salidas.
+- El formulario es el de crear compra en pequeño: los errores quedan junto a su campo y el
+  material y la orden elegidos se conservan (antes se perdían y llegaba además un aviso de
+  SweetAlert); con éxito hay un solo aviso, la clave se renueva y se vuelve al listado con sus
+  filtros.
+- La alerta usa el stock y el mínimo leídos bajo el `FOR UPDATE` del material (regla 5), después
+  del kárdex y antes de completar la clave. En el mínimo o por debajo abre la alerta o actualiza
+  la activa; por encima atiende la activa. La otra mitad del hallazgo 3 de la 10.3a (editar el
+  mínimo no reevalúa las alertas) queda abierta.
+
+Evidencia:
+
+1. Rojo antes de cada `fix` y `feat`: C1 con 4 casos, C2 con 30 y C4 con 6 (4 de caracterización
+   y 2 en Postgres). La guarda «un rechazo por stock no toca las alertas» pasó desde el
+   principio, como se esperaba.
+2. Mutaciones: C1 4 de 4, C2 13 de 13, C3 5 de 5 (la regla en su nuevo sitio, vigilada por las
+   caracterizaciones de órdenes de trabajo) y C4 8 de 8; en total, 30 de 30.
+3. C3 se comprobó con `diff` entre la función que salió y la que llegó: idénticas.
+4. Snapshots revisados uno por uno. En C2, el listado lleva `returnTo` en «Registrar salida», las
+   etiquetas marcan el campo obligatorio, los `<select>` marcan su opción por defecto, aparece el
+   campo oculto de la clave sin valor y el registro de avisos atribuye
+   `inventory-movement-created` a la página del formulario. En C4, la consulta bajo bloqueo lee
+   `stock_minimo`, se revalida `/dashboard/inventory/alerts` en los 4 casos que guardan y los 3
+   que descuentan atienden la alerta que el arnés devuelve por defecto.
+5. Las aserciones de H9 y C1 pasaron del estado anterior (`{ estado }` y `redirect:`) al nuevo
+   (`status`, `error`, `fieldErrors`), con los mismos mensajes y sin escribir nada.
+6. CSS compilado igual byte a byte en cada commit (112.316 bytes).
+7. `npm run check` terminó con código 0 antes de cada commit, hasta 4.779 pruebas en 266
+   archivos; las de integración pasan de 24 a 29 en 6 archivos.
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 264 / 4.754 | 266 / 4.779 |
+| Pruebas contra Postgres real (archivos / pruebas) | 5 / 24 | 6 / 29 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 1 | 0 |
+| Formularios de Inventario sin `ActionForm` | 1 | 0 |
+| Acciones con clave de operación | 2 | 3 |
+| Módulos fuera de la fachada que llaman a `showError`/`showSuccess`/`showConfirm` | 4 | 3 (login, `ConfirmDeleteButton`, `ConfirmDialog`; más la demo de la galería) |
+| Movimientos de stock que no actualizan la alerta (salida) | 1 | 0 |
+
+Hallazgos:
+
+1. Una salida de 1.005 sobre 10.00 guardaba cantidad 1.01 y resultante 9.00: el kárdex no
+   cuadraba. Corregido en `83f7466`.
+2. Una salida de 0.004 se guardaba como un movimiento de 0.00. Corregido en `83f7466`.
+3. Las salidas no abrían alertas de stock (hallazgo 3 de la 10.3a, mitad de la salida). Corregido
+   en `5c3be73` (D16).
+4. En staging, el campo Cantidad (`step="0.01"`) no deja enviar 1.005 desde el navegador: «Los
+   dos valores válidos más aproximados son 1 y 1,01». No es un defecto: es una primera barrera, y
+   la regla de `83f7466` sigue siendo la que protege el kárdex de un cliente que no la respete.
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 6 commits (hasta `85eb66b`): CI #160 en verde en 5:14; Vercel desplegó staging
+   (23:24 UTC). Sin migraciones. La sesión de staging había caducado y el rechazo redirigió al
+   login del host de `AUTH_URL` (conducta conocida de la 10.3c); el responsable inició sesión en
+   el host de staging.
+2. Con ADMIN (origen comprobado en llamadas aparte), sin escribir: «Registrar salida» desde el
+   listado filtrado por PRUEBA E1 PLANCHA lleva `returnTo=/dashboard/inventory/outputs?material=MAT00000010`
+   y Cancelar apunta a él; la clave del formulario es la guardada para `salida:nueva`; Cancelar
+   con el motivo escrito pregunta «¿Descartar la salida?» y, al descartar, vuelve al listado
+   filtrado sin renovar la clave. Partida: PRUEBA E1 PLANCHA (MAT00000010) con stock 5.25 y
+   mínimo 7.00, PRUEBA E1 TUBO (MAT00000011) con 2.25 y mínimo 0.00, ninguna alerta activa.
+3. Envíos autorizados por el responsable:
+
+   | Paso | Resultado |
+   |---|---|
+   | A: PRUEBA E1 PLANCHA, sin orden, 1.005 (con el botón, el navegador lo frena por el `step`; se envió sin su validación) | MVI00000072 con cantidad 1.01 y stock resultante 4.24 (5.25 − 1.01); un solo aviso con la nota de filtros; vuelve a `?material=MAT00000010`; el historial pasa de 11 a 12; la clave se renueva (`1c9c715d` a `421aab97`). Se abre una alerta **activa** con stock detectado 4.24, mínimo 7.00 y «…quedo en stock critico tras una salida de inventario.» |
+   | B: la clave de A devuelta a `sessionStorage` antes de abrir el formulario y el mismo envío | Responde con el éxito de A y renueva la clave; no hay movimiento nuevo (sigue MVI00000072), el stock sigue en 4.24 y sigue una sola alerta activa sin cambios |
+   | C: PRUEBA E1 TUBO por 5 con 2.25 disponible (comprobado antes) | «No hay stock suficiente para registrar la salida.» en el formulario y en su campo, con el foco en él; se conservan el material, la cantidad, el motivo y la clave; sin aviso; TUBO sin movimiento nuevo |
+
+4. La salida con WORKSHOP_MASTER no se probó en staging: la cubre la caracterización («el maestro
+   de taller registra la salida igual»).
+5. Datos de prueba que quedan en staging: MVI00000072 y la alerta activa de PRUEBA E1 PLANCHA,
+   con stock 4.24.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -8215,7 +8332,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b verificada en staging (CI #156), pendiente de integrar en `main` |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c verificada en `staging` (CI #160; se retira la desviación conocida) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
@@ -8238,7 +8355,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 264 / 4.754 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 266 / 4.779 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -8253,8 +8370,9 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reportes con la paridad de filtro probada en `screen-parity.test.ts` | 0 de 9 | 9 de 9 | G4 y 11 |
 | Páginas de reporte que leen sus filtros distinto que su exportación (medido en la 11.1) | 6 | 0 | 11 |
 | Cálculos del estado de cobranza (pantalla y exportación) | 2 | 1 | 11 |
-| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 5 / 24 | 11 |
-| Acciones con clave de operación (`operacion_idempotente`) | 0 | 2 | 11 |
+| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 6 / 29 | 11 |
+| Acciones con clave de operación (`operacion_idempotente`) | 0 | 3 | 11 |
+| Movimientos de stock que no actualizan la alerta de stock (la salida) | 1 | 0 | 11 |
 | Cálculos del IGV con `number` (acción y formulario de compra) | 2 | 0 | 11 |
 | Operaciones que deciden sobre una compra sin bloquearla (pago y anulación) | 2 | 0 | 11 |
 | Saldos de pago a proveedor calculados con `number` (acción y detalle) | 2 | 0 | 11 |
@@ -8269,7 +8387,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Páginas con un `<main>` dentro del `<main>` del shell | 113 | 9 | 9 y 10 |
 | Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 3 (3 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
-| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 1 | 10 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 0 | 10 y 11 |
 | Acciones de activar e inactivar que leen el estado y escriben el contrario | 12 | 0 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
@@ -8647,6 +8765,11 @@ Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e8d77ae`:
 Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de
 `FieldError` en 6; y los cambios de estado que voltean en 2.
+
+Actualizado en la sub-entrega 11.2c (2026-11-10) sobre `5c3be73`: pruebas 266 / 4.779, de ellas
+29 contra Postgres en 6 archivos. Acciones con clave de operación de 2 a 3 (salida de
+inventario). La desviación conocida llega a 0: la salida responde con un error en el formulario.
+Fila nueva: movimientos de stock que no actualizan la alerta (1 a 0), medida sobre `e35b18f`.
 
 Actualizado en la sub-entrega 11.2b (2026-11-10) sobre `f6d4b96`: pruebas 264 / 4.754, de ellas
 24 contra Postgres en 5 archivos. Acciones con clave de operación de 1 a 2 (crear compra). Fila

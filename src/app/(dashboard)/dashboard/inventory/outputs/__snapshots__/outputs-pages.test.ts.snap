@@ -116,7 +116,7 @@ exports[`/dashboard/inventory/outputs > fechas no validas > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/inventory/outputs/new">Registrar salida</a>
+<a data-variant="default" href="/dashboard/inventory/outputs/new?returnTo=%2Fdashboard%2Finventory%2Foutputs%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Registrar salida</a>
 </div>
 </div>
 </section>
@@ -327,7 +327,7 @@ exports[`/dashboard/inventory/outputs > rango invertido > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/inventory/outputs/new">Registrar salida</a>
+<a data-variant="default" href="/dashboard/inventory/outputs/new?returnTo=%2Fdashboard%2Finventory%2Foutputs%3Ffrom%3D2026-07-31%26to%3D2026-07-01">Registrar salida</a>
 </div>
 </div>
 </section>
@@ -514,7 +514,7 @@ exports[`/dashboard/inventory/outputs > sin filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/inventory/outputs/new">Registrar salida</a>
+<a data-variant="default" href="/dashboard/inventory/outputs/new?returnTo=%2Fdashboard%2Finventory%2Foutputs">Registrar salida</a>
 </div>
 </div>
 </section>
@@ -789,7 +789,7 @@ exports[`/dashboard/inventory/outputs > todos los filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/inventory/outputs/new">Registrar salida</a>
+<a data-variant="default" href="/dashboard/inventory/outputs/new?returnTo=%2Fdashboard%2Finventory%2Foutputs%3Fq%3DOT%26material%3DMAT00000001%26order%3DORT00000001%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Registrar salida</a>
 </div>
 </div>
 </section>
@@ -972,11 +972,13 @@ exports[`/dashboard/inventory/outputs/new > formulario > resultado 1`] = `
 </div>
 </section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
 <div>
 <div>
-<label for="id_material">Material</label>
-<select id="id_material" name="id_material" required="">
-<option value="">Seleccione material</option>
+<label for="id_material">Material<span aria-hidden="true">*</span>
+</label>
+<select id="id_material" required="" name="id_material">
+<option value="" selected="">Seleccione material</option>
 <option value="id_material-1">nombre_material-1 (0.00 unidad_medida-1 disponible)</option>
 <option value="id_material-2">nombre_material-2 (0.00 unidad_medida-2 disponible)</option>
 </select>
@@ -984,19 +986,21 @@ exports[`/dashboard/inventory/outputs/new > formulario > resultado 1`] = `
 <div>
 <label for="id_orden_trabajo">Orden de trabajo</label>
 <select id="id_orden_trabajo" name="id_orden_trabajo">
-<option value="">Sin orden asociada</option>
+<option value="" selected="">Sin orden asociada</option>
 <option value="id_orden_trabajo-1">id_orden_trabajo-1 - estado-1</option>
 <option value="id_orden_trabajo-2">id_orden_trabajo-2 - estado-2</option>
 </select>
 </div>
 </div>
 <div>
-<label for="cantidad">Cantidad</label>
-<input type="number" id="cantidad" min="0.01" step="0.01" required="" name="cantidad"/>
+<label for="cantidad">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad" required="" min="0.01" step="0.01" name="cantidad" value=""/>
 </div>
 <div>
-<label for="motivo">Motivo</label>
-<textarea id="motivo" name="motivo" rows="4" required="">
+<label for="motivo">Motivo<span aria-hidden="true">*</span>
+</label>
+<textarea id="motivo" required="" name="motivo" rows="4">
 </textarea>
 </div>
 <div>
@@ -1100,11 +1104,13 @@ exports[`/dashboard/inventory/outputs/new > maestro de taller > resultado 1`] = 
 </div>
 </section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
 <div>
 <div>
-<label for="id_material">Material</label>
-<select id="id_material" name="id_material" required="">
-<option value="">Seleccione material</option>
+<label for="id_material">Material<span aria-hidden="true">*</span>
+</label>
+<select id="id_material" required="" name="id_material">
+<option value="" selected="">Seleccione material</option>
 <option value="id_material-1">nombre_material-1 (0.00 unidad_medida-1 disponible)</option>
 <option value="id_material-2">nombre_material-2 (0.00 unidad_medida-2 disponible)</option>
 </select>
@@ -1112,19 +1118,21 @@ exports[`/dashboard/inventory/outputs/new > maestro de taller > resultado 1`] = 
 <div>
 <label for="id_orden_trabajo">Orden de trabajo</label>
 <select id="id_orden_trabajo" name="id_orden_trabajo">
-<option value="">Sin orden asociada</option>
+<option value="" selected="">Sin orden asociada</option>
 <option value="id_orden_trabajo-1">id_orden_trabajo-1 - estado-1</option>
 <option value="id_orden_trabajo-2">id_orden_trabajo-2 - estado-2</option>
 </select>
 </div>
 </div>
 <div>
-<label for="cantidad">Cantidad</label>
-<input type="number" id="cantidad" min="0.01" step="0.01" required="" name="cantidad"/>
+<label for="cantidad">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad" required="" min="0.01" step="0.01" name="cantidad" value=""/>
 </div>
 <div>
-<label for="motivo">Motivo</label>
-<textarea id="motivo" name="motivo" rows="4" required="">
+<label for="motivo">Motivo<span aria-hidden="true">*</span>
+</label>
+<textarea id="motivo" required="" name="motivo" rows="4">
 </textarea>
 </div>
 <div>
