@@ -1,16 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { FieldErrors } from "@/lib/errors";
+import { claimOperation, completeOperation, IdempotencyConflictError } from "@/lib/idempotency";
+import { calculatePurchaseAmounts } from "@/lib/purchase-amounts";
 import { APP_ROLES } from "@/lib/permissions";
 import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockPurchaseRow } from "@/lib/row-locks";
-import { calculateIgv } from "@/lib/taxes";
 import { purchaseSchema } from "@/schemas/inventory/purchase.schema";
 
 const ALREADY_ANNULLED = "La compra ya está anulada.";
@@ -25,229 +27,404 @@ function toNullable(value: string | undefined) {
  */
 class PurchaseAnnulmentRejectedError extends Error {}
 
-export async function createPurchaseAction(formData: FormData) {
-  const session = await requireRole(["ADMIN"]);
+/** Una linea de la compra tal como se envio. */
+export type PurchaseLineValues = {
+  id_material: string;
+  cantidad: string;
+  unidad_medida: string;
+  costo_unitario: string;
+  observaciones: string;
+};
 
-  const materialIds = formData.getAll("id_material").map(String);
-  const quantities = formData.getAll("cantidad").map(String);
-  const units = formData.getAll("unidad_medida").map(String);
-  const unitCosts = formData.getAll("costo_unitario").map(String);
-  const itemObservations = formData.getAll("item_observaciones").map(String);
+/** Lo que el formulario de compra envio, tal cual, para volver a mostrarlo. */
+export type PurchaseFormValues = {
+  id_proveedor: string;
+  fecha_compra: string;
+  tipo_comprobante: string;
+  numero_comprobante: string;
+  aplica_igv: boolean;
+  observaciones: string;
+  items: PurchaseLineValues[];
+};
 
-  const items = materialIds.map((idMaterial, index) => ({
-    id_material: idMaterial,
-    cantidad: quantities[index],
-    unidad_medida: units[index],
-    costo_unitario: unitCosts[index],
-    observaciones: itemObservations[index],
-  }));
+// C3 de la 11.2b: crear compra no redirige; devuelve el resultado y el formulario da el aviso
+// y vuelve al listado (D17 y D19 revisada, como pedidos). Sin permiso responde con un error.
+// Los errores de una linea van con la clave items.<posicion>.<campo>. El exito lleva la clave
+// confirmada para que el formulario genere otra (OperationKeyField).
+export type PurchaseFormState = FormActionState<
+  PurchaseFormValues,
+  { id_compra: string; clave_operacion: string }
+>;
+
+const CREATE_OPERATION = "crear_compra";
+
+/** Crea la compra y traduce el P2002 de su comprobante a un rechazo en su campo. */
+async function createPurchaseRow(
+  tx: Prisma.TransactionClient,
+  args: Prisma.compraCreateArgs,
+) {
+  try {
+    return await tx.compra.create(args);
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      throw new PurchaseRejectedError(RECEIPT_TAKEN, { numero_comprobante: [RECEIPT_TAKEN] });
+    }
+
+    throw error;
+  }
+}
+const REPEATED_MATERIAL =
+  "No repitas el mismo material dentro de la compra. Ajusta la cantidad en una sola fila.";
+const INACTIVE_MATERIAL = "El material seleccionado no existe o está inactivo.";
+const RECEIPT_TAKEN = "Ya existe una compra con ese tipo y número de comprobante.";
+
+/** Un rechazo dentro de la transaccion: la deshace, y con ella el reclamo de la clave. */
+class PurchaseRejectedError extends Error {
+  constructor(
+    message: string,
+    readonly fieldErrors?: FieldErrors,
+  ) {
+    super(message);
+  }
+}
+
+function getPurchaseFormValues(formData: FormData): PurchaseFormValues {
+  const text = (name: string) => formData.get(name)?.toString() ?? "";
+  const all = (name: string) => formData.getAll(name).map((value) => value.toString());
+  const quantities = all("cantidad");
+  const units = all("unidad_medida");
+  const unitCosts = all("costo_unitario");
+  const observations = all("item_observaciones");
+
+  return {
+    id_proveedor: text("id_proveedor"),
+    fecha_compra: text("fecha_compra"),
+    tipo_comprobante: text("tipo_comprobante"),
+    numero_comprobante: text("numero_comprobante"),
+    aplica_igv: formData.get("aplica_igv") === "on",
+    observaciones: text("observaciones"),
+    items: all("id_material").map((id_material, index) => ({
+      id_material,
+      cantidad: quantities[index] ?? "",
+      unidad_medida: units[index] ?? "",
+      costo_unitario: unitCosts[index] ?? "",
+      observaciones: observations[index] ?? "",
+    })),
+  };
+}
+
+function addFieldError(errors: FieldErrors, key: string, message: string) {
+  errors[key] = [...(errors[key] ?? []), message];
+}
+
+// Errores de Zod por campo: los de una linea, con la clave items.<posicion>.<campo>. Todas las
+// lineas se envian, asi que la posicion en items es la del formulario.
+function schemaFieldErrors(issues: { path: PropertyKey[]; message: string }[]) {
+  const errors: FieldErrors = {};
+
+  for (const issue of issues) {
+    const [first, index, field] = issue.path;
+    const key =
+      first === "items" && typeof index === "number"
+        ? `items.${index}${field === undefined ? "" : `.${String(field)}`}`
+        : String(first);
+
+    addFieldError(errors, key, issue.message);
+  }
+
+  return errors;
+}
+
+export async function createPurchaseAction(
+  _prevState: PurchaseFormState,
+  formData: FormData,
+): Promise<PurchaseFormState> {
+  const values = getPurchaseFormValues(formData);
+  const fail = (error: string, fieldErrors?: FieldErrors): PurchaseFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return fail("No tienes permisos para registrar compras.");
+  }
 
   const parsed = purchaseSchema.safeParse({
     id_proveedor: formData.get("id_proveedor"),
+    clave_operacion: formData.get("clave_operacion"),
     fecha_compra: formData.get("fecha_compra"),
     tipo_comprobante: formData.get("tipo_comprobante"),
     numero_comprobante: formData.get("numero_comprobante"),
     aplica_igv: formData.get("aplica_igv"),
     observaciones: formData.get("observaciones"),
-    items,
+    items: values.items,
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos inválidos.");
+    const fieldErrors = schemaFieldErrors(parsed.error.issues);
+    // La clave va en un campo oculto: su mensaje es el general, no el de un campo.
+    const keyError = fieldErrors.clave_operacion?.[0];
+
+    return fail(keyError ?? "Revisa los datos de la compra.", fieldErrors);
   }
 
   const data = parsed.data;
 
-  const repeatedMaterial = data.items.find((item, index) => {
-    return data.items.findIndex((other) => other.id_material === item.id_material) !== index;
+  // Un material repetido se marca en cada linea que lo repite.
+  const repeated: FieldErrors = {};
+
+  data.items.forEach((item, index) => {
+    if (data.items.findIndex((other) => other.id_material === item.id_material) !== index) {
+      addFieldError(repeated, `items.${index}.id_material`, REPEATED_MATERIAL);
+    }
   });
 
-  if (repeatedMaterial) {
-    throw new Error(
-      "No repitas el mismo material dentro de la compra. Ajusta la cantidad en una sola fila.",
-    );
+  if (Object.keys(repeated).length > 0) {
+    return fail(REPEATED_MATERIAL, repeated);
   }
 
-  const supplier = await prisma.proveedor.findFirst({
-    where: {
-      id_proveedor: data.id_proveedor,
-      estado: true,
-    },
-  });
+  // Hallazgos 1 a 3 y 6 de la 11.2b: los montos se cuentan en centesimos enteros, con el
+  // redondeo de las columnas, y se guarda exactamente lo que devuelve la funcion.
+  const amounts = calculatePurchaseAmounts({ items: data.items, aplicaIgv: data.aplica_igv });
+  let idCompra: string;
 
-  if (!supplier) {
-    throw new Error("El proveedor seleccionado no existe o está inactivo.");
-  }
+  try {
+    idCompra = await prisma.$transaction(async (tx) => {
+      // La clave se reclama como primera sentencia: un reenvio con la misma clave responde
+      // con la compra que ya se guardo, sin leer ni escribir nada (C3 de la 11.2b).
+      const claim = await claimOperation(tx, {
+        clave: data.clave_operacion,
+        tipo: CREATE_OPERATION,
+        userId: session.user.id,
+      });
 
-  const materials = await prisma.material.findMany({
-    where: {
-      id_material: {
-        in: data.items.map((item) => item.id_material),
-      },
-      estado: true,
-    },
-  });
+      if (claim.estado === "repetida") {
+        if (!claim.idRegistro) {
+          throw new Error("La operacion repetida no tiene una compra registrada.");
+        }
 
-  if (materials.length !== data.items.length) {
-    throw new Error("Uno o más materiales no existen o están inactivos.");
-  }
-
-  const subtotal = data.items.reduce((acc, item) => {
-    return acc + item.cantidad * item.costo_unitario;
-  }, 0);
-
-  const igv = data.aplica_igv ? calculateIgv(subtotal) : 0;
-  const montoTotal = Number((subtotal + igv).toFixed(2));
-
-  const materialById = new Map(
-    materials.map((material) => [material.id_material, material]),
-  );
-
-  await prisma.$transaction(async (tx) => {
-    const idCompra = await getNextCorrelativeId(tx, {
-      codigoEntidad: "compra",
-      prefijo: "COM",
-    });
-    const detailIds = await getNextCorrelativeIds(tx, {
-      codigoEntidad: "detalle_compra",
-      prefijo: "DCO",
-      cantidad: data.items.length,
-    });
-    const movementIds = await getNextCorrelativeIds(tx, {
-      codigoEntidad: "movimiento_inventario",
-      prefijo: "MVI",
-      cantidad: data.items.length,
-    });
-    const historyIds = await getNextCorrelativeIds(tx, {
-      codigoEntidad: "historial_precio_proveedor",
-      prefijo: "HPP",
-      cantidad: data.items.length,
-    });
-
-    await tx.compra.create({
-      data: {
-        id_compra: idCompra,
-        id_proveedor: data.id_proveedor,
-        id_usuario_registro: session.user.id,
-        fecha_compra: new Date(data.fecha_compra),
-        tipo_comprobante: data.tipo_comprobante ?? null,
-        numero_comprobante: data.numero_comprobante ?? null,
-        subtotal,
-        igv,
-        monto_total: montoTotal,
-        estado_pago: "pendiente",
-        estado_compra: "confirmada",
-        observaciones: toNullable(data.observaciones),
-      },
-    });
-
-    for (const [index, item] of data.items.entries()) {
-      const material = materialById.get(item.id_material);
-
-      if (!material) {
-        throw new Error("Material no encontrado durante la transacción.");
+        return claim.idRegistro;
       }
 
-      // Se redondea como lo haria la columna Decimal(10, 2): asi el stock anterior que se
-      // deduce abajo (resultante - cantidad) coincide con el que habia en la base.
-      const cantidad = new Prisma.Decimal(item.cantidad).toDecimalPlaces(
-        2,
-        Prisma.Decimal.ROUND_HALF_UP,
-      );
-      const itemSubtotal = item.cantidad * item.costo_unitario;
-
-      await tx.detalle_compra.create({
-        data: {
-          id_detalle_compra: detailIds[index],
-          id_compra: idCompra,
-          id_material: item.id_material,
-          cantidad: item.cantidad,
-          unidad_medida: item.unidad_medida,
-          costo_unitario: item.costo_unitario,
-          subtotal: itemSubtotal,
-          observaciones: toNullable(item.observaciones),
-        },
-      });
-
-      // La suma la hace PostgreSQL sobre el valor vigente y la fila queda bloqueada hasta
-      // el commit. Leer el stock antes y escribir el total perderia las compras que
-      // confirmen en medio.
-      const updatedMaterial = await tx.material.update({
+      // D20 de la 11.2b: el proveedor y los materiales se comprueban dentro de la
+      // transaccion, sin bloquear su fila: la compra solo exige que esten activos al
+      // registrarla, y el stock se suma de forma atomica abajo.
+      const supplier = await tx.proveedor.findFirst({
         where: {
-          id_material: item.id_material,
-        },
-        data: {
-          stock_actual: {
-            increment: cantidad,
-          },
-          costo_unitario_actual: item.costo_unitario,
-        },
-        select: {
-          stock_actual: true,
-          stock_minimo: true,
+          id_proveedor: data.id_proveedor,
+          estado: true,
         },
       });
 
-      const stockResultante = updatedMaterial.stock_actual;
-      const stockAnterior = stockResultante.minus(cantidad);
+      if (!supplier) {
+        const message = "El proveedor seleccionado no existe o está inactivo.";
 
-      if (stockResultante.greaterThan(updatedMaterial.stock_minimo)) {
-        await tx.alerta_stock.updateMany({
+        throw new PurchaseRejectedError(message, { id_proveedor: [message] });
+      }
+
+      const materials = await tx.material.findMany({
+        where: {
+          id_material: {
+            in: data.items.map((item) => item.id_material),
+          },
+          estado: true,
+        },
+      });
+      const activeIds = new Set(materials.map((material) => material.id_material));
+      const inactive: FieldErrors = {};
+
+      data.items.forEach((item, index) => {
+        if (!activeIds.has(item.id_material)) {
+          addFieldError(inactive, `items.${index}.id_material`, INACTIVE_MATERIAL);
+        }
+      });
+
+      if (Object.keys(inactive).length > 0) {
+        throw new PurchaseRejectedError("Uno o más materiales no existen o están inactivos.", inactive);
+      }
+
+      // Hallazgo 4 de la 11.2b: el tipo y el numero de comprobante son unicos
+      // (uq_compra_comprobante). Antes el create rompia con P2002 y se veia la pagina de error.
+      // Sin numero no hay nada que repetir: el indice admite varios nulos.
+      if (data.tipo_comprobante && data.numero_comprobante) {
+        const taken = await tx.compra.findFirst({
+          where: {
+            tipo_comprobante: data.tipo_comprobante,
+            numero_comprobante: data.numero_comprobante,
+          },
+          select: {
+            id_compra: true,
+          },
+        });
+
+        if (taken) {
+          throw new PurchaseRejectedError(RECEIPT_TAKEN, { numero_comprobante: [RECEIPT_TAKEN] });
+        }
+      }
+
+      const newId = await getNextCorrelativeId(tx, {
+        codigoEntidad: "compra",
+        prefijo: "COM",
+      });
+      const detailIds = await getNextCorrelativeIds(tx, {
+        codigoEntidad: "detalle_compra",
+        prefijo: "DCO",
+        cantidad: data.items.length,
+      });
+      const movementIds = await getNextCorrelativeIds(tx, {
+        codigoEntidad: "movimiento_inventario",
+        prefijo: "MVI",
+        cantidad: data.items.length,
+      });
+      const historyIds = await getNextCorrelativeIds(tx, {
+        codigoEntidad: "historial_precio_proveedor",
+        prefijo: "HPP",
+        cantidad: data.items.length,
+      });
+
+      // Respaldo de la comprobacion de arriba: otra compra con el mismo comprobante puede
+      // confirmar en medio. El unico indice unico de compra, ademas de su clave, es el del
+      // comprobante (los ids salen del correlativo), asi que un P2002 aqui es ese.
+      await createPurchaseRow(tx, {
+        data: {
+          id_compra: newId,
+          id_proveedor: data.id_proveedor,
+          id_usuario_registro: session.user.id,
+          fecha_compra: new Date(data.fecha_compra),
+          tipo_comprobante: data.tipo_comprobante ?? null,
+          numero_comprobante: data.numero_comprobante ?? null,
+          subtotal: amounts.subtotal,
+          igv: amounts.igv,
+          monto_total: amounts.total,
+          estado_pago: "pendiente",
+          estado_compra: "confirmada",
+          observaciones: toNullable(data.observaciones),
+        },
+      });
+
+      for (const [index, item] of data.items.entries()) {
+        // La cantidad ya viene redondeada como la columna Decimal(10, 2): asi el stock
+        // anterior que se deduce abajo (resultante - cantidad) coincide con el de la base.
+        const line = amounts.lines[index];
+        const cantidad = new Prisma.Decimal(line.cantidad);
+
+        await tx.detalle_compra.create({
+          data: {
+            id_detalle_compra: detailIds[index],
+            id_compra: newId,
+            id_material: item.id_material,
+            cantidad: line.cantidad,
+            unidad_medida: item.unidad_medida,
+            costo_unitario: line.costo_unitario,
+            subtotal: line.subtotal,
+            observaciones: toNullable(item.observaciones),
+          },
+        });
+
+        // La suma la hace PostgreSQL sobre el valor vigente y la fila queda bloqueada hasta
+        // el commit. Leer el stock antes y escribir el total perderia las compras que
+        // confirmen en medio.
+        const updatedMaterial = await tx.material.update({
           where: {
             id_material: item.id_material,
-            estado_alerta: "activa",
           },
           data: {
-            estado_alerta: "atendida",
-            fecha_atencion: new Date(),
-            id_usuario_atencion: session.user.id,
+            stock_actual: {
+              increment: cantidad,
+            },
+            costo_unitario_actual: line.costo_unitario,
+          },
+          select: {
+            stock_actual: true,
+            stock_minimo: true,
+          },
+        });
+
+        const stockResultante = updatedMaterial.stock_actual;
+        const stockAnterior = stockResultante.minus(cantidad);
+
+        if (stockResultante.greaterThan(updatedMaterial.stock_minimo)) {
+          await tx.alerta_stock.updateMany({
+            where: {
+              id_material: item.id_material,
+              estado_alerta: "activa",
+            },
+            data: {
+              estado_alerta: "atendida",
+              fecha_atencion: new Date(),
+              id_usuario_atencion: session.user.id,
+            },
+          });
+        }
+
+        await tx.movimiento_inventario.create({
+          data: {
+            id_movimiento: movementIds[index],
+            id_material: item.id_material,
+            id_compra: newId,
+            tipo_movimiento: "entrada",
+            cantidad,
+            stock_anterior: stockAnterior,
+            stock_resultante: stockResultante,
+            motivo: "Entrada automática generada por compra confirmada",
+            id_usuario_responsable: session.user.id,
+          },
+        });
+
+        await tx.historial_precio_proveedor.create({
+          data: {
+            id_historial_precio: historyIds[index],
+            id_proveedor: data.id_proveedor,
+            id_material: item.id_material,
+            id_compra: newId,
+            precio_unitario: line.costo_unitario,
+            fecha_registro: new Date(data.fecha_compra),
+            origen_registro: "compra",
+            observaciones: "Precio registrado automáticamente desde compra.",
           },
         });
       }
 
-      await tx.movimiento_inventario.create({
-        data: {
-          id_movimiento: movementIds[index],
-          id_material: item.id_material,
-          id_compra: idCompra,
-          tipo_movimiento: "entrada",
-          cantidad,
-          stock_anterior: stockAnterior,
-          stock_resultante: stockResultante,
-          motivo: "Entrada automática generada por compra confirmada",
-          id_usuario_responsable: session.user.id,
-        },
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "compra",
+        id_registro_afectado: newId,
+        accion: "crear",
+        detalle: `Compra creada con ${data.items.length} material(es).`,
+        tx,
       });
 
-      await tx.historial_precio_proveedor.create({
-        data: {
-          id_historial_precio: historyIds[index],
-          id_proveedor: data.id_proveedor,
-          id_material: item.id_material,
-          id_compra: idCompra,
-          precio_unitario: item.costo_unitario,
-          fecha_registro: new Date(data.fecha_compra),
-          origen_registro: "compra",
-          observaciones: "Precio registrado automáticamente desde compra.",
-        },
-      });
+      await completeOperation(tx, { clave: data.clave_operacion, idRegistro: newId });
+
+      return newId;
+    });
+  } catch (error) {
+    if (error instanceof PurchaseRejectedError) {
+      return fail(error.message, error.fieldErrors);
     }
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "compra",
-      id_registro_afectado: idCompra,
-      accion: "crear",
-      detalle: `Compra creada con ${data.items.length} material(es).`,
-      tx,
-    });
-  });
+    if (error instanceof IdempotencyConflictError) {
+      return fail(error.message);
+    }
+
+    throw error;
+  }
 
   revalidatePath("/dashboard/inventory");
   revalidatePath("/dashboard/inventory/materials");
   revalidatePath("/dashboard/inventory/purchases");
 
-  redirect("/dashboard/inventory/purchases?toast=purchase-created");
+  return {
+    status: "success",
+    data: { id_compra: idCompra, clave_operacion: data.clave_operacion },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 // C5 de la 11.2a: anular se pide desde la fila del listado o desde el detalle con

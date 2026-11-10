@@ -73,7 +73,7 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/inventory/purchases/new">Nueva compra</Link>
+            <Link href={withReturnTo(`${navigationHrefs.purchases}/new`, returnTo)}>Nueva compra</Link>
           </Button>
         }
       />

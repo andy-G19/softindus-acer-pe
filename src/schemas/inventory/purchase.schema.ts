@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+import { toDateInputValue } from "@/lib/date-range";
+import { operationKeySchema } from "@/schemas/operation-key.schema";
+
 function optionalText(max: number) {
   return z.preprocess(
     (value) => {
@@ -50,10 +53,16 @@ export const purchaseItemSchema = z.object({
 export const purchaseSchema = z.object({
   id_proveedor: z.string().trim().min(1, "Seleccione un proveedor."),
 
+  // Clave de idempotencia del formulario (11.2b).
+  clave_operacion: operationKeySchema,
+
+  // El valor de un input type="date": "aaaa-mm-dd" con una fecha que existe. Antes solo se
+  // exigia texto, y una fecha inexistente llegaba a Prisma (hallazgo 5 de la 11.2b).
   fecha_compra: z
     .string()
     .trim()
-    .min(1, "La fecha de compra es obligatoria."),
+    .min(1, "La fecha de compra es obligatoria.")
+    .refine((value) => !value || toDateInputValue(value) === value, "La fecha de compra no es válida."),
 
   tipo_comprobante: optionalEnum(["boleta", "factura", "recibo", "otro"]),
 

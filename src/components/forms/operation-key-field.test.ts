@@ -96,6 +96,21 @@ describe("OperationKeyField", () => {
     expect(other).not.toBe(first);
   });
 
+  // Hallazgo de la 11.2b (C3): con defaultValue="", React reescribia el valor del campo oculto
+  // en cada render del padre y borraba la clave; el formulario de compra renderiza con cada
+  // tecla, asi que enviaba la clave vacia.
+  it("conserva la clave cuando el formulario se vuelve a renderizar sin remontarse", async () => {
+    const first = (await mount("a")).value;
+
+    await act(async () => {
+      root.render(h(Fragment, { key: "a" }, h(OperationKeyField, { scope: SCOPE }), h("span", null, "otro render")));
+    });
+
+    const input = host.querySelector<HTMLInputElement>(`input[name="${OPERATION_KEY_FIELD}"]`);
+
+    expect(input?.value).toBe(first);
+  });
+
   it("sin sessionStorage disponible genera una clave por montaje", async () => {
     vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
       throw new Error("bloqueado");

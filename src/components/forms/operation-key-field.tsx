@@ -45,7 +45,10 @@ type OperationKeyFieldProps = {
 // Va dentro de ActionForm: cada respuesta remonta sus campos y el efecto vuelve
 // a decidir. El valor se escribe tras montar, no en el render, para que el HTML
 // del servidor y la hidratacion coincidan; un envio antes de hidratar llega sin
-// clave y el esquema lo rechaza. No entra en la galeria: no pinta nada.
+// clave y el esquema lo rechaza. El campo no lleva value ni defaultValue: en un
+// input oculto el valor es el atributo, y React lo reescribia con cada render del
+// formulario, borrando la clave (hallazgo de la 11.2b). No entra en la galeria:
+// no pinta nada.
 export function OperationKeyField({ scope, completedKey }: OperationKeyFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -63,5 +66,5 @@ export function OperationKeyField({ scope, completedKey }: OperationKeyFieldProp
     }
   }, [scope, completedKey]);
 
-  return <input ref={inputRef} type="hidden" name={OPERATION_KEY_FIELD} defaultValue="" />;
+  return <input ref={inputRef} type="hidden" name={OPERATION_KEY_FIELD} />;
 }

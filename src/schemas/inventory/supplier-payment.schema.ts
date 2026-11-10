@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { toCents } from "@/lib/decimal-cents";
+import { operationKeySchema } from "@/schemas/operation-key.schema";
 
 function optionalText(max: number) {
   return z.preprocess(
@@ -21,7 +22,7 @@ export const supplierPaymentSchema = z.object({
   id_compra: z.string().trim().min(1, "La compra es obligatoria."),
 
   // Clave de idempotencia del formulario (OperationKeyField, 11.2a).
-  clave_operacion: z.uuid({ error: "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo." }),
+  clave_operacion: operationKeySchema,
 
   fecha_pago: z
     .string()

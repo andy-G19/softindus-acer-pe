@@ -99,7 +99,7 @@ exports[`/dashboard/inventory/purchases > con una compra anulable > resultado 1`
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/inventory/purchases/new">Nueva compra</a>
+<a data-variant="default" href="/dashboard/inventory/purchases/new?returnTo=%2Fdashboard%2Finventory%2Fpurchases">Nueva compra</a>
 </div>
 </div>
 </section>
@@ -341,7 +341,7 @@ exports[`/dashboard/inventory/purchases > fechas no validas > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/inventory/purchases/new">Nueva compra</a>
+<a data-variant="default" href="/dashboard/inventory/purchases/new?returnTo=%2Fdashboard%2Finventory%2Fpurchases%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Nueva compra</a>
 </div>
 </div>
 </section>
@@ -584,7 +584,7 @@ exports[`/dashboard/inventory/purchases > rango invertido > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/inventory/purchases/new">Nueva compra</a>
+<a data-variant="default" href="/dashboard/inventory/purchases/new?returnTo=%2Fdashboard%2Finventory%2Fpurchases%3Ffrom%3D2026-07-31%26to%3D2026-07-01">Nueva compra</a>
 </div>
 </div>
 </section>
@@ -783,7 +783,7 @@ exports[`/dashboard/inventory/purchases > sin filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/inventory/purchases/new">Nueva compra</a>
+<a data-variant="default" href="/dashboard/inventory/purchases/new?returnTo=%2Fdashboard%2Finventory%2Fpurchases">Nueva compra</a>
 </div>
 </div>
 </section>
@@ -1106,7 +1106,7 @@ exports[`/dashboard/inventory/purchases > todos los filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/inventory/purchases/new">Nueva compra</a>
+<a data-variant="default" href="/dashboard/inventory/purchases/new?returnTo=%2Fdashboard%2Finventory%2Fpurchases%3Fq%3DF001%26supplier%3DPRV00000001%26material%3DMAT00000001%26status%3Dconfirmada%26payment%3Dpendiente%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Nueva compra</a>
 </div>
 </div>
 </section>
@@ -1751,7 +1751,7 @@ exports[`/dashboard/inventory/purchases/[id] > pendiente y sin pagos > resultado
 <div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_compra" value="id_compra-1"/>
-<input type="hidden" name="clave_operacion" value=""/>
+<input type="hidden" name="clave_operacion"/>
 <div>
 <div>
 <label for="fecha_pago">Fecha de pago<span aria-hidden="true">*</span>
@@ -1906,25 +1906,27 @@ exports[`/dashboard/inventory/purchases/new > formulario > resultado 1`] = `
 </div>
 </section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
 <section>
 <div>
 <div>
-<label for="id_proveedor-_R_m_">Proveedor *</label>
+<label for="id_proveedor">Proveedor *</label>
 <input type="hidden" name="id_proveedor" value=""/>
 <div>
-<input id="id_proveedor-_R_m_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-_R_m_-listbox" aria-expanded="false" required="" placeholder="Buscar proveedor..." value=""/>
+<input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" required="" placeholder="Buscar proveedor..." value=""/>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label>Fecha de compra *</label>
-<input type="date" required="" name="fecha_compra"/>
+<label for="fecha_compra">Fecha de compra<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_compra" required="" name="fecha_compra" value=""/>
 </div>
 <div>
-<label>Tipo comprobante</label>
-<select name="tipo_comprobante">
-<option value="">Sin comprobante</option>
+<label for="tipo_comprobante">Tipo comprobante</label>
+<select id="tipo_comprobante" name="tipo_comprobante">
+<option value="" selected="">Sin comprobante</option>
 <option value="boleta">Boleta</option>
 <option value="factura">Factura</option>
 <option value="recibo">Recibo</option>
@@ -1932,8 +1934,8 @@ exports[`/dashboard/inventory/purchases/new > formulario > resultado 1`] = `
 </select>
 </div>
 <div>
-<label>Nro. comprobante</label>
-<input placeholder="Ej. F001-000123" name="numero_comprobante"/>
+<label for="numero_comprobante">Nro. comprobante</label>
+<input id="numero_comprobante" placeholder="Ej. F001-000123" name="numero_comprobante" value=""/>
 </div>
 </div>
 <div>
@@ -1950,8 +1952,8 @@ exports[`/dashboard/inventory/purchases/new > formulario > resultado 1`] = `
 <p>Se activa automáticamente al elegir factura. Puedes cambiarlo en cualquier momento.</p>
 </div>
 <div>
-<label>Observaciones</label>
-<input placeholder="Observaciones generales de la compra" name="observaciones"/>
+<label for="observaciones">Observaciones</label>
+<input id="observaciones" placeholder="Observaciones generales de la compra" name="observaciones" value=""/>
 </div>
 </div>
 </section>
@@ -1967,40 +1969,43 @@ exports[`/dashboard/inventory/purchases/new > formulario > resultado 1`] = `
 <div>
 <div>
 <p>Material #1</p>
-<button data-variant="ghost" type="button">Quitar</button>
+<button data-variant="ghost" type="button" disabled="">Quitar</button>
 </div>
 <div>
 <div>
 <div>
-<label for="id_material-_R_1ba_">Material *</label>
+<label for="id_material-row-1">Material *</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
-<input id="id_material-_R_1ba_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-_R_1ba_-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
+<input id="id_material-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-row-1-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
 </div>
 <div>
-<label>Unidad *</label>
-<input required="" name="unidad_medida" value=""/>
+<label for="unidad_medida-row-1">Unidad<span aria-hidden="true">*</span>
+</label>
+<input id="unidad_medida-row-1" required="" name="unidad_medida" value=""/>
 </div>
 </div>
 <div>
 <div>
-<label>Cantidad *</label>
-<input type="number" step="0.01" min="0.01" required="" name="cantidad" value="1"/>
+<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-1" required="" step="0.01" min="0.01" name="cantidad" value="1"/>
 </div>
 <div>
-<label>Costo unitario *</label>
-<input type="number" step="0.01" min="0" required="" name="costo_unitario" value="0"/>
+<label for="costo_unitario-row-1">Costo unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario-row-1" required="" step="0.01" min="0" name="costo_unitario" value="0"/>
 </div>
 <div>
-<label>Subtotal</label>
-<div>S/ 0.00</div>
+<label for="subtotal-row-1">Subtotal</label>
+<output id="subtotal-row-1">S/ 0.00</output>
 </div>
 </div>
 <div>
-<label>Observacion del material</label>
-<input name="item_observaciones" value=""/>
+<label for="item_observaciones-row-1">Observación del material</label>
+<input id="item_observaciones-row-1" name="item_observaciones" value=""/>
 </div>
 </div>
 </div>
