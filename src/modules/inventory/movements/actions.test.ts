@@ -92,6 +92,21 @@ vi.mock("@/lib/correlatives-core", async (importOriginal) => {
 
       return formatCorrelativeId(params.prefijo, next);
     },
+    // La regla de alertas de stock (C4 de la 11.2c) reserva el id de la alerta con esta.
+    getNextCorrelativeIds: async (
+      _tx: unknown,
+      params: { codigoEntidad: string; prefijo: string; cantidad: number },
+    ) => {
+      recordEffect("getNextCorrelativeIds", params);
+
+      const last = mocks.correlatives.get(params.prefijo) ?? 0;
+
+      mocks.correlatives.set(params.prefijo, last + params.cantidad);
+
+      return Array.from({ length: params.cantidad }, (_, index) =>
+        formatCorrelativeId(params.prefijo, last + index + 1),
+      );
+    },
   };
 });
 
@@ -172,6 +187,7 @@ function materialRow(changes: Row = {}) {
     nombre_material: "Plancha LAC 2 mm",
     stock_actual: D("12.50"),
     stock_reservado: D("2.25"),
+    stock_minimo: D("1.00"),
     estado: true,
     ...changes,
   };
@@ -478,5 +494,124 @@ describe("C2 de la 11.2c: idempotencia de la salida", () => {
 
     expect(outcome).toMatchObject({ status: "error", error: "No tienes permisos para registrar salidas de inventario." });
     expect(calls.some((call) => "prisma" in call)).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C4 de la 11.2c (D16): la salida aplica la regla de alertas de stock
+// ---------------------------------------------------------------------------
+
+// La entrega a una orden abria o actualizaba la alerta de stock critico y la salida no
+// (hallazgo 3 de la 10.3a): una salida podia dejar un material bajo el minimo sin alerta. Ahora
+// aplica la misma regla, con el stock que calculo bajo el bloqueo del material: en el minimo o
+// por debajo abre la alerta o actualiza la activa; por encima atiende la activa. El mensaje
+// nombra la orden si la hay.
+describe("C4 de la 11.2c: la salida abre, actualiza o atiende la alerta de stock", () => {
+  const stock = (actual: string, minimo: string): DataOverrides => ({
+    $queryRaw: lockedRows(materialRow({ stock_actual: D(actual), stock_reservado: D("0.00"), stock_minimo: D(minimo) })),
+  });
+  const ACTIVA = { id_alerta: "ALE00000004" };
+
+  type Calls = Awaited<ReturnType<typeof runAction>>["calls"];
+
+  const alertCalls = (calls: Calls, kind: RegExp) =>
+    calls
+      .filter((call) => "prisma" in call && kind.test(call.prisma))
+      .map((call) => ({ prisma: (call as { prisma: string }).prisma, args: (call as { args: unknown }).args }));
+  const alertWrites = (calls: Calls) => alertCalls(calls, /^alerta_stock\.(create|update)/);
+
+  it("sin orden, deja el stock en el minimo: abre la alerta con el mensaje de la salida", async () => {
+    const { calls, outcome } = await runAction({
+      name: "salida al minimo",
+      form: form({ cantidad: "3.00" }),
+      data: { ...stock("8.00", "5.00"), "alerta_stock.findFirst": null },
+    });
+
+    expect(outcome).toMatchObject({ status: "success" });
+    expect(alertWrites(calls)).toEqual([
+      {
+        prisma: "alerta_stock.create",
+        args: {
+          data: {
+            id_alerta: "ALE00000001",
+            id_material: MATERIAL,
+            stock_detectado: 5,
+            stock_minimo: 5,
+            estado_alerta: "activa",
+            mensaje: "El material Plancha LAC 2 mm quedo en stock critico tras una salida de inventario.",
+          },
+        },
+      },
+    ]);
+  });
+
+  it("con orden, deja el stock bajo el minimo con una alerta activa: la actualiza con la orden", async () => {
+    const { calls } = await runAction({
+      name: "salida a una orden bajo el minimo",
+      form: form({ id_orden_trabajo: OT, cantidad: "3.00" }),
+      data: { ...stock("6.00", "5.00"), "orden_trabajo.findUnique": workOrderRow(), "alerta_stock.findFirst": ACTIVA },
+    });
+
+    expect(alertWrites(calls)).toEqual([
+      {
+        prisma: "alerta_stock.update",
+        args: {
+          where: { id_alerta: "ALE00000004" },
+          data: {
+            stock_detectado: 3,
+            stock_minimo: 5,
+            mensaje: `El material Plancha LAC 2 mm quedo en stock critico tras mover la orden ${OT}.`,
+          },
+        },
+      },
+    ]);
+  });
+
+  it("deja el stock por encima del minimo con una alerta activa: la atiende", async () => {
+    const { calls } = await runAction({
+      name: "salida por encima del minimo",
+      form: form({ cantidad: "3.00" }),
+      data: { ...stock("20.00", "5.00"), "alerta_stock.findFirst": ACTIVA },
+    });
+
+    expect(alertWrites(calls)).toEqual([
+      {
+        prisma: "alerta_stock.update",
+        args: {
+          where: { id_alerta: "ALE00000004" },
+          data: {
+            estado_alerta: "atendida",
+            fecha_atencion: expect.any(Date),
+            id_usuario_atencion: "USU00000001",
+            stock_detectado: 17,
+            mensaje: "El material Plancha LAC 2 mm recupero stock por encima del minimo.",
+          },
+        },
+      },
+    ]);
+  });
+
+  it("busca la alerta activa del material, dentro de la transaccion y despues del kardex", async () => {
+    const { calls } = await runAction({
+      name: "salida sin alerta",
+      form: form({ cantidad: "3.00" }),
+      data: { ...stock("20.00", "5.00"), "alerta_stock.findFirst": null },
+    });
+    const index = (name: string) => calls.findIndex((call) => "prisma" in call && call.prisma === name);
+
+    expect(alertCalls(calls, /^alerta_stock\./)).toEqual([
+      {
+        prisma: "alerta_stock.findFirst",
+        args: { where: { id_material: MATERIAL, estado_alerta: "activa" }, select: { id_alerta: true } },
+      },
+    ]);
+    expect(index("alerta_stock.findFirst")).toBeGreaterThan(index("movimiento_inventario.create"));
+    expect(index("alerta_stock.findFirst")).toBeLessThan(index("operacion_idempotente.updateMany"));
+  });
+
+  it("un rechazo por stock insuficiente no toca las alertas", async () => {
+    const { calls } = await runAction(findCase("stock disponible insuficiente: descuenta lo reservado"));
+
+    expect(alertCalls(calls, /^alerta_stock\./)).toEqual([]);
   });
 });

@@ -13,7 +13,9 @@ import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
 import { claimOperation, completeOperation, IdempotencyConflictError } from "@/lib/idempotency";
 import { APP_ROLES } from "@/lib/permissions";
+import { toNumber } from "@/lib/numbers";
 import { lockWorkOrderRow } from "@/lib/row-locks";
+import { syncStockAlert } from "@/modules/inventory/alerts/stock-alert-sync";
 import { operationKeySchema } from "@/schemas/operation-key.schema";
 
 type MaterialLockRow = {
@@ -21,6 +23,7 @@ type MaterialLockRow = {
   nombre_material: string;
   stock_actual: Prisma.Decimal;
   stock_reservado: Prisma.Decimal;
+  stock_minimo: Prisma.Decimal;
   estado: boolean;
 };
 
@@ -192,7 +195,7 @@ export async function createInventoryOutputAction(
       });
 
       const rows = await tx.$queryRaw<MaterialLockRow[]>(Prisma.sql`
-        SELECT id_material, nombre_material, stock_actual, stock_reservado, estado
+        SELECT id_material, nombre_material, stock_actual, stock_reservado, stock_minimo, estado
         FROM aceros.material
         WHERE id_material = ${data.id_material}
         FOR UPDATE
@@ -241,6 +244,17 @@ export async function createInventoryOutputAction(
         },
       });
 
+      // C4 de la 11.2c (D16): la misma regla de alertas que la entrega a una orden, con el
+      // stock calculado bajo el bloqueo del material (regla 5), no uno leido antes.
+      await syncStockAlert(tx, {
+        idMaterial: data.id_material,
+        materialName: material.nombre_material,
+        stockResultante: toNumber(stockResultante),
+        stockMinimo: toNumber(material.stock_minimo),
+        idOrdenTrabajo: data.id_orden_trabajo || null,
+        idUsuario: session.user.id,
+      });
+
       await registerAuditLog({
         userId: session.user.id,
         entidad_afectada: "movimiento_inventario",
@@ -271,6 +285,7 @@ export async function createInventoryOutputAction(
   revalidatePath("/dashboard/inventory");
   revalidatePath("/dashboard/inventory/materials");
   revalidatePath("/dashboard/inventory/outputs");
+  revalidatePath("/dashboard/inventory/alerts");
 
   return {
     status: "success",

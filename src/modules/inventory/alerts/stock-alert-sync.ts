@@ -21,6 +21,9 @@ import {
  *
  * Se resuelve la alerta cuando el stock vuelve por encima del minimo: sin esto, una
  * devolucion dejaria la alerta activa sobre un material que ya no esta en riesgo.
+ *
+ * idOrdenTrabajo es null en una salida de inventario sin orden (C4 de la 11.2c): el mensaje
+ * nombra la orden solo cuando la hay.
  */
 export async function syncStockAlert(
   tx: Pick<Prisma.TransactionClient, "alerta_stock"> &
@@ -30,7 +33,7 @@ export async function syncStockAlert(
     materialName: string;
     stockResultante: number;
     stockMinimo: number;
-    idOrdenTrabajo: string;
+    idOrdenTrabajo: string | null;
     idUsuario: string;
   },
 ) {
@@ -65,7 +68,10 @@ export async function syncStockAlert(
     return;
   }
 
-  const mensaje = `El material ${materialName} quedo en stock critico tras mover la orden ${params.idOrdenTrabajo}.`;
+  const origen = params.idOrdenTrabajo
+    ? `tras mover la orden ${params.idOrdenTrabajo}`
+    : "tras una salida de inventario";
+  const mensaje = `El material ${materialName} quedo en stock critico ${origen}.`;
 
   if (alertaActiva) {
     await tx.alerta_stock.update({

@@ -122,6 +122,10 @@ exports[`createInventoryOutputAction > clave repetida: responde con la salida gu
     "args": "/dashboard/inventory/outputs",
     "effect": "revalidatePath",
   },
+  {
+    "args": "/dashboard/inventory/alerts",
+    "effect": "revalidatePath",
+  },
 ]
 `;
 
@@ -202,7 +206,7 @@ exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimi
   },
   {
     "args": {
-      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, stock_minimo, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
       "values": [
         "MAT00000006",
       ],
@@ -235,6 +239,33 @@ exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimi
       },
     },
     "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000006",
+      },
+    },
+    "prisma": "alerta_stock.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+        "mensaje": "El material Plancha LAC 2 mm recupero stock por encima del minimo.",
+        "stock_detectado": 8.75,
+      },
+      "where": {
+        "id_alerta": "id_alerta-1",
+      },
+    },
+    "prisma": "alerta_stock.update",
   },
   {
     "args": {
@@ -272,6 +303,10 @@ exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimi
   },
   {
     "args": "/dashboard/inventory/outputs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/alerts",
     "effect": "revalidatePath",
   },
 ]
@@ -369,7 +404,7 @@ exports[`createInventoryOutputAction > el maestro de taller registra la salida i
   },
   {
     "args": {
-      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, stock_minimo, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
       "values": [
         "MAT00000006",
       ],
@@ -402,6 +437,33 @@ exports[`createInventoryOutputAction > el maestro de taller registra la salida i
       },
     },
     "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000006",
+      },
+    },
+    "prisma": "alerta_stock.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+        "mensaje": "El material Plancha LAC 2 mm recupero stock por encima del minimo.",
+        "stock_detectado": 8.75,
+      },
+      "where": {
+        "id_alerta": "id_alerta-1",
+      },
+    },
+    "prisma": "alerta_stock.update",
   },
   {
     "args": {
@@ -439,6 +501,10 @@ exports[`createInventoryOutputAction > el maestro de taller registra la salida i
   },
   {
     "args": "/dashboard/inventory/outputs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/alerts",
     "effect": "revalidatePath",
   },
 ]
@@ -499,7 +565,7 @@ exports[`createInventoryOutputAction > el material no existe: error en el campo 
   },
   {
     "args": {
-      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, stock_minimo, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
       "values": [
         "MAT00000006",
       ],
@@ -647,7 +713,7 @@ exports[`createInventoryOutputAction > material inactivo: error en el campo del 
   },
   {
     "args": {
-      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, stock_minimo, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
       "values": [
         "MAT00000006",
       ],
@@ -980,7 +1046,7 @@ exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra e
   },
   {
     "args": {
-      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, stock_minimo, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
       "values": [
         "MAT00000006",
       ],
@@ -1013,6 +1079,33 @@ exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra e
       },
     },
     "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000006",
+      },
+    },
+    "prisma": "alerta_stock.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+        "mensaje": "El material Plancha LAC 2 mm recupero stock por encima del minimo.",
+        "stock_detectado": 2.25,
+      },
+      "where": {
+        "id_alerta": "id_alerta-1",
+      },
+    },
+    "prisma": "alerta_stock.update",
   },
   {
     "args": {
@@ -1050,6 +1143,10 @@ exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra e
   },
   {
     "args": "/dashboard/inventory/outputs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/alerts",
     "effect": "revalidatePath",
   },
 ]
@@ -1137,7 +1234,7 @@ exports[`createInventoryOutputAction > stock disponible insuficiente: descuenta 
   },
   {
     "args": {
-      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, stock_minimo, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
       "values": [
         "MAT00000006",
       ],
@@ -1208,7 +1305,7 @@ exports[`createInventoryOutputAction > un error inesperado dentro de la transacc
   },
   {
     "args": {
-      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, stock_minimo, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
       "values": [
         "MAT00000006",
       ],

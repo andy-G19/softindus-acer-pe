@@ -23,6 +23,8 @@ vi.mock("next/cache", () => ({ revalidatePath: () => undefined }));
 
 const USUARIO = "USU00000001";
 const PLANCHA = "MAT00000001";
+const TUBO = "MAT00000002";
+const ANGULO = "MAT00000003";
 
 let prisma: PrismaClient;
 
@@ -51,10 +53,10 @@ beforeAll(async () => {
   });
 });
 
-function outputForm(cantidad: string, clave: string = randomUUID()) {
+function outputForm(cantidad: string, clave: string = randomUUID(), material: string = PLANCHA) {
   const formData = new FormData();
 
-  formData.set("id_material", PLANCHA);
+  formData.set("id_material", material);
   formData.set("id_orden_trabajo", "");
   formData.set("clave_operacion", clave);
   formData.set("cantidad", cantidad);
@@ -120,5 +122,59 @@ describe("salida de inventario en Postgres", () => {
     expect(await stockOf()).toBe(before);
     expect(await prisma.movimiento_inventario.count()).toBe(movimientosAntes);
     expect(await prisma.operacion_idempotente.count({ where: { clave } })).toBe(0);
+  });
+});
+
+// C4 de la 11.2c (D16): la salida aplica la regla de alertas de stock de la entrega a una orden.
+describe("alertas de stock tras una salida en Postgres", () => {
+  beforeAll(async () => {
+    await prisma.material.createMany({
+      data: [
+        { id_material: TUBO, nombre_material: "Tubo 2 pulgadas", categoria: "tubo", unidad_medida: "UND", stock_actual: "10", stock_minimo: "5" },
+        { id_material: ANGULO, nombre_material: "Angulo 1 pulgada", categoria: "angulo", unidad_medida: "UND", stock_actual: "20", stock_minimo: "5" },
+      ],
+    });
+  });
+
+  const activas = (idMaterial: string) =>
+    prisma.alerta_stock.findMany({
+      where: { id_material: idMaterial, estado_alerta: "activa" },
+      select: { stock_detectado: true, stock_minimo: true, mensaje: true },
+    });
+
+  it("al llegar al minimo abre la alerta y una segunda salida actualiza la misma", async () => {
+    expect(await createInventoryOutputAction({ status: "idle" }, outputForm("5", randomUUID(), TUBO))).toMatchObject({ status: "success" });
+
+    const [abierta, ...otras] = await activas(TUBO);
+
+    expect(otras).toEqual([]);
+    expect([abierta.stock_detectado.toFixed(2), abierta.stock_minimo.toFixed(2), abierta.mensaje]).toEqual([
+      "5.00",
+      "5.00",
+      "El material Tubo 2 pulgadas quedo en stock critico tras una salida de inventario.",
+    ]);
+
+    expect(await createInventoryOutputAction({ status: "idle" }, outputForm("1.5", randomUUID(), TUBO))).toMatchObject({ status: "success" });
+
+    const despues = await activas(TUBO);
+
+    expect(despues.map((alerta) => alerta.stock_detectado.toFixed(2))).toEqual(["3.50"]);
+  });
+
+  it("por encima del minimo atiende la alerta activa que hubiera", async () => {
+    await prisma.alerta_stock.create({
+      data: { id_alerta: "ALE00000900", id_material: ANGULO, stock_detectado: "4", stock_minimo: "5", mensaje: "Alerta previa" },
+    });
+
+    expect(await createInventoryOutputAction({ status: "idle" }, outputForm("2", randomUUID(), ANGULO))).toMatchObject({ status: "success" });
+
+    const alerta = await prisma.alerta_stock.findUniqueOrThrow({ where: { id_alerta: "ALE00000900" } });
+
+    expect([alerta.estado_alerta, alerta.stock_detectado.toFixed(2), alerta.id_usuario_atencion, alerta.fecha_atencion !== null]).toEqual([
+      "atendida",
+      "18.00",
+      USUARIO,
+      true,
+    ]);
   });
 });
