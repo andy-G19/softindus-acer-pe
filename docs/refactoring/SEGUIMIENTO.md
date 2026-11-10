@@ -7920,7 +7920,7 @@ Datos leídos de la API de GitHub el 2026-11-10 (UTC) y comparados con git:
 
 ### Sub-entrega 11.2a — Pago a proveedor y anulación de compra
 
-Fecha: 2026-11-10 (Lima). Estado: preparada en `staging` (C0 a C7), sin publicar. Plan en
+Fecha: 2026-11-10 (Lima). Estado: verificada en staging, pendiente de integrar en `main`. Plan en
 `tmp/e11-diff/plan-11-2.md`, con las decisiones D10 a D15 aprobadas: partir la 11.2 en a, b y
 c (D10), montos en céntimos exactos (D11), clave de operación del formulario (D12),
 `lockPurchaseRow` (D13), anular compra con `ConfirmActionButton` (D14) y paginar los pagos
@@ -7940,7 +7940,9 @@ registro y solo se renueva cuando el servidor confirma esa misma clave.
 | 1f1199a | feat | El pago en su sección del detalle: `FormActionState`, `getAuthorizedSession`, `ActionForm` y un solo aviso; `claimOperation` como primera sentencia; `OperationKeyField`; el esquema rechaza montos que se guardarían como 0.00 (hallazgo 6). |
 | 101492c | feat | Anular compra con `ConfirmActionButton` y `RowStatusState` en el listado y en el detalle: el rechazo dice por qué (hallazgo 4). Salen 2 usos de `ConfirmDeleteButton`. |
 | b369472 | feat | Los pagos a proveedores se paginan como Compras, con orden completo (hallazgo 5 de la 10.3c). |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 2e6f0f8 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 529cd46 | fix | El pago que salda la compra da su aviso: el detalle renderiza siempre el componente del pago (hallazgo 9, de la verificación en staging). |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -7985,7 +7987,7 @@ Métricas:
 
 | Métrica | Antes | Después |
 |---|---|---|
-| Archivos de prueba / pruebas aprobadas | 253 / 4.644 | 259 / 4.707 |
+| Archivos de prueba / pruebas aprobadas | 253 / 4.644 | 260 / 4.711 |
 | Pruebas contra Postgres real (archivos / pruebas) | 3 / 14 | 4 / 20 |
 | Acciones con clave de operación | 0 | 1 |
 | Pruebas del pago a proveedor | 0 | 53 (acción, saldo, formulario, campo de la clave y Postgres) |
@@ -8016,6 +8018,44 @@ Hallazgos:
 8. En las pruebas, `Prisma.sql` guarda el texto con `?` en `.sql` y con `$1` en `.text`; el arnés
    usa `.text`. Una prueba roja de C3 leyó la propiedad equivocada; el SQL del bloqueo siempre fue
    el correcto. Sin acción.
+9. Verificación en staging: el pago que salda la compra no daba aviso. La misma respuesta trae
+   el éxito y el detalle repintado sin saldo; el detalle dejaba de renderizar el formulario y su
+   efecto no llegaba a dar el aviso (la familia del hallazgo 95 de la 10.8b: un componente que
+   desaparece con su propio resultado). Corregido en `529cd46`: el detalle renderiza siempre el
+   componente y le dice con `canPay` si muestra el formulario. Rojo antes: el formulario no ocultaba
+   nada y el detalle pagado o anulado no lo renderizaba. Mutaciones 3 de 3.
+10. Verificación en staging: anular desde el detalle deja el foco en `body`. El botón desaparece y
+    la cabecera no tiene fila ni tabla a la que `ConfirmActionButton` mande el foco. Destino: 11.7.
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 8 commits (hasta `2e6f0f8`): CI #151 en verde en 3:15; Vercel desplegó staging
+   (16:33 UTC). Sin migraciones.
+2. Con ADMIN (origen y sesión comprobados en llamadas aparte), solo lecturas: la lista de pagos
+   dice «Mostrando 1-1 de 1 pagos · Página 1 de 1»; el detalle de COM00000005 muestra el saldo
+   S/ 8518.00 con `max="8518.00"` y las etiquetas unidas a su campo; la clave de operación aparece
+   al hidratar, coincide con `sessionStorage` y sobrevive a una recarga; la confirmación de anular
+   COM00000008 nombra la compra y la consecuencia, y se cerró sin anular. Hallazgo 2: la única
+   compra «parcial» de staging (COM00000005) tiene saldo; ninguna quedó con saldo 0.
+3. Escrituras autorizadas por el responsable, con el material de prueba «PRUEBA E1 PLANCHA»
+   (MAT00000010, stock 2.00 al empezar):
+
+   | Paso | Resultado |
+   |---|---|
+   | Compra A, S/ 100.30 | COM00000010; entrada MVI00000066 |
+   | Pago de 50.10 | un aviso, queda en el detalle, saldo S/ 50.20 «parcial», campo vacío y clave nueva (`a984d770` a `b930a896`) |
+   | Pago de 50.21 | lo detiene el navegador (`max="50.20"`): nada escrito, la misma clave |
+   | Pago de 50.20 (hallazgo 1) | aceptado: «pagado», saldo S/ 0.00, sin formulario; **sin aviso** (hallazgo 9) |
+   | Anular A con pagos | no se puede pedir desde la pantalla: ni el listado ni el detalle ofrecen «Anular» |
+   | Compra B, S/ 10.00, y anularla desde su detalle | COM00000011; un aviso «Compra anulada», queda en el detalle «ANULADA»; salida de reversión MVI00000068 y stock de 4.00 a 3.00 |
+
+4. Arreglo del hallazgo 9 (`529cd46`): CI #152 en verde; Vercel desplegó staging (17:14 UTC).
+   Con autorización, la compra C (COM00000012, S/ 5.00, «PRUEBA E112A aviso») y un pago de S/ 5.00
+   que la salda: el aviso «Pago a proveedor registrado correctamente» aparece a los 1,2 s, la compra
+   queda «pagado» con saldo S/ 0.00 y sin formulario. La clave guardada no se renueva porque el
+   campo ya no se monta; la compra no admite más pagos.
+5. Datos de prueba que quedan en staging: COM00000010 (pagada con 2 pagos), COM00000011 (anulada),
+   COM00000012 (pagada con 1 pago); «PRUEBA E1 PLANCHA» con stock 4.00 y costo S/ 5.00.
 
 ## Secuencia de próximas entregas
 
@@ -8042,7 +8082,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a preparada en `staging` (C0 a C7), pendiente de publicar y verificar |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a verificada en staging (CI #151 y #152), pendiente de integrar en `main` |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
@@ -8065,7 +8105,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 259 / 4.707 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 260 / 4.711 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -8474,7 +8514,7 @@ Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de
 `FieldError` en 6; y los cambios de estado que voltean en 2.
 
-Actualizado en la sub-entrega 11.2a (2026-11-10) sobre `b369472`: pruebas 259 / 4.707, de ellas
+Actualizado en la sub-entrega 11.2a (2026-11-10) sobre `b369472` (pruebas 260 / 4.711 tras `529cd46`): pruebas 259 / 4.707, de ellas
 20 contra Postgres en 4 archivos. Filas nuevas: acciones con clave de operación (0 a 1),
 operaciones que deciden sobre una compra sin bloquearla (2 a 0) y saldos de pago calculados con
 `number` (2 a 0); sus líneas base se midieron sobre `972b920`. `ConfirmDeleteButton` baja de 9 a
