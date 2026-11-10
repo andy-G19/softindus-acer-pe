@@ -7742,6 +7742,127 @@ Lecciones que pasan a la entrega 11, además de las de cada sub-entrega:
   38 de la 10.6b, 97 de la 10.8b).
 - Una predicción de montos usa lo que la base guarda (hallazgo 98).
 
+## Entrega 11 — Operaciones críticas con integración e idempotencia
+
+Plan aprobado el 2026-11-09 con cuatro decisiones:
+
+- D1. Las pruebas de integración corren contra PGlite (Postgres 17 en WebAssembly, en memoria):
+  sin red, sin Docker y sin Supabase, dentro de `npm test` y del CI.
+- D2. Una tabla genérica de idempotencia, `operacion_idempotente`, para todas las operaciones
+  que la necesiten.
+- D3. Sub-entregas en este orden: 11.1 base de integración, los 5 reportes que faltaban en la
+  paridad e idempotencia; 11.2 Inventario (compras, pagos a proveedores y salidas); 11.3
+  Comercial (proformas, comprobantes, pagos y cancelar pedido); 11.4 Caja chica y venta de
+  chatarra; 11.5 planillas y su pago, sin tocar la tarifa; 11.6a y 11.6b órdenes de trabajo y
+  avances; 11.7 consolidación (retirar `ConfirmDeleteButton`, `showConfirm`, SweetAlert2,
+  `StatusBadge`, `RowToggleStatusButton` y el CSS heredado; las 15 copias de `formatDecimal`;
+  `error.tsx`). El destino de cada hallazgo abierto de la entrega 10 está en «Hallazgos
+  abiertos y su destino» de su cierre.
+- D4. Se conserva el contrato `?toast=`.
+
+### Sub-entrega 11.1 — Base de integración, paridad de reportes e idempotencia
+
+Fecha: 2026-11-09 (Lima). Estado: preparada en `staging` (C1 a C9), sin publicar. Plan en
+`tmp/e11-diff/plan-11-1.md`, con las decisiones D5 a D9 aprobadas: corregir la lectura de
+filtros de 6 reportes (D5), un solo cálculo del estado de cobranza (D6), clave UUID sin
+correlativo (D7), el ayudante de idempotencia en la 11.1 aunque su primer consumidor sea la
+11.2 (D8) y las pruebas de integración dentro de `npm test` (D9).
+
+Antes del plan, dos sondas fuera del código (`tmp/e11-diff/sonda`, ignorada) comprobaron que el
+cliente Prisma real corre contra PGlite dentro de Vitest y que `prisma migrate diff` compara
+una base PGlite con `schema.prisma`.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| af87413 | chore | `@electric-sql/pglite` 0.4.1 y `pglite-socket` 0.1.1 como dependencias de desarrollo, con versión exacta (antes llegaban solo a través de Prisma). |
+| 07c8100 | test | Proyectos `unit` e `integration` en Vitest; `test-database.ts` (PGlite con las migraciones, socket en el puerto 0, `PrismaPg` con `max: 1`); `integration-setup.ts` (`@/lib/db` y `server-only`); 6 pruebas de correlativos en Postgres, incluido el rollback que libera el número. |
+| f2ac3d5 | test | Las migraciones construyen exactamente `schema.prisma`, salvo la diferencia conocida `uq_version_receta_vigente`. |
+| 299d167 | test | `screen-parity.test.ts` cubre los 5 reportes que faltaban (25 casos) y falla si una consulta principal no se encuentra en uno de los lados. |
+| 69bbbbf | fix | Las páginas de producción, inventario, ventas y cobranzas, proveedores y compras, financiero y mantenimiento leen sus filtros con `parseStringParam`, como la exportación (12 casos rojos antes). |
+| a881c5a | refactor | `collection-status.ts`: la cobranza de un pedido y su filtro, una sola vez para la página y el exportador. |
+| ab48505 | feat | Modelo y migración `20261109201052_add_operacion_idempotente`; el esquema pasa a 63 modelos. |
+| 650bc45 | feat | `claimOperation`, `completeOperation` e `IdempotencyConflictError` en `src/lib/idempotency.ts`, con 7 pruebas en Postgres. |
+| (este) | docs | Registro de la sub-entrega y `CLAUDE.md`. |
+
+Diseño:
+
+- Una base PGlite por archivo de prueba, creada al primer uso y cerrada en `afterAll`. Antes de
+  migrar fija `TIME ZONE 'UTC'` y `search_path = aceros`: la primera migración crea sus tablas
+  sin nombrar el esquema. Si una migración falla, el error la nombra.
+- El servidor de socket atiende todas las conexiones con un solo backend; por eso el pool tiene
+  una conexión. No se puede probar concurrencia real (R1): las pruebas lo dicen en su encabezado.
+- La prueba de migraciones escribe su propia configuración de Prisma en una carpeta temporal (la
+  de la raíz importa `dotenv` y leería el `.env`) y arranca el CLI con `spawn` asíncrono y un
+  entorno mínimo: `spawnSync` bloquearía el socket que atiende el mismo proceso.
+- La tabla `operacion_idempotente` es técnica, como `login_attempt`: la clave UUID nace en el
+  formulario. `id_registro_resultado` no tiene FK porque la tabla es genérica; el índice por
+  fecha sirve para limpiar claves viejas. La migración solo crea objetos nuevos.
+- `claimOperation` reclama con `createManyAndReturn` y `skipDuplicates` (`INSERT ... ON CONFLICT
+  DO NOTHING`): una clave repetida no aborta la transacción. Va primera en la transacción, antes
+  de bloqueos y correlativos.
+
+Evidencia:
+
+1. Rojo antes de cada `fix` y `feat`: C5 con 12 casos (201 caracteres e id con espacios, 2 por
+   reporte); C7 con la prueba de migraciones (el modelo sin su `CREATE TABLE`); C8 con el módulo
+   ausente.
+2. Mutaciones: C2 5 de 5, C3 2 de 2, C4 4 de 4, C6 3 de 3 (cada una rompe a la vez la prueba
+   unitaria, la página y la exportación), C7 3 de 3 y C8 6 de 6; en total, 23 de 23.
+3. Ningún snapshot cambió en C5 ni en C6.
+4. CSS compilado igual byte a byte en cada commit (112.316 bytes). En C6 salió `.\!filter`
+   antes del commit; se renombró el parámetro.
+5. `npm run check` terminó con código 0 antes de cada commit, hasta 4.644 pruebas en 253
+   archivos; las 14 de integración tardan unos 6 s.
+
+Tiempo: de C1 a C8, entre las 13:20 y las 18:26 (Lima), con las esperas al responsable dentro,
+frente a 6 horas estimadas con la verificación en staging.
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 249 / 4.586 | 253 / 4.644 |
+| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 3 / 14 |
+| Reportes con la paridad de filtro probada | 4 de 9 (19 casos) | 9 de 9 (56 casos) |
+| Páginas de reporte que leen sus filtros distinto que su exportación | 6 | 0 |
+| Cálculos del estado de cobranza (pantalla y exportación) | 2 | 1 |
+| Migraciones | 19 | 20 |
+
+Hallazgos:
+
+1. Financiero: la pantalla suma «Ingresos/Egresos caja chica» y «Compras por pagar» sobre listas
+   cortadas en 100 filas; la exportación, sobre hasta 5.000. Con más de 100 filas los totales
+   difieren. Destino: 11.4.
+2. Seis páginas de reporte no recortaban ni cortaban sus filtros como su exportación: un id con
+   espacios dejaba la pantalla vacía y el archivo con filas. La métrica de G4 («0 de 9») se midió
+   con filtros normales. Corregido en `69bbbbf` (D5).
+3. El estado de cobranza se calculaba dos veces. Corregido en `a881c5a` (D6).
+4. `uq_version_receta_vigente` no está modelado en `schema.prisma`. Sin acción: la prueba de
+   migraciones lo lista con su motivo.
+5. Quedan 15 copias locales de `getSearchParam` en páginas que no exportan (listas de Comercial,
+   Inventario, Mantenimiento, Producción, Personal, Caja chica y el historial de exportaciones).
+   No hay paridad que romper. Destino: 11.7.
+6. `prisma format --check` ya fallaba antes de la 11.1 (alineación en `etapa_ruta` y otros
+   modelos); las líneas nuevas están formateadas. Destino: 11.7.
+7. `npm install` avisa `EBADENGINE`: `@prisma/streams-local` (de Prisma 7.8) pide Node 22 y el
+   proyecto y el CI usan Node 20. No se usa. Decisión pendiente: subir a Node 22.
+8. `npm audit` informa 48 vulnerabilidades en el árbol de dependencias. No se evaluaron ni se
+   aplicó `npm audit fix`. Tarea aparte.
+9. C1: el primer `npm run check` falló por el tiempo de `versions-confirmation.test.ts` con la
+   máquina cargada (hallazgo 42 de la 10.7b); sola pasa en 1,5 s. No se tocó.
+
+#### Publicación, CI y verificación en staging
+
+Pendiente. Pasos previstos:
+
+1. Push a `staging` y CI en verde, anotando su duración (primera vez con PGlite en Ubuntu).
+2. El responsable ejecuta `npx prisma migrate status` contra staging (debe mostrar 1
+   pendiente), `npx prisma migrate deploy` y otra vez `status`.
+3. Con ADMIN, abrir los 5 reportes con filtros y un filtro con espacios alrededor; sin exportar
+   salvo permiso (exportar escribe en `exportacion_datos` y en la bitácora).
+4. Antes del PR a `main`: `migrate status` y `migrate deploy` contra producción, por el
+   responsable.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -7767,7 +7888,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Siguiente |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 preparada en `staging` (C1 a C9), pendiente de publicar y verificar |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
@@ -7790,7 +7911,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 249 / 4.586 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 253 / 4.644 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -7802,6 +7923,10 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Escrituras del kárdex que anotan un stock leído antes de escribir | 2 | 0 | G2 |
 | Defectos del puente `?toast=` fijados por la caracterización / entradas declaradas sin emisor | 3 / 1 | 0 / 0 | G3 |
 | Reportes cuyo enlace de exportación filtra distinto que su pantalla | 4 de 9 | 0 de 9 | G4 |
+| Reportes con la paridad de filtro probada en `screen-parity.test.ts` | 0 de 9 | 9 de 9 | G4 y 11 |
+| Páginas de reporte que leen sus filtros distinto que su exportación (medido en la 11.1) | 6 | 0 | 11 |
+| Cálculos del estado de cobranza (pantalla y exportación) | 2 | 1 | 11 |
+| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 3 / 14 | 11 |
 | Nombres de parámetro que la exportación acepta sin que ninguna pantalla los genere | 17 | 0 | G4 |
 | Enlaces a `/api/` con `next/link` (su prefetch ejecuta la ruta) | 6 | 0 | G4 |
 | Colores literales en los `.tsx` de la interfaz | 25 | 0 (regla de ESLint) | 8 |
