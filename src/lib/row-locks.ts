@@ -121,6 +121,26 @@ export async function lockPreventiveMaintenanceRow(tx: RowLockClient, idMantenim
   `);
 }
 
+// Comercial (11.3a): el pedido antes que su proforma. Crear proforma bloquea el pedido; el pago
+// y anular proforma bloquean la proforma.
+export async function lockOrderRow(tx: RowLockClient, idPedido: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_pedido
+    FROM aceros.pedido
+    WHERE id_pedido = ${idPedido}
+    FOR NO KEY UPDATE
+  `);
+}
+
+export async function lockQuoteRow(tx: RowLockClient, idProforma: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_proforma
+    FROM aceros.proforma
+    WHERE id_proforma = ${idProforma}
+    FOR NO KEY UPDATE
+  `);
+}
+
 export async function lockPurchaseRow(tx: RowLockClient, idCompra: string) {
   await tx.$queryRaw(Prisma.sql`
     SELECT id_compra

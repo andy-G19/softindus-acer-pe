@@ -7,6 +7,7 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
 } from "@/testing/page-characterization";
 
@@ -197,7 +198,7 @@ characterize("createQuoteAction", createQuoteAction, { "pedido.findUnique": orde
     },
   },
   {
-    name: "el pedido esta cancelado: hoy se acepta (hallazgo 3 de la 11.3a)",
+    name: "el pedido esta cancelado: se rechaza (D29)",
     form: quoteForm(),
     data: { "pedido.findUnique": orderRow({ estado: "cancelado" }) },
   },
@@ -305,5 +306,75 @@ describe("C2 de la 11.3a: los montos de la proforma redondeados como las columna
     expect(outcome).toBe("error: El adelanto debe ser cero o de al menos S/ 0.01.");
     expect(dataOf(calls, "proforma.create")).toBeUndefined();
     expect(dataOf(calls, "pago_cliente.create")).toBeUndefined();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C3 de la 11.3a (hallazgos 3 y 4, D26 y D29): decidir con la fila bloqueada
+// ---------------------------------------------------------------------------
+
+// Crear proforma leia el pedido y su proforma activa fuera de la transaccion: dos altas
+// simultaneas podian dejar dos proformas activas, y cancelar el pedido a la vez dejaba un pedido
+// cancelado con proforma. Tampoco miraba el estado del pedido: un formulario abierto antes de
+// cancelarlo creaba la proforma. Anular leia pagos y comprobantes fuera de la transaccion y
+// escribia la anulacion y su bitacora con el cliente global: un pago simultaneo podia quedar en
+// una proforma anulada. Ahora el pedido (al crear) y la proforma (al anular) se bloquean dentro
+// de la transaccion antes de leer lo que decide. El rechazo visible no cambia todavia (C4 y C6).
+describe("C3 de la 11.3a: proformas que deciden con la fila bloqueada", () => {
+  type Calls = Awaited<ReturnType<typeof run>>["calls"];
+
+  const reads = (name: string) => (call: { prisma: string }) => call.prisma === name;
+  const writes = (calls: Calls) =>
+    calls.filter((call) => "prisma" in call && /\.(create|update|updateMany)$/.test(call.prisma));
+
+  it("crear bloquea el pedido antes de leerlo, dentro de la transaccion", async () => {
+    const { calls, outcome } = await run(createQuoteAction, { name: "C3", form: quoteForm() }, { "pedido.findUnique": orderRow() });
+
+    expect(outcome).toBe("redirect:/dashboard/commercial/quotes?toast=quote-created");
+    expectRowLockedBefore(calls, { table: "pedido", id: PEDIDO, reads: reads("pedido.findUnique") });
+  });
+
+  it.each(["cancelado", "anulado", "entregado"])("crear rechaza un pedido %s sin escribir (D29)", async (estado) => {
+    const { calls, outcome } = await run(
+      createQuoteAction,
+      { name: "C3", form: quoteForm() },
+      { "pedido.findUnique": orderRow({ estado }) },
+    );
+
+    expect(outcome).toBe("error: Solo se puede generar la proforma de un pedido registrado o aprobado.");
+    expect(writes(calls)).toEqual([]);
+  });
+
+  it("crear acepta un pedido aprobado", async () => {
+    const { outcome } = await run(
+      createQuoteAction,
+      { name: "C3", form: quoteForm() },
+      { "pedido.findUnique": orderRow({ estado: "aprobado" }) },
+    );
+
+    expect(outcome).toBe("redirect:/dashboard/commercial/quotes?toast=quote-created");
+  });
+
+  it("anular bloquea la proforma antes de leerla y escribe dentro de la transaccion", async () => {
+    const { calls, outcome } = await run(annulQuoteAction, { name: "C3", form: annulForm() }, { "proforma.findUnique": quoteRow() });
+
+    expect(outcome).toBe("redirect:/dashboard/commercial/quotes?toast=quote-annulled");
+    expectRowLockedBefore(calls, { table: "proforma", id: PROFORMA, reads: reads("proforma.findUnique") });
+    expect(writes(calls).map((call) => ("fueraDeTransaccion" in call ? "fuera" : "dentro"))).toEqual(["dentro"]);
+    expect(calls.find((call) => "effect" in call && call.effect === "registerAuditLog")).toMatchObject({
+      args: { enTransaccion: true },
+    });
+  });
+
+  it("anular con pagos sigue volviendo al detalle, ahora sin escribir y con la fila bloqueada", async () => {
+    const { calls, outcome } = await run(
+      annulQuoteAction,
+      { name: "C3", form: annulForm() },
+      { "proforma.findUnique": quoteRow({ pago_cliente: [{ id_pago_cliente: "PCL00000002" }] }) },
+    );
+
+    expect(outcome).toBe(`redirect:/dashboard/commercial/quotes/${PROFORMA}`);
+    expectRowLockedBefore(calls, { table: "proforma", id: PROFORMA, reads: reads("proforma.findUnique") });
+    expect(writes(calls)).toEqual([]);
   });
 });

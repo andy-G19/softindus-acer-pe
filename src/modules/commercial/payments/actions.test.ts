@@ -7,6 +7,7 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
 } from "@/testing/page-characterization";
 
@@ -213,5 +214,27 @@ describe("C2 de la 11.3a: el pago redondeado como las columnas", () => {
 
     expect(outcome).toBe("error: El monto pagado debe ser mayor que cero.");
     expect(calls.some((call) => "effect" in call && call.effect === "prisma.$transaction")).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C3 de la 11.3a (hallazgo 5, D26): el pago decide con la proforma bloqueada
+// ---------------------------------------------------------------------------
+
+// El pago leia la proforma dentro de la transaccion pero sin bloquearla: dos pagos simultaneos
+// leian el mismo saldo y entre los dos podian superarlo, y una anulacion simultanea no los
+// ponia en fila. Ahora la proforma se bloquea antes de leer su saldo y su estado.
+describe("C3 de la 11.3a: el pago decide con la proforma bloqueada", () => {
+  it.each([
+    ["un pago aceptado", {}],
+    ["un pago rechazado por superar el saldo", { monto_pagado: "100.25" }],
+  ])("%s bloquea la proforma antes de leerla", async (_name, changes) => {
+    const { calls } = await runAction({ name: "C3", form: form(changes) });
+
+    expectRowLockedBefore(calls, {
+      table: "proforma",
+      id: PROFORMA,
+      reads: (call) => call.prisma === "proforma.findUnique",
+    });
   });
 });

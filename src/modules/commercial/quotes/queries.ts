@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { QUOTABLE_ORDER_STATES } from "@/modules/commercial/quotes/quote-rules";
 import { buildDateRangeFilter } from "@/lib/search-params";
 import { findClientFilterOptions } from "@/modules/commercial/clients/queries";
 import { findOrderFilterOptions } from "@/modules/commercial/orders/queries";
@@ -139,7 +140,7 @@ export async function getQuotableOrders() {
   return prisma.pedido.findMany({
     where: {
       estado: {
-        in: ["registrado", "aprobado"],
+        in: QUOTABLE_ORDER_STATES,
       },
       detalle_pedido: {
         some: {},

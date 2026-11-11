@@ -8,6 +8,7 @@ import { calculateClientPayment, hasCents } from "@/lib/client-payment-amounts";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockQuoteRow } from "@/lib/row-locks";
 import { paymentSchema } from "@/schemas/commercial/payment.schema";
 
 function emptyToNull(value: FormDataEntryValue | null) {
@@ -36,6 +37,10 @@ export async function createPaymentAction(formData: FormData) {
   const { id_proforma, monto_pagado, metodo_pago, tipo_pago } = parsed.data;
 
   await prisma.$transaction(async (tx) => {
+    // C3 de la 11.3a (hallazgo 5): la proforma se bloquea antes de leer su saldo y su estado,
+    // asi dos pagos o un pago y una anulacion simultaneos van en fila.
+    await lockQuoteRow(tx, id_proforma);
+
     const quote = await tx.proforma.findUnique({
       where: {
         id_proforma,

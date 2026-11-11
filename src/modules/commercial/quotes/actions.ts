@@ -8,6 +8,11 @@ import { calculateQuoteAmounts } from "@/lib/client-payment-amounts";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockOrderRow, lockQuoteRow } from "@/lib/row-locks";
+import {
+  NOT_QUOTABLE_ORDER_MESSAGE,
+  QUOTABLE_ORDER_STATES,
+} from "@/modules/commercial/quotes/quote-rules";
 import { quoteSchema } from "@/schemas/commercial/quote.schema";
 
 const QUOTES_PATH = "/dashboard/commercial/quotes";
@@ -39,64 +44,74 @@ export async function createQuoteAction(formData: FormData) {
     throw new Error(parsed.error.issues[0]?.message ?? "Datos inválidos.");
   }
 
-  const order = await prisma.pedido.findUnique({
-    where: {
-      id_pedido: parsed.data.id_pedido,
-    },
-    include: {
-      detalle_pedido: {
-        select: {
-          subtotal: true,
-        },
+  await prisma.$transaction(async (tx) => {
+    // C3 de la 11.3a (hallazgos 3 y 4): el pedido se bloquea y se lee dentro de la transaccion,
+    // asi dos altas simultaneas, o un alta y cancelar el pedido, van en fila. Un rechazo lanza
+    // antes de escribir y la transaccion no deja nada.
+    await lockOrderRow(tx, parsed.data.id_pedido);
+
+    const order = await tx.pedido.findUnique({
+      where: {
+        id_pedido: parsed.data.id_pedido,
       },
-      proforma: {
-        where: {
-          estado: {
-            in: ["vigente", "aceptada", "pagada"],
+      include: {
+        detalle_pedido: {
+          select: {
+            subtotal: true,
           },
         },
-        select: {
-          id_proforma: true,
-          numero_proforma: true,
-          estado: true,
+        proforma: {
+          where: {
+            estado: {
+              in: ["vigente", "aceptada", "pagada"],
+            },
+          },
+          select: {
+            id_proforma: true,
+            numero_proforma: true,
+            estado: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!order) {
-    throw new Error("El pedido seleccionado no existe.");
-  }
+    if (!order) {
+      throw new Error("El pedido seleccionado no existe.");
+    }
 
-  if (order.detalle_pedido.length === 0) {
-    throw new Error("El pedido no tiene productos asociados.");
-  }
+    // D29: solo un pedido registrado o aprobado, el mismo criterio de la lista del formulario.
+    if (!QUOTABLE_ORDER_STATES.includes(order.estado)) {
+      throw new Error(NOT_QUOTABLE_ORDER_MESSAGE);
+    }
 
-  if (order.proforma.length > 0) {
-    throw new Error(
-      `Este pedido ya tiene una proforma activa: ${order.proforma[0].numero_proforma}.`
-    );
-  }
+    if (order.detalle_pedido.length === 0) {
+      throw new Error("El pedido no tiene productos asociados.");
+    }
 
-  // C2 de la 11.3a (hallazgo 1): total, adelanto y saldo en centimos, redondeados como las
-  // columnas (client-payment-amounts.ts).
-  const amounts = calculateQuoteAmounts({
-    subtotals: order.detalle_pedido.map((detail) => detail.subtotal),
-    advance: parsed.data.adelanto_inicial,
-  });
+    if (order.proforma.length > 0) {
+      throw new Error(
+        `Este pedido ya tiene una proforma activa: ${order.proforma[0].numero_proforma}.`,
+      );
+    }
 
-  if (!amounts.accepted) {
-    throw new Error(
-      amounts.reason === "sin_total"
-        ? "El monto total de la proforma debe ser mayor que cero."
-        : "El adelanto inicial no puede ser mayor que el monto total.",
-    );
-  }
+    // C2 de la 11.3a (hallazgo 1): total, adelanto y saldo en centimos, redondeados como las
+    // columnas (client-payment-amounts.ts).
+    const amounts = calculateQuoteAmounts({
+      subtotals: order.detalle_pedido.map((detail) => detail.subtotal),
+      advance: parsed.data.adelanto_inicial,
+    });
 
-  const adelantoInicial = amounts.advance;
-  const saldo = amounts.balance;
+    if (!amounts.accepted) {
+      throw new Error(
+        amounts.reason === "sin_total"
+          ? "El monto total de la proforma debe ser mayor que cero."
+          : "El adelanto inicial no puede ser mayor que el monto total.",
+      );
+    }
 
-  await prisma.$transaction(async (tx) => {
+    const adelantoInicial = amounts.advance;
+    const saldo = amounts.balance;
+
     const id_proforma = await getNextCorrelativeId(tx, {
       codigoEntidad: "proforma",
       prefijo: "PRF",
@@ -182,51 +197,65 @@ export async function annulQuoteAction(formData: FormData) {
     redirect(QUOTES_PATH);
   }
 
-  const quote = await prisma.proforma.findUnique({
-    where: {
-      id_proforma: quoteId,
-    },
-    include: {
-      pago_cliente: {
-        select: {
-          id_pago_cliente: true,
+  // C3 de la 11.3a (hallazgo 4): la proforma se bloquea y se lee dentro de la transaccion, y la
+  // anulacion y su bitacora se escriben en ella: un pago simultaneo espera y ve la anulacion.
+  // Un rechazo devuelve a donde redirigir, sin escribir; el redirect va fuera de la transaccion.
+  const rejectedTo = await prisma.$transaction(async (tx) => {
+    await lockQuoteRow(tx, quoteId);
+
+    const quote = await tx.proforma.findUnique({
+      where: {
+        id_proforma: quoteId,
+      },
+      include: {
+        pago_cliente: {
+          select: {
+            id_pago_cliente: true,
+          },
+        },
+        comprobante_venta: {
+          where: {
+            estado: "emitido",
+          },
+          select: {
+            id_comprobante: true,
+          },
         },
       },
-      comprobante_venta: {
-        where: {
-          estado: "emitido",
-        },
-        select: {
-          id_comprobante: true,
-        },
+    });
+
+    if (!quote || quote.estado === "anulada") {
+      return QUOTES_PATH;
+    }
+
+    if (quote.pago_cliente.length > 0 || quote.comprobante_venta.length > 0) {
+      return `${QUOTES_PATH}/${quoteId}`;
+    }
+
+    await tx.proforma.update({
+      where: {
+        id_proforma: quoteId,
       },
-    },
+      data: {
+        estado: "anulada",
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "proforma",
+      id_registro_afectado: quoteId,
+      accion: "anular",
+      detalle: `Proforma anulada: ${quote.numero_proforma}`,
+      tx,
+    });
+
+    return null;
   });
 
-  if (!quote || quote.estado === "anulada") {
-    redirect(QUOTES_PATH);
+  if (rejectedTo) {
+    redirect(rejectedTo);
   }
-
-  if (quote.pago_cliente.length > 0 || quote.comprobante_venta.length > 0) {
-    redirect(`${QUOTES_PATH}/${quoteId}`);
-  }
-
-  await prisma.proforma.update({
-    where: {
-      id_proforma: quoteId,
-    },
-    data: {
-      estado: "anulada",
-    },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "proforma",
-    id_registro_afectado: quoteId,
-    accion: "anular",
-    detalle: `Proforma anulada: ${quote.numero_proforma}`,
-  });
 
   revalidatePath(QUOTES_PATH);
   revalidatePath(`${QUOTES_PATH}/${quoteId}`);

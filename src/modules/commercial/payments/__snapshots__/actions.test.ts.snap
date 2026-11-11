@@ -15,6 +15,15 @@ exports[`createPaymentAction > el pago supera el saldo > llamadas 1`] = `
   },
   {
     "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_pedido": true,
@@ -48,6 +57,15 @@ exports[`createPaymentAction > la proforma no existe > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -112,6 +130,15 @@ exports[`createPaymentAction > pago de todo el saldo: deja la proforma pagada > 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -210,6 +237,15 @@ exports[`createPaymentAction > pago parcial: deja el saldo y la proforma aceptad
   },
   {
     "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_pedido": true,
@@ -302,6 +338,15 @@ exports[`createPaymentAction > primer pago de una proforma vigente: pasa a acept
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -400,6 +445,15 @@ exports[`createPaymentAction > proforma anulada > llamadas 1`] = `
   },
   {
     "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_pedido": true,
@@ -436,6 +490,15 @@ exports[`createPaymentAction > proforma pagada > llamadas 1`] = `
   },
   {
     "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_pedido": true,
@@ -469,6 +532,15 @@ exports[`createPaymentAction > saldo cero con la proforma aceptada: la da por pa
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {

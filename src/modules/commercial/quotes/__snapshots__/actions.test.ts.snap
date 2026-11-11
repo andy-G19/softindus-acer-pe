@@ -10,6 +10,19 @@ exports[`annulQuoteAction > con pagos: vuelve al detalle sin decir por que > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -31,6 +44,10 @@ exports[`annulQuoteAction > con pagos: vuelve al detalle sin decir por que > lla
       },
     },
     "prisma": "proforma.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -47,6 +64,19 @@ exports[`annulQuoteAction > con un comprobante emitido: vuelve al detalle sin de
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -69,6 +99,10 @@ exports[`annulQuoteAction > con un comprobante emitido: vuelve al detalle sin de
     },
     "prisma": "proforma.findUnique",
   },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
 ]
 `;
 
@@ -82,6 +116,19 @@ exports[`annulQuoteAction > el id con espacios se recorta > llamadas 1`] = `
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -115,19 +162,22 @@ exports[`annulQuoteAction > el id con espacios se recorta > llamadas 1`] = `
         "id_proforma": "PRF00000007",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "proforma.update",
   },
   {
     "args": {
       "accion": "anular",
       "detalle": "Proforma anulada: PF-00000007",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "proforma",
       "id_registro_afectado": "PRF00000007",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard/commercial/quotes",
@@ -156,6 +206,19 @@ exports[`annulQuoteAction > no existe: vuelve al listado > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -177,6 +240,10 @@ exports[`annulQuoteAction > no existe: vuelve al listado > llamadas 1`] = `
       },
     },
     "prisma": "proforma.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -207,6 +274,19 @@ exports[`annulQuoteAction > sin pagos ni comprobantes: la anula > llamadas 1`] =
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -238,19 +318,22 @@ exports[`annulQuoteAction > sin pagos ni comprobantes: la anula > llamadas 1`] =
         "id_proforma": "PRF00000007",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "proforma.update",
   },
   {
     "args": {
       "accion": "anular",
       "detalle": "Proforma anulada: PF-00000007",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "proforma",
       "id_registro_afectado": "PRF00000007",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard/commercial/quotes",
@@ -293,6 +376,19 @@ exports[`annulQuoteAction > ya estaba anulada: vuelve al listado > llamadas 1`] 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -315,6 +411,10 @@ exports[`annulQuoteAction > ya estaba anulada: vuelve al listado > llamadas 1`] 
     },
     "prisma": "proforma.findUnique",
   },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
 ]
 `;
 
@@ -328,6 +428,19 @@ exports[`createQuoteAction > adelanto cero: nace vigente sin pago > llamadas 1`]
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -359,10 +472,6 @@ exports[`createQuoteAction > adelanto cero: nace vigente sin pago > llamadas 1`]
       },
     },
     "prisma": "pedido.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -426,6 +535,19 @@ exports[`createQuoteAction > adelanto igual al total: nace pagada y el pago es d
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "detalle_pedido": {
@@ -455,10 +577,6 @@ exports[`createQuoteAction > adelanto igual al total: nace pagada y el pago es d
       },
     },
     "prisma": "pedido.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -571,6 +689,19 @@ exports[`createQuoteAction > con adelanto parcial: nace aceptada y registra el a
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "detalle_pedido": {
@@ -600,10 +731,6 @@ exports[`createQuoteAction > con adelanto parcial: nace aceptada y registra el a
       },
     },
     "prisma": "pedido.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -702,6 +829,19 @@ exports[`createQuoteAction > el adelanto supera el total > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "detalle_pedido": {
@@ -732,12 +872,16 @@ exports[`createQuoteAction > el adelanto supera el total > llamadas 1`] = `
     },
     "prisma": "pedido.findUnique",
   },
+  {
+    "args": "El adelanto inicial no puede ser mayor que el monto total.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
 exports[`createQuoteAction > el adelanto supera el total > resultado 1`] = `"error: El adelanto inicial no puede ser mayor que el monto total."`;
 
-exports[`createQuoteAction > el pedido esta cancelado: hoy se acepta (hallazgo 3 de la 11.3a) > llamadas 1`] = `
+exports[`createQuoteAction > el pedido esta cancelado: se rechaza (D29) > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -747,6 +891,19 @@ exports[`createQuoteAction > el pedido esta cancelado: hoy se acepta (hallazgo 3
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "detalle_pedido": {
@@ -778,60 +935,13 @@ exports[`createQuoteAction > el pedido esta cancelado: hoy se acepta (hallazgo 3
     "prisma": "pedido.findUnique",
   },
   {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "proforma",
-      "prefijo": "PRF",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "adelanto_inicial": null,
-        "estado": "vigente",
-        "fecha_emision": 2026-07-15T15:00:00.000Z,
-        "id_pedido": "PED00000004",
-        "id_proforma": "PRF00000001",
-        "monto_total": "150.50",
-        "numero_proforma": "PF-00000001",
-        "observaciones": null,
-        "saldo": "150.50",
-        "validez_dias": 15,
-      },
-    },
-    "prisma": "proforma.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Proforma creada para el pedido PED00000004.",
-      "enTransaccion": true,
-      "entidad_afectada": "proforma",
-      "id_registro_afectado": "PRF00000001",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/commercial/quotes",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/commercial/orders",
-    "effect": "revalidatePath",
+    "args": "Solo se puede generar la proforma de un pedido registrado o aprobado.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
 
-exports[`createQuoteAction > el pedido esta cancelado: hoy se acepta (hallazgo 3 de la 11.3a) > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-created"`;
+exports[`createQuoteAction > el pedido esta cancelado: se rechaza (D29) > resultado 1`] = `"error: Solo se puede generar la proforma de un pedido registrado o aprobado."`;
 
 exports[`createQuoteAction > el pedido no existe > llamadas 1`] = `
 [
@@ -843,6 +953,19 @@ exports[`createQuoteAction > el pedido no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "detalle_pedido": {
@@ -872,6 +995,10 @@ exports[`createQuoteAction > el pedido no existe > llamadas 1`] = `
       },
     },
     "prisma": "pedido.findUnique",
+  },
+  {
+    "args": "El pedido seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -888,6 +1015,19 @@ exports[`createQuoteAction > el pedido no tiene productos > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "detalle_pedido": {
@@ -917,6 +1057,10 @@ exports[`createQuoteAction > el pedido no tiene productos > llamadas 1`] = `
       },
     },
     "prisma": "pedido.findUnique",
+  },
+  {
+    "args": "El pedido no tiene productos asociados.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -933,6 +1077,19 @@ exports[`createQuoteAction > el pedido ya tiene una proforma activa > llamadas 1
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "detalle_pedido": {
@@ -962,6 +1119,10 @@ exports[`createQuoteAction > el pedido ya tiene una proforma activa > llamadas 1
       },
     },
     "prisma": "pedido.findUnique",
+  },
+  {
+    "args": "Este pedido ya tiene una proforma activa: PF-00000003.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -978,6 +1139,19 @@ exports[`createQuoteAction > sin adelanto: nace vigente con el saldo igual al to
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "detalle_pedido": {
@@ -1007,10 +1181,6 @@ exports[`createQuoteAction > sin adelanto: nace vigente con el saldo igual al to
       },
     },
     "prisma": "pedido.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1102,6 +1272,19 @@ exports[`createQuoteAction > sin validez: se guarda nula > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "detalle_pedido": {
@@ -1131,10 +1314,6 @@ exports[`createQuoteAction > sin validez: se guarda nula > llamadas 1`] = `
       },
     },
     "prisma": "pedido.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
