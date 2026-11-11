@@ -1,0 +1,1253 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createPaymentAction > clave de otro usuario > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_cliente",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPaymentAction > clave de otro usuario > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > clave repetida: responde con el pago guardado sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_cliente",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPaymentAction > clave repetida: responde con el pago guardado sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+    "id_pago_cliente": "PCL00000009",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > el administrador registra el pago igual > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_cliente",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_cliente",
+      "prefijo": "PCL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-07-15T15:00:00.000Z,
+        "id_pago_cliente": "PCL00000001",
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000007",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "yape",
+        "monto_pagado": "40.25",
+        "observaciones": null,
+        "saldo_actual": "59.75",
+        "tipo_pago": "amortizacion",
+      },
+    },
+    "prisma": "pago_cliente.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "aceptada",
+        "saldo": "59.75",
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago de cliente registrado para la proforma PRF00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_cliente",
+      "id_registro_afectado": "PCL00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PCL00000001",
+      },
+      "where": {
+        "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPaymentAction > el administrador registra el pago igual > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+    "id_pago_cliente": "PCL00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > el pago supera el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_cliente",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "El pago no puede ser mayor que el saldo pendiente: S/ 100.00.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPaymentAction > el pago supera el saldo > resultado 1`] = `
+{
+  "error": "El pago no puede ser mayor que el saldo pendiente: S/ 100.00.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "El pago no puede ser mayor que el saldo pendiente: S/ 100.00.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "100.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > la proforma no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_cliente",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "La proforma seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPaymentAction > la proforma no existe > resultado 1`] = `
+{
+  "error": "La proforma seleccionada no existe.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > metodo de pago invalido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createPaymentAction > metodo de pago invalido > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "metodo_pago": [
+      "Selecciona un método de pago válido.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "metodo_pago": "cheque",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > monto cero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createPaymentAction > monto cero > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "El monto pagado debe ser mayor que cero.",
+      "El monto pagado debe ser mayor que cero.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "0",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > pago de todo el saldo: deja la proforma pagada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_cliente",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_cliente",
+      "prefijo": "PCL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-07-15T15:00:00.000Z,
+        "id_pago_cliente": "PCL00000001",
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000007",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "yape",
+        "monto_pagado": "100.00",
+        "observaciones": "cancela en caja",
+        "saldo_actual": "0.00",
+        "tipo_pago": "cancelacion",
+      },
+    },
+    "prisma": "pago_cliente.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "pagada",
+        "saldo": "0.00",
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago de cliente registrado para la proforma PRF00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_cliente",
+      "id_registro_afectado": "PCL00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PCL00000001",
+      },
+      "where": {
+        "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPaymentAction > pago de todo el saldo: deja la proforma pagada > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+    "id_pago_cliente": "PCL00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "100",
+    "observaciones": "  cancela en caja  ",
+    "tipo_pago": "cancelacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > pago parcial: deja el saldo y la proforma aceptada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_cliente",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_cliente",
+      "prefijo": "PCL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-07-15T15:00:00.000Z,
+        "id_pago_cliente": "PCL00000001",
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000007",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "yape",
+        "monto_pagado": "40.25",
+        "observaciones": null,
+        "saldo_actual": "59.75",
+        "tipo_pago": "amortizacion",
+      },
+    },
+    "prisma": "pago_cliente.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "aceptada",
+        "saldo": "59.75",
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago de cliente registrado para la proforma PRF00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_cliente",
+      "id_registro_afectado": "PCL00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PCL00000001",
+      },
+      "where": {
+        "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPaymentAction > pago parcial: deja el saldo y la proforma aceptada > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+    "id_pago_cliente": "PCL00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > primer pago de una proforma vigente: pasa a aceptada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_cliente",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_cliente",
+      "prefijo": "PCL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-07-15T15:00:00.000Z,
+        "id_pago_cliente": "PCL00000001",
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000007",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "yape",
+        "monto_pagado": "40.25",
+        "observaciones": null,
+        "saldo_actual": "59.75",
+        "tipo_pago": "amortizacion",
+      },
+    },
+    "prisma": "pago_cliente.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "aceptada",
+        "saldo": "59.75",
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago de cliente registrado para la proforma PRF00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_cliente",
+      "id_registro_afectado": "PCL00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PCL00000001",
+      },
+      "where": {
+        "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPaymentAction > primer pago de una proforma vigente: pasa a aceptada > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+    "id_pago_cliente": "PCL00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > proforma anulada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_cliente",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "No se puede registrar pagos en una proforma anulada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPaymentAction > proforma anulada > resultado 1`] = `
+{
+  "error": "No se puede registrar pagos en una proforma anulada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > proforma pagada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_cliente",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "La proforma ya se encuentra pagada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPaymentAction > proforma pagada > resultado 1`] = `
+{
+  "error": "La proforma ya se encuentra pagada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > saldo cero con la proforma aceptada: la da por pagada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_pago_cliente",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "La proforma ya se encuentra pagada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPaymentAction > saldo cero con la proforma aceptada: la da por pagada > resultado 1`] = `
+{
+  "error": "La proforma ya se encuentra pagada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createPaymentAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createPaymentAction > sin permiso: el maestro de taller > resultado 1`] = `
+{
+  "error": "No tienes permisos para registrar pagos de clientes.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;
+
+exports[`createPaymentAction > sin proforma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createPaymentAction > sin proforma > resultado 1`] = `
+{
+  "error": "La proforma es obligatoria.",
+  "fieldErrors": {
+    "id_proforma": [
+      "La proforma es obligatoria.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "metodo_pago": "yape",
+    "monto_pagado": "40.25",
+    "observaciones": "",
+    "tipo_pago": "amortizacion",
+  },
+}
+`;

@@ -7,7 +7,6 @@ import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -21,13 +20,15 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { createReturnToHref, dashboardBreadcrumbs, navigationHrefs, withReturnTo } from "@/lib/navigation";
 import {
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { commercialNotifications } from "@/modules/commercial/notifications";
 import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
+import { QuoteAnnulAction } from "@/modules/commercial/quotes/quote-annul-action";
 import { getQuoteListData } from "@/modules/commercial/quotes/queries";
 
 type QuotesPageProps = {
@@ -38,6 +39,8 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
   await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.3a: el alta vuelve a este listado con sus filtros.
+  const returnTo = createReturnToHref(navigationHrefs.quotes, params);
   const q = parseStringParam(params, "q");
   const client = parseStringParam(params, "client");
   const order = parseStringParam(params, "order");
@@ -66,7 +69,7 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/commercial/quotes/new">Nueva proforma</Link>
+            <Link href={withReturnTo(`${navigationHrefs.quotes}/new`, returnTo)}>Nueva proforma</Link>
           </Button>
         }
       />
@@ -200,21 +203,11 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                         </Button>
                       ) : null}
                       {canAnnul ? (
-                        <form action={annulQuoteAction}>
-                          <input
-                            type="hidden"
-                            name="id_proforma"
-                            value={quote.id_proforma}
-                          />
-                          <ConfirmDeleteButton
-                            title="¿Anular proforma?"
-                            description="Esta acción anulará la proforma y no se puede deshacer."
-                            confirmText="Confirmar anulación"
-                            entityName="proforma"
-                          >
-                            Anular
-                          </ConfirmDeleteButton>
-                        </form>
+                        <QuoteAnnulAction
+                          idProforma={quote.id_proforma}
+                          action={annulQuoteAction}
+                          successNotification={commercialNotifications["quote-annulled"]}
+                        />
                       ) : null}
                     </div>
                   </TableCell>

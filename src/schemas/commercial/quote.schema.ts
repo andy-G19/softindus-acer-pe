@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { hasCents } from "@/lib/client-payment-amounts";
+
 const optionalMoneySchema = z.preprocess((value) => {
   if (value === null || value === undefined) {
     return undefined;
@@ -12,7 +14,13 @@ const optionalMoneySchema = z.preprocess((value) => {
   }
 
   return text;
-}, z.coerce.number().min(0, "El monto no puede ser negativo.").optional());
+}, z.coerce
+  .number()
+  .min(0, "El monto no puede ser negativo.")
+  // C2 de la 11.3a: un adelanto que la columna guardaria como 0.00 se registraria como un
+  // pago de 0.00. Cero (o vacio) sigue siendo «sin adelanto».
+  .refine((value) => value === 0 || hasCents(value), "El adelanto debe ser cero o de al menos S/ 0.01.")
+  .optional());
 
 const optionalPositiveIntegerSchema = z.preprocess((value) => {
   if (value === null || value === undefined) {
