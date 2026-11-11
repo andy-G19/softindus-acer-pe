@@ -23,12 +23,21 @@ import {
 //
 // Los montos de estos casos son exactos en binario: el adelanto igual a un total con
 // decimales (hallazgo 1 de la 11.3a) tiene su propia prueba.
+//
+// Desde C4 de la 11.3a crear proforma devuelve un FormActionState (no redirige ni lanza a la
+// pagina de error), rechaza un rol sin permiso con un error y reclama la clave de la operacion
+// como primera sentencia de la transaccion. Anular sigue redirigiendo hasta C6.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio: se fija para que el snapshot sea estable.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 // Anular escribe con el cliente global, fuera de una transaccion: el doble lo permite y el
 // snapshot lo deja a la vista (C3 lo lleva dentro, con la proforma bloqueada).
 vi.mock("@/lib/db", async () =>
@@ -111,9 +120,8 @@ async function run(action: (formData: FormData) => Promise<unknown>, actionCase:
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        await action(formDataOf(actionCase.form));
-
-        return "termino sin redirigir";
+        // Crear proforma devuelve su resultado; anular redirige.
+        return (await action(formDataOf(actionCase.form))) ?? "termino sin redirigir";
       } catch (error) {
         return (
           describeNavigationError(error) ??
@@ -163,8 +171,27 @@ function orderRow(changes: Record<string, unknown> = {}) {
   };
 }
 
+const CLAVE = "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f";
+
+/** El mismo estado inicial que usa el formulario con useActionState. */
+const createQuote = (formData: FormData) => createQuoteAction({ status: "idle" }, formData);
+
+/** La clave ya estaba en la tabla: el INSERT no devuelve filas y se lee la guardada. */
+function storedKey(changes: Record<string, unknown> = {}): DataOverrides {
+  return {
+    "operacion_idempotente.createManyAndReturn": [],
+    "operacion_idempotente.findUniqueOrThrow": {
+      tipo_operacion: "crear_proforma",
+      id_usuario: "USU00000001",
+      id_registro_resultado: "PRF00000009",
+      ...changes,
+    },
+  };
+}
+
 const quoteForm = (changes: Record<string, string> = {}) => ({
   id_pedido: PEDIDO,
+  clave_operacion: CLAVE,
   adelanto_inicial: "",
   metodo_pago_adelanto: "",
   validez_dias: "15",
@@ -172,7 +199,7 @@ const quoteForm = (changes: Record<string, string> = {}) => ({
   ...changes,
 });
 
-characterize("createQuoteAction", createQuoteAction, { "pedido.findUnique": orderRow() }, [
+characterize("createQuoteAction", createQuote, { "pedido.findUnique": orderRow() }, [
   { name: "sin adelanto: nace vigente con el saldo igual al total", form: quoteForm() },
   {
     name: "con adelanto parcial: nace aceptada y registra el adelanto como pago",
@@ -207,6 +234,10 @@ characterize("createQuoteAction", createQuoteAction, { "pedido.findUnique": orde
     form: quoteForm({ adelanto_inicial: "150.51", metodo_pago_adelanto: "efectivo" }),
   },
   { name: "sin permiso: el maestro de taller", form: quoteForm(), role: "WORKSHOP_MASTER" },
+  { name: "el administrador crea la proforma igual", form: quoteForm(), role: "ADMIN" },
+  { name: "sin clave de operacion", form: quoteForm({ clave_operacion: "" }) },
+  { name: "clave repetida: responde con la proforma guardada sin escribir", form: quoteForm(), data: storedKey() },
+  { name: "clave de otro usuario", form: quoteForm(), data: storedKey({ id_usuario: "USU00000009" }) },
 ]);
 
 // ---------------------------------------------------------------------------
@@ -273,7 +304,7 @@ describe("C2 de la 11.3a: los montos de la proforma redondeados como las columna
   }
 
   const create = (form: Record<string, string>, data: DataOverrides) =>
-    run(createQuoteAction, { name: "C2", form: quoteForm(form), data }, {});
+    run(createQuote, { name: "C2", form: quoteForm(form), data }, {});
 
   it("un adelanto igual a un total con decimales (100.10 + 200.20) la deja pagada con saldo 0.00", async () => {
     const { calls, outcome } = await create(
@@ -281,7 +312,7 @@ describe("C2 de la 11.3a: los montos de la proforma redondeados como las columna
       withSubtotals("100.10", "200.20"),
     );
 
-    expect(outcome).toBe("redirect:/dashboard/commercial/quotes?toast=quote-created");
+    expect(outcome).toMatchObject({ status: "success" });
 
     const proforma = dataOf(calls, "proforma.create");
     const pago = dataOf(calls, "pago_cliente.create");
@@ -303,7 +334,11 @@ describe("C2 de la 11.3a: los montos de la proforma redondeados como las columna
   it("un adelanto que se guardaria como 0.00 se rechaza sin escribir", async () => {
     const { calls, outcome } = await create({ adelanto_inicial: "0.004", metodo_pago_adelanto: "yape" }, withSubtotals("10.00"));
 
-    expect(outcome).toBe("error: El adelanto debe ser cero o de al menos S/ 0.01.");
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "Revisa los datos de la proforma.",
+      fieldErrors: { adelanto_inicial: ["El adelanto debe ser cero o de al menos S/ 0.01."] },
+    });
     expect(dataOf(calls, "proforma.create")).toBeUndefined();
     expect(dataOf(calls, "pago_cliente.create")).toBeUndefined();
   });
@@ -328,31 +363,32 @@ describe("C3 de la 11.3a: proformas que deciden con la fila bloqueada", () => {
     calls.filter((call) => "prisma" in call && /\.(create|update|updateMany)$/.test(call.prisma));
 
   it("crear bloquea el pedido antes de leerlo, dentro de la transaccion", async () => {
-    const { calls, outcome } = await run(createQuoteAction, { name: "C3", form: quoteForm() }, { "pedido.findUnique": orderRow() });
+    const { calls, outcome } = await run(createQuote, { name: "C3", form: quoteForm() }, { "pedido.findUnique": orderRow() });
 
-    expect(outcome).toBe("redirect:/dashboard/commercial/quotes?toast=quote-created");
+    expect(outcome).toMatchObject({ status: "success" });
     expectRowLockedBefore(calls, { table: "pedido", id: PEDIDO, reads: reads("pedido.findUnique") });
   });
 
   it.each(["cancelado", "anulado", "entregado"])("crear rechaza un pedido %s sin escribir (D29)", async (estado) => {
     const { calls, outcome } = await run(
-      createQuoteAction,
+      createQuote,
       { name: "C3", form: quoteForm() },
       { "pedido.findUnique": orderRow({ estado }) },
     );
+    const message = "Solo se puede generar la proforma de un pedido registrado o aprobado.";
 
-    expect(outcome).toBe("error: Solo se puede generar la proforma de un pedido registrado o aprobado.");
+    expect(outcome).toMatchObject({ status: "error", error: message, fieldErrors: { id_pedido: [message] } });
     expect(writes(calls)).toEqual([]);
   });
 
   it("crear acepta un pedido aprobado", async () => {
     const { outcome } = await run(
-      createQuoteAction,
+      createQuote,
       { name: "C3", form: quoteForm() },
       { "pedido.findUnique": orderRow({ estado: "aprobado" }) },
     );
 
-    expect(outcome).toBe("redirect:/dashboard/commercial/quotes?toast=quote-created");
+    expect(outcome).toMatchObject({ status: "success" });
   });
 
   it("anular bloquea la proforma antes de leerla y escribe dentro de la transaccion", async () => {
@@ -376,5 +412,76 @@ describe("C3 de la 11.3a: proformas que deciden con la fila bloqueada", () => {
     expect(outcome).toBe(`redirect:/dashboard/commercial/quotes/${PROFORMA}`);
     expectRowLockedBefore(calls, { table: "proforma", id: PROFORMA, reads: reads("proforma.findUnique") });
     expect(writes(calls)).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C4 de la 11.3a (D27): crear proforma con resultado e idempotencia
+// ---------------------------------------------------------------------------
+
+// La clave se reclama como primera sentencia de la transaccion, antes del bloqueo del pedido y
+// de los correlativos: un reenvio responde con la proforma ya guardada y no crea otra ni
+// registra el adelanto dos veces. Un rechazo despues del reclamo lanza dentro de la transaccion,
+// asi la clave se libera y el envio corregido se guarda.
+describe("C4 de la 11.3a: crear proforma con resultado e idempotencia", () => {
+  type Calls = Awaited<ReturnType<typeof run>>["calls"];
+
+  const index = (calls: Calls, name: string) => calls.findIndex((call) => "prisma" in call && call.prisma === name);
+  const create = (actionCase: Omit<ActionCase, "name">) =>
+    run(createQuote, { name: "C4", ...actionCase }, { "pedido.findUnique": orderRow() });
+
+  it("reclama la clave antes de bloquear el pedido y la completa con la proforma", async () => {
+    const { calls, outcome } = await create({
+      form: quoteForm({ adelanto_inicial: "50.25", metodo_pago_adelanto: "yape" }),
+    });
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_proforma: "PRF00000001", clave_operacion: CLAVE },
+    });
+    expect(index(calls, "operacion_idempotente.createManyAndReturn")).toBeGreaterThan(-1);
+    expect(index(calls, "operacion_idempotente.createManyAndReturn")).toBeLessThan(index(calls, "$queryRaw"));
+    expect(index(calls, "pago_cliente.create")).toBeLessThan(index(calls, "operacion_idempotente.updateMany"));
+  });
+
+  it("una clave repetida no bloquea, no crea la proforma ni registra el adelanto", async () => {
+    const { calls, outcome } = await create({
+      form: quoteForm({ adelanto_inicial: "50.25", metodo_pago_adelanto: "yape" }),
+      data: storedKey(),
+    });
+
+    expect(outcome).toMatchObject({ status: "success", data: { id_proforma: "PRF00000009", clave_operacion: CLAVE } });
+    expect(index(calls, "$queryRaw")).toBe(-1);
+    expect(index(calls, "proforma.create")).toBe(-1);
+    expect(index(calls, "pago_cliente.create")).toBe(-1);
+  });
+
+  it("un rechazo dentro de la transaccion va a su campo y deshace el reclamo de la clave", async () => {
+    const { calls, outcome } = await create({
+      form: quoteForm({ adelanto_inicial: "150.51", metodo_pago_adelanto: "efectivo" }),
+    });
+    const message = "El adelanto inicial no puede ser mayor que el monto total.";
+
+    expect(outcome).toMatchObject({ status: "error", error: message, fieldErrors: { adelanto_inicial: [message] } });
+    expect(calls.some((call) => "effect" in call && call.effect === "prisma.$transaction:rollback")).toBe(true);
+  });
+
+  it("sin permiso responde en el formulario y no consulta nada", async () => {
+    const { calls, outcome } = await create({ form: quoteForm(), role: "WORKSHOP_MASTER" });
+
+    expect(outcome).toMatchObject({ status: "error", error: "No tienes permisos para crear proformas." });
+    expect(calls.some((call) => "prisma" in call)).toBe(false);
+  });
+
+  it("tras un error devuelve lo enviado para volver a mostrarlo", async () => {
+    const { outcome } = await create({
+      form: quoteForm({ adelanto_inicial: "20", metodo_pago_adelanto: "", observaciones: "  obra  " }),
+    });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      values: { id_pedido: PEDIDO, adelanto_inicial: "20", metodo_pago_adelanto: "", validez_dias: "15", observaciones: "  obra  " },
+      fieldErrors: { metodo_pago_adelanto: ["Selecciona el método de pago del adelanto."] },
+    });
   });
 });

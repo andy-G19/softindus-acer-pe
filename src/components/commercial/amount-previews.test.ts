@@ -4,14 +4,14 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { PaymentForm } from "@/components/commercial/payment-form";
-import { QuoteForm } from "@/components/commercial/quote-form";
+import { QuoteForm } from "@/modules/commercial/quotes/quote-form";
 
 // Vistas previas del saldo en los formularios de proforma y de pago (C2 de la 11.3a): usan la
 // misma regla en centimos que la accion (client-payment-amounts.ts), asi que muestran el saldo
 // que se guardara. Con number, 0.125 sobre 10.00 mostraba 9.88 y la accion guarda 9.87.
 
 vi.mock("@/modules/commercial/payments/actions", () => ({ createPaymentAction: vi.fn() }));
-vi.mock("@/modules/commercial/quotes/actions", () => ({ createQuoteAction: vi.fn() }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -77,7 +77,17 @@ describe("vista previa de la proforma", () => {
   };
 
   async function renderQuote() {
-    await act(async () => root.render(h(QuoteForm, { orders: [order], defaultOrderId: order.id_pedido })));
+    await act(async () =>
+      root.render(
+        h(QuoteForm, {
+          action: vi.fn(),
+          orders: [order],
+          defaultOrderId: order.id_pedido,
+          successNotification: { type: "success", message: "Proforma creada correctamente" },
+          returnTo: "/dashboard/commercial/quotes",
+        }),
+      ),
+    );
   }
 
   const balance = () => shownAfter("Saldo calculado");

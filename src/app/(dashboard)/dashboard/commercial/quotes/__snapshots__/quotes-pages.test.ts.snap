@@ -108,7 +108,7 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/quotes/new">Nueva proforma</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/new?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Nueva proforma</a>
 </div>
 </div>
 </section>
@@ -340,7 +340,7 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/quotes/new">Nueva proforma</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/new?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Ffrom%3D2026-07-31%26to%3D2026-07-01">Nueva proforma</a>
 </div>
 </div>
 </section>
@@ -539,7 +539,7 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/quotes/new">Nueva proforma</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/new?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fbalance%3Dpaid">Nueva proforma</a>
 </div>
 </div>
 </section>
@@ -762,7 +762,7 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/quotes/new">Nueva proforma</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/new?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Nueva proforma</a>
 </div>
 </div>
 </section>
@@ -1036,7 +1036,7 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/quotes/new">Nueva proforma</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/new?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fq%3DPRF%26client%3DCLI00000001%26order%3DPED00000001%26status%3Dvigente%26balance%3Dpending%26from%3D2026-07-01%26to%3D2026-07-31">Nueva proforma</a>
 </div>
 </div>
 </section>
@@ -1259,7 +1259,7 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/quotes/new">Nueva proforma</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/new?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Nueva proforma</a>
 </div>
 </div>
 </section>
@@ -2544,6 +2544,150 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 }
 `;
 
+exports[`/dashboard/commercial/quotes/new > desde el listado filtrado: vuelve a el > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "detalle_pedido": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "where": {
+        "detalle_pedido": {
+          "some": {},
+        },
+        "estado": {
+          "in": [
+            "registrado",
+            "aprobado",
+          ],
+        },
+        "proforma": {
+          "none": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/quotes/new > desde el listado filtrado: vuelve a el > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/quotes?status=vigente">Proformas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva proforma</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nueva proforma</h1>
+<p>Genera una proforma digital a partir de un pedido registrado.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a proformas">
+<svg/>Volver a proformas</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
+<div>
+<label for="id_pedido">Pedido<span aria-hidden="true">*</span>
+</label>
+<select id="id_pedido" required="" name="id_pedido">
+<option value="" selected="">Selecciona un pedido</option>
+<option value="id_pedido-1">id_pedido-1 — nombre_razon_social-1 — S/ 34.00</option>
+<option value="id_pedido-2">id_pedido-2 — nombre_razon_social-2 — S/ 34.00</option>
+</select>
+</div>
+<div>
+<div>
+<label for="adelanto_inicial">Adelanto inicial</label>
+<input type="number" id="adelanto_inicial" aria-describedby="adelanto_inicial-ayuda" min="0" step="0.01" placeholder="Ejemplo: 100.00" name="adelanto_inicial" value=""/>
+<p id="adelanto_inicial-ayuda">Opcional. Si no hay adelanto, déjalo vacío.</p>
+</div>
+<div data-disabled="true">
+<label for="metodo_pago_adelanto">Método de pago del adelanto</label>
+<select id="metodo_pago_adelanto" disabled="" aria-describedby="metodo_pago_adelanto-ayuda" name="metodo_pago_adelanto">
+<option value="" selected="">Seleccione...</option>
+<option value="efectivo">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="yape">Yape</option>
+<option value="plin">Plin</option>
+<option value="otro">Otro</option>
+</select>
+<p id="metodo_pago_adelanto-ayuda">Se habilita al ingresar un adelanto.</p>
+</div>
+<div>
+<label>Saldo calculado</label>
+<div>S/ 0.00</div>
+<p>Se calcula como total menos adelanto.</p>
+</div>
+<div>
+<label for="validez_dias">Validez en días</label>
+<input type="number" id="validez_dias" aria-describedby="validez_dias-ayuda" min="1" step="1" placeholder="Ejemplo: 15" name="validez_dias" value=""/>
+<p id="validez_dias-ayuda">Opcional. Ejemplo: 7, 15 o 30 días.</p>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Proforma válida hasta agotar stock. Precio sujeto a confirmación.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Generar proforma</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?status=vigente">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
 exports[`/dashboard/commercial/quotes/new > formulario > llamadas 1`] = `
 [
   {
@@ -2596,7 +2740,7 @@ exports[`/dashboard/commercial/quotes/new > formulario > llamadas 1`] = `
 
 exports[`/dashboard/commercial/quotes/new > formulario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2633,9 +2777,11 @@ exports[`/dashboard/commercial/quotes/new > formulario > resultado 1`] = `
 </div>
 </section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
 <div>
-<label>Pedido</label>
-<select name="id_pedido" required="">
+<label for="id_pedido">Pedido<span aria-hidden="true">*</span>
+</label>
+<select id="id_pedido" required="" name="id_pedido">
 <option value="" selected="">Selecciona un pedido</option>
 <option value="id_pedido-1">id_pedido-1 — nombre_razon_social-1 — S/ 34.00</option>
 <option value="id_pedido-2">id_pedido-2 — nombre_razon_social-2 — S/ 34.00</option>
@@ -2643,21 +2789,21 @@ exports[`/dashboard/commercial/quotes/new > formulario > resultado 1`] = `
 </div>
 <div>
 <div>
-<label>Adelanto inicial</label>
-<input type="number" min="0" step="0.01" placeholder="Ejemplo: 100.00" name="adelanto_inicial" value=""/>
-<p>Opcional. Si no hay adelanto, déjalo vacío.</p>
+<label for="adelanto_inicial">Adelanto inicial</label>
+<input type="number" id="adelanto_inicial" aria-describedby="adelanto_inicial-ayuda" min="0" step="0.01" placeholder="Ejemplo: 100.00" name="adelanto_inicial" value=""/>
+<p id="adelanto_inicial-ayuda">Opcional. Si no hay adelanto, déjalo vacío.</p>
 </div>
-<div>
-<label>Método de pago del adelanto</label>
-<select name="metodo_pago_adelanto" disabled="">
-<option value="">Seleccione...</option>
+<div data-disabled="true">
+<label for="metodo_pago_adelanto">Método de pago del adelanto</label>
+<select id="metodo_pago_adelanto" disabled="" aria-describedby="metodo_pago_adelanto-ayuda" name="metodo_pago_adelanto">
+<option value="" selected="">Seleccione...</option>
 <option value="efectivo">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
-<p>Se habilita al ingresar un adelanto.</p>
+<p id="metodo_pago_adelanto-ayuda">Se habilita al ingresar un adelanto.</p>
 </div>
 <div>
 <label>Saldo calculado</label>
@@ -2665,14 +2811,14 @@ exports[`/dashboard/commercial/quotes/new > formulario > resultado 1`] = `
 <p>Se calcula como total menos adelanto.</p>
 </div>
 <div>
-<label>Validez en días</label>
-<input type="number" min="1" step="1" placeholder="Ejemplo: 15" name="validez_dias"/>
-<p>Opcional. Ejemplo: 7, 15 o 30 días.</p>
+<label for="validez_dias">Validez en días</label>
+<input type="number" id="validez_dias" aria-describedby="validez_dias-ayuda" min="1" step="1" placeholder="Ejemplo: 15" name="validez_dias" value=""/>
+<p id="validez_dias-ayuda">Opcional. Ejemplo: 7, 15 o 30 días.</p>
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" placeholder="Ejemplo: Proforma válida hasta agotar stock. Precio sujeto a confirmación.">
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Proforma válida hasta agotar stock. Precio sujeto a confirmación.">
 </textarea>
 </div>
 <div>
@@ -2680,7 +2826,7 @@ exports[`/dashboard/commercial/quotes/new > formulario > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/commercial/quotes">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -2738,7 +2884,7 @@ exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > llamadas 1`
 
 exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2775,12 +2921,14 @@ exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > resultado 1
 </div>
 </section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
 <div role="alert">
 <div>Pedido preseleccionado correctamente desde el listado de pedidos.</div>
 </div>
 <div>
-<label>Pedido</label>
-<select name="id_pedido" required="">
+<label for="id_pedido">Pedido<span aria-hidden="true">*</span>
+</label>
+<select id="id_pedido" required="" name="id_pedido">
 <option value="">Selecciona un pedido</option>
 <option value="id_pedido-1" selected="">id_pedido-1 — nombre_razon_social-1 — S/ 34.00</option>
 <option value="id_pedido-2">id_pedido-2 — nombre_razon_social-2 — S/ 34.00</option>
@@ -2840,21 +2988,21 @@ exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > resultado 1
 </div>
 <div>
 <div>
-<label>Adelanto inicial</label>
-<input type="number" min="0" step="0.01" placeholder="Ejemplo: 100.00" name="adelanto_inicial" value=""/>
-<p>Opcional. Si no hay adelanto, déjalo vacío.</p>
+<label for="adelanto_inicial">Adelanto inicial</label>
+<input type="number" id="adelanto_inicial" aria-describedby="adelanto_inicial-ayuda" min="0" step="0.01" placeholder="Ejemplo: 100.00" name="adelanto_inicial" value=""/>
+<p id="adelanto_inicial-ayuda">Opcional. Si no hay adelanto, déjalo vacío.</p>
 </div>
-<div>
-<label>Método de pago del adelanto</label>
-<select name="metodo_pago_adelanto" disabled="">
-<option value="">Seleccione...</option>
+<div data-disabled="true">
+<label for="metodo_pago_adelanto">Método de pago del adelanto</label>
+<select id="metodo_pago_adelanto" disabled="" aria-describedby="metodo_pago_adelanto-ayuda" name="metodo_pago_adelanto">
+<option value="" selected="">Seleccione...</option>
 <option value="efectivo">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
-<p>Se habilita al ingresar un adelanto.</p>
+<p id="metodo_pago_adelanto-ayuda">Se habilita al ingresar un adelanto.</p>
 </div>
 <div>
 <label>Saldo calculado</label>
@@ -2862,14 +3010,14 @@ exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > resultado 1
 <p>Se calcula como total menos adelanto.</p>
 </div>
 <div>
-<label>Validez en días</label>
-<input type="number" min="1" step="1" placeholder="Ejemplo: 15" name="validez_dias"/>
-<p>Opcional. Ejemplo: 7, 15 o 30 días.</p>
+<label for="validez_dias">Validez en días</label>
+<input type="number" id="validez_dias" aria-describedby="validez_dias-ayuda" min="1" step="1" placeholder="Ejemplo: 15" name="validez_dias" value=""/>
+<p id="validez_dias-ayuda">Opcional. Ejemplo: 7, 15 o 30 días.</p>
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" placeholder="Ejemplo: Proforma válida hasta agotar stock. Precio sujeto a confirmación.">
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Proforma válida hasta agotar stock. Precio sujeto a confirmación.">
 </textarea>
 </div>
 <div>
@@ -2877,7 +3025,151 @@ exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > resultado 1
 <a data-variant="outline" href="/dashboard/commercial/quotes">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/quotes/new > un returnTo externo se ignora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "detalle_pedido": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "where": {
+        "detalle_pedido": {
+          "some": {},
+        },
+        "estado": {
+          "in": [
+            "registrado",
+            "aprobado",
+          ],
+        },
+        "proforma": {
+          "none": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/quotes/new > un returnTo externo se ignora > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/quotes">Proformas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva proforma</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nueva proforma</h1>
+<p>Genera una proforma digital a partir de un pedido registrado.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a proformas">
+<svg/>Volver a proformas</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
+<div>
+<label for="id_pedido">Pedido<span aria-hidden="true">*</span>
+</label>
+<select id="id_pedido" required="" name="id_pedido">
+<option value="" selected="">Selecciona un pedido</option>
+<option value="id_pedido-1">id_pedido-1 — nombre_razon_social-1 — S/ 34.00</option>
+<option value="id_pedido-2">id_pedido-2 — nombre_razon_social-2 — S/ 34.00</option>
+</select>
+</div>
+<div>
+<div>
+<label for="adelanto_inicial">Adelanto inicial</label>
+<input type="number" id="adelanto_inicial" aria-describedby="adelanto_inicial-ayuda" min="0" step="0.01" placeholder="Ejemplo: 100.00" name="adelanto_inicial" value=""/>
+<p id="adelanto_inicial-ayuda">Opcional. Si no hay adelanto, déjalo vacío.</p>
+</div>
+<div data-disabled="true">
+<label for="metodo_pago_adelanto">Método de pago del adelanto</label>
+<select id="metodo_pago_adelanto" disabled="" aria-describedby="metodo_pago_adelanto-ayuda" name="metodo_pago_adelanto">
+<option value="" selected="">Seleccione...</option>
+<option value="efectivo">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="yape">Yape</option>
+<option value="plin">Plin</option>
+<option value="otro">Otro</option>
+</select>
+<p id="metodo_pago_adelanto-ayuda">Se habilita al ingresar un adelanto.</p>
+</div>
+<div>
+<label>Saldo calculado</label>
+<div>S/ 0.00</div>
+<p>Se calcula como total menos adelanto.</p>
+</div>
+<div>
+<label for="validez_dias">Validez en días</label>
+<input type="number" id="validez_dias" aria-describedby="validez_dias-ayuda" min="1" step="1" placeholder="Ejemplo: 15" name="validez_dias" value=""/>
+<p id="validez_dias-ayuda">Opcional. Ejemplo: 7, 15 o 30 días.</p>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Proforma válida hasta agotar stock. Precio sujeto a confirmación.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Generar proforma</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes">Cancelar</a>
+</div>
+</form>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

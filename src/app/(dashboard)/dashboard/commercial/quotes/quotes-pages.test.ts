@@ -122,6 +122,11 @@ definePageSuite([
     cases: [
       { name: "formulario" },
       { name: "pedido preseleccionado", searchParams: { orderId: "id_pedido-1" } },
+      {
+        name: "desde el listado filtrado: vuelve a el",
+        searchParams: { returnTo: "/dashboard/commercial/quotes?status=vigente" },
+      },
+      { name: "un returnTo externo se ignora", searchParams: { returnTo: "https://example.com/quotes" } },
     ],
   },
   {

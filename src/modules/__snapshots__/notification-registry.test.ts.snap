@@ -20,6 +20,7 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/commercial/products/new/page.tsx [successNotification] -> product-created",
   "src/app/(dashboard)/dashboard/commercial/products/page.tsx [activatedNotification] -> product-activated",
   "src/app/(dashboard)/dashboard/commercial/products/page.tsx [deactivatedNotification] -> product-deactivated",
+  "src/app/(dashboard)/dashboard/commercial/quotes/new/page.tsx [successNotification] -> quote-created",
   "src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx [annulledNotification] -> indirect-cost-annulled",
   "src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx [createdNotification] -> indirect-cost-created",
   "src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx [createdNotification] -> margin-created",

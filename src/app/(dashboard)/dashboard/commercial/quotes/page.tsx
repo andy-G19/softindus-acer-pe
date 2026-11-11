@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { createReturnToHref, dashboardBreadcrumbs, navigationHrefs, withReturnTo } from "@/lib/navigation";
 import {
   parseDateParam,
   parseStringParam,
@@ -38,6 +38,8 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
   await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.3a: el alta vuelve a este listado con sus filtros.
+  const returnTo = createReturnToHref(navigationHrefs.quotes, params);
   const q = parseStringParam(params, "q");
   const client = parseStringParam(params, "client");
   const order = parseStringParam(params, "order");
@@ -66,7 +68,7 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/commercial/quotes/new">Nueva proforma</Link>
+            <Link href={withReturnTo(`${navigationHrefs.quotes}/new`, returnTo)}>Nueva proforma</Link>
           </Button>
         }
       />

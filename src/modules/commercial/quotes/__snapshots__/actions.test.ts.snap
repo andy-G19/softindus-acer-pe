@@ -423,7 +423,7 @@ exports[`annulQuoteAction > ya estaba anulada: vuelve al listado > resultado 1`]
 exports[`createQuoteAction > adelanto cero: nace vigente sin pago > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -432,6 +432,22 @@ exports[`createQuoteAction > adelanto cero: nace vigente sin pago > llamadas 1`]
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -509,6 +525,17 @@ exports[`createQuoteAction > adelanto cero: nace vigente sin pago > llamadas 1`]
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PRF00000001",
+      },
+      "where": {
+        "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -523,12 +550,28 @@ exports[`createQuoteAction > adelanto cero: nace vigente sin pago > llamadas 1`]
 ]
 `;
 
-exports[`createQuoteAction > adelanto cero: nace vigente sin pago > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-created"`;
+exports[`createQuoteAction > adelanto cero: nace vigente sin pago > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+    "id_proforma": "PRF00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "adelanto_inicial": "0",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
 
 exports[`createQuoteAction > adelanto igual al total: nace pagada y el pago es de cancelacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -537,6 +580,22 @@ exports[`createQuoteAction > adelanto igual al total: nace pagada y el pago es d
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -649,6 +708,17 @@ exports[`createQuoteAction > adelanto igual al total: nace pagada y el pago es d
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PRF00000001",
+      },
+      "where": {
+        "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -663,12 +733,28 @@ exports[`createQuoteAction > adelanto igual al total: nace pagada y el pago es d
 ]
 `;
 
-exports[`createQuoteAction > adelanto igual al total: nace pagada y el pago es de cancelacion > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-created"`;
+exports[`createQuoteAction > adelanto igual al total: nace pagada y el pago es de cancelacion > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+    "id_proforma": "PRF00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "adelanto_inicial": "150.50",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "transferencia",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
 
 exports[`createQuoteAction > adelanto sin metodo de pago > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -677,12 +763,30 @@ exports[`createQuoteAction > adelanto sin metodo de pago > llamadas 1`] = `
 ]
 `;
 
-exports[`createQuoteAction > adelanto sin metodo de pago > resultado 1`] = `"error: Selecciona el método de pago del adelanto."`;
+exports[`createQuoteAction > adelanto sin metodo de pago > resultado 1`] = `
+{
+  "error": "Revisa los datos de la proforma.",
+  "fieldErrors": {
+    "metodo_pago_adelanto": [
+      "Selecciona el método de pago del adelanto.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "adelanto_inicial": "20",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
 
-exports[`createQuoteAction > con adelanto parcial: nace aceptada y registra el adelanto como pago > llamadas 1`] = `
+exports[`createQuoteAction > clave de otro usuario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -691,6 +795,162 @@ exports[`createQuoteAction > con adelanto parcial: nace aceptada y registra el a
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createQuoteAction > clave de otro usuario > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "adelanto_inicial": "",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
+
+exports[`createQuoteAction > clave repetida: responde con la proforma guardada sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createQuoteAction > clave repetida: responde con la proforma guardada sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+    "id_proforma": "PRF00000009",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "adelanto_inicial": "",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
+
+exports[`createQuoteAction > con adelanto parcial: nace aceptada y registra el adelanto como pago > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -803,6 +1063,17 @@ exports[`createQuoteAction > con adelanto parcial: nace aceptada y registra el a
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PRF00000001",
+      },
+      "where": {
+        "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -817,12 +1088,28 @@ exports[`createQuoteAction > con adelanto parcial: nace aceptada y registra el a
 ]
 `;
 
-exports[`createQuoteAction > con adelanto parcial: nace aceptada y registra el adelanto como pago > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-created"`;
+exports[`createQuoteAction > con adelanto parcial: nace aceptada y registra el adelanto como pago > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+    "id_proforma": "PRF00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "adelanto_inicial": "50.25",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "yape",
+    "observaciones": "  entrega en obra  ",
+    "validez_dias": "15",
+  },
+}
+`;
 
 exports[`createQuoteAction > el adelanto supera el total > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -831,6 +1118,22 @@ exports[`createQuoteAction > el adelanto supera el total > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -879,74 +1182,30 @@ exports[`createQuoteAction > el adelanto supera el total > llamadas 1`] = `
 ]
 `;
 
-exports[`createQuoteAction > el adelanto supera el total > resultado 1`] = `"error: El adelanto inicial no puede ser mayor que el monto total."`;
-
-exports[`createQuoteAction > el pedido esta cancelado: se rechaza (D29) > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "SELLER",
+exports[`createQuoteAction > el adelanto supera el total > resultado 1`] = `
+{
+  "error": "El adelanto inicial no puede ser mayor que el monto total.",
+  "fieldErrors": {
+    "adelanto_inicial": [
+      "El adelanto inicial no puede ser mayor que el monto total.",
     ],
   },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "adelanto_inicial": "150.51",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "efectivo",
+    "observaciones": "",
+    "validez_dias": "15",
   },
-  {
-    "args": {
-      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
-      "values": [
-        "PED00000004",
-      ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "include": {
-        "detalle_pedido": {
-          "select": {
-            "subtotal": true,
-          },
-        },
-        "proforma": {
-          "select": {
-            "estado": true,
-            "id_proforma": true,
-            "numero_proforma": true,
-          },
-          "where": {
-            "estado": {
-              "in": [
-                "vigente",
-                "aceptada",
-                "pagada",
-              ],
-            },
-          },
-        },
-      },
-      "where": {
-        "id_pedido": "PED00000004",
-      },
-    },
-    "prisma": "pedido.findUnique",
-  },
-  {
-    "args": "Solo se puede generar la proforma de un pedido registrado o aprobado.",
-    "effect": "prisma.$transaction:rollback",
-  },
-]
+}
 `;
 
-exports[`createQuoteAction > el pedido esta cancelado: se rechaza (D29) > resultado 1`] = `"error: Solo se puede generar la proforma de un pedido registrado o aprobado."`;
-
-exports[`createQuoteAction > el pedido no existe > llamadas 1`] = `
+exports[`createQuoteAction > el administrador crea la proforma igual > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -958,189 +1217,19 @@ exports[`createQuoteAction > el pedido no existe > llamadas 1`] = `
   },
   {
     "args": {
-      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
-      "values": [
-        "PED00000004",
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
       ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "include": {
-        "detalle_pedido": {
-          "select": {
-            "subtotal": true,
-          },
-        },
-        "proforma": {
-          "select": {
-            "estado": true,
-            "id_proforma": true,
-            "numero_proforma": true,
-          },
-          "where": {
-            "estado": {
-              "in": [
-                "vigente",
-                "aceptada",
-                "pagada",
-              ],
-            },
-          },
-        },
+      "select": {
+        "clave": true,
       },
-      "where": {
-        "id_pedido": "PED00000004",
-      },
+      "skipDuplicates": true,
     },
-    "prisma": "pedido.findUnique",
-  },
-  {
-    "args": "El pedido seleccionado no existe.",
-    "effect": "prisma.$transaction:rollback",
-  },
-]
-`;
-
-exports[`createQuoteAction > el pedido no existe > resultado 1`] = `"error: El pedido seleccionado no existe."`;
-
-exports[`createQuoteAction > el pedido no tiene productos > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "SELLER",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
-      "values": [
-        "PED00000004",
-      ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "include": {
-        "detalle_pedido": {
-          "select": {
-            "subtotal": true,
-          },
-        },
-        "proforma": {
-          "select": {
-            "estado": true,
-            "id_proforma": true,
-            "numero_proforma": true,
-          },
-          "where": {
-            "estado": {
-              "in": [
-                "vigente",
-                "aceptada",
-                "pagada",
-              ],
-            },
-          },
-        },
-      },
-      "where": {
-        "id_pedido": "PED00000004",
-      },
-    },
-    "prisma": "pedido.findUnique",
-  },
-  {
-    "args": "El pedido no tiene productos asociados.",
-    "effect": "prisma.$transaction:rollback",
-  },
-]
-`;
-
-exports[`createQuoteAction > el pedido no tiene productos > resultado 1`] = `"error: El pedido no tiene productos asociados."`;
-
-exports[`createQuoteAction > el pedido ya tiene una proforma activa > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "SELLER",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
-      "values": [
-        "PED00000004",
-      ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "include": {
-        "detalle_pedido": {
-          "select": {
-            "subtotal": true,
-          },
-        },
-        "proforma": {
-          "select": {
-            "estado": true,
-            "id_proforma": true,
-            "numero_proforma": true,
-          },
-          "where": {
-            "estado": {
-              "in": [
-                "vigente",
-                "aceptada",
-                "pagada",
-              ],
-            },
-          },
-        },
-      },
-      "where": {
-        "id_pedido": "PED00000004",
-      },
-    },
-    "prisma": "pedido.findUnique",
-  },
-  {
-    "args": "Este pedido ya tiene una proforma activa: PF-00000003.",
-    "effect": "prisma.$transaction:rollback",
-  },
-]
-`;
-
-exports[`createQuoteAction > el pedido ya tiene una proforma activa > resultado 1`] = `"error: Este pedido ya tiene una proforma activa: PF-00000003."`;
-
-exports[`createQuoteAction > sin adelanto: nace vigente con el saldo igual al total > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "SELLER",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1218,6 +1307,17 @@ exports[`createQuoteAction > sin adelanto: nace vigente con el saldo igual al to
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PRF00000001",
+      },
+      "where": {
+        "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -1232,40 +1332,28 @@ exports[`createQuoteAction > sin adelanto: nace vigente con el saldo igual al to
 ]
 `;
 
-exports[`createQuoteAction > sin adelanto: nace vigente con el saldo igual al total > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-created"`;
-
-exports[`createQuoteAction > sin pedido > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "SELLER",
-    ],
+exports[`createQuoteAction > el administrador crea la proforma igual > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+    "id_proforma": "PRF00000001",
   },
-]
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "adelanto_inicial": "",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
 `;
 
-exports[`createQuoteAction > sin pedido > resultado 1`] = `"error: Debes seleccionar un pedido."`;
-
-exports[`createQuoteAction > sin permiso: el maestro de taller > llamadas 1`] = `
+exports[`createQuoteAction > el pedido esta cancelado: se rechaza (D29) > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "SELLER",
-    ],
-  },
-]
-`;
-
-exports[`createQuoteAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
-
-exports[`createQuoteAction > sin validez: se guarda nula > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1274,6 +1362,646 @@ exports[`createQuoteAction > sin validez: se guarda nula > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": "Solo se puede generar la proforma de un pedido registrado o aprobado.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createQuoteAction > el pedido esta cancelado: se rechaza (D29) > resultado 1`] = `
+{
+  "error": "Solo se puede generar la proforma de un pedido registrado o aprobado.",
+  "fieldErrors": {
+    "id_pedido": [
+      "Solo se puede generar la proforma de un pedido registrado o aprobado.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "adelanto_inicial": "",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
+
+exports[`createQuoteAction > el pedido no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": "El pedido seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createQuoteAction > el pedido no existe > resultado 1`] = `
+{
+  "error": "El pedido seleccionado no existe.",
+  "fieldErrors": {
+    "id_pedido": [
+      "El pedido seleccionado no existe.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "adelanto_inicial": "",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
+
+exports[`createQuoteAction > el pedido no tiene productos > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": "El pedido no tiene productos asociados.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createQuoteAction > el pedido no tiene productos > resultado 1`] = `
+{
+  "error": "El pedido no tiene productos asociados.",
+  "fieldErrors": {
+    "id_pedido": [
+      "El pedido no tiene productos asociados.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "adelanto_inicial": "",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
+
+exports[`createQuoteAction > el pedido ya tiene una proforma activa > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": "Este pedido ya tiene una proforma activa: PF-00000003.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createQuoteAction > el pedido ya tiene una proforma activa > resultado 1`] = `
+{
+  "error": "Este pedido ya tiene una proforma activa: PF-00000003.",
+  "fieldErrors": {
+    "id_pedido": [
+      "Este pedido ya tiene una proforma activa: PF-00000003.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "adelanto_inicial": "",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
+
+exports[`createQuoteAction > sin adelanto: nace vigente con el saldo igual al total > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proforma",
+      "prefijo": "PRF",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "adelanto_inicial": null,
+        "estado": "vigente",
+        "fecha_emision": 2026-07-15T15:00:00.000Z,
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000001",
+        "monto_total": "150.50",
+        "numero_proforma": "PF-00000001",
+        "observaciones": null,
+        "saldo": "150.50",
+        "validez_dias": 15,
+      },
+    },
+    "prisma": "proforma.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proforma creada para el pedido PED00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "proforma",
+      "id_registro_afectado": "PRF00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PRF00000001",
+      },
+      "where": {
+        "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createQuoteAction > sin adelanto: nace vigente con el saldo igual al total > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+    "id_proforma": "PRF00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "adelanto_inicial": "",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
+
+exports[`createQuoteAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createQuoteAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "adelanto_inicial": "",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
+
+exports[`createQuoteAction > sin pedido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createQuoteAction > sin pedido > resultado 1`] = `
+{
+  "error": "Revisa los datos de la proforma.",
+  "fieldErrors": {
+    "id_pedido": [
+      "Debes seleccionar un pedido.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "adelanto_inicial": "",
+    "id_pedido": "",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
+
+exports[`createQuoteAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createQuoteAction > sin permiso: el maestro de taller > resultado 1`] = `
+{
+  "error": "No tienes permisos para crear proformas.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "adelanto_inicial": "",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "15",
+  },
+}
+`;
+
+exports[`createQuoteAction > sin validez: se guarda nula > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_proforma",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1351,6 +2079,17 @@ exports[`createQuoteAction > sin validez: se guarda nula > llamadas 1`] = `
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PRF00000001",
+      },
+      "where": {
+        "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -1365,4 +2104,20 @@ exports[`createQuoteAction > sin validez: se guarda nula > llamadas 1`] = `
 ]
 `;
 
-exports[`createQuoteAction > sin validez: se guarda nula > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-created"`;
+exports[`createQuoteAction > sin validez: se guarda nula > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+    "id_proforma": "PRF00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "adelanto_inicial": "",
+    "id_pedido": "PED00000004",
+    "metodo_pago_adelanto": "",
+    "observaciones": "",
+    "validez_dias": "",
+  },
+}
+`;
