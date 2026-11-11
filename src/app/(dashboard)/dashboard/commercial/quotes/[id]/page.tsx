@@ -1,14 +1,17 @@
 import { notFound } from "next/navigation";
 
 import { ReceiptForm } from "@/components/commercial/receipt-form";
-import { PaymentForm } from "@/components/commercial/payment-form";
 import { requireRole } from "@/lib/authz";
+import { hasCents } from "@/lib/client-payment-amounts";
 import { PrintButton } from "@/components/commercial/print-button";
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { StateBadge } from "@/components/commercial/status-badge";
+import { commercialNotifications } from "@/modules/commercial/notifications";
+import { createPaymentAction } from "@/modules/commercial/payments/actions";
+import { PaymentForm } from "@/modules/commercial/payments/payment-form";
 import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
 import { getQuoteDetail } from "@/modules/commercial/quotes/queries";
 
@@ -274,13 +277,15 @@ export default async function QuoteDetailPage({
 
           <section className="grid gap-4 print:hidden lg:grid-cols-[1fr_1.2fr]">
               <PaymentForm
+                action={createPaymentAction}
                 quoteId={quote.id_proforma}
                 currentBalance={quote.saldo.toString()}
                 isPaid={
                   quote.estado === "anulada" ||
                   quote.estado === "pagada" ||
-                  Number(quote.saldo.toString()) <= 0
+                  !hasCents(quote.saldo)
                 }
+                successNotification={commercialNotifications["payment-registered"]}
               />
 
               <div className="rounded-lg border p-4">

@@ -145,6 +145,19 @@ definePageSuite([
         data: { "proforma.findUnique": paidQuoteWithAnnulledReceipt },
       },
       {
+        // C5 de la 11.3a: el pago trata un saldo cero como pagado aunque el estado no lo diga, y
+        // la seccion de pago lo muestra igual (deshabilitada).
+        name: "aceptada con saldo cero: no admite pagos",
+        params: { id: "PRF00000001" },
+        data: {
+          "proforma.findUnique": (args: PrismaArgs) => ({
+            ...annullableQuote(args),
+            estado: "aceptada",
+            saldo: new Prisma.Decimal("0"),
+          }),
+        },
+      },
+      {
         name: "inexistente",
         params: { id: "PRF99999999" },
         data: { "proforma.findUnique": null },

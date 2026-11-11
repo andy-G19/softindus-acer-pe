@@ -1425,6 +1425,359 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 }
 `;
 
+exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite pagos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+        "pago_cliente": {
+          "orderBy": {
+            "fecha_pago": "desc",
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "producto": true,
+              },
+            },
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000001",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite pagos > resultado 1`] = `
+{
+  "html": "<main>
+<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/quotes">Proformas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Detalle de proforma</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Detalle de proforma</h1>
+<p>Revisa, imprime o guarda la proforma como PDF desde el navegador.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a proformas">
+<svg/>Volver a proformas</button>
+<button data-variant="default" type="button">Imprimir proforma</button>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<button type="submit">Anular</button>
+</form>
+</div>
+</div>
+</section>
+</div>
+<section>
+<div>
+<header>
+<div>
+<h2>Industrias Aceros Perú</h2>
+<p>Taller metalúrgico especializado en herramientas agrícolas, productos metálicos y estructuras.</p>
+<div>
+<p>
+<span>Documento:</span> Proforma comercial</p>
+<p>
+<span>Pedido asociado:</span> id_pedido-1</p>
+</div>
+</div>
+<div>
+<p>N° Proforma</p>
+<p>numero_proforma-1</p>
+<p>
+<span>Emisión:</span> 1/7/2026</p>
+<p>
+<span>Validez:</span> 1 días</p>
+<p>
+<span>Vence:</span> 2/7/2026</p>
+</div>
+</header>
+<section>
+<div>
+<h3>Datos del cliente</h3>
+<div>
+<p>
+<span>Cliente:</span> nombre_razon_social-1</p>
+<p>
+<span>Tipo:</span> tipo_cliente-1</p>
+<p>
+<span>Documento:</span> tipo_documento-1 numero_documento-1</p>
+<p>
+<span>Teléfono:</span> telefono-1</p>
+<p>
+<span>Correo:</span> correo-1</p>
+<p>
+<span>Dirección:</span> direccion-1</p>
+<p>
+<span>Lugar de origen:</span> lugar_origen-1</p>
+</div>
+</div>
+<div>
+<h3>Datos del pedido</h3>
+<div>
+<p>
+<span>Código de pedido:</span> id_pedido-1</p>
+<p>
+<span>Fecha de pedido:</span> 1/7/2026</p>
+<p>
+<span>Entrega estimada:</span> 1/7/2026</p>
+<p>
+<span>Estado del pedido:</span> <span data-variant="outline">estado-1</span>
+</p>
+<p>
+<span>Estado de proforma:</span> <span data-variant="info">Aceptada</span>
+</p>
+</div>
+</div>
+</section>
+<section>
+<h3>Detalle de productos</h3>
+<div>
+<table>
+<thead>
+<tr>
+<th>Producto</th>
+<th>Categoría</th>
+<th>Cantidad</th>
+<th>Precio unitario</th>
+<th>Subtotal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nombre_producto-1</td>
+<td>categoria-1</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>nombre_producto-2</td>
+<td>categoria-2</td>
+<td>22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section>
+<div>
+<div>
+<span>Monto total</span>
+<span>S/ 11.50</span>
+</div>
+<div>
+<span>Adelanto inicial</span>
+<span>S/ 11.50</span>
+</div>
+<div>
+<div>
+<span>Saldo pendiente</span>
+<span>S/ 0.00</span>
+</div>
+</div>
+</div>
+</section>
+<section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<input type="hidden" name="clave_operacion"/>
+<div>
+<h3>Registrar pago de cliente</h3>
+<p>Registra adelantos, amortizaciones o cancelaciones para actualizar el saldo de la proforma.</p>
+</div>
+<div role="alert">
+<div>Esta proforma ya está pagada. No requiere nuevos pagos.</div>
+</div>
+<div>
+<div>
+<div data-disabled="true">
+<label for="monto_pagado">Monto pagado<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto_pagado" required="" disabled="" min="0.01" max="0" step="0.01" placeholder="Ejemplo: 150.00" name="monto_pagado" value=""/>
+</div>
+<button data-variant="link" type="button" disabled="">Usar saldo total: S/ 0.00</button>
+</div>
+<div data-disabled="true">
+<label for="metodo_pago">Método de pago<span aria-hidden="true">*</span>
+</label>
+<select id="metodo_pago" required="" disabled="" name="metodo_pago">
+<option value="efectivo" selected="">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="yape">Yape</option>
+<option value="plin">Plin</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div data-disabled="true">
+<label for="tipo_pago">Tipo de pago<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_pago" required="" disabled="" name="tipo_pago">
+<option value="amortizacion" selected="">Amortización</option>
+<option value="adelanto">Adelanto</option>
+<option value="cancelacion">Cancelación</option>
+</select>
+</div>
+</div>
+<div>
+<div>
+<span>Saldo actual</span>
+<span>S/ 0.00</span>
+</div>
+<div>
+<span>Saldo después del pago</span>
+<span>S/ 0.00</span>
+</div>
+</div>
+<div data-disabled="true">
+<label for="pago_observaciones">Observaciones</label>
+<textarea id="pago_observaciones" disabled="" name="observaciones" placeholder="Ejemplo: Pago recibido por Yape. Cliente cancela saldo pendiente.">
+</textarea>
+</div>
+<button data-variant="default" type="submit" disabled="">Registrar pago</button>
+</form>
+<div>
+<h3>Historial de pagos</h3>
+<p>Pagos registrados para esta proforma.</p>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Método</th>
+<th>Monto</th>
+<th>Saldo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colSpan="5">Todavía no hay pagos registrados para esta proforma.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<div>
+<h3>Registrar comprobante de venta</h3>
+<p>Registra boleta, factura, recibo u otro comprobante básico asociado a la proforma.</p>
+</div>
+<div>
+<div>
+<label>Tipo</label>
+<select name="tipo_comprobante" required="">
+<option value="boleta" selected="">Boleta</option>
+<option value="factura">Factura</option>
+<option value="recibo">Recibo</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label>Número</label>
+<input required="" name="numero_comprobante" value="B001-202607151500"/>
+</div>
+<div>
+<label>Monto total</label>
+<input type="number" min="0.01" step="0.01" required="" name="monto_total" value="11.50"/>
+<p>Monto sugerido: S/ 11.50</p>
+</div>
+</div>
+<div>
+<label>Observaciones</label>
+<textarea name="observaciones" placeholder="Ejemplo: Comprobante emitido por cancelación del pedido.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar comprobante</button>
+</form>
+<div>
+<h3>Comprobantes emitidos</h3>
+<p>Historial de comprobantes registrados para esta proforma.</p>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Número</th>
+<th>Monto</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colSpan="5">Todavía no hay comprobantes registrados para esta proforma.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section>
+<h3>Observaciones</h3>
+<p>observaciones-1</p>
+</section>
+<footer>
+<p>Esta proforma es un documento comercial referencial. Los precios, cantidades y fechas quedan sujetos a confirmación del taller.</p>
+<p>Documento generado desde el Sistema de Gestión Integral para Industrias Aceros Perú.</p>
+</footer>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
 exports[`/dashboard/commercial/quotes/[id] > anulable > llamadas 1`] = `
 [
   {
@@ -1627,20 +1980,25 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 <section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<input type="hidden" name="clave_operacion"/>
 <div>
 <h3>Registrar pago de cliente</h3>
 <p>Registra adelantos, amortizaciones o cancelaciones para actualizar el saldo de la proforma.</p>
 </div>
 <div>
 <div>
-<label>Monto pagado</label>
-<input type="number" min="0.01" max="11.5" step="0.01" placeholder="Ejemplo: 150.00" required="" name="monto_pagado" value=""/>
+<div>
+<label for="monto_pagado">Monto pagado<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto_pagado" required="" min="0.01" max="11.5" step="0.01" placeholder="Ejemplo: 150.00" name="monto_pagado" value=""/>
+</div>
 <button data-variant="link" type="button">Usar saldo total: S/ 11.50</button>
 </div>
 <div>
-<label>Método de pago</label>
-<select name="metodo_pago" required="">
-<option value="efectivo">Efectivo</option>
+<label for="metodo_pago">Método de pago<span aria-hidden="true">*</span>
+</label>
+<select id="metodo_pago" required="" name="metodo_pago">
+<option value="efectivo" selected="">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
 <option value="plin">Plin</option>
@@ -1648,9 +2006,10 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 </select>
 </div>
 <div>
-<label>Tipo de pago</label>
-<select name="tipo_pago" required="">
-<option value="amortizacion">Amortización</option>
+<label for="tipo_pago">Tipo de pago<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_pago" required="" name="tipo_pago">
+<option value="amortizacion" selected="">Amortización</option>
 <option value="adelanto">Adelanto</option>
 <option value="cancelacion">Cancelación</option>
 </select>
@@ -1667,8 +2026,8 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" placeholder="Ejemplo: Pago recibido por Yape. Cliente cancela saldo pendiente.">
+<label for="pago_observaciones">Observaciones</label>
+<textarea id="pago_observaciones" name="observaciones" placeholder="Ejemplo: Pago recibido por Yape. Cliente cancela saldo pendiente.">
 </textarea>
 </div>
 <button data-variant="default" type="submit">Registrar pago</button>
@@ -1967,20 +2326,25 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 <section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<input type="hidden" name="clave_operacion"/>
 <div>
 <h3>Registrar pago de cliente</h3>
 <p>Registra adelantos, amortizaciones o cancelaciones para actualizar el saldo de la proforma.</p>
 </div>
 <div>
 <div>
-<label>Monto pagado</label>
-<input type="number" min="0.01" max="11.5" step="0.01" placeholder="Ejemplo: 150.00" required="" name="monto_pagado" value=""/>
+<div>
+<label for="monto_pagado">Monto pagado<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto_pagado" required="" min="0.01" max="11.5" step="0.01" placeholder="Ejemplo: 150.00" name="monto_pagado" value=""/>
+</div>
 <button data-variant="link" type="button">Usar saldo total: S/ 11.50</button>
 </div>
 <div>
-<label>Método de pago</label>
-<select name="metodo_pago" required="">
-<option value="efectivo">Efectivo</option>
+<label for="metodo_pago">Método de pago<span aria-hidden="true">*</span>
+</label>
+<select id="metodo_pago" required="" name="metodo_pago">
+<option value="efectivo" selected="">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
 <option value="plin">Plin</option>
@@ -1988,9 +2352,10 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 </select>
 </div>
 <div>
-<label>Tipo de pago</label>
-<select name="tipo_pago" required="">
-<option value="amortizacion">Amortización</option>
+<label for="tipo_pago">Tipo de pago<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_pago" required="" name="tipo_pago">
+<option value="amortizacion" selected="">Amortización</option>
 <option value="adelanto">Adelanto</option>
 <option value="cancelacion">Cancelación</option>
 </select>
@@ -2007,8 +2372,8 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" placeholder="Ejemplo: Pago recibido por Yape. Cliente cancela saldo pendiente.">
+<label for="pago_observaciones">Observaciones</label>
+<textarea id="pago_observaciones" name="observaciones" placeholder="Ejemplo: Pago recibido por Yape. Cliente cancela saldo pendiente.">
 </textarea>
 </div>
 <button data-variant="default" type="submit">Registrar pago</button>
@@ -2382,6 +2747,7 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 <section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<input type="hidden" name="clave_operacion"/>
 <div>
 <h3>Registrar pago de cliente</h3>
 <p>Registra adelantos, amortizaciones o cancelaciones para actualizar el saldo de la proforma.</p>
@@ -2391,24 +2757,29 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 </div>
 <div>
 <div>
-<label>Monto pagado</label>
-<input type="number" min="0.01" max="0" step="0.01" placeholder="Ejemplo: 150.00" required="" disabled="" name="monto_pagado" value=""/>
+<div data-disabled="true">
+<label for="monto_pagado">Monto pagado<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto_pagado" required="" disabled="" min="0.01" max="0" step="0.01" placeholder="Ejemplo: 150.00" name="monto_pagado" value=""/>
+</div>
 <button data-variant="link" type="button" disabled="">Usar saldo total: S/ 0.00</button>
 </div>
-<div>
-<label>Método de pago</label>
-<select name="metodo_pago" required="" disabled="">
-<option value="efectivo">Efectivo</option>
+<div data-disabled="true">
+<label for="metodo_pago">Método de pago<span aria-hidden="true">*</span>
+</label>
+<select id="metodo_pago" required="" disabled="" name="metodo_pago">
+<option value="efectivo" selected="">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
 </div>
-<div>
-<label>Tipo de pago</label>
-<select name="tipo_pago" required="" disabled="">
-<option value="amortizacion">Amortización</option>
+<div data-disabled="true">
+<label for="tipo_pago">Tipo de pago<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_pago" required="" disabled="" name="tipo_pago">
+<option value="amortizacion" selected="">Amortización</option>
 <option value="adelanto">Adelanto</option>
 <option value="cancelacion">Cancelación</option>
 </select>
@@ -2424,9 +2795,9 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 <span>S/ 0.00</span>
 </div>
 </div>
-<div>
-<label>Observaciones</label>
-<textarea name="observaciones" placeholder="Ejemplo: Pago recibido por Yape. Cliente cancela saldo pendiente." disabled="">
+<div data-disabled="true">
+<label for="pago_observaciones">Observaciones</label>
+<textarea id="pago_observaciones" disabled="" name="observaciones" placeholder="Ejemplo: Pago recibido por Yape. Cliente cancela saldo pendiente.">
 </textarea>
 </div>
 <button data-variant="default" type="submit" disabled="">Registrar pago</button>

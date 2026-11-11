@@ -3,14 +3,13 @@ import { act, createElement as h } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { PaymentForm } from "@/components/commercial/payment-form";
+import { PaymentForm } from "@/modules/commercial/payments/payment-form";
 import { QuoteForm } from "@/modules/commercial/quotes/quote-form";
 
 // Vistas previas del saldo en los formularios de proforma y de pago (C2 de la 11.3a): usan la
 // misma regla en centimos que la accion (client-payment-amounts.ts), asi que muestran el saldo
 // que se guardara. Con number, 0.125 sobre 10.00 mostraba 9.88 y la accion guarda 9.87.
 
-vi.mock("@/modules/commercial/payments/actions", () => ({ createPaymentAction: vi.fn() }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
@@ -51,15 +50,23 @@ function shownAfter(label: string) {
 }
 
 describe("vista previa del pago de cliente", () => {
+  const paymentProps = {
+    action: vi.fn(),
+    quoteId: "PRF00000007",
+    currentBalance: "10",
+    isPaid: false,
+    successNotification: { type: "success", message: "Pago registrado correctamente" } as const,
+  };
+
   it("0.125 sobre 10.00 deja 9.87, como guarda la accion", async () => {
-    await act(async () => root.render(h(PaymentForm, { quoteId: "PRF00000007", currentBalance: "10", isPaid: false })));
+    await act(async () => root.render(h(PaymentForm, { ...paymentProps })));
     await type("monto_pagado", "0.125");
 
     expect(shownAfter("Saldo después del pago")).toBe("S/9.87");
   });
 
   it("un pago mayor que el saldo muestra cero", async () => {
-    await act(async () => root.render(h(PaymentForm, { quoteId: "PRF00000007", currentBalance: "10", isPaid: false })));
+    await act(async () => root.render(h(PaymentForm, { ...paymentProps })));
     await type("monto_pagado", "10.005");
 
     expect(shownAfter("Saldo después del pago")).toBe("S/0.00");

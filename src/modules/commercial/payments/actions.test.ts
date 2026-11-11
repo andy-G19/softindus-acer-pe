@@ -22,12 +22,21 @@ import {
 //
 // Los montos de estos casos son exactos en binario: un pago que se guardaria como 0.00
 // (hallazgo 2 de la 11.3a) tiene su propia prueba.
+//
+// Desde C5 de la 11.3a la accion devuelve un FormActionState (no redirige ni lanza a la pagina
+// de error), rechaza un rol sin permiso con un error y reclama la clave de la operacion como
+// primera sentencia de la transaccion.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio: se fija para que el snapshot sea estable.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -100,8 +109,24 @@ function quoteRow(changes: Record<string, unknown> = {}) {
   };
 }
 
+const CLAVE = "7a1d3c5e-2b4f-4a6c-8e0d-9f1a2b3c4d5e";
+
+/** La clave ya estaba en la tabla: el INSERT no devuelve filas y se lee la guardada. */
+function storedKey(changes: Record<string, unknown> = {}): DataOverrides {
+  return {
+    "operacion_idempotente.createManyAndReturn": [],
+    "operacion_idempotente.findUniqueOrThrow": {
+      tipo_operacion: "registrar_pago_cliente",
+      id_usuario: "USU00000001",
+      id_registro_resultado: "PCL00000009",
+      ...changes,
+    },
+  };
+}
+
 const form = (changes: Record<string, string> = {}) => ({
   id_proforma: PROFORMA,
+  clave_operacion: CLAVE,
   monto_pagado: "40.25",
   metodo_pago: "yape",
   tipo_pago: "amortizacion",
@@ -121,9 +146,8 @@ async function runAction(actionCase: ActionCase) {
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        await createPaymentAction(formData);
-
-        return "termino sin redirigir";
+        // El mismo estado inicial que usa el formulario con useActionState.
+        return await createPaymentAction({ status: "idle" }, formData);
       } catch (error) {
         return (
           describeNavigationError(error) ??
@@ -159,6 +183,11 @@ const cases: ActionCase[] = ([
   { name: "monto cero", form: form({ monto_pagado: "0" }) },
   { name: "metodo de pago invalido", form: form({ metodo_pago: "cheque" }) },
   { name: "sin permiso: el maestro de taller", role: "WORKSHOP_MASTER" },
+  { name: "el administrador registra el pago igual", role: "ADMIN" },
+  { name: "sin clave de operacion", form: form({ clave_operacion: "" }) },
+  { name: "sin proforma", form: form({ id_proforma: "" }) },
+  { name: "clave repetida: responde con el pago guardado sin escribir", data: storedKey() },
+  { name: "clave de otro usuario", data: storedKey({ id_usuario: "USU00000009" }) },
 ] satisfies (Omit<ActionCase, "form"> & { form?: ActionCase["form"] })[]).map((actionCase) => ({
   form: form(),
   ...actionCase,
@@ -206,13 +235,19 @@ describe("C2 de la 11.3a: el pago redondeado como las columnas", () => {
   it("un pago de 10.005 sobre 10.00 se rechaza: la columna lo guardaria como 10.01", async () => {
     const { outcome } = await runAction({ name: "10.005", form: form({ monto_pagado: "10.005" }), data: ten });
 
-    expect(outcome).toBe("error: El pago no puede ser mayor que el saldo pendiente: S/ 10.00.");
+    const message = "El pago no puede ser mayor que el saldo pendiente: S/ 10.00.";
+
+    expect(outcome).toMatchObject({ status: "error", error: message, fieldErrors: { monto_pagado: [message] } });
   });
 
   it("un pago que se guardaria como 0.00 se rechaza sin abrir la transaccion", async () => {
     const { calls, outcome } = await runAction({ name: "0.004", form: form({ monto_pagado: "0.004" }), data: ten });
 
-    expect(outcome).toBe("error: El monto pagado debe ser mayor que cero.");
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "Revisa los datos del pago.",
+      fieldErrors: { monto_pagado: ["El monto pagado debe ser mayor que cero."] },
+    });
     expect(calls.some((call) => "effect" in call && call.effect === "prisma.$transaction")).toBe(false);
   });
 });
@@ -235,6 +270,71 @@ describe("C3 de la 11.3a: el pago decide con la proforma bloqueada", () => {
       table: "proforma",
       id: PROFORMA,
       reads: (call) => call.prisma === "proforma.findUnique",
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C5 de la 11.3a (D27): el pago con resultado e idempotencia
+// ---------------------------------------------------------------------------
+
+// La clave se reclama como primera sentencia de la transaccion, antes del bloqueo de la proforma
+// y del correlativo: un reenvio responde con el pago ya guardado y no descuenta el saldo otra
+// vez. Un rechazo despues del reclamo lanza dentro de la transaccion, asi la clave se libera y
+// el envio corregido se guarda.
+describe("C5 de la 11.3a: el pago con resultado e idempotencia", () => {
+  type Calls = Awaited<ReturnType<typeof runAction>>["calls"];
+
+  const index = (calls: Calls, name: string) => calls.findIndex((call) => "prisma" in call && call.prisma === name);
+
+  it("reclama la clave antes de bloquear la proforma y la completa con el pago", async () => {
+    const { calls, outcome } = await runAction({ name: "C5", form: form() });
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_pago_cliente: "PCL00000001", clave_operacion: CLAVE },
+    });
+    expect(index(calls, "operacion_idempotente.createManyAndReturn")).toBeGreaterThan(-1);
+    expect(index(calls, "operacion_idempotente.createManyAndReturn")).toBeLessThan(index(calls, "$queryRaw"));
+    expect(index(calls, "proforma.update")).toBeLessThan(index(calls, "operacion_idempotente.updateMany"));
+  });
+
+  it("una clave repetida no bloquea, no registra el pago ni toca el saldo", async () => {
+    const { calls, outcome } = await runAction({ name: "C5", form: form(), data: storedKey() });
+
+    expect(outcome).toMatchObject({ status: "success", data: { id_pago_cliente: "PCL00000009", clave_operacion: CLAVE } });
+    expect(index(calls, "$queryRaw")).toBe(-1);
+    expect(index(calls, "pago_cliente.create")).toBe(-1);
+    expect(index(calls, "proforma.update")).toBe(-1);
+  });
+
+  it.each([
+    ["la proforma no existe", null, "La proforma seleccionada no existe."],
+    ["anulada", quoteRow({ estado: "anulada" }), "No se puede registrar pagos en una proforma anulada."],
+    ["pagada", quoteRow({ estado: "pagada", saldo: D("0.00") }), "La proforma ya se encuentra pagada."],
+  ])("%s: el error queda en la seccion, sin campo, y deshace el reclamo", async (_name, row, message) => {
+    const { calls, outcome } = await runAction({ name: "C5", form: form(), data: { "proforma.findUnique": row } });
+
+    expect(outcome).toMatchObject({ status: "error", error: message, fieldErrors: undefined });
+    expect(calls.some((call) => "effect" in call && call.effect === "prisma.$transaction:rollback")).toBe(true);
+  });
+
+  it("sin permiso responde en la seccion y no consulta nada", async () => {
+    const { calls, outcome } = await runAction({ name: "C5", form: form(), role: "WORKSHOP_MASTER" });
+
+    expect(outcome).toMatchObject({ status: "error", error: "No tienes permisos para registrar pagos de clientes." });
+    expect(calls.some((call) => "prisma" in call)).toBe(false);
+  });
+
+  it("tras un error devuelve lo enviado para volver a mostrarlo", async () => {
+    const { outcome } = await runAction({
+      name: "C5",
+      form: form({ monto_pagado: "100.25", metodo_pago: "plin", tipo_pago: "cancelacion", observaciones: "  caja  " }),
+    });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      values: { monto_pagado: "100.25", metodo_pago: "plin", tipo_pago: "cancelacion", observaciones: "  caja  " },
     });
   });
 });
