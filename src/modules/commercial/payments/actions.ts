@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { registerAuditLog } from "@/lib/audit";
+import { calculateClientPayment, hasCents } from "@/lib/client-payment-amounts";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
@@ -55,22 +56,17 @@ export async function createPaymentAction(formData: FormData) {
       throw new Error("No se puede registrar pagos en una proforma anulada.");
     }
 
-    if (quote.estado === "pagada" || Number(quote.saldo.toString()) <= 0) {
+    if (quote.estado === "pagada" || !hasCents(quote.saldo)) {
       throw new Error("La proforma ya se encuentra pagada.");
     }
 
-    const saldoActual = Number(quote.saldo.toString());
+    // C2 de la 11.3a: el monto se redondea como la columna antes de compararlo con el saldo
+    // guardado y de restarlo, en centimos (client-payment-amounts.ts).
+    const payment = calculateClientPayment({ balance: quote.saldo, amount: monto_pagado });
 
-    if (monto_pagado > saldoActual) {
-      throw new Error(
-        `El pago no puede ser mayor que el saldo pendiente: S/ ${saldoActual.toFixed(
-          2
-        )}.`
-      );
+    if (!payment.accepted) {
+      throw new Error(`El pago no puede ser mayor que el saldo pendiente: S/ ${payment.balance}.`);
     }
-
-    const nuevoSaldo = Number((saldoActual - monto_pagado).toFixed(2));
-    const nuevoEstado = nuevoSaldo === 0 ? "pagada" : "aceptada";
 
     const id_pago_cliente = await getNextCorrelativeId(tx, {
       codigoEntidad: "pago_cliente",
@@ -84,10 +80,10 @@ export async function createPaymentAction(formData: FormData) {
         id_pedido: quote.id_pedido,
         id_usuario_registro: session.user.id,
         fecha_pago: new Date(),
-        monto_pagado,
+        monto_pagado: payment.amount,
         metodo_pago,
         tipo_pago,
-        saldo_actual: nuevoSaldo,
+        saldo_actual: payment.newBalance,
         observaciones: emptyToNull(formData.get("observaciones")),
       },
     });
@@ -97,8 +93,8 @@ export async function createPaymentAction(formData: FormData) {
         id_proforma: quote.id_proforma,
       },
       data: {
-        saldo: nuevoSaldo,
-        estado: nuevoEstado,
+        saldo: payment.newBalance,
+        estado: payment.status,
       },
     });
 

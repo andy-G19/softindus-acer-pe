@@ -248,3 +248,62 @@ characterize("annulQuoteAction", annulQuoteAction, { "proforma.findUnique": quot
   },
   { name: "sin permiso: el maestro de taller", form: annulForm(), role: "WORKSHOP_MASTER" },
 ]);
+
+// ---------------------------------------------------------------------------
+// C2 de la 11.3a (hallazgo 1 y redondeo): montos de la proforma como los guardan las columnas
+// ---------------------------------------------------------------------------
+
+// El total se sumaba con number: 100.10 + 200.20 daba 300.29999999999995 y un adelanto de
+// 300.30 se rechazaba por «mayor que el monto total». El saldo se restaba con number sobre el
+// adelanto sin redondear: con 0.125 sobre 10.00 el saldo era 9.88 y la columna guardaba el
+// adelanto como 0.13, asi que adelanto y saldo sumaban 10.01. Un adelanto de 0.004 se
+// registraba como un pago de 0.00. Lo que importa es el valor que guardan las columnas
+// numeric(12, 2), no el tipo de JavaScript.
+describe("C2 de la 11.3a: los montos de la proforma redondeados como las columnas", () => {
+  const stored = (value: unknown) => new Prisma.Decimal(String(value)).toFixed(2);
+  const withSubtotals = (...subtotals: string[]): DataOverrides => ({
+    "pedido.findUnique": orderRow({ detalle_pedido: subtotals.map((subtotal) => ({ subtotal: D(subtotal) })) }),
+  });
+
+  function dataOf(calls: Awaited<ReturnType<typeof run>>["calls"], name: string) {
+    const call = calls.find((item) => "prisma" in item && item.prisma === name);
+
+    return (call as { args: { data: Record<string, unknown> } } | undefined)?.args.data;
+  }
+
+  const create = (form: Record<string, string>, data: DataOverrides) =>
+    run(createQuoteAction, { name: "C2", form: quoteForm(form), data }, {});
+
+  it("un adelanto igual a un total con decimales (100.10 + 200.20) la deja pagada con saldo 0.00", async () => {
+    const { calls, outcome } = await create(
+      { adelanto_inicial: "300.30", metodo_pago_adelanto: "efectivo" },
+      withSubtotals("100.10", "200.20"),
+    );
+
+    expect(outcome).toBe("redirect:/dashboard/commercial/quotes?toast=quote-created");
+
+    const proforma = dataOf(calls, "proforma.create");
+    const pago = dataOf(calls, "pago_cliente.create");
+
+    expect([stored(proforma?.monto_total), stored(proforma?.saldo), proforma?.estado]).toEqual(["300.30", "0.00", "pagada"]);
+    expect([stored(pago?.monto_pagado), stored(pago?.saldo_actual), pago?.tipo_pago]).toEqual(["300.30", "0.00", "cancelacion"]);
+  });
+
+  it("un adelanto de 0.125 sobre 10.00: adelanto y saldo suman el total con lo que guardan las columnas", async () => {
+    const { calls } = await create({ adelanto_inicial: "0.125", metodo_pago_adelanto: "yape" }, withSubtotals("10.00"));
+
+    const proforma = dataOf(calls, "proforma.create");
+    const pago = dataOf(calls, "pago_cliente.create");
+
+    expect([stored(proforma?.adelanto_inicial), stored(proforma?.saldo)]).toEqual(["0.13", "9.87"]);
+    expect([stored(pago?.monto_pagado), stored(pago?.saldo_actual)]).toEqual(["0.13", "9.87"]);
+  });
+
+  it("un adelanto que se guardaria como 0.00 se rechaza sin escribir", async () => {
+    const { calls, outcome } = await create({ adelanto_inicial: "0.004", metodo_pago_adelanto: "yape" }, withSubtotals("10.00"));
+
+    expect(outcome).toBe("error: El adelanto debe ser cero o de al menos S/ 0.01.");
+    expect(dataOf(calls, "proforma.create")).toBeUndefined();
+    expect(dataOf(calls, "pago_cliente.create")).toBeUndefined();
+  });
+});

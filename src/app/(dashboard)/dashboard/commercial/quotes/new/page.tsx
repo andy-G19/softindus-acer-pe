@@ -1,5 +1,6 @@
 
 import { requireRole } from "@/lib/authz";
+import { calculateQuoteTotal } from "@/lib/client-payment-amounts";
 import { QuoteForm } from "@/components/commercial/quote-form";
 import { getQuotableOrders } from "@/modules/commercial/quotes/queries";
 import { PageHeader } from "@/components/navigation/page-header";
@@ -20,9 +21,8 @@ export default async function NewQuotePage({ searchParams }: NewQuotePageProps) 
   const orders = await getQuotableOrders();
 
   const orderOptions = orders.map((order) => {
-    const total = order.detalle_pedido.reduce((sum, detail) => {
-      return sum + Number(detail.subtotal.toString());
-    }, 0);
+    // C2 de la 11.3a: el mismo total que guardara la proforma, en centimos.
+    const total = calculateQuoteTotal(order.detalle_pedido.map((detail) => detail.subtotal));
 
     return {
       id_pedido: order.id_pedido,
@@ -30,7 +30,7 @@ export default async function NewQuotePage({ searchParams }: NewQuotePageProps) 
       fecha_pedido: order.fecha_pedido.toISOString(),
       fecha_entrega_estimada:
         order.fecha_entrega_estimada?.toISOString() ?? null,
-      monto_total: total.toString(),
+      monto_total: total,
       productos: order.detalle_pedido.map((detail) => ({
         id_detalle_pedido: detail.id_detalle_pedido,
         producto: detail.producto.nombre_producto,

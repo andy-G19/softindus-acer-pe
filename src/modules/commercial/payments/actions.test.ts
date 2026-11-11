@@ -174,3 +174,44 @@ describe("createPaymentAction", () => {
     });
   }
 });
+
+// ---------------------------------------------------------------------------
+// C2 de la 11.3a (hallazgo 2 y redondeo): el pago como lo guardan las columnas
+// ---------------------------------------------------------------------------
+
+// El saldo se restaba con number sobre el monto sin redondear: un pago de 0.125 sobre 10.00
+// dejaba un saldo de 9.88 y la columna guardaba el pago como 0.13 (pago y saldo sumaban
+// 10.01). Un pago de 0.004 se guardaba como 0.00. Lo que importa es el valor que guardan las
+// columnas numeric(12, 2), no el tipo de JavaScript.
+describe("C2 de la 11.3a: el pago redondeado como las columnas", () => {
+  const stored = (value: unknown) => new Prisma.Decimal(String(value)).toFixed(2);
+  const ten = { "proforma.findUnique": quoteRow({ saldo: D("10.00") }) };
+
+  function dataOf(calls: Awaited<ReturnType<typeof runAction>>["calls"], name: string) {
+    const call = calls.find((item) => "prisma" in item && item.prisma === name);
+
+    return (call as { args: { data: Record<string, unknown> } } | undefined)?.args.data;
+  }
+
+  it("un pago de 0.125 sobre 10.00: pago y saldo suman el saldo anterior con lo que guardan las columnas", async () => {
+    const { calls } = await runAction({ name: "0.125", form: form({ monto_pagado: "0.125" }), data: ten });
+
+    const pago = dataOf(calls, "pago_cliente.create");
+
+    expect([stored(pago?.monto_pagado), stored(pago?.saldo_actual)]).toEqual(["0.13", "9.87"]);
+    expect(stored(dataOf(calls, "proforma.update")?.saldo)).toBe("9.87");
+  });
+
+  it("un pago de 10.005 sobre 10.00 se rechaza: la columna lo guardaria como 10.01", async () => {
+    const { outcome } = await runAction({ name: "10.005", form: form({ monto_pagado: "10.005" }), data: ten });
+
+    expect(outcome).toBe("error: El pago no puede ser mayor que el saldo pendiente: S/ 10.00.");
+  });
+
+  it("un pago que se guardaria como 0.00 se rechaza sin abrir la transaccion", async () => {
+    const { calls, outcome } = await runAction({ name: "0.004", form: form({ monto_pagado: "0.004" }), data: ten });
+
+    expect(outcome).toBe("error: El monto pagado debe ser mayor que cero.");
+    expect(calls.some((call) => "effect" in call && call.effect === "prisma.$transaction")).toBe(false);
+  });
+});

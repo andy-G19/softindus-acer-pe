@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { registerAuditLog } from "@/lib/audit";
+import { calculateQuoteAmounts } from "@/lib/client-payment-amounts";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
@@ -77,22 +78,23 @@ export async function createQuoteAction(formData: FormData) {
     );
   }
 
-  const montoTotal = order.detalle_pedido.reduce((total, detail) => {
-    return total + Number(detail.subtotal.toString());
-  }, 0);
+  // C2 de la 11.3a (hallazgo 1): total, adelanto y saldo en centimos, redondeados como las
+  // columnas (client-payment-amounts.ts).
+  const amounts = calculateQuoteAmounts({
+    subtotals: order.detalle_pedido.map((detail) => detail.subtotal),
+    advance: parsed.data.adelanto_inicial,
+  });
 
-  if (montoTotal <= 0) {
-    throw new Error("El monto total de la proforma debe ser mayor que cero.");
+  if (!amounts.accepted) {
+    throw new Error(
+      amounts.reason === "sin_total"
+        ? "El monto total de la proforma debe ser mayor que cero."
+        : "El adelanto inicial no puede ser mayor que el monto total.",
+    );
   }
 
-  const adelantoInicial = parsed.data.adelanto_inicial ?? 0;
-
-  if (adelantoInicial > montoTotal) {
-    throw new Error("El adelanto inicial no puede ser mayor que el monto total.");
-  }
-
-  const saldo = Number((montoTotal - adelantoInicial).toFixed(2));
-  const hasAdvance = adelantoInicial > 0;
+  const adelantoInicial = amounts.advance;
+  const saldo = amounts.balance;
 
   await prisma.$transaction(async (tx) => {
     const id_proforma = await getNextCorrelativeId(tx, {
@@ -105,7 +107,7 @@ export async function createQuoteAction(formData: FormData) {
     // Sin adelanto la proforma nace vigente; con adelanto el cliente ya la
     // aceptó y pagó algo, así que sigue los mismos estados que un pago normal
     // (ver createPaymentAction).
-    const estado = !hasAdvance ? "vigente" : saldo <= 0 ? "pagada" : "aceptada";
+    const estado = amounts.status;
 
     await tx.proforma.create({
       data: {
@@ -113,8 +115,8 @@ export async function createQuoteAction(formData: FormData) {
         id_pedido: parsed.data.id_pedido,
         numero_proforma,
         fecha_emision: fechaEmision,
-        monto_total: montoTotal,
-        adelanto_inicial: hasAdvance ? adelantoInicial : null,
+        monto_total: amounts.total,
+        adelanto_inicial: adelantoInicial,
         saldo,
         estado,
         validez_dias: parsed.data.validez_dias ?? null,
@@ -134,7 +136,7 @@ export async function createQuoteAction(formData: FormData) {
     // El adelanto es dinero que ya entró: se registra como pago_cliente para
     // que aparezca en el historial de pagos, quede en la trazabilidad y
     // bloquee la anulación de una proforma ya cobrada.
-    if (hasAdvance) {
+    if (adelantoInicial !== null) {
       const id_pago_cliente = await getNextCorrelativeId(tx, {
         codigoEntidad: "pago_cliente",
         prefijo: "PCL",
@@ -149,7 +151,7 @@ export async function createQuoteAction(formData: FormData) {
           fecha_pago: fechaEmision,
           monto_pagado: adelantoInicial,
           metodo_pago: parsed.data.metodo_pago_adelanto ?? "efectivo",
-          tipo_pago: saldo <= 0 ? "cancelacion" : "adelanto",
+          tipo_pago: estado === "pagada" ? "cancelacion" : "adelanto",
           saldo_actual: saldo,
           observaciones: "Adelanto inicial registrado al crear la proforma.",
         },

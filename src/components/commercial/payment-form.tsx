@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { createPaymentAction } from "@/modules/commercial/payments/actions";
+import { calculateClientPayment } from "@/lib/client-payment-amounts";
 import { formatMoney } from "@/lib/formatters";
 
 type PaymentFormProps = {
@@ -24,8 +25,10 @@ export function PaymentForm({
 }: PaymentFormProps) {
   const [amount, setAmount] = useState("");
   const balance = Number(currentBalance);
-  const amountNumber = Number(amount || 0);
-  const nextBalance = Math.max(balance - amountNumber, 0);
+  // C2 de la 11.3a: la vista previa usa la regla de la accion (client-payment-amounts.ts). Un
+  // pago mayor que el saldo muestra saldo cero, como antes; la accion lo rechaza.
+  const payment = calculateClientPayment({ balance: currentBalance, amount: amount || 0 });
+  const nextBalance = payment.accepted ? payment.newBalance : 0;
 
   return (
     <form

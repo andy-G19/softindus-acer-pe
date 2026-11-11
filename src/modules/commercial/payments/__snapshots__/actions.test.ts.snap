@@ -143,9 +143,9 @@ exports[`createPaymentAction > pago de todo el saldo: deja la proforma pagada > 
         "id_proforma": "PRF00000007",
         "id_usuario_registro": "USU00000001",
         "metodo_pago": "yape",
-        "monto_pagado": 100,
+        "monto_pagado": "100.00",
         "observaciones": "cancela en caja",
-        "saldo_actual": 0,
+        "saldo_actual": "0.00",
         "tipo_pago": "cancelacion",
       },
     },
@@ -155,7 +155,7 @@ exports[`createPaymentAction > pago de todo el saldo: deja la proforma pagada > 
     "args": {
       "data": {
         "estado": "pagada",
-        "saldo": 0,
+        "saldo": "0.00",
       },
       "where": {
         "id_proforma": "PRF00000007",
@@ -238,9 +238,9 @@ exports[`createPaymentAction > pago parcial: deja el saldo y la proforma aceptad
         "id_proforma": "PRF00000007",
         "id_usuario_registro": "USU00000001",
         "metodo_pago": "yape",
-        "monto_pagado": 40.25,
+        "monto_pagado": "40.25",
         "observaciones": null,
-        "saldo_actual": 59.75,
+        "saldo_actual": "59.75",
         "tipo_pago": "amortizacion",
       },
     },
@@ -250,7 +250,7 @@ exports[`createPaymentAction > pago parcial: deja el saldo y la proforma aceptad
     "args": {
       "data": {
         "estado": "aceptada",
-        "saldo": 59.75,
+        "saldo": "59.75",
       },
       "where": {
         "id_proforma": "PRF00000007",
@@ -333,9 +333,9 @@ exports[`createPaymentAction > primer pago de una proforma vigente: pasa a acept
         "id_proforma": "PRF00000007",
         "id_usuario_registro": "USU00000001",
         "metodo_pago": "yape",
-        "monto_pagado": 40.25,
+        "monto_pagado": "40.25",
         "observaciones": null,
-        "saldo_actual": 59.75,
+        "saldo_actual": "59.75",
         "tipo_pago": "amortizacion",
       },
     },
@@ -345,7 +345,7 @@ exports[`createPaymentAction > primer pago de una proforma vigente: pasa a acept
     "args": {
       "data": {
         "estado": "aceptada",
-        "saldo": 59.75,
+        "saldo": "59.75",
       },
       "where": {
         "id_proforma": "PRF00000007",

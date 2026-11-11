@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
+import { calculateQuoteAmounts, hasCents } from "@/lib/client-payment-amounts";
 import { createQuoteAction } from "@/modules/commercial/quotes/actions";
 import { formatDate, formatMoney } from "@/lib/formatters";
 
@@ -54,10 +55,14 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
     return orders.find((order) => order.id_pedido === selectedOrderId) ?? null;
   }, [orders, selectedOrderId]);
 
-  const totalAmount = Number(selectedOrder?.monto_total ?? 0);
-  const advance = Number(advanceAmount || 0);
-  const balance = Math.max(totalAmount - advance, 0);
-  const hasAdvance = advance > 0;
+  // C2 de la 11.3a: la vista previa usa la regla de la accion (client-payment-amounts.ts). Un
+  // adelanto mayor que el total muestra saldo cero, como antes; la accion lo rechaza.
+  const amounts = calculateQuoteAmounts({
+    subtotals: [selectedOrder?.monto_total ?? 0],
+    advance: advanceAmount || 0,
+  });
+  const balance = amounts.accepted ? amounts.balance : 0;
+  const hasAdvance = hasCents(advanceAmount || 0);
 
   const canCreateQuote = orders.length > 0;
   const hasDefaultOrder = Boolean(defaultOrderId && selectedOrder);
