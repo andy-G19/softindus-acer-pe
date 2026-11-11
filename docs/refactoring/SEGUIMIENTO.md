@@ -8321,6 +8321,99 @@ Datos leídos de la API de GitHub el 2026-11-10 (UTC) y comparados con git:
 - Vercel desplegó `2af80c6` en producción (`success` a las 23:54:16 UTC). La sub-entrega no trae
   migraciones.
 
+### Sub-entrega 11.3a — Proformas y pagos de cliente
+
+Fecha: 2026-11-10 (Lima). Estado: preparada en `staging`, sin publicar. Plan de la 11.3 en
+`tmp/e11-diff/plan-11-3.md`, con las decisiones D24 a D29 aprobadas: la 11.3 se parte en 11.3a
+(proformas y pagos), 11.3b (comprobantes y pedido) y 11.3c (listados) (D24); montos de cliente
+en céntimos partiendo del saldo guardado (D25); `lockOrderRow` y `lockQuoteRow`, el pedido antes
+que la proforma (D26); crear proforma en su página y el pago como sección del detalle, los dos
+con clave de operación (D27); anular con `ConfirmActionButton` (D28); y crear proforma solo
+sobre un pedido registrado o aprobado (D29, decisión de negocio).
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 5403a8a | docs | Integración de la 11.2c en `main` (PR #42). |
+| ff4671b | test | Caracterización de crear proforma, anular proforma y el pago de cliente (32 casos): no tenían ninguna prueba. Anular escribía fuera de una transacción y el doble lo deja a la vista (`writesOutsideTransaction`). |
+| aa52fbd | fix | `src/lib/client-payment-amounts.ts`: total, adelanto, pago y saldo en céntimos, en las acciones, la página y las dos vistas previas; el esquema rechaza un pago o adelanto que se guardaría como 0.00 (hallazgos 1 y 2, 5 casos rojos antes). |
+| 84b4f17 | fix | `lockOrderRow` y `lockQuoteRow`: crear proforma bloquea el pedido y lo lee dentro de la transacción, el pago y anular bloquean la proforma, anular escribe dentro de la transacción y crear rechaza un pedido que no esté registrado ni aprobado (D29; hallazgos 3 a 5, 8 casos rojos antes). |
+| 1673683 | feat | Crear proforma con `FormActionState`, `getAuthorizedSession`, clave `proforma:nueva` (primera sentencia), errores en su campo, `returnTo` y guardia de descarte. El formulario pasa a `modules/commercial/quotes`; la página deja de anidar un `<main>`. |
+| 390da0b | feat | Pago de cliente con resultado y clave `pago_cliente:<id_proforma>`, como sección del detalle que sigue montada aunque la proforma quede pagada. El formulario pasa a `modules/commercial/payments`. |
+| 8a3a908 | feat | Anular proforma con `ConfirmActionButton` y `RowStatusState`: el motivo del rechazo queda en la confirmación; `ConfirmDeleteButton` sale del listado y del detalle. |
+| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Diseño:
+
+- El pago parte del saldo guardado en la proforma y no lo recalcula desde los pagos (D25): no se
+  sabe si las proformas antiguas registraron su adelanto como pago, y recalcular podría cambiar
+  su saldo.
+- Crear proforma y el pago reclaman la clave antes del bloqueo; un rechazo posterior lanza dentro
+  de la transacción y libera la clave. Anular no reclama clave: su rechazo se decide antes de
+  escribir y se devuelve desde la transacción, sin revalidar.
+- El pedido se bloquea antes que la proforma; la 11.3b debe respetar ese orden en cancelar y
+  editar pedido y en los comprobantes.
+- Los errores de la proforma en el pago (no existe, anulada, pagada) son el mensaje general de la
+  sección: no los causa ningún campo. El del monto va en su campo.
+- El campo de observaciones del pago lleva `id="pago_observaciones"`: el formulario de
+  comprobante, en el mismo detalle, tiene sus propias observaciones.
+
+Evidencia:
+
+1. Rojo antes de cada `fix`: C2 con 5 casos y C3 con 8. En C4 a C6 (`feat`) las pruebas se
+   escribieron con el código; la caracterización de C1 mostró en su diff cada cambio de contrato,
+   revisado caso por caso con la secuencia de llamadas (`tmp/e11-diff/cmp_snap.py`).
+2. Mutaciones: C1 13 de 13, C2 13 de 14, C3 9 de 9, C4 17 de 17, C5 17 de 17 y C6 13 de 13; en
+   total, 82 muertas y 1 equivalente (la página de nueva proforma sumando con `number`: el error
+   es menor que 1e-10 y redondeado a céntimos se ve igual; el snapshot de la página no cambió). En
+   C4 una superviviente pedía un caso de página con `returnTo` y otra mostró que leer
+   `values.id_pedido` era redundante con el estado (se quitó); en C5, dos pruebas débiles se
+   reforzaron (el aviso solo se contaba, y saldo cero siempre venía con «pagada»).
+3. Snapshots revisados uno por uno. C2 solo cambió el tipo de lo enviado (`150.5` → `"150.50"`).
+   C3 añade el bloqueo y lleva la transacción al principio; ningún resultado cambia salvo el del
+   pedido cancelado. C4 y C5 añaden el reclamo y la confirmación de la clave y cambian la
+   respuesta a `FormActionState`. C6 cambia el `<form>` de SweetAlert por un botón destructivo.
+   Los casos que describían el comportamiento viejo se renombraron.
+4. Pruebas contra Postgres: crear proforma (6) y pago de cliente (4), que ejecutan los dos
+   candados nuevos de verdad.
+5. CSS compilado igual byte a byte en cada commit (112.316 bytes).
+6. `npm run check` terminó con código 0 antes de cada commit, hasta 4.894 pruebas en 275
+   archivos; las de integración pasan de 29 a 39 en 8 archivos.
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 266 / 4.779 | 275 / 4.894 |
+| Pruebas contra Postgres real (archivos / pruebas) | 6 / 29 | 8 / 39 |
+| Acciones de Comercial caracterizadas (proformas, pagos, comprobantes, cancelar) | 0 / 6 | 3 / 6 |
+| Acciones de Comercial que lanzan un error de validación a la página de error | 3 | 1 (emitir comprobante, 11.3b) |
+| Acciones de Comercial que rechazan con un `redirect` silencioso | 3 | 2 (anular comprobante y cancelar pedido, 11.3b) |
+| Operaciones de Comercial que deciden fuera de la transacción o sin bloquear su fila | 7 | 4 (comprobantes y pedido, 11.3b) |
+| Cálculos de montos de cliente con `number` (acciones, página y vistas previas) | 5 | 0 |
+| Acciones con clave de operación | 3 | 5 |
+| Páginas con `ConfirmDeleteButton` | 7 | 5 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 9 | 8 |
+| Listados de Comercial sin paginar | 3 | 3 (11.3c) |
+
+Hallazgos:
+
+1. Un adelanto igual a un total con decimales se rechazaba (100.10 + 200.20 sumaba
+   300.29999999999995). Corregido en `aa52fbd`.
+2. Un pago o adelanto de 0.004 se guardaba como 0.00, y uno de 0.125 sobre 10.00 dejaba pago y
+   saldo sumando 10.01. Corregido en `aa52fbd`.
+3. Crear proforma no comprobaba el estado del pedido: un formulario abierto antes de cancelarlo
+   creaba la proforma. Corregido en `84b4f17` (D29).
+4. Crear y anular proforma decidían fuera de la transacción; anular escribía sin transacción.
+   Corregido en `84b4f17`.
+5. Dos pagos simultáneos podían superar el saldo. Corregido en `84b4f17`.
+6. Un número de comprobante repetido en carrera rompe en el índice único y muestra la página de
+   error. Destino: 11.3b.
+7. El listado oculta «Anular» si la proforma tiene cualquier comprobante, también uno anulado; el
+   detalle y la acción solo cuentan los emitidos. Destino: 11.3b.
+8. Las pruebas de formulario de crear proforma (C4) y de la salida de inventario (11.2c) cuentan
+   el aviso de éxito sin comprobar cuál es (la debilidad que mostró C5). Destino: un commit
+   `test` propio.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -8346,7 +8439,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a en preparación |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a preparada en `staging`, sin publicar |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
@@ -8369,7 +8462,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 266 / 4.779 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 275 / 4.894 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -8384,8 +8477,10 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reportes con la paridad de filtro probada en `screen-parity.test.ts` | 0 de 9 | 9 de 9 | G4 y 11 |
 | Páginas de reporte que leen sus filtros distinto que su exportación (medido en la 11.1) | 6 | 0 | 11 |
 | Cálculos del estado de cobranza (pantalla y exportación) | 2 | 1 | 11 |
-| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 6 / 29 | 11 |
-| Acciones con clave de operación (`operacion_idempotente`) | 0 | 3 | 11 |
+| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 8 / 39 | 11 |
+| Acciones con clave de operación (`operacion_idempotente`) | 0 | 5 | 11 |
+| Cálculos de montos de cliente con `number` (acciones, página y vistas previas de proforma y pago) | 5 | 0 | 11 |
+| Operaciones de Comercial que deciden fuera de la transacción o sin bloquear su fila | 7 | 4 | 11 |
 | Movimientos de stock que no actualizan la alerta de stock (la salida) | 1 | 0 | 11 |
 | Cálculos del IGV con `number` (acción y formulario de compra) | 2 | 0 | 11 |
 | Operaciones que deciden sobre una compra sin bloquearla (pago y anulación) | 2 | 0 | 11 |
@@ -8398,7 +8493,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
 | Copias locales de `FieldError` | 16 | 1 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 9 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 8 | 9, 10 y 11 |
 | Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 3 (3 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
 | Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 0 | 10 y 11 |
@@ -8779,6 +8874,12 @@ Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e8d77ae`:
 Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de
 `FieldError` en 6; y los cambios de estado que voltean en 2.
+
+Actualizado en la sub-entrega 11.3a (2026-11-10) sobre `8a3a908`: pruebas 275 / 4.894, de ellas
+39 contra Postgres en 8 archivos. Acciones con clave de operación de 3 a 5 (crear proforma y pago
+de cliente). `<main>` anidado de 9 a 8 (nueva proforma). Filas nuevas, medidas sobre `5403a8a`:
+cálculos de montos de cliente con `number` (5 a 0) y operaciones de Comercial que deciden fuera
+de la transacción o sin bloquear (7 a 4). `ConfirmDeleteButton` baja de 7 a 5 páginas.
 
 Actualizado en la sub-entrega 11.2c (2026-11-10) sobre `5c3be73`: pruebas 266 / 4.779, de ellas
 29 contra Postgres en 6 archivos. Acciones con clave de operación de 2 a 3 (salida de
