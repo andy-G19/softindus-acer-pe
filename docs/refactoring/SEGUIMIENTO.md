@@ -8323,7 +8323,7 @@ Datos leídos de la API de GitHub el 2026-11-10 (UTC) y comparados con git:
 
 ### Sub-entrega 11.3a — Proformas y pagos de cliente
 
-Fecha: 2026-11-10 (Lima). Estado: preparada en `staging`, sin publicar. Plan de la 11.3 en
+Fecha: 2026-11-10 (Lima). Estado: verificada en `staging` (CI #164). Plan de la 11.3 en
 `tmp/e11-diff/plan-11-3.md`, con las decisiones D24 a D29 aprobadas: la 11.3 se parte en 11.3a
 (proformas y pagos), 11.3b (comprobantes y pedido) y 11.3c (listados) (D24); montos de cliente
 en céntimos partiendo del saldo guardado (D25); `lockOrderRow` y `lockQuoteRow`, el pedido antes
@@ -8340,7 +8340,8 @@ sobre un pedido registrado o aprobado (D29, decisión de negocio).
 | 1673683 | feat | Crear proforma con `FormActionState`, `getAuthorizedSession`, clave `proforma:nueva` (primera sentencia), errores en su campo, `returnTo` y guardia de descarte. El formulario pasa a `modules/commercial/quotes`; la página deja de anidar un `<main>`. |
 | 390da0b | feat | Pago de cliente con resultado y clave `pago_cliente:<id_proforma>`, como sección del detalle que sigue montada aunque la proforma quede pagada. El formulario pasa a `modules/commercial/payments`. |
 | 8a3a908 | feat | Anular proforma con `ConfirmActionButton` y `RowStatusState`: el motivo del rechazo queda en la confirmación; `ConfirmDeleteButton` sale del listado y del detalle. |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| a250a6a | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -8413,6 +8414,39 @@ Hallazgos:
 8. Las pruebas de formulario de crear proforma (C4) y de la salida de inventario (11.2c) cuentan
    el aviso de éxito sin comprobar cuál es (la debilidad que mostró C5). Destino: un commit
    `test` propio.
+9. En staging, la confirmación de anular nombra la proforma por su id interno («¿Anular la
+   proforma PRF00000005?») mientras el listado y el detalle la muestran por su número
+   (PF-00000005). Es de presentación. Destino: 11.3b, junto con el hallazgo 7.
+10. En staging, el campo del monto del pago (`max` igual al saldo) no deja enviar un pago mayor
+   desde el navegador, como el `step` de la salida (hallazgo 4 de la 11.2c): es una primera
+   barrera; la regla de la acción es la que protege el saldo.
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 8 commits (hasta `a250a6a`): CI #164 en verde en 3:46; Vercel desplegó staging
+   (04:03 UTC del 2026-11-11). Sin migraciones. Staging pidió primero el login de Vercel y
+   después el de la app; los dos los hizo el responsable.
+2. Con ADMIN (origen comprobado en llamadas aparte), sin escribir: «Nueva proforma» desde el
+   listado filtrado (`status=vigente`) lleva `returnTo` y Cancelar apunta a él; la clave de la
+   proforma está guardada para `proforma:nueva`; la página tiene un solo `<main>`. En el detalle
+   de PF-00000003 la sección de pago tiene su clave para `pago_cliente:PRF00000003` y sus
+   observaciones llevan `id="pago_observaciones"`. Ningún pedido de staging suma con error en
+   `number` (PED00000008 y PED00000009 son 12.81 + 12.81), así que el hallazgo 1 queda probado
+   por las pruebas unitarias y de Postgres; el pedido de prueba para verlo en staging no se
+   autorizó.
+3. Envíos autorizados por el responsable:
+
+   | Paso | Resultado |
+   |---|---|
+   | 1. Proforma sobre PED00000008 con adelanto 10.00 por Yape y validez 15 | PF-00000004 **aceptada**, total S/ 25.62, saldo S/ 15.62; el adelanto en el historial (adelanto, yape, S/ 10.00, saldo 15.62); un solo aviso con la nota de filtros; vuelve a `?status=vigente`; historial de 13 a 14; clave renovada; la fila no ofrece «Anular» |
+   | 2. Pago de 15.63 (saldo 15.62 comprobado antes) | Con el botón, el navegador lo frena por el `max` («El valor debe ser inferior o igual a 15,62»). Enviado sin esa validación: «El pago no puede ser mayor que el saldo pendiente: S/ 15.62.» en la sección y en el campo, con el foco en él; monto, método y tipo conservados con la misma clave; sin aviso; saldo sin cambio |
+   | 3. El mismo pago corregido a 15.62, con la misma clave | Un solo pago (cancelación, yape, S/ 15.62, saldo 0.00); PF-00000004 **pagada** con saldo S/ 0.00; un solo aviso aunque la sección llegó deshabilitada («Esta proforma ya está pagada.»); clave renovada |
+   | 4. Anular la proforma pagada con pagos | Ni el detalle ni la fila ofrecen «Anular»; no se forzó el envío. El rechazo en la confirmación lo cubren las pruebas en jsdom y Postgres |
+   | 5. Proforma sin adelanto sobre PED00000009 y reenvío con la misma clave | PF-00000005 **vigente** (S/ 25.62) con su «Anular» destructivo en la fila. Para el reenvío se devolvió la clave a `sessionStorage` y, como el pedido ya no se ofrece tras recargar, se añadió a la lista del formulario como lo tenía antes de guardar: respondió con el éxito de PF-00000005 y el listado sigue con cinco proformas, sin PF-00000006 |
+   | 6. Anular PF-00000005 desde su fila | La confirmación dice «La proforma queda anulada y su pedido vuelve a admitir una proforma nueva. No se puede deshacer.» con el botón destructivo; al confirmar, PF-00000005 **anulada**, un solo aviso («Proforma anulada»), el botón sale de la fila y el foco pasa a la fila; PED00000009 vuelve a aparecer en «Nueva proforma» |
+
+4. Datos de prueba que quedan en staging: PF-00000004 (PED00000008, pagada, con un adelanto de
+   S/ 10.00 y un pago de S/ 15.62) y PF-00000005 (PED00000009, anulada).
 
 ## Secuencia de próximas entregas
 
@@ -8439,7 +8473,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a preparada en `staging`, sin publicar |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a verificada en `staging` (CI #164) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
