@@ -1351,10 +1351,7 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 <div>
 <a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000011">Ver detalle</a>
 <a data-variant="default" href="/dashboard/commercial/quotes/PRF00000011">Registrar pago</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proforma" value="PRF00000011"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
 </tr>
@@ -1419,8 +1416,7 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </tbody>
 </table>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1504,10 +1500,7 @@ exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite 
 <button type="button" aria-label="Volver a proformas">
 <svg/>Volver a proformas</button>
 <button data-variant="default" type="button">Imprimir proforma</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proforma" value="id_proforma-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </div>
 </div>
 </section>
@@ -1857,10 +1850,7 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 <button type="button" aria-label="Volver a proformas">
 <svg/>Volver a proformas</button>
 <button data-variant="default" type="button">Imprimir proforma</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proforma" value="id_proforma-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </div>
 </div>
 </section>

@@ -1,18 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
 import { calculateQuoteAmounts } from "@/lib/client-payment-amounts";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
 import { claimOperation, completeOperation, IdempotencyConflictError } from "@/lib/idempotency";
 import { APP_ROLES } from "@/lib/permissions";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockOrderRow, lockQuoteRow } from "@/lib/row-locks";
 import {
   NOT_QUOTABLE_ORDER_MESSAGE,
@@ -27,10 +27,6 @@ function emptyToNull(value: FormDataEntryValue | null) {
   const text = value?.toString().trim();
 
   return text ? text : null;
-}
-
-async function requireCommercialPermission() {
-  return requireRole(["ADMIN", "SELLER"]);
 }
 
 /** Lo que el formulario de proforma envio, para volver a mostrarlo. */
@@ -301,18 +297,30 @@ export async function createQuoteAction(
   };
 }
 
-export async function annulQuoteAction(formData: FormData) {
-  const session = await requireCommercialPermission();
-  const quoteId = formData.get("id_proforma")?.toString().trim();
+// C6 de la 11.3a (D28): anular se confirma con ConfirmActionButton y la accion devuelve
+// RowStatusState. Antes redirigia al listado o al detalle sin decir por que no anulaba; ahora el
+// rechazo (tiene pagos, tiene un comprobante emitido, ya estaba anulada) queda en la
+// confirmacion, y sin permiso responde con un error en lugar de redirigir.
+export async function annulQuoteAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
+  const quoteId = formData.get("id_proforma")?.toString().trim() ?? "";
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN, APP_ROLES.SELLER]);
+
+  if (!session) {
+    return rowStatusError(quoteId, "No tienes permisos para anular proformas.");
+  }
 
   if (!quoteId) {
-    redirect(QUOTES_PATH);
+    return rowStatusError(quoteId, "Debe seleccionar una proforma válida.");
   }
 
   // C3 de la 11.3a (hallazgo 4): la proforma se bloquea y se lee dentro de la transaccion, y la
   // anulacion y su bitacora se escriben en ella: un pago simultaneo espera y ve la anulacion.
-  // Un rechazo devuelve a donde redirigir, sin escribir; el redirect va fuera de la transaccion.
-  const rejectedTo = await prisma.$transaction(async (tx) => {
+  // Sin clave de operacion, un rechazo se devuelve desde la transaccion antes de escribir nada.
+  const rejection = await prisma.$transaction(async (tx) => {
     await lockQuoteRow(tx, quoteId);
 
     const quote = await tx.proforma.findUnique({
@@ -336,12 +344,20 @@ export async function annulQuoteAction(formData: FormData) {
       },
     });
 
-    if (!quote || quote.estado === "anulada") {
-      return QUOTES_PATH;
+    if (!quote) {
+      return "La proforma seleccionada no existe.";
     }
 
-    if (quote.pago_cliente.length > 0 || quote.comprobante_venta.length > 0) {
-      return `${QUOTES_PATH}/${quoteId}`;
+    if (quote.estado === "anulada") {
+      return "La proforma ya está anulada.";
+    }
+
+    if (quote.pago_cliente.length > 0) {
+      return "No se puede anular una proforma con pagos registrados.";
+    }
+
+    if (quote.comprobante_venta.length > 0) {
+      return "No se puede anular una proforma con un comprobante emitido.";
     }
 
     await tx.proforma.update({
@@ -365,13 +381,14 @@ export async function annulQuoteAction(formData: FormData) {
     return null;
   });
 
-  if (rejectedTo) {
-    redirect(rejectedTo);
+  // Un rechazo no revalida: el repintado se llevaria el boton y su mensaje (CLAUDE.md).
+  if (rejection) {
+    return rowStatusError(quoteId, rejection);
   }
 
   revalidatePath(QUOTES_PATH);
   revalidatePath(`${QUOTES_PATH}/${quoteId}`);
   revalidatePath("/dashboard/commercial/orders");
 
-  redirect(`${QUOTES_PATH}?toast=quote-annulled`);
+  return rowStatusDone(quoteId, "anulada");
 }

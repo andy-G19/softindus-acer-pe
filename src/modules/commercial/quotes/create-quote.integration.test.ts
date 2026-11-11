@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import type { PrismaClient } from "@/generated/prisma/client";
-import { createQuoteAction } from "@/modules/commercial/quotes/actions";
+import { annulQuoteAction, createQuoteAction } from "@/modules/commercial/quotes/actions";
 import { getTestDatabase } from "@/testing/test-database";
 
 // Crear proforma contra Postgres real (PGlite), 11.3a. Corre la accion entera: la clave de la
@@ -165,6 +165,40 @@ describe("crear proforma en Postgres", () => {
     expect(state).toMatchObject({ status: "error", fieldErrors: { id_pedido: [message] } });
     expect(await quotesOf("PED00000003")).toEqual([]);
     expect(await prisma.operacion_idempotente.count({ where: { clave } })).toBe(0);
+  });
+
+  // C6 de la 11.3a: lo que la confirmacion de anular promete, contra la base real.
+  it("anular deja la proforma anulada y su pedido admite una proforma nueva", async () => {
+    await createOrder("PED00000005");
+
+    const created = await createQuoteAction({ status: "idle" }, quoteForm("PED00000005"));
+    const idProforma = (created as { data: { id_proforma: string } }).data.id_proforma;
+    const form = new FormData();
+
+    form.set("id_proforma", idProforma);
+
+    expect(await annulQuoteAction({ status: "idle" }, form)).toMatchObject({ status: "success", data: { estado: "anulada" } });
+    expect((await quotesOf("PED00000005")).map((quote) => quote.estado)).toEqual(["anulada"]);
+    expect(await createQuoteAction({ status: "idle" }, quoteForm("PED00000005"))).toMatchObject({ status: "success" });
+  });
+
+  it("anular una proforma con su adelanto registrado se rechaza y no la toca", async () => {
+    await createOrder("PED00000006");
+
+    const created = await createQuoteAction(
+      { status: "idle" },
+      quoteForm("PED00000006", { adelanto_inicial: "10", metodo_pago_adelanto: "efectivo" }),
+    );
+    const idProforma = (created as { data: { id_proforma: string } }).data.id_proforma;
+    const form = new FormData();
+
+    form.set("id_proforma", idProforma);
+
+    expect(await annulQuoteAction({ status: "idle" }, form)).toMatchObject({
+      status: "error",
+      error: "No se puede anular una proforma con pagos registrados.",
+    });
+    expect((await quotesOf("PED00000006")).map((quote) => quote.estado)).toEqual(["aceptada"]);
   });
 
   it("un segundo alta del mismo pedido con otra clave se rechaza por la proforma activa", async () => {

@@ -26,7 +26,8 @@ import {
 //
 // Desde C4 de la 11.3a crear proforma devuelve un FormActionState (no redirige ni lanza a la
 // pagina de error), rechaza un rol sin permiso con un error y reclama la clave de la operacion
-// como primera sentencia de la transaccion. Anular sigue redirigiendo hasta C6.
+// como primera sentencia de la transaccion. Desde C6, anular devuelve un RowStatusState: el
+// rechazo queda en la confirmacion en lugar de un redirect sin explicacion.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -120,7 +121,7 @@ async function run(action: (formData: FormData) => Promise<unknown>, actionCase:
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        // Crear proforma devuelve su resultado; anular redirige.
+        // Las dos acciones devuelven su resultado (crear desde C4, anular desde C6).
         return (await action(formDataOf(actionCase.form))) ?? "termino sin redirigir";
       } catch (error) {
         return (
@@ -258,27 +259,31 @@ function quoteRow(changes: Record<string, unknown> = {}) {
 
 const annulForm = (id = PROFORMA) => ({ id_proforma: id });
 
-characterize("annulQuoteAction", annulQuoteAction, { "proforma.findUnique": quoteRow() }, [
+/** El mismo estado inicial que usa ConfirmActionButton. */
+const annulQuote = (formData: FormData) => annulQuoteAction({ status: "idle" }, formData);
+
+characterize("annulQuoteAction", annulQuote, { "proforma.findUnique": quoteRow() }, [
   { name: "sin pagos ni comprobantes: la anula", form: annulForm() },
   { name: "el id con espacios se recorta", form: annulForm(` ${PROFORMA} `) },
-  { name: "sin id: vuelve al listado", form: annulForm("") },
-  { name: "no existe: vuelve al listado", form: annulForm(), data: { "proforma.findUnique": null } },
+  { name: "sin id: responde en la confirmacion", form: annulForm("") },
+  { name: "no existe: lo dice en la confirmacion", form: annulForm(), data: { "proforma.findUnique": null } },
   {
-    name: "ya estaba anulada: vuelve al listado",
+    name: "ya estaba anulada: lo dice en la confirmacion",
     form: annulForm(),
     data: { "proforma.findUnique": quoteRow({ estado: "anulada" }) },
   },
   {
-    name: "con pagos: vuelve al detalle sin decir por que",
+    name: "con pagos: dice por que no la anula",
     form: annulForm(),
     data: { "proforma.findUnique": quoteRow({ pago_cliente: [{ id_pago_cliente: "PCL00000002" }] }) },
   },
   {
-    name: "con un comprobante emitido: vuelve al detalle sin decir por que",
+    name: "con un comprobante emitido: dice por que no la anula",
     form: annulForm(),
     data: { "proforma.findUnique": quoteRow({ comprobante_venta: [{ id_comprobante: "CMP00000001" }] }) },
   },
   { name: "sin permiso: el maestro de taller", form: annulForm(), role: "WORKSHOP_MASTER" },
+  { name: "el administrador la anula igual", form: annulForm(), role: "ADMIN" },
 ]);
 
 // ---------------------------------------------------------------------------
@@ -392,9 +397,9 @@ describe("C3 de la 11.3a: proformas que deciden con la fila bloqueada", () => {
   });
 
   it("anular bloquea la proforma antes de leerla y escribe dentro de la transaccion", async () => {
-    const { calls, outcome } = await run(annulQuoteAction, { name: "C3", form: annulForm() }, { "proforma.findUnique": quoteRow() });
+    const { calls, outcome } = await run(annulQuote, { name: "C3", form: annulForm() }, { "proforma.findUnique": quoteRow() });
 
-    expect(outcome).toBe("redirect:/dashboard/commercial/quotes?toast=quote-annulled");
+    expect(outcome).toMatchObject({ status: "success", data: { estado: "anulada" } });
     expectRowLockedBefore(calls, { table: "proforma", id: PROFORMA, reads: reads("proforma.findUnique") });
     expect(writes(calls).map((call) => ("fueraDeTransaccion" in call ? "fuera" : "dentro"))).toEqual(["dentro"]);
     expect(calls.find((call) => "effect" in call && call.effect === "registerAuditLog")).toMatchObject({
@@ -402,14 +407,14 @@ describe("C3 de la 11.3a: proformas que deciden con la fila bloqueada", () => {
     });
   });
 
-  it("anular con pagos sigue volviendo al detalle, ahora sin escribir y con la fila bloqueada", async () => {
+  it("anular con pagos se rechaza sin escribir y con la fila bloqueada", async () => {
     const { calls, outcome } = await run(
-      annulQuoteAction,
+      annulQuote,
       { name: "C3", form: annulForm() },
       { "proforma.findUnique": quoteRow({ pago_cliente: [{ id_pago_cliente: "PCL00000002" }] }) },
     );
 
-    expect(outcome).toBe(`redirect:/dashboard/commercial/quotes/${PROFORMA}`);
+    expect(outcome).toMatchObject({ status: "error", error: "No se puede anular una proforma con pagos registrados." });
     expectRowLockedBefore(calls, { table: "proforma", id: PROFORMA, reads: reads("proforma.findUnique") });
     expect(writes(calls)).toEqual([]);
   });
@@ -483,5 +488,63 @@ describe("C4 de la 11.3a: crear proforma con resultado e idempotencia", () => {
       values: { id_pedido: PEDIDO, adelanto_inicial: "20", metodo_pago_adelanto: "", validez_dias: "15", observaciones: "  obra  " },
       fieldErrors: { metodo_pago_adelanto: ["Selecciona el método de pago del adelanto."] },
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C6 de la 11.3a (D28): anular con el rechazo en la confirmacion
+// ---------------------------------------------------------------------------
+
+// Anular redirigia al listado o al detalle sin decir por que no anulaba. Ahora devuelve un
+// RowStatusState: ConfirmActionButton deja el mensaje dentro de la confirmacion, y un rechazo
+// no revalida (el repintado se llevaria el boton y su mensaje).
+describe("C6 de la 11.3a: anular con el rechazo en la confirmacion", () => {
+  type Calls = Awaited<ReturnType<typeof run>>["calls"];
+
+  const revalidates = (calls: Calls) => calls.some((call) => "effect" in call && call.effect === "revalidatePath");
+  const annul = (data: DataOverrides, form = annulForm()) =>
+    run(annulQuote, { name: "C6", form }, { "proforma.findUnique": quoteRow(), ...data });
+
+  it.each([
+    ["no existe", { "proforma.findUnique": null }, "La proforma seleccionada no existe."],
+    ["ya estaba anulada", { "proforma.findUnique": quoteRow({ estado: "anulada" }) }, "La proforma ya está anulada."],
+    [
+      "con pagos",
+      { "proforma.findUnique": quoteRow({ pago_cliente: [{ id_pago_cliente: "PCL00000002" }] }) },
+      "No se puede anular una proforma con pagos registrados.",
+    ],
+    [
+      "con un comprobante emitido",
+      { "proforma.findUnique": quoteRow({ comprobante_venta: [{ id_comprobante: "CMP00000001" }] }) },
+      "No se puede anular una proforma con un comprobante emitido.",
+    ],
+  ])("%s: el motivo vuelve a la confirmacion y no revalida", async (_name, data, message) => {
+    const { calls, outcome } = await annul(data as DataOverrides);
+
+    expect(outcome).toMatchObject({ status: "error", error: message, values: { id: PROFORMA } });
+    expect(revalidates(calls)).toBe(false);
+  });
+
+  it("anulada: responde con su estado y revalida el listado, el detalle y los pedidos", async () => {
+    const { calls, outcome } = await annul({});
+
+    expect(outcome).toMatchObject({ status: "success", data: { estado: "anulada" }, values: { id: PROFORMA } });
+    expect(
+      calls.flatMap((call) => ("effect" in call && call.effect === "revalidatePath" ? [call.args] : [])),
+    ).toEqual(["/dashboard/commercial/quotes", `/dashboard/commercial/quotes/${PROFORMA}`, "/dashboard/commercial/orders"]);
+  });
+
+  it("sin permiso responde en la confirmacion y no consulta nada", async () => {
+    const { calls, outcome } = await run(annulQuote, { name: "C6", form: annulForm(), role: "WORKSHOP_MASTER" }, {});
+
+    expect(outcome).toMatchObject({ status: "error", error: "No tienes permisos para anular proformas." });
+    expect(calls.some((call) => "prisma" in call)).toBe(false);
+  });
+
+  it("sin proforma responde en la confirmacion y no consulta nada", async () => {
+    const { calls, outcome } = await annul({}, annulForm(""));
+
+    expect(outcome).toMatchObject({ status: "error", error: "Debe seleccionar una proforma válida." });
+    expect(calls.some((call) => "prisma" in call)).toBe(false);
   });
 });

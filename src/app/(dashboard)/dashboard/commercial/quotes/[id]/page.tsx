@@ -5,7 +5,6 @@ import { requireRole } from "@/lib/authz";
 import { hasCents } from "@/lib/client-payment-amounts";
 import { PrintButton } from "@/components/commercial/print-button";
 import { PageHeader } from "@/components/navigation/page-header";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { StateBadge } from "@/components/commercial/status-badge";
@@ -13,6 +12,7 @@ import { commercialNotifications } from "@/modules/commercial/notifications";
 import { createPaymentAction } from "@/modules/commercial/payments/actions";
 import { PaymentForm } from "@/modules/commercial/payments/payment-form";
 import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
+import { QuoteAnnulAction } from "@/modules/commercial/quotes/quote-annul-action";
 import { getQuoteDetail } from "@/modules/commercial/quotes/queries";
 
 type QuoteDetailPageProps = {
@@ -79,21 +79,11 @@ export default async function QuoteDetailPage({
               <PrintButton />
 
               {canAnnul ? (
-                <form action={annulQuoteAction}>
-                  <input
-                    type="hidden"
-                    name="id_proforma"
-                    value={quote.id_proforma}
-                  />
-                  <ConfirmDeleteButton
-                    title="¿Anular proforma?"
-                    description="Esta acción anulará la proforma y no se puede deshacer."
-                    confirmText="Confirmar anulación"
-                    entityName="proforma"
-                  >
-                    Anular
-                  </ConfirmDeleteButton>
-                </form>
+                <QuoteAnnulAction
+                  idProforma={quote.id_proforma}
+                  action={annulQuoteAction}
+                  successNotification={commercialNotifications["quote-annulled"]}
+                />
               ) : null}
             </>
           }

@@ -1,9 +1,9 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`annulQuoteAction > con pagos: vuelve al detalle sin decir por que > llamadas 1`] = `
+exports[`annulQuoteAction > con pagos: dice por que no la anula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -52,12 +52,21 @@ exports[`annulQuoteAction > con pagos: vuelve al detalle sin decir por que > lla
 ]
 `;
 
-exports[`annulQuoteAction > con pagos: vuelve al detalle sin decir por que > resultado 1`] = `"redirect:/dashboard/commercial/quotes/PRF00000007"`;
+exports[`annulQuoteAction > con pagos: dice por que no la anula > resultado 1`] = `
+{
+  "error": "No se puede anular una proforma con pagos registrados.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "PRF00000007",
+  },
+}
+`;
 
-exports[`annulQuoteAction > con un comprobante emitido: vuelve al detalle sin decir por que > llamadas 1`] = `
+exports[`annulQuoteAction > con un comprobante emitido: dice por que no la anula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -106,12 +115,120 @@ exports[`annulQuoteAction > con un comprobante emitido: vuelve al detalle sin de
 ]
 `;
 
-exports[`annulQuoteAction > con un comprobante emitido: vuelve al detalle sin decir por que > resultado 1`] = `"redirect:/dashboard/commercial/quotes/PRF00000007"`;
+exports[`annulQuoteAction > con un comprobante emitido: dice por que no la anula > resultado 1`] = `
+{
+  "error": "No se puede anular una proforma con un comprobante emitido.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "PRF00000007",
+  },
+}
+`;
+
+exports[`annulQuoteAction > el administrador la anula igual > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+        "pago_cliente": {
+          "select": {
+            "id_pago_cliente": true,
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Proforma anulada: PF-00000007",
+      "enTransaccion": true,
+      "entidad_afectada": "proforma",
+      "id_registro_afectado": "PRF00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulQuoteAction > el administrador la anula igual > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulada",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "PRF00000007",
+  },
+}
+`;
 
 exports[`annulQuoteAction > el id con espacios se recorta > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -194,12 +311,23 @@ exports[`annulQuoteAction > el id con espacios se recorta > llamadas 1`] = `
 ]
 `;
 
-exports[`annulQuoteAction > el id con espacios se recorta > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-annulled"`;
+exports[`annulQuoteAction > el id con espacios se recorta > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulada",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "PRF00000007",
+  },
+}
+`;
 
-exports[`annulQuoteAction > no existe: vuelve al listado > llamadas 1`] = `
+exports[`annulQuoteAction > no existe: lo dice en la confirmacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -248,12 +376,21 @@ exports[`annulQuoteAction > no existe: vuelve al listado > llamadas 1`] = `
 ]
 `;
 
-exports[`annulQuoteAction > no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/quotes"`;
+exports[`annulQuoteAction > no existe: lo dice en la confirmacion > resultado 1`] = `
+{
+  "error": "La proforma seleccionada no existe.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "PRF00000007",
+  },
+}
+`;
 
-exports[`annulQuoteAction > sin id: vuelve al listado > llamadas 1`] = `
+exports[`annulQuoteAction > sin id: responde en la confirmacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -262,12 +399,21 @@ exports[`annulQuoteAction > sin id: vuelve al listado > llamadas 1`] = `
 ]
 `;
 
-exports[`annulQuoteAction > sin id: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/quotes"`;
+exports[`annulQuoteAction > sin id: responde en la confirmacion > resultado 1`] = `
+{
+  "error": "Debe seleccionar una proforma válida.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "",
+  },
+}
+`;
 
 exports[`annulQuoteAction > sin pagos ni comprobantes: la anula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -350,12 +496,23 @@ exports[`annulQuoteAction > sin pagos ni comprobantes: la anula > llamadas 1`] =
 ]
 `;
 
-exports[`annulQuoteAction > sin pagos ni comprobantes: la anula > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-annulled"`;
+exports[`annulQuoteAction > sin pagos ni comprobantes: la anula > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulada",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "PRF00000007",
+  },
+}
+`;
 
 exports[`annulQuoteAction > sin permiso: el maestro de taller > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -364,12 +521,21 @@ exports[`annulQuoteAction > sin permiso: el maestro de taller > llamadas 1`] = `
 ]
 `;
 
-exports[`annulQuoteAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`annulQuoteAction > sin permiso: el maestro de taller > resultado 1`] = `
+{
+  "error": "No tienes permisos para anular proformas.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "PRF00000007",
+  },
+}
+`;
 
-exports[`annulQuoteAction > ya estaba anulada: vuelve al listado > llamadas 1`] = `
+exports[`annulQuoteAction > ya estaba anulada: lo dice en la confirmacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -418,7 +584,16 @@ exports[`annulQuoteAction > ya estaba anulada: vuelve al listado > llamadas 1`] 
 ]
 `;
 
-exports[`annulQuoteAction > ya estaba anulada: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/quotes"`;
+exports[`annulQuoteAction > ya estaba anulada: lo dice en la confirmacion > resultado 1`] = `
+{
+  "error": "La proforma ya está anulada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "PRF00000007",
+  },
+}
+`;
 
 exports[`createQuoteAction > adelanto cero: nace vigente sin pago > llamadas 1`] = `
 [
