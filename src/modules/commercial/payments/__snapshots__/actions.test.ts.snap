@@ -1,0 +1,508 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createPaymentAction > el pago supera el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "El pago no puede ser mayor que el saldo pendiente: S/ 100.00.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPaymentAction > el pago supera el saldo > resultado 1`] = `"error: El pago no puede ser mayor que el saldo pendiente: S/ 100.00."`;
+
+exports[`createPaymentAction > la proforma no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "La proforma seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPaymentAction > la proforma no existe > resultado 1`] = `"error: La proforma seleccionada no existe."`;
+
+exports[`createPaymentAction > metodo de pago invalido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createPaymentAction > metodo de pago invalido > resultado 1`] = `"error: Selecciona un método de pago válido."`;
+
+exports[`createPaymentAction > monto cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createPaymentAction > monto cero > resultado 1`] = `"error: El monto pagado debe ser mayor que cero."`;
+
+exports[`createPaymentAction > pago de todo el saldo: deja la proforma pagada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_cliente",
+      "prefijo": "PCL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-07-15T15:00:00.000Z,
+        "id_pago_cliente": "PCL00000001",
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000007",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "yape",
+        "monto_pagado": 100,
+        "observaciones": "cancela en caja",
+        "saldo_actual": 0,
+        "tipo_pago": "cancelacion",
+      },
+    },
+    "prisma": "pago_cliente.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "pagada",
+        "saldo": 0,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago de cliente registrado para la proforma PRF00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_cliente",
+      "id_registro_afectado": "PCL00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPaymentAction > pago de todo el saldo: deja la proforma pagada > resultado 1`] = `"redirect:/dashboard/commercial/quotes/PRF00000007?toast=payment-registered"`;
+
+exports[`createPaymentAction > pago parcial: deja el saldo y la proforma aceptada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_cliente",
+      "prefijo": "PCL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-07-15T15:00:00.000Z,
+        "id_pago_cliente": "PCL00000001",
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000007",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "yape",
+        "monto_pagado": 40.25,
+        "observaciones": null,
+        "saldo_actual": 59.75,
+        "tipo_pago": "amortizacion",
+      },
+    },
+    "prisma": "pago_cliente.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "aceptada",
+        "saldo": 59.75,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago de cliente registrado para la proforma PRF00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_cliente",
+      "id_registro_afectado": "PCL00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPaymentAction > pago parcial: deja el saldo y la proforma aceptada > resultado 1`] = `"redirect:/dashboard/commercial/quotes/PRF00000007?toast=payment-registered"`;
+
+exports[`createPaymentAction > primer pago de una proforma vigente: pasa a aceptada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_cliente",
+      "prefijo": "PCL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-07-15T15:00:00.000Z,
+        "id_pago_cliente": "PCL00000001",
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000007",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "yape",
+        "monto_pagado": 40.25,
+        "observaciones": null,
+        "saldo_actual": 59.75,
+        "tipo_pago": "amortizacion",
+      },
+    },
+    "prisma": "pago_cliente.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "aceptada",
+        "saldo": 59.75,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago de cliente registrado para la proforma PRF00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_cliente",
+      "id_registro_afectado": "PCL00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPaymentAction > primer pago de una proforma vigente: pasa a aceptada > resultado 1`] = `"redirect:/dashboard/commercial/quotes/PRF00000007?toast=payment-registered"`;
+
+exports[`createPaymentAction > proforma anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "No se puede registrar pagos en una proforma anulada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPaymentAction > proforma anulada > resultado 1`] = `"error: No se puede registrar pagos en una proforma anulada."`;
+
+exports[`createPaymentAction > proforma pagada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "La proforma ya se encuentra pagada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPaymentAction > proforma pagada > resultado 1`] = `"error: La proforma ya se encuentra pagada."`;
+
+exports[`createPaymentAction > saldo cero con la proforma aceptada: la da por pagada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "saldo": true,
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "La proforma ya se encuentra pagada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPaymentAction > saldo cero con la proforma aceptada: la da por pagada > resultado 1`] = `"error: La proforma ya se encuentra pagada."`;
+
+exports[`createPaymentAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createPaymentAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;

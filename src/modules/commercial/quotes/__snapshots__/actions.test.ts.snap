@@ -1,0 +1,1189 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`annulQuoteAction > con pagos: vuelve al detalle sin decir por que > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+        "pago_cliente": {
+          "select": {
+            "id_pago_cliente": true,
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+]
+`;
+
+exports[`annulQuoteAction > con pagos: vuelve al detalle sin decir por que > resultado 1`] = `"redirect:/dashboard/commercial/quotes/PRF00000007"`;
+
+exports[`annulQuoteAction > con un comprobante emitido: vuelve al detalle sin decir por que > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+        "pago_cliente": {
+          "select": {
+            "id_pago_cliente": true,
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+]
+`;
+
+exports[`annulQuoteAction > con un comprobante emitido: vuelve al detalle sin decir por que > resultado 1`] = `"redirect:/dashboard/commercial/quotes/PRF00000007"`;
+
+exports[`annulQuoteAction > el id con espacios se recorta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+        "pago_cliente": {
+          "select": {
+            "id_pago_cliente": true,
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proforma.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Proforma anulada: PF-00000007",
+      "enTransaccion": false,
+      "entidad_afectada": "proforma",
+      "id_registro_afectado": "PRF00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulQuoteAction > el id con espacios se recorta > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-annulled"`;
+
+exports[`annulQuoteAction > no existe: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+        "pago_cliente": {
+          "select": {
+            "id_pago_cliente": true,
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+]
+`;
+
+exports[`annulQuoteAction > no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/quotes"`;
+
+exports[`annulQuoteAction > sin id: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`annulQuoteAction > sin id: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/quotes"`;
+
+exports[`annulQuoteAction > sin pagos ni comprobantes: la anula > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+        "pago_cliente": {
+          "select": {
+            "id_pago_cliente": true,
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proforma.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Proforma anulada: PF-00000007",
+      "enTransaccion": false,
+      "entidad_afectada": "proforma",
+      "id_registro_afectado": "PRF00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulQuoteAction > sin pagos ni comprobantes: la anula > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-annulled"`;
+
+exports[`annulQuoteAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`annulQuoteAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`annulQuoteAction > ya estaba anulada: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+        "pago_cliente": {
+          "select": {
+            "id_pago_cliente": true,
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+]
+`;
+
+exports[`annulQuoteAction > ya estaba anulada: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/quotes"`;
+
+exports[`createQuoteAction > adelanto cero: nace vigente sin pago > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proforma",
+      "prefijo": "PRF",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "adelanto_inicial": null,
+        "estado": "vigente",
+        "fecha_emision": 2026-07-15T15:00:00.000Z,
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000001",
+        "monto_total": 150.5,
+        "numero_proforma": "PF-00000001",
+        "observaciones": null,
+        "saldo": 150.5,
+        "validez_dias": 15,
+      },
+    },
+    "prisma": "proforma.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proforma creada para el pedido PED00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "proforma",
+      "id_registro_afectado": "PRF00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createQuoteAction > adelanto cero: nace vigente sin pago > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-created"`;
+
+exports[`createQuoteAction > adelanto igual al total: nace pagada y el pago es de cancelacion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proforma",
+      "prefijo": "PRF",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "adelanto_inicial": 150.5,
+        "estado": "pagada",
+        "fecha_emision": 2026-07-15T15:00:00.000Z,
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000001",
+        "monto_total": 150.5,
+        "numero_proforma": "PF-00000001",
+        "observaciones": null,
+        "saldo": 0,
+        "validez_dias": 15,
+      },
+    },
+    "prisma": "proforma.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proforma creada para el pedido PED00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "proforma",
+      "id_registro_afectado": "PRF00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_cliente",
+      "prefijo": "PCL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-07-15T15:00:00.000Z,
+        "id_pago_cliente": "PCL00000001",
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000001",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "transferencia",
+        "monto_pagado": 150.5,
+        "observaciones": "Adelanto inicial registrado al crear la proforma.",
+        "saldo_actual": 0,
+        "tipo_pago": "cancelacion",
+      },
+    },
+    "prisma": "pago_cliente.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Adelanto inicial registrado para la proforma PRF00000001.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_cliente",
+      "id_registro_afectado": "PCL00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createQuoteAction > adelanto igual al total: nace pagada y el pago es de cancelacion > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-created"`;
+
+exports[`createQuoteAction > adelanto sin metodo de pago > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createQuoteAction > adelanto sin metodo de pago > resultado 1`] = `"error: Selecciona el método de pago del adelanto."`;
+
+exports[`createQuoteAction > con adelanto parcial: nace aceptada y registra el adelanto como pago > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proforma",
+      "prefijo": "PRF",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "adelanto_inicial": 50.25,
+        "estado": "aceptada",
+        "fecha_emision": 2026-07-15T15:00:00.000Z,
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000001",
+        "monto_total": 150.5,
+        "numero_proforma": "PF-00000001",
+        "observaciones": "entrega en obra",
+        "saldo": 100.25,
+        "validez_dias": 15,
+      },
+    },
+    "prisma": "proforma.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proforma creada para el pedido PED00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "proforma",
+      "id_registro_afectado": "PRF00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pago_cliente",
+      "prefijo": "PCL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-07-15T15:00:00.000Z,
+        "id_pago_cliente": "PCL00000001",
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000001",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "yape",
+        "monto_pagado": 50.25,
+        "observaciones": "Adelanto inicial registrado al crear la proforma.",
+        "saldo_actual": 100.25,
+        "tipo_pago": "adelanto",
+      },
+    },
+    "prisma": "pago_cliente.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Adelanto inicial registrado para la proforma PRF00000001.",
+      "enTransaccion": true,
+      "entidad_afectada": "pago_cliente",
+      "id_registro_afectado": "PCL00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createQuoteAction > con adelanto parcial: nace aceptada y registra el adelanto como pago > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-created"`;
+
+exports[`createQuoteAction > el adelanto supera el total > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`createQuoteAction > el adelanto supera el total > resultado 1`] = `"error: El adelanto inicial no puede ser mayor que el monto total."`;
+
+exports[`createQuoteAction > el pedido esta cancelado: hoy se acepta (hallazgo 3 de la 11.3a) > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proforma",
+      "prefijo": "PRF",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "adelanto_inicial": null,
+        "estado": "vigente",
+        "fecha_emision": 2026-07-15T15:00:00.000Z,
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000001",
+        "monto_total": 150.5,
+        "numero_proforma": "PF-00000001",
+        "observaciones": null,
+        "saldo": 150.5,
+        "validez_dias": 15,
+      },
+    },
+    "prisma": "proforma.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proforma creada para el pedido PED00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "proforma",
+      "id_registro_afectado": "PRF00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createQuoteAction > el pedido esta cancelado: hoy se acepta (hallazgo 3 de la 11.3a) > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-created"`;
+
+exports[`createQuoteAction > el pedido no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`createQuoteAction > el pedido no existe > resultado 1`] = `"error: El pedido seleccionado no existe."`;
+
+exports[`createQuoteAction > el pedido no tiene productos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`createQuoteAction > el pedido no tiene productos > resultado 1`] = `"error: El pedido no tiene productos asociados."`;
+
+exports[`createQuoteAction > el pedido ya tiene una proforma activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`createQuoteAction > el pedido ya tiene una proforma activa > resultado 1`] = `"error: Este pedido ya tiene una proforma activa: PF-00000003."`;
+
+exports[`createQuoteAction > sin adelanto: nace vigente con el saldo igual al total > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proforma",
+      "prefijo": "PRF",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "adelanto_inicial": null,
+        "estado": "vigente",
+        "fecha_emision": 2026-07-15T15:00:00.000Z,
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000001",
+        "monto_total": 150.5,
+        "numero_proforma": "PF-00000001",
+        "observaciones": null,
+        "saldo": 150.5,
+        "validez_dias": 15,
+      },
+    },
+    "prisma": "proforma.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proforma creada para el pedido PED00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "proforma",
+      "id_registro_afectado": "PRF00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createQuoteAction > sin adelanto: nace vigente con el saldo igual al total > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-created"`;
+
+exports[`createQuoteAction > sin pedido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createQuoteAction > sin pedido > resultado 1`] = `"error: Debes seleccionar un pedido."`;
+
+exports[`createQuoteAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createQuoteAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createQuoteAction > sin validez: se guarda nula > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": {
+          "select": {
+            "subtotal": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proforma",
+      "prefijo": "PRF",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "adelanto_inicial": null,
+        "estado": "vigente",
+        "fecha_emision": 2026-07-15T15:00:00.000Z,
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000001",
+        "monto_total": 150.5,
+        "numero_proforma": "PF-00000001",
+        "observaciones": null,
+        "saldo": 150.5,
+        "validez_dias": null,
+      },
+    },
+    "prisma": "proforma.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proforma creada para el pedido PED00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "proforma",
+      "id_registro_afectado": "PRF00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createQuoteAction > sin validez: se guarda nula > resultado 1`] = `"redirect:/dashboard/commercial/quotes?toast=quote-created"`;
