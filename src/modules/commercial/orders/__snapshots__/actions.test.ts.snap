@@ -3106,7 +3106,7 @@ exports[`updateOrderAction > pedido anulado > llamadas 1`] = `
 exports[`updateOrderAction > pedido anulado > resultado 1`] = `
 {
   "estado": {
-    "error": "No se puede modificar un pedido cancelado.",
+    "error": "No se puede modificar un pedido anulado.",
     "fieldErrors": undefined,
     "operationId": "operacion-de-prueba",
     "status": "error",

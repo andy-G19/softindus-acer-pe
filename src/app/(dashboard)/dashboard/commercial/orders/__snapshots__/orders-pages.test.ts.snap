@@ -1286,10 +1286,7 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/commercial/orders/PED00000011?returnTo=%2Fdashboard%2Fcommercial%2Forders">Ver detalle</a>
 <a data-variant="outline" href="/dashboard/commercial/orders/PED00000011/edit?returnTo=%2Fdashboard%2Fcommercial%2Forders">Editar</a>
 <a data-variant="default" href="/dashboard/commercial/quotes/new?orderId=PED00000011">Generar proforma</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_pedido" value="PED00000011"/>
-<button type="submit">Cancelar</button>
-</form>
+<button data-variant="destructive" type="button">Cancelar</button>
 </div>
 </td>
 </tr>
@@ -1381,8 +1378,7 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/commercial/orders?page=2">Siguiente</a>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;

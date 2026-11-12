@@ -1,16 +1,16 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { Prisma } from "@/generated/prisma/client";
 import type { FieldErrors } from "@/lib/errors";
 import { calculateOrderAmounts } from "@/lib/order-amounts";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockOrderRow } from "@/lib/row-locks";
 import { getOrderChangeBlock } from "@/modules/commercial/orders/order-rules";
 import { orderSchema, type OrderInput } from "@/schemas/commercial/order.schema";
@@ -52,10 +52,6 @@ function toDateOrNull(value?: string | null) {
   }
 
   return new Date(`${value}T00:00:00`);
-}
-
-async function requireCommercialPermission() {
-  return requireRole(["ADMIN", "SELLER"]);
 }
 
 function getOrderFormValues(formData: FormData): OrderFormValues {
@@ -496,23 +492,35 @@ export async function updateOrderAction(
   return orderSaved(values, orderId);
 }
 
-export async function cancelOrderAction(formData: FormData) {
-  const session = await requireCommercialPermission();
-  const orderId = formData.get("id_pedido")?.toString().trim();
+// C8 de la 11.3b (D34): cancelar se confirma con ConfirmActionButton y la accion devuelve
+// RowStatusState. Antes volvia al listado sin decir por que no cancelaba (era la accion que la
+// entrega 10 dejo redirigiendo, «whose cancel action stays for delivery 11»). Decide con el
+// pedido bloqueado (C4) y la regla comun de order-rules.ts (C3).
+export async function cancelOrderAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
+  const orderId = formData.get("id_pedido")?.toString().trim() ?? "";
+
+  const session = await getAuthorizedSession(["ADMIN", "SELLER"]);
+
+  if (!session) {
+    return rowStatusError(orderId, "No tienes permisos para cancelar pedidos.");
+  }
 
   if (!orderId) {
-    redirect(ORDERS_PATH);
+    return rowStatusError(orderId, "Debe seleccionar un pedido válido.");
   }
 
   // C4 de la 11.3b (D31): el pedido se bloquea y se lee dentro de la transaccion, y la
-  // cancelacion y su bitacora se escriben en ella. El redirect del rechazo va fuera.
-  const rejected = await prisma.$transaction(async (tx) => {
+  // cancelacion y su bitacora se escriben en ella. Un rechazo se devuelve antes de escribir.
+  const rejection = await prisma.$transaction(async (tx) => {
     await lockOrderRow(tx, orderId);
 
     const changeValidation = await validateOrderCanChange(tx, orderId);
 
     if (!changeValidation.ok) {
-      return true;
+      return changeValidation.message;
     }
 
     await tx.pedido.update({
@@ -533,14 +541,16 @@ export async function cancelOrderAction(formData: FormData) {
       tx,
     });
 
-    return false;
+    return null;
   });
 
-  if (rejected) {
-    redirect(ORDERS_PATH);
+  // Un rechazo no revalida: el repintado se llevaria el boton y su mensaje (CLAUDE.md).
+  if (rejection) {
+    return rowStatusError(orderId, rejection);
   }
 
   revalidatePath(ORDERS_PATH);
   revalidatePath(`${ORDERS_PATH}/${orderId}`);
-  redirect(`${ORDERS_PATH}?toast=order-cancelled`);
+
+  return rowStatusDone(orderId, "cancelado");
 }

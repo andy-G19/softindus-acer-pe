@@ -13,7 +13,13 @@
 
 export const ACTIVE_QUOTE_STATES = ["vigente", "aceptada", "pagada"];
 
-export const CLOSED_ORDER_MESSAGE = "No se puede modificar un pedido cancelado.";
+/**
+ * Nombra el estado real: antes los dos decian «cancelado», y un pedido anulado respondia que estaba
+ * cancelado (C8 de la 11.3b: el mensaje se ve desde que cancelar responde en la confirmacion).
+ */
+export function closedOrderMessage(estado: "cancelado" | "anulado") {
+  return `No se puede modificar un pedido ${estado}.`;
+}
 export const LINKED_ORDER_MESSAGE = "No se puede modificar un pedido con proforma, comprobante u orden asociada.";
 
 export type OrderChangeSubject = {
@@ -26,7 +32,7 @@ export type OrderChangeSubject = {
 /** El motivo por el que el pedido no se puede cambiar, o null si se puede. */
 export function getOrderChangeBlock(order: OrderChangeSubject): string | null {
   if (order.estado === "cancelado" || order.estado === "anulado") {
-    return CLOSED_ORDER_MESSAGE;
+    return closedOrderMessage(order.estado);
   }
 
   const hasActiveQuote = order.proforma.some((quote) => ACTIVE_QUOTE_STATES.includes(quote.estado));
