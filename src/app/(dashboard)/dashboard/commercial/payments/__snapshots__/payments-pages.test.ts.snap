@@ -209,7 +209,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fpayments%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver proforma</a>
 </td>
 </tr>
 <tr>
@@ -222,7 +222,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fpayments%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver proforma</a>
 </td>
 </tr>
 </tbody>
@@ -659,7 +659,7 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fpayments">Ver proforma</a>
 </td>
 </tr>
 <tr>
@@ -672,7 +672,7 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fpayments">Ver proforma</a>
 </td>
 </tr>
 </tbody>
@@ -883,7 +883,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fpayments">Ver proforma</a>
 </td>
 </tr>
 <tr>
@@ -896,7 +896,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fpayments">Ver proforma</a>
 </td>
 </tr>
 <tr>
@@ -909,7 +909,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fpayments">Ver proforma</a>
 </td>
 </tr>
 </tbody>
@@ -1226,7 +1226,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fpayments%3Fq%3DPRO%26client%3DCLI00000001%26order%3DPED00000001%26method%3Defectivo%26type%3Dadelanto%26from%3D2026-07-01%26to%3D2026-07-31">Ver proforma</a>
 </td>
 </tr>
 <tr>
@@ -1239,7 +1239,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fpayments%3Fq%3DPRO%26client%3DCLI00000001%26order%3DPED00000001%26method%3Defectivo%26type%3Dadelanto%26from%3D2026-07-01%26to%3D2026-07-31">Ver proforma</a>
 </td>
 </tr>
 </tbody>

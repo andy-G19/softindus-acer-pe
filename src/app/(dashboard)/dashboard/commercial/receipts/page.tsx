@@ -20,7 +20,12 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   parseDateParam,
@@ -41,6 +46,8 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
   await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.3c: el detalle de la proforma vuelve a este listado con sus filtros y su pagina.
+  const returnTo = createReturnToHref(navigationHrefs.salesReceipts, params);
   const q = parseStringParam(params, "q");
   const type = parseStringParam(params, "type");
   const status = parseStringParam(params, "status");
@@ -137,7 +144,10 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
                   {receipt.id_proforma ? (
                     <Button variant="outline" size="sm" asChild>
                       <Link
-                        href={`/dashboard/commercial/quotes/${receipt.id_proforma}`}
+                        href={withReturnTo(
+                          `${navigationHrefs.quotes}/${receipt.id_proforma}`,
+                          returnTo,
+                        )}
                       >
                         Ver proforma
                       </Link>

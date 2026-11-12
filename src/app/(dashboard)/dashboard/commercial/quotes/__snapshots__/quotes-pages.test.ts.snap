@@ -225,8 +225,8 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -245,8 +245,8 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -723,8 +723,8 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fbalance%3Dpaid">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fbalance%3Dpaid">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -743,8 +743,8 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fbalance%3Dpaid">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fbalance%3Dpaid">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -972,8 +972,8 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -992,8 +992,8 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -1323,8 +1323,8 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fq%3DPRF%26client%3DCLI00000001%26order%3DPED00000001%26status%3Dvigente%26balance%3Dpending%26from%3D2026-07-01%26to%3D2026-07-31">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fq%3DPRF%26client%3DCLI00000001%26order%3DPED00000001%26status%3Dvigente%26balance%3Dpending%26from%3D2026-07-01%26to%3D2026-07-31">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -1343,8 +1343,8 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fq%3DPRF%26client%3DCLI00000001%26order%3DPED00000001%26status%3Dvigente%26balance%3Dpending%26from%3D2026-07-01%26to%3D2026-07-31">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fq%3DPRF%26client%3DCLI00000001%26order%3DPED00000001%26status%3Dvigente%26balance%3Dpending%26from%3D2026-07-01%26to%3D2026-07-31">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -1572,8 +1572,8 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000011">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/PRF00000011">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000011?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/PRF00000011?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Registrar pago</a>
 <button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
@@ -1593,8 +1593,8 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000012">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/PRF00000012">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000012?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/PRF00000012?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -1613,7 +1613,7 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000013">Ver detalle</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000013?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Ver detalle</a>
 </div>
 </td>
 </tr>
@@ -1632,7 +1632,7 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000014">Ver detalle</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000014?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Ver detalle</a>
 </div>
 </td>
 </tr>

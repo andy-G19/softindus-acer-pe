@@ -165,7 +165,7 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Freceipts%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver proforma</a>
 <button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
@@ -530,7 +530,7 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Freceipts">Ver proforma</a>
 <button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
@@ -797,7 +797,7 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Freceipts%3Fq%3DB001%26type%3Dboleta%26status%3Demitido%26from%3D2026-07-01%26to%3D2026-07-31">Ver proforma</a>
 <button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
@@ -982,7 +982,7 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Freceipts">Ver proforma</a>
 <button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
@@ -999,7 +999,7 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Freceipts">Ver proforma</a>
 </div>
 </td>
 </tr>

@@ -42,7 +42,8 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
   await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
-  // C4 de la 11.3a: el alta vuelve a este listado con sus filtros.
+  // C4 de la 11.3a: el alta vuelve a este listado con sus filtros; desde C5 de la 11.3c, tambien
+  // el detalle (filtros y pagina).
   const returnTo = createReturnToHref(navigationHrefs.quotes, params);
   const q = parseStringParam(params, "q");
   const client = parseStringParam(params, "client");
@@ -189,7 +190,10 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                     <div className="flex flex-wrap gap-2">
                       <Button variant="outline" size="sm" asChild>
                         <Link
-                          href={`/dashboard/commercial/quotes/${quote.id_proforma}`}
+                          href={withReturnTo(
+                            `${navigationHrefs.quotes}/${quote.id_proforma}`,
+                            returnTo,
+                          )}
                         >
                           Ver detalle
                         </Link>
@@ -197,7 +201,10 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                       {canPay ? (
                         <Button size="sm" asChild>
                           <Link
-                            href={`/dashboard/commercial/quotes/${quote.id_proforma}`}
+                            href={withReturnTo(
+                              `${navigationHrefs.quotes}/${quote.id_proforma}`,
+                              returnTo,
+                            )}
                           >
                             Registrar pago
                           </Link>
