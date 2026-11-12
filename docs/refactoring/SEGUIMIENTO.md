@@ -8466,7 +8466,7 @@ Datos leídos de la API de GitHub el 2026-11-11 (UTC) y comparados con git:
 
 ### Sub-entrega 11.3b — Comprobantes y pedido
 
-Fecha: 2026-11-11 (Lima). Estado: preparada en `staging`, sin publicar. Plan en
+Fecha: 2026-11-11 (Lima). Estado: verificada en `staging` (CI #168). Plan en
 `tmp/e11-diff/plan-11-3b.md`, con las decisiones D30 a D35 aprobadas: una sola regla para cambiar
 un pedido, en la que una proforma o un comprobante anulados no bloquean (D30, decisión de
 negocio); editar y cancelar con el pedido bloqueado y emitir comprobante con la proforma
@@ -8486,7 +8486,8 @@ proforma con su número (D35).
 | 5650796 | feat | Anular comprobante con `ConfirmActionButton`, compare-and-set y bitácora en la transacción. |
 | caeb038 | feat | Cancelar pedido con `ConfirmActionButton` («Volver» para cerrar, `cancelText` nuevo y opcional); el mensaje de un pedido cerrado nombra su estado. |
 | 90bb51e | fix | La confirmación de anular proforma la nombra por su número (hallazgo 9 de la 11.3a); 1 caso rojo antes. |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| d044c88 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -8552,6 +8553,33 @@ Hallazgos:
 5. Al responder en la confirmación, un pedido anulado decía «No se puede modificar un pedido
    cancelado.»: el texto existía desde antes y nadie lo veía. Corregido en `caeb038`.
 6. Corrección del hallazgo 7 de la 11.3a: no era un defecto (ver allí).
+7. En staging, con el panel del navegador de unos 830 px de ancho, el menú lateral queda fijo
+   sobre el contenido y tapa su parte izquierda: un clic en la posición del botón de la sección de
+   comprobante abrió «Costos» (no se guardó nada). No es de esta sub-entrega. Destino: 11.7 o un
+   `fix` propio, con verificación en navegador.
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 11 commits (hasta `d044c88`): CI #168 en verde en 4:27; Vercel desplegó staging
+   (04:32 UTC del 2026-11-12). Sin migraciones.
+2. Con ADMIN (origen comprobado en llamadas aparte), sin escribir: PED00000009, cuya proforma se
+   anuló en la verificación de la 11.3a, ofrece «Editar» y «Cancelar» destructivo, y su edición
+   abre el formulario (antes de D30 volvía al detalle). En PF-00000004 la sección de comprobante
+   sugiere `B001-202611112336`: las 23:36 del 11/11 en hora de Lima, cuando en UTC ya era el 12;
+   la consola no registra errores de hidratación. Las observaciones del pago y del comprobante
+   llevan ids distintos y la página tiene un solo `<main>`.
+3. Envíos autorizados por el responsable:
+
+   | Paso | Resultado |
+   |---|---|
+   | 1. Comprobante en PF-00000004 con el número `R001-202607171133`, ya usado (comprobado en el listado) | «Ya existe un comprobante con ese número.» en la sección y en su campo, con el foco en él; el número escrito se conserva (la sugerencia no lo pisa) con la misma clave; sin aviso ni comprobante |
+   | 2. El mismo comprobante con el número sugerido y la misma clave | Un primer intento no llegó a enviarse: el clic cayó en el menú lateral (hallazgo 7) y llevó a «Costos»; el listado confirmó que no se guardó nada y la clave seguía guardada. Repetido pulsando el botón por script: `B001-202611112339`, boleta por S/ 25.62, **emitido**; un solo aviso; la sección queda deshabilitada con «Esta proforma ya tiene un comprobante emitido.»; clave renovada |
+   | 3. Anular ese comprobante desde el listado | La confirmación lo nombra por su número y dice «El comprobante queda anulado y su proforma vuelve a admitir un comprobante nuevo. No se puede deshacer.»; **anulado**, un aviso, la fila sin botón y el foco en la fila; PF-00000004 vuelve a admitir un comprobante (sugiere `B001-202611112340`) |
+   | 4. Editar PED00000009 (solo observaciones: «Verificacion 11.3b») | Un aviso con la nota de filtros, vuelta a `?q=PED00000009`; el historial de 12 a 13 y **Atrás vuelve a la edición sin saltarse el listado** (hallazgo 9 de la 11.2b, verificado en pedidos sin defecto); el detalle conserva el total S/ 25.62 |
+   | 5. Cancelar PED00000009 desde su fila | La confirmación ofrece «Volver» y «Cancelar pedido» (destructivo) con «El pedido queda cancelado: ya no se puede editar ni generar su proforma. No se puede deshacer.»; **cancelado**, un aviso, la fila sin «Editar» ni «Cancelar» y el foco en la fila |
+
+4. Datos de prueba que quedan en staging: el comprobante `B001-202611112339` de PF-00000004
+   (anulado) y PED00000009 cancelado, con las observaciones «Verificacion 11.3b».
 
 ## Secuencia de próximas entregas
 
@@ -8578,7 +8606,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b preparada en `staging`, sin publicar |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b verificada en `staging` (CI #168) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
