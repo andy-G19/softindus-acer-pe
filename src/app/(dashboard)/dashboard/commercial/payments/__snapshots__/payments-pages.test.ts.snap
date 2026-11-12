@@ -11,9 +11,14 @@ exports[`/dashboard/commercial/payments > fechas no validas > llamadas 1`] = `
   },
   {
     "args": {
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_cliente": "desc",
+        },
+      ],
       "select": {
         "fecha_pago": true,
         "id_pago_cliente": true,
@@ -37,6 +42,8 @@ exports[`/dashboard/commercial/payments > fechas no validas > llamadas 1`] = `
         "saldo_actual": true,
         "tipo_pago": true,
       },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -48,6 +55,20 @@ exports[`/dashboard/commercial/payments > fechas no validas > llamadas 1`] = `
       },
     },
     "prisma": "pago_cliente.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "fecha_pago": {
+              "gte": 2026-03-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pago_cliente.count",
   },
   {
     "args": {
@@ -207,6 +228,13 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/payments?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -223,9 +251,14 @@ exports[`/dashboard/commercial/payments > rango invertido > llamadas 1`] = `
   },
   {
     "args": {
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_cliente": "desc",
+        },
+      ],
       "select": {
         "fecha_pago": true,
         "id_pago_cliente": true,
@@ -249,6 +282,8 @@ exports[`/dashboard/commercial/payments > rango invertido > llamadas 1`] = `
         "saldo_actual": true,
         "tipo_pago": true,
       },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -261,6 +296,21 @@ exports[`/dashboard/commercial/payments > rango invertido > llamadas 1`] = `
       },
     },
     "prisma": "pago_cliente.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "fecha_pago": {
+              "gte": 2026-07-31T00:00:00.000Z,
+              "lt": 2026-07-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pago_cliente.count",
   },
   {
     "args": {
@@ -404,6 +454,13 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 0-0 de 0 pagos · Página 1 de 1</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<button data-variant="outline" disabled="">Siguiente</button>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -420,9 +477,14 @@ exports[`/dashboard/commercial/payments > sin filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_cliente": "desc",
+        },
+      ],
       "select": {
         "fecha_pago": true,
         "id_pago_cliente": true,
@@ -446,9 +508,17 @@ exports[`/dashboard/commercial/payments > sin filtros > llamadas 1`] = `
         "saldo_actual": true,
         "tipo_pago": true,
       },
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "pago_cliente.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "pago_cliente.count",
   },
   {
     "args": {
@@ -608,6 +678,13 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/payments?page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -624,9 +701,14 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > llamadas 1`] 
   },
   {
     "args": {
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_cliente": "desc",
+        },
+      ],
       "select": {
         "fecha_pago": true,
         "id_pago_cliente": true,
@@ -650,9 +732,17 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > llamadas 1`] 
         "saldo_actual": true,
         "tipo_pago": true,
       },
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "pago_cliente.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "pago_cliente.count",
   },
   {
     "args": {
@@ -825,6 +915,13 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/payments?page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -841,9 +938,14 @@ exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_cliente": "desc",
+        },
+      ],
       "select": {
         "fecha_pago": true,
         "id_pago_cliente": true,
@@ -867,6 +969,8 @@ exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
         "saldo_actual": true,
         "tipo_pago": true,
       },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -923,6 +1027,65 @@ exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
       },
     },
     "prisma": "pago_cliente.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_pedido": {
+                  "contains": "PRO",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_proforma": {
+                  "contains": "PRO",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "proforma": {
+                  "pedido": {
+                    "cliente": {
+                      "nombre_razon_social": {
+                        "contains": "PRO",
+                        "mode": "insensitive",
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "proforma": {
+              "pedido": {
+                "id_cliente": "CLI00000001",
+              },
+            },
+          },
+          {
+            "id_pedido": "PED00000001",
+          },
+          {
+            "metodo_pago": "efectivo",
+          },
+          {
+            "tipo_pago": "adelanto",
+          },
+          {
+            "fecha_pago": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pago_cliente.count",
   },
   {
     "args": {
@@ -1081,6 +1244,13 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/payments?q=PRO&amp;client=CLI00000001&amp;order=PED00000001&amp;method=efectivo&amp;type=adelanto&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",

@@ -5,6 +5,7 @@ import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,7 @@ import {
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   parseDateParam,
   parseStringParam,
@@ -29,7 +31,7 @@ import { commercialNotifications } from "@/modules/commercial/notifications";
 import { getOptionLabel, RECEIPT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
 import { annulReceiptAction } from "@/modules/commercial/receipts/actions";
 import { ReceiptAnnulAction } from "@/modules/commercial/receipts/receipt-annul-action";
-import { getReceiptList } from "@/modules/commercial/receipts/queries";
+import { getReceiptListData } from "@/modules/commercial/receipts/queries";
 
 type ReceiptsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -44,7 +46,13 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
   const status = parseStringParam(params, "status");
   const from = parseDateParam(params, "from");
   const to = parseDateParam(params, "to");
-  const receipts = await getReceiptList({ q, type, status, from, to });
+  const { page, pageSize, skip, take } = getPaginationParams(params);
+  const { receipts, totalItems } = await getReceiptListData(
+    { q, type, status, from, to },
+    { skip, take },
+  );
+
+  const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
     <div className="space-y-6">
@@ -159,6 +167,13 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
           ) : null}
         </TableBody>
       </Table>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.salesReceipts}
+        searchParams={params}
+        itemLabel="comprobantes"
+      />
     </div>
   );
 }

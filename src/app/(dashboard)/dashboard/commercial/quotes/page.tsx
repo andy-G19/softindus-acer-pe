@@ -5,6 +5,7 @@ import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -21,6 +22,7 @@ import {
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { createReturnToHref, dashboardBreadcrumbs, navigationHrefs, withReturnTo } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   parseDateParam,
   parseStringParam,
@@ -49,15 +51,13 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
   const balance = parseStringParam(params, "balance");
   const from = parseDateParam(params, "from");
   const to = parseDateParam(params, "to");
-  const { quotes, clients, orders } = await getQuoteListData({
-    q,
-    client,
-    order,
-    status,
-    balance,
-    from,
-    to,
-  });
+  const { page, pageSize, skip, take } = getPaginationParams(params);
+  const { quotes, totalItems, clients, orders } = await getQuoteListData(
+    { q, client, order, status, balance, from, to },
+    { skip, take },
+  );
+
+  const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
     <div className="space-y-6">
@@ -228,6 +228,13 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
             )}
           </TableBody>
       </Table>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.quotes}
+        searchParams={params}
+        itemLabel="proformas"
+      />
     </div>
   );
 }

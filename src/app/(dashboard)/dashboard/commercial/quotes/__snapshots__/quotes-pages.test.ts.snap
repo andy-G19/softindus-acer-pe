@@ -11,9 +11,14 @@ exports[`/dashboard/commercial/quotes > fechas no validas > llamadas 1`] = `
   },
   {
     "args": {
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_proforma": "desc",
+        },
+      ],
       "select": {
         "comprobante_venta": {
           "select": {
@@ -47,6 +52,8 @@ exports[`/dashboard/commercial/quotes > fechas no validas > llamadas 1`] = `
         },
         "saldo": true,
       },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -58,6 +65,20 @@ exports[`/dashboard/commercial/quotes > fechas no validas > llamadas 1`] = `
       },
     },
     "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "fecha_emision": {
+              "gte": 2026-03-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "proforma.count",
   },
   {
     "args": {
@@ -232,6 +253,13 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -248,9 +276,14 @@ exports[`/dashboard/commercial/quotes > rango invertido > llamadas 1`] = `
   },
   {
     "args": {
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_proforma": "desc",
+        },
+      ],
       "select": {
         "comprobante_venta": {
           "select": {
@@ -284,6 +317,8 @@ exports[`/dashboard/commercial/quotes > rango invertido > llamadas 1`] = `
         },
         "saldo": true,
       },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -296,6 +331,21 @@ exports[`/dashboard/commercial/quotes > rango invertido > llamadas 1`] = `
       },
     },
     "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "fecha_emision": {
+              "gte": 2026-07-31T00:00:00.000Z,
+              "lt": 2026-07-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "proforma.count",
   },
   {
     "args": {
@@ -440,6 +490,13 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 0-0 de 0 proformas · Página 1 de 1</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<button data-variant="outline" disabled="">Siguiente</button>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -456,9 +513,14 @@ exports[`/dashboard/commercial/quotes > saldo pagado > llamadas 1`] = `
   },
   {
     "args": {
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_proforma": "desc",
+        },
+      ],
       "select": {
         "comprobante_venta": {
           "select": {
@@ -492,6 +554,8 @@ exports[`/dashboard/commercial/quotes > saldo pagado > llamadas 1`] = `
         },
         "saldo": true,
       },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -501,6 +565,18 @@ exports[`/dashboard/commercial/quotes > saldo pagado > llamadas 1`] = `
       },
     },
     "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "saldo": 0,
+          },
+        ],
+      },
+    },
+    "prisma": "proforma.count",
   },
   {
     "args": {
@@ -675,6 +751,13 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?balance=paid&amp;page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -691,9 +774,14 @@ exports[`/dashboard/commercial/quotes > sin filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_proforma": "desc",
+        },
+      ],
       "select": {
         "comprobante_venta": {
           "select": {
@@ -727,9 +815,17 @@ exports[`/dashboard/commercial/quotes > sin filtros > llamadas 1`] = `
         },
         "saldo": true,
       },
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "proforma.count",
   },
   {
     "args": {
@@ -904,6 +1000,13 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -920,9 +1023,14 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
   },
   {
     "args": {
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_proforma": "desc",
+        },
+      ],
       "select": {
         "comprobante_venta": {
           "select": {
@@ -956,6 +1064,8 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
         },
         "saldo": true,
       },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -1010,6 +1120,63 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
       },
     },
     "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "numero_proforma": {
+                  "contains": "PRF",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_pedido": {
+                  "contains": "PRF",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "pedido": {
+                  "cliente": {
+                    "nombre_razon_social": {
+                      "contains": "PRF",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "pedido": {
+              "id_cliente": "CLI00000001",
+            },
+          },
+          {
+            "id_pedido": "PED00000001",
+          },
+          {
+            "estado": "vigente",
+          },
+          {
+            "saldo": {
+              "gt": 0,
+            },
+          },
+          {
+            "fecha_emision": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "proforma.count",
   },
   {
     "args": {
@@ -1184,6 +1351,13 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?q=PRF&amp;client=CLI00000001&amp;order=PED00000001&amp;status=vigente&amp;balance=pending&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -1200,9 +1374,14 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > llamadas 1`] =
   },
   {
     "args": {
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_proforma": "desc",
+        },
+      ],
       "select": {
         "comprobante_venta": {
           "select": {
@@ -1236,9 +1415,17 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > llamadas 1`] =
         },
         "saldo": true,
       },
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "proforma.count",
   },
   {
     "args": {
@@ -1451,6 +1638,13 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",

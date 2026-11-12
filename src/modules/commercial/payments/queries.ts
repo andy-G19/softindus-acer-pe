@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import type { PaginationParams } from "@/lib/pagination";
 import { buildDateRangeFilter } from "@/lib/search-params";
 import { findClientFilterOptions } from "@/modules/commercial/clients/queries";
 import { findOrderFilterOptions } from "@/modules/commercial/orders/queries";
@@ -75,17 +76,21 @@ function buildCustomerPaymentListConditions(
 
 // C3 de la 11.3c (D39): solo las columnas que muestra la tabla. Antes traia la proforma, el
 // pedido y el cliente completos para mostrar el nombre del cliente.
+// C4 de la 11.3c (D38, hallazgo 9 de la 10.4a): pagina con el total contado con el mismo filtro y
+// el id como desempate de los pagos del mismo dia.
 export async function getCustomerPaymentListData(
   filters: CustomerPaymentListFilters,
+  { skip, take }: Pick<PaginationParams, "skip" | "take">,
 ) {
   const conditions = buildCustomerPaymentListConditions(filters);
+  const where: Prisma.pago_clienteWhereInput = conditions.length > 0 ? { AND: conditions } : {};
 
-  const [payments, clients, orders] = await Promise.all([
+  const [payments, totalItems, clients, orders] = await Promise.all([
     prisma.pago_cliente.findMany({
-      where: conditions.length > 0 ? { AND: conditions } : {},
-      orderBy: {
-        fecha_pago: "desc",
-      },
+      where,
+      orderBy: [{ fecha_pago: "desc" }, { id_pago_cliente: "desc" }],
+      skip,
+      take,
       select: {
         id_pago_cliente: true,
         id_pedido: true,
@@ -110,9 +115,10 @@ export async function getCustomerPaymentListData(
         },
       },
     }),
+    prisma.pago_cliente.count({ where }),
     findClientFilterOptions(),
     findOrderFilterOptions(),
   ]);
 
-  return { payments, clients, orders };
+  return { payments, totalItems, clients, orders };
 }
