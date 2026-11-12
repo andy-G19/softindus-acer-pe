@@ -1,0 +1,623 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`annulReceiptAction > el id con espacios se recorta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_comprobante": "CMP00000003",
+      },
+    },
+    "prisma": "comprobante_venta.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulado",
+      },
+      "where": {
+        "id_comprobante": "CMP00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "comprobante_venta.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Comprobante anulado: B001-000123",
+      "enTransaccion": false,
+      "entidad_afectada": "comprobante_venta",
+      "id_registro_afectado": "CMP00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/receipts",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulReceiptAction > el id con espacios se recorta > resultado 1`] = `"redirect:/dashboard/commercial/receipts?toast=receipt-annulled"`;
+
+exports[`annulReceiptAction > emitido: lo anula > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_comprobante": "CMP00000003",
+      },
+    },
+    "prisma": "comprobante_venta.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulado",
+      },
+      "where": {
+        "id_comprobante": "CMP00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "comprobante_venta.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Comprobante anulado: B001-000123",
+      "enTransaccion": false,
+      "entidad_afectada": "comprobante_venta",
+      "id_registro_afectado": "CMP00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/receipts",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulReceiptAction > emitido: lo anula > resultado 1`] = `"redirect:/dashboard/commercial/receipts?toast=receipt-annulled"`;
+
+exports[`annulReceiptAction > no existe: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_comprobante": "CMP00000003",
+      },
+    },
+    "prisma": "comprobante_venta.findUnique",
+  },
+]
+`;
+
+exports[`annulReceiptAction > no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/receipts"`;
+
+exports[`annulReceiptAction > sin id: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`annulReceiptAction > sin id: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/receipts"`;
+
+exports[`annulReceiptAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`annulReceiptAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`annulReceiptAction > ya estaba anulado: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_comprobante": "CMP00000003",
+      },
+    },
+    "prisma": "comprobante_venta.findUnique",
+  },
+]
+`;
+
+exports[`annulReceiptAction > ya estaba anulado: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/receipts"`;
+
+exports[`createReceiptAction > boleta por el total de la proforma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+            "numero_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_comprobante": true,
+      },
+      "where": {
+        "numero_comprobante": "B001-000123",
+      },
+    },
+    "prisma": "comprobante_venta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "comprobante_venta",
+      "prefijo": "CMP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "emitido",
+        "fecha_emision": 2026-07-15T15:00:00.000Z,
+        "id_comprobante": "CMP00000001",
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000007",
+        "monto_total": 150.5,
+        "numero_comprobante": "B001-000123",
+        "observaciones": null,
+        "tipo_comprobante": "boleta",
+      },
+    },
+    "prisma": "comprobante_venta.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Comprobante registrado: B001-000123",
+      "enTransaccion": true,
+      "entidad_afectada": "comprobante_venta",
+      "id_registro_afectado": "CMP00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/receipts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createReceiptAction > boleta por el total de la proforma > resultado 1`] = `"redirect:/dashboard/commercial/quotes/PRF00000007?toast=receipt-created"`;
+
+exports[`createReceiptAction > el monto supera el total de la proforma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+            "numero_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+]
+`;
+
+exports[`createReceiptAction > el monto supera el total de la proforma > resultado 1`] = `"error: El comprobante no puede superar el monto total de la proforma."`;
+
+exports[`createReceiptAction > el numero ya existe en otro comprobante > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+            "numero_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_comprobante": true,
+      },
+      "where": {
+        "numero_comprobante": "B001-000123",
+      },
+    },
+    "prisma": "comprobante_venta.findUnique",
+  },
+]
+`;
+
+exports[`createReceiptAction > el numero ya existe en otro comprobante > resultado 1`] = `"error: Ya existe un comprobante con ese número."`;
+
+exports[`createReceiptAction > factura por un monto menor, con observaciones y espacios en el numero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+            "numero_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_comprobante": true,
+      },
+      "where": {
+        "numero_comprobante": "F001-000045",
+      },
+    },
+    "prisma": "comprobante_venta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "comprobante_venta",
+      "prefijo": "CMP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "emitido",
+        "fecha_emision": 2026-07-15T15:00:00.000Z,
+        "id_comprobante": "CMP00000001",
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000007",
+        "monto_total": 100.25,
+        "numero_comprobante": "F001-000045",
+        "observaciones": "entrega parcial",
+        "tipo_comprobante": "factura",
+      },
+    },
+    "prisma": "comprobante_venta.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Comprobante registrado: F001-000045",
+      "enTransaccion": true,
+      "entidad_afectada": "comprobante_venta",
+      "id_registro_afectado": "CMP00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/receipts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createReceiptAction > factura por un monto menor, con observaciones y espacios en el numero > resultado 1`] = `"redirect:/dashboard/commercial/quotes/PRF00000007?toast=receipt-created"`;
+
+exports[`createReceiptAction > la proforma no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+            "numero_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+]
+`;
+
+exports[`createReceiptAction > la proforma no existe > resultado 1`] = `"error: La proforma seleccionada no existe."`;
+
+exports[`createReceiptAction > la proforma ya tiene un comprobante emitido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+            "numero_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+]
+`;
+
+exports[`createReceiptAction > la proforma ya tiene un comprobante emitido > resultado 1`] = `"error: Esta proforma ya tiene un comprobante emitido: B001-000100."`;
+
+exports[`createReceiptAction > monto cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createReceiptAction > monto cero > resultado 1`] = `"error: El monto total debe ser mayor que cero."`;
+
+exports[`createReceiptAction > proforma anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+            "numero_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+]
+`;
+
+exports[`createReceiptAction > proforma anulada > resultado 1`] = `"error: No se puede emitir comprobante para una proforma anulada."`;
+
+exports[`createReceiptAction > sin numero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createReceiptAction > sin numero > resultado 1`] = `"error: El número de comprobante es obligatorio."`;
+
+exports[`createReceiptAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createReceiptAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createReceiptAction > tipo invalido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createReceiptAction > tipo invalido > resultado 1`] = `"error: Selecciona un tipo de comprobante válido."`;

@@ -1,0 +1,509 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`cancelOrderAction > anulado: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`cancelOrderAction > anulado: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/orders"`;
+
+exports[`cancelOrderAction > aprobado: lo cancela > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "cancelado",
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "accion": "cancelar",
+      "detalle": "Pedido cancelado: PED00000004",
+      "enTransaccion": false,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`cancelOrderAction > aprobado: lo cancela > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-cancelled"`;
+
+exports[`cancelOrderAction > con un comprobante: vuelve al listado sin decir por que > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`cancelOrderAction > con un comprobante: vuelve al listado sin decir por que > resultado 1`] = `"redirect:/dashboard/commercial/orders"`;
+
+exports[`cancelOrderAction > con una orden de trabajo: vuelve al listado sin decir por que > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`cancelOrderAction > con una orden de trabajo: vuelve al listado sin decir por que > resultado 1`] = `"redirect:/dashboard/commercial/orders"`;
+
+exports[`cancelOrderAction > con una proforma: vuelve al listado sin decir por que > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`cancelOrderAction > con una proforma: vuelve al listado sin decir por que > resultado 1`] = `"redirect:/dashboard/commercial/orders"`;
+
+exports[`cancelOrderAction > el id con espacios se recorta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "cancelado",
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "accion": "cancelar",
+      "detalle": "Pedido cancelado: PED00000004",
+      "enTransaccion": false,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`cancelOrderAction > el id con espacios se recorta > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-cancelled"`;
+
+exports[`cancelOrderAction > no existe: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`cancelOrderAction > no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/orders"`;
+
+exports[`cancelOrderAction > registrado sin nada asociado: lo cancela > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "cancelado",
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "accion": "cancelar",
+      "detalle": "Pedido cancelado: PED00000004",
+      "enTransaccion": false,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`cancelOrderAction > registrado sin nada asociado: lo cancela > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-cancelled"`;
+
+exports[`cancelOrderAction > sin id: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`cancelOrderAction > sin id: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/orders"`;
+
+exports[`cancelOrderAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`cancelOrderAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`cancelOrderAction > ya cancelado: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`cancelOrderAction > ya cancelado: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/orders"`;
