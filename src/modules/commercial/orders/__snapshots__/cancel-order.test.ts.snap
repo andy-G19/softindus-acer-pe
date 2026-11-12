@@ -10,6 +10,19 @@ exports[`cancelOrderAction > anulado: vuelve al listado > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -40,6 +53,10 @@ exports[`cancelOrderAction > anulado: vuelve al listado > llamadas 1`] = `
     },
     "prisma": "pedido.findUnique",
   },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
 ]
 `;
 
@@ -53,6 +70,19 @@ exports[`cancelOrderAction > aprobado: lo cancela > llamadas 1`] = `
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -94,19 +124,22 @@ exports[`cancelOrderAction > aprobado: lo cancela > llamadas 1`] = `
         "id_pedido": "PED00000004",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "pedido.update",
   },
   {
     "args": {
       "accion": "cancelar",
       "detalle": "Pedido cancelado: PED00000004",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "pedido",
       "id_registro_afectado": "PED00000004",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard/commercial/orders",
@@ -131,6 +164,19 @@ exports[`cancelOrderAction > con un comprobante: vuelve al listado sin decir por
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -160,6 +206,10 @@ exports[`cancelOrderAction > con un comprobante: vuelve al listado sin decir por
       },
     },
     "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -176,6 +226,19 @@ exports[`cancelOrderAction > con una orden de trabajo: vuelve al listado sin dec
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -205,6 +268,10 @@ exports[`cancelOrderAction > con una orden de trabajo: vuelve al listado sin dec
       },
     },
     "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -221,6 +288,19 @@ exports[`cancelOrderAction > con una proforma: vuelve al listado sin decir por q
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -251,6 +331,10 @@ exports[`cancelOrderAction > con una proforma: vuelve al listado sin decir por q
     },
     "prisma": "pedido.findUnique",
   },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
 ]
 `;
 
@@ -264,6 +348,19 @@ exports[`cancelOrderAction > el id con espacios se recorta > llamadas 1`] = `
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -305,19 +402,22 @@ exports[`cancelOrderAction > el id con espacios se recorta > llamadas 1`] = `
         "id_pedido": "PED00000004",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "pedido.update",
   },
   {
     "args": {
       "accion": "cancelar",
       "detalle": "Pedido cancelado: PED00000004",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "pedido",
       "id_registro_afectado": "PED00000004",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard/commercial/orders",
@@ -342,6 +442,19 @@ exports[`cancelOrderAction > no existe: vuelve al listado > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -372,6 +485,10 @@ exports[`cancelOrderAction > no existe: vuelve al listado > llamadas 1`] = `
     },
     "prisma": "pedido.findUnique",
   },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
 ]
 `;
 
@@ -385,6 +502,19 @@ exports[`cancelOrderAction > registrado sin nada asociado: lo cancela > llamadas
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -426,19 +556,22 @@ exports[`cancelOrderAction > registrado sin nada asociado: lo cancela > llamadas
         "id_pedido": "PED00000004",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "pedido.update",
   },
   {
     "args": {
       "accion": "cancelar",
       "detalle": "Pedido cancelado: PED00000004",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "pedido",
       "id_registro_afectado": "PED00000004",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard/commercial/orders",
@@ -491,6 +624,19 @@ exports[`cancelOrderAction > ya cancelado: vuelve al listado > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -520,6 +666,10 @@ exports[`cancelOrderAction > ya cancelado: vuelve al listado > llamadas 1`] = `
       },
     },
     "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;

@@ -5,6 +5,7 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
 } from "@/testing/page-characterization";
 
@@ -173,5 +174,38 @@ describe("C3 de la 11.3b: cancelar aplica la regla del pedido", () => {
     });
 
     expect(outcome).toBe("redirect:/dashboard/commercial/orders");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C4 de la 11.3b (D31): cancelar decide con el pedido bloqueado
+// ---------------------------------------------------------------------------
+
+// Cancelar leia el pedido fuera de la transaccion y escribia la cancelacion y su bitacora sin
+// ella: una proforma creada en medio dejaba un pedido cancelado con proforma. Ahora el pedido se
+// bloquea antes de leerlo y la cancelacion y la bitacora van en la misma transaccion.
+describe("C4 de la 11.3b: cancelar decide con el pedido bloqueado", () => {
+  const reads = (call: { prisma: string }) => call.prisma === "pedido.findUnique";
+
+  it("cancelar bloquea el pedido antes de leerlo y escribe dentro de la transaccion", async () => {
+    const { calls } = await runAction({ name: "C4" });
+    const writes = calls.filter((call) => "prisma" in call && call.prisma === "pedido.update");
+
+    expectRowLockedBefore(calls, { table: "pedido", id: PEDIDO, reads });
+    expect(writes.map((call) => ("fueraDeTransaccion" in call ? "fuera" : "dentro"))).toEqual(["dentro"]);
+    expect(calls.find((call) => "effect" in call && call.effect === "registerAuditLog")).toMatchObject({
+      args: { enTransaccion: true },
+    });
+  });
+
+  it("un rechazo tambien bloquea antes de leer y no escribe", async () => {
+    const { calls, outcome } = await runAction({
+      name: "C4",
+      data: { "pedido.findUnique": orderRow({ proforma: [{ id_proforma: "PRF00000006", estado: "vigente" }] }) },
+    });
+
+    expect(outcome).toBe("redirect:/dashboard/commercial/orders");
+    expectRowLockedBefore(calls, { table: "pedido", id: PEDIDO, reads });
+    expect(calls.some((call) => "prisma" in call && call.prisma === "pedido.update")).toBe(false);
   });
 });
