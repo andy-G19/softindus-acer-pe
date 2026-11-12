@@ -5,7 +5,6 @@ import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
@@ -26,7 +25,9 @@ import {
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { commercialNotifications } from "@/modules/commercial/notifications";
 import { annulReceiptAction } from "@/modules/commercial/receipts/actions";
+import { ReceiptAnnulAction } from "@/modules/commercial/receipts/receipt-annul-action";
 import { getReceiptList } from "@/modules/commercial/receipts/queries";
 
 type ReceiptsPageProps = {
@@ -133,22 +134,12 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
                     </Button>
                   ) : null}
                   {receipt.estado !== "anulado" ? (
-                    <form action={annulReceiptAction}>
-                      <input
-                        type="hidden"
-                        name="id_comprobante"
-                        value={receipt.id_comprobante}
-                      />
-                      <ConfirmDeleteButton
-                        title="¿Anular comprobante?"
-                        description="Esta acción marcará el comprobante como anulado. Verifique antes de continuar."
-                        confirmText="Confirmar anulación"
-                        entityName="comprobante"
-                        className="hover:bg-destructive/20"
-                      >
-                        Anular
-                      </ConfirmDeleteButton>
-                    </form>
+                    <ReceiptAnnulAction
+                      idComprobante={receipt.id_comprobante}
+                      numeroComprobante={receipt.numero_comprobante}
+                      action={annulReceiptAction}
+                      successNotification={commercialNotifications["receipt-annulled"]}
+                    />
                   ) : null}
                 </div>
               </TableCell>

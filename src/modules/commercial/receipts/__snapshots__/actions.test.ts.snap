@@ -1,44 +1,50 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`annulReceiptAction > el id con espacios se recorta > llamadas 1`] = `
+exports[`annulReceiptAction > el administrador lo anula igual > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
     ],
   },
   {
-    "args": {
-      "where": {
-        "id_comprobante": "CMP00000003",
-      },
-    },
-    "prisma": "comprobante_venta.findUnique",
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
       "data": {
         "estado": "anulado",
       },
+      "select": {
+        "id_proforma": true,
+        "numero_comprobante": true,
+      },
       "where": {
+        "estado": {
+          "not": "anulado",
+        },
         "id_comprobante": "CMP00000003",
       },
     },
-    "fueraDeTransaccion": true,
-    "prisma": "comprobante_venta.update",
+    "prisma": "comprobante_venta.updateManyAndReturn",
   },
   {
     "args": {
       "accion": "anular",
       "detalle": "Comprobante anulado: B001-000123",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "comprobante_venta",
       "id_registro_afectado": "CMP00000003",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard/commercial/receipts",
@@ -55,47 +61,138 @@ exports[`annulReceiptAction > el id con espacios se recorta > llamadas 1`] = `
 ]
 `;
 
-exports[`annulReceiptAction > el id con espacios se recorta > resultado 1`] = `"redirect:/dashboard/commercial/receipts?toast=receipt-annulled"`;
+exports[`annulReceiptAction > el administrador lo anula igual > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "CMP00000003",
+  },
+}
+`;
+
+exports[`annulReceiptAction > el id con espacios se recorta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulado",
+      },
+      "select": {
+        "id_proforma": true,
+        "numero_comprobante": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulado",
+        },
+        "id_comprobante": "CMP00000003",
+      },
+    },
+    "prisma": "comprobante_venta.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Comprobante anulado: B001-000123",
+      "enTransaccion": true,
+      "entidad_afectada": "comprobante_venta",
+      "id_registro_afectado": "CMP00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/receipts",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulReceiptAction > el id con espacios se recorta > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "CMP00000003",
+  },
+}
+`;
 
 exports[`annulReceiptAction > emitido: lo anula > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
     ],
   },
   {
-    "args": {
-      "where": {
-        "id_comprobante": "CMP00000003",
-      },
-    },
-    "prisma": "comprobante_venta.findUnique",
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
       "data": {
         "estado": "anulado",
       },
+      "select": {
+        "id_proforma": true,
+        "numero_comprobante": true,
+      },
       "where": {
+        "estado": {
+          "not": "anulado",
+        },
         "id_comprobante": "CMP00000003",
       },
     },
-    "fueraDeTransaccion": true,
-    "prisma": "comprobante_venta.update",
+    "prisma": "comprobante_venta.updateManyAndReturn",
   },
   {
     "args": {
       "accion": "anular",
       "detalle": "Comprobante anulado: B001-000123",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "comprobante_venta",
       "id_registro_afectado": "CMP00000003",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard/commercial/receipts",
@@ -112,34 +209,72 @@ exports[`annulReceiptAction > emitido: lo anula > llamadas 1`] = `
 ]
 `;
 
-exports[`annulReceiptAction > emitido: lo anula > resultado 1`] = `"redirect:/dashboard/commercial/receipts?toast=receipt-annulled"`;
+exports[`annulReceiptAction > emitido: lo anula > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "CMP00000003",
+  },
+}
+`;
 
-exports[`annulReceiptAction > no existe: vuelve al listado > llamadas 1`] = `
+exports[`annulReceiptAction > no existe o ya estaba anulado: lo dice en la confirmacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
+      "data": {
+        "estado": "anulado",
+      },
+      "select": {
+        "id_proforma": true,
+        "numero_comprobante": true,
+      },
       "where": {
+        "estado": {
+          "not": "anulado",
+        },
         "id_comprobante": "CMP00000003",
       },
     },
-    "prisma": "comprobante_venta.findUnique",
+    "prisma": "comprobante_venta.updateManyAndReturn",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`annulReceiptAction > no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/receipts"`;
+exports[`annulReceiptAction > no existe o ya estaba anulado: lo dice en la confirmacion > resultado 1`] = `
+{
+  "error": "El comprobante no existe o ya estaba anulado.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "CMP00000003",
+  },
+}
+`;
 
-exports[`annulReceiptAction > sin id: vuelve al listado > llamadas 1`] = `
+exports[`annulReceiptAction > sin id: responde en la confirmacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -148,12 +283,21 @@ exports[`annulReceiptAction > sin id: vuelve al listado > llamadas 1`] = `
 ]
 `;
 
-exports[`annulReceiptAction > sin id: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/receipts"`;
+exports[`annulReceiptAction > sin id: responde en la confirmacion > resultado 1`] = `
+{
+  "error": "Debe seleccionar un comprobante válido.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "",
+  },
+}
+`;
 
 exports[`annulReceiptAction > sin permiso: el maestro de taller > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -162,29 +306,86 @@ exports[`annulReceiptAction > sin permiso: el maestro de taller > llamadas 1`] =
 ]
 `;
 
-exports[`annulReceiptAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`annulReceiptAction > sin permiso: el maestro de taller > resultado 1`] = `
+{
+  "error": "No tienes permisos para anular comprobantes.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "CMP00000003",
+  },
+}
+`;
 
-exports[`annulReceiptAction > ya estaba anulado: vuelve al listado > llamadas 1`] = `
+exports[`annulReceiptAction > sin proforma: revalida solo los listados > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
+      "data": {
+        "estado": "anulado",
+      },
+      "select": {
+        "id_proforma": true,
+        "numero_comprobante": true,
+      },
       "where": {
+        "estado": {
+          "not": "anulado",
+        },
         "id_comprobante": "CMP00000003",
       },
     },
-    "prisma": "comprobante_venta.findUnique",
+    "prisma": "comprobante_venta.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Comprobante anulado: B001-000123",
+      "enTransaccion": true,
+      "entidad_afectada": "comprobante_venta",
+      "id_registro_afectado": "CMP00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/receipts",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
   },
 ]
 `;
 
-exports[`annulReceiptAction > ya estaba anulado: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/receipts"`;
+exports[`annulReceiptAction > sin proforma: revalida solo los listados > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "CMP00000003",
+  },
+}
+`;
 
 exports[`createReceiptAction > boleta por el total de la proforma > llamadas 1`] = `
 [

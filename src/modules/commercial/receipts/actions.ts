@@ -1,18 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
 import { checkReceiptAmount } from "@/lib/client-payment-amounts";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
 import { claimOperation, completeOperation, IdempotencyConflictError } from "@/lib/idempotency";
 import { APP_ROLES } from "@/lib/permissions";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockQuoteRow } from "@/lib/row-locks";
 import { receiptSchema } from "@/schemas/commercial/receipt.schema";
 import { operationKeySchema } from "@/schemas/operation-key.schema";
@@ -21,10 +21,6 @@ function emptyToNull(value: FormDataEntryValue | null) {
   const text = value?.toString().trim();
 
   return text ? text : null;
-}
-
-async function requireCommercialPermission() {
-  return requireRole(["ADMIN", "SELLER"]);
 }
 
 /** Lo que el formulario de comprobante envio, para volver a mostrarlo. */
@@ -260,44 +256,72 @@ export async function createReceiptAction(
   };
 }
 
-export async function annulReceiptAction(formData: FormData) {
-  const session = await requireCommercialPermission();
-  const receiptId = formData.get("id_comprobante")?.toString().trim();
+// C7 de la 11.3b (D33): anular se confirma con ConfirmActionButton y la accion devuelve
+// RowStatusState. Antes volvia al listado sin decir nada si el comprobante no existia o ya estaba
+// anulado, y escribia la anulacion y su bitacora sin transaccion. Decide sobre una sola condicion
+// (que no este anulado), asi que basta un compare-and-set: la condicion y la escritura van en la
+// misma sentencia y un doble clic o un listado viejo no anulan dos veces, sin bloquear la fila.
+export async function annulReceiptAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
+  const receiptId = formData.get("id_comprobante")?.toString().trim() ?? "";
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN, APP_ROLES.SELLER]);
+
+  if (!session) {
+    return rowStatusError(receiptId, "No tienes permisos para anular comprobantes.");
+  }
 
   if (!receiptId) {
-    redirect("/dashboard/commercial/receipts");
+    return rowStatusError(receiptId, "Debe seleccionar un comprobante válido.");
   }
 
-  const receipt = await prisma.comprobante_venta.findUnique({
-    where: {
-      id_comprobante: receiptId,
-    },
+  const annulled = await prisma.$transaction(async (tx) => {
+    const [receipt] = await tx.comprobante_venta.updateManyAndReturn({
+      where: {
+        id_comprobante: receiptId,
+        estado: {
+          not: "anulado",
+        },
+      },
+      data: {
+        estado: "anulado",
+      },
+      select: {
+        numero_comprobante: true,
+        id_proforma: true,
+      },
+    });
+
+    // Sin fila: no existe o ya estaba anulado. No hay nada que registrar.
+    if (!receipt) {
+      return null;
+    }
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "comprobante_venta",
+      id_registro_afectado: receiptId,
+      accion: "anular",
+      detalle: `Comprobante anulado: ${receipt.numero_comprobante}`,
+      tx,
+    });
+
+    return receipt;
   });
 
-  if (!receipt || receipt.estado === "anulado") {
-    redirect("/dashboard/commercial/receipts");
+  // Un rechazo no revalida: el repintado se llevaria el boton y su mensaje (CLAUDE.md).
+  if (!annulled) {
+    return rowStatusError(receiptId, "El comprobante no existe o ya estaba anulado.");
   }
-
-  await prisma.comprobante_venta.update({
-    where: {
-      id_comprobante: receiptId,
-    },
-    data: {
-      estado: "anulado",
-    },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "comprobante_venta",
-    id_registro_afectado: receiptId,
-    accion: "anular",
-    detalle: `Comprobante anulado: ${receipt.numero_comprobante}`,
-  });
 
   revalidatePath("/dashboard/commercial/receipts");
   revalidatePath("/dashboard/commercial/quotes");
-  revalidatePath(`/dashboard/commercial/quotes/${receipt.id_proforma}`);
 
-  redirect("/dashboard/commercial/receipts?toast=receipt-annulled");
+  if (annulled.id_proforma) {
+    revalidatePath(`/dashboard/commercial/quotes/${annulled.id_proforma}`);
+  }
+
+  return rowStatusDone(receiptId, "anulado");
 }

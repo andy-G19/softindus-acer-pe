@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import type { PrismaClient } from "@/generated/prisma/client";
-import { createReceiptAction } from "@/modules/commercial/receipts/actions";
+import { annulReceiptAction, createReceiptAction } from "@/modules/commercial/receipts/actions";
 import { getTestDatabase } from "@/testing/test-database";
 
 // Emitir comprobante contra Postgres real (PGlite), 11.3b. Corre la accion entera: la clave de la
@@ -124,5 +124,39 @@ describe("emitir comprobante en Postgres", () => {
 
     expect(state).toMatchObject({ status: "error", error: "Esta proforma ya tiene un comprobante emitido: B001-000001." });
     expect(await receiptsOf("PRF00000001")).toHaveLength(1);
+  });
+});
+
+// C7 de la 11.3b: lo que la confirmacion de anular promete, contra la base real.
+describe("anular comprobante en Postgres", () => {
+  const annulForm = (idComprobante: string) => {
+    const formData = new FormData();
+
+    formData.set("id_comprobante", idComprobante);
+
+    return formData;
+  };
+
+  it("anular deja el comprobante anulado y la proforma admite uno nuevo; anularlo otra vez se rechaza", async () => {
+    await createQuote("PRF00000004");
+
+    const emitted = await createReceiptAction({ status: "idle" }, receiptForm("PRF00000004", "B001-000004"));
+    const idComprobante = (emitted as { data: { id_comprobante: string } }).data.id_comprobante;
+
+    expect(await annulReceiptAction({ status: "idle" }, annulForm(idComprobante))).toMatchObject({
+      status: "success",
+      data: { estado: "anulado" },
+    });
+    expect(await annulReceiptAction({ status: "idle" }, annulForm(idComprobante))).toMatchObject({
+      status: "error",
+      error: "El comprobante no existe o ya estaba anulado.",
+    });
+    expect(await createReceiptAction({ status: "idle" }, receiptForm("PRF00000004", "B001-000005"))).toMatchObject({
+      status: "success",
+    });
+    expect((await receiptsOf("PRF00000004")).map((receipt) => [receipt.numero_comprobante, receipt.estado]).sort()).toEqual([
+      ["B001-000004", "anulado"],
+      ["B001-000005", "emitido"],
+    ]);
   });
 });

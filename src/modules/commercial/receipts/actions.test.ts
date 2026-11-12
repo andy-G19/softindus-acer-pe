@@ -24,7 +24,8 @@ import {
 //
 // Desde C6 de la 11.3b emitir devuelve un FormActionState (no redirige ni lanza a la pagina de
 // error), rechaza un rol sin permiso con un error y reclama la clave de la operacion como
-// primera sentencia de la transaccion. Anular sigue redirigiendo hasta C7.
+// primera sentencia de la transaccion. Desde C7 anular devuelve un RowStatusState con un
+// compare-and-set.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -230,32 +231,29 @@ characterize("createReceiptAction", createReceipt, free, [
 // Anular comprobante
 // ---------------------------------------------------------------------------
 
-function receiptRow(changes: Record<string, unknown> = {}) {
-  return {
-    id_comprobante: COMPROBANTE,
-    id_pedido: "PED00000004",
-    id_proforma: PROFORMA,
-    tipo_comprobante: "boleta",
-    numero_comprobante: "B001-000123",
-    monto_total: D("150.50"),
-    estado: "emitido",
-    ...changes,
-  };
-}
+// Desde C7 de la 11.3b anular es un compare-and-set: la base devuelve la fila anulada o ninguna
+// (no existe o ya estaba anulado), sin leer el comprobante antes.
+const annulled = (changes: Record<string, unknown> = {}): DataOverrides => ({
+  "comprobante_venta.updateManyAndReturn": [{ numero_comprobante: "B001-000123", id_proforma: PROFORMA, ...changes }],
+});
 
 const annulForm = (id = COMPROBANTE) => ({ id_comprobante: id });
 
-characterize("annulReceiptAction", annulReceiptAction, { "comprobante_venta.findUnique": receiptRow() }, [
+/** El mismo estado inicial que usa ConfirmActionButton. */
+const annulReceipt = (formData: FormData) => annulReceiptAction({ status: "idle" }, formData);
+
+characterize("annulReceiptAction", annulReceipt, annulled(), [
   { name: "emitido: lo anula", form: annulForm() },
   { name: "el id con espacios se recorta", form: annulForm(` ${COMPROBANTE} `) },
-  { name: "sin id: vuelve al listado", form: annulForm("") },
-  { name: "no existe: vuelve al listado", form: annulForm(), data: { "comprobante_venta.findUnique": null } },
+  { name: "sin id: responde en la confirmacion", form: annulForm("") },
   {
-    name: "ya estaba anulado: vuelve al listado",
+    name: "no existe o ya estaba anulado: lo dice en la confirmacion",
     form: annulForm(),
-    data: { "comprobante_venta.findUnique": receiptRow({ estado: "anulado" }) },
+    data: { "comprobante_venta.updateManyAndReturn": [] },
   },
+  { name: "sin proforma: revalida solo los listados", form: annulForm(), data: annulled({ id_proforma: null }) },
   { name: "sin permiso: el maestro de taller", form: annulForm(), role: "WORKSHOP_MASTER" },
+  { name: "el administrador lo anula igual", form: annulForm(), role: "ADMIN" },
 ]);
 
 // ---------------------------------------------------------------------------
@@ -396,5 +394,57 @@ describe("C6 de la 11.3b: el comprobante con resultado e idempotencia", () => {
     expect(outcome).toMatchObject({
       values: { tipo_comprobante: "factura", numero_comprobante: "F001-9", monto_total: "100", observaciones: "  obra  " },
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C7 de la 11.3b (D33): anular comprobante con compare-and-set y el rechazo en la confirmacion
+// ---------------------------------------------------------------------------
+
+// Anular leia el comprobante, volvia al listado sin decir nada si no existia o ya estaba anulado,
+// y escribia la anulacion y su bitacora sin transaccion. Ahora la condicion (no anulado) va en el
+// where de la misma sentencia que anula, y la bitacora en la misma transaccion.
+describe("C7 de la 11.3b: anular comprobante con compare-and-set", () => {
+  type Calls = Awaited<ReturnType<typeof run>>["calls"];
+
+  const revalidated = (calls: Calls) =>
+    calls.flatMap((call) => ("effect" in call && call.effect === "revalidatePath" ? [call.args] : []));
+  const annul = (data: DataOverrides = {}, form = annulForm(), role?: ActionCase["role"]) =>
+    run(annulReceipt, { name: "C7", form, data, role }, annulled());
+
+  it("la condicion va en la misma sentencia que anula y la bitacora en la transaccion", async () => {
+    const { calls, outcome } = await annul();
+    const write = calls.find((call) => "prisma" in call && call.prisma === "comprobante_venta.updateManyAndReturn");
+
+    expect(outcome).toMatchObject({ status: "success", data: { estado: "anulado" }, values: { id: COMPROBANTE } });
+    expect(write).toMatchObject({
+      args: { where: { id_comprobante: COMPROBANTE, estado: { not: "anulado" } }, data: { estado: "anulado" } },
+    });
+    expect(calls.some((call) => "prisma" in call && call.prisma === "comprobante_venta.findUnique")).toBe(false);
+    expect(calls.find((call) => "effect" in call && call.effect === "registerAuditLog")).toMatchObject({
+      args: { enTransaccion: true, detalle: "Comprobante anulado: B001-000123" },
+    });
+    expect(revalidated(calls)).toEqual([
+      "/dashboard/commercial/receipts",
+      "/dashboard/commercial/quotes",
+      `/dashboard/commercial/quotes/${PROFORMA}`,
+    ]);
+  });
+
+  it("si no anula ninguna fila responde en la confirmacion, sin bitacora ni revalidar", async () => {
+    const { calls, outcome } = await annul({ "comprobante_venta.updateManyAndReturn": [] });
+
+    expect(outcome).toMatchObject({ status: "error", error: "El comprobante no existe o ya estaba anulado." });
+    expect(calls.some((call) => "effect" in call && call.effect === "registerAuditLog")).toBe(false);
+    expect(revalidated(calls)).toEqual([]);
+  });
+
+  it("sin permiso o sin comprobante responde en la confirmacion y no consulta nada", async () => {
+    const denied = await annul({}, annulForm(), "WORKSHOP_MASTER");
+    const empty = await annul({}, annulForm(""));
+
+    expect(denied.outcome).toMatchObject({ status: "error", error: "No tienes permisos para anular comprobantes." });
+    expect(empty.outcome).toMatchObject({ status: "error", error: "Debe seleccionar un comprobante válido." });
+    expect([...denied.calls, ...empty.calls].some((call) => "prisma" in call)).toBe(false);
   });
 });
