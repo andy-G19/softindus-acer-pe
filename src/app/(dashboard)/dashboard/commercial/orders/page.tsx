@@ -35,6 +35,7 @@ import {
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { cancelOrderAction } from "@/modules/commercial/orders/actions";
+import { canChangeOrder } from "@/modules/commercial/orders/order-rules";
 import { getOrderListData } from "@/modules/commercial/orders/queries";
 
 type OrdersPageProps = {
@@ -153,17 +154,11 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                 })
                 .join(" | ");
               const activeQuote = order.proforma[0];
-              const hasWorkOrder = order.detalle_pedido.some(
-                (detail) => detail.orden_trabajo.length > 0,
-              );
               const canGenerateQuote =
                 ["registrado", "aprobado"].includes(order.estado) &&
                 !activeQuote;
-              const canEdit =
-                order.estado !== "cancelado" &&
-                !activeQuote &&
-                order.comprobante_venta.length === 0 &&
-                !hasWorkOrder;
+              // C3 de la 11.3b (D30): la regla de editar y cancelar, tambien en las acciones.
+              const canEdit = canChangeOrder(order);
 
               return (
                 <TableRow key={order.id_pedido}>

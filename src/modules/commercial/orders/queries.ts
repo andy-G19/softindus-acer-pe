@@ -105,6 +105,7 @@ export async function getOrderListData(
         comprobante_venta: {
           select: {
             id_comprobante: true,
+            estado: true,
           },
         },
         proforma: {
@@ -204,11 +205,13 @@ export async function getOrderEditData(idPedido: string) {
         proforma: {
           select: {
             id_proforma: true,
+            estado: true,
           },
         },
         comprobante_venta: {
           select: {
             id_comprobante: true,
+            estado: true,
           },
         },
         detalle_pedido: {

@@ -15,6 +15,7 @@ exports[`/dashboard/commercial/orders > fechas no validas > llamadas 1`] = `
         "cliente": true,
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -273,6 +274,7 @@ exports[`/dashboard/commercial/orders > rango invertido > llamadas 1`] = `
         "cliente": true,
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -503,6 +505,7 @@ exports[`/dashboard/commercial/orders > sin filtros > llamadas 1`] = `
         "cliente": true,
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -745,6 +748,7 @@ exports[`/dashboard/commercial/orders > todos los filtros > llamadas 1`] = `
         "cliente": true,
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -1091,6 +1095,7 @@ exports[`/dashboard/commercial/orders > un pedido por estado > llamadas 1`] = `
         "cliente": true,
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -1299,12 +1304,12 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <span data-variant="info">Aprobado</span>
 </td>
 <td>
-<span data-variant="success">numero_proforma-1</span>
+<span data-variant="success">PF-00000012</span>
 </td>
 <td>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/orders/PED00000012?returnTo=%2Fdashboard%2Fcommercial%2Forders">Ver detalle</a>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000012">Ver proforma</a>
 </div>
 </td>
 </tr>
@@ -1993,7 +1998,7 @@ exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > resul
 }
 `;
 
-exports[`/dashboard/commercial/orders/[id]/edit > anulado muestra el formulario > llamadas 1`] = `
+exports[`/dashboard/commercial/orders/[id]/edit > anulado redirige al detalle (hallazgo 1 de la 10.4c) > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -2015,6 +2020,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > anulado muestra el formulario 
         },
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2030,6 +2036,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > anulado muestra el formulario 
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -2077,161 +2084,10 @@ exports[`/dashboard/commercial/orders/[id]/edit > anulado muestra el formulario 
 ]
 `;
 
-exports[`/dashboard/commercial/orders/[id]/edit > anulado muestra el formulario > resultado 1`] = `
+exports[`/dashboard/commercial/orders/[id]/edit > anulado redirige al detalle (hallazgo 1 de la 10.4c) > resultado 1`] = `
 {
-  "html": "<div>
-<section>
-<nav aria-label="Ruta de navegación">
-<ol>
-<li>
-<a href="/dashboard">Dashboard</a>
-</li>
-<li>
-<svg/>
-<a href="/dashboard/commercial">Comercial</a>
-</li>
-<li>
-<svg/>
-<a href="/dashboard/commercial/orders">Pedidos</a>
-</li>
-<li>
-<svg/>
-<span aria-current="page">Editar pedido</span>
-</li>
-</ol>
-</nav>
-<div>
-<div>
-<div aria-hidden="true">
-</div>
-<div>
-<h1>Editar pedido</h1>
-<p>Solo se permite editar pedidos sin proforma, comprobante u orden asociada.</p>
-</div>
-</div>
-<div>
-<button type="button" aria-label="Volver a pedidos">
-<svg/>Volver a pedidos</button>
-</div>
-</div>
-</section>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_pedido" value="id_pedido-1"/>
-<div>
-<div>
-<label for="id_cliente">Cliente *</label>
-<input type="hidden" name="id_cliente" value="id_cliente-1"/>
-<div>
-<input id="id_cliente" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value="nombre_razon_social-1"/>
-<button type="button">Limpiar</button>
-</div>
-</div>
-</div>
-<div>
-<div>
-<div>
-<h2>Detalle del pedido</h2>
-<p>Puedes agregar varios productos al mismo pedido.</p>
-</div>
-<button data-variant="outline" type="button">Agregar producto</button>
-</div>
-<div>
-<div>
-<div>
-<h3>Producto 1</h3>
-<button data-variant="ghost" type="button">Quitar</button>
-</div>
-<div>
-<div>
-<label for="id_producto-row-1">Producto *</label>
-<input type="hidden" name="id_producto" value="id_producto-1"/>
-<div>
-<input id="id_producto-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-1-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-1"/>
-<button type="button">Limpiar</button>
-</div>
-</div>
-</div>
-<div>
-<div>
-<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
-</label>
-<input type="number" id="cantidad-row-1" required="" min="1" step="0.01" name="cantidad" value="11.5"/>
-</div>
-<div>
-<label for="precio_unitario-row-1">Precio unitario<span aria-hidden="true">*</span>
-</label>
-<input type="number" id="precio_unitario-row-1" required="" min="0" step="0.01" name="precio_unitario" value="11.5"/>
-</div>
-<div>
-<label for="subtotal-row-1">Subtotal</label>
-<output id="subtotal-row-1">S/ 132.25</output>
-</div>
-</div>
-<div>
-<label for="observacion_detalle-row-1">Observación del producto</label>
-<input id="observacion_detalle-row-1" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value="observaciones-1"/>
-</div>
-</div>
-<div>
-<div>
-<h3>Producto 2</h3>
-<button data-variant="ghost" type="button">Quitar</button>
-</div>
-<div>
-<div>
-<label for="id_producto-row-2">Producto *</label>
-<input type="hidden" name="id_producto" value="id_producto-2"/>
-<div>
-<input id="id_producto-row-2" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-2-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-2"/>
-<button type="button">Limpiar</button>
-</div>
-</div>
-</div>
-<div>
-<div>
-<label for="cantidad-row-2">Cantidad<span aria-hidden="true">*</span>
-</label>
-<input type="number" id="cantidad-row-2" required="" min="1" step="0.01" name="cantidad" value="22.5"/>
-</div>
-<div>
-<label for="precio_unitario-row-2">Precio unitario<span aria-hidden="true">*</span>
-</label>
-<input type="number" id="precio_unitario-row-2" required="" min="0" step="0.01" name="precio_unitario" value="22.5"/>
-</div>
-<div>
-<label for="subtotal-row-2">Subtotal</label>
-<output id="subtotal-row-2">S/ 506.25</output>
-</div>
-</div>
-<div>
-<label for="observacion_detalle-row-2">Observación del producto</label>
-<input id="observacion_detalle-row-2" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
-</div>
-</div>
-</div>
-<div>
-<div>
-<p>Total estimado</p>
-<p>S/ 638.50</p>
-</div>
-</div>
-</div>
-<div>
-<label for="fecha_entrega_estimada">Fecha estimada de entrega</label>
-<input type="date" id="fecha_entrega_estimada" name="fecha_entrega_estimada" value="2026-07-01"/>
-</div>
-<div>
-<label for="observaciones">Observaciones generales del pedido</label>
-<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">observaciones-1</textarea>
-</div>
-<div>
-<button data-variant="default" type="submit">Guardar cambios</button>
-<a data-variant="outline" href="/dashboard/commercial/orders">Cancelar</a>
-</div>
-</form>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
-  "outcome": "render",
+  "html": null,
+  "outcome": "redirect:/dashboard/commercial/orders/id_pedido-1",
 }
 `;
 
@@ -2257,6 +2113,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > cancelado redirige al detalle 
         },
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2272,6 +2129,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > cancelado redirige al detalle 
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -2348,6 +2206,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > cliente inactivo > llamadas 1`
         },
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2363,6 +2222,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > cliente inactivo > llamadas 1`
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -2590,6 +2450,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > con proforma redirige al detal
         },
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2605,6 +2466,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > con proforma redirige al detal
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -2681,6 +2543,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > editable > llamadas 1`] = `
         },
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2696,6 +2559,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > editable > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -2923,6 +2787,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > importes con decimales > llama
         },
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2938,6 +2803,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > importes con decimales > llama
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -3165,6 +3031,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > inexistente > llamadas 1`] = `
         },
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -3180,6 +3047,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > inexistente > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -3256,6 +3124,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > producto inactivo > llamadas 1
         },
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -3271,6 +3140,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > producto inactivo > llamadas 1
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -3462,6 +3332,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > regreso al listado filtrado > 
         },
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -3477,6 +3348,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > regreso al listado filtrado > 
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -3704,6 +3576,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > subtotal en empate > llamadas 
         },
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -3719,6 +3592,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > subtotal en empate > llamadas 
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },

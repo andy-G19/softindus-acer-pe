@@ -10,6 +10,7 @@ import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives"
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
 import { calculateOrderAmounts } from "@/lib/order-amounts";
+import { getOrderChangeBlock } from "@/modules/commercial/orders/order-rules";
 import { orderSchema, type OrderInput } from "@/schemas/commercial/order.schema";
 
 /** Una linea del pedido tal como se envio. */
@@ -234,11 +235,13 @@ async function validateOrderCanChange(orderId: string) {
       proforma: {
         select: {
           id_proforma: true,
+          estado: true,
         },
       },
       comprobante_venta: {
         select: {
           id_comprobante: true,
+          estado: true,
         },
       },
       detalle_pedido: {
@@ -257,27 +260,11 @@ async function validateOrderCanChange(orderId: string) {
     return { ok: false as const, message: "El pedido no existe." };
   }
 
-  if (order.estado === "cancelado" || order.estado === "anulado") {
-    return {
-      ok: false as const,
-      message: "No se puede modificar un pedido cancelado.",
-    };
-  }
+  // C3 de la 11.3b (D30): la misma regla que el listado y la pagina de edicion.
+  const block = getOrderChangeBlock(order);
 
-  const hasWorkOrders = order.detalle_pedido.some(
-    (detail) => detail.orden_trabajo.length > 0,
-  );
-
-  if (
-    order.proforma.length > 0 ||
-    order.comprobante_venta.length > 0 ||
-    hasWorkOrders
-  ) {
-    return {
-      ok: false as const,
-      message:
-        "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
-    };
+  if (block) {
+    return { ok: false as const, message: block };
   }
 
   return { ok: true as const, order };

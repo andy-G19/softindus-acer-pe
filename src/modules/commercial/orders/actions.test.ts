@@ -499,12 +499,12 @@ defineOrderSuite("updateOrderAction", updateOrderAction, [
   {
     name: "pedido con proforma",
     form: editForm,
-    data: orderRow({ proforma: [{ id_proforma: "PRF00000001" }] }),
+    data: orderRow({ proforma: [{ id_proforma: "PRF00000001", estado: "vigente" }] }),
   },
   {
     name: "pedido con comprobante",
     form: editForm,
-    data: orderRow({ comprobante_venta: [{ id_comprobante: "CVE00000001" }] }),
+    data: orderRow({ comprobante_venta: [{ id_comprobante: "CVE00000001", estado: "emitido" }] }),
   },
   {
     name: "pedido con orden de trabajo",
@@ -550,3 +550,23 @@ defineOrderSuite("updateOrderAction", updateOrderAction, [
     data: { ...orderRow(), "detalle_pedido.createMany": failWith(foreignKeyViolation()) },
   },
 ]);
+
+// ---------------------------------------------------------------------------
+// C3 de la 11.3b (D30): una sola regla para cambiar un pedido
+// ---------------------------------------------------------------------------
+
+// La edicion rechazaba con cualquier proforma o comprobante, tambien anulados. Ahora solo
+// bloquean una proforma activa y un comprobante emitido, la regla del listado y de cancelar.
+describe("C3 de la 11.3b: editar aplica la regla del pedido", () => {
+  it("con su proforma anulada: la edicion se guarda", async () => {
+    const order = orderRow({ proforma: [{ id_proforma: "PRF00000005", estado: "anulada" }] });
+
+    expect(await outcomeOf(updateOrderAction, editForm, order)).toBe(UPDATED);
+  });
+
+  it("con su comprobante anulado: la edicion se guarda", async () => {
+    const order = orderRow({ comprobante_venta: [{ id_comprobante: "CMP00000004", estado: "anulado" }] });
+
+    expect(await outcomeOf(updateOrderAction, editForm, order)).toBe(UPDATED);
+  });
+});

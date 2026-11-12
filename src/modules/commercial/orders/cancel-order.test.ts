@@ -107,11 +107,11 @@ const cases: ActionCase[] = [
   { name: "anulado: vuelve al listado", data: { "pedido.findUnique": orderRow({ estado: "anulado" }) } },
   {
     name: "con una proforma: vuelve al listado sin decir por que",
-    data: { "pedido.findUnique": orderRow({ proforma: [{ id_proforma: "PRF00000003" }] }) },
+    data: { "pedido.findUnique": orderRow({ proforma: [{ id_proforma: "PRF00000003", estado: "vigente" }] }) },
   },
   {
     name: "con un comprobante: vuelve al listado sin decir por que",
-    data: { "pedido.findUnique": orderRow({ comprobante_venta: [{ id_comprobante: "CMP00000001" }] }) },
+    data: { "pedido.findUnique": orderRow({ comprobante_venta: [{ id_comprobante: "CMP00000001", estado: "emitido" }] }) },
   },
   {
     name: "con una orden de trabajo: vuelve al listado sin decir por que",
@@ -136,4 +136,42 @@ describe("cancelOrderAction", () => {
       expect(outcome).toMatchSnapshot("resultado");
     });
   }
+});
+
+// ---------------------------------------------------------------------------
+// C3 de la 11.3b (D30): una sola regla para cambiar un pedido
+// ---------------------------------------------------------------------------
+
+// Cancelar rechazaba con cualquier proforma o comprobante, tambien anulados, mientras el listado
+// ofrecia el boton: un pedido cuya unica proforma se anulo no se podia cancelar nunca. Ahora solo
+// bloquean una proforma activa (vigente, aceptada o pagada) y un comprobante emitido.
+describe("C3 de la 11.3b: cancelar aplica la regla del pedido", () => {
+  const CANCELLED = "redirect:/dashboard/commercial/orders?toast=order-cancelled";
+
+  it("con su proforma anulada: lo cancela", async () => {
+    const { outcome } = await runAction({
+      name: "C3",
+      data: { "pedido.findUnique": orderRow({ proforma: [{ id_proforma: "PRF00000005", estado: "anulada" }] }) },
+    });
+
+    expect(outcome).toBe(CANCELLED);
+  });
+
+  it("con su comprobante anulado: lo cancela", async () => {
+    const { outcome } = await runAction({
+      name: "C3",
+      data: { "pedido.findUnique": orderRow({ comprobante_venta: [{ id_comprobante: "CMP00000004", estado: "anulado" }] }) },
+    });
+
+    expect(outcome).toBe(CANCELLED);
+  });
+
+  it.each(["vigente", "aceptada", "pagada"])("con una proforma %s: sigue sin cancelarlo", async (estado) => {
+    const { outcome } = await runAction({
+      name: "C3",
+      data: { "pedido.findUnique": orderRow({ proforma: [{ id_proforma: "PRF00000006", estado }] }) },
+    });
+
+    expect(outcome).toBe("redirect:/dashboard/commercial/orders");
+  });
 });

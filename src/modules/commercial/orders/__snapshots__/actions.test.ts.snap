@@ -2055,6 +2055,7 @@ exports[`updateOrderAction > ADMIN edita un pedido registrado > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2069,6 +2070,7 @@ exports[`updateOrderAction > ADMIN edita un pedido registrado > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -2238,6 +2240,7 @@ exports[`updateOrderAction > SELLER edita un pedido > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2252,6 +2255,7 @@ exports[`updateOrderAction > SELLER edita un pedido > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -2463,6 +2467,7 @@ exports[`updateOrderAction > el pedido no existe > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2477,6 +2482,7 @@ exports[`updateOrderAction > el pedido no existe > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -2534,6 +2540,7 @@ exports[`updateOrderAction > entrega anterior a la fecha del pedido > llamadas 1
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2548,6 +2555,7 @@ exports[`updateOrderAction > entrega anterior a la fecha del pedido > llamadas 1
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -2609,6 +2617,7 @@ exports[`updateOrderAction > entrega igual a la fecha del pedido > llamadas 1`] 
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2623,6 +2632,7 @@ exports[`updateOrderAction > entrega igual a la fecha del pedido > llamadas 1`] 
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -2792,6 +2802,7 @@ exports[`updateOrderAction > importes con decimales: cada linea redondeada y el 
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2806,6 +2817,7 @@ exports[`updateOrderAction > importes con decimales: cada linea redondeada y el 
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -2975,6 +2987,7 @@ exports[`updateOrderAction > pedido anulado > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -2989,6 +3002,7 @@ exports[`updateOrderAction > pedido anulado > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -3046,6 +3060,7 @@ exports[`updateOrderAction > pedido cancelado > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -3060,6 +3075,7 @@ exports[`updateOrderAction > pedido cancelado > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -3117,6 +3133,7 @@ exports[`updateOrderAction > pedido con comprobante > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -3131,6 +3148,7 @@ exports[`updateOrderAction > pedido con comprobante > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -3188,6 +3206,7 @@ exports[`updateOrderAction > pedido con orden de trabajo > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -3202,6 +3221,7 @@ exports[`updateOrderAction > pedido con orden de trabajo > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -3259,6 +3279,7 @@ exports[`updateOrderAction > pedido con proforma > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -3273,6 +3294,7 @@ exports[`updateOrderAction > pedido con proforma > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -3330,6 +3352,7 @@ exports[`updateOrderAction > producto repetido > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -3344,6 +3367,7 @@ exports[`updateOrderAction > producto repetido > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -3447,6 +3471,7 @@ exports[`updateOrderAction > un error de validacion llega despues de leer el ped
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -3461,6 +3486,7 @@ exports[`updateOrderAction > un error de validacion llega despues de leer el ped
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -3522,6 +3548,7 @@ exports[`updateOrderAction > una clave foranea rota despues de borrar el detalle
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -3536,6 +3563,7 @@ exports[`updateOrderAction > una clave foranea rota despues de borrar el detalle
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },

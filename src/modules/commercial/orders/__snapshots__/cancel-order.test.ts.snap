@@ -14,6 +14,7 @@ exports[`cancelOrderAction > anulado: vuelve al listado > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -28,6 +29,7 @@ exports[`cancelOrderAction > anulado: vuelve al listado > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -57,6 +59,7 @@ exports[`cancelOrderAction > aprobado: lo cancela > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -71,6 +74,7 @@ exports[`cancelOrderAction > aprobado: lo cancela > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -131,6 +135,7 @@ exports[`cancelOrderAction > con un comprobante: vuelve al listado sin decir por
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -145,6 +150,7 @@ exports[`cancelOrderAction > con un comprobante: vuelve al listado sin decir por
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -174,6 +180,7 @@ exports[`cancelOrderAction > con una orden de trabajo: vuelve al listado sin dec
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -188,6 +195,7 @@ exports[`cancelOrderAction > con una orden de trabajo: vuelve al listado sin dec
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -217,6 +225,7 @@ exports[`cancelOrderAction > con una proforma: vuelve al listado sin decir por q
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -231,6 +240,7 @@ exports[`cancelOrderAction > con una proforma: vuelve al listado sin decir por q
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -260,6 +270,7 @@ exports[`cancelOrderAction > el id con espacios se recorta > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -274,6 +285,7 @@ exports[`cancelOrderAction > el id con espacios se recorta > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -334,6 +346,7 @@ exports[`cancelOrderAction > no existe: vuelve al listado > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -348,6 +361,7 @@ exports[`cancelOrderAction > no existe: vuelve al listado > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -377,6 +391,7 @@ exports[`cancelOrderAction > registrado sin nada asociado: lo cancela > llamadas
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -391,6 +406,7 @@ exports[`cancelOrderAction > registrado sin nada asociado: lo cancela > llamadas
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },
@@ -479,6 +495,7 @@ exports[`cancelOrderAction > ya cancelado: vuelve al listado > llamadas 1`] = `
       "include": {
         "comprobante_venta": {
           "select": {
+            "estado": true,
             "id_comprobante": true,
           },
         },
@@ -493,6 +510,7 @@ exports[`cancelOrderAction > ya cancelado: vuelve al listado > llamadas 1`] = `
         },
         "proforma": {
           "select": {
+            "estado": true,
             "id_proforma": true,
           },
         },

@@ -75,6 +75,7 @@ const ORDERS_BY_STATUS = (args: PrismaArgs) => {
       ...base,
       id_pedido: "PED00000012",
       estado: "aprobado",
+      proforma: [{ id_proforma: "PRF00000012", numero_proforma: "PF-00000012", estado: "vigente" }],
       comprobante_venta: [],
       detalle_pedido: withoutWorkOrders,
     },
@@ -89,7 +90,14 @@ const ORDERS_BY_STATUS = (args: PrismaArgs) => {
       detalle_pedido: withoutWorkOrders,
     },
     // Con comprobante y sin proforma activa: se puede generar otra, no editar.
-    { ...base, id_pedido: "PED00000015", estado: "aprobado", proforma: [], detalle_pedido: withoutWorkOrders },
+    {
+      ...base,
+      id_pedido: "PED00000015",
+      estado: "aprobado",
+      proforma: [],
+      comprobante_venta: [{ id_comprobante: "CMP00000015", estado: "emitido" }],
+      detalle_pedido: withoutWorkOrders,
+    },
   ];
 };
 
@@ -101,7 +109,8 @@ const ORDERS_BY_STATUS = (args: PrismaArgs) => {
 // calculaban en coma flotante con toFixed (hallazgo 6): dos lineas de 1,25 x
 // 10,25 mostraban 12.81 cada una y un total de 25.63; desde C2, la vista previa
 // usa la regla de la base y el total es 25.62. Un pedido anulado sin
-// proforma muestra el formulario, que la accion rechaza al guardar.
+// proforma mostraba el formulario, que la accion rechazaba al guardar; desde C3 de la 11.3b
+// redirige al detalle, con la regla comun de order-rules.ts.
 const editableWith = (changes: (order: Record<string, unknown>) => Record<string, unknown>) =>
   (args: PrismaArgs) => changes(editableOrder(args));
 
@@ -192,7 +201,16 @@ definePageSuite([
     route: "/dashboard/commercial/orders/[id]/edit",
     load: () => import("./[id]/edit/page"),
     cases: [
-      { name: "con proforma redirige al detalle", params: { id: "PED00000001" } },
+      {
+        name: "con proforma redirige al detalle",
+        params: { id: "PED00000001" },
+        data: {
+          "pedido.findUnique": editableWith((order) => ({
+            ...order,
+            proforma: [{ id_proforma: "PRF00000001", estado: "vigente" }],
+          })),
+        },
+      },
       {
         name: "editable",
         params: { id: "PED00000001" },
@@ -215,7 +233,7 @@ definePageSuite([
         data: { "pedido.findUnique": editableWith((order) => ({ ...order, estado: "cancelado" })) },
       },
       {
-        name: "anulado muestra el formulario",
+        name: "anulado redirige al detalle (hallazgo 1 de la 10.4c)",
         params: { id: "PED00000001" },
         data: { "pedido.findUnique": editableWith((order) => ({ ...order, estado: "anulado" })) },
       },
