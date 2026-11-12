@@ -26,6 +26,7 @@ import {
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { commercialNotifications } from "@/modules/commercial/notifications";
+import { RECEIPT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
 import { annulReceiptAction } from "@/modules/commercial/receipts/actions";
 import { ReceiptAnnulAction } from "@/modules/commercial/receipts/receipt-annul-action";
 import { getReceiptList } from "@/modules/commercial/receipts/queries";
@@ -68,10 +69,11 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
           {(control) => (
             <NativeSelect {...control} name="type" defaultValue={type}>
               <option value="">Todos los tipos</option>
-              <option value="boleta">Boleta</option>
-              <option value="factura">Factura</option>
-              <option value="recibo">Recibo</option>
-              <option value="otro">Otro</option>
+              {RECEIPT_TYPE_OPTIONS.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </NativeSelect>
           )}
         </Field>

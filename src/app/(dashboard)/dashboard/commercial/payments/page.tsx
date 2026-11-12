@@ -24,6 +24,7 @@ import {
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { PAYMENT_METHOD_OPTIONS, PAYMENT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
 import { getCustomerPaymentListData } from "@/modules/commercial/payments/queries";
 
 type CustomerPaymentsPageProps = {
@@ -101,11 +102,11 @@ export default async function CustomerPaymentsPage({
           {(control) => (
             <NativeSelect {...control} name="method" defaultValue={method}>
               <option value="">Método</option>
-              <option value="efectivo">Efectivo</option>
-              <option value="transferencia">Transferencia</option>
-              <option value="yape">Yape</option>
-              <option value="plin">Plin</option>
-              <option value="otro">Otro</option>
+              {PAYMENT_METHOD_OPTIONS.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </NativeSelect>
           )}
         </Field>
@@ -113,9 +114,11 @@ export default async function CustomerPaymentsPage({
           {(control) => (
             <NativeSelect {...control} name="type" defaultValue={type}>
               <option value="">Tipo pago</option>
-              <option value="adelanto">Adelanto</option>
-              <option value="amortizacion">Amortización</option>
-              <option value="cancelacion">Cancelación</option>
+              {PAYMENT_TYPE_OPTIONS.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </NativeSelect>
           )}
         </Field>
