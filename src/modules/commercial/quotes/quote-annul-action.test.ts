@@ -48,6 +48,9 @@ async function settle() {
 }
 
 const PROFORMA = "PRF00000007";
+// C9 de la 11.3b (hallazgo 9 de la 11.3a): la confirmacion nombra la proforma por el numero que
+// muestran el listado y el detalle (PF-...), no por su id interno (PRF...).
+const NUMERO = "PF-00000007";
 const ANNULLED = { type: "warning" as const, message: "Proforma anulada" };
 
 const confirmation = () => document.querySelector('[role="alertdialog"]');
@@ -67,7 +70,9 @@ function actionWith(state: RowStatusState) {
 }
 
 async function render(action: ReturnType<typeof actionWith>) {
-  await act(async () => root.render(h(QuoteAnnulAction, { idProforma: PROFORMA, action, successNotification: ANNULLED })));
+  await act(async () => root.render(
+      h(QuoteAnnulAction, { quote: { id_proforma: PROFORMA, numero_proforma: NUMERO }, action, successNotification: ANNULLED }),
+    ));
 }
 
 describe("QuoteAnnulAction", () => {
@@ -79,7 +84,7 @@ describe("QuoteAnnulAction", () => {
 
     await act(async () => buttonIn(host, "Anular").click());
 
-    expect(confirmation()?.textContent).toContain(`¿Anular la proforma ${PROFORMA}?`);
+    expect(confirmation()?.textContent).toContain(`¿Anular la proforma ${NUMERO}?`);
     expect(confirmation()?.textContent).toContain(
       "La proforma queda anulada y su pedido vuelve a admitir una proforma nueva. No se puede deshacer.",
     );

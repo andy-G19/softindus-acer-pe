@@ -81,7 +81,7 @@ export default async function QuoteDetailPage({
 
               {canAnnul ? (
                 <QuoteAnnulAction
-                  idProforma={quote.id_proforma}
+                  quote={quote}
                   action={annulQuoteAction}
                   successNotification={commercialNotifications["quote-annulled"]}
                 />
