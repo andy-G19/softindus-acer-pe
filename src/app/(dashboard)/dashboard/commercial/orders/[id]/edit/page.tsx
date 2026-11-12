@@ -10,6 +10,7 @@ import {
 import { commercialNotifications } from "@/modules/commercial/notifications";
 import { updateOrderAction } from "@/modules/commercial/orders/actions";
 import { buildOrderEditOptions } from "@/modules/commercial/orders/order-edit-options";
+import { canChangeOrder } from "@/modules/commercial/orders/order-rules";
 import { OrderForm } from "@/modules/commercial/orders/order-form";
 import { getOrderEditData } from "@/modules/commercial/orders/queries";
 
@@ -40,16 +41,9 @@ export default async function EditOrderPage({ params, searchParams }: EditOrderP
     notFound();
   }
 
-  const hasWorkOrder = order.detalle_pedido.some(
-    (detail) => detail.orden_trabajo.length > 0,
-  );
-
-  if (
-    order.estado === "cancelado" ||
-    order.proforma.length > 0 ||
-    order.comprobante_venta.length > 0 ||
-    hasWorkOrder
-  ) {
+  // C3 de la 11.3b (D30): la regla de la accion; un pedido anulado tampoco se edita (hallazgo 1
+  // de la 10.4c), y una proforma o un comprobante anulados no bloquean.
+  if (!canChangeOrder(order)) {
     redirect(`/dashboard/commercial/orders/${order.id_pedido}`);
   }
 

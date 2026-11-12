@@ -5,7 +5,6 @@ import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,7 +33,10 @@ import {
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { commercialNotifications } from "@/modules/commercial/notifications";
 import { cancelOrderAction } from "@/modules/commercial/orders/actions";
+import { OrderCancelAction } from "@/modules/commercial/orders/order-cancel-action";
+import { canChangeOrder } from "@/modules/commercial/orders/order-rules";
 import { getOrderListData } from "@/modules/commercial/orders/queries";
 
 type OrdersPageProps = {
@@ -153,17 +155,11 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                 })
                 .join(" | ");
               const activeQuote = order.proforma[0];
-              const hasWorkOrder = order.detalle_pedido.some(
-                (detail) => detail.orden_trabajo.length > 0,
-              );
               const canGenerateQuote =
                 ["registrado", "aprobado"].includes(order.estado) &&
                 !activeQuote;
-              const canEdit =
-                order.estado !== "cancelado" &&
-                !activeQuote &&
-                order.comprobante_venta.length === 0 &&
-                !hasWorkOrder;
+              // C3 de la 11.3b (D30): la regla de editar y cancelar, tambien en las acciones.
+              const canEdit = canChangeOrder(order);
 
               return (
                 <TableRow key={order.id_pedido}>
@@ -232,22 +228,11 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                         </Button>
                       ) : null}
                       {canEdit ? (
-                        <form action={cancelOrderAction}>
-                          <input
-                            type="hidden"
-                            name="id_pedido"
-                            value={order.id_pedido}
-                          />
-                          <ConfirmDeleteButton
-                            title="¿Cancelar pedido?"
-                            description="Esta acción cambiará el estado del pedido y no debe ejecutarse sin verificación previa."
-                            confirmText="Confirmar cancelación"
-                            entityName="pedido"
-                            className="hover:bg-destructive/20"
-                          >
-                            Cancelar
-                          </ConfirmDeleteButton>
-                        </form>
+                        <OrderCancelAction
+                          idPedido={order.id_pedido}
+                          action={cancelOrderAction}
+                          successNotification={commercialNotifications["order-cancelled"]}
+                        />
                       ) : null}
                     </div>
                   </TableCell>

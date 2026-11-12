@@ -10,6 +10,7 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
   type PrismaArgs,
   type Role,
@@ -499,12 +500,12 @@ defineOrderSuite("updateOrderAction", updateOrderAction, [
   {
     name: "pedido con proforma",
     form: editForm,
-    data: orderRow({ proforma: [{ id_proforma: "PRF00000001" }] }),
+    data: orderRow({ proforma: [{ id_proforma: "PRF00000001", estado: "vigente" }] }),
   },
   {
     name: "pedido con comprobante",
     form: editForm,
-    data: orderRow({ comprobante_venta: [{ id_comprobante: "CVE00000001" }] }),
+    data: orderRow({ comprobante_venta: [{ id_comprobante: "CVE00000001", estado: "emitido" }] }),
   },
   {
     name: "pedido con orden de trabajo",
@@ -550,3 +551,59 @@ defineOrderSuite("updateOrderAction", updateOrderAction, [
     data: { ...orderRow(), "detalle_pedido.createMany": failWith(foreignKeyViolation()) },
   },
 ]);
+
+// ---------------------------------------------------------------------------
+// C3 de la 11.3b (D30): una sola regla para cambiar un pedido
+// ---------------------------------------------------------------------------
+
+// La edicion rechazaba con cualquier proforma o comprobante, tambien anulados. Ahora solo
+// bloquean una proforma activa y un comprobante emitido, la regla del listado y de cancelar.
+describe("C3 de la 11.3b: editar aplica la regla del pedido", () => {
+  it("con su proforma anulada: la edicion se guarda", async () => {
+    const order = orderRow({ proforma: [{ id_proforma: "PRF00000005", estado: "anulada" }] });
+
+    expect(await outcomeOf(updateOrderAction, editForm, order)).toBe(UPDATED);
+  });
+
+  it("con su comprobante anulado: la edicion se guarda", async () => {
+    const order = orderRow({ comprobante_venta: [{ id_comprobante: "CMP00000004", estado: "anulado" }] });
+
+    expect(await outcomeOf(updateOrderAction, editForm, order)).toBe(UPDATED);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C4 de la 11.3b (D31, hallazgo 7 de la 10.4a): editar decide con el pedido bloqueado
+// ---------------------------------------------------------------------------
+
+// La edicion leia el pedido y decidia si se podia cambiar fuera de la transaccion: una proforma
+// creada en medio dejaba un pedido editado con su proforma, con otros montos. Ahora el pedido se
+// bloquea dentro de la transaccion antes de leerlo, y el cliente y los productos se leen en ella.
+describe("C4 de la 11.3b: editar decide con el pedido bloqueado", () => {
+  async function callsOf(data: DataOverrides) {
+    mocks.correlatives.clear();
+
+    const { calls } = await characterizeHandler(async () => {
+      try {
+        return await updateOrderAction(initialState, formOf(editForm));
+      } catch (error) {
+        return describeNavigationError(error);
+      }
+    }, { ...CATALOG, ...data });
+
+    return calls;
+  }
+
+  const reads = (call: { prisma: string }) =>
+    ["pedido.findUnique", "cliente.findUnique", "producto.findMany"].includes(call.prisma);
+
+  it("una edicion que se guarda bloquea el pedido antes de leer lo que decide", async () => {
+    expectRowLockedBefore(await callsOf(orderRow()), { table: "pedido", id: PEDIDO, reads });
+  });
+
+  it("una edicion rechazada por la proforma activa tambien lo bloquea antes de leerlo", async () => {
+    const calls = await callsOf(orderRow({ proforma: [{ id_proforma: "PRF00000001", estado: "vigente" }] }));
+
+    expectRowLockedBefore(calls, { table: "pedido", id: PEDIDO, reads: (call) => call.prisma === "pedido.findUnique" });
+  });
+});

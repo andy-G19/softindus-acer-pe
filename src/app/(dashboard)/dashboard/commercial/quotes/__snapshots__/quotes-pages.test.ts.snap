@@ -1465,7 +1465,7 @@ exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite 
 
 exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite pagos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <div>
 <section>
 <nav aria-label="Ruta de navegación">
@@ -1701,14 +1701,16 @@ exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite 
 <section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<input type="hidden" name="clave_operacion"/>
 <div>
 <h3>Registrar comprobante de venta</h3>
 <p>Registra boleta, factura, recibo u otro comprobante básico asociado a la proforma.</p>
 </div>
 <div>
 <div>
-<label>Tipo</label>
-<select name="tipo_comprobante" required="">
+<label for="tipo_comprobante">Tipo<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_comprobante" required="" name="tipo_comprobante">
 <option value="boleta" selected="">Boleta</option>
 <option value="factura">Factura</option>
 <option value="recibo">Recibo</option>
@@ -1716,18 +1718,20 @@ exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite 
 </select>
 </div>
 <div>
-<label>Número</label>
-<input required="" name="numero_comprobante" value="B001-202607151500"/>
+<label for="numero_comprobante">Número<span aria-hidden="true">*</span>
+</label>
+<input id="numero_comprobante" required="" autoComplete="off" name="numero_comprobante" value=""/>
 </div>
 <div>
-<label>Monto total</label>
-<input type="number" min="0.01" step="0.01" required="" name="monto_total" value="11.50"/>
-<p>Monto sugerido: S/ 11.50</p>
+<label for="monto_total">Monto total<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto_total" required="" aria-describedby="monto_total-ayuda" min="0.01" step="0.01" name="monto_total" value="11.50"/>
+<p id="monto_total-ayuda">Monto sugerido: S/ 11.50</p>
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" placeholder="Ejemplo: Comprobante emitido por cancelación del pedido.">
+<label for="comprobante_observaciones">Observaciones</label>
+<textarea id="comprobante_observaciones" name="observaciones" placeholder="Ejemplo: Comprobante emitido por cancelación del pedido.">
 </textarea>
 </div>
 <button data-variant="default" type="submit">Registrar comprobante</button>
@@ -1765,7 +1769,7 @@ exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite 
 </footer>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -1815,7 +1819,7 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > llamadas 1`] = `
 
 exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <div>
 <section>
 <nav aria-label="Ruta de navegación">
@@ -2048,14 +2052,16 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 <section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<input type="hidden" name="clave_operacion"/>
 <div>
 <h3>Registrar comprobante de venta</h3>
 <p>Registra boleta, factura, recibo u otro comprobante básico asociado a la proforma.</p>
 </div>
 <div>
 <div>
-<label>Tipo</label>
-<select name="tipo_comprobante" required="">
+<label for="tipo_comprobante">Tipo<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_comprobante" required="" name="tipo_comprobante">
 <option value="boleta" selected="">Boleta</option>
 <option value="factura">Factura</option>
 <option value="recibo">Recibo</option>
@@ -2063,18 +2069,20 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 </select>
 </div>
 <div>
-<label>Número</label>
-<input required="" name="numero_comprobante" value="B001-202607151500"/>
+<label for="numero_comprobante">Número<span aria-hidden="true">*</span>
+</label>
+<input id="numero_comprobante" required="" autoComplete="off" name="numero_comprobante" value=""/>
 </div>
 <div>
-<label>Monto total</label>
-<input type="number" min="0.01" step="0.01" required="" name="monto_total" value="11.50"/>
-<p>Monto sugerido: S/ 11.50</p>
+<label for="monto_total">Monto total<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto_total" required="" aria-describedby="monto_total-ayuda" min="0.01" step="0.01" name="monto_total" value="11.50"/>
+<p id="monto_total-ayuda">Monto sugerido: S/ 11.50</p>
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" placeholder="Ejemplo: Comprobante emitido por cancelación del pedido.">
+<label for="comprobante_observaciones">Observaciones</label>
+<textarea id="comprobante_observaciones" name="observaciones" placeholder="Ejemplo: Comprobante emitido por cancelación del pedido.">
 </textarea>
 </div>
 <button data-variant="default" type="submit">Registrar comprobante</button>
@@ -2112,7 +2120,7 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 </footer>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -2162,7 +2170,7 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > llamadas 1`] = `
 
 exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <div>
 <section>
 <nav aria-label="Ruta de navegación">
@@ -2405,14 +2413,16 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 <section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<input type="hidden" name="clave_operacion"/>
 <div>
 <h3>Registrar comprobante de venta</h3>
 <p>Registra boleta, factura, recibo u otro comprobante básico asociado a la proforma.</p>
 </div>
 <div>
 <div>
-<label>Tipo</label>
-<select name="tipo_comprobante" required="">
+<label for="tipo_comprobante">Tipo<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_comprobante" required="" name="tipo_comprobante">
 <option value="boleta" selected="">Boleta</option>
 <option value="factura">Factura</option>
 <option value="recibo">Recibo</option>
@@ -2420,18 +2430,20 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 </select>
 </div>
 <div>
-<label>Número</label>
-<input required="" name="numero_comprobante" value="B001-202607151500"/>
+<label for="numero_comprobante">Número<span aria-hidden="true">*</span>
+</label>
+<input id="numero_comprobante" required="" autoComplete="off" name="numero_comprobante" value=""/>
 </div>
 <div>
-<label>Monto total</label>
-<input type="number" min="0.01" step="0.01" required="" name="monto_total" value="11.50"/>
-<p>Monto sugerido: S/ 11.50</p>
+<label for="monto_total">Monto total<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto_total" required="" aria-describedby="monto_total-ayuda" min="0.01" step="0.01" name="monto_total" value="11.50"/>
+<p id="monto_total-ayuda">Monto sugerido: S/ 11.50</p>
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" placeholder="Ejemplo: Comprobante emitido por cancelación del pedido.">
+<label for="comprobante_observaciones">Observaciones</label>
+<textarea id="comprobante_observaciones" name="observaciones" placeholder="Ejemplo: Comprobante emitido por cancelación del pedido.">
 </textarea>
 </div>
 <button data-variant="default" type="submit">Registrar comprobante</button>
@@ -2484,7 +2496,7 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 </footer>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -2583,7 +2595,7 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 
 exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <div>
 <section>
 <nav aria-label="Ruta de navegación">
@@ -2829,14 +2841,16 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 <section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<input type="hidden" name="clave_operacion"/>
 <div>
 <h3>Registrar comprobante de venta</h3>
 <p>Registra boleta, factura, recibo u otro comprobante básico asociado a la proforma.</p>
 </div>
 <div>
 <div>
-<label>Tipo</label>
-<select name="tipo_comprobante" required="">
+<label for="tipo_comprobante">Tipo<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_comprobante" required="" name="tipo_comprobante">
 <option value="boleta" selected="">Boleta</option>
 <option value="factura">Factura</option>
 <option value="recibo">Recibo</option>
@@ -2844,18 +2858,20 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 </select>
 </div>
 <div>
-<label>Número</label>
-<input required="" name="numero_comprobante" value="B001-202607151500"/>
+<label for="numero_comprobante">Número<span aria-hidden="true">*</span>
+</label>
+<input id="numero_comprobante" required="" autoComplete="off" name="numero_comprobante" value=""/>
 </div>
 <div>
-<label>Monto total</label>
-<input type="number" min="0.01" step="0.01" required="" name="monto_total" value="11.50"/>
-<p>Monto sugerido: S/ 11.50</p>
+<label for="monto_total">Monto total<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto_total" required="" aria-describedby="monto_total-ayuda" min="0.01" step="0.01" name="monto_total" value="11.50"/>
+<p id="monto_total-ayuda">Monto sugerido: S/ 11.50</p>
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" placeholder="Ejemplo: Comprobante emitido por cancelación del pedido.">
+<label for="comprobante_observaciones">Observaciones</label>
+<textarea id="comprobante_observaciones" name="observaciones" placeholder="Ejemplo: Comprobante emitido por cancelación del pedido.">
 </textarea>
 </div>
 <button data-variant="default" type="submit">Registrar comprobante</button>
@@ -2899,7 +2915,7 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 </footer>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

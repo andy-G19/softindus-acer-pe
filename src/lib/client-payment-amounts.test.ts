@@ -5,6 +5,7 @@ import {
   calculateClientPayment,
   calculateQuoteAmounts,
   calculateQuoteTotal,
+  checkReceiptAmount,
   hasCents,
 } from "@/lib/client-payment-amounts";
 
@@ -112,5 +113,18 @@ describe("hasCents", () => {
       false,
       false,
     ]);
+  });
+});
+
+describe("checkReceiptAmount", () => {
+  it("acepta hasta el total, comparando lo que guarda la columna", () => {
+    expect(checkReceiptAmount({ total: D("150.50"), amount: 150.5 })).toEqual({ accepted: true, amount: "150.50" });
+    expect(checkReceiptAmount({ total: D("150.50"), amount: "150.504" })).toEqual({ accepted: true, amount: "150.50" });
+    expect(checkReceiptAmount({ total: D("150.50"), amount: "100.125" })).toEqual({ accepted: true, amount: "100.13" });
+  });
+
+  it("rechaza lo que supera el total, tambien por un centimo redondeado", () => {
+    expect(checkReceiptAmount({ total: D("150.50"), amount: "150.505" })).toEqual({ accepted: false });
+    expect(checkReceiptAmount({ total: D("150.50"), amount: "150.51" })).toEqual({ accepted: false });
   });
 });

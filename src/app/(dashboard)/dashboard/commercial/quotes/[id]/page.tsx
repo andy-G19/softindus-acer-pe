@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 
-import { ReceiptForm } from "@/components/commercial/receipt-form";
 import { requireRole } from "@/lib/authz";
 import { hasCents } from "@/lib/client-payment-amounts";
 import { PrintButton } from "@/components/commercial/print-button";
@@ -10,6 +9,8 @@ import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { StateBadge } from "@/components/commercial/status-badge";
 import { commercialNotifications } from "@/modules/commercial/notifications";
 import { createPaymentAction } from "@/modules/commercial/payments/actions";
+import { createReceiptAction } from "@/modules/commercial/receipts/actions";
+import { ReceiptForm } from "@/modules/commercial/receipts/receipt-form";
 import { PaymentForm } from "@/modules/commercial/payments/payment-form";
 import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
 import { QuoteAnnulAction } from "@/modules/commercial/quotes/quote-annul-action";
@@ -62,7 +63,7 @@ export default async function QuoteDetailPage({
     !activeReceipt;
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6">
       <div className="print:hidden">
         <PageHeader
           title="Detalle de proforma"
@@ -80,7 +81,7 @@ export default async function QuoteDetailPage({
 
               {canAnnul ? (
                 <QuoteAnnulAction
-                  idProforma={quote.id_proforma}
+                  quote={quote}
                   action={annulQuoteAction}
                   successNotification={commercialNotifications["quote-annulled"]}
                 />
@@ -329,9 +330,11 @@ export default async function QuoteDetailPage({
 
             <section className="grid gap-4 print:hidden lg:grid-cols-[1fr_1.2fr]">
               <ReceiptForm
+                action={createReceiptAction}
                 quoteId={quote.id_proforma}
                 suggestedAmount={quote.monto_total.toString()}
                 hasReceipt={Boolean(activeReceipt) || quote.estado === "anulada"}
+                successNotification={commercialNotifications["receipt-created"]}
               />
 
               <div className="rounded-lg border p-4">
@@ -408,6 +411,6 @@ export default async function QuoteDetailPage({
           </footer>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

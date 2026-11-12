@@ -1,0 +1,885 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`cancelOrderAction > anulado: lo dice en la confirmacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "estado": true,
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`cancelOrderAction > anulado: lo dice en la confirmacion > resultado 1`] = `
+{
+  "error": "No se puede modificar un pedido anulado.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "PED00000004",
+  },
+}
+`;
+
+exports[`cancelOrderAction > aprobado: lo cancela > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "estado": true,
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "cancelado",
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "accion": "cancelar",
+      "detalle": "Pedido cancelado: PED00000004",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`cancelOrderAction > aprobado: lo cancela > resultado 1`] = `
+{
+  "data": {
+    "estado": "cancelado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "PED00000004",
+  },
+}
+`;
+
+exports[`cancelOrderAction > con un comprobante emitido: dice por que no lo cancela > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "estado": true,
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`cancelOrderAction > con un comprobante emitido: dice por que no lo cancela > resultado 1`] = `
+{
+  "error": "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "PED00000004",
+  },
+}
+`;
+
+exports[`cancelOrderAction > con una orden de trabajo: dice por que no lo cancela > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "estado": true,
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`cancelOrderAction > con una orden de trabajo: dice por que no lo cancela > resultado 1`] = `
+{
+  "error": "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "PED00000004",
+  },
+}
+`;
+
+exports[`cancelOrderAction > con una proforma activa: dice por que no lo cancela > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "estado": true,
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`cancelOrderAction > con una proforma activa: dice por que no lo cancela > resultado 1`] = `
+{
+  "error": "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "PED00000004",
+  },
+}
+`;
+
+exports[`cancelOrderAction > el administrador lo cancela igual > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "estado": true,
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "cancelado",
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "accion": "cancelar",
+      "detalle": "Pedido cancelado: PED00000004",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`cancelOrderAction > el administrador lo cancela igual > resultado 1`] = `
+{
+  "data": {
+    "estado": "cancelado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "PED00000004",
+  },
+}
+`;
+
+exports[`cancelOrderAction > el id con espacios se recorta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "estado": true,
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "cancelado",
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "accion": "cancelar",
+      "detalle": "Pedido cancelado: PED00000004",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`cancelOrderAction > el id con espacios se recorta > resultado 1`] = `
+{
+  "data": {
+    "estado": "cancelado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "PED00000004",
+  },
+}
+`;
+
+exports[`cancelOrderAction > no existe: lo dice en la confirmacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "estado": true,
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`cancelOrderAction > no existe: lo dice en la confirmacion > resultado 1`] = `
+{
+  "error": "El pedido no existe.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "PED00000004",
+  },
+}
+`;
+
+exports[`cancelOrderAction > registrado sin nada asociado: lo cancela > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "estado": true,
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "cancelado",
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "accion": "cancelar",
+      "detalle": "Pedido cancelado: PED00000004",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`cancelOrderAction > registrado sin nada asociado: lo cancela > resultado 1`] = `
+{
+  "data": {
+    "estado": "cancelado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "PED00000004",
+  },
+}
+`;
+
+exports[`cancelOrderAction > sin id: responde en la confirmacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`cancelOrderAction > sin id: responde en la confirmacion > resultado 1`] = `
+{
+  "error": "Debe seleccionar un pedido válido.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "",
+  },
+}
+`;
+
+exports[`cancelOrderAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`cancelOrderAction > sin permiso: el maestro de taller > resultado 1`] = `
+{
+  "error": "No tienes permisos para cancelar pedidos.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "PED00000004",
+  },
+}
+`;
+
+exports[`cancelOrderAction > ya cancelado: lo dice en la confirmacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "estado": true,
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000004",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`cancelOrderAction > ya cancelado: lo dice en la confirmacion > resultado 1`] = `
+{
+  "error": "No se puede modificar un pedido cancelado.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "PED00000004",
+  },
+}
+`;

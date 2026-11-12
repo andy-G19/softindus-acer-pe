@@ -21,6 +21,7 @@ vi.mock("next/navigation", () => ({ useRouter: () => router }));
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const RETURN_TO = "/dashboard/inventory/outputs?material=MAT00000006";
 const NOTIFICATION = { type: "success", message: "Salida registrada correctamente" } as const;
+const FILTER_HINT = "Puede no aparecer con los filtros activos del listado.";
 
 let host: HTMLDivElement;
 let root: Root;
@@ -152,6 +153,9 @@ describe("InventoryOutputForm", () => {
     await fillAndSubmit();
 
     expect(notifications.notify).toHaveBeenCalledTimes(1);
+    // C1 de la 11.3b (hallazgo 8 de la 11.3a): el aviso exacto, con la nota de los filtros del
+    // listado al que vuelve; contar la llamada no notaba un aviso vacio.
+    expect(notifications.notify).toHaveBeenCalledWith({ ...NOTIFICATION, description: FILTER_HINT });
     expect(router.push).toHaveBeenCalledWith(RETURN_TO);
 
     const stored = sessionStorage.getItem("clave-operacion:salida:nueva");

@@ -1,15 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { Prisma } from "@/generated/prisma/client";
 import type { FieldErrors } from "@/lib/errors";
 import { calculateOrderAmounts } from "@/lib/order-amounts";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
+import { lockOrderRow } from "@/lib/row-locks";
+import { getOrderChangeBlock } from "@/modules/commercial/orders/order-rules";
 import { orderSchema, type OrderInput } from "@/schemas/commercial/order.schema";
 
 /** Una linea del pedido tal como se envio. */
@@ -49,10 +52,6 @@ function toDateOrNull(value?: string | null) {
   }
 
   return new Date(`${value}T00:00:00`);
-}
-
-async function requireCommercialPermission() {
-  return requireRole(["ADMIN", "SELLER"]);
 }
 
 function getOrderFormValues(formData: FormData): OrderFormValues {
@@ -182,18 +181,21 @@ function validateEstimatedDate(
 // aunque esten inactivos mientras no se cambien: la edicion los ofrece (D3 y
 // hallazgo 5 de la 10.4a). Sin esta comprobacion, un id que no existe rompia en
 // la clave foranea.
+type OrderReader = Pick<Prisma.TransactionClient, "pedido" | "cliente" | "producto">;
+
 async function validateActiveReferences(
+  db: OrderReader,
   data: OrderInput,
   lines: number[],
   current?: { id_cliente: string; productIds: string[] },
 ): Promise<{ error: string; fieldErrors: FieldErrors } | null> {
   const productIds = data.items.map((item) => item.id_producto);
   const [client, products] = await Promise.all([
-    prisma.cliente.findUnique({
+    db.cliente.findUnique({
       where: { id_cliente: data.id_cliente },
       select: { id_cliente: true, estado: true },
     }),
-    prisma.producto.findMany({
+    db.producto.findMany({
       where: { id_producto: { in: productIds } },
       select: { id_producto: true, estado: true },
     }),
@@ -225,8 +227,8 @@ async function validateActiveReferences(
   return null;
 }
 
-async function validateOrderCanChange(orderId: string) {
-  const order = await prisma.pedido.findUnique({
+async function validateOrderCanChange(db: OrderReader, orderId: string) {
+  const order = await db.pedido.findUnique({
     where: {
       id_pedido: orderId,
     },
@@ -234,11 +236,13 @@ async function validateOrderCanChange(orderId: string) {
       proforma: {
         select: {
           id_proforma: true,
+          estado: true,
         },
       },
       comprobante_venta: {
         select: {
           id_comprobante: true,
+          estado: true,
         },
       },
       detalle_pedido: {
@@ -257,27 +261,11 @@ async function validateOrderCanChange(orderId: string) {
     return { ok: false as const, message: "El pedido no existe." };
   }
 
-  if (order.estado === "cancelado" || order.estado === "anulado") {
-    return {
-      ok: false as const,
-      message: "No se puede modificar un pedido cancelado.",
-    };
-  }
+  // C3 de la 11.3b (D30): la misma regla que el listado y la pagina de edicion.
+  const block = getOrderChangeBlock(order);
 
-  const hasWorkOrders = order.detalle_pedido.some(
-    (detail) => detail.orden_trabajo.length > 0,
-  );
-
-  if (
-    order.proforma.length > 0 ||
-    order.comprobante_venta.length > 0 ||
-    hasWorkOrders
-  ) {
-    return {
-      ok: false as const,
-      message:
-        "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
-    };
+  if (block) {
+    return { ok: false as const, message: block };
   }
 
   return { ok: true as const, order };
@@ -287,6 +275,7 @@ async function validateOrderCanChange(orderId: string) {
 // pedido): esquema, fecha de entrega, productos repetidos y referencias
 // activas. Devuelve los datos validados o el estado de error.
 async function validateOrder(
+  db: OrderReader,
   formData: FormData,
   values: OrderFormValues,
   orderDate: Date,
@@ -320,7 +309,7 @@ async function validateOrder(
     return { ok: false as const, state: orderError(values, REPEATED_PRODUCT, fieldErrors) };
   }
 
-  const referencesError = await validateActiveReferences(parsed.data, lines, current);
+  const referencesError = await validateActiveReferences(db, parsed.data, lines, current);
 
   if (referencesError) {
     return { ok: false as const, state: orderError(values, referencesError.error, referencesError.fieldErrors) };
@@ -340,7 +329,7 @@ export async function createOrderAction(
     return orderError(values, "No tienes permisos para registrar pedidos.");
   }
 
-  const validation = await validateOrder(formData, values, new Date());
+  const validation = await validateOrder(prisma, formData, values, new Date());
 
   if (!validation.ok) {
     return validation.state;
@@ -420,25 +409,31 @@ export async function updateOrderAction(
     return orderError(values, "El pedido no existe.");
   }
 
-  const changeValidation = await validateOrderCanChange(orderId);
+  // C4 de la 11.3b (D31, hallazgo 7 de la 10.4a): el pedido se bloquea dentro de la transaccion
+  // y se lee despues, con el cliente y los productos: una proforma creada en medio (que bloquea el
+  // mismo pedido) ya se ve aqui. Sin clave de operacion, un rechazo se devuelve desde la
+  // transaccion antes de escribir nada.
+  const rejection = await prisma.$transaction(async (tx) => {
+    await lockOrderRow(tx, orderId);
 
-  if (!changeValidation.ok) {
-    return orderError(values, changeValidation.message);
-  }
+    const changeValidation = await validateOrderCanChange(tx, orderId);
 
-  const validation = await validateOrder(formData, values, changeValidation.order.fecha_pedido, {
-    id_cliente: changeValidation.order.id_cliente,
-    productIds: changeValidation.order.detalle_pedido.map((detail) => detail.id_producto),
-  });
+    if (!changeValidation.ok) {
+      return orderError(values, changeValidation.message);
+    }
 
-  if (!validation.ok) {
-    return validation.state;
-  }
+    const validation = await validateOrder(tx, formData, values, changeValidation.order.fecha_pedido, {
+      id_cliente: changeValidation.order.id_cliente,
+      productIds: changeValidation.order.detalle_pedido.map((detail) => detail.id_producto),
+    });
 
-  const data = validation.data;
-  const amounts = calculateOrderAmounts(data.items);
+    if (!validation.ok) {
+      return validation.state;
+    }
 
-  await prisma.$transaction(async (tx) => {
+    const data = validation.data;
+    const amounts = calculateOrderAmounts(data.items);
+
     await tx.detalle_pedido.deleteMany({
       where: {
         id_pedido: orderId,
@@ -483,7 +478,13 @@ export async function updateOrderAction(
       detalle: `Pedido actualizado: ${orderId}`,
       tx,
     });
+
+    return null;
   });
+
+  if (rejection) {
+    return rejection;
+  }
 
   revalidatePath(ORDERS_PATH);
   revalidatePath(`${ORDERS_PATH}/${orderId}`);
@@ -491,38 +492,65 @@ export async function updateOrderAction(
   return orderSaved(values, orderId);
 }
 
-export async function cancelOrderAction(formData: FormData) {
-  const session = await requireCommercialPermission();
-  const orderId = formData.get("id_pedido")?.toString().trim();
+// C8 de la 11.3b (D34): cancelar se confirma con ConfirmActionButton y la accion devuelve
+// RowStatusState. Antes volvia al listado sin decir por que no cancelaba (era la accion que la
+// entrega 10 dejo redirigiendo, «whose cancel action stays for delivery 11»). Decide con el
+// pedido bloqueado (C4) y la regla comun de order-rules.ts (C3).
+export async function cancelOrderAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
+  const orderId = formData.get("id_pedido")?.toString().trim() ?? "";
+
+  const session = await getAuthorizedSession(["ADMIN", "SELLER"]);
+
+  if (!session) {
+    return rowStatusError(orderId, "No tienes permisos para cancelar pedidos.");
+  }
 
   if (!orderId) {
-    redirect(ORDERS_PATH);
+    return rowStatusError(orderId, "Debe seleccionar un pedido válido.");
   }
 
-  const changeValidation = await validateOrderCanChange(orderId);
+  // C4 de la 11.3b (D31): el pedido se bloquea y se lee dentro de la transaccion, y la
+  // cancelacion y su bitacora se escriben en ella. Un rechazo se devuelve antes de escribir.
+  const rejection = await prisma.$transaction(async (tx) => {
+    await lockOrderRow(tx, orderId);
 
-  if (!changeValidation.ok) {
-    redirect(ORDERS_PATH);
+    const changeValidation = await validateOrderCanChange(tx, orderId);
+
+    if (!changeValidation.ok) {
+      return changeValidation.message;
+    }
+
+    await tx.pedido.update({
+      where: {
+        id_pedido: orderId,
+      },
+      data: {
+        estado: "cancelado",
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "pedido",
+      id_registro_afectado: orderId,
+      accion: "cancelar",
+      detalle: `Pedido cancelado: ${orderId}`,
+      tx,
+    });
+
+    return null;
+  });
+
+  // Un rechazo no revalida: el repintado se llevaria el boton y su mensaje (CLAUDE.md).
+  if (rejection) {
+    return rowStatusError(orderId, rejection);
   }
-
-  await prisma.pedido.update({
-    where: {
-      id_pedido: orderId,
-    },
-    data: {
-      estado: "cancelado",
-    },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "pedido",
-    id_registro_afectado: orderId,
-    accion: "cancelar",
-    detalle: `Pedido cancelado: ${orderId}`,
-  });
 
   revalidatePath(ORDERS_PATH);
   revalidatePath(`${ORDERS_PATH}/${orderId}`);
-  redirect(`${ORDERS_PATH}?toast=order-cancelled`);
+
+  return rowStatusDone(orderId, "cancelado");
 }

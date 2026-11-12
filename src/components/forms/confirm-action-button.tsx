@@ -39,6 +39,11 @@ type ConfirmActionButtonProps<Values, Data> = {
     title: string;
     description: ReactNode;
     confirmText: string;
+    /**
+     * Texto del boton que cierra sin ejecutar («Cancelar» por defecto). Cancelar un pedido usa
+     * «Volver»: dos botones con «Cancelar» no dirian cual cancela el pedido (C8 de la 11.3b).
+     */
+    cancelText?: string;
     variant?: "default" | "destructive";
   };
   pendingText?: string;
@@ -208,6 +213,7 @@ export function ConfirmActionButton<Values, Data>({
           title={confirm.title}
           description={confirm.description}
           confirmText={confirm.confirmText}
+          cancelText={confirm.cancelText}
           onConfirm={run}
           pending={pending}
           pendingText={pendingText}

@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 930 |
+| Archivos fuente analizados | 941 |
 | Páginas | 179 |
 | Páginas en ranuras paralelas (@ranura) | 53 |
 | Páginas que interceptan una ruta | 33 |
-| Declaraciones JSX de formulario | 30 |
+| Declaraciones JSX de formulario | 27 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 111 |
 
@@ -52,7 +52,7 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/commercial/orders/[id]/edit` | — | `src/app/(dashboard)/dashboard/commercial/orders/[id]/edit/page.tsx` | 0 | OrderForm |
 | `/dashboard/commercial/orders/[id]` | — | `src/app/(dashboard)/dashboard/commercial/orders/[id]/page.tsx` | 0 | — |
 | `/dashboard/commercial/orders/new` | — | `src/app/(dashboard)/dashboard/commercial/orders/new/page.tsx` | 0 | OrderForm |
-| `/dashboard/commercial/orders` | — | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 1 | — |
+| `/dashboard/commercial/orders` | — | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 0 | — |
 | `/dashboard/commercial` | — | `src/app/(dashboard)/dashboard/commercial/page.tsx` | 0 | — |
 | `/dashboard/commercial/payments` | — | `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 0 | — |
 | `/dashboard/commercial/product-categories` | — | `src/app/(dashboard)/dashboard/commercial/product-categories/page.tsx` | 0 | ProductCategoryManager |
@@ -65,7 +65,7 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/commercial/quotes/[id]` | — | `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 0 | ReceiptForm, PaymentForm |
 | `/dashboard/commercial/quotes/new` | — | `src/app/(dashboard)/dashboard/commercial/quotes/new/page.tsx` | 0 | QuoteForm |
 | `/dashboard/commercial/quotes` | — | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 0 | — |
-| `/dashboard/commercial/receipts` | — | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 1 | — |
+| `/dashboard/commercial/receipts` | — | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 0 | — |
 | `/dashboard/costs/costings/[id]` | — | `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 0 | — |
 | `/dashboard/costs/costings` | — | `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 0 | — |
 | `/dashboard/costs` | — | `src/app/(dashboard)/dashboard/costs/page.tsx` | 0 | — |
@@ -224,8 +224,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 
 | Fuente | Línea | Acción |
 | --- | --- | --- |
-| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 235 | `{cancelOrderAction}` |
-| `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 136 | `{annulReceiptAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 46 | `{createPettyCashBoxAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 90 | `{createPettyCashExpenseAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 115 | `{createPettyCashIncomeAdjustmentAction}` |
@@ -244,7 +242,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx` | 98 | `{generatePayrollAction}` |
 | `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 260 | `{cancelPayrollAction}` |
 | `src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx` | 82 | `{createScrapSaleAction}` |
-| `src/components/commercial/receipt-form.tsx` | 54 | `{createReceiptAction}` |
 | `src/components/forms/action-form.tsx` | 48 | `{action}` |
 | `src/components/forms/filter-bar.tsx` | 39 | `{action}` |
 | `src/components/table/row-actions.tsx` | 44 | `{action}` |
