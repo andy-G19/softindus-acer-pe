@@ -196,6 +196,19 @@ exports[`createReceiptAction > boleta por el total de la proforma > llamadas 1`]
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -226,10 +239,6 @@ exports[`createReceiptAction > boleta por el total de la proforma > llamadas 1`]
     "prisma": "comprobante_venta.findUnique",
   },
   {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
     "args": {
       "codigoEntidad": "comprobante_venta",
       "prefijo": "CMP",
@@ -244,7 +253,7 @@ exports[`createReceiptAction > boleta por el total de la proforma > llamadas 1`]
         "id_comprobante": "CMP00000001",
         "id_pedido": "PED00000004",
         "id_proforma": "PRF00000007",
-        "monto_total": 150.5,
+        "monto_total": "150.50",
         "numero_comprobante": "B001-000123",
         "observaciones": null,
         "tipo_comprobante": "boleta",
@@ -298,6 +307,19 @@ exports[`createReceiptAction > el monto supera el total de la proforma > llamada
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -316,6 +338,10 @@ exports[`createReceiptAction > el monto supera el total de la proforma > llamada
     },
     "prisma": "proforma.findUnique",
   },
+  {
+    "args": "El comprobante no puede superar el monto total de la proforma.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
@@ -329,6 +355,19 @@ exports[`createReceiptAction > el numero ya existe en otro comprobante > llamada
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -360,6 +399,10 @@ exports[`createReceiptAction > el numero ya existe en otro comprobante > llamada
     },
     "prisma": "comprobante_venta.findUnique",
   },
+  {
+    "args": "Ya existe un comprobante con ese número.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
@@ -373,6 +416,19 @@ exports[`createReceiptAction > factura por un monto menor, con observaciones y e
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -405,10 +461,6 @@ exports[`createReceiptAction > factura por un monto menor, con observaciones y e
     "prisma": "comprobante_venta.findUnique",
   },
   {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
     "args": {
       "codigoEntidad": "comprobante_venta",
       "prefijo": "CMP",
@@ -423,7 +475,7 @@ exports[`createReceiptAction > factura por un monto menor, con observaciones y e
         "id_comprobante": "CMP00000001",
         "id_pedido": "PED00000004",
         "id_proforma": "PRF00000007",
-        "monto_total": 100.25,
+        "monto_total": "100.25",
         "numero_comprobante": "F001-000045",
         "observaciones": "entrega parcial",
         "tipo_comprobante": "factura",
@@ -477,6 +529,19 @@ exports[`createReceiptAction > la proforma no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -494,6 +559,10 @@ exports[`createReceiptAction > la proforma no existe > llamadas 1`] = `
       },
     },
     "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "La proforma seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -510,6 +579,19 @@ exports[`createReceiptAction > la proforma ya tiene un comprobante emitido > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -527,6 +609,10 @@ exports[`createReceiptAction > la proforma ya tiene un comprobante emitido > lla
       },
     },
     "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "Esta proforma ya tiene un comprobante emitido: B001-000100.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -557,6 +643,19 @@ exports[`createReceiptAction > proforma anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "comprobante_venta": {
@@ -574,6 +673,10 @@ exports[`createReceiptAction > proforma anulada > llamadas 1`] = `
       },
     },
     "prisma": "proforma.findUnique",
+  },
+  {
+    "args": "No se puede emitir comprobante para una proforma anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;

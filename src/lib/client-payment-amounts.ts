@@ -114,3 +114,20 @@ export function calculateClientPayment({
     status: newBalance <= 0n ? "pagada" : "aceptada",
   };
 }
+
+export type ReceiptAmountResult = { accepted: false } | { accepted: true; amount: string };
+
+/**
+ * El monto de un comprobante de venta (C5 de la 11.3b): no puede superar el total de la
+ * proforma. Se compara y se guarda como lo guarda la columna numeric(12, 2): 150.504 sobre un
+ * total de 150.50 es 150.50 y se acepta; 150.505 es 150.51 y se rechaza.
+ */
+export function checkReceiptAmount({ total, amount }: { total: AmountValue; amount: AmountValue }): ReceiptAmountResult {
+  const amountCents = cents(amount);
+
+  if (amountCents > cents(total)) {
+    return { accepted: false };
+  }
+
+  return { accepted: true, amount: formatCents(amountCents) };
+}

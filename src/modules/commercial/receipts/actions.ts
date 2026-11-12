@@ -4,9 +4,11 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { registerAuditLog } from "@/lib/audit";
+import { checkReceiptAmount } from "@/lib/client-payment-amounts";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockQuoteRow } from "@/lib/row-locks";
 import { receiptSchema } from "@/schemas/commercial/receipt.schema";
 
 function emptyToNull(value: FormDataEntryValue | null) {
@@ -39,55 +41,63 @@ export async function createReceiptAction(formData: FormData) {
   const { id_proforma, tipo_comprobante, numero_comprobante, monto_total } =
     parsed.data;
 
-  const quote = await prisma.proforma.findUnique({
-    where: {
-      id_proforma,
-    },
-    include: {
-      comprobante_venta: {
-        where: {
-          estado: "emitido",
-        },
-        select: {
-          id_comprobante: true,
-          numero_comprobante: true,
+  await prisma.$transaction(async (tx) => {
+    // C5 de la 11.3b: la proforma se bloquea y se lee dentro de la transaccion, con su
+    // comprobante emitido y el numero: dos comprobantes simultaneos para la misma proforma, o
+    // uno y la anulacion de la proforma, van en fila. Un rechazo lanza antes de escribir.
+    await lockQuoteRow(tx, id_proforma);
+
+    const quote = await tx.proforma.findUnique({
+      where: {
+        id_proforma,
+      },
+      include: {
+        comprobante_venta: {
+          where: {
+            estado: "emitido",
+          },
+          select: {
+            id_comprobante: true,
+            numero_comprobante: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!quote) {
-    throw new Error("La proforma seleccionada no existe.");
-  }
+    if (!quote) {
+      throw new Error("La proforma seleccionada no existe.");
+    }
 
-  if (quote.estado === "anulada") {
-    throw new Error("No se puede emitir comprobante para una proforma anulada.");
-  }
+    if (quote.estado === "anulada") {
+      throw new Error("No se puede emitir comprobante para una proforma anulada.");
+    }
 
-  if (quote.comprobante_venta.length > 0) {
-    throw new Error(
-      `Esta proforma ya tiene un comprobante emitido: ${quote.comprobante_venta[0].numero_comprobante}.`
-    );
-  }
+    if (quote.comprobante_venta.length > 0) {
+      throw new Error(
+        `Esta proforma ya tiene un comprobante emitido: ${quote.comprobante_venta[0].numero_comprobante}.`
+      );
+    }
 
-  if (monto_total > Number(quote.monto_total.toString())) {
-    throw new Error("El comprobante no puede superar el monto total de la proforma.");
-  }
+    // C5 de la 11.3b: el monto se compara y se guarda como lo guarda la columna, en centimos.
+    const amount = checkReceiptAmount({ total: quote.monto_total, amount: monto_total });
 
-  const existingNumber = await prisma.comprobante_venta.findUnique({
-    where: {
-      numero_comprobante,
-    },
-    select: {
-      id_comprobante: true,
-    },
-  });
+    if (!amount.accepted) {
+      throw new Error("El comprobante no puede superar el monto total de la proforma.");
+    }
 
-  if (existingNumber) {
-    throw new Error("Ya existe un comprobante con ese número.");
-  }
+    const existingNumber = await tx.comprobante_venta.findUnique({
+      where: {
+        numero_comprobante,
+      },
+      select: {
+        id_comprobante: true,
+      },
+    });
 
-  await prisma.$transaction(async (tx) => {
+    if (existingNumber) {
+      throw new Error("Ya existe un comprobante con ese número.");
+    }
+
     const id_comprobante = await getNextCorrelativeId(tx, {
       codigoEntidad: "comprobante_venta",
       prefijo: "CMP",
@@ -101,7 +111,7 @@ export async function createReceiptAction(formData: FormData) {
         tipo_comprobante,
         numero_comprobante,
         fecha_emision: new Date(),
-        monto_total,
+        monto_total: amount.amount,
         estado: "emitido",
         observaciones: emptyToNull(formData.get("observaciones")),
       },

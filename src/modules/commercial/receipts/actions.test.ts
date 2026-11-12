@@ -7,6 +7,7 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
 } from "@/testing/page-characterization";
 
@@ -224,3 +225,56 @@ characterize("annulReceiptAction", annulReceiptAction, { "comprobante_venta.find
   },
   { name: "sin permiso: el maestro de taller", form: annulForm(), role: "WORKSHOP_MASTER" },
 ]);
+
+// ---------------------------------------------------------------------------
+// C5 de la 11.3b (hallazgos 3 y 4 del plan): monto en centimos y la proforma bloqueada
+// ---------------------------------------------------------------------------
+
+// El monto se comparaba con el total de la proforma con number y se guardaba sin redondear: uno
+// de 0.004 se guardaba como 0.00, y uno de 150.504 sobre un total de 150.50 se rechazaba aunque
+// la columna lo guardaria igual al total. La proforma, el comprobante emitido y el numero se
+// leian fuera de la transaccion: dos comprobantes simultaneos para la misma proforma podian
+// pasar los dos. Ahora la proforma se bloquea y todo se decide dentro de la transaccion.
+describe("C5 de la 11.3b: el comprobante en centimos y con la proforma bloqueada", () => {
+  const stored = (value: unknown) => new Prisma.Decimal(String(value)).toFixed(2);
+  const create = (form: Record<string, string>) => run(createReceiptAction, { name: "C5", form: receiptForm(form) }, free);
+
+  function dataOf(calls: Awaited<ReturnType<typeof run>>["calls"], name: string) {
+    const call = calls.find((item) => "prisma" in item && item.prisma === name);
+
+    return (call as { args: { data: Record<string, unknown> } } | undefined)?.args.data;
+  }
+
+  it("un monto que se guardaria como 0.00 se rechaza", async () => {
+    const { calls, outcome } = await create({ monto_total: "0.004" });
+
+    expect(outcome).toBe("error: El monto total debe ser mayor que cero.");
+    expect(dataOf(calls, "comprobante_venta.create")).toBeUndefined();
+  });
+
+  it("150.504 sobre un total de 150.50 se acepta: la columna lo guarda como 150.50", async () => {
+    const { calls, outcome } = await create({ monto_total: "150.504" });
+
+    expect(outcome).toBe(`redirect:/dashboard/commercial/quotes/${PROFORMA}?toast=receipt-created`);
+    expect(stored(dataOf(calls, "comprobante_venta.create")?.monto_total)).toBe("150.50");
+  });
+
+  it("150.505 sobre un total de 150.50 se rechaza: la columna lo guardaria como 150.51", async () => {
+    const { outcome } = await create({ monto_total: "150.505" });
+
+    expect(outcome).toBe("error: El comprobante no puede superar el monto total de la proforma.");
+  });
+
+  it.each([
+    ["emitido", {}],
+    ["rechazado por el numero repetido", { "comprobante_venta.findUnique": { id_comprobante: "CMP00000002" } }],
+  ])("%s: bloquea la proforma antes de leer lo que decide", async (_name, data) => {
+    const { calls } = await run(createReceiptAction, { name: "C5", form: receiptForm(), data }, free);
+
+    expectRowLockedBefore(calls, {
+      table: "proforma",
+      id: PROFORMA,
+      reads: (call) => ["proforma.findUnique", "comprobante_venta.findUnique"].includes(call.prisma),
+    });
+  });
+});

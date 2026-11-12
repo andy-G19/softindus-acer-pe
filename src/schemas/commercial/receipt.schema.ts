@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { hasCents } from "@/lib/client-payment-amounts";
+
 const moneySchema = z.preprocess((value) => {
   const text = value?.toString().trim();
 
@@ -8,7 +10,11 @@ const moneySchema = z.preprocess((value) => {
   }
 
   return text;
-}, z.coerce.number().positive("El monto total debe ser mayor que cero."));
+}, z.coerce
+  .number()
+  .positive("El monto total debe ser mayor que cero.")
+  // C5 de la 11.3b: lo que la columna guardaria como 0.00 tampoco es un monto.
+  .refine(hasCents, "El monto total debe ser mayor que cero."));
 
 export const receiptSchema = z.object({
   id_proforma: z.string().min(1, "La proforma es obligatoria."),
