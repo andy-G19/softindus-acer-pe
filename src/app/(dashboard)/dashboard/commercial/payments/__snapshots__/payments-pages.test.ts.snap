@@ -11,19 +11,31 @@ exports[`/dashboard/commercial/payments > fechas no validas > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": {
+        "fecha_pago": "desc",
+      },
+      "select": {
+        "fecha_pago": true,
+        "id_pago_cliente": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "metodo_pago": true,
+        "monto_pagado": true,
         "proforma": {
-          "include": {
+          "select": {
             "pedido": {
-              "include": {
-                "cliente": true,
+              "select": {
+                "cliente": {
+                  "select": {
+                    "nombre_razon_social": true,
+                  },
+                },
               },
             },
           },
         },
-      },
-      "orderBy": {
-        "fecha_pago": "desc",
+        "saldo_actual": true,
+        "tipo_pago": true,
       },
       "where": {
         "AND": [
@@ -211,19 +223,31 @@ exports[`/dashboard/commercial/payments > rango invertido > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": {
+        "fecha_pago": "desc",
+      },
+      "select": {
+        "fecha_pago": true,
+        "id_pago_cliente": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "metodo_pago": true,
+        "monto_pagado": true,
         "proforma": {
-          "include": {
+          "select": {
             "pedido": {
-              "include": {
-                "cliente": true,
+              "select": {
+                "cliente": {
+                  "select": {
+                    "nombre_razon_social": true,
+                  },
+                },
               },
             },
           },
         },
-      },
-      "orderBy": {
-        "fecha_pago": "desc",
+        "saldo_actual": true,
+        "tipo_pago": true,
       },
       "where": {
         "AND": [
@@ -396,19 +420,31 @@ exports[`/dashboard/commercial/payments > sin filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": {
+        "fecha_pago": "desc",
+      },
+      "select": {
+        "fecha_pago": true,
+        "id_pago_cliente": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "metodo_pago": true,
+        "monto_pagado": true,
         "proforma": {
-          "include": {
+          "select": {
             "pedido": {
-              "include": {
-                "cliente": true,
+              "select": {
+                "cliente": {
+                  "select": {
+                    "nombre_razon_social": true,
+                  },
+                },
               },
             },
           },
         },
-      },
-      "orderBy": {
-        "fecha_pago": "desc",
+        "saldo_actual": true,
+        "tipo_pago": true,
       },
       "where": {},
     },
@@ -588,19 +624,31 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > llamadas 1`] 
   },
   {
     "args": {
-      "include": {
+      "orderBy": {
+        "fecha_pago": "desc",
+      },
+      "select": {
+        "fecha_pago": true,
+        "id_pago_cliente": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "metodo_pago": true,
+        "monto_pagado": true,
         "proforma": {
-          "include": {
+          "select": {
             "pedido": {
-              "include": {
-                "cliente": true,
+              "select": {
+                "cliente": {
+                  "select": {
+                    "nombre_razon_social": true,
+                  },
+                },
               },
             },
           },
         },
-      },
-      "orderBy": {
-        "fecha_pago": "desc",
+        "saldo_actual": true,
+        "tipo_pago": true,
       },
       "where": {},
     },
@@ -793,19 +841,31 @@ exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": {
+        "fecha_pago": "desc",
+      },
+      "select": {
+        "fecha_pago": true,
+        "id_pago_cliente": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "metodo_pago": true,
+        "monto_pagado": true,
         "proforma": {
-          "include": {
+          "select": {
             "pedido": {
-              "include": {
-                "cliente": true,
+              "select": {
+                "cliente": {
+                  "select": {
+                    "nombre_razon_social": true,
+                  },
+                },
               },
             },
           },
         },
-      },
-      "orderBy": {
-        "fecha_pago": "desc",
+        "saldo_actual": true,
+        "tipo_pago": true,
       },
       "where": {
         "AND": [

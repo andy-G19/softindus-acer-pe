@@ -11,16 +11,27 @@ exports[`/dashboard/commercial/receipts > fechas no validas > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
-        "pedido": {
-          "include": {
-            "cliente": true,
-          },
-        },
-        "proforma": true,
-      },
       "orderBy": {
         "fecha_emision": "desc",
+      },
+      "select": {
+        "estado": true,
+        "fecha_emision": true,
+        "id_comprobante": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_comprobante": true,
+        "pedido": {
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
+              },
+            },
+          },
+        },
+        "tipo_comprobante": true,
       },
       "where": {
         "AND": [
@@ -173,16 +184,27 @@ exports[`/dashboard/commercial/receipts > rango invertido > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
-        "pedido": {
-          "include": {
-            "cliente": true,
-          },
-        },
-        "proforma": true,
-      },
       "orderBy": {
         "fecha_emision": "desc",
+      },
+      "select": {
+        "estado": true,
+        "fecha_emision": true,
+        "id_comprobante": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_comprobante": true,
+        "pedido": {
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
+              },
+            },
+          },
+        },
+        "tipo_comprobante": true,
       },
       "where": {
         "AND": [
@@ -313,16 +335,27 @@ exports[`/dashboard/commercial/receipts > sin filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
-        "pedido": {
-          "include": {
-            "cliente": true,
-          },
-        },
-        "proforma": true,
-      },
       "orderBy": {
         "fecha_emision": "desc",
+      },
+      "select": {
+        "estado": true,
+        "fecha_emision": true,
+        "id_comprobante": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_comprobante": true,
+        "pedido": {
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
+              },
+            },
+          },
+        },
+        "tipo_comprobante": true,
       },
       "where": {},
     },
@@ -467,16 +500,27 @@ exports[`/dashboard/commercial/receipts > todos los filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
-        "pedido": {
-          "include": {
-            "cliente": true,
-          },
-        },
-        "proforma": true,
-      },
       "orderBy": {
         "fecha_emision": "desc",
+      },
+      "select": {
+        "estado": true,
+        "fecha_emision": true,
+        "id_comprobante": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_comprobante": true,
+        "pedido": {
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
+              },
+            },
+          },
+        },
+        "tipo_comprobante": true,
       },
       "where": {
         "AND": [
@@ -662,16 +706,27 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > llamadas 1
   },
   {
     "args": {
-      "include": {
-        "pedido": {
-          "include": {
-            "cliente": true,
-          },
-        },
-        "proforma": true,
-      },
       "orderBy": {
         "fecha_emision": "desc",
+      },
+      "select": {
+        "estado": true,
+        "fecha_emision": true,
+        "id_comprobante": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_comprobante": true,
+        "pedido": {
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
+              },
+            },
+          },
+        },
+        "tipo_comprobante": true,
       },
       "where": {},
     },

@@ -91,6 +91,8 @@ function buildQuoteListWhere(filters: QuoteListFilters): Prisma.proformaWhereInp
   return conditions.length > 0 ? { AND: conditions } : {};
 }
 
+// C3 de la 11.3c (D39): solo las columnas que muestra la tabla. Antes traia el cliente completo
+// y las lineas del pedido con su producto, que el listado no usa.
 export async function getQuoteListData(filters: QuoteListFilters) {
   const where = buildQuoteListWhere(filters);
 
@@ -100,7 +102,14 @@ export async function getQuoteListData(filters: QuoteListFilters) {
       orderBy: {
         fecha_emision: "desc",
       },
-      include: {
+      select: {
+        id_proforma: true,
+        numero_proforma: true,
+        id_pedido: true,
+        fecha_emision: true,
+        monto_total: true,
+        saldo: true,
+        estado: true,
         pago_cliente: {
           select: {
             id_pago_cliente: true,
@@ -117,11 +126,10 @@ export async function getQuoteListData(filters: QuoteListFilters) {
           },
         },
         pedido: {
-          include: {
-            cliente: true,
-            detalle_pedido: {
-              include: {
-                producto: true,
+          select: {
+            cliente: {
+              select: {
+                nombre_razon_social: true,
               },
             },
           },

@@ -11,7 +11,10 @@ exports[`/dashboard/commercial/quotes > fechas no validas > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": {
+        "fecha_emision": "desc",
+      },
+      "select": {
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -22,24 +25,27 @@ exports[`/dashboard/commercial/quotes > fechas no validas > llamadas 1`] = `
             "estado": "emitido",
           },
         },
+        "estado": true,
+        "fecha_emision": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_proforma": true,
         "pago_cliente": {
           "select": {
             "id_pago_cliente": true,
           },
         },
         "pedido": {
-          "include": {
-            "cliente": true,
-            "detalle_pedido": {
-              "include": {
-                "producto": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
               },
             },
           },
         },
-      },
-      "orderBy": {
-        "fecha_emision": "desc",
+        "saldo": true,
       },
       "where": {
         "AND": [
@@ -242,7 +248,10 @@ exports[`/dashboard/commercial/quotes > rango invertido > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": {
+        "fecha_emision": "desc",
+      },
+      "select": {
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -253,24 +262,27 @@ exports[`/dashboard/commercial/quotes > rango invertido > llamadas 1`] = `
             "estado": "emitido",
           },
         },
+        "estado": true,
+        "fecha_emision": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_proforma": true,
         "pago_cliente": {
           "select": {
             "id_pago_cliente": true,
           },
         },
         "pedido": {
-          "include": {
-            "cliente": true,
-            "detalle_pedido": {
-              "include": {
-                "producto": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
               },
             },
           },
         },
-      },
-      "orderBy": {
-        "fecha_emision": "desc",
+        "saldo": true,
       },
       "where": {
         "AND": [
@@ -444,7 +456,10 @@ exports[`/dashboard/commercial/quotes > saldo pagado > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": {
+        "fecha_emision": "desc",
+      },
+      "select": {
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -455,24 +470,27 @@ exports[`/dashboard/commercial/quotes > saldo pagado > llamadas 1`] = `
             "estado": "emitido",
           },
         },
+        "estado": true,
+        "fecha_emision": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_proforma": true,
         "pago_cliente": {
           "select": {
             "id_pago_cliente": true,
           },
         },
         "pedido": {
-          "include": {
-            "cliente": true,
-            "detalle_pedido": {
-              "include": {
-                "producto": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
               },
             },
           },
         },
-      },
-      "orderBy": {
-        "fecha_emision": "desc",
+        "saldo": true,
       },
       "where": {
         "AND": [
@@ -673,7 +691,10 @@ exports[`/dashboard/commercial/quotes > sin filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": {
+        "fecha_emision": "desc",
+      },
+      "select": {
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -684,24 +705,27 @@ exports[`/dashboard/commercial/quotes > sin filtros > llamadas 1`] = `
             "estado": "emitido",
           },
         },
+        "estado": true,
+        "fecha_emision": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_proforma": true,
         "pago_cliente": {
           "select": {
             "id_pago_cliente": true,
           },
         },
         "pedido": {
-          "include": {
-            "cliente": true,
-            "detalle_pedido": {
-              "include": {
-                "producto": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
               },
             },
           },
         },
-      },
-      "orderBy": {
-        "fecha_emision": "desc",
+        "saldo": true,
       },
       "where": {},
     },
@@ -896,7 +920,10 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
   },
   {
     "args": {
-      "include": {
+      "orderBy": {
+        "fecha_emision": "desc",
+      },
+      "select": {
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -907,24 +934,27 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
             "estado": "emitido",
           },
         },
+        "estado": true,
+        "fecha_emision": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_proforma": true,
         "pago_cliente": {
           "select": {
             "id_pago_cliente": true,
           },
         },
         "pedido": {
-          "include": {
-            "cliente": true,
-            "detalle_pedido": {
-              "include": {
-                "producto": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
               },
             },
           },
         },
-      },
-      "orderBy": {
-        "fecha_emision": "desc",
+        "saldo": true,
       },
       "where": {
         "AND": [
@@ -1170,7 +1200,10 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > llamadas 1`] =
   },
   {
     "args": {
-      "include": {
+      "orderBy": {
+        "fecha_emision": "desc",
+      },
+      "select": {
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -1181,24 +1214,27 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > llamadas 1`] =
             "estado": "emitido",
           },
         },
+        "estado": true,
+        "fecha_emision": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_proforma": true,
         "pago_cliente": {
           "select": {
             "id_pago_cliente": true,
           },
         },
         "pedido": {
-          "include": {
-            "cliente": true,
-            "detalle_pedido": {
-              "include": {
-                "producto": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
               },
             },
           },
         },
-      },
-      "orderBy": {
-        "fecha_emision": "desc",
+        "saldo": true,
       },
       "where": {},
     },

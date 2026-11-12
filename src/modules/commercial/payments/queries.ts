@@ -73,6 +73,8 @@ function buildCustomerPaymentListConditions(
   return conditions;
 }
 
+// C3 de la 11.3c (D39): solo las columnas que muestra la tabla. Antes traia la proforma, el
+// pedido y el cliente completos para mostrar el nombre del cliente.
 export async function getCustomerPaymentListData(
   filters: CustomerPaymentListFilters,
 ) {
@@ -84,12 +86,24 @@ export async function getCustomerPaymentListData(
       orderBy: {
         fecha_pago: "desc",
       },
-      include: {
+      select: {
+        id_pago_cliente: true,
+        id_pedido: true,
+        id_proforma: true,
+        fecha_pago: true,
+        tipo_pago: true,
+        metodo_pago: true,
+        monto_pagado: true,
+        saldo_actual: true,
         proforma: {
-          include: {
+          select: {
             pedido: {
-              include: {
-                cliente: true,
+              select: {
+                cliente: {
+                  select: {
+                    nombre_razon_social: true,
+                  },
+                },
               },
             },
           },

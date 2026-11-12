@@ -51,6 +51,8 @@ function buildReceiptListConditions(filters: ReceiptListFilters) {
   return conditions;
 }
 
+// C3 de la 11.3c (D39): solo las columnas que muestra la tabla. Antes traia el cliente y la
+// proforma completos; el enlace a la proforma usa el id que ya guarda el comprobante.
 export async function getReceiptList(filters: ReceiptListFilters) {
   const conditions = buildReceiptListConditions(filters);
 
@@ -59,13 +61,24 @@ export async function getReceiptList(filters: ReceiptListFilters) {
     orderBy: {
       fecha_emision: "desc",
     },
-    include: {
+    select: {
+      id_comprobante: true,
+      numero_comprobante: true,
+      id_pedido: true,
+      id_proforma: true,
+      tipo_comprobante: true,
+      fecha_emision: true,
+      monto_total: true,
+      estado: true,
       pedido: {
-        include: {
-          cliente: true,
+        select: {
+          cliente: {
+            select: {
+              nombre_razon_social: true,
+            },
+          },
         },
       },
-      proforma: true,
     },
   });
 }
