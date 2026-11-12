@@ -117,7 +117,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <div>
 <label for="method">Método</label>
 <select id="method" name="method">
-<option value="" selected="">Método</option>
+<option value="" selected="">Todos los métodos</option>
 <option value="efectivo">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
@@ -128,7 +128,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <div>
 <label for="type">Tipo de pago</label>
 <select id="type" name="type">
-<option value="" selected="">Tipo pago</option>
+<option value="" selected="">Todos los tipos</option>
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
@@ -318,7 +318,7 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 <div>
 <label for="method">Método</label>
 <select id="method" name="method">
-<option value="" selected="">Método</option>
+<option value="" selected="">Todos los métodos</option>
 <option value="efectivo">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
@@ -329,7 +329,7 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 <div>
 <label for="type">Tipo de pago</label>
 <select id="type" name="type">
-<option value="" selected="">Tipo pago</option>
+<option value="" selected="">Todos los tipos</option>
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
@@ -494,7 +494,7 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <div>
 <label for="method">Método</label>
 <select id="method" name="method">
-<option value="" selected="">Método</option>
+<option value="" selected="">Todos los métodos</option>
 <option value="efectivo">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
@@ -505,7 +505,7 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <div>
 <label for="type">Tipo de pago</label>
 <select id="type" name="type">
-<option value="" selected="">Tipo pago</option>
+<option value="" selected="">Todos los tipos</option>
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
@@ -686,7 +686,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <div>
 <label for="method">Método</label>
 <select id="method" name="method">
-<option value="" selected="">Método</option>
+<option value="" selected="">Todos los métodos</option>
 <option value="efectivo">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
@@ -697,7 +697,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <div>
 <label for="type">Tipo de pago</label>
 <select id="type" name="type">
-<option value="" selected="">Tipo pago</option>
+<option value="" selected="">Todos los tipos</option>
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
@@ -740,8 +740,8 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <td>nombre_razon_social-1</td>
 <td>id_pedido-1</td>
 <td>id_proforma-1</td>
-<td>adelanto</td>
-<td>efectivo</td>
+<td>Adelanto</td>
+<td>Efectivo</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
@@ -753,8 +753,8 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <td>nombre_razon_social-2</td>
 <td>id_pedido-2</td>
 <td>id_proforma-2</td>
-<td>amortizacion</td>
-<td>transferencia</td>
+<td>Amortización</td>
+<td>Transferencia</td>
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
@@ -766,8 +766,8 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <td>nombre_razon_social-1</td>
 <td>id_pedido-1</td>
 <td>id_proforma-1</td>
-<td>cancelacion</td>
-<td>yape</td>
+<td>Cancelación</td>
+<td>Yape</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
@@ -944,7 +944,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <div>
 <label for="method">Método</label>
 <select id="method" name="method">
-<option value="">Método</option>
+<option value="">Todos los métodos</option>
 <option value="efectivo" selected="">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
@@ -955,7 +955,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <div>
 <label for="type">Tipo de pago</label>
 <select id="type" name="type">
-<option value="">Tipo pago</option>
+<option value="">Todos los tipos</option>
 <option value="adelanto" selected="">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>

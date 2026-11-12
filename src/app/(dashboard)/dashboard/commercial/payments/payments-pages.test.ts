@@ -25,8 +25,9 @@ vi.mock("next/navigation", async (importOriginal) =>
 // Entrega 10.4b: lo que pasa hoy con las fechas antes de pasar la barra a
 // FilterBar y DateRangeFields (detalle en orders-pages.test.ts). Los datos
 // generados dan un tipo y un metodo que no existen: el caso con valores
-// reales fija que la tabla los muestra tal como se guardan («amortizacion»),
-// no con el texto de los filtros («Amortización»).
+// reales fijaba que la tabla los mostraba tal como se guardan
+// («amortizacion»). Desde C2 de la 11.3c (hallazgo 4 de la 10.4b) muestra el
+// texto de los filtros («Amortización»): ver payment-labels-pages.test.ts.
 const PAYMENTS_WITH_REAL_VALUES = (args: PrismaArgs) => {
   const [first, second] = generatedResult("pago_cliente", "findMany", args) as Record<string, unknown>[];
 

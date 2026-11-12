@@ -26,7 +26,7 @@ import {
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { commercialNotifications } from "@/modules/commercial/notifications";
-import { RECEIPT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
+import { getOptionLabel, RECEIPT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
 import { annulReceiptAction } from "@/modules/commercial/receipts/actions";
 import { ReceiptAnnulAction } from "@/modules/commercial/receipts/receipt-annul-action";
 import { getReceiptList } from "@/modules/commercial/receipts/queries";
@@ -116,7 +116,7 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
                 {receipt.pedido.cliente.nombre_razon_social}
               </TableCell>
               <TableCell>{receipt.id_pedido}</TableCell>
-              <TableCell>{receipt.tipo_comprobante}</TableCell>
+              <TableCell>{getOptionLabel(RECEIPT_TYPE_OPTIONS, receipt.tipo_comprobante)}</TableCell>
               <TableCell>{formatDate(receipt.fecha_emision)}</TableCell>
               <TableCell className="text-right">
                 {formatMoney(receipt.monto_total)}

@@ -8,6 +8,12 @@ import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { StateBadge } from "@/components/commercial/status-badge";
 import { commercialNotifications } from "@/modules/commercial/notifications";
+import {
+  getOptionLabel,
+  PAYMENT_METHOD_OPTIONS,
+  PAYMENT_TYPE_OPTIONS,
+  RECEIPT_TYPE_OPTIONS,
+} from "@/modules/commercial/payment-labels";
 import { createPaymentAction } from "@/modules/commercial/payments/actions";
 import { createReceiptAction } from "@/modules/commercial/receipts/actions";
 import { ReceiptForm } from "@/modules/commercial/receipts/receipt-form";
@@ -301,8 +307,12 @@ export default async function QuoteDetailPage({
                       {quote.pago_cliente.map((payment) => (
                         <tr key={payment.id_pago_cliente} className="border-t">
                           <td className="px-4 py-3">{formatDate(payment.fecha_pago)}</td>
-                          <td className="px-4 py-3">{payment.tipo_pago}</td>
-                          <td className="px-4 py-3">{payment.metodo_pago}</td>
+                          <td className="px-4 py-3">
+                            {getOptionLabel(PAYMENT_TYPE_OPTIONS, payment.tipo_pago)}
+                          </td>
+                          <td className="px-4 py-3">
+                            {getOptionLabel(PAYMENT_METHOD_OPTIONS, payment.metodo_pago)}
+                          </td>
                           <td className="px-4 py-3 text-right">
                             {formatMoney(payment.monto_pagado)}
                           </td>
@@ -361,7 +371,9 @@ export default async function QuoteDetailPage({
                           <td className="px-4 py-3">
                             {formatDate(receipt.fecha_emision)}
                           </td>
-                          <td className="px-4 py-3">{receipt.tipo_comprobante}</td>
+                          <td className="px-4 py-3">
+                            {getOptionLabel(RECEIPT_TYPE_OPTIONS, receipt.tipo_comprobante)}
+                          </td>
                           <td className="px-4 py-3 font-medium">
                             {receipt.numero_comprobante}
                           </td>

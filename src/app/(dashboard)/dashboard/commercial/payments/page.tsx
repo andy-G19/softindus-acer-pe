@@ -24,7 +24,11 @@ import {
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
-import { PAYMENT_METHOD_OPTIONS, PAYMENT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
+import {
+  getOptionLabel,
+  PAYMENT_METHOD_OPTIONS,
+  PAYMENT_TYPE_OPTIONS,
+} from "@/modules/commercial/payment-labels";
 import { getCustomerPaymentListData } from "@/modules/commercial/payments/queries";
 
 type CustomerPaymentsPageProps = {
@@ -101,7 +105,7 @@ export default async function CustomerPaymentsPage({
         <Field id="method" label="Método">
           {(control) => (
             <NativeSelect {...control} name="method" defaultValue={method}>
-              <option value="">Método</option>
+              <option value="">Todos los métodos</option>
               {PAYMENT_METHOD_OPTIONS.map(([value, label]) => (
                 <option key={value} value={value}>
                   {label}
@@ -113,7 +117,7 @@ export default async function CustomerPaymentsPage({
         <Field id="type" label="Tipo de pago">
           {(control) => (
             <NativeSelect {...control} name="type" defaultValue={type}>
-              <option value="">Tipo pago</option>
+              <option value="">Todos los tipos</option>
               {PAYMENT_TYPE_OPTIONS.map(([value, label]) => (
                 <option key={value} value={value}>
                   {label}
@@ -152,8 +156,8 @@ export default async function CustomerPaymentsPage({
               </TableCell>
               <TableCell>{payment.id_pedido}</TableCell>
               <TableCell>{payment.id_proforma}</TableCell>
-              <TableCell>{payment.tipo_pago}</TableCell>
-              <TableCell>{payment.metodo_pago}</TableCell>
+              <TableCell>{getOptionLabel(PAYMENT_TYPE_OPTIONS, payment.tipo_pago)}</TableCell>
+              <TableCell>{getOptionLabel(PAYMENT_METHOD_OPTIONS, payment.metodo_pago)}</TableCell>
               <TableCell className="text-right">
                 {formatMoney(payment.monto_pagado)}
               </TableCell>

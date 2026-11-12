@@ -27,6 +27,7 @@ import {
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { commercialNotifications } from "@/modules/commercial/notifications";
+import { getOptionLabel, RECEIPT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
 import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
 import { QuoteAnnulAction } from "@/modules/commercial/quotes/quote-annul-action";
 import { getQuoteListData } from "@/modules/commercial/quotes/queries";
@@ -177,7 +178,7 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                   <TableCell>
                     {quote.comprobante_venta[0] ? (
                       <Badge variant="success">
-                        {quote.comprobante_venta[0].tipo_comprobante}{" "}
+                        {getOptionLabel(RECEIPT_TYPE_OPTIONS, quote.comprobante_venta[0].tipo_comprobante)}{" "}
                         {quote.comprobante_venta[0].numero_comprobante}
                       </Badge>
                     ) : (
