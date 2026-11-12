@@ -21,12 +21,21 @@ import {
 //
 // Los montos de estos casos son exactos en binario: el monto con decimales y el que se
 // guardaria como 0.00 (hallazgo 3 del plan de la 11.3b) tienen su propia prueba.
+//
+// Desde C6 de la 11.3b emitir devuelve un FormActionState (no redirige ni lanza a la pagina de
+// error), rechaza un rol sin permiso con un error y reclama la clave de la operacion como
+// primera sentencia de la transaccion. Anular sigue redirigiendo hasta C7.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio: se fija para que el snapshot sea estable.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 // Anular escribe con el cliente global, fuera de una transaccion: el doble lo permite y el
 // snapshot lo deja a la vista.
 vi.mock("@/lib/db", async () =>
@@ -154,8 +163,27 @@ function quoteRow(changes: Record<string, unknown> = {}) {
   };
 }
 
+const CLAVE = "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e";
+
+/** El mismo estado inicial que usa el formulario con useActionState. */
+const createReceipt = (formData: FormData) => createReceiptAction({ status: "idle" }, formData);
+
+/** La clave ya estaba en la tabla: el INSERT no devuelve filas y se lee la guardada. */
+function storedKey(changes: Record<string, unknown> = {}): DataOverrides {
+  return {
+    "operacion_idempotente.createManyAndReturn": [],
+    "operacion_idempotente.findUniqueOrThrow": {
+      tipo_operacion: "emitir_comprobante",
+      id_usuario: "USU00000001",
+      id_registro_resultado: "CMP00000009",
+      ...changes,
+    },
+  };
+}
+
 const receiptForm = (changes: Record<string, string> = {}) => ({
   id_proforma: PROFORMA,
+  clave_operacion: CLAVE,
   tipo_comprobante: "boleta",
   numero_comprobante: "B001-000123",
   monto_total: "150.50",
@@ -165,7 +193,7 @@ const receiptForm = (changes: Record<string, string> = {}) => ({
 
 const free: DataOverrides = { "proforma.findUnique": quoteRow(), "comprobante_venta.findUnique": null };
 
-characterize("createReceiptAction", createReceiptAction, free, [
+characterize("createReceiptAction", createReceipt, free, [
   { name: "boleta por el total de la proforma", form: receiptForm() },
   {
     name: "factura por un monto menor, con observaciones y espacios en el numero",
@@ -192,6 +220,10 @@ characterize("createReceiptAction", createReceiptAction, free, [
   { name: "tipo invalido", form: receiptForm({ tipo_comprobante: "ticket" }) },
   { name: "monto cero", form: receiptForm({ monto_total: "0" }) },
   { name: "sin permiso: el maestro de taller", form: receiptForm(), role: "WORKSHOP_MASTER" },
+  { name: "el administrador lo emite igual", form: receiptForm(), role: "ADMIN" },
+  { name: "sin clave de operacion", form: receiptForm({ clave_operacion: "" }) },
+  { name: "clave repetida: responde con el comprobante emitido sin escribir", form: receiptForm(), data: storedKey() },
+  { name: "clave de otro usuario", form: receiptForm(), data: storedKey({ id_usuario: "USU00000009" }) },
 ]);
 
 // ---------------------------------------------------------------------------
@@ -237,7 +269,7 @@ characterize("annulReceiptAction", annulReceiptAction, { "comprobante_venta.find
 // pasar los dos. Ahora la proforma se bloquea y todo se decide dentro de la transaccion.
 describe("C5 de la 11.3b: el comprobante en centimos y con la proforma bloqueada", () => {
   const stored = (value: unknown) => new Prisma.Decimal(String(value)).toFixed(2);
-  const create = (form: Record<string, string>) => run(createReceiptAction, { name: "C5", form: receiptForm(form) }, free);
+  const create = (form: Record<string, string>) => run(createReceipt, { name: "C5", form: receiptForm(form) }, free);
 
   function dataOf(calls: Awaited<ReturnType<typeof run>>["calls"], name: string) {
     const call = calls.find((item) => "prisma" in item && item.prisma === name);
@@ -248,33 +280,121 @@ describe("C5 de la 11.3b: el comprobante en centimos y con la proforma bloqueada
   it("un monto que se guardaria como 0.00 se rechaza", async () => {
     const { calls, outcome } = await create({ monto_total: "0.004" });
 
-    expect(outcome).toBe("error: El monto total debe ser mayor que cero.");
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "Revisa los datos del comprobante.",
+      fieldErrors: { monto_total: ["El monto total debe ser mayor que cero."] },
+    });
     expect(dataOf(calls, "comprobante_venta.create")).toBeUndefined();
   });
 
   it("150.504 sobre un total de 150.50 se acepta: la columna lo guarda como 150.50", async () => {
     const { calls, outcome } = await create({ monto_total: "150.504" });
 
-    expect(outcome).toBe(`redirect:/dashboard/commercial/quotes/${PROFORMA}?toast=receipt-created`);
+    expect(outcome).toMatchObject({ status: "success" });
     expect(stored(dataOf(calls, "comprobante_venta.create")?.monto_total)).toBe("150.50");
   });
 
   it("150.505 sobre un total de 150.50 se rechaza: la columna lo guardaria como 150.51", async () => {
     const { outcome } = await create({ monto_total: "150.505" });
 
-    expect(outcome).toBe("error: El comprobante no puede superar el monto total de la proforma.");
+    const message = "El comprobante no puede superar el monto total de la proforma.";
+
+    expect(outcome).toMatchObject({ status: "error", error: message, fieldErrors: { monto_total: [message] } });
   });
 
   it.each([
     ["emitido", {}],
     ["rechazado por el numero repetido", { "comprobante_venta.findUnique": { id_comprobante: "CMP00000002" } }],
   ])("%s: bloquea la proforma antes de leer lo que decide", async (_name, data) => {
-    const { calls } = await run(createReceiptAction, { name: "C5", form: receiptForm(), data }, free);
+    const { calls } = await run(createReceipt, { name: "C5", form: receiptForm(), data }, free);
 
     expectRowLockedBefore(calls, {
       table: "proforma",
       id: PROFORMA,
       reads: (call) => ["proforma.findUnique", "comprobante_venta.findUnique"].includes(call.prisma),
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C6 de la 11.3b (D32, hallazgo 6 de la 11.3a): el comprobante con resultado e idempotencia
+// ---------------------------------------------------------------------------
+
+// La clave se reclama como primera sentencia de la transaccion, antes del bloqueo de la proforma
+// y del correlativo: un reenvio responde con el comprobante ya emitido. Un rechazo despues del
+// reclamo lanza dentro de la transaccion, asi la clave se libera. Un numero repetido va a su
+// campo, tambien cuando otro comprobante lo toma entre la busqueda y el alta (P2002).
+describe("C6 de la 11.3b: el comprobante con resultado e idempotencia", () => {
+  type Calls = Awaited<ReturnType<typeof run>>["calls"];
+
+  const index = (calls: Calls, name: string) => calls.findIndex((call) => "prisma" in call && call.prisma === name);
+  const emit = (data: DataOverrides = {}, form = receiptForm(), role?: ActionCase["role"]) =>
+    run(createReceipt, { name: "C6", form, data, role }, free);
+  const NUMBER_TAKEN = "Ya existe un comprobante con ese número.";
+
+  it("reclama la clave antes de bloquear la proforma y la completa con el comprobante", async () => {
+    const { calls, outcome } = await emit();
+
+    expect(outcome).toMatchObject({ status: "success", data: { id_comprobante: "CMP00000001", clave_operacion: CLAVE } });
+    expect(index(calls, "operacion_idempotente.createManyAndReturn")).toBeGreaterThan(-1);
+    expect(index(calls, "operacion_idempotente.createManyAndReturn")).toBeLessThan(index(calls, "$queryRaw"));
+    expect(index(calls, "comprobante_venta.create")).toBeLessThan(index(calls, "operacion_idempotente.updateMany"));
+  });
+
+  it("una clave repetida no bloquea ni emite otro comprobante", async () => {
+    const { calls, outcome } = await emit(storedKey());
+
+    expect(outcome).toMatchObject({ status: "success", data: { id_comprobante: "CMP00000009" } });
+    expect(index(calls, "$queryRaw")).toBe(-1);
+    expect(index(calls, "comprobante_venta.create")).toBe(-1);
+  });
+
+  it("un numero repetido va a su campo y deshace el reclamo", async () => {
+    const { calls, outcome } = await emit({ "comprobante_venta.findUnique": { id_comprobante: "CMP00000002" } });
+
+    expect(outcome).toMatchObject({ status: "error", error: NUMBER_TAKEN, fieldErrors: { numero_comprobante: [NUMBER_TAKEN] } });
+    expect(calls.some((call) => "effect" in call && call.effect === "prisma.$transaction:rollback")).toBe(true);
+  });
+
+  it("un numero tomado en carrera (P2002 del indice unico) tambien va a su campo", async () => {
+    const taken = new Prisma.PrismaClientKnownRequestError("Unique constraint failed on numero_comprobante", {
+      code: "P2002",
+      clientVersion: "7",
+    });
+    const { outcome } = await emit({
+      "comprobante_venta.create": () => {
+        throw taken;
+      },
+    });
+
+    expect(outcome).toMatchObject({ status: "error", error: NUMBER_TAKEN, fieldErrors: { numero_comprobante: [NUMBER_TAKEN] } });
+  });
+
+  it.each([
+    ["la proforma no existe", { "proforma.findUnique": null }, "La proforma seleccionada no existe."],
+    ["anulada", { "proforma.findUnique": quoteRow({ estado: "anulada" }) }, "No se puede emitir comprobante para una proforma anulada."],
+  ])("%s: el error queda en la seccion, sin campo", async (_name, data, message) => {
+    const { outcome } = await emit(data as DataOverrides);
+
+    expect(outcome).toMatchObject({ status: "error", error: message, fieldErrors: undefined });
+  });
+
+  it("sin permiso responde en la seccion y no consulta nada", async () => {
+    const { calls, outcome } = await emit({}, receiptForm(), "WORKSHOP_MASTER");
+
+    expect(outcome).toMatchObject({ status: "error", error: "No tienes permisos para emitir comprobantes." });
+    expect(calls.some((call) => "prisma" in call)).toBe(false);
+  });
+
+  it("tras un error devuelve lo enviado para volver a mostrarlo", async () => {
+    const { outcome } = await emit(
+      { "comprobante_venta.findUnique": { id_comprobante: "CMP00000002" } },
+      receiptForm({ tipo_comprobante: "factura", numero_comprobante: "F001-9", monto_total: "100", observaciones: "  obra  " }),
+    );
+
+    expect(outcome).toMatchObject({
+      values: { tipo_comprobante: "factura", numero_comprobante: "F001-9", monto_total: "100", observaciones: "  obra  " },
     });
   });
 });

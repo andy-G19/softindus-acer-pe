@@ -189,7 +189,7 @@ exports[`annulReceiptAction > ya estaba anulado: vuelve al listado > resultado 1
 exports[`createReceiptAction > boleta por el total de la proforma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -198,6 +198,22 @@ exports[`createReceiptAction > boleta por el total de la proforma > llamadas 1`]
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "emitir_comprobante",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -273,6 +289,17 @@ exports[`createReceiptAction > boleta por el total de la proforma > llamadas 1`]
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "CMP00000001",
+      },
+      "where": {
+        "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -295,12 +322,27 @@ exports[`createReceiptAction > boleta por el total de la proforma > llamadas 1`]
 ]
 `;
 
-exports[`createReceiptAction > boleta por el total de la proforma > resultado 1`] = `"redirect:/dashboard/commercial/quotes/PRF00000007?toast=receipt-created"`;
+exports[`createReceiptAction > boleta por el total de la proforma > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+    "id_comprobante": "CMP00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "monto_total": "150.50",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
 
-exports[`createReceiptAction > el monto supera el total de la proforma > llamadas 1`] = `
+exports[`createReceiptAction > clave de otro usuario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -309,6 +351,321 @@ exports[`createReceiptAction > el monto supera el total de la proforma > llamada
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "emitir_comprobante",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createReceiptAction > clave de otro usuario > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "monto_total": "150.50",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
+
+exports[`createReceiptAction > clave repetida: responde con el comprobante emitido sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "emitir_comprobante",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/receipts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createReceiptAction > clave repetida: responde con el comprobante emitido sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+    "id_comprobante": "CMP00000009",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "monto_total": "150.50",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
+
+exports[`createReceiptAction > el administrador lo emite igual > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "emitir_comprobante",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_proforma FROM aceros.proforma WHERE id_proforma = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PRF00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+            "numero_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000007",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_comprobante": true,
+      },
+      "where": {
+        "numero_comprobante": "B001-000123",
+      },
+    },
+    "prisma": "comprobante_venta.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "comprobante_venta",
+      "prefijo": "CMP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "emitido",
+        "fecha_emision": 2026-07-15T15:00:00.000Z,
+        "id_comprobante": "CMP00000001",
+        "id_pedido": "PED00000004",
+        "id_proforma": "PRF00000007",
+        "monto_total": "150.50",
+        "numero_comprobante": "B001-000123",
+        "observaciones": null,
+        "tipo_comprobante": "boleta",
+      },
+    },
+    "prisma": "comprobante_venta.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Comprobante registrado: B001-000123",
+      "enTransaccion": true,
+      "entidad_afectada": "comprobante_venta",
+      "id_registro_afectado": "CMP00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "CMP00000001",
+      },
+      "where": {
+        "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/quotes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/quotes/PRF00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/receipts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createReceiptAction > el administrador lo emite igual > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+    "id_comprobante": "CMP00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "monto_total": "150.50",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
+
+exports[`createReceiptAction > el monto supera el total de la proforma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "emitir_comprobante",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -345,12 +702,29 @@ exports[`createReceiptAction > el monto supera el total de la proforma > llamada
 ]
 `;
 
-exports[`createReceiptAction > el monto supera el total de la proforma > resultado 1`] = `"error: El comprobante no puede superar el monto total de la proforma."`;
+exports[`createReceiptAction > el monto supera el total de la proforma > resultado 1`] = `
+{
+  "error": "El comprobante no puede superar el monto total de la proforma.",
+  "fieldErrors": {
+    "monto_total": [
+      "El comprobante no puede superar el monto total de la proforma.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "monto_total": "150.75",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
 
 exports[`createReceiptAction > el numero ya existe en otro comprobante > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -359,6 +733,22 @@ exports[`createReceiptAction > el numero ya existe en otro comprobante > llamada
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "emitir_comprobante",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -406,12 +796,29 @@ exports[`createReceiptAction > el numero ya existe en otro comprobante > llamada
 ]
 `;
 
-exports[`createReceiptAction > el numero ya existe en otro comprobante > resultado 1`] = `"error: Ya existe un comprobante con ese número."`;
+exports[`createReceiptAction > el numero ya existe en otro comprobante > resultado 1`] = `
+{
+  "error": "Ya existe un comprobante con ese número.",
+  "fieldErrors": {
+    "numero_comprobante": [
+      "Ya existe un comprobante con ese número.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "monto_total": "150.50",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
 
 exports[`createReceiptAction > factura por un monto menor, con observaciones y espacios en el numero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -420,6 +827,22 @@ exports[`createReceiptAction > factura por un monto menor, con observaciones y e
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "emitir_comprobante",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -495,6 +918,17 @@ exports[`createReceiptAction > factura por un monto menor, con observaciones y e
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "CMP00000001",
+      },
+      "where": {
+        "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -517,12 +951,27 @@ exports[`createReceiptAction > factura por un monto menor, con observaciones y e
 ]
 `;
 
-exports[`createReceiptAction > factura por un monto menor, con observaciones y espacios en el numero > resultado 1`] = `"redirect:/dashboard/commercial/quotes/PRF00000007?toast=receipt-created"`;
+exports[`createReceiptAction > factura por un monto menor, con observaciones y espacios en el numero > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+    "id_comprobante": "CMP00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "monto_total": "100.25",
+    "numero_comprobante": "  F001-000045  ",
+    "observaciones": "  entrega parcial  ",
+    "tipo_comprobante": "factura",
+  },
+}
+`;
 
 exports[`createReceiptAction > la proforma no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -531,6 +980,22 @@ exports[`createReceiptAction > la proforma no existe > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "emitir_comprobante",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -567,12 +1032,25 @@ exports[`createReceiptAction > la proforma no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`createReceiptAction > la proforma no existe > resultado 1`] = `"error: La proforma seleccionada no existe."`;
+exports[`createReceiptAction > la proforma no existe > resultado 1`] = `
+{
+  "error": "La proforma seleccionada no existe.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "monto_total": "150.50",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
 
 exports[`createReceiptAction > la proforma ya tiene un comprobante emitido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -581,6 +1059,22 @@ exports[`createReceiptAction > la proforma ya tiene un comprobante emitido > lla
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "emitir_comprobante",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -617,12 +1111,25 @@ exports[`createReceiptAction > la proforma ya tiene un comprobante emitido > lla
 ]
 `;
 
-exports[`createReceiptAction > la proforma ya tiene un comprobante emitido > resultado 1`] = `"error: Esta proforma ya tiene un comprobante emitido: B001-000100."`;
+exports[`createReceiptAction > la proforma ya tiene un comprobante emitido > resultado 1`] = `
+{
+  "error": "Esta proforma ya tiene un comprobante emitido: B001-000100.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "monto_total": "150.50",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
 
 exports[`createReceiptAction > monto cero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -631,12 +1138,30 @@ exports[`createReceiptAction > monto cero > llamadas 1`] = `
 ]
 `;
 
-exports[`createReceiptAction > monto cero > resultado 1`] = `"error: El monto total debe ser mayor que cero."`;
+exports[`createReceiptAction > monto cero > resultado 1`] = `
+{
+  "error": "Revisa los datos del comprobante.",
+  "fieldErrors": {
+    "monto_total": [
+      "El monto total debe ser mayor que cero.",
+      "El monto total debe ser mayor que cero.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "monto_total": "0",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
 
 exports[`createReceiptAction > proforma anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -645,6 +1170,22 @@ exports[`createReceiptAction > proforma anulada > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "3c9e1a7b-5d2f-4b8a-9c6e-0f1a2b3c4d5e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "emitir_comprobante",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -681,12 +1222,56 @@ exports[`createReceiptAction > proforma anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`createReceiptAction > proforma anulada > resultado 1`] = `"error: No se puede emitir comprobante para una proforma anulada."`;
+exports[`createReceiptAction > proforma anulada > resultado 1`] = `
+{
+  "error": "No se puede emitir comprobante para una proforma anulada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "monto_total": "150.50",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
+
+exports[`createReceiptAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createReceiptAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "monto_total": "150.50",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
 
 exports[`createReceiptAction > sin numero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -695,12 +1280,29 @@ exports[`createReceiptAction > sin numero > llamadas 1`] = `
 ]
 `;
 
-exports[`createReceiptAction > sin numero > resultado 1`] = `"error: El número de comprobante es obligatorio."`;
+exports[`createReceiptAction > sin numero > resultado 1`] = `
+{
+  "error": "Revisa los datos del comprobante.",
+  "fieldErrors": {
+    "numero_comprobante": [
+      "El número de comprobante es obligatorio.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "monto_total": "150.50",
+    "numero_comprobante": "   ",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
 
 exports[`createReceiptAction > sin permiso: el maestro de taller > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -709,12 +1311,25 @@ exports[`createReceiptAction > sin permiso: el maestro de taller > llamadas 1`] 
 ]
 `;
 
-exports[`createReceiptAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createReceiptAction > sin permiso: el maestro de taller > resultado 1`] = `
+{
+  "error": "No tienes permisos para emitir comprobantes.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "monto_total": "150.50",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "boleta",
+  },
+}
+`;
 
 exports[`createReceiptAction > tipo invalido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -723,4 +1338,21 @@ exports[`createReceiptAction > tipo invalido > llamadas 1`] = `
 ]
 `;
 
-exports[`createReceiptAction > tipo invalido > resultado 1`] = `"error: Selecciona un tipo de comprobante válido."`;
+exports[`createReceiptAction > tipo invalido > resultado 1`] = `
+{
+  "error": "Revisa los datos del comprobante.",
+  "fieldErrors": {
+    "tipo_comprobante": [
+      "Selecciona un tipo de comprobante válido.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "monto_total": "150.50",
+    "numero_comprobante": "B001-000123",
+    "observaciones": "",
+    "tipo_comprobante": "ticket",
+  },
+}
+`;
