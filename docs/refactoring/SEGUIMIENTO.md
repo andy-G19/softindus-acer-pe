@@ -8729,7 +8729,7 @@ Datos leídos de la API de GitHub el 2026-11-13 (UTC) y comparados con git:
 
 ### Sub-entrega 11.4a — Caja chica
 
-Fecha: 2026-11-13 (Lima). Estado: verificada en `staging` (CI #176). Plan de la 11.4 en
+Fecha: 2026-11-13 (Lima). Estado: integrada en `main` (PR #46, merge `729229a`). Plan de la 11.4 en
 `tmp/e11-diff/plan-11-4.md`, con las decisiones D42 a D47 aprobadas: la 11.4 se parte en 11.4a
 (caja chica) y 11.4b (venta de chatarra, filtro de fechas de movimientos y totales del reporte
 financiero) (D42); montos en centimos (D43); `lockCashBoxRow` y `lockCashMovementRow`, con la caja
@@ -8854,6 +8854,20 @@ Hallazgos:
 5. Datos de prueba que quedan en staging: CAJ00000003 «Caja verificacion 11.4a», abierta con
    S/ 100.00, y su egreso «Verificacion 11.4a» anulado. La aplicación no cierra ni borra cajas.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-13 (UTC) y comparados con git:
+
+- La verificación `9f90ceb` se publicó en `staging`: CI #177 en verde (3m 59s).
+- PR #46, abierto a las 11:54:19 UTC y fusionado con merge commit a las 12:01:25 UTC del
+  2026-11-13: 11 commits, de `b81c211` a `9f90ceb`, y 42 archivos (+7.737 −660). Su CI, el #178,
+  sobre `9f90ceb`, terminó en verde (4m 19s).
+- El merge commit `729229a` tiene como padres `5b23ec7` (`main`) y `9f90ceb` (`staging`), y su
+  árbol es el de `9f90ceb` (`b79e57bf`): `main` y `staging` tienen el mismo contenido. CI #179 en
+  verde (3m 33s).
+- Vercel desplegó `729229a` en producción (`success` a las 12:03:17 UTC). La sub-entrega no trae
+  migraciones.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -8879,7 +8893,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a verificada en `staging` (CI #176) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b en preparación |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
