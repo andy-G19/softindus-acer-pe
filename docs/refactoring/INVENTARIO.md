@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 946 |
+| Archivos fuente analizados | 963 |
 | Páginas | 179 |
 | Páginas en ranuras paralelas (@ranura) | 53 |
 | Páginas que interceptan una ruta | 33 |
-| Declaraciones JSX de formulario | 27 |
+| Declaraciones JSX de formulario | 23 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 111 |
 
@@ -125,14 +125,14 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/maintenance/spare-parts/new` | — | `src/app/(dashboard)/dashboard/maintenance/spare-parts/new/page.tsx` | 0 | SparePartForm |
 | `/dashboard/maintenance/spare-parts` | — | `src/app/(dashboard)/dashboard/maintenance/spare-parts/page.tsx` | 0 | — |
 | `/dashboard` | — | `src/app/(dashboard)/dashboard/page.tsx` | 0 | — |
-| `/dashboard/petty-cash/boxes/new` | — | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 1 | — |
+| `/dashboard/petty-cash/boxes/new` | — | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 0 | PettyCashBoxForm |
 | `/dashboard/petty-cash/boxes` | — | `src/app/(dashboard)/dashboard/petty-cash/boxes/page.tsx` | 0 | — |
 | `/dashboard/petty-cash/categories/[id]/edit` | — | `src/app/(dashboard)/dashboard/petty-cash/categories/[id]/edit/page.tsx` | 0 | ExpenseCategoryForm |
 | `/dashboard/petty-cash/categories` | — | `src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx` | 0 | — |
-| `/dashboard/petty-cash/expenses/new` | — | `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 1 | — |
-| `/dashboard/petty-cash/income-adjustments/new` | — | `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 1 | — |
+| `/dashboard/petty-cash/expenses/new` | — | `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 0 | PettyCashExpenseForm |
+| `/dashboard/petty-cash/income-adjustments/new` | — | `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 0 | PettyCashIncomeAdjustmentForm |
 | `/dashboard/petty-cash/monthly-summary` | — | `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 1 | — |
-| `/dashboard/petty-cash/movements` | — | `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 2 | — |
+| `/dashboard/petty-cash/movements` | — | `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 1 | — |
 | `/dashboard/petty-cash` | — | `src/app/(dashboard)/dashboard/petty-cash/page.tsx` | 0 | — |
 | `/dashboard/production/bottlenecks` | — | `src/app/(dashboard)/dashboard/production/bottlenecks/page.tsx` | 0 | — |
 | `/dashboard/production/campaigns/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/production/campaigns/@panel/(.)[id]/edit/page.tsx` | 0 | CampaignForm |
@@ -224,12 +224,8 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 
 | Fuente | Línea | Acción |
 | --- | --- | --- |
-| `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 46 | `{createPettyCashBoxAction}` |
-| `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 90 | `{createPettyCashExpenseAction}` |
-| `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 115 | `{createPettyCashIncomeAdjustmentAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 253 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 177 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 335 | `{annulPettyCashMovementAction}` |
+| `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 175 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 165 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 263 | `{deliverWorkOrderMaterialsAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 557 | `{reopenWorkOrderMaterialsAction}` |

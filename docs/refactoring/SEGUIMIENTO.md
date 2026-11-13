@@ -8727,6 +8727,106 @@ Datos leídos de la API de GitHub el 2026-11-13 (UTC) y comparados con git:
 - Vercel desplegó `5b23ec7` en producción (`success` a las 00:44:15 UTC). La sub-entrega no trae
   migraciones.
 
+### Sub-entrega 11.4a — Caja chica
+
+Fecha: 2026-11-13 (Lima). Estado: preparada en `staging`, sin publicar. Plan de la 11.4 en
+`tmp/e11-diff/plan-11-4.md`, con las decisiones D42 a D47 aprobadas: la 11.4 se parte en 11.4a
+(caja chica) y 11.4b (venta de chatarra, filtro de fechas de movimientos y totales del reporte
+financiero) (D42); montos en centimos (D43); `lockCashBoxRow` y `lockCashMovementRow`, con la caja
+siempre al final (D44); anular el ingreso de una venta de chatarra se rechaza (D45, decision de
+negocio); egreso, ingreso o ajuste y abrir caja con resultado, y clave en los dos que mueven dinero
+(D46); y anular movimiento con `ConfirmActionButton`, conservando la marca `[ANULADO]` (D47).
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| b81c211 | docs | Integración de la 11.3c en `main` (PR #45). |
+| 5b16de8 | test | Caracterización de egreso, ingreso o ajuste, anular movimiento y abrir caja (37 casos); hasta aquí no tenían pruebas. |
+| 5b971eb | fix | `petty-cash-amounts.ts`: el monto se redondea como la columna antes de comparar y de escribir; los esquemas rechazan lo que se guardaría como 0.00 (D43); 6 casos rojos antes. |
+| 3e55d9f | fix | Egreso, ingreso o ajuste y anular bloquean la caja (anular, antes, el movimiento) y deciden dentro de la transacción (D44); 7 casos rojos antes; 4 pruebas en Postgres. |
+| 2b0abec | fix | Anular el ingreso de una venta de chatarra se rechaza, nombrando la venta (D45); 1 caso rojo antes. |
+| f4c4f5d | feat | Egreso con `FormActionState`, clave `egreso_caja:nuevo` (primera sentencia), errores en su campo, `returnTo` y guardia de descarte; la página deja de anidar un `<main>`. |
+| 6b3544b | feat | Ingreso o ajuste con lo mismo y clave `movimiento_caja:nuevo`. |
+| 2e2cecf | feat | Abrir caja con resultado y sin clave; el nombre repetido se busca dentro de la transacción y va a su campo; caracterización nueva de la página. |
+| 99fbbd7 | feat | Anular movimiento con `ConfirmActionButton` y `RowStatusState`, nombrado por concepto y monto; la dirección del dinero en una sola regla (`movement-direction.ts`); sale `ConfirmDeleteButton` de movimientos. |
+| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Diseño:
+
+- `checkCashWithdrawal` compara en centésimos el monto redondeado con el saldo guardado y devuelve
+  el texto que se manda al movimiento y al `decrement`: lo que se envía es lo que se guarda.
+  Antes la columna del movimiento redondeaba el monto y el saldo redondeaba la resta.
+- La caja es el padre que todas las operaciones de la 11.4 comparten: se bloquea siempre al final
+  (anular toma primero el movimiento; la venta de la 11.4b, la chatarra).
+- Egreso e ingreso o ajuste reclaman su clave como primera sentencia y lanzan un rechazo con su
+  campo para liberar la clave; cada uno con su tipo de operación, así la clave de un egreso no
+  sirve para un ingreso. Abrir caja y anular, sin clave, devuelven el rechazo desde la
+  transacción antes de escribir.
+- La confirmación de anular dice hacia dónde va el dinero con la misma regla que la acción y el
+  signo del listado, y el botón recibe la fila del movimiento, no campos sueltos.
+
+Evidencia:
+
+1. Rojo antes de cada `fix`: C2 con 6 casos, C3 con 7 y C4 con 1. En C5 a C8 (`feat`) las pruebas
+   se escribieron con el código y la caracterización de C1 mostró cada cambio de contrato.
+2. Mutaciones: C1 22 de 22, C2 11 de 11, C3 9 de 9 y 1 equivalente (aceptar una caja inexistente:
+   `id_caja_chica` es `NOT NULL` con clave foránea), C4 4 de 4, C5 17 de 17, C6 15 de 15, C7 14 de
+   14 y C8 12 de 12; en total, 104 de 104 y 1 equivalente. En C8 una mutación viva (la página
+   pasaba otro tipo al botón) llevó a la regla compartida y a pasar la fila entera.
+3. Snapshots revisados uno por uno: C2 cambia el monto de número a texto con el mismo valor; C3,
+   el orden (transacción, candado, lecturas, `rollback`) sin cambiar ningún resultado; C4 añade la
+   lectura de las ventas; C5 a C8 cambian el contrato de las respuestas, los formularios y el botón.
+4. Pruebas contra Postgres (10 en `petty-cash.integration.test.ts`): 40.005 deja el saldo en
+   59.99; anular dos veces devuelve el monto una vez; un egreso rechazado no escribe y libera su
+   clave; la misma clave dos veces deja un solo egreso o ingreso; la clave de un egreso no sirve
+   para un ingreso; anular un ingreso ya gastado o el de una venta se rechaza; un nombre de caja
+   repetido con otras mayúsculas se rechaza.
+5. Tropiezos de método sin efecto en el código: el generador de C1 usaba `satisfies` y TypeScript
+   unía los tipos de los datos (se declaró `CaseInput`); la primera prueba roja de C2 no mandaba
+   campos vacíos ni el doble de correlativos (se corrigió antes de darla por roja); en C3 Prettier
+   reformateó líneas ajenas porque la comprobación de `HEAD` miraba copias en `tmp/`, que ignora
+   (se restauraron los archivos y se comprobó con `git diff -w`); en C7 la prueba en Postgres chocó
+   con ids fijos que otras pruebas insertan sin correlativo (se adelantó el correlativo).
+6. CSS compilado igual byte a byte en cada commit (112.316 bytes).
+7. `npm run check` terminó con código 0 antes de cada commit, hasta 5.114 pruebas en 298
+   archivos; las de integración pasan de 47 a 57 en 11 archivos. Lint mantiene el aviso anterior
+   (`_line` en `orders/actions.ts`).
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 287 / 5.013 | 298 / 5.114 |
+| Pruebas contra Postgres real (archivos / pruebas) | 10 / 47 | 11 / 57 |
+| Acciones de caja chica y chatarra caracterizadas | 0 / 5 | 4 / 5 |
+| Acciones de caja chica y chatarra que lanzan un error de validación a la página de error | 5 | 1 (la venta) |
+| Operaciones de caja chica y chatarra que deciden fuera de la transacción o sin bloquear su fila | 5 | 1 (la venta) |
+| Comparaciones de dinero con `number` en estas acciones | 3 | 1 (anular, sobre montos guardados con dos decimales) |
+| Acciones con clave de operación | 6 | 8 |
+| Páginas con `ConfirmDeleteButton` | 3 | 2 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 7 | 3 |
+
+Hallazgos:
+
+1. Dos egresos simultáneos podían dejar la caja en negativo. Corregido en `3e55d9f`.
+2. Dos anulaciones simultáneas del mismo movimiento devolvían el monto dos veces. Corregido en
+   `3e55d9f`.
+3. El movimiento y el saldo redondeaban distinto (40.005 guardaba 40.01 y bajaba el saldo 40.00),
+   0.004 se guardaba como 0.00 y 100.004 se rechazaba sobre un saldo de 100.00. Corregido en
+   `5b971eb`.
+4. Anular el ingreso de una venta de chatarra contradecía la venta. Corregido en `2b0abec` (D45).
+5. Cinco acciones lanzaban sus errores a la página de error y ninguna tenía clave. Corregido en
+   C5 a C8 para cuatro; la venta va a la 11.4b.
+6. La dirección del dinero de un movimiento estaba copiada en la acción y en el listado. Corregido
+   en `99fbbd7`.
+7. Dos aperturas simultáneas de una caja con el mismo nombre todavía pueden pasar: no hay fila que
+   bloquear ni un índice único sin distinguir mayúsculas (sería una migración). Solo ADMIN abre
+   cajas. Destino: decisión del responsable.
+8. El listado de movimientos sigue ofreciendo «Anular» en el ingreso de una venta de chatarra; el
+   rechazo queda en la confirmación. Destino: 11.4b, junto con la venta.
+9. Pendientes de la 11.4b: la venta de chatarra (decide fuera de la transacción, se puede vender
+   dos veces), el filtro de fechas de movimientos que corta con `lte T23:59:59` (hallazgo 2 de la
+   10.3c) y los totales del reporte financiero sobre 100 filas (hallazgo 1 de la 11.1).
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -8752,7 +8852,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a en preparación |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a preparada en `staging`, sin publicar |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
@@ -8775,7 +8875,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 287 / 5.013 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 298 / 5.114 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -8790,13 +8890,14 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reportes con la paridad de filtro probada en `screen-parity.test.ts` | 0 de 9 | 9 de 9 | G4 y 11 |
 | Páginas de reporte que leen sus filtros distinto que su exportación (medido en la 11.1) | 6 | 0 | 11 |
 | Cálculos del estado de cobranza (pantalla y exportación) | 2 | 1 | 11 |
-| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 10 / 47 | 11 |
-| Acciones con clave de operación (`operacion_idempotente`) | 0 | 6 | 11 |
+| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 11 / 57 | 11 |
+| Acciones con clave de operación (`operacion_idempotente`) | 0 | 8 | 11 |
 | Cálculos de montos de cliente con `number` (acciones, página y vistas previas de proforma y pago) | 5 | 0 | 11 |
 | Operaciones de Comercial que deciden fuera de la transacción o sin bloquear su fila | 7 | 0 | 11 |
 | Reglas distintas para «¿se puede cambiar el pedido?» (listado, edición, acción) | 3 | 1 | 11 |
 | Listados de Comercial sin paginar (proformas, comprobantes, pagos de cliente) | 3 | 0 | 11 |
 | Celdas de Comercial que muestran método, tipo de pago o tipo de comprobante como se guardan | 7 | 0 | 11 |
+| Operaciones de caja chica y chatarra que deciden fuera de la transacción o sin bloquear su fila | 5 | 1 | 11 |
 | Movimientos de stock que no actualizan la alerta de stock (la salida) | 1 | 0 | 11 |
 | Cálculos del IGV con `number` (acción y formulario de compra) | 2 | 0 | 11 |
 | Operaciones que deciden sobre una compra sin bloquearla (pago y anulación) | 2 | 0 | 11 |
@@ -8809,7 +8910,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
 | Copias locales de `FieldError` | 16 | 1 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 7 | 9, 10 y 11 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 3 | 9, 10 y 11 |
 | Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 3 (3 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
 | Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 0 | 10 y 11 |
@@ -9190,6 +9291,13 @@ Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e8d77ae`:
 Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de
 `FieldError` en 6; y los cambios de estado que voltean en 2.
+
+Actualizado en la sub-entrega 11.4a (2026-11-13) sobre `99fbbd7`: pruebas 298 / 5.114, de ellas
+57 contra Postgres en 11 archivos. Acciones con clave de operación de 6 a 8 (egreso e ingreso o
+ajuste de caja chica). Fila nueva, medida sobre `b81c211`: operaciones de caja chica y chatarra que
+deciden fuera de la transacción, de 5 a 1 (queda la venta). `<main>` anidado de 7 a 3 (quedan
+inicio, cajas y resumen mensual de caja chica). `ConfirmDeleteButton` baja de 3 a 2 páginas (quedan
+órdenes de trabajo y planillas).
 
 Actualizado en la sub-entrega 11.3c (2026-11-12) sobre `b143c28`: pruebas 287 / 5.013; contra
 Postgres siguen 47 en 10 archivos. Filas nuevas, medidas sobre `aa60e5f`: listados de Comercial
