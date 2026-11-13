@@ -3,13 +3,20 @@
 exports[`createPettyCashBoxAction > caja valida: la abre con su saldo inicial como saldo actual > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
+      "select": {
+        "id_caja_chica": true,
+      },
       "where": {
         "nombre_caja": {
           "equals": "Caja almacen",
@@ -18,10 +25,6 @@ exports[`createPettyCashBoxAction > caja valida: la abre con su saldo inicial co
       },
     },
     "prisma": "caja_chica.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -60,12 +63,27 @@ exports[`createPettyCashBoxAction > caja valida: la abre con su saldo inicial co
 ]
 `;
 
-exports[`createPettyCashBoxAction > caja valida: la abre con su saldo inicial como saldo actual > resultado 1`] = `"redirect:/dashboard/petty-cash/boxes?toast=petty-cash-box-created"`;
+exports[`createPettyCashBoxAction > caja valida: la abre con su saldo inicial como saldo actual > resultado 1`] = `
+{
+  "data": {
+    "id_caja_chica": "CAJ00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_apertura": "2026-11-10",
+    "nombre_caja": "  Caja almacen  ",
+    "observaciones": "",
+    "responsable": "",
+    "saldo_inicial": "250.40",
+  },
+}
+`;
 
 exports[`createPettyCashBoxAction > nombre corto y sin fecha > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -73,42 +91,46 @@ exports[`createPettyCashBoxAction > nombre corto y sin fecha > llamadas 1`] = `
 ]
 `;
 
-exports[`createPettyCashBoxAction > nombre corto y sin fecha > resultado 1`] = `"error: El nombre de la caja debe tener al menos 3 caracteres. La fecha de apertura es obligatoria."`;
+exports[`createPettyCashBoxAction > nombre corto y sin fecha > resultado 1`] = `
+{
+  "error": "Revisa los datos de la caja.",
+  "fieldErrors": {
+    "fecha_apertura": [
+      "La fecha de apertura es obligatoria.",
+    ],
+    "nombre_caja": [
+      "El nombre de la caja debe tener al menos 3 caracteres.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_apertura": "",
+    "nombre_caja": "ab",
+    "observaciones": "",
+    "responsable": "",
+    "saldo_inicial": "250.40",
+  },
+}
+`;
 
 exports[`createPettyCashBoxAction > nombre repetido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
-      "where": {
-        "nombre_caja": {
-          "equals": "Caja almacen",
-          "mode": "insensitive",
-        },
+      "select": {
+        "id_caja_chica": true,
       },
-    },
-    "prisma": "caja_chica.findFirst",
-  },
-]
-`;
-
-exports[`createPettyCashBoxAction > nombre repetido > resultado 1`] = `"error: Ya existe una caja chica con ese nombre."`;
-
-exports[`createPettyCashBoxAction > saldo inicial cero, con responsable y observaciones > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
       "where": {
         "nombre_caja": {
           "equals": "Caja almacen",
@@ -120,7 +142,56 @@ exports[`createPettyCashBoxAction > saldo inicial cero, con responsable y observ
   },
   {
     "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createPettyCashBoxAction > nombre repetido > resultado 1`] = `
+{
+  "error": "Ya existe una caja chica con ese nombre.",
+  "fieldErrors": {
+    "nombre_caja": [
+      "Ya existe una caja chica con ese nombre.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_apertura": "2026-11-10",
+    "nombre_caja": "  Caja almacen  ",
+    "observaciones": "",
+    "responsable": "",
+    "saldo_inicial": "250.40",
+  },
+}
+`;
+
+exports[`createPettyCashBoxAction > saldo inicial cero, con responsable y observaciones > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_caja_chica": true,
+      },
+      "where": {
+        "nombre_caja": {
+          "equals": "Caja almacen",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "caja_chica.findFirst",
   },
   {
     "args": {
@@ -159,12 +230,27 @@ exports[`createPettyCashBoxAction > saldo inicial cero, con responsable y observ
 ]
 `;
 
-exports[`createPettyCashBoxAction > saldo inicial cero, con responsable y observaciones > resultado 1`] = `"redirect:/dashboard/petty-cash/boxes?toast=petty-cash-box-created"`;
+exports[`createPettyCashBoxAction > saldo inicial cero, con responsable y observaciones > resultado 1`] = `
+{
+  "data": {
+    "id_caja_chica": "CAJ00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_apertura": "2026-11-10",
+    "nombre_caja": "  Caja almacen  ",
+    "observaciones": " turno tarde ",
+    "responsable": " Rosa ",
+    "saldo_inicial": "0",
+  },
+}
+`;
 
 exports[`createPettyCashBoxAction > saldo inicial negativo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -172,12 +258,30 @@ exports[`createPettyCashBoxAction > saldo inicial negativo > llamadas 1`] = `
 ]
 `;
 
-exports[`createPettyCashBoxAction > saldo inicial negativo > resultado 1`] = `"error: El saldo inicial no puede ser negativo."`;
+exports[`createPettyCashBoxAction > saldo inicial negativo > resultado 1`] = `
+{
+  "error": "Revisa los datos de la caja.",
+  "fieldErrors": {
+    "saldo_inicial": [
+      "El saldo inicial no puede ser negativo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_apertura": "2026-11-10",
+    "nombre_caja": "  Caja almacen  ",
+    "observaciones": "",
+    "responsable": "",
+    "saldo_inicial": "-1",
+  },
+}
+`;
 
 exports[`createPettyCashBoxAction > sin permiso: el vendedor > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -185,4 +289,18 @@ exports[`createPettyCashBoxAction > sin permiso: el vendedor > llamadas 1`] = `
 ]
 `;
 
-exports[`createPettyCashBoxAction > sin permiso: el vendedor > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createPettyCashBoxAction > sin permiso: el vendedor > resultado 1`] = `
+{
+  "error": "No tienes permisos para abrir cajas chicas.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_apertura": "2026-11-10",
+    "nombre_caja": "  Caja almacen  ",
+    "observaciones": "",
+    "responsable": "",
+    "saldo_inicial": "250.40",
+  },
+}
+`;

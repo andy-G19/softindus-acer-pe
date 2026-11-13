@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import type { PrismaClient } from "@/generated/prisma/client";
+import { createPettyCashBoxAction } from "@/modules/petty-cash/boxes/actions";
 import { createPettyCashExpenseAction } from "@/modules/petty-cash/expenses/actions";
 import { createPettyCashIncomeAdjustmentAction } from "@/modules/petty-cash/income-adjustments/actions";
 import { annulPettyCashMovementAction } from "@/modules/petty-cash/movements/actions";
@@ -231,6 +232,36 @@ describe("caja chica en Postgres", () => {
     expect(await expense("CAJ00000009", "5.00", clave)).toBe("guardado");
     expect(await income("CAJ00000009", "5.00", clave)).toBe("La clave de la operacion ya se uso en otra operacion.");
     expect(await balanceOf("CAJ00000009")).toBe("5.00");
+  });
+
+  it("abrir una caja con un nombre que ya existe, con otras mayusculas, se rechaza en su campo (C7)", async () => {
+    const open = (nombre: string) =>
+      createPettyCashBoxAction(
+        { status: "idle" },
+        formOf({ nombre_caja: nombre, saldo_inicial: "80.405", fecha_apertura: "2026-11-10" }),
+      );
+
+    // Los casos anteriores crean sus cajas con ids fijos (CAJ00000001 y siguientes) sin pasar por el
+    // correlativo: se adelanta para que la accion no repita uno de esos ids.
+    await prisma.correlativo_sistema.update({
+      where: { codigo_entidad: "caja_chica" },
+      data: { ultimo_numero: 100 },
+    });
+
+    expect(await open("Caja almacen norte")).toMatchObject({ status: "success" });
+    expect(await open("  CAJA ALMACEN NORTE ")).toMatchObject({
+      status: "error",
+      fieldErrors: { nombre_caja: ["Ya existe una caja chica con ese nombre."] },
+    });
+
+    const boxes = await prisma.caja_chica.findMany({
+      where: { nombre_caja: { equals: "caja almacen norte", mode: "insensitive" } },
+      select: { saldo_inicial: true, saldo_actual: true, estado: true },
+    });
+
+    expect(boxes.map((box) => [box.saldo_inicial.toFixed(2), box.saldo_actual.toFixed(2), box.estado])).toEqual([
+      ["80.41", "80.41", "abierta"],
+    ]);
   });
 
   it("el ingreso de una venta de chatarra no se anula desde caja chica (C4, D45)", async () => {

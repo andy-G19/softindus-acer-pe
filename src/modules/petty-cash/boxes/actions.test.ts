@@ -16,12 +16,21 @@ import {
 // Fija la busqueda del nombre repetido sin distinguir mayusculas (hoy fuera de la transaccion),
 // el correlativo, la caja abierta con el saldo actual igual al inicial, las revalidaciones y el
 // resultado. Abrir caja no escribe bitacora.
+//
+// C7 de la 11.4a (D46): la accion devuelve un resultado en lugar de redirigir o lanzar, y busca el
+// nombre repetido dentro de la transaccion que crea la caja. Los casos de C1 quedan con el mismo
+// nombre; su resultado es ahora el estado del formulario.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio: se fija para que el snapshot sea estable.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -96,9 +105,7 @@ async function runAction(actionCase: ActionCase) {
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        await createPettyCashBoxAction(formData);
-
-        return "termino sin redirigir";
+        return await createPettyCashBoxAction({ status: "idle" }, formData);
       } catch (error) {
         return (
           describeNavigationError(error) ??

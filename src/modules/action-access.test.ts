@@ -198,6 +198,8 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/petty-cash/boxes/actions"),
     roles: SOLO_ADMIN,
     acciones: ["createPettyCashBoxAction"],
+    // C7 de la 11.4a: abrir caja responde a un rol denegado con un error en el formulario.
+    rechazanConResultado: ["createPettyCashBoxAction"],
   },
   {
     ruta: "petty-cash/categories/actions",
