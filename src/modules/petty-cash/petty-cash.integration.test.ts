@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import type { PrismaClient } from "@/generated/prisma/client";
@@ -18,6 +20,7 @@ import { getTestDatabase } from "@/testing/test-database";
 
 vi.mock("@/lib/authz", () => ({
   requireRole: async () => ({ user: { id: "USU00000001", name: "Andrea Prueba" } }),
+  getAuthorizedSession: async () => ({ user: { id: "USU00000001", name: "Andrea Prueba" } }),
 }));
 vi.mock("next/cache", () => ({ revalidatePath: () => undefined }));
 vi.mock("next/navigation", () => ({
@@ -83,18 +86,22 @@ async function outcome(run: () => Promise<unknown>) {
   }
 }
 
-const expense = (idCajaChica: string, monto: string) =>
-  outcome(() =>
-    createPettyCashExpenseAction(
-      formOf({
-        id_caja_chica: idCajaChica,
-        id_categoria_gasto: CATEGORIA,
-        concepto: "Taxi a proveedor",
-        monto,
-        fecha_movimiento: "2026-11-10",
-      }),
-    ),
+/** El egreso devuelve el estado del formulario (C5 de la 11.4a): «guardado» o su error. */
+const expense = async (idCajaChica: string, monto: string, clave: string = randomUUID()) => {
+  const state = await createPettyCashExpenseAction(
+    { status: "idle" },
+    formOf({
+      clave_operacion: clave,
+      id_caja_chica: idCajaChica,
+      id_categoria_gasto: CATEGORIA,
+      concepto: "Taxi a proveedor",
+      monto,
+      fecha_movimiento: "2026-11-10",
+    }),
   );
+
+  return state.status === "success" ? "guardado" : state.status === "error" ? state.error : "sin respuesta";
+};
 
 const income = (idCajaChica: string, monto: string) =>
   outcome(() =>
@@ -130,7 +137,7 @@ describe("caja chica en Postgres", () => {
   it("un egreso de 40.005 guarda 40.01 en el movimiento y descuenta 40.01 del saldo (C2)", async () => {
     await createBox("CAJ00000001", "100.00");
 
-    expect(await expense("CAJ00000001", "40.005")).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-expense-registered");
+    expect(await expense("CAJ00000001", "40.005")).toBe("guardado");
     expect(await balanceOf("CAJ00000001")).toBe("59.99");
     expect((await movementsOf("CAJ00000001")).map((movement) => movement.monto)).toEqual(["40.01"]);
   });
@@ -138,7 +145,7 @@ describe("caja chica en Postgres", () => {
   it("anular dos veces el mismo egreso devuelve el monto una sola vez", async () => {
     await createBox("CAJ00000002", "100.00");
 
-    expect(await expense("CAJ00000002", "40.25")).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-expense-registered");
+    expect(await expense("CAJ00000002", "40.25")).toBe("guardado");
     const [movement] = await movementsOf("CAJ00000002");
 
     expect(await balanceOf("CAJ00000002")).toBe("59.75");
@@ -171,7 +178,7 @@ describe("caja chica en Postgres", () => {
     await createBox("CAJ00000004", "0.00");
 
     expect(await income("CAJ00000004", "50.00")).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-income-registered");
-    expect(await expense("CAJ00000004", "20.00")).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-expense-registered");
+    expect(await expense("CAJ00000004", "20.00")).toBe("guardado");
     const [ingreso] = await movementsOf("CAJ00000004");
 
     expect(await annul(ingreso.id_movimiento_caja)).toBe(
@@ -179,6 +186,28 @@ describe("caja chica en Postgres", () => {
     );
     expect(await balanceOf("CAJ00000004")).toBe("30.00");
     expect((await movementsOf("CAJ00000004")).map((movement) => movement.monto)).toEqual(["50.00", "20.00"]);
+  });
+
+  it("la misma clave dos veces deja un solo egreso y descuenta el saldo una vez (C5)", async () => {
+    await createBox("CAJ00000006", "100.00");
+    const clave = randomUUID();
+
+    expect(await expense("CAJ00000006", "30.00", clave)).toBe("guardado");
+    expect(await expense("CAJ00000006", "30.00", clave)).toBe("guardado");
+    expect(await balanceOf("CAJ00000006")).toBe("70.00");
+    expect((await movementsOf("CAJ00000006")).map((movement) => movement.monto)).toEqual(["30.00"]);
+  });
+
+  it("un egreso rechazado libera la clave: corregido, se guarda con la misma (C5)", async () => {
+    await createBox("CAJ00000007", "50.00");
+    const clave = randomUUID();
+
+    expect(await expense("CAJ00000007", "60.00", clave)).toBe(
+      "El egreso supera el saldo disponible de la caja. Saldo actual: S/ 50.00.",
+    );
+    expect(await expense("CAJ00000007", "45.00", clave)).toBe("guardado");
+    expect(await balanceOf("CAJ00000007")).toBe("5.00");
+    expect((await movementsOf("CAJ00000007")).map((movement) => movement.monto)).toEqual(["45.00"]);
   });
 
   it("el ingreso de una venta de chatarra no se anula desde caja chica (C4, D45)", async () => {

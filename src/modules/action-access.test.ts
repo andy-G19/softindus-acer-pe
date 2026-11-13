@@ -219,6 +219,8 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/petty-cash/expenses/actions"),
     roles: SOLO_ADMIN,
     acciones: ["createPettyCashExpenseAction"],
+    // C5 de la 11.4a: el egreso responde a un rol denegado con un error en el formulario.
+    rechazanConResultado: ["createPettyCashExpenseAction"],
   },
   {
     ruta: "petty-cash/income-adjustments/actions",

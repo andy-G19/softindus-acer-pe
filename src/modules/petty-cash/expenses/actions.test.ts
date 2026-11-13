@@ -19,12 +19,21 @@ import {
 // caja y de la categoria (hoy fuera de la transaccion y sin bloquear la caja), el correlativo, el
 // movimiento, el descuento atomico del saldo, la bitacora, el final de la transaccion, las
 // revalidaciones y el resultado: la redireccion o el error exacto.
+//
+// C5 de la 11.4a (D46): la accion devuelve un resultado en lugar de redirigir o lanzar, reclama la
+// clave de la operacion como primera sentencia de la transaccion y pone cada rechazo en su campo.
+// Los casos de C1 quedan con el mismo nombre; su resultado es ahora el estado del formulario.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio: se fija para que el snapshot sea estable.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -99,9 +108,7 @@ async function runAction(actionCase: ActionCase) {
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        await createPettyCashExpenseAction(formData);
-
-        return "termino sin redirigir";
+        return await createPettyCashExpenseAction({ status: "idle" }, formData);
       } catch (error) {
         return (
           describeNavigationError(error) ??
@@ -141,7 +148,23 @@ const DEFAULT_DATA: DataOverrides = {
   "categoria_gasto.findUnique": categoryRow(),
 };
 
+const CLAVE = "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f";
+
+/** La clave ya estaba en la tabla: el INSERT no devuelve filas y se lee la guardada. */
+function storedKey(changes: Record<string, unknown> = {}): DataOverrides {
+  return {
+    "operacion_idempotente.createManyAndReturn": [],
+    "operacion_idempotente.findUniqueOrThrow": {
+      tipo_operacion: "registrar_egreso_caja",
+      id_usuario: "USU00000001",
+      id_registro_resultado: "MCA00000009",
+      ...changes,
+    },
+  };
+}
+
 const form = (changes: Record<string, string> = {}) => ({
+  clave_operacion: CLAVE,
   id_caja_chica: "CAJ00000002",
   id_categoria_gasto: "CGA00000003",
   concepto: "Taxi a proveedor",
@@ -168,6 +191,15 @@ const caseInputs: CaseInput[] = [
   { name: "monto que no es numero", form: form({ monto: "abc" }) },
   { name: "concepto corto y sin caja", form: form({ concepto: "ab", id_caja_chica: "" }) },
   { name: "sin permiso: el vendedor", role: "SELLER" },
+  { name: "sin clave de operacion", form: form({ clave_operacion: "" }) },
+  {
+    name: "la misma clave ya registrada: responde con el egreso guardado sin escribir",
+    data: storedKey(),
+  },
+  {
+    name: "la clave es de otra operacion",
+    data: storedKey({ tipo_operacion: "crear_proforma" }),
+  },
 ];
 
 const cases: ActionCase[] = caseInputs.map((actionCase) => ({
@@ -208,5 +240,40 @@ describe("C3 de la 11.4a: el egreso bloquea la caja", () => {
       id: "CAJ00000002",
       reads: (call) => call.prisma === "caja_chica.findUnique" || call.prisma === "categoria_gasto.findUnique",
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C5 de la 11.4a (D46): el egreso con resultado e idempotencia
+// ---------------------------------------------------------------------------
+
+// La clave se reclama como primera sentencia de la transaccion, antes del bloqueo de la caja y del
+// correlativo, y se completa con el egreso antes de confirmar: un reenvio con la misma clave
+// espera y responde con el egreso ya guardado.
+describe("C5 de la 11.4a: el egreso reclama su clave primero", () => {
+  const index = (calls: Awaited<ReturnType<typeof runAction>>["calls"], name: string) =>
+    calls.findIndex((call) => ("prisma" in call && call.prisma === name) || ("effect" in call && call.effect === name));
+
+  it("reclama la clave antes del bloqueo y la completa despues de escribir", async () => {
+    const { calls, outcome } = await runAction({ name: "C5", form: form() });
+
+    expect(outcome).toMatchObject({ status: "success", data: { id_movimiento_caja: "MCA00000001", clave_operacion: CLAVE } });
+    expect(index(calls, "operacion_idempotente.createManyAndReturn")).toBeGreaterThan(-1);
+    expect(index(calls, "operacion_idempotente.createManyAndReturn")).toBeLessThan(index(calls, "$queryRaw"));
+    expect(index(calls, "caja_chica.update")).toBeLessThan(index(calls, "operacion_idempotente.updateMany"));
+    expect(index(calls, "operacion_idempotente.updateMany")).toBeLessThan(index(calls, "prisma.$transaction:commit"));
+  });
+
+  it("un rechazo despues del reclamo revierte la transaccion y deja el error en su campo", async () => {
+    const { calls, outcome } = await runAction({ name: "C5", form: form({ monto: "100.25" }) });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "El egreso supera el saldo disponible de la caja. Saldo actual: S/ 100.00.",
+      fieldErrors: { monto: ["El egreso supera el saldo disponible de la caja. Saldo actual: S/ 100.00."] },
+      values: { monto: "100.25", concepto: "Taxi a proveedor" },
+    });
+    expect(index(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(index(calls, "operacion_idempotente.updateMany")).toBe(-1);
   });
 });

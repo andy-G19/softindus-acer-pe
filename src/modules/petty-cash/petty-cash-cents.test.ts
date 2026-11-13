@@ -70,7 +70,19 @@ async function run(action: Action, fields: Record<string, string>) {
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        await action(formData);
+        const state = (await action(formData)) as
+          | { status?: string; error?: string; fieldErrors?: Record<string, string[] | undefined> }
+          | undefined;
+
+        // C5 de la 11.4a: el egreso devuelve el estado del formulario en lugar de redirigir; un
+        // error del monto queda en su campo.
+        if (state?.status === "success") {
+          return "guardado";
+        }
+
+        if (state?.status === "error") {
+          return `error: ${state.fieldErrors?.monto?.[0] ?? state.error}`;
+        }
 
         return "termino sin redirigir";
       } catch (error) {
@@ -96,7 +108,8 @@ async function run(action: Action, fields: Record<string, string>) {
 }
 
 const expense = (monto: string) =>
-  run(createPettyCashExpenseAction, {
+  run((formData) => createPettyCashExpenseAction({ status: "idle" }, formData), {
+    clave_operacion: "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
     id_caja_chica: "CAJ00000002",
     id_categoria_gasto: "CGA00000003",
     concepto: "Taxi a proveedor",
@@ -130,7 +143,7 @@ describe("C2 de la 11.4a: egreso en centimos", () => {
   it("el movimiento y el descuento del saldo usan el mismo monto redondeado", async () => {
     const { outcome, monto, saldo } = await expense("40.005");
 
-    expect(outcome).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-expense-registered");
+    expect(outcome).toBe("guardado");
     expect(monto).toBe("40.01");
     expect(saldo).toEqual({ decrement: "40.01" });
   });
@@ -138,7 +151,7 @@ describe("C2 de la 11.4a: egreso en centimos", () => {
   it("un egreso que se guarda como todo el saldo se acepta", async () => {
     const { outcome, monto, saldo } = await expense("100.004");
 
-    expect(outcome).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-expense-registered");
+    expect(outcome).toBe("guardado");
     expect(monto).toBe("100.00");
     expect(saldo).toEqual({ decrement: "100.00" });
   });
