@@ -8597,7 +8597,7 @@ Datos leídos de la API de GitHub el 2026-11-12 (UTC) y comparados con git:
 
 ### Sub-entrega 11.3c — Listados de Comercial
 
-Fecha: 2026-11-12 (Lima). Estado: preparada en `staging`, sin publicar. Plan en
+Fecha: 2026-11-12 (Lima). Estado: verificada en `staging` (CI #172). Plan en
 `tmp/e11-diff/plan-11-3c.md`, con las decisiones D36 a D41 aprobadas: textos de pago y comprobante
 en un solo módulo (D36); «Todos los métodos» y «Todos los tipos» en los filtros de pagos (D37);
 paginar proformas, comprobantes y pagos de cliente con el id como desempate (D38); cada listado
@@ -8613,7 +8613,8 @@ una lista cerrada (D40); y pagos de cliente nombran la proforma por su número (
 | 49e99c8 | feat | Paginación de los tres listados (hallazgo 9 de la 10.4a): 20 por página, `count` con el mismo `where`, orden por fecha y luego id. |
 | 68d6933 | fix | El detalle de proforma vuelve al listado de origen con sus filtros y su página (hallazgo 5 de la 10.4b); 8 casos rojos antes. |
 | b143c28 | fix | Pagos de cliente muestran la proforma por su número y la buscan por él (hallazgo 2); 2 casos rojos antes. |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| e4a146e | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -8677,6 +8678,40 @@ Hallazgos:
    cobranzas, y «Generar proforma» del listado de pedidos abre el alta sin él (al guardar vuelve a
    proformas). Clientes y el detalle de proforma muestran `tipo_cliente` como se guarda. Destino:
    11.7 o un `fix` propio.
+6. En staging: una página posterior a la última (un enlace viejo, o anular la última fila de una
+   página filtrada) muestra la tabla vacía con «Todavía no hay … registrados», los controles dicen
+   «Mostrando 1-N de N · Página 1 de 1» y los dos botones quedan deshabilitados: no hay forma de
+   volver salvo «Limpiar». Ya pasaba en compras (`?page=99`, comprobado): es de `getPaginationMeta`
+   y `PaginationControls`, compartidos por todas las listas paginadas. Destino: `fix` propio.
+7. En staging: los historiales del detalle de proforma ordenan solo por fecha, y el adelanto y la
+   cancelación de PF-00000004, del mismo día, salen en ese orden (el más antiguo primero). Es el
+   empate del hallazgo 1 en `getQuoteDetail`. Destino: 11.7 o un `fix` propio.
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 8 commits (hasta `e4a146e`): CI #172 en verde en 4:23; Vercel desplegó staging
+   (00:16 UTC del 2026-11-13). Sin migraciones.
+2. Todo de lectura, con ADMIN y el origen comprobado en una llamada aparte; no se escribió nada.
+3. Paginación con `?pageSize=2`: cada listado recorrido página a página por GET coincide fila por
+   fila y en el mismo orden con el listado completo (`?pageSize=100`), sin repetidas ni perdidas:
+   pagos 7 (cuatro del 11/11, el desempate por id con datos reales), proformas 5 y comprobantes 2.
+   Pagos muestra «Mostrando 1-2 de 7 pagos · Página 1 de 4» y «Siguiente» conserva los filtros.
+4. Textos: pagos con «Cancelación», «Adelanto», «Yape» y la proforma como `PF-00000004`; filtros
+   con «Todos los métodos» y «Todos los tipos»; comprobantes con «Boleta» y «Recibo»; la insignia
+   de proformas «Recibo R001-202607171133»; los historiales del detalle con su texto. Buscar
+   `pf-00000004` y `PRF00000004` en pagos da los mismos 2 pagos.
+5. Volver al origen:
+
+   | Desde | Resultado |
+   |---|---|
+   | Pagos con Yape, página 2 (`pageSize=1`), clic en «Ver proforma» | Miga «Pagos de cliente» con la URL completa y «Volver a pagos de cliente»; al pulsarlo, pagos con Yape en la página 2 |
+   | Carga directa del detalle con `returnTo` de comprobantes anulados (sin referrer, como otra pestaña) | «Volver a comprobantes» usa el respaldo y llega a comprobantes con «Anulado» elegido |
+   | Pedidos (`pageSize=5`, con filtros vacíos) | «Volver a pedidos»; el `returnTo` omite los filtros vacíos |
+   | Proformas con saldo pagado | Miga «Proformas» con el filtro |
+   | `returnTo` de compras y uno externo | «Volver a proformas» y miga a proformas sin filtros |
+
+6. Ningún `<main>` anidado; la consola solo muestra los avisos de la barra de Vercel en la vista
+   previa, ningún error de la app.
 
 ## Secuencia de próximas entregas
 
@@ -8703,7 +8738,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c preparada en `staging`, sin publicar |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c verificada en `staging` (CI #172) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
