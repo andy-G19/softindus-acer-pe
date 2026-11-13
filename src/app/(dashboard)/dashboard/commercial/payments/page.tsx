@@ -162,7 +162,8 @@ export default async function CustomerPaymentsPage({
                 {payment.proforma.pedido.cliente.nombre_razon_social}
               </TableCell>
               <TableCell>{payment.id_pedido}</TableCell>
-              <TableCell>{payment.id_proforma}</TableCell>
+              {/* C6 de la 11.3c (D41): la proforma por su numero, como en el resto de la app. */}
+              <TableCell>{payment.proforma.numero_proforma}</TableCell>
               <TableCell>{getOptionLabel(PAYMENT_TYPE_OPTIONS, payment.tipo_pago)}</TableCell>
               <TableCell>{getOptionLabel(PAYMENT_METHOD_OPTIONS, payment.metodo_pago)}</TableCell>
               <TableCell className="text-right">

@@ -28,10 +28,13 @@ function buildCustomerPaymentListConditions(
   const conditions: Prisma.pago_clienteWhereInput[] = [];
 
   if (q) {
+    // C6 de la 11.3c (D41): tambien el numero de la proforma (PF-…), que es lo que ve el usuario;
+    // el id interno sigue sirviendo.
     conditions.push({
       OR: [
         { id_pedido: { contains: q, mode: "insensitive" } },
         { id_proforma: { contains: q, mode: "insensitive" } },
+        { proforma: { numero_proforma: { contains: q, mode: "insensitive" } } },
         {
           proforma: {
             pedido: {
@@ -102,6 +105,7 @@ export async function getCustomerPaymentListData(
         saldo_actual: true,
         proforma: {
           select: {
+            numero_proforma: true,
             pedido: {
               select: {
                 cliente: {

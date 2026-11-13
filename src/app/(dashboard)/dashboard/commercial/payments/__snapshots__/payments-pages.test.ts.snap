@@ -28,6 +28,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > llamadas 1`] = `
         "monto_pagado": true,
         "proforma": {
           "select": {
+            "numero_proforma": true,
             "pedido": {
               "select": {
                 "cliente": {
@@ -203,7 +204,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <td>1/7/2026</td>
 <td>nombre_razon_social-1</td>
 <td>id_pedido-1</td>
-<td>id_proforma-1</td>
+<td>numero_proforma-1</td>
 <td>tipo_pago-1</td>
 <td>metodo_pago-1</td>
 <td>S/ 11.50</td>
@@ -216,7 +217,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <td>2/7/2026</td>
 <td>nombre_razon_social-2</td>
 <td>id_pedido-2</td>
-<td>id_proforma-2</td>
+<td>numero_proforma-2</td>
 <td>tipo_pago-2</td>
 <td>metodo_pago-2</td>
 <td>S/ 22.50</td>
@@ -268,6 +269,7 @@ exports[`/dashboard/commercial/payments > rango invertido > llamadas 1`] = `
         "monto_pagado": true,
         "proforma": {
           "select": {
+            "numero_proforma": true,
             "pedido": {
               "select": {
                 "cliente": {
@@ -494,6 +496,7 @@ exports[`/dashboard/commercial/payments > sin filtros > llamadas 1`] = `
         "monto_pagado": true,
         "proforma": {
           "select": {
+            "numero_proforma": true,
             "pedido": {
               "select": {
                 "cliente": {
@@ -653,7 +656,7 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <td>1/7/2026</td>
 <td>nombre_razon_social-1</td>
 <td>id_pedido-1</td>
-<td>id_proforma-1</td>
+<td>numero_proforma-1</td>
 <td>tipo_pago-1</td>
 <td>metodo_pago-1</td>
 <td>S/ 11.50</td>
@@ -666,7 +669,7 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <td>2/7/2026</td>
 <td>nombre_razon_social-2</td>
 <td>id_pedido-2</td>
-<td>id_proforma-2</td>
+<td>numero_proforma-2</td>
 <td>tipo_pago-2</td>
 <td>metodo_pago-2</td>
 <td>S/ 22.50</td>
@@ -718,6 +721,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > llamadas 1`] 
         "monto_pagado": true,
         "proforma": {
           "select": {
+            "numero_proforma": true,
             "pedido": {
               "select": {
                 "cliente": {
@@ -877,7 +881,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <td>1/7/2026</td>
 <td>nombre_razon_social-1</td>
 <td>id_pedido-1</td>
-<td>id_proforma-1</td>
+<td>numero_proforma-1</td>
 <td>Adelanto</td>
 <td>Efectivo</td>
 <td>S/ 11.50</td>
@@ -890,7 +894,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <td>2/7/2026</td>
 <td>nombre_razon_social-2</td>
 <td>id_pedido-2</td>
-<td>id_proforma-2</td>
+<td>numero_proforma-2</td>
 <td>Amortización</td>
 <td>Transferencia</td>
 <td>S/ 22.50</td>
@@ -903,7 +907,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <td>1/7/2026</td>
 <td>nombre_razon_social-1</td>
 <td>id_pedido-1</td>
-<td>id_proforma-1</td>
+<td>numero_proforma-1</td>
 <td>Cancelación</td>
 <td>Yape</td>
 <td>S/ 11.50</td>
@@ -955,6 +959,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
         "monto_pagado": true,
         "proforma": {
           "select": {
+            "numero_proforma": true,
             "pedido": {
               "select": {
                 "cliente": {
@@ -985,6 +990,14 @@ exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
                 "id_proforma": {
                   "contains": "PRO",
                   "mode": "insensitive",
+                },
+              },
+              {
+                "proforma": {
+                  "numero_proforma": {
+                    "contains": "PRO",
+                    "mode": "insensitive",
+                  },
                 },
               },
               {
@@ -1044,6 +1057,14 @@ exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
                 "id_proforma": {
                   "contains": "PRO",
                   "mode": "insensitive",
+                },
+              },
+              {
+                "proforma": {
+                  "numero_proforma": {
+                    "contains": "PRO",
+                    "mode": "insensitive",
+                  },
                 },
               },
               {
@@ -1220,7 +1241,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <td>1/7/2026</td>
 <td>nombre_razon_social-1</td>
 <td>id_pedido-1</td>
-<td>id_proforma-1</td>
+<td>numero_proforma-1</td>
 <td>tipo_pago-1</td>
 <td>metodo_pago-1</td>
 <td>S/ 11.50</td>
@@ -1233,7 +1254,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <td>2/7/2026</td>
 <td>nombre_razon_social-2</td>
 <td>id_pedido-2</td>
-<td>id_proforma-2</td>
+<td>numero_proforma-2</td>
 <td>tipo_pago-2</td>
 <td>metodo_pago-2</td>
 <td>S/ 22.50</td>
