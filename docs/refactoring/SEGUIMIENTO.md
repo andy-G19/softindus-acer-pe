@@ -8729,7 +8729,7 @@ Datos leídos de la API de GitHub el 2026-11-13 (UTC) y comparados con git:
 
 ### Sub-entrega 11.4a — Caja chica
 
-Fecha: 2026-11-13 (Lima). Estado: preparada en `staging`, sin publicar. Plan de la 11.4 en
+Fecha: 2026-11-13 (Lima). Estado: verificada en `staging` (CI #176). Plan de la 11.4 en
 `tmp/e11-diff/plan-11-4.md`, con las decisiones D42 a D47 aprobadas: la 11.4 se parte en 11.4a
 (caja chica) y 11.4b (venta de chatarra, filtro de fechas de movimientos y totales del reporte
 financiero) (D42); montos en centimos (D43); `lockCashBoxRow` y `lockCashMovementRow`, con la caja
@@ -8748,7 +8748,8 @@ negocio); egreso, ingreso o ajuste y abrir caja con resultado, y clave en los do
 | 6b3544b | feat | Ingreso o ajuste con lo mismo y clave `movimiento_caja:nuevo`. |
 | 2e2cecf | feat | Abrir caja con resultado y sin clave; el nombre repetido se busca dentro de la transacción y va a su campo; caracterización nueva de la página. |
 | 99fbbd7 | feat | Anular movimiento con `ConfirmActionButton` y `RowStatusState`, nombrado por concepto y monto; la dirección del dinero en una sola regla (`movement-direction.ts`); sale `ConfirmDeleteButton` de movimientos. |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 5b57145 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -8827,6 +8828,32 @@ Hallazgos:
    dos veces), el filtro de fechas de movimientos que corta con `lte T23:59:59` (hallazgo 2 de la
    10.3c) y los totales del reporte financiero sobre 100 filas (hallazgo 1 de la 11.1).
 
+#### Publicación, CI y verificación en staging
+
+1. Push de los 10 commits (hasta `5b57145`): CI #176 en verde en 5:27; Vercel desplegó staging
+   (03:34 UTC del 2026-11-13). Sin migraciones.
+2. Con ADMIN, sin escribir (origen comprobado en llamada aparte): los tres formularios responden
+   200, sin `<main>` anidado; egreso e ingreso llevan clave y abrir caja no; «Cancelar» lleva a
+   caja chica o a cajas. Movimientos sin `<main>` anidado y «Anular» destructivo. Las dos ventas de
+   chatarra están vinculadas a MCA00000001 y MCA00000002, los dos únicos movimientos (inicio de
+   Mermas y chatarra), comprobado antes del envío que debía rechazarse.
+3. Envíos autorizados por el responsable, sobre una caja nueva para no tocar las reales:
+
+   | Paso | Resultado |
+   |---|---|
+   | 1. Abrir «Caja verificacion 11.4a» con S/ 100.00 | CAJ00000003, un aviso, vuelta al listado de cajas |
+   | 2. Abrir «CAJA VERIFICACION 11.4A» | «Ya existe una caja chica con ese nombre.» arriba y en el campo, foco en él, lo escrito conservado; siguen 3 cajas |
+   | 3. Egreso de 150.00 en CAJ00000003 | «El egreso supera el saldo… S/ 100.00.» en el monto, enfocado; caja, categoría y concepto conservados; la clave se mantiene |
+   | 4. El mismo egreso corregido a 40.25, con la misma clave | Un solo egreso, saldo 59.75; un aviso; vuelta a caja chica con una entrada nueva en el historial; clave renovada |
+   | 5. Anular ese egreso | La confirmación dice «¿Anular «Verificacion 11.4a» por S/ 40.25?» y que el monto vuelve a la caja; anulado con la marca y el monto original; un aviso; la fila sin botón y el foco en ella; saldo 100.00 |
+   | 6. Anularlo otra vez | No se puede desde la pantalla: la fila anulada ya no ofrece «Anular». La anulación repetida queda probada en Postgres (C3) |
+   | 7. Anular el ingreso de la venta del 31/07 (CAJ00000001) | La confirmación dice que el monto se descuenta de la caja; el rechazo «Este ingreso es de la venta de chatarra VCH00000001; no se anula desde caja chica.» queda dentro, sin aviso; CAJ00000001 sigue en 650.00 |
+
+4. El primer clic en «Anular», justo al cargar la página, no abrió la confirmación (la página no
+   había terminado de hidratarse); el segundo sí. La consola no registra errores de la app.
+5. Datos de prueba que quedan en staging: CAJ00000003 «Caja verificacion 11.4a», abierta con
+   S/ 100.00, y su egreso «Verificacion 11.4a» anulado. La aplicación no cierra ni borra cajas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -8852,7 +8879,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a preparada en `staging`, sin publicar |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a verificada en `staging` (CI #176) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
