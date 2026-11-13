@@ -5,6 +5,7 @@ import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -21,12 +22,14 @@ import {
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { createReturnToHref, dashboardBreadcrumbs, navigationHrefs, withReturnTo } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { commercialNotifications } from "@/modules/commercial/notifications";
+import { getOptionLabel, RECEIPT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
 import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
 import { QuoteAnnulAction } from "@/modules/commercial/quotes/quote-annul-action";
 import { getQuoteListData } from "@/modules/commercial/quotes/queries";
@@ -39,7 +42,8 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
   await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
-  // C4 de la 11.3a: el alta vuelve a este listado con sus filtros.
+  // C4 de la 11.3a: el alta vuelve a este listado con sus filtros; desde C5 de la 11.3c, tambien
+  // el detalle (filtros y pagina).
   const returnTo = createReturnToHref(navigationHrefs.quotes, params);
   const q = parseStringParam(params, "q");
   const client = parseStringParam(params, "client");
@@ -48,15 +52,13 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
   const balance = parseStringParam(params, "balance");
   const from = parseDateParam(params, "from");
   const to = parseDateParam(params, "to");
-  const { quotes, clients, orders } = await getQuoteListData({
-    q,
-    client,
-    order,
-    status,
-    balance,
-    from,
-    to,
-  });
+  const { page, pageSize, skip, take } = getPaginationParams(params);
+  const { quotes, totalItems, clients, orders } = await getQuoteListData(
+    { q, client, order, status, balance, from, to },
+    { skip, take },
+  );
+
+  const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
     <div className="space-y-6">
@@ -177,7 +179,7 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                   <TableCell>
                     {quote.comprobante_venta[0] ? (
                       <Badge variant="success">
-                        {quote.comprobante_venta[0].tipo_comprobante}{" "}
+                        {getOptionLabel(RECEIPT_TYPE_OPTIONS, quote.comprobante_venta[0].tipo_comprobante)}{" "}
                         {quote.comprobante_venta[0].numero_comprobante}
                       </Badge>
                     ) : (
@@ -188,7 +190,10 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                     <div className="flex flex-wrap gap-2">
                       <Button variant="outline" size="sm" asChild>
                         <Link
-                          href={`/dashboard/commercial/quotes/${quote.id_proforma}`}
+                          href={withReturnTo(
+                            `${navigationHrefs.quotes}/${quote.id_proforma}`,
+                            returnTo,
+                          )}
                         >
                           Ver detalle
                         </Link>
@@ -196,7 +201,10 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                       {canPay ? (
                         <Button size="sm" asChild>
                           <Link
-                            href={`/dashboard/commercial/quotes/${quote.id_proforma}`}
+                            href={withReturnTo(
+                              `${navigationHrefs.quotes}/${quote.id_proforma}`,
+                              returnTo,
+                            )}
                           >
                             Registrar pago
                           </Link>
@@ -227,6 +235,13 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
             )}
           </TableBody>
       </Table>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.quotes}
+        searchParams={params}
+        itemLabel="proformas"
+      />
     </div>
   );
 }

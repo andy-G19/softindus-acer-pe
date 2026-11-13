@@ -11,7 +11,15 @@ exports[`/dashboard/commercial/quotes > fechas no validas > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_proforma": "desc",
+        },
+      ],
+      "select": {
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -22,25 +30,30 @@ exports[`/dashboard/commercial/quotes > fechas no validas > llamadas 1`] = `
             "estado": "emitido",
           },
         },
+        "estado": true,
+        "fecha_emision": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_proforma": true,
         "pago_cliente": {
           "select": {
             "id_pago_cliente": true,
           },
         },
         "pedido": {
-          "include": {
-            "cliente": true,
-            "detalle_pedido": {
-              "include": {
-                "producto": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
               },
             },
           },
         },
+        "saldo": true,
       },
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -52,6 +65,20 @@ exports[`/dashboard/commercial/quotes > fechas no validas > llamadas 1`] = `
       },
     },
     "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "fecha_emision": {
+              "gte": 2026-03-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "proforma.count",
   },
   {
     "args": {
@@ -198,8 +225,8 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -218,13 +245,20 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Registrar pago</a>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",
@@ -242,7 +276,15 @@ exports[`/dashboard/commercial/quotes > rango invertido > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_proforma": "desc",
+        },
+      ],
+      "select": {
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -253,25 +295,30 @@ exports[`/dashboard/commercial/quotes > rango invertido > llamadas 1`] = `
             "estado": "emitido",
           },
         },
+        "estado": true,
+        "fecha_emision": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_proforma": true,
         "pago_cliente": {
           "select": {
             "id_pago_cliente": true,
           },
         },
         "pedido": {
-          "include": {
-            "cliente": true,
-            "detalle_pedido": {
-              "include": {
-                "producto": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
               },
             },
           },
         },
+        "saldo": true,
       },
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -284,6 +331,21 @@ exports[`/dashboard/commercial/quotes > rango invertido > llamadas 1`] = `
       },
     },
     "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "fecha_emision": {
+              "gte": 2026-07-31T00:00:00.000Z,
+              "lt": 2026-07-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "proforma.count",
   },
   {
     "args": {
@@ -428,6 +490,13 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 0-0 de 0 proformas · Página 1 de 1</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<button data-variant="outline" disabled="">Siguiente</button>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -444,7 +513,15 @@ exports[`/dashboard/commercial/quotes > saldo pagado > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_proforma": "desc",
+        },
+      ],
+      "select": {
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -455,25 +532,30 @@ exports[`/dashboard/commercial/quotes > saldo pagado > llamadas 1`] = `
             "estado": "emitido",
           },
         },
+        "estado": true,
+        "fecha_emision": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_proforma": true,
         "pago_cliente": {
           "select": {
             "id_pago_cliente": true,
           },
         },
         "pedido": {
-          "include": {
-            "cliente": true,
-            "detalle_pedido": {
-              "include": {
-                "producto": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
               },
             },
           },
         },
+        "saldo": true,
       },
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -483,6 +565,18 @@ exports[`/dashboard/commercial/quotes > saldo pagado > llamadas 1`] = `
       },
     },
     "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "saldo": 0,
+          },
+        ],
+      },
+    },
+    "prisma": "proforma.count",
   },
   {
     "args": {
@@ -629,8 +723,8 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fbalance%3Dpaid">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fbalance%3Dpaid">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -649,13 +743,20 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fbalance%3Dpaid">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fbalance%3Dpaid">Registrar pago</a>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?balance=paid&amp;page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",
@@ -673,7 +774,15 @@ exports[`/dashboard/commercial/quotes > sin filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_proforma": "desc",
+        },
+      ],
+      "select": {
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -684,28 +793,39 @@ exports[`/dashboard/commercial/quotes > sin filtros > llamadas 1`] = `
             "estado": "emitido",
           },
         },
+        "estado": true,
+        "fecha_emision": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_proforma": true,
         "pago_cliente": {
           "select": {
             "id_pago_cliente": true,
           },
         },
         "pedido": {
-          "include": {
-            "cliente": true,
-            "detalle_pedido": {
-              "include": {
-                "producto": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
               },
             },
           },
         },
+        "saldo": true,
       },
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "proforma.count",
   },
   {
     "args": {
@@ -852,8 +972,8 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -872,13 +992,20 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Registrar pago</a>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",
@@ -896,7 +1023,15 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_proforma": "desc",
+        },
+      ],
+      "select": {
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -907,25 +1042,30 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
             "estado": "emitido",
           },
         },
+        "estado": true,
+        "fecha_emision": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_proforma": true,
         "pago_cliente": {
           "select": {
             "id_pago_cliente": true,
           },
         },
         "pedido": {
-          "include": {
-            "cliente": true,
-            "detalle_pedido": {
-              "include": {
-                "producto": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
               },
             },
           },
         },
+        "saldo": true,
       },
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -980,6 +1120,63 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
       },
     },
     "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "numero_proforma": {
+                  "contains": "PRF",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_pedido": {
+                  "contains": "PRF",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "pedido": {
+                  "cliente": {
+                    "nombre_razon_social": {
+                      "contains": "PRF",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "pedido": {
+              "id_cliente": "CLI00000001",
+            },
+          },
+          {
+            "id_pedido": "PED00000001",
+          },
+          {
+            "estado": "vigente",
+          },
+          {
+            "saldo": {
+              "gt": 0,
+            },
+          },
+          {
+            "fecha_emision": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "proforma.count",
   },
   {
     "args": {
@@ -1126,8 +1323,8 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fq%3DPRF%26client%3DCLI00000001%26order%3DPED00000001%26status%3Dvigente%26balance%3Dpending%26from%3D2026-07-01%26to%3D2026-07-31">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fq%3DPRF%26client%3DCLI00000001%26order%3DPED00000001%26status%3Dvigente%26balance%3Dpending%26from%3D2026-07-01%26to%3D2026-07-31">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -1146,13 +1343,20 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fq%3DPRF%26client%3DCLI00000001%26order%3DPED00000001%26status%3Dvigente%26balance%3Dpending%26from%3D2026-07-01%26to%3D2026-07-31">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fquotes%3Fq%3DPRF%26client%3DCLI00000001%26order%3DPED00000001%26status%3Dvigente%26balance%3Dpending%26from%3D2026-07-01%26to%3D2026-07-31">Registrar pago</a>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?q=PRF&amp;client=CLI00000001&amp;order=PED00000001&amp;status=vigente&amp;balance=pending&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",
@@ -1170,7 +1374,15 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > llamadas 1`] =
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_proforma": "desc",
+        },
+      ],
+      "select": {
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -1181,28 +1393,39 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > llamadas 1`] =
             "estado": "emitido",
           },
         },
+        "estado": true,
+        "fecha_emision": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_proforma": true,
         "pago_cliente": {
           "select": {
             "id_pago_cliente": true,
           },
         },
         "pedido": {
-          "include": {
-            "cliente": true,
-            "detalle_pedido": {
-              "include": {
-                "producto": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
               },
             },
           },
         },
+        "saldo": true,
       },
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "proforma.count",
   },
   {
     "args": {
@@ -1349,8 +1572,8 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000011">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/PRF00000011">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000011?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/PRF00000011?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Registrar pago</a>
 <button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
@@ -1370,8 +1593,8 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000012">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/PRF00000012">Registrar pago</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000012?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/PRF00000012?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Registrar pago</a>
 </div>
 </td>
 </tr>
@@ -1390,7 +1613,7 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000013">Ver detalle</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000013?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Ver detalle</a>
 </div>
 </td>
 </tr>
@@ -1409,12 +1632,19 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000014">Ver detalle</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000014?returnTo=%2Fdashboard%2Fcommercial%2Fquotes">Ver detalle</a>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",

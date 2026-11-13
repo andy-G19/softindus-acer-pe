@@ -1,10 +1,12 @@
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
 import {
+  characterizePage,
   definePageSuite,
   generatedResult,
   generatedRow,
+  isPrismaCall,
   type PrismaArgs,
 } from "@/testing/page-characterization";
 
@@ -107,7 +109,7 @@ definePageSuite([
       {
         name: "rango invertido",
         searchParams: { from: "2026-07-31", to: "2026-07-01" },
-        data: { "proforma.findMany": [] },
+        data: { "proforma.findMany": [], "proforma.count": 0 },
       },
       {
         name: "fechas no validas",
@@ -165,3 +167,31 @@ definePageSuite([
     ],
   },
 ]);
+
+// C4 de la 11.3c (D38, hallazgo 9 de la 10.4a): la lista cargaba todas las filas de una vez. Ahora
+// pagina como pagos a proveedores: 20 por pagina, con el total contado aparte con el mismo filtro y
+// un orden completo (fecha y luego id), porque la fecha es un dia y las filas del mismo dia
+// empatan.
+describe("C4 de la 11.3c: proformas paginados", () => {
+  it("la segunda pagina pide las filas 21 a 40 y cuenta el total con el mismo filtro", async () => {
+    const { calls, html } = await characterizePage(
+      () => import("./page"),
+      { name: "segunda pagina", searchParams: { page: "2", status: "vigente" } },
+      "/dashboard/commercial/quotes",
+    );
+
+    const prismaCalls = calls.filter(isPrismaCall);
+    const list = prismaCalls.find((call) => call.prisma === "proforma.findMany");
+    const count = prismaCalls.find((call) => call.prisma === "proforma.count");
+    const listArgs = list?.args as { where?: unknown; skip?: number; take?: number; orderBy?: unknown };
+
+    expect(listArgs).toMatchObject({
+      skip: 20,
+      take: 20,
+      orderBy: [{ fecha_emision: "desc" }, { id_proforma: "desc" }],
+    });
+    expect(count?.args).toEqual({ where: listArgs.where });
+    expect(html).toContain("proformas");
+    expect(html).toMatch(/P[áa]gina 2/);
+  });
+});

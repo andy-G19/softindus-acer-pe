@@ -4,6 +4,7 @@ import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
@@ -18,12 +19,23 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import {
+  getOptionLabel,
+  PAYMENT_METHOD_OPTIONS,
+  PAYMENT_TYPE_OPTIONS,
+} from "@/modules/commercial/payment-labels";
 import { getCustomerPaymentListData } from "@/modules/commercial/payments/queries";
 
 type CustomerPaymentsPageProps = {
@@ -36,6 +48,8 @@ export default async function CustomerPaymentsPage({
   await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.3c: el detalle de la proforma vuelve a este listado con sus filtros y su pagina.
+  const returnTo = createReturnToHref(navigationHrefs.customerPayments, params);
   const q = parseStringParam(params, "q");
   const client = parseStringParam(params, "client");
   const order = parseStringParam(params, "order");
@@ -44,15 +58,13 @@ export default async function CustomerPaymentsPage({
   const from = parseDateParam(params, "from");
   const to = parseDateParam(params, "to");
 
-  const { payments, clients, orders } = await getCustomerPaymentListData({
-    q,
-    client,
-    order,
-    method,
-    type,
-    from,
-    to,
-  });
+  const { page, pageSize, skip, take } = getPaginationParams(params);
+  const { payments, totalItems, clients, orders } = await getCustomerPaymentListData(
+    { q, client, order, method, type, from, to },
+    { skip, take },
+  );
+
+  const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
     <div className="space-y-6">
@@ -100,22 +112,24 @@ export default async function CustomerPaymentsPage({
         <Field id="method" label="Método">
           {(control) => (
             <NativeSelect {...control} name="method" defaultValue={method}>
-              <option value="">Método</option>
-              <option value="efectivo">Efectivo</option>
-              <option value="transferencia">Transferencia</option>
-              <option value="yape">Yape</option>
-              <option value="plin">Plin</option>
-              <option value="otro">Otro</option>
+              <option value="">Todos los métodos</option>
+              {PAYMENT_METHOD_OPTIONS.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </NativeSelect>
           )}
         </Field>
         <Field id="type" label="Tipo de pago">
           {(control) => (
             <NativeSelect {...control} name="type" defaultValue={type}>
-              <option value="">Tipo pago</option>
-              <option value="adelanto">Adelanto</option>
-              <option value="amortizacion">Amortización</option>
-              <option value="cancelacion">Cancelación</option>
+              <option value="">Todos los tipos</option>
+              {PAYMENT_TYPE_OPTIONS.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </NativeSelect>
           )}
         </Field>
@@ -148,9 +162,10 @@ export default async function CustomerPaymentsPage({
                 {payment.proforma.pedido.cliente.nombre_razon_social}
               </TableCell>
               <TableCell>{payment.id_pedido}</TableCell>
-              <TableCell>{payment.id_proforma}</TableCell>
-              <TableCell>{payment.tipo_pago}</TableCell>
-              <TableCell>{payment.metodo_pago}</TableCell>
+              {/* C6 de la 11.3c (D41): la proforma por su numero, como en el resto de la app. */}
+              <TableCell>{payment.proforma.numero_proforma}</TableCell>
+              <TableCell>{getOptionLabel(PAYMENT_TYPE_OPTIONS, payment.tipo_pago)}</TableCell>
+              <TableCell>{getOptionLabel(PAYMENT_METHOD_OPTIONS, payment.metodo_pago)}</TableCell>
               <TableCell className="text-right">
                 {formatMoney(payment.monto_pagado)}
               </TableCell>
@@ -160,7 +175,10 @@ export default async function CustomerPaymentsPage({
               <TableCell>
                 <Button variant="outline" size="sm" asChild>
                   <Link
-                    href={`/dashboard/commercial/quotes/${payment.id_proforma}`}
+                    href={withReturnTo(
+                      `${navigationHrefs.quotes}/${payment.id_proforma}`,
+                      returnTo,
+                    )}
                   >
                     Ver proforma
                   </Link>
@@ -180,6 +198,13 @@ export default async function CustomerPaymentsPage({
           ) : null}
         </TableBody>
       </Table>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.customerPayments}
+        searchParams={params}
+        itemLabel="pagos"
+      />
     </div>
   );
 }

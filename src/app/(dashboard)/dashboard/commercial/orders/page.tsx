@@ -212,7 +212,10 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                       {activeQuote ? (
                         <Button variant="outline" size="sm" asChild>
                           <Link
-                            href={`/dashboard/commercial/quotes/${activeQuote.id_proforma}`}
+                            href={withReturnTo(
+                              `${navigationHrefs.quotes}/${activeQuote.id_proforma}`,
+                              returnTo,
+                            )}
                           >
                             Ver proforma
                           </Link>

@@ -5,6 +5,7 @@ import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
@@ -19,16 +20,23 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { commercialNotifications } from "@/modules/commercial/notifications";
+import { getOptionLabel, RECEIPT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
 import { annulReceiptAction } from "@/modules/commercial/receipts/actions";
 import { ReceiptAnnulAction } from "@/modules/commercial/receipts/receipt-annul-action";
-import { getReceiptList } from "@/modules/commercial/receipts/queries";
+import { getReceiptListData } from "@/modules/commercial/receipts/queries";
 
 type ReceiptsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -38,12 +46,20 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
   await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.3c: el detalle de la proforma vuelve a este listado con sus filtros y su pagina.
+  const returnTo = createReturnToHref(navigationHrefs.salesReceipts, params);
   const q = parseStringParam(params, "q");
   const type = parseStringParam(params, "type");
   const status = parseStringParam(params, "status");
   const from = parseDateParam(params, "from");
   const to = parseDateParam(params, "to");
-  const receipts = await getReceiptList({ q, type, status, from, to });
+  const { page, pageSize, skip, take } = getPaginationParams(params);
+  const { receipts, totalItems } = await getReceiptListData(
+    { q, type, status, from, to },
+    { skip, take },
+  );
+
+  const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
     <div className="space-y-6">
@@ -68,10 +84,11 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
           {(control) => (
             <NativeSelect {...control} name="type" defaultValue={type}>
               <option value="">Todos los tipos</option>
-              <option value="boleta">Boleta</option>
-              <option value="factura">Factura</option>
-              <option value="recibo">Recibo</option>
-              <option value="otro">Otro</option>
+              {RECEIPT_TYPE_OPTIONS.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </NativeSelect>
           )}
         </Field>
@@ -114,7 +131,7 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
                 {receipt.pedido.cliente.nombre_razon_social}
               </TableCell>
               <TableCell>{receipt.id_pedido}</TableCell>
-              <TableCell>{receipt.tipo_comprobante}</TableCell>
+              <TableCell>{getOptionLabel(RECEIPT_TYPE_OPTIONS, receipt.tipo_comprobante)}</TableCell>
               <TableCell>{formatDate(receipt.fecha_emision)}</TableCell>
               <TableCell className="text-right">
                 {formatMoney(receipt.monto_total)}
@@ -127,7 +144,10 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
                   {receipt.id_proforma ? (
                     <Button variant="outline" size="sm" asChild>
                       <Link
-                        href={`/dashboard/commercial/quotes/${receipt.id_proforma}`}
+                        href={withReturnTo(
+                          `${navigationHrefs.quotes}/${receipt.id_proforma}`,
+                          returnTo,
+                        )}
                       >
                         Ver proforma
                       </Link>
@@ -157,6 +177,13 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
           ) : null}
         </TableBody>
       </Table>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.salesReceipts}
+        searchParams={params}
+        itemLabel="comprobantes"
+      />
     </div>
   );
 }

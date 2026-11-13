@@ -8466,7 +8466,7 @@ Datos leídos de la API de GitHub el 2026-11-11 (UTC) y comparados con git:
 
 ### Sub-entrega 11.3b — Comprobantes y pedido
 
-Fecha: 2026-11-11 (Lima). Estado: verificada en `staging` (CI #168). Plan en
+Fecha: 2026-11-11 (Lima). Estado: integrada en `main` (PR #44, merge `0261c7a`). Plan en
 `tmp/e11-diff/plan-11-3b.md`, con las decisiones D30 a D35 aprobadas: una sola regla para cambiar
 un pedido, en la que una proforma o un comprobante anulados no bloquean (D30, decisión de
 negocio); editar y cancelar con el pedido bloqueado y emitir comprobante con la proforma
@@ -8581,6 +8581,138 @@ Hallazgos:
 4. Datos de prueba que quedan en staging: el comprobante `B001-202611112339` de PF-00000004
    (anulado) y PED00000009 cancelado, con las observaciones «Verificacion 11.3b».
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-12 (UTC) y comparados con git:
+
+- La verificación `45e2a84` se publicó en `staging`: CI #169 en verde (4m 18s).
+- PR #44, abierto a las 11:22:28 UTC y fusionado con merge commit a las 11:29:33 UTC del
+  2026-11-12: 12 commits, de `48911ac` a `45e2a84`, y 42 archivos (+5.360 −673). Su CI, el #170,
+  sobre `45e2a84`, terminó en verde (3m 48s) antes del merge.
+- El merge commit `0261c7a` tiene como padres `157534f` (`main`) y `45e2a84` (`staging`), y su
+  árbol es el de `45e2a84` (`6054515a`): `main` y `staging` tienen el mismo contenido. CI #171 en
+  verde (5m 43s).
+- Vercel desplegó `0261c7a` en producción (`success` a las 11:31:17 UTC). La sub-entrega no trae
+  migraciones.
+
+### Sub-entrega 11.3c — Listados de Comercial
+
+Fecha: 2026-11-12 (Lima). Estado: verificada en `staging` (CI #172). Plan en
+`tmp/e11-diff/plan-11-3c.md`, con las decisiones D36 a D41 aprobadas: textos de pago y comprobante
+en un solo módulo (D36); «Todos los métodos» y «Todos los tipos» en los filtros de pagos (D37);
+paginar proformas, comprobantes y pagos de cliente con el id como desempate (D38); cada listado
+selecciona solo lo que muestra (D39); el detalle de proforma vuelve a su listado de origen, de
+una lista cerrada (D40); y pagos de cliente nombran la proforma por su número (D41).
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| aa60e5f | docs | Integración de la 11.3b en `main` (PR #44). |
+| 8aea542 | refactor | `payment-labels.ts`: método, tipo de pago y tipo de comprobante como pares `[valor, texto]` y `getOptionLabel`; los filtros de pagos y comprobantes lo usan con los snapshots iguales. |
+| 804c0ee | fix | Tablas de pagos, comprobantes y proformas, y los historiales del detalle, muestran el texto (hallazgo 4 de la 10.4b); opción vacía «Todos los …» (D37); 5 casos rojos antes. |
+| cdcea89 | refactor | `select` explícito en los tres listados: el HTML de los 16 casos igual, cambian solo los argumentos. |
+| 49e99c8 | feat | Paginación de los tres listados (hallazgo 9 de la 10.4a): 20 por página, `count` con el mismo `where`, orden por fecha y luego id. |
+| 68d6933 | fix | El detalle de proforma vuelve al listado de origen con sus filtros y su página (hallazgo 5 de la 10.4b); 8 casos rojos antes. |
+| b143c28 | fix | Pagos de cliente muestran la proforma por su número y la buscan por él (hallazgo 2); 2 casos rojos antes. |
+| e4a146e | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
+
+Diseño:
+
+- Un valor guardado se muestra con la lista de su área (`getOptionLabel`); un valor que la lista no
+  conoce se muestra tal cual, como `getUserStatusLabel`, para no esconder un dato antiguo. Una
+  prueba exige que cada lista tenga exactamente los valores que aceptan los esquemas de Zod.
+- Los formularios de pago, proforma y comprobante conservan su propia lista: el de pago ofrece
+  «Amortización» primero porque es su valor por defecto, y unificarla cambiaría lo que se envía.
+- Las fechas de los tres listados son `@db.Date`: las filas del mismo día empatan y, sin el id
+  como desempate, `OFFSET` podría repetir u omitir filas entre páginas.
+- El detalle de proforma acepta como `returnTo` solo las rutas exactas de proformas, pagos,
+  comprobantes y pedidos, con su texto de «Volver» y su miga de pan. `BackButton` vuelve con el
+  historial cuando puede; el `returnTo` corrige el texto, la miga y el destino de respaldo (otra
+  pestaña, recarga).
+
+Evidencia:
+
+1. Rojo antes de cada `fix`: C2 con 5 casos, C5 con 8 (y 4 de respaldo en verde) y C6 con 2. En
+   los `refactor` (C1, C3) los snapshots del HTML quedaron iguales; en el `feat` (C4) la prueba de
+   segunda página se escribió con el código, como en la 11.2a.
+2. Mutaciones: C1 8 de 8, C2 10 de 10, C3 10 de 10, C4 13 de 13, C5 12 de 12 y C6 6 de 6; en
+   total, 59 de 59.
+3. Snapshots revisados uno por uno, contando líneas: C2 cambia las dos opciones vacías y seis
+   celdas de pagos; C3, solo `include` por `select` (los mismos 16 `orderBy`); C4 añade el `count`
+   y los controles, sin quitar nada de la tabla; C5 cambia solo los 43 enlaces al detalle; C6,
+   la columna, el `select` y la rama del buscador.
+4. Sin pruebas nuevas contra Postgres: la sub-entrega no escribe y el `count` con el mismo
+   `where` lo fija el arnés.
+5. Tropiezos de método sin efecto en el código: la primera prueba de C2 no compilaba
+   (`characterizePage` da `html` como `string | null` y Vitest no comprueba tipos) y superó el
+   plazo de 5 s en la primera importación (se precargó con `preloadPages`); el comando `git add`
+   de C2 llevaba barras invertidas que PowerShell no quita, y el commit no se hizo hasta
+   repetirlo; un script que comparaba argumentos por texto dio falsos «distinto» y se reemplazó
+   por el recuento de líneas del diff; un heredoc de bash con comillas invertidas falló y los
+   parches se escribieron con un archivo.
+6. CSS compilado igual byte a byte en cada commit (112.316 bytes).
+7. `npm run check` terminó con código 0 antes de cada commit, hasta 5.013 pruebas en 287 archivos.
+   Lint mantiene un aviso anterior (`_line` sin usar en `orders/actions.ts`, de `8626f18`).
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 283 / 4.988 | 287 / 5.013 |
+| Pruebas contra Postgres real (archivos / pruebas) | 10 / 47 | 10 / 47 |
+| Listados de Comercial sin paginar | 3 | 0 |
+| Celdas que muestran método, tipo de pago o tipo de comprobante como se guardan | 7 | 0 |
+| Enlaces al detalle de proforma que pierden el listado de origen | 7 | 2 (detalle de pedido y reporte) |
+| Listas de opciones de método y tipo copiadas en Comercial | 7 | 4 (los formularios) |
+
+Hallazgos:
+
+1. Los tres listados ordenaban por un día: el orden dentro de un día era arbitrario. Corregido en
+   `49e99c8` con el id como desempate.
+2. Pagos de cliente mostraba el id interno de la proforma y solo lo buscaba por él. Corregido en
+   `b143c28` (D41).
+3. Los filtros de pagos decían «Método» y «Tipo pago» como opción vacía. Corregido en `804c0ee`.
+4. Las opciones de método y tipo estaban copiadas en 7 listas. Quedan 4, las de los formularios.
+   Destino: 11.7, revisando el valor por defecto de cada uno.
+5. Siguen sin `returnTo` hacia la proforma el detalle de pedido y el reporte de ventas y
+   cobranzas, y «Generar proforma» del listado de pedidos abre el alta sin él (al guardar vuelve a
+   proformas). Clientes y el detalle de proforma muestran `tipo_cliente` como se guarda. Destino:
+   11.7 o un `fix` propio.
+6. En staging: una página posterior a la última (un enlace viejo, o anular la última fila de una
+   página filtrada) muestra la tabla vacía con «Todavía no hay … registrados», los controles dicen
+   «Mostrando 1-N de N · Página 1 de 1» y los dos botones quedan deshabilitados: no hay forma de
+   volver salvo «Limpiar». Ya pasaba en compras (`?page=99`, comprobado): es de `getPaginationMeta`
+   y `PaginationControls`, compartidos por todas las listas paginadas. Destino: `fix` propio.
+7. En staging: los historiales del detalle de proforma ordenan solo por fecha, y el adelanto y la
+   cancelación de PF-00000004, del mismo día, salen en ese orden (el más antiguo primero). Es el
+   empate del hallazgo 1 en `getQuoteDetail`. Destino: 11.7 o un `fix` propio.
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 8 commits (hasta `e4a146e`): CI #172 en verde en 4:23; Vercel desplegó staging
+   (00:16 UTC del 2026-11-13). Sin migraciones.
+2. Todo de lectura, con ADMIN y el origen comprobado en una llamada aparte; no se escribió nada.
+3. Paginación con `?pageSize=2`: cada listado recorrido página a página por GET coincide fila por
+   fila y en el mismo orden con el listado completo (`?pageSize=100`), sin repetidas ni perdidas:
+   pagos 7 (cuatro del 11/11, el desempate por id con datos reales), proformas 5 y comprobantes 2.
+   Pagos muestra «Mostrando 1-2 de 7 pagos · Página 1 de 4» y «Siguiente» conserva los filtros.
+4. Textos: pagos con «Cancelación», «Adelanto», «Yape» y la proforma como `PF-00000004`; filtros
+   con «Todos los métodos» y «Todos los tipos»; comprobantes con «Boleta» y «Recibo»; la insignia
+   de proformas «Recibo R001-202607171133»; los historiales del detalle con su texto. Buscar
+   `pf-00000004` y `PRF00000004` en pagos da los mismos 2 pagos.
+5. Volver al origen:
+
+   | Desde | Resultado |
+   |---|---|
+   | Pagos con Yape, página 2 (`pageSize=1`), clic en «Ver proforma» | Miga «Pagos de cliente» con la URL completa y «Volver a pagos de cliente»; al pulsarlo, pagos con Yape en la página 2 |
+   | Carga directa del detalle con `returnTo` de comprobantes anulados (sin referrer, como otra pestaña) | «Volver a comprobantes» usa el respaldo y llega a comprobantes con «Anulado» elegido |
+   | Pedidos (`pageSize=5`, con filtros vacíos) | «Volver a pedidos»; el `returnTo` omite los filtros vacíos |
+   | Proformas con saldo pagado | Miga «Proformas» con el filtro |
+   | `returnTo` de compras y uno externo | «Volver a proformas» y miga a proformas sin filtros |
+
+6. Ningún `<main>` anidado; la consola solo muestra los avisos de la barra de Vercel en la vista
+   previa, ningún error de la app.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -8606,7 +8738,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b verificada en `staging` (CI #168) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c verificada en `staging` (CI #172) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
@@ -8629,7 +8761,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 283 / 4.988 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 287 / 5.013 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -8649,6 +8781,8 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Cálculos de montos de cliente con `number` (acciones, página y vistas previas de proforma y pago) | 5 | 0 | 11 |
 | Operaciones de Comercial que deciden fuera de la transacción o sin bloquear su fila | 7 | 0 | 11 |
 | Reglas distintas para «¿se puede cambiar el pedido?» (listado, edición, acción) | 3 | 1 | 11 |
+| Listados de Comercial sin paginar (proformas, comprobantes, pagos de cliente) | 3 | 0 | 11 |
+| Celdas de Comercial que muestran método, tipo de pago o tipo de comprobante como se guardan | 7 | 0 | 11 |
 | Movimientos de stock que no actualizan la alerta de stock (la salida) | 1 | 0 | 11 |
 | Cálculos del IGV con `number` (acción y formulario de compra) | 2 | 0 | 11 |
 | Operaciones que deciden sobre una compra sin bloquearla (pago y anulación) | 2 | 0 | 11 |
@@ -9042,6 +9176,10 @@ Actualizado en la sub-entrega 10.6b (2026-11-02) sobre `e8d77ae`:
 Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de
 `FieldError` en 6; y los cambios de estado que voltean en 2.
+
+Actualizado en la sub-entrega 11.3c (2026-11-12) sobre `b143c28`: pruebas 287 / 5.013; contra
+Postgres siguen 47 en 10 archivos. Filas nuevas, medidas sobre `aa60e5f`: listados de Comercial
+sin paginar de 3 a 0 y celdas que muestran un valor guardado de 7 a 0.
 
 Actualizado en la sub-entrega 11.3b (2026-11-11) sobre `90bb51e`: pruebas 283 / 4.988, de ellas
 47 contra Postgres en 10 archivos. Acciones con clave de operación de 5 a 6 (emitir comprobante).

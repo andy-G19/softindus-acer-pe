@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import type { PaginationParams } from "@/lib/pagination";
 import { buildDateRangeFilter } from "@/lib/search-params";
 
 // Consultas de lectura de la pagina de Comprobantes. No autorizan: la pagina
@@ -51,21 +52,46 @@ function buildReceiptListConditions(filters: ReceiptListFilters) {
   return conditions;
 }
 
-export async function getReceiptList(filters: ReceiptListFilters) {
+// C3 de la 11.3c (D39): solo las columnas que muestra la tabla. Antes traia el cliente y la
+// proforma completos; el enlace a la proforma usa el id que ya guarda el comprobante.
+// C4 de la 11.3c (D38, hallazgo 9 de la 10.4a): pagina con el total contado con el mismo filtro y
+// el id como desempate de los comprobantes del mismo dia.
+export async function getReceiptListData(
+  filters: ReceiptListFilters,
+  { skip, take }: Pick<PaginationParams, "skip" | "take">,
+) {
   const conditions = buildReceiptListConditions(filters);
+  const where: Prisma.comprobante_ventaWhereInput =
+    conditions.length > 0 ? { AND: conditions } : {};
 
-  return prisma.comprobante_venta.findMany({
-    where: conditions.length > 0 ? { AND: conditions } : {},
-    orderBy: {
-      fecha_emision: "desc",
-    },
-    include: {
-      pedido: {
-        include: {
-          cliente: true,
+  const [receipts, totalItems] = await Promise.all([
+    prisma.comprobante_venta.findMany({
+      where,
+      orderBy: [{ fecha_emision: "desc" }, { id_comprobante: "desc" }],
+      skip,
+      take,
+      select: {
+        id_comprobante: true,
+        numero_comprobante: true,
+        id_pedido: true,
+        id_proforma: true,
+        tipo_comprobante: true,
+        fecha_emision: true,
+        monto_total: true,
+        estado: true,
+        pedido: {
+          select: {
+            cliente: {
+              select: {
+                nombre_razon_social: true,
+              },
+            },
+          },
         },
       },
-      proforma: true,
-    },
-  });
+    }),
+    prisma.comprobante_venta.count({ where }),
+  ]);
+
+  return { receipts, totalItems };
 }

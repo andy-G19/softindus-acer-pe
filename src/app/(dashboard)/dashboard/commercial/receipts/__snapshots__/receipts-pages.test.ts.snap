@@ -11,17 +11,35 @@ exports[`/dashboard/commercial/receipts > fechas no validas > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_comprobante": "desc",
+        },
+      ],
+      "select": {
+        "estado": true,
+        "fecha_emision": true,
+        "id_comprobante": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_comprobante": true,
         "pedido": {
-          "include": {
-            "cliente": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
+              },
+            },
           },
         },
-        "proforma": true,
+        "tipo_comprobante": true,
       },
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -33,6 +51,20 @@ exports[`/dashboard/commercial/receipts > fechas no validas > llamadas 1`] = `
       },
     },
     "prisma": "comprobante_venta.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "fecha_emision": {
+              "gte": 2026-03-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "comprobante_venta.count",
   },
 ]
 `;
@@ -133,7 +165,7 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Freceipts%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver proforma</a>
 <button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
@@ -157,6 +189,13 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 comprobantes · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/receipts?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -173,17 +212,35 @@ exports[`/dashboard/commercial/receipts > rango invertido > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_comprobante": "desc",
+        },
+      ],
+      "select": {
+        "estado": true,
+        "fecha_emision": true,
+        "id_comprobante": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_comprobante": true,
         "pedido": {
-          "include": {
-            "cliente": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
+              },
+            },
           },
         },
-        "proforma": true,
+        "tipo_comprobante": true,
       },
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -196,6 +253,21 @@ exports[`/dashboard/commercial/receipts > rango invertido > llamadas 1`] = `
       },
     },
     "prisma": "comprobante_venta.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "fecha_emision": {
+              "gte": 2026-07-31T00:00:00.000Z,
+              "lt": 2026-07-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "comprobante_venta.count",
   },
 ]
 `;
@@ -297,6 +369,13 @@ exports[`/dashboard/commercial/receipts > rango invertido > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 0-0 de 0 comprobantes · Página 1 de 1</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<button data-variant="outline" disabled="">Siguiente</button>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -313,20 +392,44 @@ exports[`/dashboard/commercial/receipts > sin filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_comprobante": "desc",
+        },
+      ],
+      "select": {
+        "estado": true,
+        "fecha_emision": true,
+        "id_comprobante": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_comprobante": true,
         "pedido": {
-          "include": {
-            "cliente": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
+              },
+            },
           },
         },
-        "proforma": true,
+        "tipo_comprobante": true,
       },
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "comprobante_venta.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "comprobante_venta.count",
   },
 ]
 `;
@@ -427,7 +530,7 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Freceipts">Ver proforma</a>
 <button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
@@ -451,6 +554,13 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 comprobantes · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/receipts?page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -467,17 +577,35 @@ exports[`/dashboard/commercial/receipts > todos los filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_comprobante": "desc",
+        },
+      ],
+      "select": {
+        "estado": true,
+        "fecha_emision": true,
+        "id_comprobante": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_comprobante": true,
         "pedido": {
-          "include": {
-            "cliente": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
+              },
+            },
           },
         },
-        "proforma": true,
+        "tipo_comprobante": true,
       },
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -522,6 +650,53 @@ exports[`/dashboard/commercial/receipts > todos los filtros > llamadas 1`] = `
       },
     },
     "prisma": "comprobante_venta.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "numero_comprobante": {
+                  "contains": "B001",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_pedido": {
+                  "contains": "B001",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "pedido": {
+                  "cliente": {
+                    "nombre_razon_social": {
+                      "contains": "B001",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "tipo_comprobante": "boleta",
+          },
+          {
+            "estado": "emitido",
+          },
+          {
+            "fecha_emision": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "comprobante_venta.count",
   },
 ]
 `;
@@ -622,7 +797,7 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Freceipts%3Fq%3DB001%26type%3Dboleta%26status%3Demitido%26from%3D2026-07-01%26to%3D2026-07-31">Ver proforma</a>
 <button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
@@ -646,6 +821,13 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 comprobantes · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/receipts?q=B001&amp;type=boleta&amp;status=emitido&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -662,20 +844,44 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > llamadas 1
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_emision": "desc",
+        },
+        {
+          "id_comprobante": "desc",
+        },
+      ],
+      "select": {
+        "estado": true,
+        "fecha_emision": true,
+        "id_comprobante": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "monto_total": true,
+        "numero_comprobante": true,
         "pedido": {
-          "include": {
-            "cliente": true,
+          "select": {
+            "cliente": {
+              "select": {
+                "nombre_razon_social": true,
+              },
+            },
           },
         },
-        "proforma": true,
+        "tipo_comprobante": true,
       },
-      "orderBy": {
-        "fecha_emision": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "comprobante_venta.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "comprobante_venta.count",
   },
 ]
 `;
@@ -776,7 +982,7 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Freceipts">Ver proforma</a>
 <button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
@@ -793,7 +999,7 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 </td>
 <td>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Freceipts">Ver proforma</a>
 </div>
 </td>
 </tr>
@@ -815,6 +1021,13 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 comprobantes · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/receipts?page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",

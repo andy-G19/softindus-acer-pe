@@ -11,20 +11,40 @@ exports[`/dashboard/commercial/payments > fechas no validas > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_cliente": "desc",
+        },
+      ],
+      "select": {
+        "fecha_pago": true,
+        "id_pago_cliente": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "metodo_pago": true,
+        "monto_pagado": true,
         "proforma": {
-          "include": {
+          "select": {
+            "numero_proforma": true,
             "pedido": {
-              "include": {
-                "cliente": true,
+              "select": {
+                "cliente": {
+                  "select": {
+                    "nombre_razon_social": true,
+                  },
+                },
               },
             },
           },
         },
+        "saldo_actual": true,
+        "tipo_pago": true,
       },
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -36,6 +56,20 @@ exports[`/dashboard/commercial/payments > fechas no validas > llamadas 1`] = `
       },
     },
     "prisma": "pago_cliente.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "fecha_pago": {
+              "gte": 2026-03-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pago_cliente.count",
   },
   {
     "args": {
@@ -117,7 +151,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <div>
 <label for="method">Método</label>
 <select id="method" name="method">
-<option value="" selected="">Método</option>
+<option value="" selected="">Todos los métodos</option>
 <option value="efectivo">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
@@ -128,7 +162,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <div>
 <label for="type">Tipo de pago</label>
 <select id="type" name="type">
-<option value="" selected="">Tipo pago</option>
+<option value="" selected="">Todos los tipos</option>
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
@@ -170,30 +204,37 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <td>1/7/2026</td>
 <td>nombre_razon_social-1</td>
 <td>id_pedido-1</td>
-<td>id_proforma-1</td>
+<td>numero_proforma-1</td>
 <td>tipo_pago-1</td>
 <td>metodo_pago-1</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fpayments%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver proforma</a>
 </td>
 </tr>
 <tr>
 <td>2/7/2026</td>
 <td>nombre_razon_social-2</td>
 <td>id_pedido-2</td>
-<td>id_proforma-2</td>
+<td>numero_proforma-2</td>
 <td>tipo_pago-2</td>
 <td>metodo_pago-2</td>
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fpayments%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver proforma</a>
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/payments?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",
@@ -211,20 +252,40 @@ exports[`/dashboard/commercial/payments > rango invertido > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_cliente": "desc",
+        },
+      ],
+      "select": {
+        "fecha_pago": true,
+        "id_pago_cliente": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "metodo_pago": true,
+        "monto_pagado": true,
         "proforma": {
-          "include": {
+          "select": {
+            "numero_proforma": true,
             "pedido": {
-              "include": {
-                "cliente": true,
+              "select": {
+                "cliente": {
+                  "select": {
+                    "nombre_razon_social": true,
+                  },
+                },
               },
             },
           },
         },
+        "saldo_actual": true,
+        "tipo_pago": true,
       },
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -237,6 +298,21 @@ exports[`/dashboard/commercial/payments > rango invertido > llamadas 1`] = `
       },
     },
     "prisma": "pago_cliente.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "fecha_pago": {
+              "gte": 2026-07-31T00:00:00.000Z,
+              "lt": 2026-07-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pago_cliente.count",
   },
   {
     "args": {
@@ -318,7 +394,7 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 <div>
 <label for="method">Método</label>
 <select id="method" name="method">
-<option value="" selected="">Método</option>
+<option value="" selected="">Todos los métodos</option>
 <option value="efectivo">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
@@ -329,7 +405,7 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 <div>
 <label for="type">Tipo de pago</label>
 <select id="type" name="type">
-<option value="" selected="">Tipo pago</option>
+<option value="" selected="">Todos los tipos</option>
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
@@ -380,6 +456,13 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 </tbody>
 </table>
 </div>
+<div>
+<p>Mostrando 0-0 de 0 pagos · Página 1 de 1</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<button data-variant="outline" disabled="">Siguiente</button>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -396,23 +479,49 @@ exports[`/dashboard/commercial/payments > sin filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_cliente": "desc",
+        },
+      ],
+      "select": {
+        "fecha_pago": true,
+        "id_pago_cliente": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "metodo_pago": true,
+        "monto_pagado": true,
         "proforma": {
-          "include": {
+          "select": {
+            "numero_proforma": true,
             "pedido": {
-              "include": {
-                "cliente": true,
+              "select": {
+                "cliente": {
+                  "select": {
+                    "nombre_razon_social": true,
+                  },
+                },
               },
             },
           },
         },
+        "saldo_actual": true,
+        "tipo_pago": true,
       },
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "pago_cliente.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "pago_cliente.count",
   },
   {
     "args": {
@@ -494,7 +603,7 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <div>
 <label for="method">Método</label>
 <select id="method" name="method">
-<option value="" selected="">Método</option>
+<option value="" selected="">Todos los métodos</option>
 <option value="efectivo">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
@@ -505,7 +614,7 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <div>
 <label for="type">Tipo de pago</label>
 <select id="type" name="type">
-<option value="" selected="">Tipo pago</option>
+<option value="" selected="">Todos los tipos</option>
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
@@ -547,30 +656,37 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <td>1/7/2026</td>
 <td>nombre_razon_social-1</td>
 <td>id_pedido-1</td>
-<td>id_proforma-1</td>
+<td>numero_proforma-1</td>
 <td>tipo_pago-1</td>
 <td>metodo_pago-1</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fpayments">Ver proforma</a>
 </td>
 </tr>
 <tr>
 <td>2/7/2026</td>
 <td>nombre_razon_social-2</td>
 <td>id_pedido-2</td>
-<td>id_proforma-2</td>
+<td>numero_proforma-2</td>
 <td>tipo_pago-2</td>
 <td>metodo_pago-2</td>
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fpayments">Ver proforma</a>
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/payments?page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",
@@ -588,23 +704,49 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > llamadas 1`] 
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_cliente": "desc",
+        },
+      ],
+      "select": {
+        "fecha_pago": true,
+        "id_pago_cliente": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "metodo_pago": true,
+        "monto_pagado": true,
         "proforma": {
-          "include": {
+          "select": {
+            "numero_proforma": true,
             "pedido": {
-              "include": {
-                "cliente": true,
+              "select": {
+                "cliente": {
+                  "select": {
+                    "nombre_razon_social": true,
+                  },
+                },
               },
             },
           },
         },
+        "saldo_actual": true,
+        "tipo_pago": true,
       },
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "pago_cliente.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "pago_cliente.count",
   },
   {
     "args": {
@@ -686,7 +828,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <div>
 <label for="method">Método</label>
 <select id="method" name="method">
-<option value="" selected="">Método</option>
+<option value="" selected="">Todos los métodos</option>
 <option value="efectivo">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
@@ -697,7 +839,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <div>
 <label for="type">Tipo de pago</label>
 <select id="type" name="type">
-<option value="" selected="">Tipo pago</option>
+<option value="" selected="">Todos los tipos</option>
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
@@ -739,43 +881,50 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <td>1/7/2026</td>
 <td>nombre_razon_social-1</td>
 <td>id_pedido-1</td>
-<td>id_proforma-1</td>
-<td>adelanto</td>
-<td>efectivo</td>
+<td>numero_proforma-1</td>
+<td>Adelanto</td>
+<td>Efectivo</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fpayments">Ver proforma</a>
 </td>
 </tr>
 <tr>
 <td>2/7/2026</td>
 <td>nombre_razon_social-2</td>
 <td>id_pedido-2</td>
-<td>id_proforma-2</td>
-<td>amortizacion</td>
-<td>transferencia</td>
+<td>numero_proforma-2</td>
+<td>Amortización</td>
+<td>Transferencia</td>
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fpayments">Ver proforma</a>
 </td>
 </tr>
 <tr>
 <td>1/7/2026</td>
 <td>nombre_razon_social-1</td>
 <td>id_pedido-1</td>
-<td>id_proforma-1</td>
-<td>cancelacion</td>
-<td>yape</td>
+<td>numero_proforma-1</td>
+<td>Cancelación</td>
+<td>Yape</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fpayments">Ver proforma</a>
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/payments?page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",
@@ -793,20 +942,40 @@ exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_pago_cliente": "desc",
+        },
+      ],
+      "select": {
+        "fecha_pago": true,
+        "id_pago_cliente": true,
+        "id_pedido": true,
+        "id_proforma": true,
+        "metodo_pago": true,
+        "monto_pagado": true,
         "proforma": {
-          "include": {
+          "select": {
+            "numero_proforma": true,
             "pedido": {
-              "include": {
-                "cliente": true,
+              "select": {
+                "cliente": {
+                  "select": {
+                    "nombre_razon_social": true,
+                  },
+                },
               },
             },
           },
         },
+        "saldo_actual": true,
+        "tipo_pago": true,
       },
-      "orderBy": {
-        "fecha_pago": "desc",
-      },
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -821,6 +990,14 @@ exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
                 "id_proforma": {
                   "contains": "PRO",
                   "mode": "insensitive",
+                },
+              },
+              {
+                "proforma": {
+                  "numero_proforma": {
+                    "contains": "PRO",
+                    "mode": "insensitive",
+                  },
                 },
               },
               {
@@ -863,6 +1040,73 @@ exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
       },
     },
     "prisma": "pago_cliente.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_pedido": {
+                  "contains": "PRO",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_proforma": {
+                  "contains": "PRO",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "proforma": {
+                  "numero_proforma": {
+                    "contains": "PRO",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+              {
+                "proforma": {
+                  "pedido": {
+                    "cliente": {
+                      "nombre_razon_social": {
+                        "contains": "PRO",
+                        "mode": "insensitive",
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "proforma": {
+              "pedido": {
+                "id_cliente": "CLI00000001",
+              },
+            },
+          },
+          {
+            "id_pedido": "PED00000001",
+          },
+          {
+            "metodo_pago": "efectivo",
+          },
+          {
+            "tipo_pago": "adelanto",
+          },
+          {
+            "fecha_pago": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pago_cliente.count",
   },
   {
     "args": {
@@ -944,7 +1188,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <div>
 <label for="method">Método</label>
 <select id="method" name="method">
-<option value="">Método</option>
+<option value="">Todos los métodos</option>
 <option value="efectivo" selected="">Efectivo</option>
 <option value="transferencia">Transferencia</option>
 <option value="yape">Yape</option>
@@ -955,7 +1199,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <div>
 <label for="type">Tipo de pago</label>
 <select id="type" name="type">
-<option value="">Tipo pago</option>
+<option value="">Todos los tipos</option>
 <option value="adelanto" selected="">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
@@ -997,30 +1241,37 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <td>1/7/2026</td>
 <td>nombre_razon_social-1</td>
 <td>id_pedido-1</td>
-<td>id_proforma-1</td>
+<td>numero_proforma-1</td>
 <td>tipo_pago-1</td>
 <td>metodo_pago-1</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Fpayments%3Fq%3DPRO%26client%3DCLI00000001%26order%3DPED00000001%26method%3Defectivo%26type%3Dadelanto%26from%3D2026-07-01%26to%3D2026-07-31">Ver proforma</a>
 </td>
 </tr>
 <tr>
 <td>2/7/2026</td>
 <td>nombre_razon_social-2</td>
 <td>id_pedido-2</td>
-<td>id_proforma-2</td>
+<td>numero_proforma-2</td>
 <td>tipo_pago-2</td>
 <td>metodo_pago-2</td>
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Fpayments%3Fq%3DPRO%26client%3DCLI00000001%26order%3DPED00000001%26method%3Defectivo%26type%3Dadelanto%26from%3D2026-07-01%26to%3D2026-07-31">Ver proforma</a>
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/payments?q=PRO&amp;client=CLI00000001&amp;order=PED00000001&amp;method=efectivo&amp;type=adelanto&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+</div>
 </div>
 </div>",
   "outcome": "render",

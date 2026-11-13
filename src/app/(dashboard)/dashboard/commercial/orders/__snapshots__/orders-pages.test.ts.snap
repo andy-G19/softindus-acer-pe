@@ -220,7 +220,7 @@ exports[`/dashboard/commercial/orders > fechas no validas > resultado 1`] = `
 <td>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/orders/id_pedido-1?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver detalle</a>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver proforma</a>
 </div>
 </td>
 </tr>
@@ -240,7 +240,7 @@ exports[`/dashboard/commercial/orders > fechas no validas > resultado 1`] = `
 <td>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/orders/id_pedido-2?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver detalle</a>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Ver proforma</a>
 </div>
 </td>
 </tr>
@@ -694,7 +694,7 @@ exports[`/dashboard/commercial/orders > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/orders/id_pedido-1?returnTo=%2Fdashboard%2Fcommercial%2Forders">Ver detalle</a>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Forders">Ver proforma</a>
 </div>
 </td>
 </tr>
@@ -714,7 +714,7 @@ exports[`/dashboard/commercial/orders > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/orders/id_pedido-2?returnTo=%2Fdashboard%2Fcommercial%2Forders">Ver detalle</a>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Forders">Ver proforma</a>
 </div>
 </td>
 </tr>
@@ -1041,7 +1041,7 @@ exports[`/dashboard/commercial/orders > todos los filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/orders/id_pedido-1?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Fq%3DPED%26client%3DCLI00000001%26product%3DPRO00000001%26status%3Daprobado%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Ver detalle</a>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Fq%3DPED%26client%3DCLI00000001%26product%3DPRO00000001%26status%3Daprobado%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Ver proforma</a>
 </div>
 </td>
 </tr>
@@ -1061,7 +1061,7 @@ exports[`/dashboard/commercial/orders > todos los filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/orders/id_pedido-2?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Fq%3DPED%26client%3DCLI00000001%26product%3DPRO00000001%26status%3Daprobado%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Ver detalle</a>
-<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Fq%3DPED%26client%3DCLI00000001%26product%3DPRO00000001%26status%3Daprobado%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Ver proforma</a>
 </div>
 </td>
 </tr>
@@ -1306,7 +1306,7 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <td>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/orders/PED00000012?returnTo=%2Fdashboard%2Fcommercial%2Forders">Ver detalle</a>
-<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000012">Ver proforma</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/PRF00000012?returnTo=%2Fdashboard%2Fcommercial%2Forders">Ver proforma</a>
 </div>
 </td>
 </tr>

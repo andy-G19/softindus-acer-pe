@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import type { PaginationParams } from "@/lib/pagination";
 import { QUOTABLE_ORDER_STATES } from "@/modules/commercial/quotes/quote-rules";
 import { buildDateRangeFilter } from "@/lib/search-params";
 import { findClientFilterOptions } from "@/modules/commercial/clients/queries";
@@ -91,16 +92,31 @@ function buildQuoteListWhere(filters: QuoteListFilters): Prisma.proformaWhereInp
   return conditions.length > 0 ? { AND: conditions } : {};
 }
 
-export async function getQuoteListData(filters: QuoteListFilters) {
+// C3 de la 11.3c (D39): solo las columnas que muestra la tabla. Antes traia el cliente completo
+// y las lineas del pedido con su producto, que el listado no usa.
+// C4 de la 11.3c (D38, hallazgo 9 de la 10.4a): pagina como pagos a proveedores. La fecha es un
+// dia (`@db.Date`), asi que las proformas del mismo dia empatan: el id desempata para que una fila
+// no salte de pagina entre dos consultas.
+export async function getQuoteListData(
+  filters: QuoteListFilters,
+  { skip, take }: Pick<PaginationParams, "skip" | "take">,
+) {
   const where = buildQuoteListWhere(filters);
 
-  const [quotes, clients, orders] = await Promise.all([
+  const [quotes, totalItems, clients, orders] = await Promise.all([
     prisma.proforma.findMany({
       where,
-      orderBy: {
-        fecha_emision: "desc",
-      },
-      include: {
+      orderBy: [{ fecha_emision: "desc" }, { id_proforma: "desc" }],
+      skip,
+      take,
+      select: {
+        id_proforma: true,
+        numero_proforma: true,
+        id_pedido: true,
+        fecha_emision: true,
+        monto_total: true,
+        saldo: true,
+        estado: true,
         pago_cliente: {
           select: {
             id_pago_cliente: true,
@@ -117,22 +133,22 @@ export async function getQuoteListData(filters: QuoteListFilters) {
           },
         },
         pedido: {
-          include: {
-            cliente: true,
-            detalle_pedido: {
-              include: {
-                producto: true,
+          select: {
+            cliente: {
+              select: {
+                nombre_razon_social: true,
               },
             },
           },
         },
       },
     }),
+    prisma.proforma.count({ where }),
     findClientFilterOptions(),
     findOrderFilterOptions(),
   ]);
 
-  return { quotes, clients, orders };
+  return { quotes, totalItems, clients, orders };
 }
 
 // Pedidos registrados o aprobados, con detalle y sin una proforma activa.
