@@ -9,6 +9,19 @@ exports[`createScrapSaleAction > caja cerrada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "venta_chatarra": true,
@@ -21,6 +34,15 @@ exports[`createScrapSaleAction > caja cerrada > llamadas 1`] = `
   },
   {
     "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_caja_chica": true,
@@ -30,6 +52,10 @@ exports[`createScrapSaleAction > caja cerrada > llamadas 1`] = `
       },
     },
     "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": "Solo se puede registrar el ingreso en una caja abierta.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -45,6 +71,19 @@ exports[`createScrapSaleAction > chatarra sin peso ni cantidad y formulario vaci
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "venta_chatarra": true,
@@ -54,6 +93,10 @@ exports[`createScrapSaleAction > chatarra sin peso ni cantidad y formulario vaci
       },
     },
     "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": "Debe registrar peso vendido, cantidad vendida o tener esos datos en la chatarra seleccionada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -69,6 +112,19 @@ exports[`createScrapSaleAction > el peso vendido supera el registrado > llamadas
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "venta_chatarra": true,
@@ -78,6 +134,10 @@ exports[`createScrapSaleAction > el peso vendido supera el registrado > llamadas
       },
     },
     "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": "El peso vendido no puede superar el peso registrado.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -93,6 +153,19 @@ exports[`createScrapSaleAction > la caja no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "venta_chatarra": true,
@@ -105,6 +178,15 @@ exports[`createScrapSaleAction > la caja no existe > llamadas 1`] = `
   },
   {
     "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_caja_chica": true,
@@ -114,6 +196,10 @@ exports[`createScrapSaleAction > la caja no existe > llamadas 1`] = `
       },
     },
     "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": "La caja chica seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -129,6 +215,19 @@ exports[`createScrapSaleAction > la cantidad vendida supera la registrada > llam
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "venta_chatarra": true,
@@ -138,6 +237,10 @@ exports[`createScrapSaleAction > la cantidad vendida supera la registrada > llam
       },
     },
     "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": "La cantidad vendida no puede superar la cantidad registrada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -153,6 +256,19 @@ exports[`createScrapSaleAction > la chatarra no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "venta_chatarra": true,
@@ -162,6 +278,10 @@ exports[`createScrapSaleAction > la chatarra no existe > llamadas 1`] = `
       },
     },
     "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": "El registro de chatarra seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -177,6 +297,19 @@ exports[`createScrapSaleAction > la chatarra ya esta vendida > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "venta_chatarra": true,
@@ -186,6 +319,10 @@ exports[`createScrapSaleAction > la chatarra ya esta vendida > llamadas 1`] = `
       },
     },
     "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": "Esta chatarra ya fue vendida.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -201,6 +338,19 @@ exports[`createScrapSaleAction > la chatarra ya tiene una venta > llamadas 1`] =
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "venta_chatarra": true,
@@ -210,6 +360,10 @@ exports[`createScrapSaleAction > la chatarra ya tiene una venta > llamadas 1`] =
       },
     },
     "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": "Esta chatarra ya tiene una venta registrada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -238,6 +392,19 @@ exports[`createScrapSaleAction > peso y cantidad vacios: toma los de la chatarra
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "venta_chatarra": true,
@@ -250,6 +417,15 @@ exports[`createScrapSaleAction > peso y cantidad vacios: toma los de la chatarra
   },
   {
     "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_caja_chica": true,
@@ -259,10 +435,6 @@ exports[`createScrapSaleAction > peso y cantidad vacios: toma los de la chatarra
       },
     },
     "prisma": "caja_chica.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -433,6 +605,19 @@ exports[`createScrapSaleAction > venta con caja: movimiento de ingreso, saldo, v
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "venta_chatarra": true,
@@ -445,6 +630,15 @@ exports[`createScrapSaleAction > venta con caja: movimiento de ingreso, saldo, v
   },
   {
     "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_caja_chica": true,
@@ -454,10 +648,6 @@ exports[`createScrapSaleAction > venta con caja: movimiento de ingreso, saldo, v
       },
     },
     "prisma": "caja_chica.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -602,6 +792,19 @@ exports[`createScrapSaleAction > venta sin caja: solo la venta y la chatarra ven
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "venta_chatarra": true,
@@ -611,10 +814,6 @@ exports[`createScrapSaleAction > venta sin caja: solo la venta y la chatarra ven
       },
     },
     "prisma": "chatarra.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {

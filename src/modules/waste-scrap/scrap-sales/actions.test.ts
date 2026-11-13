@@ -7,6 +7,9 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
+  isPrismaCall,
+  isRowLock,
   type DataOverrides,
 } from "@/testing/page-characterization";
 
@@ -201,4 +204,57 @@ describe("createScrapSaleAction", () => {
       expect(outcome).toMatchSnapshot("resultado");
     });
   }
+});
+
+// ---------------------------------------------------------------------------
+// C3 de la 11.4b (D48): la venta decide con la chatarra y la caja bloqueadas
+// ---------------------------------------------------------------------------
+
+// Dos envios simultaneos leian la chatarra fuera de la transaccion, los dos la veian sin vender y
+// los dos la vendian: dos ventas y dos ingresos en la caja. Ahora la venta bloquea la chatarra
+// antes de leerla y despues su caja antes de leer su estado, la chatarra primero y la caja al
+// final (D44 de la 11.4a). PGlite no prueba la espera: aqui se fija el orden.
+describe("C3 de la 11.4b: la venta bloquea la chatarra y despues la caja", () => {
+  it.each([
+    ["una venta con caja", {}],
+    ["una venta con el peso por encima del registrado", { peso_vendido_kg: "15.01" }],
+  ])("%s bloquea la chatarra antes de leerla", async (_name, changes) => {
+    const { calls } = await runAction({ name: "C3", form: form(changes) });
+
+    expectRowLockedBefore(calls, {
+      table: "chatarra",
+      id: "CHA00000004",
+      reads: (call) => call.prisma === "chatarra.findUnique",
+    });
+  });
+
+  it("bloquea la caja antes de leerla, despues de la chatarra", async () => {
+    const { calls } = await runAction({ name: "C3", form: form() });
+
+    expectRowLockedBefore(calls, {
+      table: "caja_chica",
+      id: "CAJ00000002",
+      reads: (call) => call.prisma === "caja_chica.findUnique",
+    });
+    expect(
+      calls.findIndex((call) => isRowLock(call, "chatarra", "CHA00000004")),
+      "la chatarra se bloquea antes que la caja",
+    ).toBeLessThan(calls.findIndex((call) => isRowLock(call, "caja_chica", "CAJ00000002")));
+  });
+
+  it("una venta sin caja no bloquea ninguna caja", async () => {
+    const { calls } = await runAction({ name: "C3", form: form({ id_caja_chica: "" }) });
+
+    expectRowLockedBefore(calls, {
+      table: "chatarra",
+      id: "CHA00000004",
+      reads: (call) => call.prisma === "chatarra.findUnique",
+    });
+    // Ningun SELECT ... FROM aceros.caja_chica: sin caja no hay fila que bloquear.
+    const boxLocks = calls.filter(
+      (call) => isPrismaCall(call) && call.prisma === "$queryRaw" && String((call.args as { sql: string }).sql).includes("aceros.caja_chica"),
+    );
+
+    expect(boxLocks).toEqual([]);
+  });
 });

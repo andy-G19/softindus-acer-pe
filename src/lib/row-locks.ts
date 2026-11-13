@@ -163,6 +163,17 @@ export async function lockCashMovementRow(tx: RowLockClient, idMovimientoCaja: s
   `);
 }
 
+// Venta de chatarra (C3 de la 11.4b, D48): la chatarra se bloquea antes de leerla, y despues su
+// caja (lockCashBoxRow), que va al final como en toda la 11.4.
+export async function lockScrapRow(tx: RowLockClient, idChatarra: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_chatarra
+    FROM aceros.chatarra
+    WHERE id_chatarra = ${idChatarra}
+    FOR NO KEY UPDATE
+  `);
+}
+
 export async function lockPurchaseRow(tx: RowLockClient, idCompra: string) {
   await tx.$queryRaw(Prisma.sql`
     SELECT id_compra

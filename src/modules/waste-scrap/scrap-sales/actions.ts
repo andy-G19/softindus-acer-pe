@@ -8,6 +8,7 @@ import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { formatCents, toCents } from "@/lib/decimal-cents";
 import { roundCashAmount } from "@/lib/petty-cash-amounts";
+import { lockCashBoxRow, lockScrapRow } from "@/lib/row-locks";
 import { scrapSaleSchema } from "@/schemas/waste-scrap/scrap-sale.schema";
 
 async function requireAdmin() {
@@ -43,86 +44,95 @@ export async function createScrapSaleAction(formData: FormData) {
 
   const data = parsedData.data;
 
-  const scrap = await prisma.chatarra.findUnique({
-    where: {
-      id_chatarra: data.id_chatarra,
-    },
-    include: {
-      venta_chatarra: true,
-    },
-  });
-
-  if (!scrap) {
-    throw new Error("El registro de chatarra seleccionado no existe.");
-  }
-
-  if (scrap.estado === "vendida") {
-    throw new Error("Esta chatarra ya fue vendida.");
-  }
-
-  if (scrap.venta_chatarra.length > 0) {
-    throw new Error("Esta chatarra ya tiene una venta registrada.");
-  }
-
-  // C2 de la 11.4b (D48): el peso y la cantidad escritos se redondean como sus columnas
-  // numeric(10, 2) antes de compararlos con lo registrado y de guardarlos; los que se dejan vacios
-  // toman los de la chatarra, como antes.
-  const pesoEscrito =
-    data.peso_vendido_kg !== undefined ? formatCents(hundredths(data.peso_vendido_kg)) : undefined;
-  const cantidadEscrita =
-    data.cantidad_vendida !== undefined ? formatCents(hundredths(data.cantidad_vendida)) : undefined;
-
-  const pesoVendido = pesoEscrito ?? scrap.peso_kg;
-  const cantidadVendida = cantidadEscrita ?? scrap.cantidad;
-
-  if (!pesoVendido && !cantidadVendida) {
-    throw new Error(
-      "Debe registrar peso vendido, cantidad vendida o tener esos datos en la chatarra seleccionada.",
-    );
-  }
-
-  if (pesoEscrito && scrap.peso_kg && hundredths(scrap.peso_kg) > 0n) {
-    if (hundredths(pesoEscrito) > hundredths(scrap.peso_kg)) {
-      throw new Error("El peso vendido no puede superar el peso registrado.");
-    }
-  }
-
-  if (cantidadEscrita && scrap.cantidad && hundredths(scrap.cantidad) > 0n) {
-    if (hundredths(cantidadEscrita) > hundredths(scrap.cantidad)) {
-      throw new Error(
-        "La cantidad vendida no puede superar la cantidad registrada.",
-      );
-    }
-  }
-
-  let selectedCashBox: { id_caja_chica: string; estado: string } | null = null;
-
-  if (data.id_caja_chica) {
-    selectedCashBox = await prisma.caja_chica.findUnique({
-      where: {
-        id_caja_chica: data.id_caja_chica,
-      },
-      select: {
-        id_caja_chica: true,
-        estado: true,
-      },
-    });
-
-    if (!selectedCashBox) {
-      throw new Error("La caja chica seleccionada no existe.");
-    }
-
-    if (selectedCashBox.estado !== "abierta") {
-      throw new Error("Solo se puede registrar el ingreso en una caja abierta.");
-    }
-  }
-
   const fechaVenta = new Date(`${data.fecha_venta}T00:00:00`);
   // C2 de la 11.4b (D48): el monto redondeado como las columnas; el mismo texto va a la venta, al
   // movimiento y al aumento del saldo.
   const montoRecibido = roundCashAmount(data.monto_recibido);
 
   await prisma.$transaction(async (tx) => {
+    // C3 de la 11.4b (D48): la chatarra se bloquea antes de leerla y despues su caja antes de leer
+    // su estado; la chatarra primero y la caja al final. Dos envios simultaneos leian la chatarra
+    // fuera de la transaccion, los dos la veian sin vender y los dos la vendian: ahora el segundo
+    // espera al primero y ve la venta. Un rechazo lanza dentro de la transaccion, que no escribio
+    // nada.
+    await lockScrapRow(tx, data.id_chatarra);
+
+    const scrap = await tx.chatarra.findUnique({
+      where: {
+        id_chatarra: data.id_chatarra,
+      },
+      include: {
+        venta_chatarra: true,
+      },
+    });
+
+    if (!scrap) {
+      throw new Error("El registro de chatarra seleccionado no existe.");
+    }
+
+    if (scrap.estado === "vendida") {
+      throw new Error("Esta chatarra ya fue vendida.");
+    }
+
+    if (scrap.venta_chatarra.length > 0) {
+      throw new Error("Esta chatarra ya tiene una venta registrada.");
+    }
+
+    // C2 de la 11.4b (D48): el peso y la cantidad escritos se redondean como sus columnas
+    // numeric(10, 2) antes de compararlos con lo registrado y de guardarlos; los que se dejan vacios
+    // toman los de la chatarra, como antes.
+    const pesoEscrito =
+      data.peso_vendido_kg !== undefined ? formatCents(hundredths(data.peso_vendido_kg)) : undefined;
+    const cantidadEscrita =
+      data.cantidad_vendida !== undefined ? formatCents(hundredths(data.cantidad_vendida)) : undefined;
+
+    const pesoVendido = pesoEscrito ?? scrap.peso_kg;
+    const cantidadVendida = cantidadEscrita ?? scrap.cantidad;
+
+    if (!pesoVendido && !cantidadVendida) {
+      throw new Error(
+        "Debe registrar peso vendido, cantidad vendida o tener esos datos en la chatarra seleccionada.",
+      );
+    }
+
+    if (pesoEscrito && scrap.peso_kg && hundredths(scrap.peso_kg) > 0n) {
+      if (hundredths(pesoEscrito) > hundredths(scrap.peso_kg)) {
+        throw new Error("El peso vendido no puede superar el peso registrado.");
+      }
+    }
+
+    if (cantidadEscrita && scrap.cantidad && hundredths(scrap.cantidad) > 0n) {
+      if (hundredths(cantidadEscrita) > hundredths(scrap.cantidad)) {
+        throw new Error(
+          "La cantidad vendida no puede superar la cantidad registrada.",
+        );
+      }
+    }
+
+    let selectedCashBox: { id_caja_chica: string; estado: string } | null = null;
+
+    if (data.id_caja_chica) {
+      await lockCashBoxRow(tx, data.id_caja_chica);
+
+      selectedCashBox = await tx.caja_chica.findUnique({
+        where: {
+          id_caja_chica: data.id_caja_chica,
+        },
+        select: {
+          id_caja_chica: true,
+          estado: true,
+        },
+      });
+
+      if (!selectedCashBox) {
+        throw new Error("La caja chica seleccionada no existe.");
+      }
+
+      if (selectedCashBox.estado !== "abierta") {
+        throw new Error("Solo se puede registrar el ingreso en una caja abierta.");
+      }
+    }
+
     const idVentaChatarra = await getNextCorrelativeId(tx, {
       codigoEntidad: "venta_chatarra",
       prefijo: "VCH",
