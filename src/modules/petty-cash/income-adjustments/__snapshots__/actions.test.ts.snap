@@ -1,0 +1,549 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createPettyCashIncomeAdjustmentAction > ajuste negativo por todo el saldo: descuenta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_caja",
+      "prefijo": "MCA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "comprobante": null,
+        "concepto": "Ajuste negativo: Faltante de arqueo",
+        "fecha_movimiento": 2026-11-10T00:00:00.000Z,
+        "id_caja_chica": "CAJ00000002",
+        "id_movimiento_caja": "MCA00000001",
+        "id_usuario_registro": "USU00000001",
+        "monto": 100,
+        "observaciones": "Dirección del ajuste: disminución.",
+        "responsable": "Usuario de prueba",
+        "tipo_movimiento": "ajuste",
+      },
+    },
+    "prisma": "movimiento_caja.create",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "decrement": 100,
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Movimiento de caja registrado: Ajuste negativo: Faltante de arqueo.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/income-adjustments/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPettyCashIncomeAdjustmentAction > ajuste negativo por todo el saldo: descuenta > resultado 1`] = `"redirect:/dashboard/petty-cash?toast=petty-cash-income-registered"`;
+
+exports[`createPettyCashIncomeAdjustmentAction > ajuste negativo que supera el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+]
+`;
+
+exports[`createPettyCashIncomeAdjustmentAction > ajuste negativo que supera el saldo > resultado 1`] = `"error: El ajuste negativo supera el saldo disponible de la caja. Saldo actual: S/ 100.00."`;
+
+exports[`createPettyCashIncomeAdjustmentAction > ajuste positivo: tipo ajuste, concepto y observacion con su direccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_caja",
+      "prefijo": "MCA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "comprobante": null,
+        "concepto": "Ajuste positivo: Sobrante de arqueo",
+        "fecha_movimiento": 2026-11-10T00:00:00.000Z,
+        "id_caja_chica": "CAJ00000002",
+        "id_movimiento_caja": "MCA00000001",
+        "id_usuario_registro": "USU00000001",
+        "monto": 60.5,
+        "observaciones": "Dirección del ajuste: incremento. conteo",
+        "responsable": "Usuario de prueba",
+        "tipo_movimiento": "ajuste",
+      },
+    },
+    "prisma": "movimiento_caja.create",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "increment": 60.5,
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Movimiento de caja registrado: Ajuste positivo: Sobrante de arqueo.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/income-adjustments/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPettyCashIncomeAdjustmentAction > ajuste positivo: tipo ajuste, concepto y observacion con su direccion > resultado 1`] = `"redirect:/dashboard/petty-cash?toast=petty-cash-income-registered"`;
+
+exports[`createPettyCashIncomeAdjustmentAction > caja cerrada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+]
+`;
+
+exports[`createPettyCashIncomeAdjustmentAction > caja cerrada > resultado 1`] = `"error: Solo se pueden registrar movimientos en cajas abiertas."`;
+
+exports[`createPettyCashIncomeAdjustmentAction > ingreso: crea el movimiento y aumenta el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_caja",
+      "prefijo": "MCA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "comprobante": null,
+        "concepto": "Reposicion de caja",
+        "fecha_movimiento": 2026-11-10T00:00:00.000Z,
+        "id_caja_chica": "CAJ00000002",
+        "id_movimiento_caja": "MCA00000001",
+        "id_usuario_registro": "USU00000001",
+        "monto": 60.5,
+        "observaciones": null,
+        "responsable": "Usuario de prueba",
+        "tipo_movimiento": "ingreso",
+      },
+    },
+    "prisma": "movimiento_caja.create",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "increment": 60.5,
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Movimiento de caja registrado: Reposicion de caja.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/income-adjustments/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPettyCashIncomeAdjustmentAction > ingreso: crea el movimiento y aumenta el saldo > resultado 1`] = `"redirect:/dashboard/petty-cash?toast=petty-cash-income-registered"`;
+
+exports[`createPettyCashIncomeAdjustmentAction > la caja no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+]
+`;
+
+exports[`createPettyCashIncomeAdjustmentAction > la caja no existe > resultado 1`] = `"error: La caja chica seleccionada no existe."`;
+
+exports[`createPettyCashIncomeAdjustmentAction > monto cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPettyCashIncomeAdjustmentAction > monto cero > resultado 1`] = `"error: El monto debe ser mayor a cero."`;
+
+exports[`createPettyCashIncomeAdjustmentAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPettyCashIncomeAdjustmentAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createPettyCashIncomeAdjustmentAction > tipo de operacion invalido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPettyCashIncomeAdjustmentAction > tipo de operacion invalido > resultado 1`] = `"error: Debe seleccionar un tipo de operación válido."`;
+
+exports[`createPettyCashIncomeAdjustmentAction > un ingreso no mira el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_caja",
+      "prefijo": "MCA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "comprobante": null,
+        "concepto": "Reposicion de caja",
+        "fecha_movimiento": 2026-11-10T00:00:00.000Z,
+        "id_caja_chica": "CAJ00000002",
+        "id_movimiento_caja": "MCA00000001",
+        "id_usuario_registro": "USU00000001",
+        "monto": 500,
+        "observaciones": null,
+        "responsable": "Usuario de prueba",
+        "tipo_movimiento": "ingreso",
+      },
+    },
+    "prisma": "movimiento_caja.create",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "increment": 500,
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Movimiento de caja registrado: Reposicion de caja.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/income-adjustments/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPettyCashIncomeAdjustmentAction > un ingreso no mira el saldo > resultado 1`] = `"redirect:/dashboard/petty-cash?toast=petty-cash-income-registered"`;

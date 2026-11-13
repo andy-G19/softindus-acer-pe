@@ -1,0 +1,456 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createPettyCashExpenseAction > caja cerrada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > caja cerrada > resultado 1`] = `"error: Solo se pueden registrar egresos en cajas abiertas."`;
+
+exports[`createPettyCashExpenseAction > categoria inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000003",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > categoria inactiva > resultado 1`] = `"error: No se puede usar una categoría de gasto inactiva."`;
+
+exports[`createPettyCashExpenseAction > concepto corto y sin caja > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > concepto corto y sin caja > resultado 1`] = `"error: Debe seleccionar una caja chica. El concepto debe tener al menos 3 caracteres."`;
+
+exports[`createPettyCashExpenseAction > egreso por todo el saldo, con comprobante, responsable y observaciones > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000003",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_caja",
+      "prefijo": "MCA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "comprobante": "B001-77",
+        "concepto": "Taxi a proveedor",
+        "fecha_movimiento": 2026-11-10T00:00:00.000Z,
+        "id_caja_chica": "CAJ00000002",
+        "id_categoria_gasto": "CGA00000003",
+        "id_movimiento_caja": "MCA00000001",
+        "id_usuario_registro": "USU00000001",
+        "monto": 100,
+        "observaciones": "pagado",
+        "responsable": "Luis",
+        "tipo_movimiento": "egreso",
+      },
+    },
+    "prisma": "movimiento_caja.create",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "decrement": 100,
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Egreso de caja registrado: Taxi a proveedor.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/expenses/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > egreso por todo el saldo, con comprobante, responsable y observaciones > resultado 1`] = `"redirect:/dashboard/petty-cash?toast=petty-cash-expense-registered"`;
+
+exports[`createPettyCashExpenseAction > egreso valido: crea el movimiento y descuenta el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000003",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_caja",
+      "prefijo": "MCA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "comprobante": null,
+        "concepto": "Taxi a proveedor",
+        "fecha_movimiento": 2026-11-10T00:00:00.000Z,
+        "id_caja_chica": "CAJ00000002",
+        "id_categoria_gasto": "CGA00000003",
+        "id_movimiento_caja": "MCA00000001",
+        "id_usuario_registro": "USU00000001",
+        "monto": 40.25,
+        "observaciones": null,
+        "responsable": "Usuario de prueba",
+        "tipo_movimiento": "egreso",
+      },
+    },
+    "prisma": "movimiento_caja.create",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "decrement": 40.25,
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Egreso de caja registrado: Taxi a proveedor.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/expenses/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > egreso valido: crea el movimiento y descuenta el saldo > resultado 1`] = `"redirect:/dashboard/petty-cash?toast=petty-cash-expense-registered"`;
+
+exports[`createPettyCashExpenseAction > el egreso supera el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > el egreso supera el saldo > resultado 1`] = `"error: El egreso supera el saldo disponible de la caja. Saldo actual: S/ 100.00."`;
+
+exports[`createPettyCashExpenseAction > la caja no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > la caja no existe > resultado 1`] = `"error: La caja chica seleccionada no existe."`;
+
+exports[`createPettyCashExpenseAction > la categoria no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000003",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > la categoria no existe > resultado 1`] = `"error: La categoría seleccionada no existe."`;
+
+exports[`createPettyCashExpenseAction > monto cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > monto cero > resultado 1`] = `"error: El monto debe ser mayor a cero."`;
+
+exports[`createPettyCashExpenseAction > monto que no es numero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > monto que no es numero > resultado 1`] = `"error: El monto debe ser un número válido."`;
+
+exports[`createPettyCashExpenseAction > sin permiso: el vendedor > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > sin permiso: el vendedor > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
