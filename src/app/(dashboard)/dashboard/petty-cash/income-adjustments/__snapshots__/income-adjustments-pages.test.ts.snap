@@ -49,7 +49,7 @@ exports[`/dashboard/petty-cash/income-adjustments/new > formulario > llamadas 1`
 
 exports[`/dashboard/petty-cash/income-adjustments/new > formulario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -133,48 +133,57 @@ exports[`/dashboard/petty-cash/income-adjustments/new > formulario > resultado 1
 </div>
 <div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
 <div>
-<label for="id_caja_chica">Caja chica</label>
-<select id="id_caja_chica" name="id_caja_chica" required="">
-<option value="">Selecciona una caja</option>
+<label for="id_caja_chica">Caja chica<span aria-hidden="true">*</span>
+</label>
+<select id="id_caja_chica" required="" name="id_caja_chica">
+<option value="" selected="">Selecciona una caja</option>
 <option value="id_caja_chica-1">nombre_caja-1 · Saldo: S/ 11.50</option>
 <option value="id_caja_chica-2">nombre_caja-2 · Saldo: S/ 22.50</option>
 </select>
 </div>
 <div>
-<label for="tipo_operacion">Tipo de operación</label>
-<select id="tipo_operacion" name="tipo_operacion" required="">
+<label for="tipo_operacion">Tipo de operación<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_operacion" required="" name="tipo_operacion">
 <option value="ingreso" selected="">Ingreso menor — aumenta saldo</option>
 <option value="ajuste_incremento">Ajuste positivo — aumenta saldo</option>
 <option value="ajuste_disminucion">Ajuste negativo — disminuye saldo</option>
 </select>
 </div>
 <div>
-<label for="concepto">Concepto</label>
-<input type="text" id="concepto" required="" placeholder="Ejemplo: Devolución de vuelto no usado" name="concepto"/>
+<label for="concepto">Concepto<span aria-hidden="true">*</span>
+</label>
+<input type="text" id="concepto" required="" placeholder="Ejemplo: Devolución de vuelto no usado" name="concepto" value=""/>
 </div>
 <div>
-<label for="monto">Monto</label>
-<input type="number" id="monto" min="0.01" step="0.01" required="" placeholder="Ejemplo: 20.00" name="monto"/>
+<label for="monto">Monto<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="monto" required="" min="0.01" step="0.01" placeholder="Ejemplo: 20.00" name="monto" value=""/>
 </div>
 <div>
-<label for="fecha_movimiento">Fecha del movimiento</label>
+<label for="fecha_movimiento">Fecha del movimiento<span aria-hidden="true">*</span>
+</label>
 <input type="date" id="fecha_movimiento" required="" name="fecha_movimiento" value="2026-07-15"/>
 </div>
 <div>
 <label for="comprobante">Comprobante o referencia</label>
-<input type="text" id="comprobante" placeholder="Ejemplo: Ref. interna AJ-001" name="comprobante"/>
+<input type="text" id="comprobante" placeholder="Ejemplo: Ref. interna AJ-001" name="comprobante" value=""/>
 </div>
 <div>
 <label for="responsable">Responsable</label>
-<input type="text" id="responsable" placeholder="Ejemplo: Administrador" name="responsable"/>
+<input type="text" id="responsable" placeholder="Ejemplo: Administrador" name="responsable" value=""/>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
 <textarea id="observaciones" name="observaciones" rows="4" placeholder="Detalle adicional del ingreso o ajuste.">
 </textarea>
 </div>
+<div>
 <button data-variant="default" type="submit">Registrar movimiento</button>
+<a data-variant="outline" href="/dashboard/petty-cash">Cancelar</a>
+</div>
 </form>
 </div>
 </div>
@@ -214,7 +223,7 @@ exports[`/dashboard/petty-cash/income-adjustments/new > formulario > resultado 1
 </div>
 </div>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

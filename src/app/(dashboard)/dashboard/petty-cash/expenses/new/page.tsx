@@ -9,22 +9,28 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
-import { NativeSelect } from "@/components/ui/native-select";
-import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
 import { formatMoney } from "@/lib/formatters";
 import { toNumber } from "@/lib/numbers";
 import { createPettyCashExpenseAction } from "@/modules/petty-cash/expenses/actions";
+import { PettyCashExpenseForm } from "@/modules/petty-cash/expenses/expense-form";
 import { getNewPettyCashExpenseData } from "@/modules/petty-cash/expenses/queries";
+import { pettyCashNotifications } from "@/modules/petty-cash/notifications";
 
-export default async function NewPettyCashExpensePage() {
+type NewPettyCashExpensePageProps = {
+  searchParams?: Promise<{ returnTo?: string | string[] }>;
+};
+
+export default async function NewPettyCashExpensePage({ searchParams }: NewPettyCashExpensePageProps) {
   await requireRole([APP_ROLES.ADMIN]);
+
+  // C5 de la 11.4a (D46): al guardar o cancelar vuelve a la pagina de la que vino; sin ella, al
+  // inicio de caja chica, como antes.
+  const backHref = getSafeReturnTo((await searchParams)?.returnTo, navigationHrefs.pettyCash);
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -36,11 +42,11 @@ export default async function NewPettyCashExpensePage() {
   }, 0);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Registrar egreso de caja chica"
         description="Registra gastos menores del taller, descuenta automáticamente el saldo de la caja seleccionada y conserva la trazabilidad del responsable, concepto, categoría, fecha y comprobante."
-        backHref={navigationHrefs.pettyCash}
+        backHref={backHref}
         backLabel="Volver al módulo"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Caja chica", href: navigationHrefs.pettyCash },
@@ -87,101 +93,21 @@ export default async function NewPettyCashExpensePage() {
                 }
               />
             ) : (
-              <form action={createPettyCashExpenseAction} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="id_caja_chica">Caja chica</Label>
-                  <NativeSelect id="id_caja_chica" name="id_caja_chica" required>
-                    <option value="">Selecciona una caja</option>
-                    {openBoxes.map((box) => (
-                      <option key={box.id_caja_chica} value={box.id_caja_chica}>
-                        {box.nombre_caja} · Saldo: {formatMoney(box.saldo_actual)}
-                      </option>
-                    ))}
-                  </NativeSelect>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="id_categoria_gasto">Categoría de gasto</Label>
-                  <NativeSelect id="id_categoria_gasto" name="id_categoria_gasto" required>
-                    <option value="">Selecciona una categoría</option>
-                    {activeCategories.map((category) => (
-                      <option
-                        key={category.id_categoria_gasto}
-                        value={category.id_categoria_gasto}
-                      >
-                        {category.nombre_categoria}
-                      </option>
-                    ))}
-                  </NativeSelect>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="concepto">Concepto</Label>
-                  <Input
-                    id="concepto"
-                    name="concepto"
-                    type="text"
-                    required
-                    placeholder="Ejemplo: Compra de discos de corte"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="monto">Monto del egreso</Label>
-                  <Input
-                    id="monto"
-                    name="monto"
-                    type="number"
-                    min="0.01"
-                    step="0.01"
-                    required
-                    placeholder="Ejemplo: 35.50"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="fecha_movimiento">Fecha del egreso</Label>
-                  <Input
-                    id="fecha_movimiento"
-                    name="fecha_movimiento"
-                    type="date"
-                    required
-                    defaultValue={today}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="comprobante">Comprobante</Label>
-                  <Input
-                    id="comprobante"
-                    name="comprobante"
-                    type="text"
-                    placeholder="Ejemplo: Boleta B001-45"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="responsable">Responsable</Label>
-                  <Input
-                    id="responsable"
-                    name="responsable"
-                    type="text"
-                    placeholder="Ejemplo: Administrador"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="observaciones">Observaciones</Label>
-                  <Textarea
-                    id="observaciones"
-                    name="observaciones"
-                    rows={4}
-                    placeholder="Detalle adicional del gasto."
-                  />
-                </div>
-
-                <Button type="submit">Registrar egreso</Button>
-              </form>
+              <PettyCashExpenseForm
+                action={createPettyCashExpenseAction}
+                boxes={openBoxes.map((box) => ({
+                  id_caja_chica: box.id_caja_chica,
+                  nombre_caja: box.nombre_caja,
+                  saldo_actual: box.saldo_actual.toString(),
+                }))}
+                categories={activeCategories.map((category) => ({
+                  id_categoria_gasto: category.id_categoria_gasto,
+                  nombre_categoria: category.nombre_categoria,
+                }))}
+                defaultDate={today}
+                successNotification={pettyCashNotifications["petty-cash-expense-registered"]}
+                returnTo={backHref}
+              />
             )}
           </CardContent>
         </Card>
@@ -225,6 +151,6 @@ export default async function NewPettyCashExpensePage() {
           </CardContent>
         </Card>
       </section>
-    </main>
+    </div>
   );
 }

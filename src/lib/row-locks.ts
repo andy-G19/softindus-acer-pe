@@ -141,6 +141,28 @@ export async function lockQuoteRow(tx: RowLockClient, idProforma: string) {
   `);
 }
 
+// Caja chica (C3 de la 11.4a, D44): el egreso, el ingreso o ajuste y anular un movimiento bloquean
+// la caja antes de leer su saldo. Una operacion que toma otra fila de la 11.4 (el movimiento que
+// anula; en la 11.4b, la chatarra que vende) la bloquea primero: la caja va siempre al final,
+// porque es el padre que todas comparten.
+export async function lockCashBoxRow(tx: RowLockClient, idCajaChica: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_caja_chica
+    FROM aceros.caja_chica
+    WHERE id_caja_chica = ${idCajaChica}
+    FOR NO KEY UPDATE
+  `);
+}
+
+export async function lockCashMovementRow(tx: RowLockClient, idMovimientoCaja: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_movimiento_caja
+    FROM aceros.movimiento_caja
+    WHERE id_movimiento_caja = ${idMovimientoCaja}
+    FOR NO KEY UPDATE
+  `);
+}
+
 export async function lockPurchaseRow(tx: RowLockClient, idCompra: string) {
   await tx.$queryRaw(Prisma.sql`
     SELECT id_compra

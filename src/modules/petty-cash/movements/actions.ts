@@ -1,66 +1,105 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { toNumber } from "@/lib/numbers";
-
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
+import { APP_ROLES } from "@/lib/permissions";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
+import { lockCashBoxRow, lockCashMovementRow } from "@/lib/row-locks";
+import { isNegativeCashMovement } from "@/modules/petty-cash/movements/movement-direction";
 
 function normalizeText(value: FormDataEntryValue | null) {
   return value ? String(value).trim() : "";
 }
 
-function isNegativeMovement(type: string, concept: string) {
-  return type === "egreso" || concept.startsWith("Ajuste negativo");
-}
-
-export async function annulPettyCashMovementAction(formData: FormData) {
-  const session = await requireAdmin();
-
+// C8 de la 11.4a (D47): anular se confirma con ConfirmActionButton y la accion devuelve
+// RowStatusState, como anular proforma. Antes lanzaba a la pagina de error; ahora el rechazo (ya
+// anulado, caja cerrada, saldo insuficiente, ingreso de una venta de chatarra) queda en la
+// confirmacion, y sin permiso responde con un error. La anulacion sigue siendo la marca
+// [ANULADO] con el monto en 0, como en costos indirectos.
+export async function annulPettyCashMovementAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
   const idMovimientoCaja = normalizeText(formData.get("id_movimiento_caja"));
 
-  if (!idMovimientoCaja) {
-    throw new Error("Debe seleccionar un movimiento de caja valido.");
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return rowStatusError(idMovimientoCaja, "No tienes permisos para anular movimientos de caja chica.");
   }
 
-  await prisma.$transaction(async (tx) => {
+  if (!idMovimientoCaja) {
+    return rowStatusError(idMovimientoCaja, "Debe seleccionar un movimiento de caja valido.");
+  }
+
+  // Sin clave de operacion, un rechazo se devuelve desde la transaccion antes de escribir nada.
+  const rejection = await prisma.$transaction(async (tx) => {
+    // C3 de la 11.4a (D44): el movimiento se bloquea antes de leerlo y despues su caja antes de
+    // leer el saldo; el movimiento primero y la caja al final. Dos anulaciones simultaneas leian
+    // la marca [ANULADO] sin bloquear: las dos la veian ausente y las dos devolvian el monto.
+    // Ahora la segunda espera a la primera y ve la marca.
+    await lockCashMovementRow(tx, idMovimientoCaja);
+
     const movement = await tx.movimiento_caja.findUnique({
       where: {
         id_movimiento_caja: idMovimientoCaja,
       },
-      include: {
-        caja_chica: true,
+      select: {
+        id_movimiento_caja: true,
+        id_caja_chica: true,
+        tipo_movimiento: true,
+        concepto: true,
+        monto: true,
+        observaciones: true,
+        venta_chatarra: {
+          select: { id_venta_chatarra: true },
+          orderBy: { id_venta_chatarra: "asc" },
+        },
       },
     });
 
     if (!movement) {
-      throw new Error("El movimiento de caja seleccionado no existe.");
+      return "El movimiento de caja seleccionado no existe.";
     }
 
     if (movement.observaciones?.includes("[ANULADO]")) {
-      throw new Error("No se puede anular un movimiento ya anulado.");
+      return "No se puede anular un movimiento ya anulado.";
     }
 
-    if (movement.caja_chica.estado !== "abierta") {
-      throw new Error("Solo se pueden anular movimientos de cajas abiertas.");
+    // C4 de la 11.4a (D45): el ingreso de una venta de chatarra no se anula desde caja chica.
+    // Anularlo devolvia el dinero y dejaba la venta registrada y la chatarra vendida.
+    if (movement.venta_chatarra.length > 0) {
+      return `Este ingreso es de la venta de chatarra ${movement.venta_chatarra[0].id_venta_chatarra}; no se anula desde caja chica.`;
+    }
+
+    await lockCashBoxRow(tx, movement.id_caja_chica);
+
+    const cashBox = await tx.caja_chica.findUnique({
+      where: {
+        id_caja_chica: movement.id_caja_chica,
+      },
+      select: {
+        saldo_actual: true,
+        estado: true,
+      },
+    });
+
+    if (!cashBox || cashBox.estado !== "abierta") {
+      return "Solo se pueden anular movimientos de cajas abiertas.";
     }
 
     const amount = toNumber(movement.monto);
-    const wasNegativeMovement = isNegativeMovement(
+    const wasNegativeMovement = isNegativeCashMovement(
       movement.tipo_movimiento,
       movement.concepto,
     );
 
-    if (!wasNegativeMovement && toNumber(movement.caja_chica.saldo_actual) < amount) {
-      throw new Error(
-        "No se puede anular el ingreso porque la caja no tiene saldo suficiente para revertirlo.",
-      );
+    if (!wasNegativeMovement && toNumber(cashBox.saldo_actual) < amount) {
+      return "No se puede anular el ingreso porque la caja no tiene saldo suficiente para revertirlo.";
     }
 
     const revertBalance = wasNegativeMovement
@@ -101,7 +140,14 @@ export async function annulPettyCashMovementAction(formData: FormData) {
       detalle: `Movimiento de caja anulado: ${movement.concepto}.`,
       tx,
     });
+
+    return null;
   });
+
+  // Un rechazo no revalida: el repintado quitaria el boton y su mensaje con el.
+  if (rejection) {
+    return rowStatusError(idMovimientoCaja, rejection);
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/petty-cash");
@@ -109,5 +155,5 @@ export async function annulPettyCashMovementAction(formData: FormData) {
   revalidatePath("/dashboard/petty-cash/monthly-summary");
   revalidatePath("/dashboard/petty-cash/boxes");
 
-  redirect("/dashboard/petty-cash/movements?toast=petty-cash-movement-annulled");
+  return rowStatusDone(idMovimientoCaja, "anulado");
 }

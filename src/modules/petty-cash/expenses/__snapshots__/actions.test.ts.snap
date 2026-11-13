@@ -1,0 +1,1113 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createPettyCashExpenseAction > caja cerrada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_egreso_caja",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": "Solo se pueden registrar egresos en cajas abiertas.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > caja cerrada > resultado 1`] = `
+{
+  "error": "Solo se pueden registrar egresos en cajas abiertas.",
+  "fieldErrors": {
+    "id_caja_chica": [
+      "Solo se pueden registrar egresos en cajas abiertas.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "comprobante": "",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "40.25",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > categoria inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_egreso_caja",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000003",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": "No se puede usar una categoría de gasto inactiva.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > categoria inactiva > resultado 1`] = `
+{
+  "error": "No se puede usar una categoría de gasto inactiva.",
+  "fieldErrors": {
+    "id_categoria_gasto": [
+      "No se puede usar una categoría de gasto inactiva.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "comprobante": "",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "40.25",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > concepto corto y sin caja > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > concepto corto y sin caja > resultado 1`] = `
+{
+  "error": "Revisa los datos del egreso.",
+  "fieldErrors": {
+    "concepto": [
+      "El concepto debe tener al menos 3 caracteres.",
+    ],
+    "id_caja_chica": [
+      "Debe seleccionar una caja chica.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "comprobante": "",
+    "concepto": "ab",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "40.25",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > egreso por todo el saldo, con comprobante, responsable y observaciones > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_egreso_caja",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000003",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_caja",
+      "prefijo": "MCA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "comprobante": "B001-77",
+        "concepto": "Taxi a proveedor",
+        "fecha_movimiento": 2026-11-10T00:00:00.000Z,
+        "id_caja_chica": "CAJ00000002",
+        "id_categoria_gasto": "CGA00000003",
+        "id_movimiento_caja": "MCA00000001",
+        "id_usuario_registro": "USU00000001",
+        "monto": "100.00",
+        "observaciones": "pagado",
+        "responsable": "Luis",
+        "tipo_movimiento": "egreso",
+      },
+    },
+    "prisma": "movimiento_caja.create",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "decrement": "100.00",
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Egreso de caja registrado: Taxi a proveedor.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "MCA00000001",
+      },
+      "where": {
+        "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/expenses/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > egreso por todo el saldo, con comprobante, responsable y observaciones > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+    "id_movimiento_caja": "MCA00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "comprobante": " B001-77 ",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "100",
+    "observaciones": " pagado ",
+    "responsable": " Luis ",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > egreso valido: crea el movimiento y descuenta el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_egreso_caja",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000003",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_caja",
+      "prefijo": "MCA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "comprobante": null,
+        "concepto": "Taxi a proveedor",
+        "fecha_movimiento": 2026-11-10T00:00:00.000Z,
+        "id_caja_chica": "CAJ00000002",
+        "id_categoria_gasto": "CGA00000003",
+        "id_movimiento_caja": "MCA00000001",
+        "id_usuario_registro": "USU00000001",
+        "monto": "40.25",
+        "observaciones": null,
+        "responsable": "Usuario de prueba",
+        "tipo_movimiento": "egreso",
+      },
+    },
+    "prisma": "movimiento_caja.create",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "decrement": "40.25",
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Egreso de caja registrado: Taxi a proveedor.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "MCA00000001",
+      },
+      "where": {
+        "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/expenses/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > egreso valido: crea el movimiento y descuenta el saldo > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+    "id_movimiento_caja": "MCA00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "comprobante": "",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "40.25",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > el egreso supera el saldo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_egreso_caja",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": "El egreso supera el saldo disponible de la caja. Saldo actual: S/ 100.00.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > el egreso supera el saldo > resultado 1`] = `
+{
+  "error": "El egreso supera el saldo disponible de la caja. Saldo actual: S/ 100.00.",
+  "fieldErrors": {
+    "monto": [
+      "El egreso supera el saldo disponible de la caja. Saldo actual: S/ 100.00.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "comprobante": "",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "100.25",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > la caja no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_egreso_caja",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": "La caja chica seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > la caja no existe > resultado 1`] = `
+{
+  "error": "La caja chica seleccionada no existe.",
+  "fieldErrors": {
+    "id_caja_chica": [
+      "La caja chica seleccionada no existe.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "comprobante": "",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "40.25",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > la categoria no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_egreso_caja",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000003",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": "La categoría seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > la categoria no existe > resultado 1`] = `
+{
+  "error": "La categoría seleccionada no existe.",
+  "fieldErrors": {
+    "id_categoria_gasto": [
+      "La categoría seleccionada no existe.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "comprobante": "",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "40.25",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > la clave es de otra operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_egreso_caja",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > la clave es de otra operacion > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "comprobante": "",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "40.25",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > la misma clave ya registrada: responde con el egreso guardado sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "registrar_egreso_caja",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/expenses/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > la misma clave ya registrada: responde con el egreso guardado sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "5f0c2b7e-8d41-4c3a-9b6e-1a2b3c4d5e6f",
+    "id_movimiento_caja": "MCA00000009",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "comprobante": "",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "40.25",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > monto cero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > monto cero > resultado 1`] = `
+{
+  "error": "Revisa los datos del egreso.",
+  "fieldErrors": {
+    "monto": [
+      "El monto debe ser mayor a cero.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "comprobante": "",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "0",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > monto que no es numero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > monto que no es numero > resultado 1`] = `
+{
+  "error": "Revisa los datos del egreso.",
+  "fieldErrors": {
+    "monto": [
+      "El monto debe ser un número válido.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "comprobante": "",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "abc",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "comprobante": "",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "40.25",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;
+
+exports[`createPettyCashExpenseAction > sin permiso: el vendedor > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPettyCashExpenseAction > sin permiso: el vendedor > resultado 1`] = `
+{
+  "error": "No tienes permisos para registrar egresos de caja chica.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "comprobante": "",
+    "concepto": "Taxi a proveedor",
+    "fecha_movimiento": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_categoria_gasto": "CGA00000003",
+    "monto": "40.25",
+    "observaciones": "",
+    "responsable": "",
+  },
+}
+`;

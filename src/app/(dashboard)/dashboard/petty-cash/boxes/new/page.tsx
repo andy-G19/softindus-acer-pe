@@ -1,32 +1,37 @@
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createPettyCashBoxAction } from "@/modules/petty-cash/boxes/actions";
+import { PettyCashBoxForm } from "@/modules/petty-cash/boxes/box-form";
+import { pettyCashNotifications } from "@/modules/petty-cash/notifications";
 
-export default async function NewPettyCashBoxPage() {
+type NewPettyCashBoxPageProps = {
+  searchParams?: Promise<{ returnTo?: string | string[] }>;
+};
+
+export default async function NewPettyCashBoxPage({ searchParams }: NewPettyCashBoxPageProps) {
   await requireRole([APP_ROLES.ADMIN]);
+
+  // C7 de la 11.4a (D46): al guardar o cancelar vuelve a la pagina de la que vino; sin ella, al
+  // listado de cajas, como antes.
+  const backHref = getSafeReturnTo((await searchParams)?.returnTo, navigationHrefs.pettyCashBoxes);
 
   const today = new Date().toISOString().split("T")[0];
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Abrir caja chica"
         description="Registra una nueva caja chica indicando nombre, saldo inicial, fecha de apertura, responsable y observaciones."
-        backHref={navigationHrefs.pettyCashBoxes}
+        backHref={backHref}
         backLabel="Volver a cajas"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Caja chica", href: navigationHrefs.pettyCash },
@@ -43,69 +48,12 @@ export default async function NewPettyCashBoxPage() {
           </CardHeader>
 
           <CardContent>
-            <form action={createPettyCashBoxAction} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="nombre_caja">Nombre de la caja</Label>
-                <Input
-                  id="nombre_caja"
-                  name="nombre_caja"
-                  type="text"
-                  required
-                  placeholder="Ejemplo: Caja chica principal"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="saldo_inicial">Saldo inicial</Label>
-                <Input
-                  id="saldo_inicial"
-                  name="saldo_inicial"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  required
-                  placeholder="Ejemplo: 200.00"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="fecha_apertura">Fecha de apertura</Label>
-                <Input
-                  id="fecha_apertura"
-                  name="fecha_apertura"
-                  type="date"
-                  required
-                  defaultValue={today}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="responsable">Responsable</Label>
-                <Input
-                  id="responsable"
-                  name="responsable"
-                  type="text"
-                  placeholder="Ejemplo: Administrador"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="observaciones">Observaciones</Label>
-                <Textarea
-                  id="observaciones"
-                  name="observaciones"
-                  rows={4}
-                  placeholder="Observaciones sobre la apertura de caja."
-                />
-              </div>
-
-              <div className="flex flex-col gap-2 sm:flex-row">
-                <Button type="submit">Abrir caja chica</Button>
-                <Button variant="outline" asChild>
-                  <Link href="/dashboard/petty-cash/boxes">Ver listado</Link>
-                </Button>
-              </div>
-            </form>
+            <PettyCashBoxForm
+              action={createPettyCashBoxAction}
+              defaultDate={today}
+              successNotification={pettyCashNotifications["petty-cash-box-created"]}
+              returnTo={backHref}
+            />
           </CardContent>
         </Card>
 
@@ -132,6 +80,6 @@ export default async function NewPettyCashBoxPage() {
           </CardContent>
         </Card>
       </section>
-    </main>
+    </div>
   );
 }

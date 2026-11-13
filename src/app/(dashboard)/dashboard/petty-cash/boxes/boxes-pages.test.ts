@@ -26,4 +26,15 @@ definePageSuite([
       { name: "listado" },
     ],
   },
+  // C7 de la 11.4a: la pagina para abrir caja no tenia caracterizacion. Fija el formulario con
+  // resultado (PettyCashBoxForm) y la vuelta: al listado de cajas, o al returnTo valido.
+  {
+    route: "/dashboard/petty-cash/boxes/new",
+    load: () => import("./new/page"),
+    cases: [
+      { name: "formulario" },
+      { name: "desde caja chica: vuelve a ella", searchParams: { returnTo: "/dashboard/petty-cash" } },
+      { name: "un returnTo externo se ignora", searchParams: { returnTo: "https://example.com/boxes" } },
+    ],
+  },
 ]);

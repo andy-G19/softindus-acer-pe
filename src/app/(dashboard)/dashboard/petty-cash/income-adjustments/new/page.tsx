@@ -9,19 +9,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
-import { NativeSelect } from "@/components/ui/native-select";
-import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { toNumber } from "@/lib/numbers";
 import { createPettyCashIncomeAdjustmentAction } from "@/modules/petty-cash/income-adjustments/actions";
+import { PettyCashIncomeAdjustmentForm } from "@/modules/petty-cash/income-adjustments/income-adjustment-form";
 import { getNewPettyCashIncomeAdjustmentData } from "@/modules/petty-cash/income-adjustments/queries";
+import { pettyCashNotifications } from "@/modules/petty-cash/notifications";
 import Link from "next/link";
 
 function getMovementLabel(type: string, concept: string) {
@@ -48,8 +46,18 @@ function getMovementBadgeVariant(type: string, concept: string) {
   return "secondary" as const;
 }
 
-export default async function NewPettyCashIncomeAdjustmentPage() {
+type NewPettyCashIncomeAdjustmentPageProps = {
+  searchParams?: Promise<{ returnTo?: string | string[] }>;
+};
+
+export default async function NewPettyCashIncomeAdjustmentPage({
+  searchParams,
+}: NewPettyCashIncomeAdjustmentPageProps) {
   await requireRole([APP_ROLES.ADMIN]);
+
+  // C6 de la 11.4a (D46): al guardar o cancelar vuelve a la pagina de la que vino; sin ella, al
+  // inicio de caja chica, como antes.
+  const backHref = getSafeReturnTo((await searchParams)?.returnTo, navigationHrefs.pettyCash);
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -71,11 +79,11 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
   });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Registrar ingresos menores y ajustes"
         description="Registra ingresos menores del taller o ajustes de caja chica para corregir diferencias de saldo, manteniendo trazabilidad de fecha, responsable, concepto, monto y observaciones."
-        backHref={navigationHrefs.pettyCash}
+        backHref={backHref}
         backLabel="Volver al módulo"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Caja chica", href: navigationHrefs.pettyCash },
@@ -112,109 +120,17 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
                 }
               />
             ) : (
-              <form
+              <PettyCashIncomeAdjustmentForm
                 action={createPettyCashIncomeAdjustmentAction}
-                className="space-y-4"
-              >
-                <div className="space-y-2">
-                  <Label htmlFor="id_caja_chica">Caja chica</Label>
-                  <NativeSelect id="id_caja_chica" name="id_caja_chica" required>
-                    <option value="">Selecciona una caja</option>
-                    {openBoxes.map((box) => (
-                      <option key={box.id_caja_chica} value={box.id_caja_chica}>
-                        {box.nombre_caja} · Saldo: {formatMoney(box.saldo_actual)}
-                      </option>
-                    ))}
-                  </NativeSelect>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="tipo_operacion">Tipo de operación</Label>
-                  <NativeSelect
-                    id="tipo_operacion"
-                    name="tipo_operacion"
-                    required
-                    defaultValue="ingreso"
-                  >
-                    <option value="ingreso">
-                      Ingreso menor — aumenta saldo
-                    </option>
-                    <option value="ajuste_incremento">
-                      Ajuste positivo — aumenta saldo
-                    </option>
-                    <option value="ajuste_disminucion">
-                      Ajuste negativo — disminuye saldo
-                    </option>
-                  </NativeSelect>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="concepto">Concepto</Label>
-                  <Input
-                    id="concepto"
-                    name="concepto"
-                    type="text"
-                    required
-                    placeholder="Ejemplo: Devolución de vuelto no usado"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="monto">Monto</Label>
-                  <Input
-                    id="monto"
-                    name="monto"
-                    type="number"
-                    min="0.01"
-                    step="0.01"
-                    required
-                    placeholder="Ejemplo: 20.00"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="fecha_movimiento">Fecha del movimiento</Label>
-                  <Input
-                    id="fecha_movimiento"
-                    name="fecha_movimiento"
-                    type="date"
-                    required
-                    defaultValue={today}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="comprobante">Comprobante o referencia</Label>
-                  <Input
-                    id="comprobante"
-                    name="comprobante"
-                    type="text"
-                    placeholder="Ejemplo: Ref. interna AJ-001"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="responsable">Responsable</Label>
-                  <Input
-                    id="responsable"
-                    name="responsable"
-                    type="text"
-                    placeholder="Ejemplo: Administrador"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="observaciones">Observaciones</Label>
-                  <Textarea
-                    id="observaciones"
-                    name="observaciones"
-                    rows={4}
-                    placeholder="Detalle adicional del ingreso o ajuste."
-                  />
-                </div>
-
-                <Button type="submit">Registrar movimiento</Button>
-              </form>
+                boxes={openBoxes.map((box) => ({
+                  id_caja_chica: box.id_caja_chica,
+                  nombre_caja: box.nombre_caja,
+                  saldo_actual: box.saldo_actual.toString(),
+                }))}
+                defaultDate={today}
+                successNotification={pettyCashNotifications["petty-cash-income-registered"]}
+                returnTo={backHref}
+              />
             )}
           </CardContent>
         </Card>
@@ -281,6 +197,6 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
           </CardContent>
         </Card>
       </section>
-    </main>
+    </div>
   );
 }

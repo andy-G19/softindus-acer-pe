@@ -1,0 +1,908 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`annulPettyCashMovementAction > anular un ajuste negativo: lo trata como egreso > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
+      },
+      "where": {
+        "id_movimiento_caja": "MCA00000009",
+      },
+    },
+    "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "monto": 0,
+        "observaciones": "[ANULADO] 2026-07-15T15:00:00.000Z - Monto original: S/ 40.25.",
+      },
+      "where": {
+        "id_movimiento_caja": "MCA00000009",
+      },
+    },
+    "prisma": "movimiento_caja.update",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "increment": 40.25,
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Movimiento de caja anulado: Ajuste negativo: Faltante.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000009",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulPettyCashMovementAction > anular un ajuste negativo: lo trata como egreso > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
+
+exports[`annulPettyCashMovementAction > anular un ajuste positivo: lo trata como ingreso > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
+      },
+      "where": {
+        "id_movimiento_caja": "MCA00000009",
+      },
+    },
+    "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "monto": 0,
+        "observaciones": "[ANULADO] 2026-07-15T15:00:00.000Z - Monto original: S/ 40.25.",
+      },
+      "where": {
+        "id_movimiento_caja": "MCA00000009",
+      },
+    },
+    "prisma": "movimiento_caja.update",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "decrement": 40.25,
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Movimiento de caja anulado: Ajuste positivo: Sobrante.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000009",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulPettyCashMovementAction > anular un ajuste positivo: lo trata como ingreso > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
+
+exports[`annulPettyCashMovementAction > anular un egreso: marca el movimiento y devuelve el monto > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
+      },
+      "where": {
+        "id_movimiento_caja": "MCA00000009",
+      },
+    },
+    "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "monto": 0,
+        "observaciones": "[ANULADO] 2026-07-15T15:00:00.000Z - Monto original: S/ 40.25.",
+      },
+      "where": {
+        "id_movimiento_caja": "MCA00000009",
+      },
+    },
+    "prisma": "movimiento_caja.update",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "increment": 40.25,
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Movimiento de caja anulado: Taxi a proveedor.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000009",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulPettyCashMovementAction > anular un egreso: marca el movimiento y devuelve el monto > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
+
+exports[`annulPettyCashMovementAction > anular un ingreso con saldo suficiente: descuenta el monto y conserva la observacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
+      },
+      "where": {
+        "id_movimiento_caja": "MCA00000009",
+      },
+    },
+    "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "monto": 0,
+        "observaciones": "deposito
+[ANULADO] 2026-07-15T15:00:00.000Z - Monto original: S/ 40.25.",
+      },
+      "where": {
+        "id_movimiento_caja": "MCA00000009",
+      },
+    },
+    "prisma": "movimiento_caja.update",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "decrement": 40.25,
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Movimiento de caja anulado: Reposicion.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000009",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/boxes",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulPettyCashMovementAction > anular un ingreso con saldo suficiente: descuenta el monto y conserva la observacion > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
+
+exports[`annulPettyCashMovementAction > anular un ingreso sin saldo suficiente > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
+      },
+      "where": {
+        "id_movimiento_caja": "MCA00000009",
+      },
+    },
+    "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`annulPettyCashMovementAction > anular un ingreso sin saldo suficiente > resultado 1`] = `
+{
+  "error": "No se puede anular el ingreso porque la caja no tiene saldo suficiente para revertirlo.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
+
+exports[`annulPettyCashMovementAction > caja cerrada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
+      },
+      "where": {
+        "id_movimiento_caja": "MCA00000009",
+      },
+    },
+    "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`annulPettyCashMovementAction > caja cerrada > resultado 1`] = `
+{
+  "error": "Solo se pueden anular movimientos de cajas abiertas.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
+
+exports[`annulPettyCashMovementAction > el movimiento no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
+      },
+      "where": {
+        "id_movimiento_caja": "MCA00000009",
+      },
+    },
+    "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`annulPettyCashMovementAction > el movimiento no existe > resultado 1`] = `
+{
+  "error": "El movimiento de caja seleccionado no existe.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
+
+exports[`annulPettyCashMovementAction > sin movimiento en el formulario > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`annulPettyCashMovementAction > sin movimiento en el formulario > resultado 1`] = `
+{
+  "error": "Debe seleccionar un movimiento de caja valido.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "",
+  },
+}
+`;
+
+exports[`annulPettyCashMovementAction > sin permiso: el vendedor > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`annulPettyCashMovementAction > sin permiso: el vendedor > resultado 1`] = `
+{
+  "error": "No tienes permisos para anular movimientos de caja chica.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
+
+exports[`annulPettyCashMovementAction > ya estaba anulado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
+      },
+      "where": {
+        "id_movimiento_caja": "MCA00000009",
+      },
+    },
+    "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`annulPettyCashMovementAction > ya estaba anulado > resultado 1`] = `
+{
+  "error": "No se puede anular un movimiento ya anulado.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;

@@ -198,6 +198,8 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/petty-cash/boxes/actions"),
     roles: SOLO_ADMIN,
     acciones: ["createPettyCashBoxAction"],
+    // C7 de la 11.4a: abrir caja responde a un rol denegado con un error en el formulario.
+    rechazanConResultado: ["createPettyCashBoxAction"],
   },
   {
     ruta: "petty-cash/categories/actions",
@@ -219,18 +221,24 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/petty-cash/expenses/actions"),
     roles: SOLO_ADMIN,
     acciones: ["createPettyCashExpenseAction"],
+    // C5 de la 11.4a: el egreso responde a un rol denegado con un error en el formulario.
+    rechazanConResultado: ["createPettyCashExpenseAction"],
   },
   {
     ruta: "petty-cash/income-adjustments/actions",
     cargar: () => import("@/modules/petty-cash/income-adjustments/actions"),
     roles: SOLO_ADMIN,
     acciones: ["createPettyCashIncomeAdjustmentAction"],
+    // C6 de la 11.4a: el ingreso o ajuste responde a un rol denegado con un error en el formulario.
+    rechazanConResultado: ["createPettyCashIncomeAdjustmentAction"],
   },
   {
     ruta: "petty-cash/movements/actions",
     cargar: () => import("@/modules/petty-cash/movements/actions"),
     roles: SOLO_ADMIN,
     acciones: ["annulPettyCashMovementAction"],
+    // C8 de la 11.4a: anular responde a un rol denegado con un error en la confirmacion.
+    rechazanConResultado: ["annulPettyCashMovementAction"],
   },
   {
     ruta: "production/campaigns/actions",

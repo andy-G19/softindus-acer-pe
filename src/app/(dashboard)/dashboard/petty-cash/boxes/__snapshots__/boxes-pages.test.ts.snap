@@ -185,3 +185,318 @@ exports[`/dashboard/petty-cash/boxes > listado > resultado 1`] = `
   "outcome": "render",
 }
 `;
+
+exports[`/dashboard/petty-cash/boxes/new > desde caja chica: vuelve a ella > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/boxes/new > desde caja chica: vuelve a ella > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash/boxes">Cajas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva caja</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Abrir caja chica</h1>
+<p>Registra una nueva caja chica indicando nombre, saldo inicial, fecha de apertura, responsable y observaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a cajas">
+<svg/>Volver a cajas</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos de apertura</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_caja">Nombre de la caja<span aria-hidden="true">*</span>
+</label>
+<input type="text" id="nombre_caja" required="" placeholder="Ejemplo: Caja chica principal" name="nombre_caja" value=""/>
+</div>
+<div>
+<label for="saldo_inicial">Saldo inicial<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="saldo_inicial" required="" min="0" step="0.01" placeholder="Ejemplo: 200.00" name="saldo_inicial" value=""/>
+</div>
+<div>
+<label for="fecha_apertura">Fecha de apertura<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_apertura" required="" name="fecha_apertura" value="2026-07-15"/>
+</div>
+<div>
+<label for="responsable">Responsable</label>
+<input type="text" id="responsable" placeholder="Ejemplo: Administrador" name="responsable" value=""/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Observaciones sobre la apertura de caja.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Abrir caja chica</button>
+<a data-variant="outline" href="/dashboard/petty-cash">Cancelar</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Recomendación</div>
+</div>
+<div>
+<p>Usa una caja principal para los gastos menores diarios del taller.</p>
+<p>El saldo inicial será también el saldo actual al momento de crear la caja.</p>
+<p>Más adelante, los ingresos y egresos modificarán automáticamente el saldo actual.</p>
+</div>
+</div>
+</section>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/petty-cash/boxes/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/boxes/new > formulario > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash/boxes">Cajas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva caja</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Abrir caja chica</h1>
+<p>Registra una nueva caja chica indicando nombre, saldo inicial, fecha de apertura, responsable y observaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a cajas">
+<svg/>Volver a cajas</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos de apertura</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_caja">Nombre de la caja<span aria-hidden="true">*</span>
+</label>
+<input type="text" id="nombre_caja" required="" placeholder="Ejemplo: Caja chica principal" name="nombre_caja" value=""/>
+</div>
+<div>
+<label for="saldo_inicial">Saldo inicial<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="saldo_inicial" required="" min="0" step="0.01" placeholder="Ejemplo: 200.00" name="saldo_inicial" value=""/>
+</div>
+<div>
+<label for="fecha_apertura">Fecha de apertura<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_apertura" required="" name="fecha_apertura" value="2026-07-15"/>
+</div>
+<div>
+<label for="responsable">Responsable</label>
+<input type="text" id="responsable" placeholder="Ejemplo: Administrador" name="responsable" value=""/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Observaciones sobre la apertura de caja.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Abrir caja chica</button>
+<a data-variant="outline" href="/dashboard/petty-cash/boxes">Cancelar</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Recomendación</div>
+</div>
+<div>
+<p>Usa una caja principal para los gastos menores diarios del taller.</p>
+<p>El saldo inicial será también el saldo actual al momento de crear la caja.</p>
+<p>Más adelante, los ingresos y egresos modificarán automáticamente el saldo actual.</p>
+</div>
+</div>
+</section>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/petty-cash/boxes/new > un returnTo externo se ignora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/boxes/new > un returnTo externo se ignora > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash/boxes">Cajas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva caja</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Abrir caja chica</h1>
+<p>Registra una nueva caja chica indicando nombre, saldo inicial, fecha de apertura, responsable y observaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a cajas">
+<svg/>Volver a cajas</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos de apertura</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_caja">Nombre de la caja<span aria-hidden="true">*</span>
+</label>
+<input type="text" id="nombre_caja" required="" placeholder="Ejemplo: Caja chica principal" name="nombre_caja" value=""/>
+</div>
+<div>
+<label for="saldo_inicial">Saldo inicial<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="saldo_inicial" required="" min="0" step="0.01" placeholder="Ejemplo: 200.00" name="saldo_inicial" value=""/>
+</div>
+<div>
+<label for="fecha_apertura">Fecha de apertura<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_apertura" required="" name="fecha_apertura" value="2026-07-15"/>
+</div>
+<div>
+<label for="responsable">Responsable</label>
+<input type="text" id="responsable" placeholder="Ejemplo: Administrador" name="responsable" value=""/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Observaciones sobre la apertura de caja.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Abrir caja chica</button>
+<a data-variant="outline" href="/dashboard/petty-cash/boxes">Cancelar</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Recomendación</div>
+</div>
+<div>
+<p>Usa una caja principal para los gastos menores diarios del taller.</p>
+<p>El saldo inicial será también el saldo actual al momento de crear la caja.</p>
+<p>Más adelante, los ingresos y egresos modificarán automáticamente el saldo actual.</p>
+</div>
+</div>
+</section>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
