@@ -286,7 +286,7 @@ exports[`createScrapSaleAction > peso y cantidad vacios: toma los de la chatarra
         "id_caja_chica": "CAJ00000002",
         "id_movimiento_caja": "MCA00000001",
         "id_usuario_registro": "USU00000001",
-        "monto": 80.25,
+        "monto": "80.25",
         "observaciones": "Ingreso generado por venta de chatarra.",
         "responsable": "Usuario de prueba",
         "tipo_movimiento": "ingreso",
@@ -298,7 +298,7 @@ exports[`createScrapSaleAction > peso y cantidad vacios: toma los de la chatarra
     "args": {
       "data": {
         "saldo_actual": {
-          "increment": 80.25,
+          "increment": "80.25",
         },
       },
       "where": {
@@ -328,7 +328,7 @@ exports[`createScrapSaleAction > peso y cantidad vacios: toma los de la chatarra
         "id_movimiento_caja": "MCA00000001",
         "id_usuario_registro": "USU00000001",
         "id_venta_chatarra": "VCH00000001",
-        "monto_recibido": 80.25,
+        "monto_recibido": "80.25",
         "observaciones": null,
         "peso_vendido_kg": Decimal(15),
       },
@@ -481,7 +481,7 @@ exports[`createScrapSaleAction > venta con caja: movimiento de ingreso, saldo, v
         "id_caja_chica": "CAJ00000002",
         "id_movimiento_caja": "MCA00000001",
         "id_usuario_registro": "USU00000001",
-        "monto": 80.25,
+        "monto": "80.25",
         "observaciones": "Ingreso generado por venta de chatarra.",
         "responsable": "Usuario de prueba",
         "tipo_movimiento": "ingreso",
@@ -493,7 +493,7 @@ exports[`createScrapSaleAction > venta con caja: movimiento de ingreso, saldo, v
     "args": {
       "data": {
         "saldo_actual": {
-          "increment": 80.25,
+          "increment": "80.25",
         },
       },
       "where": {
@@ -523,9 +523,9 @@ exports[`createScrapSaleAction > venta con caja: movimiento de ingreso, saldo, v
         "id_movimiento_caja": "MCA00000001",
         "id_usuario_registro": "USU00000001",
         "id_venta_chatarra": "VCH00000001",
-        "monto_recibido": 80.25,
+        "monto_recibido": "80.25",
         "observaciones": null,
-        "peso_vendido_kg": 12.5,
+        "peso_vendido_kg": "12.50",
       },
     },
     "prisma": "venta_chatarra.create",
@@ -633,9 +633,9 @@ exports[`createScrapSaleAction > venta sin caja: solo la venta y la chatarra ven
         "id_movimiento_caja": null,
         "id_usuario_registro": "USU00000001",
         "id_venta_chatarra": "VCH00000001",
-        "monto_recibido": 80.25,
+        "monto_recibido": "80.25",
         "observaciones": "reciclador",
-        "peso_vendido_kg": 12.5,
+        "peso_vendido_kg": "12.50",
       },
     },
     "prisma": "venta_chatarra.create",

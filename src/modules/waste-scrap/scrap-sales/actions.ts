@@ -6,11 +6,17 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { toNumber } from "@/lib/numbers";
+import { formatCents, toCents } from "@/lib/decimal-cents";
+import { roundCashAmount } from "@/lib/petty-cash-amounts";
 import { scrapSaleSchema } from "@/schemas/waste-scrap/scrap-sale.schema";
 
 async function requireAdmin() {
   return requireRole(["ADMIN"]);
+}
+
+/** Centesimos de un peso o una cantidad, redondeados como su columna numeric(10, 2). */
+function hundredths(value: { toString(): string }) {
+  return toCents(value.toString()) ?? 0n;
 }
 
 export async function createScrapSaleAction(formData: FormData) {
@@ -58,11 +64,16 @@ export async function createScrapSaleAction(formData: FormData) {
     throw new Error("Esta chatarra ya tiene una venta registrada.");
   }
 
-  const pesoDisponible = toNumber(scrap.peso_kg);
-  const cantidadDisponible = toNumber(scrap.cantidad);
+  // C2 de la 11.4b (D48): el peso y la cantidad escritos se redondean como sus columnas
+  // numeric(10, 2) antes de compararlos con lo registrado y de guardarlos; los que se dejan vacios
+  // toman los de la chatarra, como antes.
+  const pesoEscrito =
+    data.peso_vendido_kg !== undefined ? formatCents(hundredths(data.peso_vendido_kg)) : undefined;
+  const cantidadEscrita =
+    data.cantidad_vendida !== undefined ? formatCents(hundredths(data.cantidad_vendida)) : undefined;
 
-  const pesoVendido = data.peso_vendido_kg ?? scrap.peso_kg;
-  const cantidadVendida = data.cantidad_vendida ?? scrap.cantidad;
+  const pesoVendido = pesoEscrito ?? scrap.peso_kg;
+  const cantidadVendida = cantidadEscrita ?? scrap.cantidad;
 
   if (!pesoVendido && !cantidadVendida) {
     throw new Error(
@@ -70,14 +81,14 @@ export async function createScrapSaleAction(formData: FormData) {
     );
   }
 
-  if (data.peso_vendido_kg && pesoDisponible > 0) {
-    if (data.peso_vendido_kg > pesoDisponible) {
+  if (pesoEscrito && scrap.peso_kg && hundredths(scrap.peso_kg) > 0n) {
+    if (hundredths(pesoEscrito) > hundredths(scrap.peso_kg)) {
       throw new Error("El peso vendido no puede superar el peso registrado.");
     }
   }
 
-  if (data.cantidad_vendida && cantidadDisponible > 0) {
-    if (data.cantidad_vendida > cantidadDisponible) {
+  if (cantidadEscrita && scrap.cantidad && hundredths(scrap.cantidad) > 0n) {
+    if (hundredths(cantidadEscrita) > hundredths(scrap.cantidad)) {
       throw new Error(
         "La cantidad vendida no puede superar la cantidad registrada.",
       );
@@ -107,6 +118,9 @@ export async function createScrapSaleAction(formData: FormData) {
   }
 
   const fechaVenta = new Date(`${data.fecha_venta}T00:00:00`);
+  // C2 de la 11.4b (D48): el monto redondeado como las columnas; el mismo texto va a la venta, al
+  // movimiento y al aumento del saldo.
+  const montoRecibido = roundCashAmount(data.monto_recibido);
 
   await prisma.$transaction(async (tx) => {
     const idVentaChatarra = await getNextCorrelativeId(tx, {
@@ -129,7 +143,7 @@ export async function createScrapSaleAction(formData: FormData) {
           id_usuario_registro: session.user.id,
           tipo_movimiento: "ingreso",
           concepto: `Venta de chatarra ${scrap.id_chatarra}`,
-          monto: data.monto_recibido,
+          monto: montoRecibido,
           fecha_movimiento: fechaVenta,
           responsable: session.user.name ?? "Administrador",
           observaciones:
@@ -144,7 +158,7 @@ export async function createScrapSaleAction(formData: FormData) {
         },
         data: {
           saldo_actual: {
-            increment: data.monto_recibido,
+            increment: montoRecibido,
           },
         },
       });
@@ -169,7 +183,7 @@ export async function createScrapSaleAction(formData: FormData) {
         fecha_venta: fechaVenta,
         cantidad_vendida: cantidadVendida ?? null,
         peso_vendido_kg: pesoVendido ?? null,
-        monto_recibido: data.monto_recibido,
+        monto_recibido: montoRecibido,
         destino_dinero: data.destino_dinero,
         id_usuario_registro: session.user.id,
         observaciones: data.observaciones,
