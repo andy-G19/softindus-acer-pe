@@ -20,12 +20,21 @@ import {
 // atomica del saldo (un egreso o un ajuste negativo devuelven el monto; un ingreso o un ajuste
 // positivo lo descuentan), la bitacora, las revalidaciones y el resultado. La fecha de la marca
 // sale del reloj fijo del arnes.
+//
+// C8 de la 11.4a (D47): la accion devuelve RowStatusState en lugar de redirigir o lanzar; un
+// rechazo se devuelve desde la transaccion antes de escribir y no revalida. Los casos de C1 quedan
+// con el mismo nombre; su resultado es ahora el estado de la fila.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio: se fija para que el snapshot sea estable.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -100,9 +109,7 @@ async function runAction(actionCase: ActionCase) {
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        await annulPettyCashMovementAction(formData);
-
-        return "termino sin redirigir";
+        return await annulPettyCashMovementAction({ status: "idle" }, formData);
       } catch (error) {
         return (
           describeNavigationError(error) ??
@@ -266,9 +273,11 @@ describe("C4 de la 11.4a: el ingreso de una venta de chatarra no se anula", () =
       },
     });
 
-    expect(outcome).toBe(
-      "error: Este ingreso es de la venta de chatarra VCH00000003; no se anula desde caja chica.",
-    );
+    // C8 de la 11.4a: el rechazo llega como el estado de la fila, para la confirmacion.
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "Este ingreso es de la venta de chatarra VCH00000003; no se anula desde caja chica.",
+    });
     expect(
       calls.filter((call) => "prisma" in call && (call.prisma === "movimiento_caja.update" || call.prisma === "caja_chica.update")),
     ).toEqual([]);
@@ -281,6 +290,34 @@ describe("C4 de la 11.4a: el ingreso de una venta de chatarra no se anula", () =
       data: { "movimiento_caja.findUnique": movementRow({ tipo_movimiento: "ingreso", concepto: "Reposicion" }) },
     });
 
-    expect(outcome).toBe("redirect:/dashboard/petty-cash/movements?toast=petty-cash-movement-annulled");
+    expect(outcome).toMatchObject({ status: "success", data: { estado: "anulado" } });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C8 de la 11.4a (D47): anular responde a la confirmacion
+// ---------------------------------------------------------------------------
+
+describe("C8 de la 11.4a: anular responde con el estado de la fila", () => {
+  it("un rechazo no revalida: el repintado quitaria el boton y su mensaje", async () => {
+    const { calls, outcome } = await runAction({
+      name: "C8",
+      form: form(),
+      data: { "movimiento_caja.findUnique": movementRow({ observaciones: "[ANULADO] antes" }) },
+    });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "No se puede anular un movimiento ya anulado.",
+      values: { id: "MCA00000009" },
+    });
+    expect(calls.some((call) => "effect" in call && call.effect === "revalidatePath")).toBe(false);
+  });
+
+  it("anular revalida el listado y responde con el estado anulado", async () => {
+    const { calls, outcome } = await runAction({ name: "C8", form: form() });
+
+    expect(outcome).toMatchObject({ status: "success", data: { estado: "anulado" }, values: { id: "MCA00000009" } });
+    expect(calls.some((call) => "effect" in call && call.effect === "revalidatePath" && call.args === "/dashboard/petty-cash/movements")).toBe(true);
   });
 });

@@ -143,7 +143,7 @@ exports[`/dashboard/petty-cash/movements > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/petty-cash/movements > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -335,10 +335,7 @@ exports[`/dashboard/petty-cash/movements > sin filtros > resultado 1`] = `
 <td>nombres-1 apellidos-1</td>
 <td>+ S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -356,10 +353,7 @@ exports[`/dashboard/petty-cash/movements > sin filtros > resultado 1`] = `
 <td>nombres-2 apellidos-2</td>
 <td>+ S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -374,8 +368,7 @@ exports[`/dashboard/petty-cash/movements > sin filtros > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/petty-cash/movements?page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -547,7 +540,7 @@ exports[`/dashboard/petty-cash/movements > solo desde > llamadas 1`] = `
 
 exports[`/dashboard/petty-cash/movements > solo desde > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -739,10 +732,7 @@ exports[`/dashboard/petty-cash/movements > solo desde > resultado 1`] = `
 <td>nombres-1 apellidos-1</td>
 <td>+ S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -760,10 +750,7 @@ exports[`/dashboard/petty-cash/movements > solo desde > resultado 1`] = `
 <td>nombres-2 apellidos-2</td>
 <td>+ S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -778,8 +765,7 @@ exports[`/dashboard/petty-cash/movements > solo desde > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/petty-cash/movements?desde=2026-07-01&amp;page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -951,7 +937,7 @@ exports[`/dashboard/petty-cash/movements > solo hasta > llamadas 1`] = `
 
 exports[`/dashboard/petty-cash/movements > solo hasta > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1143,10 +1129,7 @@ exports[`/dashboard/petty-cash/movements > solo hasta > resultado 1`] = `
 <td>nombres-1 apellidos-1</td>
 <td>+ S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -1164,10 +1147,7 @@ exports[`/dashboard/petty-cash/movements > solo hasta > resultado 1`] = `
 <td>nombres-2 apellidos-2</td>
 <td>+ S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -1182,8 +1162,7 @@ exports[`/dashboard/petty-cash/movements > solo hasta > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/petty-cash/movements?hasta=2026-07-31&amp;page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1535,7 +1514,7 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/petty-cash/movements > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1727,10 +1706,7 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > resultado 1`] = `
 <td>nombres-1 apellidos-1</td>
 <td>+ S/ 11.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-1"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 <tr>
@@ -1748,10 +1724,7 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > resultado 1`] = `
 <td>nombres-2 apellidos-2</td>
 <td>+ S/ 22.50</td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-2"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </td>
 </tr>
 </tbody>
@@ -1766,8 +1739,7 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/petty-cash/movements?caja=CCH00000001&amp;tipo=egreso&amp;categoria=CGA00000001&amp;desde=2026-07-01&amp;hasta=2026-07-31&amp;q=combustible&amp;page=3">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;

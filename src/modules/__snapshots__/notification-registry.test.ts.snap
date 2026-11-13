@@ -93,6 +93,7 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx [successNotification] -> expense-category-updated",
   "src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx [successNotification] -> petty-cash-expense-registered",
   "src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx [successNotification] -> petty-cash-income-registered",
+  "src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx [successNotification] -> petty-cash-movement-annulled",
   "src/app/(dashboard)/dashboard/production/campaigns/@panel/(.)[id]/edit/page.tsx [successNotification] -> campaign-updated",
   "src/app/(dashboard)/dashboard/production/campaigns/@panel/(.)new/page.tsx [successNotification] -> campaign-created",
   "src/app/(dashboard)/dashboard/production/campaigns/[id]/edit/page.tsx [successNotification] -> campaign-updated",

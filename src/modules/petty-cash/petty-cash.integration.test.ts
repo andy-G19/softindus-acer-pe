@@ -12,8 +12,8 @@ import { getTestDatabase } from "@/testing/test-database";
 // Caja chica contra Postgres real (PGlite), C3 de la 11.4a. Corre las acciones enteras: los
 // candados de la caja y del movimiento (su SQL se ejecuta de verdad sobre las tablas), los montos
 // redondeados como las columnas (C2), el correlativo, la bitacora y el rollback de un rechazo.
-// Solo se reemplazan la sesion, la cache y la navegacion de Next: la redireccion final se
-// devuelve como texto.
+// Solo se reemplazan la sesion y la cache de Next: desde C5 a C8 de la 11.4a ninguna de estas
+// acciones redirige, todas devuelven su resultado.
 //
 // Lo que no se puede probar aqui: dos egresos o dos anulaciones simultaneos. En Postgres el
 // segundo espera el candado del primero; PGlite atiende una sola transaccion a la vez
@@ -24,11 +24,6 @@ vi.mock("@/lib/authz", () => ({
   getAuthorizedSession: async () => ({ user: { id: "USU00000001", name: "Andrea Prueba" } }),
 }));
 vi.mock("next/cache", () => ({ revalidatePath: () => undefined }));
-vi.mock("next/navigation", () => ({
-  redirect: (url: string) => {
-    throw new Error(`redirect:${url}`);
-  },
-}));
 
 const USUARIO = "USU00000001";
 const CATEGORIA = "CGA00000001";
@@ -76,17 +71,6 @@ function formOf(fields: Record<string, string>) {
   return formData;
 }
 
-/** Ejecuta la accion y devuelve su redireccion o su error, como texto. */
-async function outcome(run: () => Promise<unknown>) {
-  try {
-    await run();
-
-    return "termino sin redirigir";
-  } catch (error) {
-    return error instanceof Error ? error.message : String(error);
-  }
-}
-
 /** El egreso devuelve el estado del formulario (C5 de la 11.4a): «guardado» o su error. */
 const expense = async (idCajaChica: string, monto: string, clave: string = randomUUID()) => {
   const state = await createPettyCashExpenseAction(
@@ -121,8 +105,15 @@ const income = async (idCajaChica: string, monto: string, clave: string = random
   return state.status === "success" ? "guardado" : state.status === "error" ? state.error : "sin respuesta";
 };
 
-const annul = (idMovimientoCaja: string) =>
-  outcome(() => annulPettyCashMovementAction(formOf({ id_movimiento_caja: idMovimientoCaja })));
+/** Anular devuelve el estado de la fila (C8 de la 11.4a): «anulado» o su error. */
+const annul = async (idMovimientoCaja: string) => {
+  const state = await annulPettyCashMovementAction(
+    { status: "idle" },
+    formOf({ id_movimiento_caja: idMovimientoCaja }),
+  );
+
+  return state.status === "success" ? state.data.estado : state.status === "error" ? state.error : "sin respuesta";
+};
 
 const balanceOf = async (idCajaChica: string) =>
   (
@@ -154,9 +145,7 @@ describe("caja chica en Postgres", () => {
     const [movement] = await movementsOf("CAJ00000002");
 
     expect(await balanceOf("CAJ00000002")).toBe("59.75");
-    expect(await annul(movement.id_movimiento_caja)).toBe(
-      "redirect:/dashboard/petty-cash/movements?toast=petty-cash-movement-annulled",
-    );
+    expect(await annul(movement.id_movimiento_caja)).toBe("anulado");
     expect(await balanceOf("CAJ00000002")).toBe("100.00");
 
     expect(await annul(movement.id_movimiento_caja)).toBe("No se puede anular un movimiento ya anulado.");

@@ -3,7 +3,7 @@
 exports[`annulPettyCashMovementAction > anular un ajuste negativo: lo trata como egreso > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -129,12 +129,23 @@ exports[`annulPettyCashMovementAction > anular un ajuste negativo: lo trata como
 ]
 `;
 
-exports[`annulPettyCashMovementAction > anular un ajuste negativo: lo trata como egreso > resultado 1`] = `"redirect:/dashboard/petty-cash/movements?toast=petty-cash-movement-annulled"`;
+exports[`annulPettyCashMovementAction > anular un ajuste negativo: lo trata como egreso > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
 
 exports[`annulPettyCashMovementAction > anular un ajuste positivo: lo trata como ingreso > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -260,12 +271,23 @@ exports[`annulPettyCashMovementAction > anular un ajuste positivo: lo trata como
 ]
 `;
 
-exports[`annulPettyCashMovementAction > anular un ajuste positivo: lo trata como ingreso > resultado 1`] = `"redirect:/dashboard/petty-cash/movements?toast=petty-cash-movement-annulled"`;
+exports[`annulPettyCashMovementAction > anular un ajuste positivo: lo trata como ingreso > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
 
 exports[`annulPettyCashMovementAction > anular un egreso: marca el movimiento y devuelve el monto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -391,12 +413,23 @@ exports[`annulPettyCashMovementAction > anular un egreso: marca el movimiento y 
 ]
 `;
 
-exports[`annulPettyCashMovementAction > anular un egreso: marca el movimiento y devuelve el monto > resultado 1`] = `"redirect:/dashboard/petty-cash/movements?toast=petty-cash-movement-annulled"`;
+exports[`annulPettyCashMovementAction > anular un egreso: marca el movimiento y devuelve el monto > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
 
 exports[`annulPettyCashMovementAction > anular un ingreso con saldo suficiente: descuenta el monto y conserva la observacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -523,12 +556,23 @@ exports[`annulPettyCashMovementAction > anular un ingreso con saldo suficiente: 
 ]
 `;
 
-exports[`annulPettyCashMovementAction > anular un ingreso con saldo suficiente: descuenta el monto y conserva la observacion > resultado 1`] = `"redirect:/dashboard/petty-cash/movements?toast=petty-cash-movement-annulled"`;
+exports[`annulPettyCashMovementAction > anular un ingreso con saldo suficiente: descuenta el monto y conserva la observacion > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
 
 exports[`annulPettyCashMovementAction > anular un ingreso sin saldo suficiente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -592,18 +636,27 @@ exports[`annulPettyCashMovementAction > anular un ingreso sin saldo suficiente >
     "prisma": "caja_chica.findUnique",
   },
   {
-    "args": "No se puede anular el ingreso porque la caja no tiene saldo suficiente para revertirlo.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`annulPettyCashMovementAction > anular un ingreso sin saldo suficiente > resultado 1`] = `"error: No se puede anular el ingreso porque la caja no tiene saldo suficiente para revertirlo."`;
+exports[`annulPettyCashMovementAction > anular un ingreso sin saldo suficiente > resultado 1`] = `
+{
+  "error": "No se puede anular el ingreso porque la caja no tiene saldo suficiente para revertirlo.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
 
 exports[`annulPettyCashMovementAction > caja cerrada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -667,18 +720,27 @@ exports[`annulPettyCashMovementAction > caja cerrada > llamadas 1`] = `
     "prisma": "caja_chica.findUnique",
   },
   {
-    "args": "Solo se pueden anular movimientos de cajas abiertas.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`annulPettyCashMovementAction > caja cerrada > resultado 1`] = `"error: Solo se pueden anular movimientos de cajas abiertas."`;
+exports[`annulPettyCashMovementAction > caja cerrada > resultado 1`] = `
+{
+  "error": "Solo se pueden anular movimientos de cajas abiertas.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
 
 exports[`annulPettyCashMovementAction > el movimiento no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -721,18 +783,27 @@ exports[`annulPettyCashMovementAction > el movimiento no existe > llamadas 1`] =
     "prisma": "movimiento_caja.findUnique",
   },
   {
-    "args": "El movimiento de caja seleccionado no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`annulPettyCashMovementAction > el movimiento no existe > resultado 1`] = `"error: El movimiento de caja seleccionado no existe."`;
+exports[`annulPettyCashMovementAction > el movimiento no existe > resultado 1`] = `
+{
+  "error": "El movimiento de caja seleccionado no existe.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
 
 exports[`annulPettyCashMovementAction > sin movimiento en el formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -740,12 +811,21 @@ exports[`annulPettyCashMovementAction > sin movimiento en el formulario > llamad
 ]
 `;
 
-exports[`annulPettyCashMovementAction > sin movimiento en el formulario > resultado 1`] = `"error: Debe seleccionar un movimiento de caja valido."`;
+exports[`annulPettyCashMovementAction > sin movimiento en el formulario > resultado 1`] = `
+{
+  "error": "Debe seleccionar un movimiento de caja valido.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "",
+  },
+}
+`;
 
 exports[`annulPettyCashMovementAction > sin permiso: el vendedor > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -753,12 +833,21 @@ exports[`annulPettyCashMovementAction > sin permiso: el vendedor > llamadas 1`] 
 ]
 `;
 
-exports[`annulPettyCashMovementAction > sin permiso: el vendedor > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`annulPettyCashMovementAction > sin permiso: el vendedor > resultado 1`] = `
+{
+  "error": "No tienes permisos para anular movimientos de caja chica.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;
 
 exports[`annulPettyCashMovementAction > ya estaba anulado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -801,10 +890,19 @@ exports[`annulPettyCashMovementAction > ya estaba anulado > llamadas 1`] = `
     "prisma": "movimiento_caja.findUnique",
   },
   {
-    "args": "No se puede anular un movimiento ya anulado.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`annulPettyCashMovementAction > ya estaba anulado > resultado 1`] = `"error: No se puede anular un movimiento ya anulado."`;
+exports[`annulPettyCashMovementAction > ya estaba anulado > resultado 1`] = `
+{
+  "error": "No se puede anular un movimiento ya anulado.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "MCA00000009",
+  },
+}
+`;

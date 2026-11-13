@@ -3,7 +3,6 @@ import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { PaginationControls } from "@/components/pagination-controls";
 import {
   Card,
@@ -32,7 +31,10 @@ import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { toNumber } from "@/lib/numbers";
 import { annulPettyCashMovementAction } from "@/modules/petty-cash/movements/actions";
+import { MovementAnnulAction } from "@/modules/petty-cash/movements/movement-annul-action";
+import { isNegativeCashMovement } from "@/modules/petty-cash/movements/movement-direction";
 import { getPettyCashMovementListData } from "@/modules/petty-cash/movements/queries";
+import { pettyCashNotifications } from "@/modules/petty-cash/notifications";
 
 type PettyCashMovementsPageProps = {
   searchParams?: Promise<{
@@ -83,16 +85,12 @@ function getMovementBadgeVariant(type: string, concept: string) {
   return "success" as const;
 }
 
-function isNegativeMovement(type: string, concept: string) {
-  return type === "egreso" || concept.startsWith("Ajuste negativo");
-}
-
 function formatSignedMoney(
   type: string,
   concept: string,
   amount: Prisma.Decimal,
 ) {
-  const sign = isNegativeMovement(type, concept) ? "-" : "+";
+  const sign = isNegativeCashMovement(type, concept) ? "-" : "+";
 
   return `${sign} ${formatMoney(amount)}`;
 }
@@ -148,7 +146,7 @@ export default async function PettyCashMovementsPage({
     totalNegativeAdjustments;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Listado de movimientos de caja"
         description="Consulta ingresos, egresos y ajustes de caja chica usando filtros por caja, tipo, categoría, fecha, concepto, comprobante o responsable."
@@ -332,21 +330,13 @@ export default async function PettyCashMovementsPage({
                           Anulado
                         </span>
                       ) : (
-                        <form action={annulPettyCashMovementAction}>
-                          <input
-                            type="hidden"
-                            name="id_movimiento_caja"
-                            value={movement.id_movimiento_caja}
-                          />
-                          <ConfirmDeleteButton
-                            title="¿Anular movimiento de caja?"
-                            description="Esta acción anulará el movimiento de caja chica y no se puede deshacer."
-                            confirmText="Confirmar anulación"
-                            entityName="movimiento"
-                          >
-                            Anular
-                          </ConfirmDeleteButton>
-                        </form>
+                        // C8 de la 11.4a (D47): confirma con su concepto, su monto y hacia donde va el
+                        // dinero; un rechazo queda en la confirmacion.
+                        <MovementAnnulAction
+                          movement={movement}
+                          action={annulPettyCashMovementAction}
+                          successNotification={pettyCashNotifications["petty-cash-movement-annulled"]}
+                        />
                       )}
                     </TableCell>
                   </TableRow>
@@ -363,6 +353,6 @@ export default async function PettyCashMovementsPage({
         searchParams={params as Record<string, string | string[] | undefined>}
         itemLabel="movimientos"
       />
-    </main>
+    </div>
   );
 }

@@ -237,6 +237,8 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/petty-cash/movements/actions"),
     roles: SOLO_ADMIN,
     acciones: ["annulPettyCashMovementAction"],
+    // C8 de la 11.4a: anular responde a un rol denegado con un error en la confirmacion.
+    rechazanConResultado: ["annulPettyCashMovementAction"],
   },
   {
     ruta: "production/campaigns/actions",
