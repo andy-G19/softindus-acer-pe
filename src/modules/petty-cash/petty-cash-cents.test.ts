@@ -121,7 +121,8 @@ const expense = (monto: string) =>
   });
 
 const income = (tipo_operacion: string, monto: string) =>
-  run(createPettyCashIncomeAdjustmentAction, {
+  run((formData) => createPettyCashIncomeAdjustmentAction({ status: "idle" }, formData), {
+    clave_operacion: "7a1d3c5e-2b4f-4e6a-8c9d-0e1f2a3b4c5d",
     id_caja_chica: "CAJ00000002",
     tipo_operacion,
     concepto: "Arqueo de caja",
@@ -181,7 +182,7 @@ describe("C2 de la 11.4a: ingreso y ajuste en centimos", () => {
   it("un ajuste negativo que se guarda como todo el saldo se acepta", async () => {
     const { outcome, monto, saldo } = await income("ajuste_disminucion", "100.004");
 
-    expect(outcome).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-income-registered");
+    expect(outcome).toBe("guardado");
     expect(monto).toBe("100.00");
     expect(saldo).toEqual({ decrement: "100.00" });
   });

@@ -18,12 +18,21 @@ import {
 // operacion (un ajuste se guarda como «ajuste» y su direccion vive en el concepto: «Ajuste
 // positivo: …» o «Ajuste negativo: …»), el aumento o el descuento atomico del saldo, la bitacora,
 // las revalidaciones y el resultado.
+//
+// C6 de la 11.4a (D46): la accion devuelve un resultado en lugar de redirigir o lanzar, reclama la
+// clave de la operacion como primera sentencia de la transaccion y pone cada rechazo en su campo.
+// Los casos de C1 quedan con el mismo nombre; su resultado es ahora el estado del formulario.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio: se fija para que el snapshot sea estable.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -98,9 +107,7 @@ async function runAction(actionCase: ActionCase) {
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        await createPettyCashIncomeAdjustmentAction(formData);
-
-        return "termino sin redirigir";
+        return await createPettyCashIncomeAdjustmentAction({ status: "idle" }, formData);
       } catch (error) {
         return (
           describeNavigationError(error) ??
@@ -130,7 +137,23 @@ const DEFAULT_DATA: DataOverrides = {
   "caja_chica.findUnique": boxRow(),
 };
 
+const CLAVE = "7a1d3c5e-2b4f-4e6a-8c9d-0e1f2a3b4c5d";
+
+/** La clave ya estaba en la tabla: el INSERT no devuelve filas y se lee la guardada. */
+function storedKey(changes: Record<string, unknown> = {}): DataOverrides {
+  return {
+    "operacion_idempotente.createManyAndReturn": [],
+    "operacion_idempotente.findUniqueOrThrow": {
+      tipo_operacion: "registrar_ingreso_caja",
+      id_usuario: "USU00000001",
+      id_registro_resultado: "MCA00000009",
+      ...changes,
+    },
+  };
+}
+
 const form = (changes: Record<string, string> = {}) => ({
+  clave_operacion: CLAVE,
   id_caja_chica: "CAJ00000002",
   tipo_operacion: "ingreso",
   concepto: "Reposicion de caja",
@@ -166,6 +189,15 @@ const caseInputs: CaseInput[] = [
   { name: "tipo de operacion invalido", form: form({ tipo_operacion: "retiro" }) },
   { name: "monto cero", form: form({ monto: "0" }) },
   { name: "sin permiso: el maestro de taller", role: "WORKSHOP_MASTER" },
+  { name: "sin clave de operacion", form: form({ clave_operacion: "" }) },
+  {
+    name: "la misma clave ya registrada: responde con el movimiento guardado sin escribir",
+    data: storedKey(),
+  },
+  {
+    name: "la clave es de otra operacion",
+    data: storedKey({ tipo_operacion: "registrar_egreso_caja" }),
+  },
 ];
 
 const cases: ActionCase[] = caseInputs.map((actionCase) => ({
@@ -205,5 +237,40 @@ describe("C3 de la 11.4a: el ingreso y el ajuste bloquean la caja", () => {
       id: "CAJ00000002",
       reads: (call) => call.prisma === "caja_chica.findUnique",
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C6 de la 11.4a (D46): el ingreso o ajuste con resultado e idempotencia
+// ---------------------------------------------------------------------------
+
+describe("C6 de la 11.4a: el ingreso o ajuste reclama su clave primero", () => {
+  const index = (calls: Awaited<ReturnType<typeof runAction>>["calls"], name: string) =>
+    calls.findIndex((call) => ("prisma" in call && call.prisma === name) || ("effect" in call && call.effect === name));
+
+  it("reclama la clave antes del bloqueo y la completa despues de escribir", async () => {
+    const { calls, outcome } = await runAction({ name: "C6", form: form() });
+
+    expect(outcome).toMatchObject({ status: "success", data: { id_movimiento_caja: "MCA00000001", clave_operacion: CLAVE } });
+    expect(index(calls, "operacion_idempotente.createManyAndReturn")).toBeGreaterThan(-1);
+    expect(index(calls, "operacion_idempotente.createManyAndReturn")).toBeLessThan(index(calls, "$queryRaw"));
+    expect(index(calls, "caja_chica.update")).toBeLessThan(index(calls, "operacion_idempotente.updateMany"));
+    expect(index(calls, "operacion_idempotente.updateMany")).toBeLessThan(index(calls, "prisma.$transaction:commit"));
+  });
+
+  it("un ajuste negativo que supera el saldo deja el error en el monto, con lo enviado", async () => {
+    const { calls, outcome } = await runAction({
+      name: "C6",
+      form: form({ tipo_operacion: "ajuste_disminucion", concepto: "Faltante de arqueo", monto: "100.25" }),
+    });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "El ajuste negativo supera el saldo disponible de la caja. Saldo actual: S/ 100.00.",
+      fieldErrors: { monto: ["El ajuste negativo supera el saldo disponible de la caja. Saldo actual: S/ 100.00."] },
+      values: { tipo_operacion: "ajuste_disminucion", monto: "100.25" },
+    });
+    expect(index(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(index(calls, "operacion_idempotente.updateMany")).toBe(-1);
   });
 });

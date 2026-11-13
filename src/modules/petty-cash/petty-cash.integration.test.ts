@@ -103,18 +103,22 @@ const expense = async (idCajaChica: string, monto: string, clave: string = rando
   return state.status === "success" ? "guardado" : state.status === "error" ? state.error : "sin respuesta";
 };
 
-const income = (idCajaChica: string, monto: string) =>
-  outcome(() =>
-    createPettyCashIncomeAdjustmentAction(
-      formOf({
-        id_caja_chica: idCajaChica,
-        tipo_operacion: "ingreso",
-        concepto: "Reposicion de caja",
-        monto,
-        fecha_movimiento: "2026-11-10",
-      }),
-    ),
+/** El ingreso devuelve el estado del formulario (C6 de la 11.4a): «guardado» o su error. */
+const income = async (idCajaChica: string, monto: string, clave: string = randomUUID()) => {
+  const state = await createPettyCashIncomeAdjustmentAction(
+    { status: "idle" },
+    formOf({
+      clave_operacion: clave,
+      id_caja_chica: idCajaChica,
+      tipo_operacion: "ingreso",
+      concepto: "Reposicion de caja",
+      monto,
+      fecha_movimiento: "2026-11-10",
+    }),
   );
+
+  return state.status === "success" ? "guardado" : state.status === "error" ? state.error : "sin respuesta";
+};
 
 const annul = (idMovimientoCaja: string) =>
   outcome(() => annulPettyCashMovementAction(formOf({ id_movimiento_caja: idMovimientoCaja })));
@@ -177,7 +181,7 @@ describe("caja chica en Postgres", () => {
   it("anular un ingreso que la caja ya gasto se rechaza y no toca el saldo", async () => {
     await createBox("CAJ00000004", "0.00");
 
-    expect(await income("CAJ00000004", "50.00")).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-income-registered");
+    expect(await income("CAJ00000004", "50.00")).toBe("guardado");
     expect(await expense("CAJ00000004", "20.00")).toBe("guardado");
     const [ingreso] = await movementsOf("CAJ00000004");
 
@@ -210,10 +214,29 @@ describe("caja chica en Postgres", () => {
     expect((await movementsOf("CAJ00000007")).map((movement) => movement.monto)).toEqual(["45.00"]);
   });
 
+  it("la misma clave dos veces deja un solo ingreso y aumenta el saldo una vez (C6)", async () => {
+    await createBox("CAJ00000008", "10.00");
+    const clave = randomUUID();
+
+    expect(await income("CAJ00000008", "25.00", clave)).toBe("guardado");
+    expect(await income("CAJ00000008", "25.00", clave)).toBe("guardado");
+    expect(await balanceOf("CAJ00000008")).toBe("35.00");
+    expect((await movementsOf("CAJ00000008")).map((movement) => movement.monto)).toEqual(["25.00"]);
+  });
+
+  it("la clave de un egreso no sirve para un ingreso (C6)", async () => {
+    await createBox("CAJ00000009", "10.00");
+    const clave = randomUUID();
+
+    expect(await expense("CAJ00000009", "5.00", clave)).toBe("guardado");
+    expect(await income("CAJ00000009", "5.00", clave)).toBe("La clave de la operacion ya se uso en otra operacion.");
+    expect(await balanceOf("CAJ00000009")).toBe("5.00");
+  });
+
   it("el ingreso de una venta de chatarra no se anula desde caja chica (C4, D45)", async () => {
     await createBox("CAJ00000005", "10.00");
 
-    expect(await income("CAJ00000005", "35.50")).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-income-registered");
+    expect(await income("CAJ00000005", "35.50")).toBe("guardado");
     const [ingreso] = await movementsOf("CAJ00000005");
 
     await prisma.chatarra.create({
