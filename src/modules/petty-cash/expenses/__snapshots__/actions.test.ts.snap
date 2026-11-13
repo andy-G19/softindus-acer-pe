@@ -9,6 +9,19 @@ exports[`createPettyCashExpenseAction > caja cerrada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -22,6 +35,10 @@ exports[`createPettyCashExpenseAction > caja cerrada > llamadas 1`] = `
     },
     "prisma": "caja_chica.findUnique",
   },
+  {
+    "args": "Solo se pueden registrar egresos en cajas abiertas.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
@@ -34,6 +51,19 @@ exports[`createPettyCashExpenseAction > categoria inactiva > llamadas 1`] = `
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -61,6 +91,10 @@ exports[`createPettyCashExpenseAction > categoria inactiva > llamadas 1`] = `
       },
     },
     "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": "No se puede usar una categoría de gasto inactiva.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -89,6 +123,19 @@ exports[`createPettyCashExpenseAction > egreso por todo el saldo, con comprobant
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -114,10 +161,6 @@ exports[`createPettyCashExpenseAction > egreso por todo el saldo, con comprobant
       },
     },
     "prisma": "categoria_gasto.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -210,6 +253,19 @@ exports[`createPettyCashExpenseAction > egreso valido: crea el movimiento y desc
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -235,10 +291,6 @@ exports[`createPettyCashExpenseAction > egreso valido: crea el movimiento y desc
       },
     },
     "prisma": "categoria_gasto.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -331,6 +383,19 @@ exports[`createPettyCashExpenseAction > el egreso supera el saldo > llamadas 1`]
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -343,6 +408,10 @@ exports[`createPettyCashExpenseAction > el egreso supera el saldo > llamadas 1`]
       },
     },
     "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": "El egreso supera el saldo disponible de la caja. Saldo actual: S/ 100.00.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -358,6 +427,19 @@ exports[`createPettyCashExpenseAction > la caja no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -371,6 +453,10 @@ exports[`createPettyCashExpenseAction > la caja no existe > llamadas 1`] = `
     },
     "prisma": "caja_chica.findUnique",
   },
+  {
+    "args": "La caja chica seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
@@ -383,6 +469,19 @@ exports[`createPettyCashExpenseAction > la categoria no existe > llamadas 1`] = 
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -410,6 +509,10 @@ exports[`createPettyCashExpenseAction > la categoria no existe > llamadas 1`] = 
       },
     },
     "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": "La categoría seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;

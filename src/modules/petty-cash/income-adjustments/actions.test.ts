@@ -7,6 +7,7 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
 } from "@/testing/page-characterization";
 
@@ -182,4 +183,27 @@ describe("createPettyCashIncomeAdjustmentAction", () => {
       expect(outcome).toMatchSnapshot("resultado");
     });
   }
+});
+
+// ---------------------------------------------------------------------------
+// C3 de la 11.4a (D44): el ingreso y el ajuste deciden con la caja bloqueada
+// ---------------------------------------------------------------------------
+
+// Un ajuste negativo leia el saldo fuera de la transaccion, como el egreso: con un egreso
+// simultaneo la caja podia quedar en negativo. Ahora bloquea la caja antes de leerla; el ingreso
+// tambien, porque decide que la caja este abierta.
+describe("C3 de la 11.4a: el ingreso y el ajuste bloquean la caja", () => {
+  it.each([
+    ["un ingreso", {}],
+    ["un ajuste negativo", { tipo_operacion: "ajuste_disminucion", concepto: "Faltante de arqueo" }],
+    ["un ajuste negativo que supera el saldo", { tipo_operacion: "ajuste_disminucion", concepto: "Faltante", monto: "100.25" }],
+  ])("%s bloquea la caja antes de leerla", async (_name, changes) => {
+    const { calls } = await runAction({ name: "C3", form: form(changes) });
+
+    expectRowLockedBefore(calls, {
+      table: "caja_chica",
+      id: "CAJ00000002",
+      reads: (call) => call.prisma === "caja_chica.findUnique",
+    });
+  });
 });

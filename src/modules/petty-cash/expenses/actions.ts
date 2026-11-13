@@ -6,6 +6,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockCashBoxRow } from "@/lib/row-locks";
 import { checkCashWithdrawal } from "@/lib/petty-cash-amounts";
 import { pettyCashExpenseSchema } from "@/schemas/petty-cash/petty-cash-expense.schema";
 
@@ -37,56 +38,62 @@ export async function createPettyCashExpenseAction(formData: FormData) {
 
   const data = parsedData.data;
 
-  const cashBox = await prisma.caja_chica.findUnique({
-    where: {
-      id_caja_chica: data.id_caja_chica,
-    },
-    select: {
-      id_caja_chica: true,
-      nombre_caja: true,
-      saldo_actual: true,
-      estado: true,
-    },
-  });
-
-  if (!cashBox) {
-    throw new Error("La caja chica seleccionada no existe.");
-  }
-
-  if (cashBox.estado !== "abierta") {
-    throw new Error("Solo se pueden registrar egresos en cajas abiertas.");
-  }
-
-  // C2 de la 11.4a (D43): el monto redondeado como la columna, comparado en centesimos con el
-  // saldo guardado; es el mismo que se guarda en el movimiento y se descuenta de la caja.
-  const withdrawal = checkCashWithdrawal({ balance: cashBox.saldo_actual, amount: data.monto });
-
-  if (!withdrawal.accepted) {
-    throw new Error(
-      `El egreso supera el saldo disponible de la caja. Saldo actual: S/ ${withdrawal.balance}.`,
-    );
-  }
-
-  const category = await prisma.categoria_gasto.findUnique({
-    where: {
-      id_categoria_gasto: data.id_categoria_gasto,
-    },
-    select: {
-      id_categoria_gasto: true,
-      nombre_categoria: true,
-      estado: true,
-    },
-  });
-
-  if (!category) {
-    throw new Error("La categoría seleccionada no existe.");
-  }
-
-  if (!category.estado) {
-    throw new Error("No se puede usar una categoría de gasto inactiva.");
-  }
-
   await prisma.$transaction(async (tx) => {
+    // C3 de la 11.4a (D44): la caja se bloquea antes de leerla, y la caja y la categoria se leen
+    // con tx. Dos egresos simultaneos leian el saldo fuera de la transaccion, los dos lo veian
+    // suficiente y la caja quedaba en negativo: ahora el segundo espera al primero y ve el saldo
+    // ya descontado. Un rechazo lanza dentro de la transaccion, que no escribio nada.
+    await lockCashBoxRow(tx, data.id_caja_chica);
+
+    const cashBox = await tx.caja_chica.findUnique({
+      where: {
+        id_caja_chica: data.id_caja_chica,
+      },
+      select: {
+        id_caja_chica: true,
+        nombre_caja: true,
+        saldo_actual: true,
+        estado: true,
+      },
+    });
+
+    if (!cashBox) {
+      throw new Error("La caja chica seleccionada no existe.");
+    }
+
+    if (cashBox.estado !== "abierta") {
+      throw new Error("Solo se pueden registrar egresos en cajas abiertas.");
+    }
+
+    // C2 de la 11.4a (D43): el monto redondeado como la columna, comparado en centesimos con el
+    // saldo guardado; es el mismo que se guarda en el movimiento y se descuenta de la caja.
+    const withdrawal = checkCashWithdrawal({ balance: cashBox.saldo_actual, amount: data.monto });
+
+    if (!withdrawal.accepted) {
+      throw new Error(
+        `El egreso supera el saldo disponible de la caja. Saldo actual: S/ ${withdrawal.balance}.`,
+      );
+    }
+
+    const category = await tx.categoria_gasto.findUnique({
+      where: {
+        id_categoria_gasto: data.id_categoria_gasto,
+      },
+      select: {
+        id_categoria_gasto: true,
+        nombre_categoria: true,
+        estado: true,
+      },
+    });
+
+    if (!category) {
+      throw new Error("La categoría seleccionada no existe.");
+    }
+
+    if (!category.estado) {
+      throw new Error("No se puede usar una categoría de gasto inactiva.");
+    }
+
     const idMovimientoCaja = await getNextCorrelativeId(tx, {
       codigoEntidad: "movimiento_caja",
       prefijo: "MCA",

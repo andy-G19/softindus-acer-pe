@@ -1,0 +1,183 @@
+import { beforeAll, describe, expect, it, vi } from "vitest";
+
+import type { PrismaClient } from "@/generated/prisma/client";
+import { createPettyCashExpenseAction } from "@/modules/petty-cash/expenses/actions";
+import { createPettyCashIncomeAdjustmentAction } from "@/modules/petty-cash/income-adjustments/actions";
+import { annulPettyCashMovementAction } from "@/modules/petty-cash/movements/actions";
+import { getTestDatabase } from "@/testing/test-database";
+
+// Caja chica contra Postgres real (PGlite), C3 de la 11.4a. Corre las acciones enteras: los
+// candados de la caja y del movimiento (su SQL se ejecuta de verdad sobre las tablas), los montos
+// redondeados como las columnas (C2), el correlativo, la bitacora y el rollback de un rechazo.
+// Solo se reemplazan la sesion, la cache y la navegacion de Next: la redireccion final se
+// devuelve como texto.
+//
+// Lo que no se puede probar aqui: dos egresos o dos anulaciones simultaneos. En Postgres el
+// segundo espera el candado del primero; PGlite atiende una sola transaccion a la vez
+// (test-database.ts). Las repeticiones van una tras otra.
+
+vi.mock("@/lib/authz", () => ({
+  requireRole: async () => ({ user: { id: "USU00000001", name: "Andrea Prueba" } }),
+}));
+vi.mock("next/cache", () => ({ revalidatePath: () => undefined }));
+vi.mock("next/navigation", () => ({
+  redirect: (url: string) => {
+    throw new Error(`redirect:${url}`);
+  },
+}));
+
+const USUARIO = "USU00000001";
+const CATEGORIA = "CGA00000001";
+
+let prisma: PrismaClient;
+
+beforeAll(async () => {
+  ({ prisma } = await getTestDatabase());
+
+  await prisma.rol.create({ data: { id_rol: "ROL00000001", nombre_rol: "ADMIN" } });
+  await prisma.usuario.create({
+    data: {
+      id_usuario: USUARIO,
+      id_rol: "ROL00000001",
+      nombres: "Andrea",
+      apellidos: "Prueba",
+      usuario: "andrea",
+      clave_hash: "sin-uso",
+    },
+  });
+  await prisma.categoria_gasto.create({
+    data: { id_categoria_gasto: CATEGORIA, nombre_categoria: "Movilidad" },
+  });
+});
+
+async function createBox(idCajaChica: string, saldo: string) {
+  await prisma.caja_chica.create({
+    data: {
+      id_caja_chica: idCajaChica,
+      nombre_caja: `Caja ${idCajaChica}`,
+      saldo_inicial: saldo,
+      saldo_actual: saldo,
+      estado: "abierta",
+    },
+  });
+}
+
+function formOf(fields: Record<string, string>) {
+  const formData = new FormData();
+
+  for (const [key, value] of Object.entries({ comprobante: "", responsable: "", observaciones: "", ...fields })) {
+    formData.set(key, value);
+  }
+
+  return formData;
+}
+
+/** Ejecuta la accion y devuelve su redireccion o su error, como texto. */
+async function outcome(run: () => Promise<unknown>) {
+  try {
+    await run();
+
+    return "termino sin redirigir";
+  } catch (error) {
+    return error instanceof Error ? error.message : String(error);
+  }
+}
+
+const expense = (idCajaChica: string, monto: string) =>
+  outcome(() =>
+    createPettyCashExpenseAction(
+      formOf({
+        id_caja_chica: idCajaChica,
+        id_categoria_gasto: CATEGORIA,
+        concepto: "Taxi a proveedor",
+        monto,
+        fecha_movimiento: "2026-11-10",
+      }),
+    ),
+  );
+
+const income = (idCajaChica: string, monto: string) =>
+  outcome(() =>
+    createPettyCashIncomeAdjustmentAction(
+      formOf({
+        id_caja_chica: idCajaChica,
+        tipo_operacion: "ingreso",
+        concepto: "Reposicion de caja",
+        monto,
+        fecha_movimiento: "2026-11-10",
+      }),
+    ),
+  );
+
+const annul = (idMovimientoCaja: string) =>
+  outcome(() => annulPettyCashMovementAction(formOf({ id_movimiento_caja: idMovimientoCaja })));
+
+const balanceOf = async (idCajaChica: string) =>
+  (
+    await prisma.caja_chica.findUniqueOrThrow({ where: { id_caja_chica: idCajaChica }, select: { saldo_actual: true } })
+  ).saldo_actual.toFixed(2);
+
+const movementsOf = async (idCajaChica: string) =>
+  (
+    await prisma.movimiento_caja.findMany({
+      where: { id_caja_chica: idCajaChica },
+      orderBy: { id_movimiento_caja: "asc" },
+      select: { id_movimiento_caja: true, tipo_movimiento: true, monto: true, observaciones: true },
+    })
+  ).map((movement) => ({ ...movement, monto: movement.monto.toFixed(2) }));
+
+describe("caja chica en Postgres", () => {
+  it("un egreso de 40.005 guarda 40.01 en el movimiento y descuenta 40.01 del saldo (C2)", async () => {
+    await createBox("CAJ00000001", "100.00");
+
+    expect(await expense("CAJ00000001", "40.005")).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-expense-registered");
+    expect(await balanceOf("CAJ00000001")).toBe("59.99");
+    expect((await movementsOf("CAJ00000001")).map((movement) => movement.monto)).toEqual(["40.01"]);
+  });
+
+  it("anular dos veces el mismo egreso devuelve el monto una sola vez", async () => {
+    await createBox("CAJ00000002", "100.00");
+
+    expect(await expense("CAJ00000002", "40.25")).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-expense-registered");
+    const [movement] = await movementsOf("CAJ00000002");
+
+    expect(await balanceOf("CAJ00000002")).toBe("59.75");
+    expect(await annul(movement.id_movimiento_caja)).toBe(
+      "redirect:/dashboard/petty-cash/movements?toast=petty-cash-movement-annulled",
+    );
+    expect(await balanceOf("CAJ00000002")).toBe("100.00");
+
+    expect(await annul(movement.id_movimiento_caja)).toBe("No se puede anular un movimiento ya anulado.");
+    expect(await balanceOf("CAJ00000002")).toBe("100.00");
+
+    const [annulled] = await movementsOf("CAJ00000002");
+
+    expect(annulled.monto).toBe("0.00");
+    expect(annulled.observaciones).toContain("[ANULADO]");
+    expect(annulled.observaciones).toContain("Monto original: S/ 40.25.");
+  });
+
+  it("un egreso que supera el saldo no escribe nada", async () => {
+    await createBox("CAJ00000003", "30.00");
+
+    expect(await expense("CAJ00000003", "30.01")).toBe(
+      "El egreso supera el saldo disponible de la caja. Saldo actual: S/ 30.00.",
+    );
+    expect(await balanceOf("CAJ00000003")).toBe("30.00");
+    expect(await movementsOf("CAJ00000003")).toEqual([]);
+  });
+
+  it("anular un ingreso que la caja ya gasto se rechaza y no toca el saldo", async () => {
+    await createBox("CAJ00000004", "0.00");
+
+    expect(await income("CAJ00000004", "50.00")).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-income-registered");
+    expect(await expense("CAJ00000004", "20.00")).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-expense-registered");
+    const [ingreso] = await movementsOf("CAJ00000004");
+
+    expect(await annul(ingreso.id_movimiento_caja)).toBe(
+      "No se puede anular el ingreso porque la caja no tiene saldo suficiente para revertirlo.",
+    );
+    expect(await balanceOf("CAJ00000004")).toBe("30.00");
+    expect((await movementsOf("CAJ00000004")).map((movement) => movement.monto)).toEqual(["50.00", "20.00"]);
+  });
+});

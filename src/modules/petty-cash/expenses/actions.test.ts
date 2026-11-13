@@ -7,6 +7,7 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
 } from "@/testing/page-characterization";
 
@@ -184,4 +185,28 @@ describe("createPettyCashExpenseAction", () => {
       expect(outcome).toMatchSnapshot("resultado");
     });
   }
+});
+
+// ---------------------------------------------------------------------------
+// C3 de la 11.4a (D44): el egreso decide con la caja bloqueada
+// ---------------------------------------------------------------------------
+
+// Dos egresos simultaneos leian el saldo fuera de la transaccion, los dos lo veian suficiente y
+// los dos restaban: la caja quedaba en negativo. Ahora el egreso bloquea la caja dentro de la
+// transaccion antes de leerla, y lee la caja y la categoria con `tx`: el segundo espera al
+// primero y ve el saldo ya descontado. PGlite no prueba la espera (una transaccion a la vez):
+// aqui se fija el orden.
+describe("C3 de la 11.4a: el egreso bloquea la caja", () => {
+  it.each([
+    ["un egreso valido", {}],
+    ["un egreso que supera el saldo", { monto: "100.25" }],
+  ])("%s bloquea la caja antes de leer la caja y la categoria", async (_name, changes) => {
+    const { calls } = await runAction({ name: "C3", form: form(changes) });
+
+    expectRowLockedBefore(calls, {
+      table: "caja_chica",
+      id: "CAJ00000002",
+      reads: (call) => call.prisma === "caja_chica.findUnique" || call.prisma === "categoria_gasto.findUnique",
+    });
+  });
 });

@@ -6,6 +6,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockCashBoxRow } from "@/lib/row-locks";
 import { checkCashWithdrawal, roundCashAmount } from "@/lib/petty-cash-amounts";
 import { pettyCashIncomeAdjustmentSchema } from "@/schemas/petty-cash/petty-cash-income-adjustment.schema";
 
@@ -65,44 +66,6 @@ export async function createPettyCashIncomeAdjustmentAction(formData: FormData) 
 
   const data = parsedData.data;
 
-  const cashBox = await prisma.caja_chica.findUnique({
-    where: {
-      id_caja_chica: data.id_caja_chica,
-    },
-    select: {
-      id_caja_chica: true,
-      nombre_caja: true,
-      saldo_actual: true,
-      estado: true,
-    },
-  });
-
-  if (!cashBox) {
-    throw new Error("La caja chica seleccionada no existe.");
-  }
-
-  if (cashBox.estado !== "abierta") {
-    throw new Error("Solo se pueden registrar movimientos en cajas abiertas.");
-  }
-
-  const isNegativeAdjustment = data.tipo_operacion === "ajuste_disminucion";
-
-  // C2 de la 11.4a (D43): el monto redondeado como la columna; un ajuste negativo se compara en
-  // centesimos con el saldo guardado. Es el mismo monto que se guarda y que mueve el saldo.
-  let amount = roundCashAmount(data.monto);
-
-  if (isNegativeAdjustment) {
-    const withdrawal = checkCashWithdrawal({ balance: cashBox.saldo_actual, amount: data.monto });
-
-    if (!withdrawal.accepted) {
-      throw new Error(
-        `El ajuste negativo supera el saldo disponible de la caja. Saldo actual: S/ ${withdrawal.balance}.`,
-      );
-    }
-
-    amount = withdrawal.amount;
-  }
-
   const movementType =
     data.tipo_operacion === "ingreso" ? "ingreso" : "ajuste";
 
@@ -117,6 +80,48 @@ export async function createPettyCashIncomeAdjustmentAction(formData: FormData) 
   );
 
   await prisma.$transaction(async (tx) => {
+    // C3 de la 11.4a (D44): la caja se bloquea antes de leerla y se lee con tx, como en el egreso:
+    // un ajuste negativo simultaneo con un egreso podia dejarla en negativo.
+    await lockCashBoxRow(tx, data.id_caja_chica);
+
+    const cashBox = await tx.caja_chica.findUnique({
+      where: {
+        id_caja_chica: data.id_caja_chica,
+      },
+      select: {
+        id_caja_chica: true,
+        nombre_caja: true,
+        saldo_actual: true,
+        estado: true,
+      },
+    });
+
+    if (!cashBox) {
+      throw new Error("La caja chica seleccionada no existe.");
+    }
+
+    if (cashBox.estado !== "abierta") {
+      throw new Error("Solo se pueden registrar movimientos en cajas abiertas.");
+    }
+
+    const isNegativeAdjustment = data.tipo_operacion === "ajuste_disminucion";
+
+    // C2 de la 11.4a (D43): el monto redondeado como la columna; un ajuste negativo se compara en
+    // centesimos con el saldo guardado. Es el mismo monto que se guarda y que mueve el saldo.
+    let amount = roundCashAmount(data.monto);
+
+    if (isNegativeAdjustment) {
+      const withdrawal = checkCashWithdrawal({ balance: cashBox.saldo_actual, amount: data.monto });
+
+      if (!withdrawal.accepted) {
+        throw new Error(
+          `El ajuste negativo supera el saldo disponible de la caja. Saldo actual: S/ ${withdrawal.balance}.`,
+        );
+      }
+
+      amount = withdrawal.amount;
+    }
+
     const idMovimientoCaja = await getNextCorrelativeId(tx, {
       codigoEntidad: "movimiento_caja",
       prefijo: "MCA",

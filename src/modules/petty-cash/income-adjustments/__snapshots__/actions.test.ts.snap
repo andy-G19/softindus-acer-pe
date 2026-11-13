@@ -9,6 +9,19 @@ exports[`createPettyCashIncomeAdjustmentAction > ajuste negativo por todo el sal
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -21,10 +34,6 @@ exports[`createPettyCashIncomeAdjustmentAction > ajuste negativo por todo el sal
       },
     },
     "prisma": "caja_chica.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -116,6 +125,19 @@ exports[`createPettyCashIncomeAdjustmentAction > ajuste negativo que supera el s
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -128,6 +150,10 @@ exports[`createPettyCashIncomeAdjustmentAction > ajuste negativo que supera el s
       },
     },
     "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": "El ajuste negativo supera el saldo disponible de la caja. Saldo actual: S/ 100.00.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -143,6 +169,19 @@ exports[`createPettyCashIncomeAdjustmentAction > ajuste positivo: tipo ajuste, c
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -155,10 +194,6 @@ exports[`createPettyCashIncomeAdjustmentAction > ajuste positivo: tipo ajuste, c
       },
     },
     "prisma": "caja_chica.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -250,6 +285,19 @@ exports[`createPettyCashIncomeAdjustmentAction > caja cerrada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -262,6 +310,10 @@ exports[`createPettyCashIncomeAdjustmentAction > caja cerrada > llamadas 1`] = `
       },
     },
     "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": "Solo se pueden registrar movimientos en cajas abiertas.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -277,6 +329,19 @@ exports[`createPettyCashIncomeAdjustmentAction > ingreso: crea el movimiento y a
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -289,10 +354,6 @@ exports[`createPettyCashIncomeAdjustmentAction > ingreso: crea el movimiento y a
       },
     },
     "prisma": "caja_chica.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -384,6 +445,19 @@ exports[`createPettyCashIncomeAdjustmentAction > la caja no existe > llamadas 1`
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -396,6 +470,10 @@ exports[`createPettyCashIncomeAdjustmentAction > la caja no existe > llamadas 1`
       },
     },
     "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": "La caja chica seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -450,6 +528,19 @@ exports[`createPettyCashIncomeAdjustmentAction > un ingreso no mira el saldo > l
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -462,10 +553,6 @@ exports[`createPettyCashIncomeAdjustmentAction > un ingreso no mira el saldo > l
       },
     },
     "prisma": "caja_chica.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {

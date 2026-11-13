@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { lockCashBoxRow, lockCashMovementRow } from "@/lib/row-locks";
 import { toNumber } from "@/lib/numbers";
 
 async function requireAdmin() {
@@ -30,12 +31,23 @@ export async function annulPettyCashMovementAction(formData: FormData) {
   }
 
   await prisma.$transaction(async (tx) => {
+    // C3 de la 11.4a (D44): el movimiento se bloquea antes de leerlo y despues su caja antes de
+    // leer el saldo; el movimiento primero y la caja al final. Dos anulaciones simultaneas leian
+    // la marca [ANULADO] sin bloquear: las dos la veian ausente y las dos devolvian el monto.
+    // Ahora la segunda espera a la primera y ve la marca.
+    await lockCashMovementRow(tx, idMovimientoCaja);
+
     const movement = await tx.movimiento_caja.findUnique({
       where: {
         id_movimiento_caja: idMovimientoCaja,
       },
-      include: {
-        caja_chica: true,
+      select: {
+        id_movimiento_caja: true,
+        id_caja_chica: true,
+        tipo_movimiento: true,
+        concepto: true,
+        monto: true,
+        observaciones: true,
       },
     });
 
@@ -47,7 +59,19 @@ export async function annulPettyCashMovementAction(formData: FormData) {
       throw new Error("No se puede anular un movimiento ya anulado.");
     }
 
-    if (movement.caja_chica.estado !== "abierta") {
+    await lockCashBoxRow(tx, movement.id_caja_chica);
+
+    const cashBox = await tx.caja_chica.findUnique({
+      where: {
+        id_caja_chica: movement.id_caja_chica,
+      },
+      select: {
+        saldo_actual: true,
+        estado: true,
+      },
+    });
+
+    if (!cashBox || cashBox.estado !== "abierta") {
       throw new Error("Solo se pueden anular movimientos de cajas abiertas.");
     }
 
@@ -57,7 +81,7 @@ export async function annulPettyCashMovementAction(formData: FormData) {
       movement.concepto,
     );
 
-    if (!wasNegativeMovement && toNumber(movement.caja_chica.saldo_actual) < amount) {
+    if (!wasNegativeMovement && toNumber(cashBox.saldo_actual) < amount) {
       throw new Error(
         "No se puede anular el ingreso porque la caja no tiene saldo suficiente para revertirlo.",
       );

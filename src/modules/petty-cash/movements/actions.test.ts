@@ -7,6 +7,8 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
+  isRowLock,
   type DataOverrides,
 } from "@/testing/page-characterization";
 
@@ -115,8 +117,8 @@ async function runAction(actionCase: ActionCase) {
   return { calls, outcome: result };
 }
 
-/** Egreso de 40.25 en una caja abierta con 100.00 de saldo. */
-function movementRow(changes: Record<string, unknown> = {}, box: Record<string, unknown> = {}) {
+/** Egreso de 40.25 de la caja CAJ00000002. */
+function movementRow(changes: Record<string, unknown> = {}) {
   return {
     id_movimiento_caja: "MCA00000009",
     id_caja_chica: "CAJ00000002",
@@ -124,18 +126,25 @@ function movementRow(changes: Record<string, unknown> = {}, box: Record<string, 
     concepto: "Taxi a proveedor",
     monto: D("40.25"),
     observaciones: null,
-    caja_chica: {
-      id_caja_chica: "CAJ00000002",
-      saldo_actual: D("100.00"),
-      estado: "abierta",
-      ...box,
-    },
+    ...changes,
+  };
+}
+
+/**
+ * La caja abierta con 100.00 de saldo. Desde C3 de la 11.4a se lee aparte y despues de bloquearla;
+ * antes llegaba incluida en el movimiento.
+ */
+function boxRow(changes: Record<string, unknown> = {}) {
+  return {
+    saldo_actual: D("100.00"),
+    estado: "abierta",
     ...changes,
   };
 }
 
 const DEFAULT_DATA: DataOverrides = {
   "movimiento_caja.findUnique": movementRow(),
+  "caja_chica.findUnique": boxRow(),
 };
 
 const form = (changes: Record<string, string> = {}) => ({
@@ -152,7 +161,8 @@ const caseInputs: CaseInput[] = [
   {
     name: "anular un ingreso sin saldo suficiente",
     data: {
-      "movimiento_caja.findUnique": movementRow({ tipo_movimiento: "ingreso", concepto: "Reposicion" }, { saldo_actual: D("40.24") }),
+      "movimiento_caja.findUnique": movementRow({ tipo_movimiento: "ingreso", concepto: "Reposicion" }),
+      "caja_chica.findUnique": boxRow({ saldo_actual: D("40.24") }),
     },
   },
   {
@@ -169,7 +179,7 @@ const caseInputs: CaseInput[] = [
   },
   {
     name: "caja cerrada",
-    data: { "movimiento_caja.findUnique": movementRow({}, { estado: "cerrada" }) },
+    data: { "caja_chica.findUnique": boxRow({ estado: "cerrada" }) },
   },
   { name: "el movimiento no existe", data: { "movimiento_caja.findUnique": null } },
   { name: "sin movimiento en el formulario", form: form({ id_movimiento_caja: "  " }) },
@@ -191,4 +201,44 @@ describe("annulPettyCashMovementAction", () => {
       expect(outcome).toMatchSnapshot("resultado");
     });
   }
+});
+
+// ---------------------------------------------------------------------------
+// C3 de la 11.4a (D44): anular decide con el movimiento y la caja bloqueados
+// ---------------------------------------------------------------------------
+
+// Dos anulaciones simultaneas del mismo movimiento leian la marca [ANULADO] sin bloquear la fila:
+// las dos la veian ausente y las dos devolvian el monto a la caja. Y anular un ingreso comparaba
+// el saldo leido junto con el movimiento, sin bloquear la caja. Ahora anular bloquea el
+// movimiento antes de leerlo y despues su caja antes de leer el saldo: el movimiento primero y la
+// caja al final, el orden de toda la 11.4. La caja se lee aparte, ya bloqueada.
+describe("C3 de la 11.4a: anular bloquea el movimiento y despues la caja", () => {
+  it.each([
+    ["anular un egreso", {}],
+    ["anular un ingreso sin saldo suficiente", { tipo_movimiento: "ingreso", concepto: "Reposicion", monto: D("200.00") }],
+  ])("%s bloquea el movimiento antes de leerlo y la caja antes de leer su saldo", async (_name, changes) => {
+    const { calls } = await runAction({
+      name: "C3",
+      form: form(),
+      data: {
+        "movimiento_caja.findUnique": movementRow(changes),
+        "caja_chica.findUnique": boxRow(),
+      },
+    });
+
+    expectRowLockedBefore(calls, {
+      table: "movimiento_caja",
+      id: "MCA00000009",
+      reads: (call) => call.prisma === "movimiento_caja.findUnique",
+    });
+    expectRowLockedBefore(calls, {
+      table: "caja_chica",
+      id: "CAJ00000002",
+      reads: (call) => call.prisma === "caja_chica.findUnique",
+    });
+    expect(
+      calls.findIndex((call) => isRowLock(call, "movimiento_caja", "MCA00000009")),
+      "el movimiento se bloquea antes que su caja",
+    ).toBeLessThan(calls.findIndex((call) => isRowLock(call, "caja_chica", "CAJ00000002")));
+  });
 });

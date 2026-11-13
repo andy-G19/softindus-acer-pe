@@ -14,14 +14,49 @@ exports[`annulPettyCashMovementAction > anular un ajuste negativo: lo trata como
   },
   {
     "args": {
-      "include": {
-        "caja_chica": true,
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
       },
     },
     "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
   },
   {
     "args": {
@@ -102,14 +137,49 @@ exports[`annulPettyCashMovementAction > anular un ajuste positivo: lo trata como
   },
   {
     "args": {
-      "include": {
-        "caja_chica": true,
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
       },
     },
     "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
   },
   {
     "args": {
@@ -190,14 +260,49 @@ exports[`annulPettyCashMovementAction > anular un egreso: marca el movimiento y 
   },
   {
     "args": {
-      "include": {
-        "caja_chica": true,
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
       },
     },
     "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
   },
   {
     "args": {
@@ -278,14 +383,49 @@ exports[`annulPettyCashMovementAction > anular un ingreso con saldo suficiente: 
   },
   {
     "args": {
-      "include": {
-        "caja_chica": true,
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
       },
     },
     "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
   },
   {
     "args": {
@@ -367,14 +507,49 @@ exports[`annulPettyCashMovementAction > anular un ingreso sin saldo suficiente >
   },
   {
     "args": {
-      "include": {
-        "caja_chica": true,
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
       },
     },
     "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
   },
   {
     "args": "No se puede anular el ingreso porque la caja no tiene saldo suficiente para revertirlo.",
@@ -399,14 +574,49 @@ exports[`annulPettyCashMovementAction > caja cerrada > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
-        "caja_chica": true,
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
       },
     },
     "prisma": "movimiento_caja.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
   },
   {
     "args": "Solo se pueden anular movimientos de cajas abiertas.",
@@ -431,8 +641,22 @@ exports[`annulPettyCashMovementAction > el movimiento no existe > llamadas 1`] =
   },
   {
     "args": {
-      "include": {
-        "caja_chica": true,
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
@@ -489,8 +713,22 @@ exports[`annulPettyCashMovementAction > ya estaba anulado > llamadas 1`] = `
   },
   {
     "args": {
-      "include": {
-        "caja_chica": true,
+      "sql": "SELECT id_movimiento_caja FROM aceros.movimiento_caja WHERE id_movimiento_caja = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MCA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_caja_chica": true,
+        "id_movimiento_caja": true,
+        "monto": true,
+        "observaciones": true,
+        "tipo_movimiento": true,
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
