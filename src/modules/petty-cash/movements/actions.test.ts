@@ -126,6 +126,8 @@ function movementRow(changes: Record<string, unknown> = {}) {
     concepto: "Taxi a proveedor",
     monto: D("40.25"),
     observaciones: null,
+    // Las ventas de chatarra que registraron este movimiento: ninguna, salvo en C4 de la 11.4a.
+    venta_chatarra: [],
     ...changes,
   };
 }
@@ -240,5 +242,45 @@ describe("C3 de la 11.4a: anular bloquea el movimiento y despues la caja", () =>
       calls.findIndex((call) => isRowLock(call, "movimiento_caja", "MCA00000009")),
       "el movimiento se bloquea antes que su caja",
     ).toBeLessThan(calls.findIndex((call) => isRowLock(call, "caja_chica", "CAJ00000002")));
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C4 de la 11.4a (D45): el ingreso de una venta de chatarra no se anula desde caja chica
+// ---------------------------------------------------------------------------
+
+// Una venta de chatarra con caja registra un ingreso en ella. Anular ese ingreso devolvia el
+// dinero y dejaba la venta registrada y la chatarra «vendida»: la venta y la caja se
+// contradecian. Decision de negocio D45: se rechaza, con la venta nombrada, sin escribir nada.
+describe("C4 de la 11.4a: el ingreso de una venta de chatarra no se anula", () => {
+  it("rechaza el ingreso de una venta y no toca el movimiento ni la caja", async () => {
+    const { calls, outcome } = await runAction({
+      name: "C4",
+      form: form(),
+      data: {
+        "movimiento_caja.findUnique": movementRow({
+          tipo_movimiento: "ingreso",
+          concepto: "Venta de chatarra CHA00000004",
+          venta_chatarra: [{ id_venta_chatarra: "VCH00000003" }],
+        }),
+      },
+    });
+
+    expect(outcome).toBe(
+      "error: Este ingreso es de la venta de chatarra VCH00000003; no se anula desde caja chica.",
+    );
+    expect(
+      calls.filter((call) => "prisma" in call && (call.prisma === "movimiento_caja.update" || call.prisma === "caja_chica.update")),
+    ).toEqual([]);
+  });
+
+  it("un ingreso sin venta se sigue anulando", async () => {
+    const { outcome } = await runAction({
+      name: "C4",
+      form: form(),
+      data: { "movimiento_caja.findUnique": movementRow({ tipo_movimiento: "ingreso", concepto: "Reposicion" }) },
+    });
+
+    expect(outcome).toBe("redirect:/dashboard/petty-cash/movements?toast=petty-cash-movement-annulled");
   });
 });

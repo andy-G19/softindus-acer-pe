@@ -180,4 +180,32 @@ describe("caja chica en Postgres", () => {
     expect(await balanceOf("CAJ00000004")).toBe("30.00");
     expect((await movementsOf("CAJ00000004")).map((movement) => movement.monto)).toEqual(["50.00", "20.00"]);
   });
+
+  it("el ingreso de una venta de chatarra no se anula desde caja chica (C4, D45)", async () => {
+    await createBox("CAJ00000005", "10.00");
+
+    expect(await income("CAJ00000005", "35.50")).toBe("redirect:/dashboard/petty-cash?toast=petty-cash-income-registered");
+    const [ingreso] = await movementsOf("CAJ00000005");
+
+    await prisma.chatarra.create({
+      data: { id_chatarra: "CHA00000001", tipo_material: "Retazos de plancha", estado: "vendida" },
+    });
+    await prisma.venta_chatarra.create({
+      data: {
+        id_venta_chatarra: "VCH00000001",
+        id_chatarra: "CHA00000001",
+        id_movimiento_caja: ingreso.id_movimiento_caja,
+        monto_recibido: "35.50",
+        id_usuario_registro: USUARIO,
+      },
+    });
+
+    expect(await annul(ingreso.id_movimiento_caja)).toBe(
+      "Este ingreso es de la venta de chatarra VCH00000001; no se anula desde caja chica.",
+    );
+    expect(await balanceOf("CAJ00000005")).toBe("45.50");
+    expect((await movementsOf("CAJ00000005")).map((movement) => [movement.monto, movement.observaciones])).toEqual([
+      ["35.50", null],
+    ]);
+  });
 });

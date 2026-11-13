@@ -30,6 +30,14 @@ exports[`annulPettyCashMovementAction > anular un ajuste negativo: lo trata como
         "monto": true,
         "observaciones": true,
         "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
@@ -153,6 +161,14 @@ exports[`annulPettyCashMovementAction > anular un ajuste positivo: lo trata como
         "monto": true,
         "observaciones": true,
         "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
@@ -276,6 +292,14 @@ exports[`annulPettyCashMovementAction > anular un egreso: marca el movimiento y 
         "monto": true,
         "observaciones": true,
         "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
@@ -399,6 +423,14 @@ exports[`annulPettyCashMovementAction > anular un ingreso con saldo suficiente: 
         "monto": true,
         "observaciones": true,
         "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
@@ -523,6 +555,14 @@ exports[`annulPettyCashMovementAction > anular un ingreso sin saldo suficiente >
         "monto": true,
         "observaciones": true,
         "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
@@ -590,6 +630,14 @@ exports[`annulPettyCashMovementAction > caja cerrada > llamadas 1`] = `
         "monto": true,
         "observaciones": true,
         "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
@@ -657,6 +705,14 @@ exports[`annulPettyCashMovementAction > el movimiento no existe > llamadas 1`] =
         "monto": true,
         "observaciones": true,
         "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",
@@ -729,6 +785,14 @@ exports[`annulPettyCashMovementAction > ya estaba anulado > llamadas 1`] = `
         "monto": true,
         "observaciones": true,
         "tipo_movimiento": true,
+        "venta_chatarra": {
+          "orderBy": {
+            "id_venta_chatarra": "asc",
+          },
+          "select": {
+            "id_venta_chatarra": true,
+          },
+        },
       },
       "where": {
         "id_movimiento_caja": "MCA00000009",

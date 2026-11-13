@@ -48,6 +48,10 @@ export async function annulPettyCashMovementAction(formData: FormData) {
         concepto: true,
         monto: true,
         observaciones: true,
+        venta_chatarra: {
+          select: { id_venta_chatarra: true },
+          orderBy: { id_venta_chatarra: "asc" },
+        },
       },
     });
 
@@ -57,6 +61,14 @@ export async function annulPettyCashMovementAction(formData: FormData) {
 
     if (movement.observaciones?.includes("[ANULADO]")) {
       throw new Error("No se puede anular un movimiento ya anulado.");
+    }
+
+    // C4 de la 11.4a (D45): el ingreso de una venta de chatarra no se anula desde caja chica.
+    // Anularlo devolvia el dinero y dejaba la venta registrada y la chatarra vendida.
+    if (movement.venta_chatarra.length > 0) {
+      throw new Error(
+        `Este ingreso es de la venta de chatarra ${movement.venta_chatarra[0].id_venta_chatarra}; no se anula desde caja chica.`,
+      );
     }
 
     await lockCashBoxRow(tx, movement.id_caja_chica);
