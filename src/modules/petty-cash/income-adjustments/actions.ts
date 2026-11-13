@@ -6,7 +6,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { toNumber } from "@/lib/numbers";
+import { checkCashWithdrawal, roundCashAmount } from "@/lib/petty-cash-amounts";
 import { pettyCashIncomeAdjustmentSchema } from "@/schemas/petty-cash/petty-cash-income-adjustment.schema";
 
 async function requireAdmin() {
@@ -85,15 +85,22 @@ export async function createPettyCashIncomeAdjustmentAction(formData: FormData) 
     throw new Error("Solo se pueden registrar movimientos en cajas abiertas.");
   }
 
-  const currentBalance = toNumber(cashBox.saldo_actual);
   const isNegativeAdjustment = data.tipo_operacion === "ajuste_disminucion";
 
-  if (isNegativeAdjustment && data.monto > currentBalance) {
-    throw new Error(
-      `El ajuste negativo supera el saldo disponible de la caja. Saldo actual: S/ ${currentBalance.toFixed(
-        2,
-      )}.`,
-    );
+  // C2 de la 11.4a (D43): el monto redondeado como la columna; un ajuste negativo se compara en
+  // centesimos con el saldo guardado. Es el mismo monto que se guarda y que mueve el saldo.
+  let amount = roundCashAmount(data.monto);
+
+  if (isNegativeAdjustment) {
+    const withdrawal = checkCashWithdrawal({ balance: cashBox.saldo_actual, amount: data.monto });
+
+    if (!withdrawal.accepted) {
+      throw new Error(
+        `El ajuste negativo supera el saldo disponible de la caja. Saldo actual: S/ ${withdrawal.balance}.`,
+      );
+    }
+
+    amount = withdrawal.amount;
   }
 
   const movementType =
@@ -122,7 +129,7 @@ export async function createPettyCashIncomeAdjustmentAction(formData: FormData) 
         id_usuario_registro: session.user.id,
         tipo_movimiento: movementType,
         concepto: movementConcept,
-        monto: data.monto,
+        monto: amount,
         fecha_movimiento: data.fecha_movimiento,
         comprobante: data.comprobante || null,
         responsable:
@@ -138,10 +145,10 @@ export async function createPettyCashIncomeAdjustmentAction(formData: FormData) 
       data: {
         saldo_actual: isNegativeAdjustment
           ? {
-              decrement: data.monto,
+              decrement: amount,
             }
           : {
-              increment: data.monto,
+              increment: amount,
         },
       },
     });

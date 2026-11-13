@@ -42,7 +42,7 @@ exports[`createPettyCashIncomeAdjustmentAction > ajuste negativo por todo el sal
         "id_caja_chica": "CAJ00000002",
         "id_movimiento_caja": "MCA00000001",
         "id_usuario_registro": "USU00000001",
-        "monto": 100,
+        "monto": "100.00",
         "observaciones": "Dirección del ajuste: disminución.",
         "responsable": "Usuario de prueba",
         "tipo_movimiento": "ajuste",
@@ -54,7 +54,7 @@ exports[`createPettyCashIncomeAdjustmentAction > ajuste negativo por todo el sal
     "args": {
       "data": {
         "saldo_actual": {
-          "decrement": 100,
+          "decrement": "100.00",
         },
       },
       "where": {
@@ -176,7 +176,7 @@ exports[`createPettyCashIncomeAdjustmentAction > ajuste positivo: tipo ajuste, c
         "id_caja_chica": "CAJ00000002",
         "id_movimiento_caja": "MCA00000001",
         "id_usuario_registro": "USU00000001",
-        "monto": 60.5,
+        "monto": "60.50",
         "observaciones": "Dirección del ajuste: incremento. conteo",
         "responsable": "Usuario de prueba",
         "tipo_movimiento": "ajuste",
@@ -188,7 +188,7 @@ exports[`createPettyCashIncomeAdjustmentAction > ajuste positivo: tipo ajuste, c
     "args": {
       "data": {
         "saldo_actual": {
-          "increment": 60.5,
+          "increment": "60.50",
         },
       },
       "where": {
@@ -310,7 +310,7 @@ exports[`createPettyCashIncomeAdjustmentAction > ingreso: crea el movimiento y a
         "id_caja_chica": "CAJ00000002",
         "id_movimiento_caja": "MCA00000001",
         "id_usuario_registro": "USU00000001",
-        "monto": 60.5,
+        "monto": "60.50",
         "observaciones": null,
         "responsable": "Usuario de prueba",
         "tipo_movimiento": "ingreso",
@@ -322,7 +322,7 @@ exports[`createPettyCashIncomeAdjustmentAction > ingreso: crea el movimiento y a
     "args": {
       "data": {
         "saldo_actual": {
-          "increment": 60.5,
+          "increment": "60.50",
         },
       },
       "where": {
@@ -483,7 +483,7 @@ exports[`createPettyCashIncomeAdjustmentAction > un ingreso no mira el saldo > l
         "id_caja_chica": "CAJ00000002",
         "id_movimiento_caja": "MCA00000001",
         "id_usuario_registro": "USU00000001",
-        "monto": 500,
+        "monto": "500.00",
         "observaciones": null,
         "responsable": "Usuario de prueba",
         "tipo_movimiento": "ingreso",
@@ -495,7 +495,7 @@ exports[`createPettyCashIncomeAdjustmentAction > un ingreso no mira el saldo > l
     "args": {
       "data": {
         "saldo_actual": {
-          "increment": 500,
+          "increment": "500.00",
         },
       },
       "where": {

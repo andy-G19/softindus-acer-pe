@@ -136,7 +136,7 @@ exports[`createPettyCashExpenseAction > egreso por todo el saldo, con comprobant
         "id_categoria_gasto": "CGA00000003",
         "id_movimiento_caja": "MCA00000001",
         "id_usuario_registro": "USU00000001",
-        "monto": 100,
+        "monto": "100.00",
         "observaciones": "pagado",
         "responsable": "Luis",
         "tipo_movimiento": "egreso",
@@ -148,7 +148,7 @@ exports[`createPettyCashExpenseAction > egreso por todo el saldo, con comprobant
     "args": {
       "data": {
         "saldo_actual": {
-          "decrement": 100,
+          "decrement": "100.00",
         },
       },
       "where": {
@@ -257,7 +257,7 @@ exports[`createPettyCashExpenseAction > egreso valido: crea el movimiento y desc
         "id_categoria_gasto": "CGA00000003",
         "id_movimiento_caja": "MCA00000001",
         "id_usuario_registro": "USU00000001",
-        "monto": 40.25,
+        "monto": "40.25",
         "observaciones": null,
         "responsable": "Usuario de prueba",
         "tipo_movimiento": "egreso",
@@ -269,7 +269,7 @@ exports[`createPettyCashExpenseAction > egreso valido: crea el movimiento y desc
     "args": {
       "data": {
         "saldo_actual": {
-          "decrement": 40.25,
+          "decrement": "40.25",
         },
       },
       "where": {

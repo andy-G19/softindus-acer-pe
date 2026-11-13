@@ -6,7 +6,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { toNumber } from "@/lib/numbers";
+import { checkCashWithdrawal } from "@/lib/petty-cash-amounts";
 import { pettyCashExpenseSchema } from "@/schemas/petty-cash/petty-cash-expense.schema";
 
 async function requireAdmin() {
@@ -57,13 +57,13 @@ export async function createPettyCashExpenseAction(formData: FormData) {
     throw new Error("Solo se pueden registrar egresos en cajas abiertas.");
   }
 
-  const currentBalance = toNumber(cashBox.saldo_actual);
+  // C2 de la 11.4a (D43): el monto redondeado como la columna, comparado en centesimos con el
+  // saldo guardado; es el mismo que se guarda en el movimiento y se descuenta de la caja.
+  const withdrawal = checkCashWithdrawal({ balance: cashBox.saldo_actual, amount: data.monto });
 
-  if (data.monto > currentBalance) {
+  if (!withdrawal.accepted) {
     throw new Error(
-      `El egreso supera el saldo disponible de la caja. Saldo actual: S/ ${currentBalance.toFixed(
-        2,
-      )}.`,
+      `El egreso supera el saldo disponible de la caja. Saldo actual: S/ ${withdrawal.balance}.`,
     );
   }
 
@@ -100,7 +100,7 @@ export async function createPettyCashExpenseAction(formData: FormData) {
         id_usuario_registro: session.user.id,
         tipo_movimiento: "egreso",
         concepto: data.concepto,
-        monto: data.monto,
+        monto: withdrawal.amount,
         fecha_movimiento: data.fecha_movimiento,
         comprobante: data.comprobante || null,
         responsable:
@@ -115,7 +115,7 @@ export async function createPettyCashExpenseAction(formData: FormData) {
       },
       data: {
         saldo_actual: {
-          decrement: data.monto,
+          decrement: withdrawal.amount,
         },
       },
     });

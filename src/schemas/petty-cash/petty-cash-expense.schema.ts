@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { hasCents } from "@/lib/client-payment-amounts";
+
 export const pettyCashExpenseSchema = z.object({
   id_caja_chica: z
     .string()
@@ -33,7 +35,8 @@ export const pettyCashExpenseSchema = z.object({
         return z.NEVER;
       }
 
-      if (amount <= 0) {
+      // C2 de la 11.4a (D43): lo que la columna guardaria como 0.00 tampoco es un monto.
+      if (amount <= 0 || !hasCents(value)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "El monto debe ser mayor a cero.",
