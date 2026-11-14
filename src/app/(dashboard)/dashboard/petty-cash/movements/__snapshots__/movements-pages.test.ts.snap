@@ -850,7 +850,7 @@ exports[`/dashboard/petty-cash/movements > solo hasta > llamadas 1`] = `
       "take": 20,
       "where": {
         "fecha_movimiento": {
-          "lte": 2026-07-31T23:59:59.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
         },
       },
     },
@@ -860,7 +860,7 @@ exports[`/dashboard/petty-cash/movements > solo hasta > llamadas 1`] = `
     "args": {
       "where": {
         "fecha_movimiento": {
-          "lte": 2026-07-31T23:59:59.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
         },
       },
     },
@@ -875,7 +875,7 @@ exports[`/dashboard/petty-cash/movements > solo hasta > llamadas 1`] = `
         "AND": [
           {
             "fecha_movimiento": {
-              "lte": 2026-07-31T23:59:59.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
           },
           {
@@ -895,7 +895,7 @@ exports[`/dashboard/petty-cash/movements > solo hasta > llamadas 1`] = `
         "AND": [
           {
             "fecha_movimiento": {
-              "lte": 2026-07-31T23:59:59.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
           },
           {
@@ -915,7 +915,7 @@ exports[`/dashboard/petty-cash/movements > solo hasta > llamadas 1`] = `
         "AND": [
           {
             "fecha_movimiento": {
-              "lte": 2026-07-31T23:59:59.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
           },
           {
@@ -940,7 +940,7 @@ exports[`/dashboard/petty-cash/movements > solo hasta > llamadas 1`] = `
         "AND": [
           {
             "fecha_movimiento": {
-              "lte": 2026-07-31T23:59:59.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
           },
           {
@@ -1282,7 +1282,7 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > llamadas 1`] = `
         ],
         "fecha_movimiento": {
           "gte": 2026-07-01T00:00:00.000Z,
-          "lte": 2026-07-31T23:59:59.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
         },
         "id_caja_chica": "CCH00000001",
         "id_categoria_gasto": "CGA00000001",
@@ -1322,7 +1322,7 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > llamadas 1`] = `
         ],
         "fecha_movimiento": {
           "gte": 2026-07-01T00:00:00.000Z,
-          "lte": 2026-07-31T23:59:59.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
         },
         "id_caja_chica": "CCH00000001",
         "id_categoria_gasto": "CGA00000001",
@@ -1367,7 +1367,7 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > llamadas 1`] = `
             ],
             "fecha_movimiento": {
               "gte": 2026-07-01T00:00:00.000Z,
-              "lte": 2026-07-31T23:59:59.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
             "id_caja_chica": "CCH00000001",
             "id_categoria_gasto": "CGA00000001",
@@ -1417,7 +1417,7 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > llamadas 1`] = `
             ],
             "fecha_movimiento": {
               "gte": 2026-07-01T00:00:00.000Z,
-              "lte": 2026-07-31T23:59:59.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
             "id_caja_chica": "CCH00000001",
             "id_categoria_gasto": "CGA00000001",
@@ -1467,7 +1467,7 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > llamadas 1`] = `
             ],
             "fecha_movimiento": {
               "gte": 2026-07-01T00:00:00.000Z,
-              "lte": 2026-07-31T23:59:59.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
             "id_caja_chica": "CCH00000001",
             "id_categoria_gasto": "CGA00000001",
@@ -1522,7 +1522,7 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > llamadas 1`] = `
             ],
             "fecha_movimiento": {
               "gte": 2026-07-01T00:00:00.000Z,
-              "lte": 2026-07-31T23:59:59.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
             "id_caja_chica": "CCH00000001",
             "id_categoria_gasto": "CGA00000001",

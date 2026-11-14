@@ -29,6 +29,7 @@ import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { formatDate, formatMoney } from "@/lib/formatters";
+import { parseDateParam } from "@/lib/search-params";
 import { toNumber } from "@/lib/numbers";
 import { annulPettyCashMovementAction } from "@/modules/petty-cash/movements/actions";
 import { MovementAnnulAction } from "@/modules/petty-cash/movements/movement-annul-action";
@@ -125,8 +126,10 @@ export default async function PettyCashMovementsPage({
       cashBox: selectedCashBox,
       type: selectedType,
       category: selectedCategory,
-      startDate: selectedStartDate,
-      endDate: selectedEndDate,
+      // C6 de la 11.4b (D51): un texto que no es fecha no filtra, como en los demas listados, en
+      // lugar de llegar a Prisma como fecha invalida y romper la pagina.
+      startDate: parseDateParam(params, "desde"),
+      endDate: parseDateParam(params, "hasta"),
       searchText,
     },
     { skip, take },
