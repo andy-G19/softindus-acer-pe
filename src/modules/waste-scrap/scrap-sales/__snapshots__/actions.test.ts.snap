@@ -1,0 +1,1601 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createScrapSaleAction > caja cerrada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "venta_chatarra": true,
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": "Solo se puede registrar el ingreso en una caja abierta.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > caja cerrada > resultado 1`] = `
+{
+  "error": "Solo se puede registrar el ingreso en una caja abierta.",
+  "fieldErrors": {
+    "id_caja_chica": [
+      "Solo se puede registrar el ingreso en una caja abierta.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > chatarra sin peso ni cantidad y formulario vacio > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "venta_chatarra": true,
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": "Debe registrar peso vendido, cantidad vendida o tener esos datos en la chatarra seleccionada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > chatarra sin peso ni cantidad y formulario vacio > resultado 1`] = `
+{
+  "error": "Debe registrar peso vendido, cantidad vendida o tener esos datos en la chatarra seleccionada.",
+  "fieldErrors": {
+    "peso_vendido_kg": [
+      "Debe registrar peso vendido, cantidad vendida o tener esos datos en la chatarra seleccionada.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > el peso vendido supera el registrado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "venta_chatarra": true,
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": "El peso vendido no puede superar el peso registrado.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > el peso vendido supera el registrado > resultado 1`] = `
+{
+  "error": "El peso vendido no puede superar el peso registrado.",
+  "fieldErrors": {
+    "peso_vendido_kg": [
+      "El peso vendido no puede superar el peso registrado.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "15.01",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > la caja no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "venta_chatarra": true,
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": "La caja chica seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > la caja no existe > resultado 1`] = `
+{
+  "error": "La caja chica seleccionada no existe.",
+  "fieldErrors": {
+    "id_caja_chica": [
+      "La caja chica seleccionada no existe.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > la cantidad vendida supera la registrada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "venta_chatarra": true,
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": "La cantidad vendida no puede superar la cantidad registrada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > la cantidad vendida supera la registrada > resultado 1`] = `
+{
+  "error": "La cantidad vendida no puede superar la cantidad registrada.",
+  "fieldErrors": {
+    "cantidad_vendida": [
+      "La cantidad vendida no puede superar la cantidad registrada.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "3.5",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > la chatarra no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "venta_chatarra": true,
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": "El registro de chatarra seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > la chatarra no existe > resultado 1`] = `
+{
+  "error": "El registro de chatarra seleccionado no existe.",
+  "fieldErrors": {
+    "id_chatarra": [
+      "El registro de chatarra seleccionado no existe.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > la chatarra ya esta vendida > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "venta_chatarra": true,
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": "Esta chatarra ya fue vendida.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > la chatarra ya esta vendida > resultado 1`] = `
+{
+  "error": "Esta chatarra ya fue vendida.",
+  "fieldErrors": {
+    "id_chatarra": [
+      "Esta chatarra ya fue vendida.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > la chatarra ya tiene una venta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "venta_chatarra": true,
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": "Esta chatarra ya tiene una venta registrada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > la chatarra ya tiene una venta > resultado 1`] = `
+{
+  "error": "Esta chatarra ya tiene una venta registrada.",
+  "fieldErrors": {
+    "id_chatarra": [
+      "Esta chatarra ya tiene una venta registrada.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > la clave es de otra operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > la clave es de otra operacion > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > la misma clave ya registrada: responde con la venta guardada sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scraps",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scrap-sales/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > la misma clave ya registrada: responde con la venta guardada sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+    "id_venta_chatarra": "VCH00000009",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > monto cero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createScrapSaleAction > monto cero > resultado 1`] = `
+{
+  "error": "Revisa los datos de la venta.",
+  "fieldErrors": {
+    "monto_recibido": [
+      "El monto recibido debe ser mayor que cero.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "0",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > peso y cantidad vacios: toma los de la chatarra > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "venta_chatarra": true,
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "venta_chatarra",
+      "prefijo": "VCH",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_caja",
+      "prefijo": "MCA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "concepto": "Venta de chatarra CHA00000004",
+        "fecha_movimiento": 2026-11-10T00:00:00.000Z,
+        "id_caja_chica": "CAJ00000002",
+        "id_movimiento_caja": "MCA00000001",
+        "id_usuario_registro": "USU00000001",
+        "monto": "80.25",
+        "observaciones": "Ingreso generado por venta de chatarra.",
+        "responsable": "Usuario de prueba",
+        "tipo_movimiento": "ingreso",
+      },
+    },
+    "prisma": "movimiento_caja.create",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "increment": "80.25",
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Movimiento de caja creado por venta de chatarra CHA00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_vendida": Decimal(3),
+        "destino_dinero": null,
+        "fecha_venta": 2026-11-10T00:00:00.000Z,
+        "id_chatarra": "CHA00000004",
+        "id_movimiento_caja": "MCA00000001",
+        "id_usuario_registro": "USU00000001",
+        "id_venta_chatarra": "VCH00000001",
+        "monto_recibido": "80.25",
+        "observaciones": null,
+        "peso_vendido_kg": Decimal(15),
+      },
+    },
+    "prisma": "venta_chatarra.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vendida",
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Venta de chatarra registrada para CHA00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "venta_chatarra",
+      "id_registro_afectado": "VCH00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "VCH00000001",
+      },
+      "where": {
+        "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scraps",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scrap-sales/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > peso y cantidad vacios: toma los de la chatarra > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+    "id_venta_chatarra": "VCH00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > sin chatarra ni fecha > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createScrapSaleAction > sin chatarra ni fecha > resultado 1`] = `
+{
+  "error": "Revisa los datos de la venta.",
+  "fieldErrors": {
+    "fecha_venta": [
+      "La fecha de venta es obligatoria.",
+    ],
+    "id_chatarra": [
+      "Debe seleccionar un registro de chatarra.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createScrapSaleAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createScrapSaleAction > sin permiso: el maestro de taller > resultado 1`] = `
+{
+  "error": "No tienes permisos para registrar ventas de chatarra.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > venta con caja: movimiento de ingreso, saldo, venta y chatarra vendida > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "venta_chatarra": true,
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_caja_chica FROM aceros.caja_chica WHERE id_caja_chica = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAJ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_caja_chica": true,
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "venta_chatarra",
+      "prefijo": "VCH",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_caja",
+      "prefijo": "MCA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "concepto": "Venta de chatarra CHA00000004",
+        "fecha_movimiento": 2026-11-10T00:00:00.000Z,
+        "id_caja_chica": "CAJ00000002",
+        "id_movimiento_caja": "MCA00000001",
+        "id_usuario_registro": "USU00000001",
+        "monto": "80.25",
+        "observaciones": "Ingreso generado por venta de chatarra.",
+        "responsable": "Usuario de prueba",
+        "tipo_movimiento": "ingreso",
+      },
+    },
+    "prisma": "movimiento_caja.create",
+  },
+  {
+    "args": {
+      "data": {
+        "saldo_actual": {
+          "increment": "80.25",
+        },
+      },
+      "where": {
+        "id_caja_chica": "CAJ00000002",
+      },
+    },
+    "prisma": "caja_chica.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Movimiento de caja creado por venta de chatarra CHA00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_caja",
+      "id_registro_afectado": "MCA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_vendida": Decimal(3),
+        "destino_dinero": null,
+        "fecha_venta": 2026-11-10T00:00:00.000Z,
+        "id_chatarra": "CHA00000004",
+        "id_movimiento_caja": "MCA00000001",
+        "id_usuario_registro": "USU00000001",
+        "id_venta_chatarra": "VCH00000001",
+        "monto_recibido": "80.25",
+        "observaciones": null,
+        "peso_vendido_kg": "12.50",
+      },
+    },
+    "prisma": "venta_chatarra.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vendida",
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Venta de chatarra registrada para CHA00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "venta_chatarra",
+      "id_registro_afectado": "VCH00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "VCH00000001",
+      },
+      "where": {
+        "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scraps",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scrap-sales/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > venta con caja: movimiento de ingreso, saldo, venta y chatarra vendida > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+    "id_venta_chatarra": "VCH00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": "",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "CAJ00000002",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": "",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;
+
+exports[`createScrapSaleAction > venta sin caja: solo la venta y la chatarra vendida > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "vender_chatarra",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_chatarra FROM aceros.chatarra WHERE id_chatarra = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CHA00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "venta_chatarra": true,
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "venta_chatarra",
+      "prefijo": "VCH",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_vendida": Decimal(3),
+        "destino_dinero": "Compra de discos",
+        "fecha_venta": 2026-11-10T00:00:00.000Z,
+        "id_chatarra": "CHA00000004",
+        "id_movimiento_caja": null,
+        "id_usuario_registro": "USU00000001",
+        "id_venta_chatarra": "VCH00000001",
+        "monto_recibido": "80.25",
+        "observaciones": "reciclador",
+        "peso_vendido_kg": "12.50",
+      },
+    },
+    "prisma": "venta_chatarra.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vendida",
+      },
+      "where": {
+        "id_chatarra": "CHA00000004",
+      },
+    },
+    "prisma": "chatarra.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Venta de chatarra registrada para CHA00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "venta_chatarra",
+      "id_registro_afectado": "VCH00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "VCH00000001",
+      },
+      "where": {
+        "clave": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scraps",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/waste-scrap/scrap-sales/new",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/movements",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/monthly-summary",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createScrapSaleAction > venta sin caja: solo la venta y la chatarra vendida > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
+    "id_venta_chatarra": "VCH00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad_vendida": "",
+    "destino_dinero": " Compra de discos ",
+    "fecha_venta": "2026-11-10",
+    "id_caja_chica": "",
+    "id_chatarra": "CHA00000004",
+    "monto_recibido": "80.25",
+    "observaciones": " reciclador ",
+    "peso_vendido_kg": "12.50",
+  },
+}
+`;

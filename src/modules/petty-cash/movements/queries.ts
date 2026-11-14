@@ -3,6 +3,7 @@ import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import type { PaginationParams } from "@/lib/pagination";
+import { buildDateRangeFilter } from "@/lib/search-params";
 
 // Consultas de lectura de la pagina de Movimientos de caja chica. No
 // autorizan: la pagina que las llama ya verifico el rol con requireRole.
@@ -11,8 +12,9 @@ export type PettyCashMovementFilters = {
   cashBox: string;
   type: string;
   category: string;
-  startDate: string;
-  endDate: string;
+  /** Fechas ya interpretadas por parseDateParam; null no filtra. */
+  startDate: Date | null;
+  endDate: Date | null;
   searchText: string;
 };
 
@@ -32,19 +34,13 @@ function buildPettyCashMovementWhere(filters: PettyCashMovementFilters) {
     where.id_categoria_gasto = category;
   }
 
-  if (startDate || endDate) {
-    where.fecha_movimiento = {
-      ...(startDate
-        ? {
-            gte: new Date(`${startDate}T00:00:00`),
-          }
-        : {}),
-      ...(endDate
-        ? {
-            lte: new Date(`${endDate}T23:59:59`),
-          }
-        : {}),
-    };
+  // C6 de la 11.4b (D51): la regla de los demas listados, desde el inicio del primer dia hasta
+  // antes del dia siguiente al ultimo. La copia local cortaba a las T23:59:59 en punto y dejaba
+  // fuera lo registrado despues, dentro de ese segundo (timestamptz guarda microsegundos).
+  const dateRange = buildDateRangeFilter(startDate, endDate);
+
+  if (dateRange) {
+    where.fecha_movimiento = dateRange;
   }
 
   if (searchText) {
@@ -135,6 +131,12 @@ export async function getPettyCashMovementListData(
             nombres: true,
             apellidos: true,
           },
+        },
+        // C5 de la 11.4b (D50): la venta de chatarra que genero el movimiento, para no ofrecer
+        // anular su ingreso (la accion lo rechaza, D45).
+        venta_chatarra: {
+          select: { id_venta_chatarra: true },
+          orderBy: { id_venta_chatarra: "asc" },
         },
       },
     }),

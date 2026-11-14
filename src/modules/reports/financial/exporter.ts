@@ -1,13 +1,13 @@
 import "server-only";
 
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { toNumber } from "@/lib/numbers";
 import {
   getExportDateStamp,
   getExportParam,
   type ExportCell,
   type ExportReport,
 } from "@/modules/reports/export-report";
+import { summarizeFinancialTotals } from "@/modules/reports/financial/financial-totals";
 import { getFinancialExportData } from "@/modules/reports/financial/queries";
 
 export async function exportFinancialReport(
@@ -21,7 +21,9 @@ export async function exportFinancialReport(
     productionCosts,
     estimatedProfit,
     receivables,
-    pendingPurchases,
+    cashIncomeSum,
+    cashExpenseSum,
+    pendingPurchaseAmounts,
   } = await getFinancialExportData(
     {
       dateFrom: getExportParam(searchParams, "dateFrom"),
@@ -34,42 +36,23 @@ export async function exportFinancialReport(
     limit,
   );
 
-  const totalCashIncome = cashMovements.reduce((sum, movement) => {
-    if (movement.tipo_movimiento !== "ingreso") {
-      return sum;
-    }
-
-    return sum + toNumber(movement.monto);
-  }, 0);
-
-  const totalCashExpense = cashMovements.reduce((sum, movement) => {
-    if (movement.tipo_movimiento !== "egreso") {
-      return sum;
-    }
-
-    return sum + toNumber(movement.monto);
-  }, 0);
-
-  const totalPendingPurchases = pendingPurchases.reduce((sum, purchase) => {
-    const paid = purchase.pago_proveedor.reduce((paymentSum, payment) => {
-      return paymentSum + toNumber(payment.monto_pagado);
-    }, 0);
-
-    return sum + Math.max(toNumber(purchase.monto_total) - paid, 0);
-  }, 0);
+  // C7 de la 11.4b (D52): los totales salen de todas las filas del filtro, no de las exportadas,
+  // con la misma funcion que la pagina.
+  const { totalCashIncome, totalCashExpense, cashNetMovement, pendingPurchasesBalance } =
+    summarizeFinancialTotals({ cashIncomeSum, cashExpenseSum, pendingPurchaseAmounts });
 
   const summaryRows: ExportCell[][] = [
     ["Resumen", "Saldo caja chica abierta", "", formatMoney(cashBalance._sum.saldo_actual ?? 0), "", "", "", ""],
     ["Resumen", "Ingresos caja chica", "", formatMoney(totalCashIncome), "", "", "", ""],
     ["Resumen", "Egresos caja chica", "", formatMoney(totalCashExpense), "", "", "", ""],
-    ["Resumen", "Movimiento neto caja", "", formatMoney(totalCashIncome - totalCashExpense), "", "", "", ""],
+    ["Resumen", "Movimiento neto caja", "", formatMoney(cashNetMovement), "", "", "", ""],
     ["Resumen", "Cobrado a clientes", "", formatMoney(collectedPayments._sum.monto_pagado ?? 0), "", "", "", ""],
     ["Resumen", "Costo producción", "", formatMoney(productionCosts._sum.costo_total ?? 0), "", "", "", ""],
     ["Resumen", "Ingreso estimado", "", formatMoney(estimatedProfit._sum.ingreso_estimado ?? 0), "", "", "", ""],
     ["Resumen", "Costo estimado", "", formatMoney(estimatedProfit._sum.costo_total ?? 0), "", "", "", ""],
     ["Resumen", "Utilidad estimada", "", formatMoney(estimatedProfit._sum.utilidad_estimada ?? 0), "", "", "", ""],
     ["Resumen", "Cuentas por cobrar", "", formatMoney(receivables._sum.saldo ?? 0), "", "", "", ""],
-    ["Resumen", "Compras por pagar", "", formatMoney(totalPendingPurchases), "", "", "", ""],
+    ["Resumen", "Compras por pagar", "", formatMoney(pendingPurchasesBalance), "", "", "", ""],
   ];
 
   const movementRows: ExportCell[][] = cashMovements.map((movement) => [

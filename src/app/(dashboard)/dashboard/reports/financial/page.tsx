@@ -41,6 +41,7 @@ import {
   getFinancialReportData,
   getFinancialReportFilterOptions,
 } from "@/modules/reports/financial/queries";
+import { summarizeFinancialTotals } from "@/modules/reports/financial/financial-totals";
 import { ExportRangeNotice } from "@/modules/reports/export-range-notice";
 import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
@@ -227,6 +228,9 @@ export default async function FinancialReportPage({
     lowMarginAlerts,
     receivables,
     pendingSupplierPurchases,
+    cashIncomeSum,
+    cashExpenseSum,
+    pendingPurchaseAmounts,
   } = await getFinancialReportData({
     dateFrom,
     dateTo,
@@ -236,23 +240,15 @@ export default async function FinancialReportPage({
     searchText,
   });
 
-  const incomeMovements = cashMovements.filter((movement) => {
-    return movement.tipo_movimiento === "ingreso";
-  });
-
-  const expenseMovements = cashMovements.filter((movement) => {
-    return movement.tipo_movimiento === "egreso";
-  });
-
-  const totalCashIncome = incomeMovements.reduce((sum, movement) => {
-    return sum + toNumber(movement.monto);
-  }, 0);
-
-  const totalCashExpense = expenseMovements.reduce((sum, movement) => {
-    return sum + toNumber(movement.monto);
-  }, 0);
-
-  const cashNetMovement = totalCashIncome - totalCashExpense;
+  // C7 de la 11.4b (D52): los totales de caja y de compras por pagar salen de todas las filas del
+  // filtro, con la misma funcion que la exportacion; las tablas siguen mostrando las primeras.
+  const {
+    totalCashIncome,
+    totalCashExpense,
+    cashNetMovement,
+    pendingPurchasesBalance,
+    pendingPurchasesCount,
+  } = summarizeFinancialTotals({ cashIncomeSum, cashExpenseSum, pendingPurchaseAmounts });
 
   const totalOpenCashBalance = openCashBoxesBalance._sum.saldo_actual ?? 0;
   const totalCollectedPayments = collectedPayments._sum.monto_pagado ?? 0;
@@ -279,10 +275,6 @@ export default async function FinancialReportPage({
       pendingBalance,
     };
   });
-
-  const totalSupplierPendingBalance = supplierPendingRows.reduce((sum, row) => {
-    return sum + row.pendingBalance;
-  }, 0);
 
   const financialEstimatedResult =
     toNumber(totalCollectedPayments) +
@@ -322,7 +314,7 @@ export default async function FinancialReportPage({
         <KpiCard title="Movimiento neto" value={formatMoney(cashNetMovement)} description="Ingresos menos egresos de caja chica." tone="info" icon={Scale} />
         <KpiCard title="Cobrado a clientes" value={formatMoney(totalCollectedPayments)} description="Pagos de clientes registrados en el periodo." tone="success" icon={CircleDollarSign} />
         <KpiCard title="Cuentas por cobrar" value={formatMoney(totalReceivables)} description="Saldo pendiente de proformas activas." tone="info" icon={Landmark} />
-        <KpiCard title="Compras por pagar" value={formatMoney(totalSupplierPendingBalance)} description={`Compras pendientes o parciales: ${supplierPendingRows.length}.`} tone={supplierPendingRows.length > 0 ? "warning" : "info"} icon={Truck} />
+        <KpiCard title="Compras por pagar" value={formatMoney(pendingPurchasesBalance)} description={`Compras pendientes o parciales: ${pendingPurchasesCount}.`} tone={pendingPurchasesCount > 0 ? "warning" : "info"} icon={Truck} />
         <KpiCard title="Resultado estimado" value={formatMoney(financialEstimatedResult)} description="Cobros + ingresos caja - egresos - costos." tone="info" icon={Scale} />
         <KpiCard title="Costo producción" value={formatMoney(totalProductionCost)} description="Costos de producción registrados en costeo." tone="info" icon={CircleDollarSign} />
         <KpiCard title="Utilidad estimada" value={formatMoney(totalEstimatedProfit)} description={`Alertas de bajo margen: ${lowMarginAlerts}.`} tone={lowMarginAlerts > 0 ? "warning" : "success"} icon={TrendingUp} />

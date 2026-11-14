@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { hasCents } from "@/lib/client-payment-amounts";
+
 const optionalPositiveNumber = z.preprocess(
   (value) => {
     if (value === null || value === undefined || value === "") {
@@ -42,7 +44,10 @@ export const scrapSaleSchema = z.object({
     .number({
       message: "El monto recibido debe ser numérico.",
     })
-    .positive("El monto recibido debe ser mayor que cero."),
+    .positive("El monto recibido debe ser mayor que cero.")
+    // C2 de la 11.4b (D48): lo que la columna guardaria como 0.00 tampoco es un monto. Solo mira
+    // los positivos: la accion une los mensajes y un cero los repetiria.
+    .refine((value) => value <= 0 || hasCents(value), "El monto recibido debe ser mayor que cero."),
 
   destino_dinero: z
     .string()
