@@ -30,7 +30,8 @@ export type PayrollAmountsResult =
 /**
  * Bruto, descuento y neto de una planilla: el bruto son las asistencias validas por la tarifa, el
  * descuento se redondea como su columna y el neto es el bruto menos ese descuento redondeado. Se
- * rechaza un descuento que, redondeado, supera el bruto.
+ * rechaza un descuento que, redondeado, iguala o supera el bruto: un neto de 0.00 no se podria
+ * pagar, porque el pago exige un monto mayor que cero (C5 de la 11.5, D56).
  */
 export function calculatePayrollAmounts({
   validAttendances,
@@ -44,7 +45,7 @@ export function calculatePayrollAmounts({
   const grossCents = BigInt(validAttendances) * cents(rate);
   const discountCents = cents(discount);
 
-  if (discountCents > grossCents) {
+  if (discountCents >= grossCents) {
     return { accepted: false };
   }
 

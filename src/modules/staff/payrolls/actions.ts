@@ -7,6 +7,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { toNumber } from "@/lib/numbers";
 import { calculatePayrollAmounts } from "@/lib/payroll-amounts";
 import { lockOperatorRow, lockPayrollRow } from "@/lib/row-locks";
@@ -84,6 +85,34 @@ export async function generatePayrollAction(formData: FormData) {
         );
       }
 
+      // C5 de la 11.5 (D55): un periodo que se cruza con otra planilla no anulada del operario
+      // pagaria dos veces las asistencias comunes. Compartir un solo dia tambien es cruzarse.
+      const overlappingPayroll = await tx.planilla_pago.findFirst({
+        where: {
+          id_operario: data.id_operario,
+          estado_pago: { not: "anulada" },
+          periodo_inicio: { lte: data.periodo_fin },
+          periodo_fin: { gte: data.periodo_inicio },
+        },
+        orderBy: [{ periodo_inicio: "asc" }, { id_planilla: "asc" }],
+        select: {
+          id_planilla: true,
+          periodo_inicio: true,
+          periodo_fin: true,
+        },
+      });
+
+      if (overlappingPayroll) {
+        throw new Error(
+          `Este operario ya tiene la planilla ${overlappingPayroll.id_planilla}, del ${formatDate(
+            overlappingPayroll.periodo_inicio,
+            { format: "dd/mm/yyyy" },
+          )} al ${formatDate(overlappingPayroll.periodo_fin, {
+            format: "dd/mm/yyyy",
+          })}, que se cruza con el periodo seleccionado.`,
+        );
+      }
+
       const attendanceRecords = await tx.asistencia.findMany({
         where: {
           id_operario: data.id_operario,
@@ -132,7 +161,7 @@ export async function generatePayrollAction(formData: FormData) {
 
       if (!amounts.accepted) {
         throw new Error(
-          "Los descuentos no pueden superar el monto bruto calculado.",
+          "Los descuentos no pueden igualar o superar el monto bruto calculado.",
         );
       }
 

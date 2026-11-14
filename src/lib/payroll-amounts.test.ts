@@ -14,8 +14,8 @@ describe("calculatePayrollAmounts", () => {
     [2, "50.00", 0, "100.00", "0.00", "100.00"],
     [3, "33.33", 0, "99.99", "0.00", "99.99"],
     [3, new Prisma.Decimal("33.33"), "0.01", "99.99", "0.01", "99.98"],
-    // Lo que se guardaria como el bruto no lo supera.
-    [2, "50.00", 100.004, "100.00", "100.00", "0.00"],
+    // El menor neto posible: un centimo.
+    [2, "50.00", 99.99, "100.00", "99.99", "0.01"],
   ])("%s asistencias por %s con %s de descuento: %s - %s = %s", (validAttendances, rate, discount, gross, saved, net) => {
     expect(calculatePayrollAmounts({ validAttendances, rate, discount })).toEqual({
       accepted: true,
@@ -25,7 +25,9 @@ describe("calculatePayrollAmounts", () => {
     });
   });
 
-  it.each([100.005, 100.01, 150])("un descuento de %s supera un bruto de 100.00", (discount) => {
+  // C5 de la 11.5 (D56): un descuento que deja el neto en 0.00 tampoco es una planilla, porque el
+  // pago exige un monto mayor que cero e igual al neto. 100.004 se guardaria como 100.00.
+  it.each([100, "100.00", 100.004, 100.005, 100.01, 150])("un descuento de %s iguala o supera un bruto de 100.00", (discount) => {
     expect(calculatePayrollAmounts({ validAttendances: 2, rate: "50.00", discount })).toEqual({ accepted: false });
   });
 });

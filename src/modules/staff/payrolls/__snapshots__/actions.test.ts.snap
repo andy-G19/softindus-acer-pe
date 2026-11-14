@@ -365,6 +365,36 @@ exports[`generatePayrollAction > descuento con tres decimales > llamadas 1`] = `
   },
   {
     "args": {
+      "orderBy": [
+        {
+          "periodo_inicio": "asc",
+        },
+        {
+          "id_planilla": "asc",
+        },
+      ],
+      "select": {
+        "id_planilla": true,
+        "periodo_fin": true,
+        "periodo_inicio": true,
+      },
+      "where": {
+        "estado_pago": {
+          "not": "anulada",
+        },
+        "id_operario": "OPE00000003",
+        "periodo_fin": {
+          "gte": 2026-11-02T00:00:00.000Z,
+        },
+        "periodo_inicio": {
+          "lte": 2026-11-08T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
       "select": {
         "falta": true,
         "horas_trabajadas": true,
@@ -502,6 +532,36 @@ exports[`generatePayrollAction > descuento igual al bruto: neto cero > llamadas 
   },
   {
     "args": {
+      "orderBy": [
+        {
+          "periodo_inicio": "asc",
+        },
+        {
+          "id_planilla": "asc",
+        },
+      ],
+      "select": {
+        "id_planilla": true,
+        "periodo_fin": true,
+        "periodo_inicio": true,
+      },
+      "where": {
+        "estado_pago": {
+          "not": "anulada",
+        },
+        "id_operario": "OPE00000003",
+        "periodo_fin": {
+          "gte": 2026-11-02T00:00:00.000Z,
+        },
+        "periodo_inicio": {
+          "lte": 2026-11-08T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
       "select": {
         "falta": true,
         "horas_trabajadas": true,
@@ -519,74 +579,16 @@ exports[`generatePayrollAction > descuento igual al bruto: neto cero > llamadas 
     "prisma": "asistencia.findMany",
   },
   {
-    "args": {
-      "codigoEntidad": "planilla_pago",
-      "prefijo": "PLA",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "descuentos": "100.00",
-        "estado_pago": "pendiente",
-        "id_operario": "OPE00000003",
-        "id_planilla": "PLA00000001",
-        "id_usuario_genera": "USU00000001",
-        "modalidad_pago": "quincenal",
-        "monto_bruto": "100.00",
-        "monto_neto": "0.00",
-        "periodo_fin": 2026-11-08T00:00:00.000Z,
-        "periodo_inicio": 2026-11-02T00:00:00.000Z,
-      },
-    },
-    "prisma": "planilla_pago.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Planilla generada para el operario OPE00000003.",
-      "enTransaccion": true,
-      "entidad_afectada": "planilla_pago",
-      "id_registro_afectado": "PLA00000001",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/staff",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/payrolls",
-    "effect": "revalidatePath",
+    "args": "Los descuentos no pueden igualar o superar el monto bruto calculado.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
 
 exports[`generatePayrollAction > descuento igual al bruto: neto cero > resultado 1`] = `
 {
-  "consola": [
-    [
-      "Planilla generada",
-      {
-        "asistenciasValidas": 2,
-        "descuentos": 100,
-        "faltas": 1,
-        "horasTrabajadas": 15.5,
-        "idPlanilla": "PLA00000001",
-        "montoBruto": 100,
-        "montoNeto": 0,
-        "operario": "Quispe, Luis",
-        "tardanzas": 1,
-      },
-    ],
-  ],
-  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-created",
+  "consola": [],
+  "resultado": "error: Los descuentos no pueden igualar o superar el monto bruto calculado.",
 }
 `;
 
@@ -639,6 +641,36 @@ exports[`generatePayrollAction > descuento mayor que el bruto > llamadas 1`] = `
   },
   {
     "args": {
+      "orderBy": [
+        {
+          "periodo_inicio": "asc",
+        },
+        {
+          "id_planilla": "asc",
+        },
+      ],
+      "select": {
+        "id_planilla": true,
+        "periodo_fin": true,
+        "periodo_inicio": true,
+      },
+      "where": {
+        "estado_pago": {
+          "not": "anulada",
+        },
+        "id_operario": "OPE00000003",
+        "periodo_fin": {
+          "gte": 2026-11-02T00:00:00.000Z,
+        },
+        "periodo_inicio": {
+          "lte": 2026-11-08T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
       "select": {
         "falta": true,
         "horas_trabajadas": true,
@@ -656,7 +688,7 @@ exports[`generatePayrollAction > descuento mayor que el bruto > llamadas 1`] = `
     "prisma": "asistencia.findMany",
   },
   {
-    "args": "Los descuentos no pueden superar el monto bruto calculado.",
+    "args": "Los descuentos no pueden igualar o superar el monto bruto calculado.",
     "effect": "prisma.$transaction:rollback",
   },
 ]
@@ -665,7 +697,7 @@ exports[`generatePayrollAction > descuento mayor que el bruto > llamadas 1`] = `
 exports[`generatePayrollAction > descuento mayor que el bruto > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: Los descuentos no pueden superar el monto bruto calculado.",
+  "resultado": "error: Los descuentos no pueden igualar o superar el monto bruto calculado.",
 }
 `;
 
@@ -748,6 +780,36 @@ exports[`generatePayrollAction > descuento vacio: cero > llamadas 1`] = `
         "id_operario": "OPE00000003",
         "periodo_fin": 2026-11-08T00:00:00.000Z,
         "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "periodo_inicio": "asc",
+        },
+        {
+          "id_planilla": "asc",
+        },
+      ],
+      "select": {
+        "id_planilla": true,
+        "periodo_fin": true,
+        "periodo_inicio": true,
+      },
+      "where": {
+        "estado_pago": {
+          "not": "anulada",
+        },
+        "id_operario": "OPE00000003",
+        "periodo_fin": {
+          "gte": 2026-11-02T00:00:00.000Z,
+        },
+        "periodo_inicio": {
+          "lte": 2026-11-08T00:00:00.000Z,
+        },
       },
     },
     "prisma": "planilla_pago.findFirst",
@@ -954,6 +1016,36 @@ exports[`generatePayrollAction > genera: dos asistencias validas por la tarifa, 
         "id_operario": "OPE00000003",
         "periodo_fin": 2026-11-08T00:00:00.000Z,
         "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "periodo_inicio": "asc",
+        },
+        {
+          "id_planilla": "asc",
+        },
+      ],
+      "select": {
+        "id_planilla": true,
+        "periodo_fin": true,
+        "periodo_inicio": true,
+      },
+      "where": {
+        "estado_pago": {
+          "not": "anulada",
+        },
+        "id_operario": "OPE00000003",
+        "periodo_fin": {
+          "gte": 2026-11-02T00:00:00.000Z,
+        },
+        "periodo_inicio": {
+          "lte": 2026-11-08T00:00:00.000Z,
+        },
       },
     },
     "prisma": "planilla_pago.findFirst",
@@ -1178,6 +1270,36 @@ exports[`generatePayrollAction > solo faltas en el periodo > llamadas 1`] = `
         "id_operario": "OPE00000003",
         "periodo_fin": 2026-11-08T00:00:00.000Z,
         "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "periodo_inicio": "asc",
+        },
+        {
+          "id_planilla": "asc",
+        },
+      ],
+      "select": {
+        "id_planilla": true,
+        "periodo_fin": true,
+        "periodo_inicio": true,
+      },
+      "where": {
+        "estado_pago": {
+          "not": "anulada",
+        },
+        "id_operario": "OPE00000003",
+        "periodo_fin": {
+          "gte": 2026-11-02T00:00:00.000Z,
+        },
+        "periodo_inicio": {
+          "lte": 2026-11-08T00:00:00.000Z,
+        },
       },
     },
     "prisma": "planilla_pago.findFirst",

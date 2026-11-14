@@ -180,4 +180,34 @@ describe("planillas en Postgres", () => {
     expect(await paymentsOf(id_planilla)).toBe(0);
     expect((await payrollOf("2026-11-16")).estado_pago).toBe("pendiente");
   });
+
+  // C5 de la 11.5 (D55): a esta altura el operario tiene la planilla PLA00000001 pagada (02 al 08),
+  // PLA00000002 anulada (09 al 15) y PLA00000003 pendiente (16 al 22).
+  it("un periodo que se cruza con una planilla pagada se rechaza y no escribe", async () => {
+    const before = await prisma.planilla_pago.count({ where: { id_operario: OPERARIO } });
+
+    expect(await generate("2026-11-05", "2026-11-12")).toBe(
+      "Este operario ya tiene la planilla PLA00000001, del 02/11/2026 al 08/11/2026, que se cruza con el periodo seleccionado.",
+    );
+    expect(await prisma.planilla_pago.count({ where: { id_operario: OPERARIO } })).toBe(before);
+  });
+
+  it("compartir un solo dia con una planilla pendiente tambien es cruzarse", async () => {
+    expect(await generate("2026-11-22", "2026-11-28")).toBe(
+      "Este operario ya tiene la planilla PLA00000003, del 16/11/2026 al 22/11/2026, que se cruza con el periodo seleccionado.",
+    );
+  });
+
+  it("un periodo que solo se cruza con una planilla anulada se genera", async () => {
+    expect(await generate("2026-11-10", "2026-11-15")).toBe(SAVED);
+
+    const payroll = await payrollOf("2026-11-10");
+
+    // Una asistencia valida (el 10; el 11 es falta) por 50.00.
+    expect([payroll.monto_bruto.toFixed(2), payroll.monto_neto.toFixed(2), payroll.estado_pago]).toEqual([
+      "50.00",
+      "50.00",
+      "pendiente",
+    ]);
+  });
 });
