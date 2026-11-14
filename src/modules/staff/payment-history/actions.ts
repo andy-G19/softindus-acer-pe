@@ -7,7 +7,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { toNumber } from "@/lib/numbers";
+import { checkPayrollPayment } from "@/lib/payroll-amounts";
 import { operatorPaymentSchema } from "@/schemas/staff/operator-payment.schema";
 
 async function requireAdmin() {
@@ -67,9 +67,11 @@ export async function registerOperatorPaymentAction(formData: FormData) {
     );
   }
 
-  const netAmount = toNumber(payroll.monto_neto);
+  // C2 de la 11.5 (D53): el pago, redondeado como su columna, debe ser exactamente el neto en
+  // centesimos; la tolerancia de 0.01 en number dependia del error de coma flotante.
+  const payment = checkPayrollPayment({ net: payroll.monto_neto, amount: data.monto_pagado });
 
-  if (Math.abs(data.monto_pagado - netAmount) > 0.01) {
+  if (!payment.accepted) {
     throw new Error(
       "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
     );
@@ -92,7 +94,7 @@ export async function registerOperatorPaymentAction(formData: FormData) {
         id_operario: payroll.id_operario,
         id_usuario_registro: session.user.id,
         fecha_pago: data.fecha_pago,
-        monto_pagado: data.monto_pagado.toFixed(2),
+        monto_pagado: payment.amount,
         metodo_pago: data.metodo_pago,
         periodo,
         observaciones: data.observaciones || null,

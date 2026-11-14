@@ -365,75 +365,10 @@ exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > llamadas 1
     },
     "prisma": "planilla_pago.findUnique",
   },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "historial_pago_operario",
-      "prefijo": "HPO",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "fecha_pago": 2026-11-09T00:00:00.000Z,
-        "id_historial_pago": "HPO00000001",
-        "id_operario": "OPE00000003",
-        "id_planilla": "PLA00000009",
-        "id_usuario_registro": "USU00000001",
-        "metodo_pago": "efectivo",
-        "monto_pagado": "90.01",
-        "observaciones": null,
-        "periodo": "2026-11-02 a 2026-11-08",
-      },
-    },
-    "prisma": "historial_pago_operario.create",
-  },
-  {
-    "args": {
-      "data": {
-        "estado_pago": "pagado",
-      },
-      "where": {
-        "id_planilla": "PLA00000009",
-      },
-    },
-    "prisma": "planilla_pago.update",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Pago registrado para la planilla PLA00000009.",
-      "enTransaccion": true,
-      "entidad_afectada": "historial_pago_operario",
-      "id_registro_afectado": "HPO00000001",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/staff",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/payrolls",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/payment-history",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > resultado 1`] = `"redirect:/dashboard/staff/payment-history?toast=operator-payment-registered"`;
+exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > resultado 1`] = `"error: Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla."`;
 
 exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.10 > llamadas 1`] = `
 [
@@ -455,75 +390,10 @@ exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.1
     },
     "prisma": "planilla_pago.findUnique",
   },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "historial_pago_operario",
-      "prefijo": "HPO",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "fecha_pago": 2026-11-09T00:00:00.000Z,
-        "id_historial_pago": "HPO00000001",
-        "id_operario": "OPE00000003",
-        "id_planilla": "PLA00000009",
-        "id_usuario_registro": "USU00000001",
-        "metodo_pago": "efectivo",
-        "monto_pagado": "30.11",
-        "observaciones": null,
-        "periodo": "2026-11-02 a 2026-11-08",
-      },
-    },
-    "prisma": "historial_pago_operario.create",
-  },
-  {
-    "args": {
-      "data": {
-        "estado_pago": "pagado",
-      },
-      "where": {
-        "id_planilla": "PLA00000009",
-      },
-    },
-    "prisma": "planilla_pago.update",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Pago registrado para la planilla PLA00000009.",
-      "enTransaccion": true,
-      "entidad_afectada": "historial_pago_operario",
-      "id_registro_afectado": "HPO00000001",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/staff",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/payrolls",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/payment-history",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.10 > resultado 1`] = `"redirect:/dashboard/staff/payment-history?toast=operator-payment-registered"`;
+exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.10 > resultado 1`] = `"error: Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla."`;
 
 exports[`registerOperatorPaymentAction > un centimo de menos sobre 90.00 > llamadas 1`] = `
 [

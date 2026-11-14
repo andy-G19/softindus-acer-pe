@@ -8,6 +8,7 @@ import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { toNumber } from "@/lib/numbers";
+import { calculatePayrollAmounts } from "@/lib/payroll-amounts";
 import { payrollSchema } from "@/schemas/staff/payroll.schema";
 
 async function requireAdmin() {
@@ -112,16 +113,19 @@ export async function generatePayrollAction(formData: FormData) {
     );
   }
 
-  const grossAmount = validAttendances.length * dailyRate;
-  const discounts = data.descuentos;
+  // C2 de la 11.5 (D53): bruto, descuento y neto en centesimos, con el redondeo de las columnas;
+  // el neto es el bruto menos el descuento ya redondeado, asi la planilla cuadra.
+  const amounts = calculatePayrollAmounts({
+    validAttendances: validAttendances.length,
+    rate: operator.tarifa ?? 0,
+    discount: data.descuentos,
+  });
 
-  if (discounts > grossAmount) {
+  if (!amounts.accepted) {
     throw new Error(
       "Los descuentos no pueden superar el monto bruto calculado.",
     );
   }
-
-  const netAmount = grossAmount - discounts;
 
   let idPlanilla = "";
 
@@ -139,9 +143,9 @@ export async function generatePayrollAction(formData: FormData) {
         periodo_inicio: data.periodo_inicio,
         periodo_fin: data.periodo_fin,
         modalidad_pago: operator.modalidad_pago,
-        monto_bruto: grossAmount.toFixed(2),
-        descuentos: discounts.toFixed(2),
-        monto_neto: netAmount.toFixed(2),
+        monto_bruto: amounts.gross,
+        descuentos: amounts.discount,
+        monto_neto: amounts.net,
         estado_pago: "pendiente",
       },
     });
@@ -163,9 +167,9 @@ export async function generatePayrollAction(formData: FormData) {
     faltas: absences.length,
     tardanzas: lateness.length,
     horasTrabajadas: workedHours,
-    montoBruto: grossAmount,
-    descuentos: discounts,
-    montoNeto: netAmount,
+    montoBruto: toNumber(amounts.gross),
+    descuentos: toNumber(amounts.discount),
+    montoNeto: toNumber(amounts.net),
   });
 
   revalidatePath("/dashboard/staff");
