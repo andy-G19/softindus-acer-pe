@@ -8870,7 +8870,8 @@ Datos leídos de la API de GitHub el 2026-11-13 (UTC) y comparados con git:
 
 ### Sub-entrega 11.4b — Venta de chatarra, filtro de movimientos y totales del reporte financiero
 
-Fecha: 2026-11-13 (Lima). Estado: verificada en staging. Plan en `tmp/e11-diff/plan-11-4b.md`,
+Fecha: 2026-11-13 (Lima). Estado: integrada en `main` (PR #47, merge `4991a0d`). Plan en
+`tmp/e11-diff/plan-11-4b.md`,
 con las decisiones D48 a D52 aprobadas: la venta de chatarra como el egreso de la 11.4a, con
 `lockScrapRow` antes que la caja, montos en centésimos y clave `venta_chatarra:nueva` (D48); sin
 índice único en `venta_chatarra.id_chatarra`, porque la chatarra bloqueada ya ordena las ventas y
@@ -9010,6 +9011,20 @@ Hallazgos:
 5. Datos de prueba que quedan en staging: VCH00000003, CHA00000005 vendida y su ingreso de
    S/ 12.35 en CAJ00000003 (saldo S/ 112.35). La aplicación no deshace ventas.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-14 (UTC) y comparados con git:
+
+- La verificación `ff83b14` se publicó en `staging`: CI #182 en verde (4m 2s).
+- PR #47, abierto a las 03:42:40 UTC y fusionado con merge commit a las 04:04:05 UTC del
+  2026-11-14: 11 commits, de `50b196f` a `ff83b14`, y 32 archivos (+4.397 −482). Su CI, el #183,
+  sobre `ff83b14`, terminó en verde (5m 39s).
+- El merge commit `4991a0d` tiene como padres `729229a` (`main`) y `ff83b14` (`staging`), y su
+  árbol es el de `ff83b14` (`1f7416f5`): `main` y `staging` tienen el mismo contenido. CI #184 en
+  verde (4m 4s).
+- Vercel desplegó `4991a0d` en producción (`success` a las 04:05:39 UTC). La sub-entrega no trae
+  migraciones.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -9035,7 +9050,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b verificada en staging (CI #180 y #181) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 en preparación |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
