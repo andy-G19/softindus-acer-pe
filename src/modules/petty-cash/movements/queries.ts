@@ -136,6 +136,12 @@ export async function getPettyCashMovementListData(
             apellidos: true,
           },
         },
+        // C5 de la 11.4b (D50): la venta de chatarra que genero el movimiento, para no ofrecer
+        // anular su ingreso (la accion lo rechaza, D45).
+        venta_chatarra: {
+          select: { id_venta_chatarra: true },
+          orderBy: { id_venta_chatarra: "asc" },
+        },
       },
     }),
 

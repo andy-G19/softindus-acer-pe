@@ -329,6 +329,12 @@ export default async function PettyCashMovementsPage({
                         <span className="text-xs text-muted-foreground">
                           Anulado
                         </span>
+                      ) : movement.venta_chatarra.length > 0 ? (
+                        // C5 de la 11.4b (D50): el ingreso de una venta de chatarra no se anula
+                        // desde caja chica; la fila nombra la venta en lugar de ofrecer el boton.
+                        <span className="text-xs text-muted-foreground">
+                          Venta {movement.venta_chatarra[0].id_venta_chatarra}
+                        </span>
                       ) : (
                         // C8 de la 11.4a (D47): confirma con su concepto, su monto y hacia donde va el
                         // dinero; un rechazo queda en la confirmacion.
