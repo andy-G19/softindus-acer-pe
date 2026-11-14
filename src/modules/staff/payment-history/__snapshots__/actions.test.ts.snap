@@ -428,87 +428,10 @@ exports[`registerOperatorPaymentAction > una fecha que no es fecha > llamadas 1`
       "ADMIN",
     ],
   },
-  {
-    "args": {
-      "include": {
-        "historial_pago_operario": true,
-        "operario": true,
-      },
-      "where": {
-        "id_planilla": "PLA00000009",
-      },
-    },
-    "prisma": "planilla_pago.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "historial_pago_operario",
-      "prefijo": "HPO",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "fecha_pago": Date { NaN },
-        "id_historial_pago": "HPO00000001",
-        "id_operario": "OPE00000003",
-        "id_planilla": "PLA00000009",
-        "id_usuario_registro": "USU00000001",
-        "metodo_pago": "efectivo",
-        "monto_pagado": "90.00",
-        "observaciones": null,
-        "periodo": "2026-11-02 a 2026-11-08",
-      },
-    },
-    "prisma": "historial_pago_operario.create",
-  },
-  {
-    "args": {
-      "data": {
-        "estado_pago": "pagado",
-      },
-      "where": {
-        "id_planilla": "PLA00000009",
-      },
-    },
-    "prisma": "planilla_pago.update",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Pago registrado para la planilla PLA00000009.",
-      "enTransaccion": true,
-      "entidad_afectada": "historial_pago_operario",
-      "id_registro_afectado": "HPO00000001",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/staff",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/payrolls",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/payment-history",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`registerOperatorPaymentAction > una fecha que no es fecha > resultado 1`] = `"redirect:/dashboard/staff/payment-history?toast=operator-payment-registered"`;
+exports[`registerOperatorPaymentAction > una fecha que no es fecha > resultado 1`] = `"error: La fecha de pago no es válida."`;
 
 exports[`registerOperatorPaymentAction > una fecha que no existe > llamadas 1`] = `
 [
@@ -518,84 +441,7 @@ exports[`registerOperatorPaymentAction > una fecha que no existe > llamadas 1`] 
       "ADMIN",
     ],
   },
-  {
-    "args": {
-      "include": {
-        "historial_pago_operario": true,
-        "operario": true,
-      },
-      "where": {
-        "id_planilla": "PLA00000009",
-      },
-    },
-    "prisma": "planilla_pago.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "historial_pago_operario",
-      "prefijo": "HPO",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "fecha_pago": 2026-03-02T00:00:00.000Z,
-        "id_historial_pago": "HPO00000001",
-        "id_operario": "OPE00000003",
-        "id_planilla": "PLA00000009",
-        "id_usuario_registro": "USU00000001",
-        "metodo_pago": "efectivo",
-        "monto_pagado": "90.00",
-        "observaciones": null,
-        "periodo": "2026-11-02 a 2026-11-08",
-      },
-    },
-    "prisma": "historial_pago_operario.create",
-  },
-  {
-    "args": {
-      "data": {
-        "estado_pago": "pagado",
-      },
-      "where": {
-        "id_planilla": "PLA00000009",
-      },
-    },
-    "prisma": "planilla_pago.update",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Pago registrado para la planilla PLA00000009.",
-      "enTransaccion": true,
-      "entidad_afectada": "historial_pago_operario",
-      "id_registro_afectado": "HPO00000001",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/staff",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/payrolls",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/payment-history",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`registerOperatorPaymentAction > una fecha que no existe > resultado 1`] = `"redirect:/dashboard/staff/payment-history?toast=operator-payment-registered"`;
+exports[`registerOperatorPaymentAction > una fecha que no existe > resultado 1`] = `"error: La fecha de pago no es válida."`;

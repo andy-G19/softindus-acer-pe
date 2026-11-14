@@ -1041,123 +1041,13 @@ exports[`generatePayrollAction > una fecha que no es fecha > llamadas 1`] = `
       "ADMIN",
     ],
   },
-  {
-    "args": {
-      "select": {
-        "apellidos": true,
-        "id_operario": true,
-        "modalidad_pago": true,
-        "nombres": true,
-        "tarifa": true,
-      },
-      "where": {
-        "estado": "activo",
-        "id_operario": "OPE00000003",
-      },
-    },
-    "prisma": "operario.findFirst",
-  },
-  {
-    "args": {
-      "where": {
-        "id_operario": "OPE00000003",
-        "periodo_fin": Date { NaN },
-        "periodo_inicio": 2026-11-02T00:00:00.000Z,
-      },
-    },
-    "prisma": "planilla_pago.findFirst",
-  },
-  {
-    "args": {
-      "select": {
-        "falta": true,
-        "horas_trabajadas": true,
-        "id_asistencia": true,
-        "tardanza": true,
-      },
-      "where": {
-        "fecha": {
-          "gte": 2026-11-02T00:00:00.000Z,
-          "lte": Date { NaN },
-        },
-        "id_operario": "OPE00000003",
-      },
-    },
-    "prisma": "asistencia.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "planilla_pago",
-      "prefijo": "PLA",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "descuentos": "10.00",
-        "estado_pago": "pendiente",
-        "id_operario": "OPE00000003",
-        "id_planilla": "PLA00000001",
-        "id_usuario_genera": "USU00000001",
-        "modalidad_pago": "quincenal",
-        "monto_bruto": "100.00",
-        "monto_neto": "90.00",
-        "periodo_fin": Date { NaN },
-        "periodo_inicio": 2026-11-02T00:00:00.000Z,
-      },
-    },
-    "prisma": "planilla_pago.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Planilla generada para el operario OPE00000003.",
-      "enTransaccion": true,
-      "entidad_afectada": "planilla_pago",
-      "id_registro_afectado": "PLA00000001",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/staff",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/payrolls",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
 exports[`generatePayrollAction > una fecha que no es fecha > resultado 1`] = `
 {
-  "consola": [
-    [
-      "Planilla generada",
-      {
-        "asistenciasValidas": 2,
-        "descuentos": 10,
-        "faltas": 1,
-        "horasTrabajadas": 15.5,
-        "idPlanilla": "PLA00000001",
-        "montoBruto": 100,
-        "montoNeto": 90,
-        "operario": "Quispe, Luis",
-        "tardanzas": 1,
-      },
-    ],
-  ],
-  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-created",
+  "consola": [],
+  "resultado": "error: La fecha de fin del periodo no es válida.",
 }
 `;
 
@@ -1169,123 +1059,13 @@ exports[`generatePayrollAction > una fecha que no existe > llamadas 1`] = `
       "ADMIN",
     ],
   },
-  {
-    "args": {
-      "select": {
-        "apellidos": true,
-        "id_operario": true,
-        "modalidad_pago": true,
-        "nombres": true,
-        "tarifa": true,
-      },
-      "where": {
-        "estado": "activo",
-        "id_operario": "OPE00000003",
-      },
-    },
-    "prisma": "operario.findFirst",
-  },
-  {
-    "args": {
-      "where": {
-        "id_operario": "OPE00000003",
-        "periodo_fin": 2026-03-02T00:00:00.000Z,
-        "periodo_inicio": 2026-02-23T00:00:00.000Z,
-      },
-    },
-    "prisma": "planilla_pago.findFirst",
-  },
-  {
-    "args": {
-      "select": {
-        "falta": true,
-        "horas_trabajadas": true,
-        "id_asistencia": true,
-        "tardanza": true,
-      },
-      "where": {
-        "fecha": {
-          "gte": 2026-02-23T00:00:00.000Z,
-          "lte": 2026-03-02T00:00:00.000Z,
-        },
-        "id_operario": "OPE00000003",
-      },
-    },
-    "prisma": "asistencia.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "planilla_pago",
-      "prefijo": "PLA",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "descuentos": "10.00",
-        "estado_pago": "pendiente",
-        "id_operario": "OPE00000003",
-        "id_planilla": "PLA00000001",
-        "id_usuario_genera": "USU00000001",
-        "modalidad_pago": "quincenal",
-        "monto_bruto": "100.00",
-        "monto_neto": "90.00",
-        "periodo_fin": 2026-03-02T00:00:00.000Z,
-        "periodo_inicio": 2026-02-23T00:00:00.000Z,
-      },
-    },
-    "prisma": "planilla_pago.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Planilla generada para el operario OPE00000003.",
-      "enTransaccion": true,
-      "entidad_afectada": "planilla_pago",
-      "id_registro_afectado": "PLA00000001",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/staff",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/staff/payrolls",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
 exports[`generatePayrollAction > una fecha que no existe > resultado 1`] = `
 {
-  "consola": [
-    [
-      "Planilla generada",
-      {
-        "asistenciasValidas": 2,
-        "descuentos": 10,
-        "faltas": 1,
-        "horasTrabajadas": 15.5,
-        "idPlanilla": "PLA00000001",
-        "montoBruto": 100,
-        "montoNeto": 90,
-        "operario": "Quispe, Luis",
-        "tardanzas": 1,
-      },
-    ],
-  ],
-  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-created",
+  "consola": [],
+  "resultado": "error: La fecha de fin del periodo no es válida.",
 }
 `;
 
