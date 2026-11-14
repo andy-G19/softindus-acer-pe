@@ -71,6 +71,7 @@ async function generate(overlap: unknown, descuentos = "") {
   const formData = new FormData();
 
   for (const [key, value] of Object.entries({
+    clave_operacion: "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
     id_operario: "OPE00000003",
     periodo_inicio: "2026-11-05",
     periodo_fin: "2026-11-11",
@@ -81,9 +82,10 @@ async function generate(overlap: unknown, descuentos = "") {
 
   const { calls, result } = await characterizeHandler(async () => {
     try {
-      await generatePayrollAction(formData);
+      // Desde C6 de la 11.5 generar devuelve su resultado en lugar de redirigir.
+      const state = await generatePayrollAction({ status: "idle" }, formData);
 
-      return "guardado";
+      return state.status === "success" ? "guardado" : state.status === "error" ? `error: ${state.error}` : "sin respuesta";
     } catch (error) {
       return describeNavigationError(error)?.startsWith("redirect:")
         ? "guardado"

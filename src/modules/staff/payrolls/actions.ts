@@ -2,47 +2,132 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { FieldErrors } from "@/lib/errors";
 import { formatDate } from "@/lib/formatters";
+import { claimOperation, completeOperation, IdempotencyConflictError } from "@/lib/idempotency";
 import { toNumber } from "@/lib/numbers";
 import { calculatePayrollAmounts } from "@/lib/payroll-amounts";
+import { APP_ROLES } from "@/lib/permissions";
 import { lockOperatorRow, lockPayrollRow } from "@/lib/row-locks";
+import { operationKeySchema } from "@/schemas/operation-key.schema";
 import { payrollSchema } from "@/schemas/staff/payroll.schema";
 
 async function requireAdmin() {
   return requireRole(["ADMIN"]);
 }
 
-export async function generatePayrollAction(formData: FormData) {
-  const session = await requireAdmin();
+/** Lo que el formulario de la planilla envio, para volver a mostrarlo. */
+export type PayrollFormValues = {
+  id_operario: string;
+  periodo_inicio: string;
+  periodo_fin: string;
+  descuentos: string;
+};
 
-  const parsed = payrollSchema.safeParse({
-    id_operario: formData.get("id_operario"),
-    periodo_inicio: formData.get("periodo_inicio"),
-    periodo_fin: formData.get("periodo_fin"),
-    descuentos: formData.get("descuentos") ?? "",
+// C6 de la 11.5 (D59): generar devuelve el resultado y el formulario da el aviso y vuelve al
+// listado, como la venta de chatarra (C4 de la 11.4b). Un error queda en el formulario, junto a
+// su campo, en lugar de la pagina de error; sin permiso responde con un error. El exito lleva la
+// clave confirmada para que el formulario genere otra (OperationKeyField).
+export type PayrollFormState = FormActionState<
+  PayrollFormValues,
+  { id_planilla: string; clave_operacion: string }
+>;
+
+const GENERATE_OPERATION = "generar_planilla";
+
+const generateFormSchema = payrollSchema.and(z.object({ clave_operacion: operationKeySchema }));
+
+/**
+ * Un rechazo que se decide dentro de la transaccion, despues de reclamar la clave: se lanza para
+ * que la transaccion se revierta y libere la clave, y la accion lo convierte en el error de su
+ * campo.
+ */
+class PayrollValidationError extends Error {
+  constructor(
+    readonly field: keyof PayrollFormValues,
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
+function getPayrollFormValues(formData: FormData): PayrollFormValues {
+  const text = (name: keyof PayrollFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    id_operario: text("id_operario"),
+    periodo_inicio: text("periodo_inicio"),
+    periodo_fin: text("periodo_fin"),
+    descuentos: text("descuentos"),
+  };
+}
+
+export async function generatePayrollAction(
+  _prevState: PayrollFormState,
+  formData: FormData,
+): Promise<PayrollFormState> {
+  const values = getPayrollFormValues(formData);
+  const fail = (error: string, fieldErrors?: FieldErrors): PayrollFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return fail("No tienes permisos para generar planillas.");
+  }
+
+  const parsed = generateFormSchema.safeParse({
+    ...values,
+    clave_operacion: formData.get("clave_operacion"),
   });
 
   if (!parsed.success) {
-    const message = parsed.error.issues
-      .map((issue) => issue.message)
-      .join(" ");
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+    // La clave va en un campo oculto: su mensaje es el general, no el de un campo.
+    const keyError = fieldErrors.clave_operacion?.[0];
 
-    throw new Error(message);
+    return fail(keyError ?? "Revisa los datos de la planilla.", fieldErrors);
   }
 
   const data = parsed.data;
 
-  // C4 de la 11.5 (D54): el operario se bloquea antes de leerlo y todo lo que decide (el operario,
-  // el periodo ya generado y las asistencias) se lee dentro de la transaccion. Dos generaciones
-  // simultaneas del mismo operario: la segunda espera a la primera y ve su planilla. Un rechazo se
-  // lanza dentro y la transaccion se revierte sin escribir.
-  const { idPlanilla, operator, validAttendances, absences, lateness, workedHours, amounts } =
-    await prisma.$transaction(async (tx) => {
+  let idPlanilla: string;
+
+  try {
+    idPlanilla = await prisma.$transaction(async (tx) => {
+      // C6 de la 11.5: la clave se reclama como primera sentencia, antes del candado y del
+      // correlativo. Un reenvio con la misma clave responde con la planilla ya generada sin crear
+      // otra; un rechazo posterior lanza y libera la clave.
+      const claim = await claimOperation(tx, {
+        clave: data.clave_operacion,
+        tipo: GENERATE_OPERATION,
+        userId: session.user.id,
+      });
+
+      if (claim.estado === "repetida") {
+        if (!claim.idRegistro) {
+          throw new Error("La operacion repetida no tiene una planilla registrada.");
+        }
+
+        return claim.idRegistro;
+      }
+
+      // C4 de la 11.5 (D54): el operario se bloquea antes de leerlo y todo lo que decide (el
+      // operario, el periodo ya generado y las asistencias) se lee dentro de la transaccion. Dos
+      // generaciones simultaneas del mismo operario: la segunda espera a la primera y ve su
+      // planilla.
       await lockOperatorRow(tx, data.id_operario);
 
       const operator = await tx.operario.findFirst({
@@ -60,13 +145,12 @@ export async function generatePayrollAction(formData: FormData) {
       });
 
       if (!operator) {
-        throw new Error("El operario seleccionado no existe o está inactivo.");
+        throw new PayrollValidationError("id_operario", "El operario seleccionado no existe o está inactivo.");
       }
 
-      const dailyRate = toNumber(operator.tarifa);
-
-      if (dailyRate <= 0) {
-        throw new Error(
+      if (toNumber(operator.tarifa) <= 0) {
+        throw new PayrollValidationError(
+          "id_operario",
           "El operario seleccionado no tiene una tarifa válida para generar planilla.",
         );
       }
@@ -80,7 +164,8 @@ export async function generatePayrollAction(formData: FormData) {
       });
 
       if (duplicatedPayroll) {
-        throw new Error(
+        throw new PayrollValidationError(
+          "periodo_inicio",
           "Este operario ya tiene una planilla generada para el periodo seleccionado.",
         );
       }
@@ -103,7 +188,8 @@ export async function generatePayrollAction(formData: FormData) {
       });
 
       if (overlappingPayroll) {
-        throw new Error(
+        throw new PayrollValidationError(
+          "periodo_inicio",
           `Este operario ya tiene la planilla ${overlappingPayroll.id_planilla}, del ${formatDate(
             overlappingPayroll.periodo_inicio,
             { format: "dd/mm/yyyy" },
@@ -124,35 +210,20 @@ export async function generatePayrollAction(formData: FormData) {
         select: {
           id_asistencia: true,
           falta: true,
-          tardanza: true,
-          horas_trabajadas: true,
         },
       });
 
-      const validAttendances = attendanceRecords.filter(
-        (attendance) => !attendance.falta,
-      );
-
-      const absences = attendanceRecords.filter(
-        (attendance) => attendance.falta,
-      );
-
-      const lateness = attendanceRecords.filter(
-        (attendance) => attendance.tardanza && !attendance.falta,
-      );
-
-      const workedHours = validAttendances.reduce((total, attendance) => {
-        return total + toNumber(attendance.horas_trabajadas);
-      }, 0);
+      const validAttendances = attendanceRecords.filter((attendance) => !attendance.falta);
 
       if (validAttendances.length === 0) {
-        throw new Error(
+        throw new PayrollValidationError(
+          "periodo_inicio",
           "No hay asistencias válidas para generar la planilla de este periodo.",
         );
       }
 
-      // C2 de la 11.5 (D53): bruto, descuento y neto en centesimos, con el redondeo de las columnas;
-      // el neto es el bruto menos el descuento ya redondeado, asi la planilla cuadra.
+      // C2 de la 11.5 (D53): bruto, descuento y neto en centesimos, con el redondeo de las
+      // columnas; el neto es el bruto menos el descuento ya redondeado, asi la planilla cuadra.
       const amounts = calculatePayrollAmounts({
         validAttendances: validAttendances.length,
         rate: operator.tarifa ?? 0,
@@ -160,19 +231,20 @@ export async function generatePayrollAction(formData: FormData) {
       });
 
       if (!amounts.accepted) {
-        throw new Error(
+        throw new PayrollValidationError(
+          "descuentos",
           "Los descuentos no pueden igualar o superar el monto bruto calculado.",
         );
       }
 
-      const idPlanilla = await getNextCorrelativeId(tx, {
+      const idNuevaPlanilla = await getNextCorrelativeId(tx, {
         codigoEntidad: "planilla_pago",
         prefijo: "PLA",
       });
 
       await tx.planilla_pago.create({
         data: {
-          id_planilla: idPlanilla,
+          id_planilla: idNuevaPlanilla,
           id_operario: data.id_operario,
           id_usuario_genera: session.user.id,
           periodo_inicio: data.periodo_inicio,
@@ -188,31 +260,39 @@ export async function generatePayrollAction(formData: FormData) {
       await registerAuditLog({
         userId: session.user.id,
         entidad_afectada: "planilla_pago",
-        id_registro_afectado: idPlanilla,
+        id_registro_afectado: idNuevaPlanilla,
         accion: "crear",
         detalle: `Planilla generada para el operario ${data.id_operario}.`,
         tx,
       });
 
-      return { idPlanilla, operator, validAttendances, absences, lateness, workedHours, amounts };
+      await completeOperation(tx, { clave: data.clave_operacion, idRegistro: idNuevaPlanilla });
+
+      return idNuevaPlanilla;
     });
+  } catch (error) {
+    if (error instanceof PayrollValidationError) {
+      return fail(error.message, { [error.field]: [error.message] });
+    }
 
-  console.log("Planilla generada", {
-    idPlanilla,
-    operario: `${operator.apellidos}, ${operator.nombres}`,
-    asistenciasValidas: validAttendances.length,
-    faltas: absences.length,
-    tardanzas: lateness.length,
-    horasTrabajadas: workedHours,
-    montoBruto: toNumber(amounts.gross),
-    descuentos: toNumber(amounts.discount),
-    montoNeto: toNumber(amounts.net),
-  });
+    if (error instanceof IdempotencyConflictError) {
+      return fail(error.message);
+    }
 
+    throw error;
+  }
+
+  // C6 de la 11.5 (D59): ya no se escribe en el log del servidor el nombre del operario ni sus
+  // montos (hallazgo 9); la bitacora registra la planilla.
   revalidatePath("/dashboard/staff");
   revalidatePath("/dashboard/staff/payrolls");
 
-  redirect("/dashboard/staff/payrolls?toast=payroll-created");
+  return {
+    status: "success",
+    data: { id_planilla: idPlanilla, clave_operacion: data.clave_operacion },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 export async function cancelPayrollAction(formData: FormData) {

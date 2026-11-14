@@ -21,12 +21,20 @@ import {
 // fuera de la transaccion y sin bloquear ninguna fila), el correlativo, la escritura, la
 // bitacora, el final de la transaccion, las revalidaciones y el resultado: la redireccion o el
 // error exacto. Generar tambien escribe en la consola del servidor: el caso lo registra.
+//
+// Desde C6 de la 11.5 (D59) generar devuelve su resultado (FormActionState): reclama la clave de
+// la operacion como primera sentencia de la transaccion, pone cada rechazo en su campo y ya no
+// escribe en la consola. Anular todavia redirige (C8).
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -102,7 +110,7 @@ afterEach(() => {
 });
 
 async function run(
-  action: (formData: FormData) => Promise<void>,
+  action: (formData: FormData) => Promise<unknown>,
   actionCase: ActionCase,
   defaults: DataOverrides,
 ) {
@@ -117,9 +125,7 @@ async function run(
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        await action(formData);
-
-        return "termino sin redirigir";
+        return (await action(formData)) ?? "termino sin redirigir";
       } catch (error) {
         return (
           describeNavigationError(error) ??
@@ -161,7 +167,26 @@ const GENERATE_DATA: DataOverrides = {
   "asistencia.findMany": ATTENDANCES,
 };
 
+const CLAVE = "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e";
+
+/** La clave ya estaba en la tabla: el INSERT no devuelve filas y se lee la guardada. */
+function storedKey(changes: Record<string, unknown> = {}): DataOverrides {
+  return {
+    "operacion_idempotente.createManyAndReturn": [],
+    "operacion_idempotente.findUniqueOrThrow": {
+      tipo_operacion: "generar_planilla",
+      id_usuario: "USU00000001",
+      id_registro_resultado: "PLA00000009",
+      ...changes,
+    },
+  };
+}
+
+/** Generar recibe el estado anterior del formulario. */
+const generate = (formData: FormData) => generatePayrollAction({ status: "idle" }, formData);
+
 const generateForm = (changes: Record<string, string> = {}) => ({
+  clave_operacion: CLAVE,
   id_operario: "OPE00000003",
   periodo_inicio: "2026-11-02",
   periodo_fin: "2026-11-08",
@@ -195,13 +220,22 @@ const generateInputs: CaseInput[] = [
   { name: "una fecha que no existe", form: generateForm({ periodo_fin: "2026-02-30", periodo_inicio: "2026-02-23" }) },
   { name: "sin operario ni fechas", form: generateForm({ id_operario: "", periodo_inicio: "", periodo_fin: "" }) },
   { name: "sin permiso: el maestro de taller", role: "WORKSHOP_MASTER" },
+  { name: "sin clave de operacion", form: generateForm({ clave_operacion: "" }) },
+  {
+    name: "la misma clave ya registrada: responde con la planilla generada sin escribir",
+    data: storedKey(),
+  },
+  {
+    name: "la clave es de otra operacion",
+    data: storedKey({ tipo_operacion: "pagar_planilla" }),
+  },
 ];
 
 describe("generatePayrollAction", () => {
   for (const input of generateInputs) {
     it(input.name, async () => {
       const { calls, outcome } = await run(
-        generatePayrollAction,
+        generate,
         { form: generateForm(), ...input },
         GENERATE_DATA,
       );
@@ -276,7 +310,7 @@ describe("C4 de la 11.5: generar bloquea el operario antes de decidir", () => {
     ["un periodo ya generado", { "planilla_pago.findFirst": { id_planilla: "PLA00000007", estado_pago: "pendiente" } }],
     ["solo faltas", { "asistencia.findMany": [ATTENDANCES[2]] }],
   ] as const)("%s: el operario se bloquea antes de leerlo y la transaccion sigue abierta", async (_name, data) => {
-    const { calls } = await run(generatePayrollAction, { name: "C4", form: generateForm(), data: { ...data } }, GENERATE_DATA);
+    const { calls } = await run(generate, { name: "C4", form: generateForm(), data: { ...data } }, GENERATE_DATA);
 
     expectRowLockedBefore(calls, {
       table: "operario",
@@ -287,7 +321,7 @@ describe("C4 de la 11.5: generar bloquea el operario antes de decidir", () => {
 
   it("un rechazo dentro de la transaccion la revierte sin escribir", async () => {
     const { calls, outcome } = await run(
-      generatePayrollAction,
+      generate,
       {
         name: "C4",
         form: generateForm(),
@@ -296,7 +330,11 @@ describe("C4 de la 11.5: generar bloquea el operario antes de decidir", () => {
       GENERATE_DATA,
     );
 
-    expect(outcome.resultado).toBe("error: Este operario ya tiene una planilla generada para el periodo seleccionado.");
+    expect(outcome.resultado).toMatchObject({
+      status: "error",
+      error: "Este operario ya tiene una planilla generada para el periodo seleccionado.",
+      fieldErrors: { periodo_inicio: ["Este operario ya tiene una planilla generada para el periodo seleccionado."] },
+    });
     expect(effectIndex(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
     expect(prismaIndex(calls, "planilla_pago.create")).toBe(-1);
   });
@@ -327,5 +365,43 @@ describe("C4 de la 11.5: anular bloquea la planilla antes de decidir", () => {
     expect(outcome.resultado).toBe("error: No se puede anular una planilla que ya fue pagada.");
     expect(effectIndex(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
     expect(prismaIndex(calls, "planilla_pago.update")).toBe(-1);
+  });
+});
+
+// --- C6 de la 11.5 (D59): generar reclama su clave primero ---
+
+describe("C6 de la 11.5: generar reclama la clave antes del candado", () => {
+  it("reclama la clave antes del candado y la completa despues de escribir", async () => {
+    const { calls, outcome } = await run(generate, { name: "C6", form: generateForm() }, GENERATE_DATA);
+    const at = (name: string) => calls.findIndex((call) => isPrismaCall(call) && call.prisma === name);
+
+    expect(outcome.resultado).toMatchObject({
+      status: "success",
+      data: { id_planilla: "PLA00000001", clave_operacion: CLAVE },
+    });
+    expect(at("operacion_idempotente.createManyAndReturn")).toBeGreaterThan(-1);
+    expect(at("operacion_idempotente.createManyAndReturn")).toBeLessThan(at("$queryRaw"));
+    expect(at("planilla_pago.create")).toBeLessThan(at("operacion_idempotente.updateMany"));
+    expect(at("operacion_idempotente.updateMany")).toBeLessThan(effectIndex(calls, "prisma.$transaction:commit"));
+    // Ya no escribe en la consola del servidor (hallazgo 9).
+    expect(outcome.consola).toEqual([]);
+  });
+
+  it.each([
+    ["el operario inactivo", { "operario.findFirst": null }, {}, "id_operario"],
+    ["un periodo que se cruza", { "planilla_pago.findFirst": { id_planilla: "PLA00000007", estado_pago: "pendiente" } }, {}, "periodo_inicio"],
+    ["solo faltas", { "asistencia.findMany": [ATTENDANCES[2]] }, {}, "periodo_inicio"],
+    ["un descuento igual al bruto", {}, { descuentos: "100" }, "descuentos"],
+  ] as const)("%s revierte la transaccion y deja el error en su campo, con lo enviado", async (_name, data, changes, field) => {
+    const { calls, outcome } = await run(
+      generate,
+      { name: "C6", form: generateForm(changes), data: { ...data } },
+      GENERATE_DATA,
+    );
+
+    expect(outcome.resultado).toMatchObject({ status: "error", values: { id_operario: "OPE00000003", periodo_inicio: "2026-11-02" } });
+    expect(Object.keys((outcome.resultado as { fieldErrors?: Record<string, unknown> }).fieldErrors ?? {})).toEqual([field]);
+    expect(effectIndex(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(prismaIndex(calls, "operacion_idempotente.updateMany")).toBe(-1);
   });
 });

@@ -319,7 +319,7 @@ exports[`cancelPayrollAction > sin planilla en el formulario > resultado 1`] = `
 exports[`generatePayrollAction > descuento con tres decimales > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -327,6 +327,22 @@ exports[`generatePayrollAction > descuento con tres decimales > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "generar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -397,9 +413,7 @@ exports[`generatePayrollAction > descuento con tres decimales > llamadas 1`] = `
     "args": {
       "select": {
         "falta": true,
-        "horas_trabajadas": true,
         "id_asistencia": true,
-        "tardanza": true,
       },
       "where": {
         "fecha": {
@@ -447,6 +461,17 @@ exports[`generatePayrollAction > descuento con tres decimales > llamadas 1`] = `
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PLA00000001",
+      },
+      "where": {
+        "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -463,30 +488,28 @@ exports[`generatePayrollAction > descuento con tres decimales > llamadas 1`] = `
 
 exports[`generatePayrollAction > descuento con tres decimales > resultado 1`] = `
 {
-  "consola": [
-    [
-      "Planilla generada",
-      {
-        "asistenciasValidas": 2,
-        "descuentos": 10.01,
-        "faltas": 1,
-        "horasTrabajadas": 15.5,
-        "idPlanilla": "PLA00000001",
-        "montoBruto": 100,
-        "montoNeto": 89.99,
-        "operario": "Quispe, Luis",
-        "tardanzas": 1,
-      },
-    ],
-  ],
-  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-created",
+  "consola": [],
+  "resultado": {
+    "data": {
+      "clave_operacion": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+      "id_planilla": "PLA00000001",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descuentos": "10.005",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > descuento igual al bruto: neto cero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -494,6 +517,22 @@ exports[`generatePayrollAction > descuento igual al bruto: neto cero > llamadas 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "generar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -564,9 +603,7 @@ exports[`generatePayrollAction > descuento igual al bruto: neto cero > llamadas 
     "args": {
       "select": {
         "falta": true,
-        "horas_trabajadas": true,
         "id_asistencia": true,
-        "tardanza": true,
       },
       "where": {
         "fecha": {
@@ -588,14 +625,29 @@ exports[`generatePayrollAction > descuento igual al bruto: neto cero > llamadas 
 exports[`generatePayrollAction > descuento igual al bruto: neto cero > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: Los descuentos no pueden igualar o superar el monto bruto calculado.",
+  "resultado": {
+    "error": "Los descuentos no pueden igualar o superar el monto bruto calculado.",
+    "fieldErrors": {
+      "descuentos": [
+        "Los descuentos no pueden igualar o superar el monto bruto calculado.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "100",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > descuento mayor que el bruto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -603,6 +655,22 @@ exports[`generatePayrollAction > descuento mayor que el bruto > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "generar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -673,9 +741,7 @@ exports[`generatePayrollAction > descuento mayor que el bruto > llamadas 1`] = `
     "args": {
       "select": {
         "falta": true,
-        "horas_trabajadas": true,
         "id_asistencia": true,
-        "tardanza": true,
       },
       "where": {
         "fecha": {
@@ -697,14 +763,29 @@ exports[`generatePayrollAction > descuento mayor que el bruto > llamadas 1`] = `
 exports[`generatePayrollAction > descuento mayor que el bruto > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: Los descuentos no pueden igualar o superar el monto bruto calculado.",
+  "resultado": {
+    "error": "Los descuentos no pueden igualar o superar el monto bruto calculado.",
+    "fieldErrors": {
+      "descuentos": [
+        "Los descuentos no pueden igualar o superar el monto bruto calculado.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "100.01",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > descuento negativo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -715,14 +796,29 @@ exports[`generatePayrollAction > descuento negativo > llamadas 1`] = `
 exports[`generatePayrollAction > descuento negativo > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: El descuento no puede ser negativo.",
+  "resultado": {
+    "error": "Revisa los datos de la planilla.",
+    "fieldErrors": {
+      "descuentos": [
+        "El descuento no puede ser negativo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "-1",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > descuento que no es numero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -733,14 +829,29 @@ exports[`generatePayrollAction > descuento que no es numero > llamadas 1`] = `
 exports[`generatePayrollAction > descuento que no es numero > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: El descuento debe ser un número válido.",
+  "resultado": {
+    "error": "Revisa los datos de la planilla.",
+    "fieldErrors": {
+      "descuentos": [
+        "El descuento debe ser un número válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "diez",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > descuento vacio: cero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -748,6 +859,22 @@ exports[`generatePayrollAction > descuento vacio: cero > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "generar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -818,9 +945,7 @@ exports[`generatePayrollAction > descuento vacio: cero > llamadas 1`] = `
     "args": {
       "select": {
         "falta": true,
-        "horas_trabajadas": true,
         "id_asistencia": true,
-        "tardanza": true,
       },
       "where": {
         "fecha": {
@@ -868,6 +993,17 @@ exports[`generatePayrollAction > descuento vacio: cero > llamadas 1`] = `
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PLA00000001",
+      },
+      "where": {
+        "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -884,30 +1020,28 @@ exports[`generatePayrollAction > descuento vacio: cero > llamadas 1`] = `
 
 exports[`generatePayrollAction > descuento vacio: cero > resultado 1`] = `
 {
-  "consola": [
-    [
-      "Planilla generada",
-      {
-        "asistenciasValidas": 2,
-        "descuentos": 0,
-        "faltas": 1,
-        "horasTrabajadas": 15.5,
-        "idPlanilla": "PLA00000001",
-        "montoBruto": 100,
-        "montoNeto": 100,
-        "operario": "Quispe, Luis",
-        "tardanzas": 1,
-      },
-    ],
-  ],
-  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-created",
+  "consola": [],
+  "resultado": {
+    "data": {
+      "clave_operacion": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+      "id_planilla": "PLA00000001",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descuentos": "",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > el fin antes del inicio > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -918,14 +1052,29 @@ exports[`generatePayrollAction > el fin antes del inicio > llamadas 1`] = `
 exports[`generatePayrollAction > el fin antes del inicio > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: La fecha de fin no puede ser menor que la fecha de inicio.",
+  "resultado": {
+    "error": "Revisa los datos de la planilla.",
+    "fieldErrors": {
+      "periodo_fin": [
+        "La fecha de fin no puede ser menor que la fecha de inicio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-02",
+      "periodo_inicio": "2026-11-08",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > el operario no existe o esta inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -933,6 +1082,22 @@ exports[`generatePayrollAction > el operario no existe o esta inactivo > llamada
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "generar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -969,14 +1134,29 @@ exports[`generatePayrollAction > el operario no existe o esta inactivo > llamada
 exports[`generatePayrollAction > el operario no existe o esta inactivo > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: El operario seleccionado no existe o está inactivo.",
+  "resultado": {
+    "error": "El operario seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_operario": [
+        "El operario seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > genera: dos asistencias validas por la tarifa, menos el descuento > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -984,6 +1164,22 @@ exports[`generatePayrollAction > genera: dos asistencias validas por la tarifa, 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "generar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1054,9 +1250,7 @@ exports[`generatePayrollAction > genera: dos asistencias validas por la tarifa, 
     "args": {
       "select": {
         "falta": true,
-        "horas_trabajadas": true,
         "id_asistencia": true,
-        "tardanza": true,
       },
       "where": {
         "fecha": {
@@ -1104,6 +1298,17 @@ exports[`generatePayrollAction > genera: dos asistencias validas por la tarifa, 
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "PLA00000001",
+      },
+      "where": {
+        "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -1120,30 +1325,28 @@ exports[`generatePayrollAction > genera: dos asistencias validas por la tarifa, 
 
 exports[`generatePayrollAction > genera: dos asistencias validas por la tarifa, menos el descuento > resultado 1`] = `
 {
-  "consola": [
-    [
-      "Planilla generada",
-      {
-        "asistenciasValidas": 2,
-        "descuentos": 10,
-        "faltas": 1,
-        "horasTrabajadas": 15.5,
-        "idPlanilla": "PLA00000001",
-        "montoBruto": 100,
-        "montoNeto": 90,
-        "operario": "Quispe, Luis",
-        "tardanzas": 1,
-      },
-    ],
-  ],
-  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-created",
+  "consola": [],
+  "resultado": {
+    "data": {
+      "clave_operacion": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+      "id_planilla": "PLA00000001",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;
 
-exports[`generatePayrollAction > operario sin tarifa > llamadas 1`] = `
+exports[`generatePayrollAction > la clave es de otra operacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1151,6 +1354,164 @@ exports[`generatePayrollAction > operario sin tarifa > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "generar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`generatePayrollAction > la clave es de otra operacion > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": {
+    "error": "La clave de la operacion ya se uso en otra operacion.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
+}
+`;
+
+exports[`generatePayrollAction > la misma clave ya registrada: responde con la planilla generada sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "generar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`generatePayrollAction > la misma clave ya registrada: responde con la planilla generada sin escribir > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": {
+    "data": {
+      "clave_operacion": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+      "id_planilla": "PLA00000009",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
+}
+`;
+
+exports[`generatePayrollAction > operario sin tarifa > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "generar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1187,14 +1548,62 @@ exports[`generatePayrollAction > operario sin tarifa > llamadas 1`] = `
 exports[`generatePayrollAction > operario sin tarifa > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: El operario seleccionado no tiene una tarifa válida para generar planilla.",
+  "resultado": {
+    "error": "El operario seleccionado no tiene una tarifa válida para generar planilla.",
+    "fieldErrors": {
+      "id_operario": [
+        "El operario seleccionado no tiene una tarifa válida para generar planilla.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
+}
+`;
+
+exports[`generatePayrollAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`generatePayrollAction > sin clave de operacion > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": {
+    "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    "fieldErrors": {
+      "clave_operacion": [
+        "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > sin operario ni fechas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1205,14 +1614,35 @@ exports[`generatePayrollAction > sin operario ni fechas > llamadas 1`] = `
 exports[`generatePayrollAction > sin operario ni fechas > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: Debe seleccionar un operario. La fecha de inicio del periodo es obligatoria. La fecha de fin del periodo es obligatoria.",
+  "resultado": {
+    "error": "Revisa los datos de la planilla.",
+    "fieldErrors": {
+      "id_operario": [
+        "Debe seleccionar un operario.",
+      ],
+      "periodo_fin": [
+        "La fecha de fin del periodo es obligatoria.",
+      ],
+      "periodo_inicio": [
+        "La fecha de inicio del periodo es obligatoria.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "",
+      "periodo_fin": "",
+      "periodo_inicio": "",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > sin permiso: el maestro de taller > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1223,14 +1653,25 @@ exports[`generatePayrollAction > sin permiso: el maestro de taller > llamadas 1`
 exports[`generatePayrollAction > sin permiso: el maestro de taller > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: Acceso rechazado por el doble de autorizacion.",
+  "resultado": {
+    "error": "No tienes permisos para generar planillas.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > solo faltas en el periodo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1238,6 +1679,22 @@ exports[`generatePayrollAction > solo faltas en el periodo > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "generar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1308,9 +1765,7 @@ exports[`generatePayrollAction > solo faltas en el periodo > llamadas 1`] = `
     "args": {
       "select": {
         "falta": true,
-        "horas_trabajadas": true,
         "id_asistencia": true,
-        "tardanza": true,
       },
       "where": {
         "fecha": {
@@ -1332,14 +1787,29 @@ exports[`generatePayrollAction > solo faltas en el periodo > llamadas 1`] = `
 exports[`generatePayrollAction > solo faltas en el periodo > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: No hay asistencias válidas para generar la planilla de este periodo.",
+  "resultado": {
+    "error": "No hay asistencias válidas para generar la planilla de este periodo.",
+    "fieldErrors": {
+      "periodo_inicio": [
+        "No hay asistencias válidas para generar la planilla de este periodo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > una fecha que no es fecha > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1350,14 +1820,29 @@ exports[`generatePayrollAction > una fecha que no es fecha > llamadas 1`] = `
 exports[`generatePayrollAction > una fecha que no es fecha > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: La fecha de fin del periodo no es válida.",
+  "resultado": {
+    "error": "Revisa los datos de la planilla.",
+    "fieldErrors": {
+      "periodo_fin": [
+        "La fecha de fin del periodo no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "abc",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > una fecha que no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1368,14 +1853,29 @@ exports[`generatePayrollAction > una fecha que no existe > llamadas 1`] = `
 exports[`generatePayrollAction > una fecha que no existe > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: La fecha de fin del periodo no es válida.",
+  "resultado": {
+    "error": "Revisa los datos de la planilla.",
+    "fieldErrors": {
+      "periodo_fin": [
+        "La fecha de fin del periodo no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-02-30",
+      "periodo_inicio": "2026-02-23",
+    },
+  },
 }
 `;
 
 exports[`generatePayrollAction > ya hay una planilla del mismo periodo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1383,6 +1883,22 @@ exports[`generatePayrollAction > ya hay una planilla del mismo periodo > llamada
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "generar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1429,6 +1945,21 @@ exports[`generatePayrollAction > ya hay una planilla del mismo periodo > llamada
 exports[`generatePayrollAction > ya hay una planilla del mismo periodo > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: Este operario ya tiene una planilla generada para el periodo seleccionado.",
+  "resultado": {
+    "error": "Este operario ya tiene una planilla generada para el periodo seleccionado.",
+    "fieldErrors": {
+      "periodo_inicio": [
+        "Este operario ya tiene una planilla generada para el periodo seleccionado.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descuentos": "10.00",
+      "id_operario": "OPE00000003",
+      "periodo_fin": "2026-11-08",
+      "periodo_inicio": "2026-11-02",
+    },
+  },
 }
 `;

@@ -1046,23 +1046,26 @@ exports[`/dashboard/staff/payrolls/new > formulario > resultado 1`] = `
 </div>
 <div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
 <div>
 <div>
-<label for="id_operario-_R_1d6_">Operario *</label>
+<label for="id_operario">Operario *</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
-<input id="id_operario-_R_1d6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-_R_1d6_-listbox" aria-expanded="false" required="" placeholder="Buscar operario..." value=""/>
+<input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>
 <p>La tarifa se multiplicará por las asistencias válidas del periodo seleccionado.</p>
 </div>
 <div>
 <div>
-<label for="periodo_inicio">Inicio del periodo</label>
+<label for="periodo_inicio">Inicio del periodo<span aria-hidden="true">*</span>
+</label>
 <input type="date" id="periodo_inicio" required="" name="periodo_inicio" value="2026-07-09"/>
 </div>
 <div>
-<label for="periodo_fin">Fin del periodo</label>
+<label for="periodo_fin">Fin del periodo<span aria-hidden="true">*</span>
+</label>
 <input type="date" id="periodo_fin" required="" name="periodo_fin" value="2026-07-15"/>
 </div>
 <div>
@@ -1071,8 +1074,8 @@ exports[`/dashboard/staff/payrolls/new > formulario > resultado 1`] = `
 </div>
 </div>
 <div>
+<a data-variant="outline" href="/dashboard/staff/payrolls">Cancelar</a>
 <button data-variant="default" type="submit">Generar planilla</button>
-<a data-variant="outline" href="/dashboard/staff/payrolls">Ver listado</a>
 </div>
 </form>
 </div>

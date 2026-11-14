@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import type { PrismaClient } from "@/generated/prisma/client";
@@ -8,8 +10,9 @@ import { getTestDatabase } from "@/testing/test-database";
 // Planillas contra Postgres real (PGlite), C4 de la 11.5. Corre las acciones enteras: los
 // candados del operario y de la planilla (su SQL se ejecuta de verdad sobre las tablas), los
 // montos en centesimos (C2), los correlativos, la bitacora y el rollback de un rechazo. Solo se
-// reemplazan la sesion y la cache de Next. Las acciones todavia redirigen al guardar y lanzan un
-// error al rechazar: la prueba traduce lo primero a «guardado».
+// reemplazan la sesion y la cache de Next. Anular y pagar todavia redirigen al guardar y lanzan un
+// error al rechazar: la prueba traduce lo primero a «guardado». Desde C6 de la 11.5 generar
+// devuelve su resultado («guardado» o su error) y reclama una clave nueva en cada envio.
 //
 // Lo que no se puede probar aqui: dos pagos o una anulacion y un pago simultaneos de la misma
 // planilla. En Postgres el segundo espera el candado del primero y ve el estado final; PGlite
@@ -92,8 +95,23 @@ async function run(action: (formData: FormData) => Promise<void>, fields: Record
   }
 }
 
-const generate = (periodo_inicio: string, periodo_fin: string, descuentos = "") =>
-  run(generatePayrollAction, { id_operario: OPERARIO, periodo_inicio, periodo_fin, descuentos });
+async function generate(periodo_inicio: string, periodo_fin: string, descuentos = "") {
+  const formData = new FormData();
+
+  for (const [key, value] of Object.entries({
+    clave_operacion: randomUUID(),
+    id_operario: OPERARIO,
+    periodo_inicio,
+    periodo_fin,
+    descuentos,
+  })) {
+    formData.set(key, value);
+  }
+
+  const state = await generatePayrollAction({ status: "idle" }, formData);
+
+  return state.status === "success" ? SAVED : state.status === "error" ? state.error : "sin respuesta";
+}
 
 const pay = (id_planilla: string, monto_pagado: string) =>
   run(registerOperatorPaymentAction, {

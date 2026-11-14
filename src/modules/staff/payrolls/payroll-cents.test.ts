@@ -61,6 +61,7 @@ async function savedAmounts(descuentos: string) {
   const formData = new FormData();
 
   for (const [key, value] of Object.entries({
+    clave_operacion: "5b1d2c3e-4f5a-4b6c-8d7e-9f0a1b2c3d4e",
     id_operario: "OPE00000003",
     periodo_inicio: "2026-11-02",
     periodo_fin: "2026-11-08",
@@ -71,15 +72,16 @@ async function savedAmounts(descuentos: string) {
 
   const { calls, result } = await characterizeHandler(async () => {
     try {
-      await generatePayrollAction(formData);
+      // Desde C6 de la 11.5 generar devuelve su resultado en lugar de redirigir.
+      const state = await generatePayrollAction({ status: "idle" }, formData);
 
-      return "termino sin redirigir";
+      return state.status === "success" ? "guardado" : state.status === "error" ? `error: ${state.error}` : "sin respuesta";
     } catch (error) {
       return describeNavigationError(error) ?? `error: ${error instanceof Error ? error.message : String(error)}`;
     }
   }, DATA);
 
-  expect(result).toBe("redirect:/dashboard/staff/payrolls?toast=payroll-created");
+  expect(result).toBe("guardado");
 
   const create = calls.filter(isPrismaCall).find((call) => call.prisma === "planilla_pago.create");
   const data = (create?.args as { data: Record<string, unknown> } | undefined)?.data ?? {};
