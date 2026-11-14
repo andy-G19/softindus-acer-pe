@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { Prisma } from "@/generated/prisma/client";
 import { REPORT_KEYS, REPORT_REGISTRY } from "@/lib/reports/report-registry";
 import {
   characterizeHandler,
@@ -176,6 +177,16 @@ function generated(model: string, args: PrismaArgs) {
 function withChanges(model: string, changes: Row[]) {
   return (args: PrismaArgs) =>
     generated(model, args).map((row, index) => ({ ...row, ...changes[index] }));
+}
+
+// C7 de la 11.4b (D52): los totales de caja del financiero salen de aggregate con el tipo en el
+// AND. Con todas las filas cargadas suman lo mismo que ellas: 11.50 el ingreso y 22.50 el egreso
+// generados.
+function cashSumsByType(args: PrismaArgs) {
+  const conditions = (args?.where as { AND?: Row[] } | undefined)?.AND ?? [];
+  const type = conditions.map((condition) => condition.tipo_movimiento).find(Boolean);
+
+  return { _sum: { monto: new Prisma.Decimal(type === "ingreso" ? "11.50" : "22.50") } };
 }
 
 function repeatRows(model: string, total: number, idField: string, prefix: string) {
@@ -428,6 +439,7 @@ const REPORT_CASES: ExportCase[] = [
       },
       "proforma.aggregate": { _sum: { saldo: null } },
       "compra.findMany": [],
+      "movimiento_caja.aggregate": cashSumsByType,
       "movimiento_caja.findMany": withChanges("movimiento_caja", [
         { categoria_gasto: null, tipo_movimiento: "ingreso" },
         { tipo_movimiento: "egreso" },

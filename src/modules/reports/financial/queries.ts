@@ -125,6 +125,32 @@ function findFinancialFilterOptions() {
   ] as const;
 }
 
+// Lecturas de los totales de caja chica y de compras por pagar (C7 de la 11.4b, D52): las sumas
+// de ingresos y egresos de todos los movimientos del filtro y el total y los pagos de todas las
+// compras pendientes, sin el limite de las filas que se muestran. La pagina y la exportacion las
+// componen en su Promise.all y las resumen con summarizeFinancialTotals (financial-totals.ts).
+function findFinancialTotals(wheres: ReturnType<typeof buildFinancialWheres>) {
+  return [
+    prisma.movimiento_caja.aggregate({
+      where: { AND: [wheres.cashMovements, { tipo_movimiento: "ingreso" }] },
+      _sum: { monto: true },
+    }),
+
+    prisma.movimiento_caja.aggregate({
+      where: { AND: [wheres.cashMovements, { tipo_movimiento: "egreso" }] },
+      _sum: { monto: true },
+    }),
+
+    prisma.compra.findMany({
+      where: wheres.pendingPurchases,
+      select: {
+        monto_total: true,
+        pago_proveedor: { select: { monto_pagado: true } },
+      },
+    }),
+  ] as const;
+}
+
 // Solo las opciones de los filtros: la pantalla las necesita aunque no
 // consulte los datos, con el rango de fechas invertido (entrega 10.2).
 export async function getFinancialReportFilterOptions() {
@@ -148,6 +174,9 @@ export async function getFinancialReportData(filters: FinancialReportFilters) {
     lowMarginAlerts,
     receivables,
     pendingSupplierPurchases,
+    cashIncomeSum,
+    cashExpenseSum,
+    pendingPurchaseAmounts,
   ] = await Promise.all([
     ...findFinancialFilterOptions(),
 
@@ -234,6 +263,8 @@ export async function getFinancialReportData(filters: FinancialReportFilters) {
       },
       take: 100,
     }),
+
+    ...findFinancialTotals(wheres),
   ]);
 
   return {
@@ -247,6 +278,9 @@ export async function getFinancialReportData(filters: FinancialReportFilters) {
     lowMarginAlerts,
     receivables,
     pendingSupplierPurchases,
+    cashIncomeSum,
+    cashExpenseSum,
+    pendingPurchaseAmounts,
   };
 }
 
@@ -263,7 +297,9 @@ export async function getFinancialExportData(
     productionCosts,
     estimatedProfit,
     receivables,
-    pendingPurchases,
+    cashIncomeSum,
+    cashExpenseSum,
+    pendingPurchaseAmounts,
   ] = await Promise.all([
     prisma.movimiento_caja.findMany({
       where: wheres.cashMovements,
@@ -320,18 +356,10 @@ export async function getFinancialExportData(
       },
     }),
 
-    prisma.compra.findMany({
-      where: wheres.pendingPurchases,
-      orderBy: [{ fecha_compra: "desc" }, { id_compra: "desc" }],
-      // No son las filas exportadas (son insumo de un total agregado en
-      // memoria), pero igual se acota: evita cargar todas las compras
-      // pendientes de pago sin limite si la tabla crece mucho.
-      take: limit,
-      include: {
-        proveedor: true,
-        pago_proveedor: true,
-      },
-    }),
+    // C7 de la 11.4b (D52): las compras pendientes ya no se cargan con el limite de las filas:
+    // eran solo insumo del total de compras por pagar, que ahora sale de todas, con dos columnas
+    // por compra.
+    ...findFinancialTotals(wheres),
   ]);
 
   return {
@@ -341,6 +369,8 @@ export async function getFinancialExportData(
     productionCosts,
     estimatedProfit,
     receivables,
-    pendingPurchases,
+    cashIncomeSum,
+    cashExpenseSum,
+    pendingPurchaseAmounts,
   };
 }
