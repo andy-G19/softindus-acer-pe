@@ -31,7 +31,10 @@ type ScrapSaleFormProps = {
   defaultQuantity: string;
   /** Fecha que propone el campo (aaaa-mm-dd), calculada por la pagina. */
   defaultDate: string;
-  /** Resumen de la chatarra elegida desde el listado, armado por la pagina. */
+  /**
+   * Resumen de la chatarra elegida desde el listado, o el aviso de que ya no esta disponible,
+   * armado por la pagina.
+   */
   selectedScrapSummary?: ReactNode;
   /**
    * Aviso que se da al guardar, del catalogo de Mermas y chatarra. La pagina lo pasa con su clave
@@ -72,6 +75,12 @@ export function ScrapSaleForm({
   const values = state.status === "error" ? state.values : undefined;
   const resultKey = state.status === "idle" ? undefined : state.operationId;
   const completedKey = state.status === "success" ? state.data.clave_operacion : undefined;
+
+  // Una chatarra que ya no esta entre las opciones (vendida por otro, un enlace viejo) deja el
+  // campo sin elegir: con un valor que no es una opcion, el navegador elegia la primera
+  // habilitada, otra chatarra (hallazgo de la verificacion de la 11.4b en staging).
+  const requestedScrapId = values?.id_chatarra ?? defaultScrapId;
+  const scrapId = scraps.some((item) => item.value === requestedScrapId) ? requestedScrapId : "";
 
   const goBack = useCallback(() => router.push(returnTo), [router, returnTo]);
   const { controls, markDirty, trackFocus, discardDialog } = useDiscardGuard({ onLeave: goBack });
@@ -123,7 +132,7 @@ export function ScrapSaleForm({
               errors={fieldErrors?.id_chatarra}
             >
               {(control) => (
-                <NativeSelect {...control} name="id_chatarra" defaultValue={values?.id_chatarra ?? defaultScrapId}>
+                <NativeSelect {...control} name="id_chatarra" defaultValue={scrapId}>
                   <option value="" disabled>
                     Selecciona un registro de chatarra
                   </option>

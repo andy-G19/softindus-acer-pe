@@ -1,3 +1,4 @@
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Card,
   CardContent,
@@ -121,6 +122,15 @@ export default async function NewScrapSalePage({
                       : "-"}
                   </p>
                 </div>
+              ) : selectedScrapId ? (
+                // Hallazgo de la verificacion de la 11.4b en staging: la chatarra del enlace ya no
+                // se puede vender (vendida o inexistente); el formulario la deja sin elegir.
+                <Alert variant="warning">
+                  <AlertDescription>
+                    La chatarra {selectedScrapId} ya no está disponible para la venta. Elige otra
+                    o vuelve al listado de chatarra.
+                  </AlertDescription>
+                </Alert>
               ) : undefined
             }
             successNotification={wasteScrapNotifications["scrap-sale-created"]}

@@ -63,7 +63,12 @@ const valuesOf = (formData: FormData) => ({
   observaciones: String(formData.get("observaciones") ?? ""),
 });
 
-async function render(respond: (formData: FormData) => ScrapSaleFormState) {
+type FormProps = Parameters<typeof ScrapSaleForm>[0];
+
+async function render(
+  respond: (formData: FormData) => ScrapSaleFormState,
+  overrides: Partial<FormProps> = {},
+) {
   const received: FormData[] = [];
   const action = vi.fn(async (_prev: ScrapSaleFormState, formData: FormData) => {
     received.push(formData);
@@ -88,6 +93,7 @@ async function render(respond: (formData: FormData) => ScrapSaleFormState) {
         defaultDate: "2026-11-12",
         returnTo: RETURN_TO,
         successNotification: NOTIFICATION,
+        ...overrides,
       }),
     );
   });
@@ -169,6 +175,28 @@ describe("ScrapSaleForm", () => {
     expect(sessionStorage.getItem(STORAGE_KEY)).toBe(String(received[0].get("clave_operacion")));
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(router.push).not.toHaveBeenCalled();
+  });
+
+  // Hallazgo de la verificacion de la 11.4b en staging: una chatarra que llega elegida pero ya no
+  // esta entre las opciones (vendida por otro) dejaba elegida la primera habilitada, otra chatarra.
+  it("una chatarra que ya no esta entre las opciones no deja elegida otra", async () => {
+    const received = await render(
+      (formData) => ({ status: "error", error: "x", values: valuesOf(formData), operationId: "op-1" }),
+      { defaultScrapId: "CHA00000099", defaultWeight: "", defaultQuantity: "" },
+    );
+
+    expect(control<HTMLSelectElement>("id_chatarra").value).toBe("");
+
+    await act(async () => {
+      const form = host.querySelector("form");
+
+      if (form) {
+        form.noValidate = true;
+        form.requestSubmit();
+      }
+    });
+
+    expect(String(received[0].get("id_chatarra") ?? "")).toBe("");
   });
 
   it("tras guardar avisa una vez, renueva la clave y vuelve al listado de chatarra", async () => {
