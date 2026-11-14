@@ -8868,6 +8868,109 @@ Datos leídos de la API de GitHub el 2026-11-13 (UTC) y comparados con git:
 - Vercel desplegó `729229a` en producción (`success` a las 12:03:17 UTC). La sub-entrega no trae
   migraciones.
 
+### Sub-entrega 11.4b — Venta de chatarra, filtro de movimientos y totales del reporte financiero
+
+Fecha: 2026-11-13 (Lima). Estado: preparada, sin publicar. Plan en `tmp/e11-diff/plan-11-4b.md`,
+con las decisiones D48 a D52 aprobadas: la venta de chatarra como el egreso de la 11.4a, con
+`lockScrapRow` antes que la caja, montos en centésimos y clave `venta_chatarra:nueva` (D48); sin
+índice único en `venta_chatarra.id_chatarra`, porque la chatarra bloqueada ya ordena las ventas y
+el índice sería una migración (D49); el listado de movimientos no ofrece «Anular» en el ingreso de
+una venta (D50); el filtro de fechas de movimientos con `parseDateParam` y `buildDateRangeFilter`
+(D51), y los totales del reporte financiero sobre todas las filas del filtro (D52).
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 50b196f | docs | Integración de la 11.4a en `main` (PR #46). |
+| b0d7a43 | test | Caracterización de la venta de chatarra (14 casos); hasta aquí no tenía pruebas. |
+| 78c7165 | fix | Monto con `roundCashAmount` a la venta, al movimiento y al aumento del saldo; el esquema rechaza lo que se guardaría como 0.00; peso y cantidad comparados en centésimos como sus columnas; 5 casos rojos antes. |
+| d2482db | fix | La venta bloquea la chatarra (`lockScrapRow`) y después la caja, y decide dentro de la transacción; casos de candado y 2 pruebas en Postgres. |
+| 6133337 | feat | Venta con `FormActionState`, clave `venta_chatarra:nueva` (primera sentencia), errores en su campo con lo enviado, guardia de descarte y vuelta al listado de chatarra; sin permiso responde con un error. |
+| a5f80ea | fix | El listado de movimientos muestra «Venta VCH…» en lugar de «Anular» en el ingreso de una venta (D50); 1 caso rojo antes. |
+| 2eb8a30 | fix | Movimientos filtra con `parseDateParam` y `buildDateRangeFilter`: un texto que no es fecha no filtra y el último día llega hasta antes del siguiente (D51); 3 casos rojos antes y 1 de guarda. |
+| 7466d12 | fix | Totales de caja y de compras por pagar del reporte financiero sobre todas las filas, con `summarizeFinancialTotals` en la página y la exportación (D52); 2 casos rojos antes. |
+| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Diseño:
+
+- La venta sigue el protocolo del egreso: reclama la clave como primera sentencia, bloquea la
+  chatarra antes de leerla y la caja al final, y un rechazo posterior lanza un error con su campo
+  para revertir la transacción y liberar la clave. Dos ventas simultáneas de la misma chatarra:
+  la segunda espera a la primera y la ve vendida.
+- El monto recibido es un solo texto redondeado como las columnas, el mismo en la venta, en el
+  movimiento de caja y en el `increment` del saldo. Peso y cantidad se comparan con lo registrado
+  en centésimos, como guardan sus columnas `numeric(10, 2)`.
+- El ingreso de una venta no se anula desde caja chica (D45): la acción lo rechaza desde la 11.4a
+  y ahora el listado tampoco lo ofrece, porque trae la venta de cada movimiento.
+- Movimientos ya no tiene su propia regla de fechas: la página interpreta la URL con
+  `parseDateParam` y la consulta recibe fechas. Una fecha que no existe (`2026-02-30`) sigue la
+  regla de todos los listados: pasa al 2 de marzo (hallazgo 4 de la 10.3c, abierto). El plan
+  decía que se ignoraría; se corrigió al escribir la prueba roja, porque arreglarlo cambiaría los
+  17 listados que usan `parseDateParam` y está atado a la decisión de los días de Lima.
+- Los totales del reporte financiero salen de `aggregate` (ingresos y egresos) y de todas las
+  compras pendientes, leídas con dos columnas y sumadas en centésimos con
+  `calculatePurchaseBalance`. La función pura vive fuera de `queries.ts`, porque una consulta
+  devuelve lo que da Prisma; la usan la página y el exportador. Las tablas siguen mostrando las
+  primeras filas, y la exportación ya no carga compras con su límite solo para el total.
+
+Evidencia:
+
+1. Rojo antes de cada `fix`: C2 con 5 casos, C3 con los candados, C5 con 1, C6 con 3 y C7 con 2.
+   En C4 (`feat`) las pruebas se escribieron con el código y la caracterización de C1 mostró el
+   cambio de contrato.
+2. Mutaciones: C1 11 de 11, C2 9 de 9, C3 6 de 6, C4 16 de 16, C5 4 de 4, C6 7 de 7 y C7 12 de
+   12; en total, 65 de 65.
+3. Snapshots revisados uno por uno: C2 cambia los importes de número a texto redondeado; C3, el
+   orden (transacción, candados, lecturas, `rollback`); C4, el contrato de la respuesta; C5 solo
+   la consulta de movimientos (su HTML queda igual); C6 cambia 12 líneas, de `lte` 23:59:59 a
+   `lt` el día siguiente, en los 2 casos con «hasta» y sus 6 consultas; C7 añade las lecturas de
+   los totales, y en los casos con datos generados ingresos y egresos pasan de 0.00 al valor del
+   `aggregate` generado.
+4. Pruebas contra Postgres (3 en `scrap-sale.integration.test.ts`): vender dos veces la misma
+   chatarra deja una venta y un ingreso; la misma clave dos veces suma el ingreso una vez; una
+   venta en una caja cerrada no escribe nada.
+5. Tropiezos de método sin efecto en el código: en C5 la caracterización del listado perdía el
+   botón «Anular» porque el arnés generaba una venta para cada movimiento (se fijaron movimientos
+   sin venta en sus 4 casos y el HTML quedó igual); en C7 los casos de totales vacíos tomaban el
+   `aggregate` generado (se les dieron las sumas de sus filas y su HTML y su archivo quedaron
+   iguales); el ejecutor de mutaciones falló una vez al escribir un archivo (Errno 22): se
+   comprobó el archivo intacto y se repitió.
+6. CSS compilado igual byte a byte en cada commit (112.316 bytes).
+7. `npm run check` terminó con código 0 antes de cada commit, hasta 5.158 pruebas en 305
+   archivos; las de integración pasan de 57 a 60 en 12 archivos. Lint mantiene el aviso anterior
+   (`_line` en `orders/actions.ts`).
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 298 / 5.114 | 305 / 5.158 |
+| Pruebas contra Postgres real (archivos / pruebas) | 11 / 57 | 12 / 60 |
+| Acciones de caja chica y chatarra caracterizadas | 4 / 5 | 5 / 5 |
+| Acciones de caja chica y chatarra que lanzan un error de validación a la página de error | 1 | 0 |
+| Operaciones de caja chica y chatarra que deciden fuera de la transacción o sin bloquear su fila | 1 | 0 |
+| Acciones con clave de operación | 8 | 9 |
+| Copias locales que cortan las fechas con `lte` | 1 | 0 |
+| Totales del reporte financiero calculados sobre filas cortadas (página y exportación) | 2 | 0 |
+
+Hallazgos:
+
+1. Dos ventas simultáneas de la misma chatarra la vendían dos veces y sumaban dos ingresos.
+   Corregido en `d2482db`.
+2. El monto de la venta se mandaba sin redondear: el movimiento y el saldo redondeaban distinto y
+   0.004 se aceptaba. Corregido en `78c7165`.
+3. La venta lanzaba sus errores a la página de error y no tenía clave. Corregido en `6133337`.
+4. El listado de movimientos ofrecía «Anular» en el ingreso de una venta (hallazgo 8 de la
+   11.4a). Corregido en `a5f80ea`.
+5. Un texto que no es fecha en el filtro de movimientos llevaba la página de error y el último día
+   se cortaba a las 23:59:59 (hallazgo 2 de la 10.3c). Corregido en `2eb8a30`.
+6. Los totales del reporte financiero se sumaban sobre las filas cargadas (hallazgo 1 de la 11.1).
+   Corregido en `7466d12`.
+7. Menor: un peso o una cantidad de 0.004 se acepta y se guarda como 0.00, porque el esquema solo
+   pide un positivo y el texto «0.00» cuenta como escrito. El monto sí lo rechaza desde C2. Solo
+   ADMIN vende. Destino: 11.7.
+8. Sigue abierto: una fecha que no existe en la URL se corre en todos los listados (`2026-02-30`
+   filtra desde el 2 de marzo; hallazgo 4 de la 10.3c), junto con los días de Lima.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -8893,7 +8996,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b en preparación |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b preparada (C0 a C8), sin publicar |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
