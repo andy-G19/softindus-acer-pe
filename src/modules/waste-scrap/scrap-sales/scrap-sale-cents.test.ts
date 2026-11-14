@@ -60,6 +60,7 @@ async function sell(changes: Record<string, string>) {
   const formData = new FormData();
 
   for (const [key, value] of Object.entries({
+    clave_operacion: "9c2e4a6b-1d3f-4b5a-8c7d-6e5f4a3b2c1d",
     id_chatarra: "CHA00000004",
     id_caja_chica: "CAJ00000002",
     fecha_venta: "2026-11-10",
@@ -76,9 +77,20 @@ async function sell(changes: Record<string, string>) {
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        await createScrapSaleAction(formData);
+        // C4 de la 11.4b: la venta devuelve el estado del formulario; un error queda en su campo.
+        const state = await createScrapSaleAction({ status: "idle" }, formData);
 
-        return "termino sin redirigir";
+        if (state.status === "success") {
+          return "guardado";
+        }
+
+        if (state.status === "error") {
+          const fieldMessage = Object.values(state.fieldErrors ?? {}).flat()[0];
+
+          return `error: ${fieldMessage ?? state.error}`;
+        }
+
+        return "sin respuesta";
       } catch (error) {
         return describeNavigationError(error) ?? `error: ${error instanceof Error ? error.message : String(error)}`;
       }
@@ -103,7 +115,7 @@ async function sell(changes: Record<string, string>) {
   };
 }
 
-const SAVED = "redirect:/dashboard/waste-scrap/scraps?toast=scrap-sale-created";
+const SAVED = "guardado";
 
 describe("C2 de la 11.4b: venta de chatarra en centimos", () => {
   it("un monto que la columna guardaria como 0.00 no es una venta", async () => {

@@ -392,6 +392,8 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/waste-scrap/scrap-sales/actions"),
     roles: SOLO_ADMIN,
     acciones: ["createScrapSaleAction"],
+    // C4 de la 11.4b: la venta responde a un rol denegado con un error en el formulario.
+    rechazanConResultado: ["createScrapSaleAction"],
   },
   {
     ruta: "waste-scrap/scraps/actions",

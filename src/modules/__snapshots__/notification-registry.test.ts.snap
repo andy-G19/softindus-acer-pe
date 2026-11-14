@@ -148,6 +148,7 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/new/page.tsx [successNotification] -> reusable-scrap-created",
   "src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx [discardedNotification] -> reusable-scrap-discarded",
   "src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx [reusedNotification] -> reusable-scrap-reused",
+  "src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx [successNotification] -> scrap-sale-created",
   "src/app/(dashboard)/dashboard/waste-scrap/scraps/@panel/(.)new/page.tsx [successNotification] -> scrap-created",
   "src/app/(dashboard)/dashboard/waste-scrap/scraps/new/page.tsx [successNotification] -> scrap-created",
 ]

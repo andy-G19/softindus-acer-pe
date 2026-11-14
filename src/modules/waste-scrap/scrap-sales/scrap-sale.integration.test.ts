@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import type { PrismaClient } from "@/generated/prisma/client";
@@ -7,8 +9,8 @@ import { getTestDatabase } from "@/testing/test-database";
 // La venta de chatarra contra Postgres real (PGlite), C3 de la 11.4b. Corre la accion entera: los
 // candados de la chatarra y de la caja (su SQL se ejecuta de verdad sobre las tablas), el monto
 // redondeado como las columnas (C2), los correlativos, la bitacora y el rollback de un rechazo.
-// Solo se reemplazan la sesion, la cache y la navegacion de Next: la redireccion final se devuelve
-// como texto.
+// Solo se reemplazan la sesion y la cache de Next. Desde C4 de la 11.4b la venta devuelve su
+// resultado: «guardado» o su error.
 //
 // Lo que no se puede probar aqui: dos ventas simultaneas de la misma chatarra. En Postgres la
 // segunda espera el candado de la primera; PGlite atiende una sola transaccion a la vez
@@ -19,14 +21,9 @@ vi.mock("@/lib/authz", () => ({
   getAuthorizedSession: async () => ({ user: { id: "USU00000001", name: "Andrea Prueba" } }),
 }));
 vi.mock("next/cache", () => ({ revalidatePath: () => undefined }));
-vi.mock("next/navigation", () => ({
-  redirect: (url: string) => {
-    throw new Error(`redirect:${url}`);
-  },
-}));
 
 const USUARIO = "USU00000001";
-const SAVED = "redirect:/dashboard/waste-scrap/scraps?toast=scrap-sale-created";
+const SAVED = "guardado";
 
 let prisma: PrismaClient;
 
@@ -70,10 +67,11 @@ async function createBox(idCajaChica: string, saldo: string) {
   });
 }
 
-async function sell(idChatarra: string, fields: Record<string, string>) {
+async function sell(idChatarra: string, fields: Record<string, string>, clave: string = randomUUID()) {
   const formData = new FormData();
 
   for (const [key, value] of Object.entries({
+    clave_operacion: clave,
     id_chatarra: idChatarra,
     id_caja_chica: "",
     fecha_venta: "2026-11-10",
@@ -87,13 +85,9 @@ async function sell(idChatarra: string, fields: Record<string, string>) {
     formData.set(key, value);
   }
 
-  try {
-    await createScrapSaleAction(formData);
+  const state = await createScrapSaleAction({ status: "idle" }, formData);
 
-    return "termino sin redirigir";
-  } catch (error) {
-    return error instanceof Error ? error.message : String(error);
-  }
+  return state.status === "success" ? "guardado" : state.status === "error" ? state.error : "sin respuesta";
 }
 
 const balanceOf = async (idCajaChica: string) =>
@@ -134,6 +128,17 @@ describe("venta de chatarra en Postgres", () => {
       (await prisma.chatarra.findUniqueOrThrow({ where: { id_chatarra: "CHA00000001" }, select: { estado: true } }))
         .estado,
     ).toBe("vendida");
+  });
+
+  it("la misma clave dos veces deja una sola venta y suma el ingreso una vez (C4)", async () => {
+    await createScrap("CHA00000003");
+    await createBox("CAJ00000003", "10.00");
+    const clave = randomUUID();
+
+    expect(await sell("CHA00000003", { id_caja_chica: "CAJ00000003", monto_recibido: "25.00" }, clave)).toBe(SAVED);
+    expect(await sell("CHA00000003", { id_caja_chica: "CAJ00000003", monto_recibido: "25.00" }, clave)).toBe(SAVED);
+    expect(await prisma.venta_chatarra.count({ where: { id_chatarra: "CHA00000003" } })).toBe(1);
+    expect(await balanceOf("CAJ00000003")).toBe("35.00");
   });
 
   it("una venta en una caja cerrada no escribe nada: ni venta, ni movimiento, ni chatarra vendida", async () => {
