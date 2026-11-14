@@ -1,0 +1,1334 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`cancelPayrollAction > anula una planilla pendiente sin pagos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "historial_pago_operario": true,
+          },
+        },
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "anulada",
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Planilla anulada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "planilla_pago",
+      "id_registro_afectado": "PLA00000009",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`cancelPayrollAction > anula una planilla pendiente sin pagos > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-annulled",
+}
+`;
+
+exports[`cancelPayrollAction > la planilla no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "historial_pago_operario": true,
+          },
+        },
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+]
+`;
+
+exports[`cancelPayrollAction > la planilla no existe > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: La planilla seleccionada no existe.",
+}
+`;
+
+exports[`cancelPayrollAction > la planilla tiene un pago en el historial > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "historial_pago_operario": true,
+          },
+        },
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+]
+`;
+
+exports[`cancelPayrollAction > la planilla tiene un pago en el historial > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: No se puede anular una planilla con historial de pago registrado.",
+}
+`;
+
+exports[`cancelPayrollAction > la planilla ya esta anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "historial_pago_operario": true,
+          },
+        },
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+]
+`;
+
+exports[`cancelPayrollAction > la planilla ya esta anulada > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: La planilla ya se encuentra anulada.",
+}
+`;
+
+exports[`cancelPayrollAction > la planilla ya fue pagada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "historial_pago_operario": true,
+          },
+        },
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+]
+`;
+
+exports[`cancelPayrollAction > la planilla ya fue pagada > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: No se puede anular una planilla que ya fue pagada.",
+}
+`;
+
+exports[`cancelPayrollAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`cancelPayrollAction > sin permiso: el maestro de taller > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: Acceso rechazado por el doble de autorizacion.",
+}
+`;
+
+exports[`cancelPayrollAction > sin planilla en el formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`cancelPayrollAction > sin planilla en el formulario > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: No se recibió la planilla.",
+}
+`;
+
+exports[`generatePayrollAction > descuento con tres decimales > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "modalidad_pago": true,
+        "nombres": true,
+        "tarifa": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE00000003",
+        "periodo_fin": 2026-11-08T00:00:00.000Z,
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "falta": true,
+        "horas_trabajadas": true,
+        "id_asistencia": true,
+        "tardanza": true,
+      },
+      "where": {
+        "fecha": {
+          "gte": 2026-11-02T00:00:00.000Z,
+          "lte": 2026-11-08T00:00:00.000Z,
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "planilla_pago",
+      "prefijo": "PLA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descuentos": "10.01",
+        "estado_pago": "pendiente",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000001",
+        "id_usuario_genera": "USU00000001",
+        "modalidad_pago": "quincenal",
+        "monto_bruto": "100.00",
+        "monto_neto": "90.00",
+        "periodo_fin": 2026-11-08T00:00:00.000Z,
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Planilla generada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "planilla_pago",
+      "id_registro_afectado": "PLA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`generatePayrollAction > descuento con tres decimales > resultado 1`] = `
+{
+  "consola": [
+    [
+      "Planilla generada",
+      {
+        "asistenciasValidas": 2,
+        "descuentos": 10.005,
+        "faltas": 1,
+        "horasTrabajadas": 15.5,
+        "idPlanilla": "PLA00000001",
+        "montoBruto": 100,
+        "montoNeto": 89.995,
+        "operario": "Quispe, Luis",
+        "tardanzas": 1,
+      },
+    ],
+  ],
+  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-created",
+}
+`;
+
+exports[`generatePayrollAction > descuento igual al bruto: neto cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "modalidad_pago": true,
+        "nombres": true,
+        "tarifa": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE00000003",
+        "periodo_fin": 2026-11-08T00:00:00.000Z,
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "falta": true,
+        "horas_trabajadas": true,
+        "id_asistencia": true,
+        "tardanza": true,
+      },
+      "where": {
+        "fecha": {
+          "gte": 2026-11-02T00:00:00.000Z,
+          "lte": 2026-11-08T00:00:00.000Z,
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "planilla_pago",
+      "prefijo": "PLA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descuentos": "100.00",
+        "estado_pago": "pendiente",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000001",
+        "id_usuario_genera": "USU00000001",
+        "modalidad_pago": "quincenal",
+        "monto_bruto": "100.00",
+        "monto_neto": "0.00",
+        "periodo_fin": 2026-11-08T00:00:00.000Z,
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Planilla generada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "planilla_pago",
+      "id_registro_afectado": "PLA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`generatePayrollAction > descuento igual al bruto: neto cero > resultado 1`] = `
+{
+  "consola": [
+    [
+      "Planilla generada",
+      {
+        "asistenciasValidas": 2,
+        "descuentos": 100,
+        "faltas": 1,
+        "horasTrabajadas": 15.5,
+        "idPlanilla": "PLA00000001",
+        "montoBruto": 100,
+        "montoNeto": 0,
+        "operario": "Quispe, Luis",
+        "tardanzas": 1,
+      },
+    ],
+  ],
+  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-created",
+}
+`;
+
+exports[`generatePayrollAction > descuento mayor que el bruto > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "modalidad_pago": true,
+        "nombres": true,
+        "tarifa": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE00000003",
+        "periodo_fin": 2026-11-08T00:00:00.000Z,
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "falta": true,
+        "horas_trabajadas": true,
+        "id_asistencia": true,
+        "tardanza": true,
+      },
+      "where": {
+        "fecha": {
+          "gte": 2026-11-02T00:00:00.000Z,
+          "lte": 2026-11-08T00:00:00.000Z,
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findMany",
+  },
+]
+`;
+
+exports[`generatePayrollAction > descuento mayor que el bruto > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: Los descuentos no pueden superar el monto bruto calculado.",
+}
+`;
+
+exports[`generatePayrollAction > descuento negativo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`generatePayrollAction > descuento negativo > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: El descuento no puede ser negativo.",
+}
+`;
+
+exports[`generatePayrollAction > descuento que no es numero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`generatePayrollAction > descuento que no es numero > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: El descuento debe ser un número válido.",
+}
+`;
+
+exports[`generatePayrollAction > descuento vacio: cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "modalidad_pago": true,
+        "nombres": true,
+        "tarifa": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE00000003",
+        "periodo_fin": 2026-11-08T00:00:00.000Z,
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "falta": true,
+        "horas_trabajadas": true,
+        "id_asistencia": true,
+        "tardanza": true,
+      },
+      "where": {
+        "fecha": {
+          "gte": 2026-11-02T00:00:00.000Z,
+          "lte": 2026-11-08T00:00:00.000Z,
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "planilla_pago",
+      "prefijo": "PLA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descuentos": "0.00",
+        "estado_pago": "pendiente",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000001",
+        "id_usuario_genera": "USU00000001",
+        "modalidad_pago": "quincenal",
+        "monto_bruto": "100.00",
+        "monto_neto": "100.00",
+        "periodo_fin": 2026-11-08T00:00:00.000Z,
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Planilla generada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "planilla_pago",
+      "id_registro_afectado": "PLA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`generatePayrollAction > descuento vacio: cero > resultado 1`] = `
+{
+  "consola": [
+    [
+      "Planilla generada",
+      {
+        "asistenciasValidas": 2,
+        "descuentos": 0,
+        "faltas": 1,
+        "horasTrabajadas": 15.5,
+        "idPlanilla": "PLA00000001",
+        "montoBruto": 100,
+        "montoNeto": 100,
+        "operario": "Quispe, Luis",
+        "tardanzas": 1,
+      },
+    ],
+  ],
+  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-created",
+}
+`;
+
+exports[`generatePayrollAction > el fin antes del inicio > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`generatePayrollAction > el fin antes del inicio > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: La fecha de fin no puede ser menor que la fecha de inicio.",
+}
+`;
+
+exports[`generatePayrollAction > el operario no existe o esta inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "modalidad_pago": true,
+        "nombres": true,
+        "tarifa": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+]
+`;
+
+exports[`generatePayrollAction > el operario no existe o esta inactivo > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: El operario seleccionado no existe o está inactivo.",
+}
+`;
+
+exports[`generatePayrollAction > genera: dos asistencias validas por la tarifa, menos el descuento > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "modalidad_pago": true,
+        "nombres": true,
+        "tarifa": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE00000003",
+        "periodo_fin": 2026-11-08T00:00:00.000Z,
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "falta": true,
+        "horas_trabajadas": true,
+        "id_asistencia": true,
+        "tardanza": true,
+      },
+      "where": {
+        "fecha": {
+          "gte": 2026-11-02T00:00:00.000Z,
+          "lte": 2026-11-08T00:00:00.000Z,
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "planilla_pago",
+      "prefijo": "PLA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descuentos": "10.00",
+        "estado_pago": "pendiente",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000001",
+        "id_usuario_genera": "USU00000001",
+        "modalidad_pago": "quincenal",
+        "monto_bruto": "100.00",
+        "monto_neto": "90.00",
+        "periodo_fin": 2026-11-08T00:00:00.000Z,
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Planilla generada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "planilla_pago",
+      "id_registro_afectado": "PLA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`generatePayrollAction > genera: dos asistencias validas por la tarifa, menos el descuento > resultado 1`] = `
+{
+  "consola": [
+    [
+      "Planilla generada",
+      {
+        "asistenciasValidas": 2,
+        "descuentos": 10,
+        "faltas": 1,
+        "horasTrabajadas": 15.5,
+        "idPlanilla": "PLA00000001",
+        "montoBruto": 100,
+        "montoNeto": 90,
+        "operario": "Quispe, Luis",
+        "tardanzas": 1,
+      },
+    ],
+  ],
+  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-created",
+}
+`;
+
+exports[`generatePayrollAction > operario sin tarifa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "modalidad_pago": true,
+        "nombres": true,
+        "tarifa": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+]
+`;
+
+exports[`generatePayrollAction > operario sin tarifa > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: El operario seleccionado no tiene una tarifa válida para generar planilla.",
+}
+`;
+
+exports[`generatePayrollAction > sin operario ni fechas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`generatePayrollAction > sin operario ni fechas > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: Debe seleccionar un operario. La fecha de inicio del periodo es obligatoria. La fecha de fin del periodo es obligatoria.",
+}
+`;
+
+exports[`generatePayrollAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`generatePayrollAction > sin permiso: el maestro de taller > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: Acceso rechazado por el doble de autorizacion.",
+}
+`;
+
+exports[`generatePayrollAction > solo faltas en el periodo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "modalidad_pago": true,
+        "nombres": true,
+        "tarifa": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE00000003",
+        "periodo_fin": 2026-11-08T00:00:00.000Z,
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "falta": true,
+        "horas_trabajadas": true,
+        "id_asistencia": true,
+        "tardanza": true,
+      },
+      "where": {
+        "fecha": {
+          "gte": 2026-11-02T00:00:00.000Z,
+          "lte": 2026-11-08T00:00:00.000Z,
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findMany",
+  },
+]
+`;
+
+exports[`generatePayrollAction > solo faltas en el periodo > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: No hay asistencias válidas para generar la planilla de este periodo.",
+}
+`;
+
+exports[`generatePayrollAction > una fecha que no es fecha > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "modalidad_pago": true,
+        "nombres": true,
+        "tarifa": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE00000003",
+        "periodo_fin": Date { NaN },
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "falta": true,
+        "horas_trabajadas": true,
+        "id_asistencia": true,
+        "tardanza": true,
+      },
+      "where": {
+        "fecha": {
+          "gte": 2026-11-02T00:00:00.000Z,
+          "lte": Date { NaN },
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "planilla_pago",
+      "prefijo": "PLA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descuentos": "10.00",
+        "estado_pago": "pendiente",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000001",
+        "id_usuario_genera": "USU00000001",
+        "modalidad_pago": "quincenal",
+        "monto_bruto": "100.00",
+        "monto_neto": "90.00",
+        "periodo_fin": Date { NaN },
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Planilla generada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "planilla_pago",
+      "id_registro_afectado": "PLA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`generatePayrollAction > una fecha que no es fecha > resultado 1`] = `
+{
+  "consola": [
+    [
+      "Planilla generada",
+      {
+        "asistenciasValidas": 2,
+        "descuentos": 10,
+        "faltas": 1,
+        "horasTrabajadas": 15.5,
+        "idPlanilla": "PLA00000001",
+        "montoBruto": 100,
+        "montoNeto": 90,
+        "operario": "Quispe, Luis",
+        "tardanzas": 1,
+      },
+    ],
+  ],
+  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-created",
+}
+`;
+
+exports[`generatePayrollAction > una fecha que no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "modalidad_pago": true,
+        "nombres": true,
+        "tarifa": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE00000003",
+        "periodo_fin": 2026-03-02T00:00:00.000Z,
+        "periodo_inicio": 2026-02-23T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "falta": true,
+        "horas_trabajadas": true,
+        "id_asistencia": true,
+        "tardanza": true,
+      },
+      "where": {
+        "fecha": {
+          "gte": 2026-02-23T00:00:00.000Z,
+          "lte": 2026-03-02T00:00:00.000Z,
+        },
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "asistencia.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "planilla_pago",
+      "prefijo": "PLA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descuentos": "10.00",
+        "estado_pago": "pendiente",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000001",
+        "id_usuario_genera": "USU00000001",
+        "modalidad_pago": "quincenal",
+        "monto_bruto": "100.00",
+        "monto_neto": "90.00",
+        "periodo_fin": 2026-03-02T00:00:00.000Z,
+        "periodo_inicio": 2026-02-23T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Planilla generada para el operario OPE00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "planilla_pago",
+      "id_registro_afectado": "PLA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`generatePayrollAction > una fecha que no existe > resultado 1`] = `
+{
+  "consola": [
+    [
+      "Planilla generada",
+      {
+        "asistenciasValidas": 2,
+        "descuentos": 10,
+        "faltas": 1,
+        "horasTrabajadas": 15.5,
+        "idPlanilla": "PLA00000001",
+        "montoBruto": 100,
+        "montoNeto": 90,
+        "operario": "Quispe, Luis",
+        "tardanzas": 1,
+      },
+    ],
+  ],
+  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-created",
+}
+`;
+
+exports[`generatePayrollAction > ya hay una planilla del mismo periodo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "modalidad_pago": true,
+        "nombres": true,
+        "tarifa": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000003",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE00000003",
+        "periodo_fin": 2026-11-08T00:00:00.000Z,
+        "periodo_inicio": 2026-11-02T00:00:00.000Z,
+      },
+    },
+    "prisma": "planilla_pago.findFirst",
+  },
+]
+`;
+
+exports[`generatePayrollAction > ya hay una planilla del mismo periodo > resultado 1`] = `
+{
+  "consola": [],
+  "resultado": "error: Este operario ya tiene una planilla generada para el periodo seleccionado.",
+}
+`;

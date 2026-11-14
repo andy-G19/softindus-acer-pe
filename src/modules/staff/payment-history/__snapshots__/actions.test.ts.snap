@@ -1,0 +1,731 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`registerOperatorPaymentAction > con observaciones y transferencia > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "historial_pago_operario",
+      "prefijo": "HPO",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-11-09T00:00:00.000Z,
+        "id_historial_pago": "HPO00000001",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000009",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "transferencia",
+        "monto_pagado": "90.00",
+        "observaciones": "Abono en cuenta",
+        "periodo": "2026-11-02 a 2026-11-08",
+      },
+    },
+    "prisma": "historial_pago_operario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "pagado",
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago registrado para la planilla PLA00000009.",
+      "enTransaccion": true,
+      "entidad_afectada": "historial_pago_operario",
+      "id_registro_afectado": "HPO00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payment-history",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > con observaciones y transferencia > resultado 1`] = `"redirect:/dashboard/staff/payment-history?toast=operator-payment-registered"`;
+
+exports[`registerOperatorPaymentAction > la planilla esta anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > la planilla esta anulada > resultado 1`] = `"error: No se puede pagar una planilla anulada."`;
+
+exports[`registerOperatorPaymentAction > la planilla no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > la planilla no existe > resultado 1`] = `"error: La planilla seleccionada no existe."`;
+
+exports[`registerOperatorPaymentAction > la planilla ya fue pagada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > la planilla ya fue pagada > resultado 1`] = `"error: La planilla seleccionada ya fue pagada."`;
+
+exports[`registerOperatorPaymentAction > la planilla ya tiene un pago en el historial > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > la planilla ya tiene un pago en el historial > resultado 1`] = `"error: Esta planilla ya tiene un pago registrado en el historial."`;
+
+exports[`registerOperatorPaymentAction > metodo de pago desconocido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > metodo de pago desconocido > resultado 1`] = `"error: Seleccione un método de pago válido."`;
+
+exports[`registerOperatorPaymentAction > monto cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > monto cero > resultado 1`] = `"error: El monto pagado debe ser mayor a cero."`;
+
+exports[`registerOperatorPaymentAction > monto que no es numero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > monto que no es numero > resultado 1`] = `"error: El monto pagado debe ser un número válido."`;
+
+exports[`registerOperatorPaymentAction > paga el neto: historial, planilla pagada y bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "historial_pago_operario",
+      "prefijo": "HPO",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-11-09T00:00:00.000Z,
+        "id_historial_pago": "HPO00000001",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000009",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "efectivo",
+        "monto_pagado": "90.00",
+        "observaciones": null,
+        "periodo": "2026-11-02 a 2026-11-08",
+      },
+    },
+    "prisma": "historial_pago_operario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "pagado",
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago registrado para la planilla PLA00000009.",
+      "enTransaccion": true,
+      "entidad_afectada": "historial_pago_operario",
+      "id_registro_afectado": "HPO00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payment-history",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > paga el neto: historial, planilla pagada y bitacora > resultado 1`] = `"redirect:/dashboard/staff/payment-history?toast=operator-payment-registered"`;
+
+exports[`registerOperatorPaymentAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`registerOperatorPaymentAction > sin planilla, fecha ni monto > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > sin planilla, fecha ni monto > resultado 1`] = `"error: Debe seleccionar una planilla pendiente. La fecha de pago es obligatoria. El monto pagado es obligatorio."`;
+
+exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "historial_pago_operario",
+      "prefijo": "HPO",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-11-09T00:00:00.000Z,
+        "id_historial_pago": "HPO00000001",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000009",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "efectivo",
+        "monto_pagado": "90.01",
+        "observaciones": null,
+        "periodo": "2026-11-02 a 2026-11-08",
+      },
+    },
+    "prisma": "historial_pago_operario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "pagado",
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago registrado para la planilla PLA00000009.",
+      "enTransaccion": true,
+      "entidad_afectada": "historial_pago_operario",
+      "id_registro_afectado": "HPO00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payment-history",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > resultado 1`] = `"redirect:/dashboard/staff/payment-history?toast=operator-payment-registered"`;
+
+exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.10 > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "historial_pago_operario",
+      "prefijo": "HPO",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-11-09T00:00:00.000Z,
+        "id_historial_pago": "HPO00000001",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000009",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "efectivo",
+        "monto_pagado": "30.11",
+        "observaciones": null,
+        "periodo": "2026-11-02 a 2026-11-08",
+      },
+    },
+    "prisma": "historial_pago_operario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "pagado",
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago registrado para la planilla PLA00000009.",
+      "enTransaccion": true,
+      "entidad_afectada": "historial_pago_operario",
+      "id_registro_afectado": "HPO00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payment-history",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.10 > resultado 1`] = `"redirect:/dashboard/staff/payment-history?toast=operator-payment-registered"`;
+
+exports[`registerOperatorPaymentAction > un centimo de menos sobre 90.00 > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > un centimo de menos sobre 90.00 > resultado 1`] = `"error: Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla."`;
+
+exports[`registerOperatorPaymentAction > una fecha que no es fecha > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "historial_pago_operario",
+      "prefijo": "HPO",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": Date { NaN },
+        "id_historial_pago": "HPO00000001",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000009",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "efectivo",
+        "monto_pagado": "90.00",
+        "observaciones": null,
+        "periodo": "2026-11-02 a 2026-11-08",
+      },
+    },
+    "prisma": "historial_pago_operario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "pagado",
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago registrado para la planilla PLA00000009.",
+      "enTransaccion": true,
+      "entidad_afectada": "historial_pago_operario",
+      "id_registro_afectado": "HPO00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payment-history",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > una fecha que no es fecha > resultado 1`] = `"redirect:/dashboard/staff/payment-history?toast=operator-payment-registered"`;
+
+exports[`registerOperatorPaymentAction > una fecha que no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "historial_pago_operario",
+      "prefijo": "HPO",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-03-02T00:00:00.000Z,
+        "id_historial_pago": "HPO00000001",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000009",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "efectivo",
+        "monto_pagado": "90.00",
+        "observaciones": null,
+        "periodo": "2026-11-02 a 2026-11-08",
+      },
+    },
+    "prisma": "historial_pago_operario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "pagado",
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago registrado para la planilla PLA00000009.",
+      "enTransaccion": true,
+      "entidad_afectada": "historial_pago_operario",
+      "id_registro_afectado": "HPO00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payment-history",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > una fecha que no existe > resultado 1`] = `"redirect:/dashboard/staff/payment-history?toast=operator-payment-registered"`;
