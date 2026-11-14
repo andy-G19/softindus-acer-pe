@@ -7,7 +7,10 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
+  isPrismaCall,
   type DataOverrides,
+  type RecordedCall,
 } from "@/testing/page-characterization";
 
 // Caracterizacion de generar y anular planillas (C1 de la 11.5), escrita antes de tocar las
@@ -255,4 +258,74 @@ describe("cancelPayrollAction", () => {
       expect(outcome).toMatchSnapshot("resultado");
     });
   }
+});
+
+// --- C4 de la 11.5 (D54): deciden con su fila bloqueada ---
+
+const effectIndex = (calls: RecordedCall[], name: string) =>
+  calls.findIndex((call) => "effect" in call && call.effect === name);
+
+const prismaIndex = (calls: RecordedCall[], name: string) =>
+  calls.findIndex((call) => isPrismaCall(call) && call.prisma === name);
+
+describe("C4 de la 11.5: generar bloquea el operario antes de decidir", () => {
+  const GENERATE_READS = ["operario.findFirst", "planilla_pago.findFirst", "asistencia.findMany"];
+
+  it.each([
+    ["una planilla valida", {}],
+    ["un periodo ya generado", { "planilla_pago.findFirst": { id_planilla: "PLA00000007", estado_pago: "pendiente" } }],
+    ["solo faltas", { "asistencia.findMany": [ATTENDANCES[2]] }],
+  ] as const)("%s: el operario se bloquea antes de leerlo y la transaccion sigue abierta", async (_name, data) => {
+    const { calls } = await run(generatePayrollAction, { name: "C4", form: generateForm(), data: { ...data } }, GENERATE_DATA);
+
+    expectRowLockedBefore(calls, {
+      table: "operario",
+      id: "OPE00000003",
+      reads: (call) => GENERATE_READS.includes(call.prisma),
+    });
+  });
+
+  it("un rechazo dentro de la transaccion la revierte sin escribir", async () => {
+    const { calls, outcome } = await run(
+      generatePayrollAction,
+      {
+        name: "C4",
+        form: generateForm(),
+        data: { "planilla_pago.findFirst": { id_planilla: "PLA00000007", estado_pago: "pendiente" } },
+      },
+      GENERATE_DATA,
+    );
+
+    expect(outcome.resultado).toBe("error: Este operario ya tiene una planilla generada para el periodo seleccionado.");
+    expect(effectIndex(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(prismaIndex(calls, "planilla_pago.create")).toBe(-1);
+  });
+});
+
+describe("C4 de la 11.5: anular bloquea la planilla antes de decidir", () => {
+  it.each([
+    ["una planilla pendiente", {}],
+    ["una planilla pagada", { "planilla_pago.findUnique": payrollRow({ estado_pago: "pagado" }) }],
+    ["una planilla con historial", { "planilla_pago.findUnique": payrollRow({ _count: { historial_pago_operario: 1 } }) }],
+  ] as const)("%s: la planilla se bloquea antes de leerla", async (_name, data) => {
+    const { calls } = await run(cancelPayrollAction, { name: "C4", form: cancelForm(), data: { ...data } }, CANCEL_DATA);
+
+    expectRowLockedBefore(calls, {
+      table: "planilla_pago",
+      id: "PLA00000009",
+      reads: (call) => call.prisma === "planilla_pago.findUnique",
+    });
+  });
+
+  it("anular una planilla pagada revierte la transaccion sin escribir", async () => {
+    const { calls, outcome } = await run(
+      cancelPayrollAction,
+      { name: "C4", form: cancelForm(), data: { "planilla_pago.findUnique": payrollRow({ estado_pago: "pagado" }) } },
+      CANCEL_DATA,
+    );
+
+    expect(outcome.resultado).toBe("error: No se puede anular una planilla que ya fue pagada.");
+    expect(effectIndex(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(prismaIndex(calls, "planilla_pago.update")).toBe(-1);
+  });
 });

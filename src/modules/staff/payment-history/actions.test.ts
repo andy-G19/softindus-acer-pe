@@ -7,6 +7,8 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
+  isPrismaCall,
   type DataOverrides,
 } from "@/testing/page-characterization";
 
@@ -191,4 +193,37 @@ describe("registerOperatorPaymentAction", () => {
       expect(outcome).toMatchSnapshot("resultado");
     });
   }
+});
+
+// --- C4 de la 11.5 (D54): el pago decide con la planilla bloqueada ---
+
+describe("C4 de la 11.5: pagar bloquea la planilla antes de decidir", () => {
+  it.each([
+    ["una planilla pendiente", {}],
+    ["una planilla anulada", { "planilla_pago.findUnique": payrollRow({ estado_pago: "anulada" }) }],
+    [
+      "una planilla con un pago",
+      { "planilla_pago.findUnique": payrollRow({ historial_pago_operario: [{ id_historial_pago: "HPO00000004" }] }) },
+    ],
+  ] as const)("%s: la planilla se bloquea antes de leerla", async (_name, data) => {
+    const { calls } = await runAction({ name: "C4", form: form(), data: { ...data } });
+
+    expectRowLockedBefore(calls, {
+      table: "planilla_pago",
+      id: "PLA00000009",
+      reads: (call) => call.prisma === "planilla_pago.findUnique",
+    });
+  });
+
+  it("pagar una planilla anulada revierte la transaccion sin escribir", async () => {
+    const { calls, outcome } = await runAction({
+      name: "C4",
+      form: form(),
+      data: { "planilla_pago.findUnique": payrollRow({ estado_pago: "anulada" }) },
+    });
+
+    expect(outcome).toBe("error: No se puede pagar una planilla anulada.");
+    expect(calls.some((call) => "effect" in call && call.effect === "prisma.$transaction:rollback")).toBe(true);
+    expect(calls.some((call) => isPrismaCall(call) && call.prisma === "historial_pago_operario.create")).toBe(false);
+  });
 });

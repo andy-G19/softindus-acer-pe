@@ -9,6 +9,19 @@ exports[`registerOperatorPaymentAction > con observaciones y transferencia > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "historial_pago_operario": true,
@@ -19,10 +32,6 @@ exports[`registerOperatorPaymentAction > con observaciones y transferencia > lla
       },
     },
     "prisma": "planilla_pago.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -99,6 +108,19 @@ exports[`registerOperatorPaymentAction > la planilla esta anulada > llamadas 1`]
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "historial_pago_operario": true,
@@ -109,6 +131,10 @@ exports[`registerOperatorPaymentAction > la planilla esta anulada > llamadas 1`]
       },
     },
     "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "No se puede pagar una planilla anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -124,6 +150,19 @@ exports[`registerOperatorPaymentAction > la planilla no existe > llamadas 1`] = 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "historial_pago_operario": true,
@@ -134,6 +173,10 @@ exports[`registerOperatorPaymentAction > la planilla no existe > llamadas 1`] = 
       },
     },
     "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "La planilla seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -149,6 +192,19 @@ exports[`registerOperatorPaymentAction > la planilla ya fue pagada > llamadas 1`
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "historial_pago_operario": true,
@@ -159,6 +215,10 @@ exports[`registerOperatorPaymentAction > la planilla ya fue pagada > llamadas 1`
       },
     },
     "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "La planilla seleccionada ya fue pagada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -174,6 +234,19 @@ exports[`registerOperatorPaymentAction > la planilla ya tiene un pago en el hist
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "historial_pago_operario": true,
@@ -184,6 +257,10 @@ exports[`registerOperatorPaymentAction > la planilla ya tiene un pago en el hist
       },
     },
     "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "Esta planilla ya tiene un pago registrado en el historial.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -238,6 +315,19 @@ exports[`registerOperatorPaymentAction > paga el neto: historial, planilla pagad
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "historial_pago_operario": true,
@@ -248,10 +338,6 @@ exports[`registerOperatorPaymentAction > paga el neto: historial, planilla pagad
       },
     },
     "prisma": "planilla_pago.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -354,6 +440,19 @@ exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > llamadas 1
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "historial_pago_operario": true,
@@ -364,6 +463,10 @@ exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > llamadas 1
       },
     },
     "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -379,6 +482,19 @@ exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.1
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "historial_pago_operario": true,
@@ -389,6 +505,10 @@ exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.1
       },
     },
     "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -404,6 +524,19 @@ exports[`registerOperatorPaymentAction > un centimo de menos sobre 90.00 > llama
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "historial_pago_operario": true,
@@ -414,6 +547,10 @@ exports[`registerOperatorPaymentAction > un centimo de menos sobre 90.00 > llama
       },
     },
     "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;

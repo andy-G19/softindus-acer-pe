@@ -8,6 +8,7 @@ import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { checkPayrollPayment } from "@/lib/payroll-amounts";
+import { lockPayrollRow } from "@/lib/row-locks";
 import { operatorPaymentSchema } from "@/schemas/staff/operator-payment.schema";
 
 async function requireAdmin() {
@@ -39,49 +40,54 @@ export async function registerOperatorPaymentAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const payroll = await prisma.planilla_pago.findUnique({
-    where: {
-      id_planilla: data.id_planilla,
-    },
-    include: {
-      operario: true,
-      historial_pago_operario: true,
-    },
-  });
-
-  if (!payroll) {
-    throw new Error("La planilla seleccionada no existe.");
-  }
-
-  if (payroll.estado_pago === "anulada") {
-    throw new Error("No se puede pagar una planilla anulada.");
-  }
-
-  if (payroll.estado_pago === "pagado") {
-    throw new Error("La planilla seleccionada ya fue pagada.");
-  }
-
-  if (payroll.historial_pago_operario.length > 0) {
-    throw new Error(
-      "Esta planilla ya tiene un pago registrado en el historial.",
-    );
-  }
-
-  // C2 de la 11.5 (D53): el pago, redondeado como su columna, debe ser exactamente el neto en
-  // centesimos; la tolerancia de 0.01 en number dependia del error de coma flotante.
-  const payment = checkPayrollPayment({ net: payroll.monto_neto, amount: data.monto_pagado });
-
-  if (!payment.accepted) {
-    throw new Error(
-      "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
-    );
-  }
-
-  const periodo = `${formatPeriodDate(payroll.periodo_inicio)} a ${formatPeriodDate(
-    payroll.periodo_fin,
-  )}`;
-
+  // C4 de la 11.5 (D54): la planilla se bloquea antes de leerla y se decide dentro de la
+  // transaccion. Dos pagos simultaneos de la misma planilla: el segundo espera al primero y la ve
+  // pagada; un pago y una anulacion a la vez tampoco se cruzan.
   await prisma.$transaction(async (tx) => {
+    await lockPayrollRow(tx, data.id_planilla);
+
+    const payroll = await tx.planilla_pago.findUnique({
+      where: {
+        id_planilla: data.id_planilla,
+      },
+      include: {
+        operario: true,
+        historial_pago_operario: true,
+      },
+    });
+
+    if (!payroll) {
+      throw new Error("La planilla seleccionada no existe.");
+    }
+
+    if (payroll.estado_pago === "anulada") {
+      throw new Error("No se puede pagar una planilla anulada.");
+    }
+
+    if (payroll.estado_pago === "pagado") {
+      throw new Error("La planilla seleccionada ya fue pagada.");
+    }
+
+    if (payroll.historial_pago_operario.length > 0) {
+      throw new Error(
+        "Esta planilla ya tiene un pago registrado en el historial.",
+      );
+    }
+
+    // C2 de la 11.5 (D53): el pago, redondeado como su columna, debe ser exactamente el neto en
+    // centesimos; la tolerancia de 0.01 en number dependia del error de coma flotante.
+    const payment = checkPayrollPayment({ net: payroll.monto_neto, amount: data.monto_pagado });
+
+    if (!payment.accepted) {
+      throw new Error(
+        "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+      );
+    }
+
+    const periodo = `${formatPeriodDate(payroll.periodo_inicio)} a ${formatPeriodDate(
+      payroll.periodo_fin,
+    )}`;
+
     const idHistorialPago = await getNextCorrelativeId(tx, {
       codigoEntidad: "historial_pago_operario",
       prefijo: "HPO",

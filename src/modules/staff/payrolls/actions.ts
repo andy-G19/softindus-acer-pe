@@ -9,6 +9,7 @@ import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { toNumber } from "@/lib/numbers";
 import { calculatePayrollAmounts } from "@/lib/payroll-amounts";
+import { lockOperatorRow, lockPayrollRow } from "@/lib/row-locks";
 import { payrollSchema } from "@/schemas/staff/payroll.schema";
 
 async function requireAdmin() {
@@ -35,130 +36,137 @@ export async function generatePayrollAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const operator = await prisma.operario.findFirst({
-    where: {
-      id_operario: data.id_operario,
-      estado: "activo",
-    },
-    select: {
-      id_operario: true,
-      nombres: true,
-      apellidos: true,
-      modalidad_pago: true,
-      tarifa: true,
-    },
-  });
+  // C4 de la 11.5 (D54): el operario se bloquea antes de leerlo y todo lo que decide (el operario,
+  // el periodo ya generado y las asistencias) se lee dentro de la transaccion. Dos generaciones
+  // simultaneas del mismo operario: la segunda espera a la primera y ve su planilla. Un rechazo se
+  // lanza dentro y la transaccion se revierte sin escribir.
+  const { idPlanilla, operator, validAttendances, absences, lateness, workedHours, amounts } =
+    await prisma.$transaction(async (tx) => {
+      await lockOperatorRow(tx, data.id_operario);
 
-  if (!operator) {
-    throw new Error("El operario seleccionado no existe o está inactivo.");
-  }
+      const operator = await tx.operario.findFirst({
+        where: {
+          id_operario: data.id_operario,
+          estado: "activo",
+        },
+        select: {
+          id_operario: true,
+          nombres: true,
+          apellidos: true,
+          modalidad_pago: true,
+          tarifa: true,
+        },
+      });
 
-  const dailyRate = toNumber(operator.tarifa);
+      if (!operator) {
+        throw new Error("El operario seleccionado no existe o está inactivo.");
+      }
 
-  if (dailyRate <= 0) {
-    throw new Error(
-      "El operario seleccionado no tiene una tarifa válida para generar planilla.",
-    );
-  }
+      const dailyRate = toNumber(operator.tarifa);
 
-  const duplicatedPayroll = await prisma.planilla_pago.findFirst({
-    where: {
-      id_operario: data.id_operario,
-      periodo_inicio: data.periodo_inicio,
-      periodo_fin: data.periodo_fin,
-    },
-  });
+      if (dailyRate <= 0) {
+        throw new Error(
+          "El operario seleccionado no tiene una tarifa válida para generar planilla.",
+        );
+      }
 
-  if (duplicatedPayroll) {
-    throw new Error(
-      "Este operario ya tiene una planilla generada para el periodo seleccionado.",
-    );
-  }
+      const duplicatedPayroll = await tx.planilla_pago.findFirst({
+        where: {
+          id_operario: data.id_operario,
+          periodo_inicio: data.periodo_inicio,
+          periodo_fin: data.periodo_fin,
+        },
+      });
 
-  const attendanceRecords = await prisma.asistencia.findMany({
-    where: {
-      id_operario: data.id_operario,
-      fecha: {
-        gte: data.periodo_inicio,
-        lte: data.periodo_fin,
-      },
-    },
-    select: {
-      id_asistencia: true,
-      falta: true,
-      tardanza: true,
-      horas_trabajadas: true,
-    },
-  });
+      if (duplicatedPayroll) {
+        throw new Error(
+          "Este operario ya tiene una planilla generada para el periodo seleccionado.",
+        );
+      }
 
-  const validAttendances = attendanceRecords.filter(
-    (attendance) => !attendance.falta,
-  );
+      const attendanceRecords = await tx.asistencia.findMany({
+        where: {
+          id_operario: data.id_operario,
+          fecha: {
+            gte: data.periodo_inicio,
+            lte: data.periodo_fin,
+          },
+        },
+        select: {
+          id_asistencia: true,
+          falta: true,
+          tardanza: true,
+          horas_trabajadas: true,
+        },
+      });
 
-  const absences = attendanceRecords.filter(
-    (attendance) => attendance.falta,
-  );
+      const validAttendances = attendanceRecords.filter(
+        (attendance) => !attendance.falta,
+      );
 
-  const lateness = attendanceRecords.filter(
-    (attendance) => attendance.tardanza && !attendance.falta,
-  );
+      const absences = attendanceRecords.filter(
+        (attendance) => attendance.falta,
+      );
 
-  const workedHours = validAttendances.reduce((total, attendance) => {
-    return total + toNumber(attendance.horas_trabajadas);
-  }, 0);
+      const lateness = attendanceRecords.filter(
+        (attendance) => attendance.tardanza && !attendance.falta,
+      );
 
-  if (validAttendances.length === 0) {
-    throw new Error(
-      "No hay asistencias válidas para generar la planilla de este periodo.",
-    );
-  }
+      const workedHours = validAttendances.reduce((total, attendance) => {
+        return total + toNumber(attendance.horas_trabajadas);
+      }, 0);
 
-  // C2 de la 11.5 (D53): bruto, descuento y neto en centesimos, con el redondeo de las columnas;
-  // el neto es el bruto menos el descuento ya redondeado, asi la planilla cuadra.
-  const amounts = calculatePayrollAmounts({
-    validAttendances: validAttendances.length,
-    rate: operator.tarifa ?? 0,
-    discount: data.descuentos,
-  });
+      if (validAttendances.length === 0) {
+        throw new Error(
+          "No hay asistencias válidas para generar la planilla de este periodo.",
+        );
+      }
 
-  if (!amounts.accepted) {
-    throw new Error(
-      "Los descuentos no pueden superar el monto bruto calculado.",
-    );
-  }
+      // C2 de la 11.5 (D53): bruto, descuento y neto en centesimos, con el redondeo de las columnas;
+      // el neto es el bruto menos el descuento ya redondeado, asi la planilla cuadra.
+      const amounts = calculatePayrollAmounts({
+        validAttendances: validAttendances.length,
+        rate: operator.tarifa ?? 0,
+        discount: data.descuentos,
+      });
 
-  let idPlanilla = "";
+      if (!amounts.accepted) {
+        throw new Error(
+          "Los descuentos no pueden superar el monto bruto calculado.",
+        );
+      }
 
-  await prisma.$transaction(async (tx) => {
-    idPlanilla = await getNextCorrelativeId(tx, {
-      codigoEntidad: "planilla_pago",
-      prefijo: "PLA",
+      const idPlanilla = await getNextCorrelativeId(tx, {
+        codigoEntidad: "planilla_pago",
+        prefijo: "PLA",
+      });
+
+      await tx.planilla_pago.create({
+        data: {
+          id_planilla: idPlanilla,
+          id_operario: data.id_operario,
+          id_usuario_genera: session.user.id,
+          periodo_inicio: data.periodo_inicio,
+          periodo_fin: data.periodo_fin,
+          modalidad_pago: operator.modalidad_pago,
+          monto_bruto: amounts.gross,
+          descuentos: amounts.discount,
+          monto_neto: amounts.net,
+          estado_pago: "pendiente",
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "planilla_pago",
+        id_registro_afectado: idPlanilla,
+        accion: "crear",
+        detalle: `Planilla generada para el operario ${data.id_operario}.`,
+        tx,
+      });
+
+      return { idPlanilla, operator, validAttendances, absences, lateness, workedHours, amounts };
     });
-
-    await tx.planilla_pago.create({
-      data: {
-        id_planilla: idPlanilla,
-        id_operario: data.id_operario,
-        id_usuario_genera: session.user.id,
-        periodo_inicio: data.periodo_inicio,
-        periodo_fin: data.periodo_fin,
-        modalidad_pago: operator.modalidad_pago,
-        monto_bruto: amounts.gross,
-        descuentos: amounts.discount,
-        monto_neto: amounts.net,
-        estado_pago: "pendiente",
-      },
-    });
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "planilla_pago",
-      id_registro_afectado: idPlanilla,
-      accion: "crear",
-      detalle: `Planilla generada para el operario ${data.id_operario}.`,
-      tx,
-    });
-  });
 
   console.log("Planilla generada", {
     idPlanilla,
@@ -187,38 +195,42 @@ export async function cancelPayrollAction(formData: FormData) {
     throw new Error("No se recibió la planilla.");
   }
 
-  const payroll = await prisma.planilla_pago.findUnique({
-    where: {
-      id_planilla: idPlanilla,
-    },
-    include: {
-      _count: {
-        select: {
-          historial_pago_operario: true,
+  // C4 de la 11.5 (D54): la planilla se bloquea antes de leerla y se decide dentro de la
+  // transaccion; un pago simultaneo espera a la anulacion, o al reves, y ve el estado final.
+  await prisma.$transaction(async (tx) => {
+    await lockPayrollRow(tx, idPlanilla);
+
+    const payroll = await tx.planilla_pago.findUnique({
+      where: {
+        id_planilla: idPlanilla,
+      },
+      include: {
+        _count: {
+          select: {
+            historial_pago_operario: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!payroll) {
-    throw new Error("La planilla seleccionada no existe.");
-  }
+    if (!payroll) {
+      throw new Error("La planilla seleccionada no existe.");
+    }
 
-  if (payroll.estado_pago === "pagado") {
-    throw new Error("No se puede anular una planilla que ya fue pagada.");
-  }
+    if (payroll.estado_pago === "pagado") {
+      throw new Error("No se puede anular una planilla que ya fue pagada.");
+    }
 
-  if (payroll._count.historial_pago_operario > 0) {
-    throw new Error(
-      "No se puede anular una planilla con historial de pago registrado.",
-    );
-  }
+    if (payroll._count.historial_pago_operario > 0) {
+      throw new Error(
+        "No se puede anular una planilla con historial de pago registrado.",
+      );
+    }
 
-  if (payroll.estado_pago === "anulada") {
-    throw new Error("La planilla ya se encuentra anulada.");
-  }
+    if (payroll.estado_pago === "anulada") {
+      throw new Error("La planilla ya se encuentra anulada.");
+    }
 
-  await prisma.$transaction(async (tx) => {
     await tx.planilla_pago.update({
       where: {
         id_planilla: idPlanilla,
