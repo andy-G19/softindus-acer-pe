@@ -136,6 +136,7 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/staff/operators/page.tsx [deactivatedNotification] -> operator-deactivated",
   "src/app/(dashboard)/dashboard/staff/payment-history/new/page.tsx [successNotification] -> operator-payment-registered",
   "src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx [successNotification] -> payroll-created",
+  "src/app/(dashboard)/dashboard/staff/payrolls/page.tsx [successNotification] -> payroll-annulled",
   "src/app/(dashboard)/dashboard/staff/tasks/@panel/(.)new/page.tsx [successNotification] -> operator-task-created",
   "src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx [successNotification] -> operator-task-created",
   "src/app/(dashboard)/dashboard/staff/tasks/page.tsx [successNotification] -> operator-task-annulled",

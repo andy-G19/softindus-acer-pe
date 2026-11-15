@@ -3,7 +3,7 @@
 exports[`cancelPayrollAction > anula una planilla pendiente sin pagos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -76,14 +76,23 @@ exports[`cancelPayrollAction > anula una planilla pendiente sin pagos > llamadas
 exports[`cancelPayrollAction > anula una planilla pendiente sin pagos > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "redirect:/dashboard/staff/payrolls?toast=payroll-annulled",
+  "resultado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "PLA00000009",
+    },
+  },
 }
 `;
 
 exports[`cancelPayrollAction > la planilla no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -117,8 +126,8 @@ exports[`cancelPayrollAction > la planilla no existe > llamadas 1`] = `
     "prisma": "planilla_pago.findUnique",
   },
   {
-    "args": "La planilla seleccionada no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -126,14 +135,21 @@ exports[`cancelPayrollAction > la planilla no existe > llamadas 1`] = `
 exports[`cancelPayrollAction > la planilla no existe > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: La planilla seleccionada no existe.",
+  "resultado": {
+    "error": "La planilla seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PLA00000009",
+    },
+  },
 }
 `;
 
 exports[`cancelPayrollAction > la planilla tiene un pago en el historial > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -167,8 +183,8 @@ exports[`cancelPayrollAction > la planilla tiene un pago en el historial > llama
     "prisma": "planilla_pago.findUnique",
   },
   {
-    "args": "No se puede anular una planilla con historial de pago registrado.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -176,14 +192,21 @@ exports[`cancelPayrollAction > la planilla tiene un pago en el historial > llama
 exports[`cancelPayrollAction > la planilla tiene un pago en el historial > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: No se puede anular una planilla con historial de pago registrado.",
+  "resultado": {
+    "error": "No se puede anular una planilla con historial de pago registrado.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PLA00000009",
+    },
+  },
 }
 `;
 
 exports[`cancelPayrollAction > la planilla ya esta anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -217,8 +240,8 @@ exports[`cancelPayrollAction > la planilla ya esta anulada > llamadas 1`] = `
     "prisma": "planilla_pago.findUnique",
   },
   {
-    "args": "La planilla ya se encuentra anulada.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -226,14 +249,21 @@ exports[`cancelPayrollAction > la planilla ya esta anulada > llamadas 1`] = `
 exports[`cancelPayrollAction > la planilla ya esta anulada > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: La planilla ya se encuentra anulada.",
+  "resultado": {
+    "error": "La planilla ya se encuentra anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PLA00000009",
+    },
+  },
 }
 `;
 
 exports[`cancelPayrollAction > la planilla ya fue pagada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -267,8 +297,8 @@ exports[`cancelPayrollAction > la planilla ya fue pagada > llamadas 1`] = `
     "prisma": "planilla_pago.findUnique",
   },
   {
-    "args": "No se puede anular una planilla que ya fue pagada.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -276,14 +306,21 @@ exports[`cancelPayrollAction > la planilla ya fue pagada > llamadas 1`] = `
 exports[`cancelPayrollAction > la planilla ya fue pagada > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: No se puede anular una planilla que ya fue pagada.",
+  "resultado": {
+    "error": "No se puede anular una planilla que ya fue pagada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PLA00000009",
+    },
+  },
 }
 `;
 
 exports[`cancelPayrollAction > sin permiso: el maestro de taller > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -294,14 +331,21 @@ exports[`cancelPayrollAction > sin permiso: el maestro de taller > llamadas 1`] 
 exports[`cancelPayrollAction > sin permiso: el maestro de taller > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: Acceso rechazado por el doble de autorizacion.",
+  "resultado": {
+    "error": "No tienes permisos para anular planillas.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PLA00000009",
+    },
+  },
 }
 `;
 
 exports[`cancelPayrollAction > sin planilla en el formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -312,7 +356,14 @@ exports[`cancelPayrollAction > sin planilla en el formulario > llamadas 1`] = `
 exports[`cancelPayrollAction > sin planilla en el formulario > resultado 1`] = `
 {
   "consola": [],
-  "resultado": "error: No se recibió la planilla.",
+  "resultado": {
+    "error": "No se recibió la planilla.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
 }
 `;
 

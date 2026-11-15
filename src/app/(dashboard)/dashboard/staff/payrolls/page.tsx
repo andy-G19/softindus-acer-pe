@@ -6,7 +6,6 @@ import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import {
   Card,
   CardContent,
@@ -35,7 +34,9 @@ import {
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { staffNotifications } from "@/modules/staff/notifications";
 import { cancelPayrollAction } from "@/modules/staff/payrolls/actions";
+import { PayrollAnnulAction } from "@/modules/staff/payrolls/payroll-annul-action";
 import { getPayrollListData } from "@/modules/staff/payrolls/queries";
 
 type PayrollsPageProps = {
@@ -257,22 +258,13 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
                           Sin acción
                         </span>
                       ) : (
-                        <form action={cancelPayrollAction}>
-                          <input
-                            type="hidden"
-                            name="id_planilla"
-                            value={payroll.id_planilla}
-                          />
-
-                          <ConfirmDeleteButton
-                            title="¿Anular planilla?"
-                            description="Esta acción anulará la planilla y no se puede deshacer. Verifique antes de continuar."
-                            confirmText="Confirmar anulación"
-                            entityName="planilla"
-                          >
-                            Anular
-                          </ConfirmDeleteButton>
-                        </form>
+                        // C8 de la 11.5 (D60): confirma con el operario, el periodo y la consecuencia;
+                        // un rechazo queda en la confirmacion.
+                        <PayrollAnnulAction
+                          payroll={payroll}
+                          action={cancelPayrollAction}
+                          successNotification={staffNotifications["payroll-annulled"]}
+                        />
                       )}
                     </TableCell>
                   </TableRow>

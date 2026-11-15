@@ -1,12 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
@@ -15,13 +14,10 @@ import { claimOperation, completeOperation, IdempotencyConflictError } from "@/l
 import { toNumber } from "@/lib/numbers";
 import { calculatePayrollAmounts } from "@/lib/payroll-amounts";
 import { APP_ROLES } from "@/lib/permissions";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockOperatorRow, lockPayrollRow } from "@/lib/row-locks";
 import { operationKeySchema } from "@/schemas/operation-key.schema";
 import { payrollSchema } from "@/schemas/staff/payroll.schema";
-
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
 
 /** Lo que el formulario de la planilla envio, para volver a mostrarlo. */
 export type PayrollFormValues = {
@@ -295,18 +291,29 @@ export async function generatePayrollAction(
   };
 }
 
-export async function cancelPayrollAction(formData: FormData) {
-  const session = await requireAdmin();
+// C8 de la 11.5 (D60): anular desde la fila con ConfirmActionButton. La accion responde con
+// RowStatusState: un rechazo queda dentro de la confirmacion en lugar de la pagina de error, y sin
+// permiso responde con un error.
+export async function cancelPayrollAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
+  const idPlanilla = formData.get("id_planilla")?.toString().trim() ?? "";
 
-  const idPlanilla = String(formData.get("id_planilla") ?? "");
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return rowStatusError(idPlanilla, "No tienes permisos para anular planillas.");
+  }
 
   if (!idPlanilla) {
-    throw new Error("No se recibió la planilla.");
+    return rowStatusError(idPlanilla, "No se recibió la planilla.");
   }
 
   // C4 de la 11.5 (D54): la planilla se bloquea antes de leerla y se decide dentro de la
-  // transaccion; un pago simultaneo espera a la anulacion, o al reves, y ve el estado final.
-  await prisma.$transaction(async (tx) => {
+  // transaccion; un pago simultaneo espera a la anulacion, o al reves, y ve el estado final. Sin
+  // clave de operacion, un rechazo se devuelve desde la transaccion antes de escribir nada.
+  const rejection = await prisma.$transaction(async (tx) => {
     await lockPayrollRow(tx, idPlanilla);
 
     const payroll = await tx.planilla_pago.findUnique({
@@ -323,21 +330,19 @@ export async function cancelPayrollAction(formData: FormData) {
     });
 
     if (!payroll) {
-      throw new Error("La planilla seleccionada no existe.");
+      return "La planilla seleccionada no existe.";
     }
 
     if (payroll.estado_pago === "pagado") {
-      throw new Error("No se puede anular una planilla que ya fue pagada.");
+      return "No se puede anular una planilla que ya fue pagada.";
     }
 
     if (payroll._count.historial_pago_operario > 0) {
-      throw new Error(
-        "No se puede anular una planilla con historial de pago registrado.",
-      );
+      return "No se puede anular una planilla con historial de pago registrado.";
     }
 
     if (payroll.estado_pago === "anulada") {
-      throw new Error("La planilla ya se encuentra anulada.");
+      return "La planilla ya se encuentra anulada.";
     }
 
     await tx.planilla_pago.update({
@@ -357,10 +362,17 @@ export async function cancelPayrollAction(formData: FormData) {
       detalle: `Planilla anulada para el operario ${payroll.id_operario}.`,
       tx,
     });
+
+    return null;
   });
+
+  // Un rechazo no revalida: el repintado se llevaria el boton y su mensaje (CLAUDE.md).
+  if (rejection) {
+    return rowStatusError(idPlanilla, rejection);
+  }
 
   revalidatePath("/dashboard/staff");
   revalidatePath("/dashboard/staff/payrolls");
 
-  redirect("/dashboard/staff/payrolls?toast=payroll-annulled");
+  return rowStatusDone(idPlanilla, "anulada");
 }

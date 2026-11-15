@@ -10,9 +10,9 @@ import { getTestDatabase } from "@/testing/test-database";
 // Planillas contra Postgres real (PGlite), C4 de la 11.5. Corre las acciones enteras: los
 // candados del operario y de la planilla (su SQL se ejecuta de verdad sobre las tablas), los
 // montos en centesimos (C2), los correlativos, la bitacora y el rollback de un rechazo. Solo se
-// reemplazan la sesion y la cache de Next. Anular todavia redirige al guardar y lanza un error al
-// rechazar: la prueba traduce lo primero a «guardado». Desde C6 y C7 de la 11.5 generar y pagar
-// devuelven su resultado («guardado» o su error) y reclaman una clave nueva en cada envio.
+// reemplazan la sesion y la cache de Next. Desde C6, C7 y C8 de la 11.5 generar, pagar y anular
+// devuelven su resultado («guardado» o su error); generar y pagar reclaman una clave nueva en cada
+// envio.
 //
 // Lo que no se puede probar aqui: dos pagos o una anulacion y un pago simultaneos de la misma
 // planilla. En Postgres el segundo espera el candado del primero y ve el estado final; PGlite
@@ -72,29 +72,6 @@ beforeAll(async () => {
   });
 });
 
-/** Ejecuta la accion: «guardado» si redirige al terminar, o el mensaje del error. */
-async function run(action: (formData: FormData) => Promise<void>, fields: Record<string, string>) {
-  const formData = new FormData();
-
-  for (const [key, value] of Object.entries(fields)) {
-    formData.set(key, value);
-  }
-
-  try {
-    await action(formData);
-
-    return "termino sin redirigir";
-  } catch (error) {
-    const digest = (error as { digest?: unknown }).digest;
-
-    return typeof digest === "string" && digest.startsWith("NEXT_REDIRECT")
-      ? SAVED
-      : error instanceof Error
-        ? error.message
-        : String(error);
-  }
-}
-
 async function generate(periodo_inicio: string, periodo_fin: string, descuentos = "") {
   const formData = new FormData();
 
@@ -132,7 +109,15 @@ async function pay(id_planilla: string, monto_pagado: string) {
   return state.status === "success" ? SAVED : state.status === "error" ? state.error : "sin respuesta";
 }
 
-const cancel = (id_planilla: string) => run(cancelPayrollAction, { id_planilla });
+async function cancel(id_planilla: string) {
+  const formData = new FormData();
+
+  formData.set("id_planilla", id_planilla);
+
+  const state = await cancelPayrollAction({ status: "idle" }, formData);
+
+  return state.status === "success" ? SAVED : state.status === "error" ? state.error : "sin respuesta";
+}
 
 async function payrollOf(periodo_inicio: string) {
   return prisma.planilla_pago.findFirstOrThrow({

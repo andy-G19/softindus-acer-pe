@@ -350,8 +350,8 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/staff/payrolls/actions"),
     roles: SOLO_ADMIN,
     acciones: ["generatePayrollAction", "cancelPayrollAction"],
-    // C6 de la 11.5: generar responde con su resultado; anular todavia redirige (C8).
-    rechazanConResultado: ["generatePayrollAction"],
+    // C6 y C8 de la 11.5: generar y anular responden con su resultado.
+    rechazanConResultado: ["generatePayrollAction", "cancelPayrollAction"],
   },
   {
     ruta: "staff/tasks/actions",

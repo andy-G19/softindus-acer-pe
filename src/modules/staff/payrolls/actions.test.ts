@@ -24,7 +24,7 @@ import {
 //
 // Desde C6 de la 11.5 (D59) generar devuelve su resultado (FormActionState): reclama la clave de
 // la operacion como primera sentencia de la transaccion, pone cada rechazo en su campo y ya no
-// escribe en la consola. Anular todavia redirige (C8).
+// escribe en la consola. Desde C8 (D60) anular tambien devuelve su resultado (RowStatusState).
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -185,6 +185,9 @@ function storedKey(changes: Record<string, unknown> = {}): DataOverrides {
 /** Generar recibe el estado anterior del formulario. */
 const generate = (formData: FormData) => generatePayrollAction({ status: "idle" }, formData);
 
+/** Anular recibe el estado anterior del boton de la fila (C8). */
+const cancel = (formData: FormData) => cancelPayrollAction({ status: "idle" }, formData);
+
 const generateForm = (changes: Record<string, string> = {}) => ({
   clave_operacion: CLAVE,
   id_operario: "OPE00000003",
@@ -285,7 +288,7 @@ const cancelInputs: CaseInput[] = [
 describe("cancelPayrollAction", () => {
   for (const input of cancelInputs) {
     it(input.name, async () => {
-      const { calls, outcome } = await run(cancelPayrollAction, { form: cancelForm(), ...input }, CANCEL_DATA);
+      const { calls, outcome } = await run(cancel, { form: cancelForm(), ...input }, CANCEL_DATA);
 
       expectAuthorizesBeforePrisma(calls);
       expect(calls).toMatchSnapshot("llamadas");
@@ -346,7 +349,7 @@ describe("C4 de la 11.5: anular bloquea la planilla antes de decidir", () => {
     ["una planilla pagada", { "planilla_pago.findUnique": payrollRow({ estado_pago: "pagado" }) }],
     ["una planilla con historial", { "planilla_pago.findUnique": payrollRow({ _count: { historial_pago_operario: 1 } }) }],
   ] as const)("%s: la planilla se bloquea antes de leerla", async (_name, data) => {
-    const { calls } = await run(cancelPayrollAction, { name: "C4", form: cancelForm(), data: { ...data } }, CANCEL_DATA);
+    const { calls } = await run(cancel, { name: "C4", form: cancelForm(), data: { ...data } }, CANCEL_DATA);
 
     expectRowLockedBefore(calls, {
       table: "planilla_pago",
@@ -355,16 +358,23 @@ describe("C4 de la 11.5: anular bloquea la planilla antes de decidir", () => {
     });
   });
 
-  it("anular una planilla pagada revierte la transaccion sin escribir", async () => {
+  // Desde C8 de la 11.5 el rechazo se devuelve desde la transaccion antes de escribir (anular no
+  // reclama clave), en lugar de lanzarse: la transaccion termina sin ninguna escritura.
+  it("anular una planilla pagada termina la transaccion sin escribir", async () => {
     const { calls, outcome } = await run(
-      cancelPayrollAction,
+      cancel,
       { name: "C4", form: cancelForm(), data: { "planilla_pago.findUnique": payrollRow({ estado_pago: "pagado" }) } },
       CANCEL_DATA,
     );
 
-    expect(outcome.resultado).toBe("error: No se puede anular una planilla que ya fue pagada.");
-    expect(effectIndex(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(outcome.resultado).toMatchObject({
+      status: "error",
+      error: "No se puede anular una planilla que ya fue pagada.",
+      values: { id: "PLA00000009" },
+    });
     expect(prismaIndex(calls, "planilla_pago.update")).toBe(-1);
+    expect(calls.some((call) => "effect" in call && call.effect === "registerAuditLog")).toBe(false);
+    expect(calls.some((call) => "effect" in call && call.effect === "revalidatePath")).toBe(false);
   });
 });
 

@@ -1,6 +1,10 @@
 import { vi } from "vitest";
 
-import { definePageSuite } from "@/testing/page-characterization";
+import {
+  definePageSuite,
+  generatedResult,
+  type PrismaArgs,
+} from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
 vi.mock("@/lib/db", async () =>
@@ -17,6 +21,20 @@ vi.mock("next/navigation", async (importOriginal) =>
 
 // Caracterizacion de Planillas (entrega 4.5), escrita antes
 // de mover sus consultas a modules/staff/payrolls/queries.ts.
+
+type Row = Record<string, unknown>;
+
+// C8 de la 11.5 (D60): las filas generadas no estan pendientes y muestran «Sin accion», asi que
+// ningun caso veia el boton de anular. La primera fila pendiente y sin pagos es la que lo ofrece;
+// la segunda, anulada y tambien sin pagos, no: lo que decide es el estado, no solo los pagos.
+const PENDING_FIRST = {
+  "planilla_pago.findMany": (args: PrismaArgs) =>
+    (generatedResult("planilla_pago", "findMany", args) as Row[]).map((row, index) =>
+      index === 0
+        ? { ...row, estado_pago: "pendiente", _count: { historial_pago_operario: 0 } }
+        : { ...row, estado_pago: "anulada", _count: { historial_pago_operario: 0 } },
+    ),
+};
 
 definePageSuite([
   {
@@ -37,6 +55,7 @@ definePageSuite([
         },
       },
       { name: "periodo con formato invalido", searchParams: { periodo: "2026-7" } },
+      { name: "una planilla pendiente sin pagos ofrece anular", data: PENDING_FIRST },
     ],
   },
   {
