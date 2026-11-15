@@ -24,6 +24,8 @@ definePageSuite([
     load: () => import("./page"),
     cases: [
       { name: "pagos del mes" },
+      // C9 de la 11.5 (D61): paginado; la segunda pagina salta los primeros 20 pagos.
+      { name: "segunda pagina", searchParams: { page: "2" } },
     ],
   },
   {

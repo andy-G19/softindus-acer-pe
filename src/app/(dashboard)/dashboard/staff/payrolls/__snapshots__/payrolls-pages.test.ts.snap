@@ -73,7 +73,8 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > llamadas 1`]
           "id_planilla": "desc",
         },
       ],
-      "take": 50,
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "planilla_pago.findMany",
@@ -280,6 +281,318 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > resultado 1`
 </div>
 </div>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 planillas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/staff/payrolls?periodo=2026-7&amp;page=2">Siguiente</a>
+</div>
+</div>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/payrolls > segunda pagina con un filtro > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "estado_pago": "pendiente",
+          },
+        ],
+      },
+    },
+    "prisma": "planilla_pago.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_pago": "pendiente",
+      },
+    },
+    "prisma": "planilla_pago.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_pago": "pagado",
+      },
+    },
+    "prisma": "planilla_pago.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_pago": "anulada",
+      },
+    },
+    "prisma": "planilla_pago.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto_neto": true,
+      },
+      "where": {
+        "estado_pago": "pendiente",
+      },
+    },
+    "prisma": "planilla_pago.aggregate",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "historial_pago_operario": true,
+          },
+        },
+        "operario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_generacion": "desc",
+        },
+        {
+          "id_planilla": "desc",
+        },
+      ],
+      "skip": 20,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "estado_pago": "pendiente",
+          },
+        ],
+      },
+    },
+    "prisma": "planilla_pago.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/payrolls > segunda pagina con un filtro > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Planillas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Planillas de pago</h1>
+<p>Genera y consulta planillas de pago según operario, periodo, modalidad, tarifa configurada, asistencias válidas y descuentos.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/staff/payrolls/new">Generar planilla</a>
+</div>
+</div>
+</section>
+<form role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar planilla u operario" name="q" value=""/>
+</div>
+<div>
+<label for="operario">ID operario</label>
+<input id="operario" placeholder="ID operario" name="operario" value=""/>
+</div>
+<div>
+<label for="periodo">Periodo</label>
+<input type="month" id="periodo" name="periodo" value=""/>
+</div>
+<div>
+<label for="modalidad">Modalidad</label>
+<select id="modalidad" name="modalidad">
+<option value="" selected="">Todas las modalidades</option>
+<option value="semanal">Semanal</option>
+<option value="quincenal">Quincenal</option>
+<option value="mensual">Mensual</option>
+</select>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="">Todos los estados</option>
+<option value="pendiente" selected="">Pendiente</option>
+<option value="pagado">Pagado</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<fieldset>
+<legend>Rango de fechas</legend>
+<div>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
+</div>
+<div>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
+</div>
+</fieldset>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/staff/payrolls">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Planillas generadas</div>
+</div>
+</div>
+<div>
+<p>45</p>
+<p>Total histórico registrado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pendientes</div>
+</div>
+</div>
+<div>
+<p>7</p>
+<p>Por pagar: S/ 1234.50</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pagadas</div>
+</div>
+</div>
+<div>
+<p>7</p>
+<p>Se marcarán en la siguiente subfase.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Anuladas</div>
+</div>
+</div>
+<div>
+<p>7</p>
+<p>Registros descartados.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Últimas planillas generadas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Operario</th>
+<th>Periodo</th>
+<th>Modalidad</th>
+<th>Bruto</th>
+<th>Descuentos</th>
+<th>Neto</th>
+<th>Estado</th>
+<th>Generado por</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_planilla-1</td>
+<td>apellidos-1, nombres-1</td>
+<td>01/07/2026 - 01/07/2026</td>
+<td>modalidad_pago-1</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="secondary">estado_pago-1</span>
+</td>
+<td>nombres-1 apellidos-1</td>
+<td>
+<span>Sin acción</span>
+</td>
+</tr>
+<tr>
+<td>id_planilla-2</td>
+<td>apellidos-2, nombres-2</td>
+<td>02/07/2026 - 02/07/2026</td>
+<td>modalidad_pago-2</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>
+<span data-variant="secondary">estado_pago-2</span>
+</td>
+<td>nombres-2 apellidos-2</td>
+<td>
+<span>Sin acción</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<p>Mostrando 21-40 de 45 planillas · Página 2 de 3</p>
+<div>
+<a data-variant="outline" href="/dashboard/staff/payrolls?estado=pendiente&amp;page=1">Anterior</a>
+<a data-variant="outline" href="/dashboard/staff/payrolls?estado=pendiente&amp;page=3">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -358,7 +671,8 @@ exports[`/dashboard/staff/payrolls > sin filtros > llamadas 1`] = `
           "id_planilla": "desc",
         },
       ],
-      "take": 50,
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "planilla_pago.findMany",
@@ -565,6 +879,13 @@ exports[`/dashboard/staff/payrolls > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 planillas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/staff/payrolls?page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -698,7 +1019,8 @@ exports[`/dashboard/staff/payrolls > todos los filtros > llamadas 1`] = `
           "id_planilla": "desc",
         },
       ],
-      "take": 50,
+      "skip": 0,
+      "take": 20,
       "where": {
         "AND": [
           {
@@ -960,6 +1282,13 @@ exports[`/dashboard/staff/payrolls > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </div>
+<div>
+<p>Mostrando 1-20 de 42 planillas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/staff/payrolls?q=quispe&amp;operario=OPE&amp;periodo=2026-07&amp;modalidad=semanal&amp;estado=pendiente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+</div>
+</div>
 </div>",
   "outcome": "render",
 }
@@ -1038,7 +1367,8 @@ exports[`/dashboard/staff/payrolls > una planilla pendiente sin pagos ofrece anu
           "id_planilla": "desc",
         },
       ],
-      "take": 50,
+      "skip": 0,
+      "take": 20,
       "where": {},
     },
     "prisma": "planilla_pago.findMany",
@@ -1243,6 +1573,13 @@ exports[`/dashboard/staff/payrolls > una planilla pendiente sin pagos ofrece anu
 </tbody>
 </table>
 </div>
+</div>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 planillas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/staff/payrolls?page=2">Siguiente</a>
 </div>
 </div>
 </div>",

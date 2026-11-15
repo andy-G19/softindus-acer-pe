@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import type { PaginationParams } from "@/lib/pagination";
 import { buildDateRangeFilter } from "@/lib/search-params";
 
 // Consultas de lectura de las paginas de Planillas. No autorizan: la pagina
@@ -79,7 +80,10 @@ function buildPayrollListWhere(
   return conditions.length > 0 ? { AND: conditions } : {};
 }
 
-export async function getPayrollListData(filters: PayrollListFilters) {
+export async function getPayrollListData(
+  filters: PayrollListFilters,
+  { skip, take }: Pick<PaginationParams, "skip" | "take">,
+) {
   const where = buildPayrollListWhere(filters);
 
   const [
@@ -129,7 +133,10 @@ export async function getPayrollListData(filters: PayrollListFilters) {
           id_planilla: "desc",
         },
       ],
-      take: 50,
+      // C9 de la 11.5 (D61): paginado; el listado cortaba en 50 filas y las demas no se veian.
+      // El orden termina en el id: es total y OFFSET no repite ni salta filas.
+      skip,
+      take,
       include: {
         operario: true,
         usuario: {

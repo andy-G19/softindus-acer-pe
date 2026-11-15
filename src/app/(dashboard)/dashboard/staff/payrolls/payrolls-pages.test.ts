@@ -56,6 +56,16 @@ definePageSuite([
       },
       { name: "periodo con formato invalido", searchParams: { periodo: "2026-7" } },
       { name: "una planilla pendiente sin pagos ofrece anular", data: PENDING_FIRST },
+      // C9 de la 11.5 (D61): paginado con los filtros; la segunda pagina salta las primeras 20. El
+      // total de la paginacion es el conteo con el filtro del listado (45), no el de las tarjetas
+      // por estado (7): con todos los conteos iguales no se distinguian.
+      {
+        name: "segunda pagina con un filtro",
+        searchParams: { estado: "pendiente", page: "2" },
+        data: {
+          "planilla_pago.count": (args: PrismaArgs) => ("AND" in ((args?.where as object | undefined) ?? {}) ? 45 : 7),
+        },
+      },
     ],
   },
   {
