@@ -3,7 +3,7 @@
 exports[`registerOperatorPaymentAction > con observaciones y transferencia > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -11,6 +11,22 @@ exports[`registerOperatorPaymentAction > con observaciones y transferencia > lla
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -79,6 +95,17 @@ exports[`registerOperatorPaymentAction > con observaciones y transferencia > lla
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "HPO00000001",
+      },
+      "where": {
+        "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -97,12 +124,28 @@ exports[`registerOperatorPaymentAction > con observaciones y transferencia > lla
 ]
 `;
 
-exports[`registerOperatorPaymentAction > con observaciones y transferencia > resultado 1`] = `"redirect:/dashboard/staff/payment-history?toast=operator-payment-registered"`;
+exports[`registerOperatorPaymentAction > con observaciones y transferencia > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+    "id_historial_pago": "HPO00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "90.00",
+    "observaciones": " Abono en cuenta ",
+  },
+}
+`;
 
-exports[`registerOperatorPaymentAction > la planilla esta anulada > llamadas 1`] = `
+exports[`registerOperatorPaymentAction > la clave es de otra operacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -110,6 +153,164 @@ exports[`registerOperatorPaymentAction > la planilla esta anulada > llamadas 1`]
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > la clave es de otra operacion > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > la misma clave ya registrada: responde con el pago registrado sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payment-history",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > la misma clave ya registrada: responde con el pago registrado sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+    "id_historial_pago": "HPO00000004",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > la planilla esta anulada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -139,12 +340,30 @@ exports[`registerOperatorPaymentAction > la planilla esta anulada > llamadas 1`]
 ]
 `;
 
-exports[`registerOperatorPaymentAction > la planilla esta anulada > resultado 1`] = `"error: No se puede pagar una planilla anulada."`;
+exports[`registerOperatorPaymentAction > la planilla esta anulada > resultado 1`] = `
+{
+  "error": "No se puede pagar una planilla anulada.",
+  "fieldErrors": {
+    "id_planilla": [
+      "No se puede pagar una planilla anulada.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > la planilla no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -152,6 +371,22 @@ exports[`registerOperatorPaymentAction > la planilla no existe > llamadas 1`] = 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -181,12 +416,30 @@ exports[`registerOperatorPaymentAction > la planilla no existe > llamadas 1`] = 
 ]
 `;
 
-exports[`registerOperatorPaymentAction > la planilla no existe > resultado 1`] = `"error: La planilla seleccionada no existe."`;
+exports[`registerOperatorPaymentAction > la planilla no existe > resultado 1`] = `
+{
+  "error": "La planilla seleccionada no existe.",
+  "fieldErrors": {
+    "id_planilla": [
+      "La planilla seleccionada no existe.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > la planilla ya fue pagada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -194,6 +447,22 @@ exports[`registerOperatorPaymentAction > la planilla ya fue pagada > llamadas 1`
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -223,12 +492,30 @@ exports[`registerOperatorPaymentAction > la planilla ya fue pagada > llamadas 1`
 ]
 `;
 
-exports[`registerOperatorPaymentAction > la planilla ya fue pagada > resultado 1`] = `"error: La planilla seleccionada ya fue pagada."`;
+exports[`registerOperatorPaymentAction > la planilla ya fue pagada > resultado 1`] = `
+{
+  "error": "La planilla seleccionada ya fue pagada.",
+  "fieldErrors": {
+    "id_planilla": [
+      "La planilla seleccionada ya fue pagada.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > la planilla ya tiene un pago en el historial > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -236,6 +523,22 @@ exports[`registerOperatorPaymentAction > la planilla ya tiene un pago en el hist
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -265,12 +568,30 @@ exports[`registerOperatorPaymentAction > la planilla ya tiene un pago en el hist
 ]
 `;
 
-exports[`registerOperatorPaymentAction > la planilla ya tiene un pago en el historial > resultado 1`] = `"error: Esta planilla ya tiene un pago registrado en el historial."`;
+exports[`registerOperatorPaymentAction > la planilla ya tiene un pago en el historial > resultado 1`] = `
+{
+  "error": "Esta planilla ya tiene un pago registrado en el historial.",
+  "fieldErrors": {
+    "id_planilla": [
+      "Esta planilla ya tiene un pago registrado en el historial.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > metodo de pago desconocido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -278,12 +599,30 @@ exports[`registerOperatorPaymentAction > metodo de pago desconocido > llamadas 1
 ]
 `;
 
-exports[`registerOperatorPaymentAction > metodo de pago desconocido > resultado 1`] = `"error: Seleccione un método de pago válido."`;
+exports[`registerOperatorPaymentAction > metodo de pago desconocido > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "metodo_pago": [
+      "Seleccione un método de pago válido.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "cheque",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > monto cero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -291,12 +630,30 @@ exports[`registerOperatorPaymentAction > monto cero > llamadas 1`] = `
 ]
 `;
 
-exports[`registerOperatorPaymentAction > monto cero > resultado 1`] = `"error: El monto pagado debe ser mayor a cero."`;
+exports[`registerOperatorPaymentAction > monto cero > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "El monto pagado debe ser mayor a cero.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "0",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > monto que no es numero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -304,12 +661,30 @@ exports[`registerOperatorPaymentAction > monto que no es numero > llamadas 1`] =
 ]
 `;
 
-exports[`registerOperatorPaymentAction > monto que no es numero > resultado 1`] = `"error: El monto pagado debe ser un número válido."`;
+exports[`registerOperatorPaymentAction > monto que no es numero > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "El monto pagado debe ser un número válido.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "noventa",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > paga el neto: historial, planilla pagada y bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -317,6 +692,22 @@ exports[`registerOperatorPaymentAction > paga el neto: historial, planilla pagad
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -385,6 +776,17 @@ exports[`registerOperatorPaymentAction > paga el neto: historial, planilla pagad
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "HPO00000001",
+      },
+      "where": {
+        "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -403,12 +805,59 @@ exports[`registerOperatorPaymentAction > paga el neto: historial, planilla pagad
 ]
 `;
 
-exports[`registerOperatorPaymentAction > paga el neto: historial, planilla pagada y bitacora > resultado 1`] = `"redirect:/dashboard/staff/payment-history?toast=operator-payment-registered"`;
+exports[`registerOperatorPaymentAction > paga el neto: historial, planilla pagada y bitacora > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+    "id_historial_pago": "HPO00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > sin permiso: el maestro de taller > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -416,12 +865,26 @@ exports[`registerOperatorPaymentAction > sin permiso: el maestro de taller > lla
 ]
 `;
 
-exports[`registerOperatorPaymentAction > sin permiso: el maestro de taller > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`registerOperatorPaymentAction > sin permiso: el maestro de taller > resultado 1`] = `
+{
+  "error": "No tienes permisos para registrar pagos de planilla.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > sin planilla, fecha ni monto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -429,12 +892,36 @@ exports[`registerOperatorPaymentAction > sin planilla, fecha ni monto > llamadas
 ]
 `;
 
-exports[`registerOperatorPaymentAction > sin planilla, fecha ni monto > resultado 1`] = `"error: Debe seleccionar una planilla pendiente. La fecha de pago es obligatoria. El monto pagado es obligatorio."`;
+exports[`registerOperatorPaymentAction > sin planilla, fecha ni monto > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "fecha_pago": [
+      "La fecha de pago es obligatoria.",
+    ],
+    "id_planilla": [
+      "Debe seleccionar una planilla pendiente.",
+    ],
+    "monto_pagado": [
+      "El monto pagado es obligatorio.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "",
+    "id_planilla": "",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -442,6 +929,22 @@ exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > llamadas 1
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -471,12 +974,30 @@ exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > llamadas 1
 ]
 `;
 
-exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > resultado 1`] = `"error: Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla."`;
+exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > resultado 1`] = `
+{
+  "error": "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.009",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.10 > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -484,6 +1005,22 @@ exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.1
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -513,12 +1050,30 @@ exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.1
 ]
 `;
 
-exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.10 > resultado 1`] = `"error: Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla."`;
+exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.10 > resultado 1`] = `
+{
+  "error": "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "30.11",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > un centimo de menos sobre 90.00 > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -526,6 +1081,22 @@ exports[`registerOperatorPaymentAction > un centimo de menos sobre 90.00 > llama
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -555,12 +1126,30 @@ exports[`registerOperatorPaymentAction > un centimo de menos sobre 90.00 > llama
 ]
 `;
 
-exports[`registerOperatorPaymentAction > un centimo de menos sobre 90.00 > resultado 1`] = `"error: Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla."`;
+exports[`registerOperatorPaymentAction > un centimo de menos sobre 90.00 > resultado 1`] = `
+{
+  "error": "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "89.99",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > una fecha que no es fecha > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -568,12 +1157,30 @@ exports[`registerOperatorPaymentAction > una fecha que no es fecha > llamadas 1`
 ]
 `;
 
-exports[`registerOperatorPaymentAction > una fecha que no es fecha > resultado 1`] = `"error: La fecha de pago no es válida."`;
+exports[`registerOperatorPaymentAction > una fecha que no es fecha > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "fecha_pago": [
+      "La fecha de pago no es válida.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "abc",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
 
 exports[`registerOperatorPaymentAction > una fecha que no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -581,4 +1188,22 @@ exports[`registerOperatorPaymentAction > una fecha que no existe > llamadas 1`] 
 ]
 `;
 
-exports[`registerOperatorPaymentAction > una fecha que no existe > resultado 1`] = `"error: La fecha de pago no es válida."`;
+exports[`registerOperatorPaymentAction > una fecha que no existe > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "fecha_pago": [
+      "La fecha de pago no es válida.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-02-30",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;

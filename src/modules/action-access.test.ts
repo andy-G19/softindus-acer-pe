@@ -342,6 +342,8 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/staff/payment-history/actions"),
     roles: SOLO_ADMIN,
     acciones: ["registerOperatorPaymentAction"],
+    // C7 de la 11.5: el pago responde con su resultado.
+    rechazanConResultado: ["registerOperatorPaymentAction"],
   },
   {
     ruta: "staff/payrolls/actions",

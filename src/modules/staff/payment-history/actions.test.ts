@@ -20,12 +20,19 @@ import {
 // planilla con su operario y su historial (hoy fuera de la transaccion y sin bloquearla), el
 // correlativo, el pago, la planilla pagada, la bitacora, el final de la transaccion, las
 // revalidaciones y el resultado: la redireccion o el error exacto.
+//
+// Desde C7 de la 11.5 (D59) el pago devuelve su resultado (FormActionState): reclama la clave de
+// la operacion como primera sentencia de la transaccion y pone cada rechazo en su campo.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -107,7 +114,23 @@ const DEFAULT_DATA: DataOverrides = {
   "planilla_pago.findUnique": payrollRow(),
 };
 
+const CLAVE = "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d";
+
+/** La clave ya estaba en la tabla: el INSERT no devuelve filas y se lee la guardada. */
+function storedKey(changes: Record<string, unknown> = {}): DataOverrides {
+  return {
+    "operacion_idempotente.createManyAndReturn": [],
+    "operacion_idempotente.findUniqueOrThrow": {
+      tipo_operacion: "pagar_planilla",
+      id_usuario: "USU00000001",
+      id_registro_resultado: "HPO00000004",
+      ...changes,
+    },
+  };
+}
+
 const form = (changes: Record<string, string> = {}) => ({
+  clave_operacion: CLAVE,
   id_planilla: "PLA00000009",
   fecha_pago: "2026-11-09",
   monto_pagado: "90.00",
@@ -128,9 +151,7 @@ async function runAction(actionCase: ActionCase) {
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        await registerOperatorPaymentAction(formData);
-
-        return "termino sin redirigir";
+        return await registerOperatorPaymentAction({ status: "idle" }, formData);
       } catch (error) {
         return (
           describeNavigationError(error) ??
@@ -176,6 +197,15 @@ const caseInputs: CaseInput[] = [
   { name: "una fecha que no existe", form: form({ fecha_pago: "2026-02-30" }) },
   { name: "sin planilla, fecha ni monto", form: form({ id_planilla: "", fecha_pago: "", monto_pagado: "" }) },
   { name: "sin permiso: el maestro de taller", role: "WORKSHOP_MASTER" },
+  { name: "sin clave de operacion", form: form({ clave_operacion: "" }) },
+  {
+    name: "la misma clave ya registrada: responde con el pago registrado sin escribir",
+    data: storedKey(),
+  },
+  {
+    name: "la clave es de otra operacion",
+    data: storedKey({ tipo_operacion: "generar_planilla" }),
+  },
 ];
 
 const cases: ActionCase[] = caseInputs.map((actionCase) => ({
@@ -222,8 +252,40 @@ describe("C4 de la 11.5: pagar bloquea la planilla antes de decidir", () => {
       data: { "planilla_pago.findUnique": payrollRow({ estado_pago: "anulada" }) },
     });
 
-    expect(outcome).toBe("error: No se puede pagar una planilla anulada.");
+    expect(outcome).toMatchObject({
+      status: "error",
+      fieldErrors: { id_planilla: ["No se puede pagar una planilla anulada."] },
+    });
     expect(calls.some((call) => "effect" in call && call.effect === "prisma.$transaction:rollback")).toBe(true);
     expect(calls.some((call) => isPrismaCall(call) && call.prisma === "historial_pago_operario.create")).toBe(false);
+  });
+});
+
+// --- C7 de la 11.5 (D59): el pago reclama su clave primero ---
+
+describe("C7 de la 11.5: pagar reclama la clave antes del candado", () => {
+  const at = (calls: Awaited<ReturnType<typeof runAction>>["calls"], name: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === name : "effect" in call && call.effect === name));
+
+  it("reclama la clave antes del candado y la completa despues de escribir", async () => {
+    const { calls, outcome } = await runAction({ name: "C7", form: form() });
+
+    expect(outcome).toMatchObject({ status: "success", data: { id_historial_pago: "HPO00000001", clave_operacion: CLAVE } });
+    expect(at(calls, "operacion_idempotente.createManyAndReturn")).toBeGreaterThan(-1);
+    expect(at(calls, "operacion_idempotente.createManyAndReturn")).toBeLessThan(at(calls, "$queryRaw"));
+    expect(at(calls, "planilla_pago.update")).toBeLessThan(at(calls, "operacion_idempotente.updateMany"));
+    expect(at(calls, "operacion_idempotente.updateMany")).toBeLessThan(at(calls, "prisma.$transaction:commit"));
+  });
+
+  it.each([
+    ["una planilla pagada", { "planilla_pago.findUnique": payrollRow({ estado_pago: "pagado" }) }, {}, "id_planilla"],
+    ["un monto distinto del neto", {}, { monto_pagado: "90.01" }, "monto_pagado"],
+  ] as const)("%s revierte la transaccion y deja el error en su campo, con lo enviado", async (_name, data, changes, field) => {
+    const { calls, outcome } = await runAction({ name: "C7", form: form(changes), data: { ...data } });
+
+    expect(outcome).toMatchObject({ status: "error", values: { id_planilla: "PLA00000009", metodo_pago: "efectivo" } });
+    expect(Object.keys((outcome as { fieldErrors?: Record<string, unknown> }).fieldErrors ?? {})).toEqual([field]);
+    expect(at(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(at(calls, "operacion_idempotente.updateMany")).toBe(-1);
   });
 });

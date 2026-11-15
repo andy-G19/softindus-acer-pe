@@ -10,9 +10,9 @@ import { getTestDatabase } from "@/testing/test-database";
 // Planillas contra Postgres real (PGlite), C4 de la 11.5. Corre las acciones enteras: los
 // candados del operario y de la planilla (su SQL se ejecuta de verdad sobre las tablas), los
 // montos en centesimos (C2), los correlativos, la bitacora y el rollback de un rechazo. Solo se
-// reemplazan la sesion y la cache de Next. Anular y pagar todavia redirigen al guardar y lanzan un
-// error al rechazar: la prueba traduce lo primero a «guardado». Desde C6 de la 11.5 generar
-// devuelve su resultado («guardado» o su error) y reclama una clave nueva en cada envio.
+// reemplazan la sesion y la cache de Next. Anular todavia redirige al guardar y lanza un error al
+// rechazar: la prueba traduce lo primero a «guardado». Desde C6 y C7 de la 11.5 generar y pagar
+// devuelven su resultado («guardado» o su error) y reclaman una clave nueva en cada envio.
 //
 // Lo que no se puede probar aqui: dos pagos o una anulacion y un pago simultaneos de la misma
 // planilla. En Postgres el segundo espera el candado del primero y ve el estado final; PGlite
@@ -113,14 +113,24 @@ async function generate(periodo_inicio: string, periodo_fin: string, descuentos 
   return state.status === "success" ? SAVED : state.status === "error" ? state.error : "sin respuesta";
 }
 
-const pay = (id_planilla: string, monto_pagado: string) =>
-  run(registerOperatorPaymentAction, {
+async function pay(id_planilla: string, monto_pagado: string) {
+  const formData = new FormData();
+
+  for (const [key, value] of Object.entries({
+    clave_operacion: randomUUID(),
     id_planilla,
     fecha_pago: "2026-11-20",
     monto_pagado,
     metodo_pago: "efectivo",
     observaciones: "",
-  });
+  })) {
+    formData.set(key, value);
+  }
+
+  const state = await registerOperatorPaymentAction({ status: "idle" }, formData);
+
+  return state.status === "success" ? SAVED : state.status === "error" ? state.error : "sin respuesta";
+}
 
 const cancel = (id_planilla: string) => run(cancelPayrollAction, { id_planilla });
 

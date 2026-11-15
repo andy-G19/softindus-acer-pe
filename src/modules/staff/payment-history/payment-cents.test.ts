@@ -42,6 +42,7 @@ async function pay(neto: string, monto: string) {
   const formData = new FormData();
 
   for (const [key, value] of Object.entries({
+    clave_operacion: "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
     id_planilla: "PLA00000009",
     fecha_pago: "2026-11-09",
     monto_pagado: monto,
@@ -54,9 +55,14 @@ async function pay(neto: string, monto: string) {
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        await registerOperatorPaymentAction(formData);
+        // Desde C7 de la 11.5 el pago devuelve su resultado en lugar de redirigir.
+        const state = await registerOperatorPaymentAction({ status: "idle" }, formData);
 
-        return "termino sin redirigir";
+        return state.status === "success"
+          ? "guardado"
+          : state.status === "error"
+            ? `error: ${state.error}`
+            : "sin respuesta";
       } catch (error) {
         return describeNavigationError(error) ?? `error: ${error instanceof Error ? error.message : String(error)}`;
       }
@@ -99,7 +105,7 @@ describe("C2 de la 11.5: el pago es exactamente el neto", () => {
     ["30.10", "30.1", "30.10"],
   ])("sobre un neto de %s, un pago de %s se acepta y se guarda %s", async (neto, monto, saved) => {
     expect(await pay(neto, monto)).toEqual({
-      result: "redirect:/dashboard/staff/payment-history?toast=operator-payment-registered",
+      result: "guardado",
       saved,
     });
   });
