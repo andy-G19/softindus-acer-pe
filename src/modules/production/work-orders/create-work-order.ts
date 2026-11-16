@@ -4,6 +4,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { calculateRequiredQuantityRounded } from "@/lib/recipe-quantities";
+import { lockCampaignRow, lockOrderRow, lockRecipeRow, lockRouteRow } from "@/lib/row-locks";
 import type { WorkOrderInput } from "@/schemas/production/work-order.schema";
 
 /**
@@ -14,11 +15,20 @@ import type { WorkOrderInput } from "@/schemas/production/work-order.schema";
  * la version de receta y el origen (pedido, campania o reposicion), y en una sola
  * transaccion reserva los correlativos, crea la orden, pasa el pedido a produccion y
  * congela el requerimiento de materiales.
+ *
+ * C2 de la 11.6a (D63): todo lo que decide se lee dentro de la transaccion, despues de bloquear,
+ * en este orden, el pedido (el mismo candado que cancelar, editar y crear una proforma), la
+ * campania, la ruta y la receta de la version. Ninguna otra operacion toma dos de ellos al reves.
+ * Antes se leia todo fuera y sin bloquear, y no se miraba el estado del pedido: con el formulario
+ * abierto mientras se cancelaba el pedido, la orden se creaba y lo pasaba a «en_produccion».
  */
 export type CreateWorkOrderParams = {
   data: WorkOrderInput;
   idUsuario: string;
 };
+
+/** Los pedidos que admiten una orden: los mismos que ofrece el formulario. */
+const PRODUCIBLE_ORDER_STATES = ["registrado", "aprobado"];
 
 function parseDate(value: string) {
   return new Date(`${value}T00:00:00`);
@@ -37,192 +47,232 @@ export async function createWorkOrder({
   data,
   idUsuario,
 }: CreateWorkOrderParams) {
-  let effectiveProductId = data.id_producto ?? "";
-  let idCliente: string | null = null;
-  let idDetallePedido: string | null = null;
-  let idPedido: string | null = null;
+  return prisma.$transaction(async (tx) => {
+    let effectiveProductId = data.id_producto ?? "";
+    let idCliente: string | null = null;
+    let idDetallePedido: string | null = null;
+    let idPedido: string | null = null;
 
-  if (data.tipo_produccion === "pedido") {
-    if (!data.id_detalle_pedido) {
-      throw new Error("Para una orden por pedido debe seleccionar un detalle de pedido.");
+    if (data.tipo_produccion === "pedido") {
+      if (!data.id_detalle_pedido) {
+        throw new Error("Para una orden por pedido debe seleccionar un detalle de pedido.");
+      }
+
+      // El detalle se lee una sola vez (H5): de el solo se usan su pedido y su producto, que no
+      // cambian. La orden creada lo referencia con una clave foranea Restrict, que impide
+      // borrarlo.
+      const orderDetail = await tx.detalle_pedido.findUnique({
+        where: {
+          id_detalle_pedido: data.id_detalle_pedido,
+        },
+        select: {
+          id_detalle_pedido: true,
+          id_producto: true,
+          id_pedido: true,
+        },
+      });
+
+      if (!orderDetail) {
+        throw new Error("El detalle de pedido seleccionado no existe.");
+      }
+
+      if (data.id_producto && orderDetail.id_producto !== data.id_producto) {
+        throw new Error("El detalle de pedido pertenece a otro producto.");
+      }
+
+      // El estado del pedido si cambia (cancelar, editar): se lee con el pedido bloqueado.
+      await lockOrderRow(tx, orderDetail.id_pedido);
+
+      const order = await tx.pedido.findUnique({
+        where: {
+          id_pedido: orderDetail.id_pedido,
+        },
+        select: {
+          id_pedido: true,
+          id_cliente: true,
+          estado: true,
+        },
+      });
+
+      if (!order) {
+        throw new Error("El detalle de pedido seleccionado no existe.");
+      }
+
+      if (!PRODUCIBLE_ORDER_STATES.includes(order.estado)) {
+        throw new Error(
+          `El pedido ${order.id_pedido} está ${order.estado}: solo se crean órdenes para pedidos registrados o aprobados.`,
+        );
+      }
+
+      effectiveProductId = orderDetail.id_producto;
+      idCliente = order.id_cliente;
+      idDetallePedido = orderDetail.id_detalle_pedido;
+      idPedido = order.id_pedido;
     }
 
-    // El detalle se lee una sola vez (H5) y su pedido y su cliente se reutilizan dentro de
-    // la transaccion: la orden creada lo referencia con una clave foranea Restrict, que
-    // impide borrarlo, y ningun codigo cambia el pedido de un detalle.
-    const orderDetail = await prisma.detalle_pedido.findUnique({
+    if (
+      (data.tipo_produccion === "campania" ||
+        data.tipo_produccion === "reposicion_stock") &&
+      !data.id_producto
+    ) {
+      throw new Error("Seleccione un producto.");
+    }
+
+    // Los demas candados se toman antes de las lecturas que deciden, que siguen en su orden de
+    // siempre: asi el mensaje que sale primero no cambia.
+    if (data.tipo_produccion === "campania" && data.id_campania) {
+      await lockCampaignRow(tx, data.id_campania);
+    }
+
+    await lockRouteRow(tx, data.id_ruta);
+
+    // De la version solo se lee su receta, que no cambia, para bloquearla: el estado de la
+    // version cambia bajo ese candado.
+    const versionRecipe = await tx.version_receta.findUnique({
       where: {
-        id_detalle_pedido: data.id_detalle_pedido,
+        id_version_receta: data.id_version_receta,
       },
       select: {
-        id_detalle_pedido: true,
+        id_receta: true,
+      },
+    });
+
+    if (versionRecipe) {
+      await lockRecipeRow(tx, versionRecipe.id_receta);
+    }
+
+    const product = await tx.producto.findFirst({
+      where: {
+        id_producto: effectiveProductId,
+        estado: true,
+      },
+      select: {
         id_producto: true,
-        id_pedido: true,
-        pedido: {
-          select: {
-            id_cliente: true,
+        nombre_producto: true,
+      },
+    });
+
+    if (!product) {
+      throw new Error("El producto seleccionado no existe o está inactivo.");
+    }
+
+    const route = await tx.ruta_fabricacion.findFirst({
+      where: {
+        id_ruta: data.id_ruta,
+        estado: true,
+      },
+      include: {
+        etapa_ruta: {
+          where: {
+            estado: true,
           },
         },
       },
     });
 
-    if (!orderDetail) {
-      throw new Error("El detalle de pedido seleccionado no existe.");
+    if (!route) {
+      throw new Error(
+        "La ruta seleccionada no existe, está inactiva o no pertenece al producto.",
+      );
     }
 
-    if (data.id_producto && orderDetail.id_producto !== data.id_producto) {
-      throw new Error("El detalle de pedido pertenece a otro producto.");
+    if (route.id_producto !== effectiveProductId) {
+      throw new Error("La ruta seleccionada pertenece a otro producto.");
     }
 
-    effectiveProductId = orderDetail.id_producto;
-    idCliente = orderDetail.pedido.id_cliente;
-    idDetallePedido = orderDetail.id_detalle_pedido;
-    idPedido = orderDetail.id_pedido;
-  }
+    if (route.etapa_ruta.length === 0) {
+      throw new Error(
+        "La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden.",
+      );
+    }
 
-  if (
-    (data.tipo_produccion === "campania" ||
-      data.tipo_produccion === "reposicion_stock") &&
-    !data.id_producto
-  ) {
-    throw new Error("Seleccione un producto.");
-  }
-
-  const product = await prisma.producto.findFirst({
-    where: {
-      id_producto: effectiveProductId,
-      estado: true,
-    },
-    select: {
-      id_producto: true,
-      nombre_producto: true,
-    },
-  });
-
-  if (!product) {
-    throw new Error("El producto seleccionado no existe o está inactivo.");
-  }
-
-  const route = await prisma.ruta_fabricacion.findFirst({
-    where: {
-      id_ruta: data.id_ruta,
-      estado: true,
-    },
-    include: {
-      etapa_ruta: {
-        where: {
-          estado: true,
+    const version = await tx.version_receta.findFirst({
+      where: {
+        id_version_receta: data.id_version_receta,
+      },
+      include: {
+        receta_tecnica: true,
+        detalle_receta: {
+          // El material se incluye por su costo_unitario_actual: es el dato que se congela
+          // en el snapshot y no se puede reconstruir despues.
+          include: {
+            material: {
+              select: {
+                id_material: true,
+                costo_unitario_actual: true,
+              },
+            },
+          },
+          orderBy: {
+            id_detalle_receta: "asc",
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!route) {
-    throw new Error(
-      "La ruta seleccionada no existe, está inactiva o no pertenece al producto.",
-    );
-  }
+    if (!version) {
+      throw new Error(
+        "La versión de receta seleccionada no existe, no está vigente o no pertenece al producto.",
+      );
+    }
 
-  if (route.id_producto !== effectiveProductId) {
-    throw new Error("La ruta seleccionada pertenece a otro producto.");
-  }
+    if (
+      version.estado !== "vigente" ||
+      version.receta_tecnica.estado !== "activa"
+    ) {
+      throw new Error("La receta seleccionada no esta vigente o activa.");
+    }
 
-  if (route.etapa_ruta.length === 0) {
-    throw new Error(
-      "La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden.",
-    );
-  }
+    if (version.receta_tecnica.id_producto !== effectiveProductId) {
+      throw new Error("La receta seleccionada pertenece a otro producto.");
+    }
 
-  const version = await prisma.version_receta.findFirst({
-    where: {
-      id_version_receta: data.id_version_receta,
-    },
-    include: {
-      receta_tecnica: true,
-      detalle_receta: {
-        // El material se incluye por su costo_unitario_actual: es el dato que se congela
-        // en el snapshot y no se puede reconstruir despues.
+    if (version.detalle_receta.length === 0) {
+      throw new Error(
+        "La versión de receta no tiene materiales registrados. Agregue materiales antes de crear la orden.",
+      );
+    }
+
+    let idCampania: string | null = null;
+
+    if (data.tipo_produccion === "campania") {
+      if (!data.id_campania) {
+        throw new Error("Para una orden por campania debe seleccionar una campania.");
+      }
+
+      const campaign = await tx.campania_produccion.findFirst({
+        where: {
+          id_campania: data.id_campania,
+          estado: {
+            in: ["planificada", "activa"],
+          },
+        },
         include: {
-          material: {
+          campania_detalle: {
             select: {
-              id_material: true,
-              costo_unitario_actual: true,
+              id_producto: true,
             },
           },
         },
-        orderBy: {
-          id_detalle_receta: "asc",
-        },
-      },
-    },
-  });
+      });
 
-  if (!version) {
-    throw new Error(
-      "La versión de receta seleccionada no existe, no está vigente o no pertenece al producto.",
-    );
-  }
+      if (!campaign) {
+        throw new Error("La campaña seleccionada no existe o no está activa.");
+      }
 
-  if (
-    version.estado !== "vigente" ||
-    version.receta_tecnica.estado !== "activa"
-  ) {
-    throw new Error("La receta seleccionada no esta vigente o activa.");
-  }
+      idCampania = campaign.id_campania;
 
-  if (version.receta_tecnica.id_producto !== effectiveProductId) {
-    throw new Error("La receta seleccionada pertenece a otro producto.");
-  }
-
-  if (version.detalle_receta.length === 0) {
-    throw new Error(
-      "La versión de receta no tiene materiales registrados. Agregue materiales antes de crear la orden.",
-    );
-  }
-
-  let idCampania: string | null = null;
-
-  if (data.tipo_produccion === "campania") {
-    if (!data.id_campania) {
-      throw new Error("Para una orden por campania debe seleccionar una campania.");
+      if (
+        campaign.campania_detalle.length > 0 &&
+        !campaign.campania_detalle.some((detail) => {
+          return detail.id_producto === effectiveProductId;
+        })
+      ) {
+        throw new Error("El producto seleccionado no pertenece a la campania.");
+      }
     }
 
-    const campaign = await prisma.campania_produccion.findFirst({
-      where: {
-        id_campania: data.id_campania,
-        estado: {
-          in: ["planificada", "activa"],
-        },
-      },
-      include: {
-        campania_detalle: {
-          select: {
-            id_producto: true,
-          },
-        },
-      },
-    });
-
-    if (!campaign) {
-      throw new Error("La campaña seleccionada no existe o no está activa.");
-    }
-
-    idCampania = campaign.id_campania;
-
-    if (
-      campaign.campania_detalle.length > 0 &&
-      !campaign.campania_detalle.some((detail) => {
-        return detail.id_producto === effectiveProductId;
-      })
-    ) {
-      throw new Error("El producto seleccionado no pertenece a la campania.");
-    }
-  }
-
-  let idOrdenTrabajo = "";
-
-  await prisma.$transaction(async (tx) => {
-    idOrdenTrabajo = await getNextCorrelativeId(tx, {
+    const idOrdenTrabajo = await getNextCorrelativeId(tx, {
       codigoEntidad: "orden_trabajo",
       prefijo: "OTR",
     });
@@ -292,7 +342,7 @@ export async function createWorkOrder({
       detalle: `Orden de trabajo creada para el producto ${effectiveProductId}. Requerimiento congelado: ${version.detalle_receta.length} material(es).`,
       tx,
     });
-  });
 
-  return idOrdenTrabajo;
+    return idOrdenTrabajo;
+  });
 }

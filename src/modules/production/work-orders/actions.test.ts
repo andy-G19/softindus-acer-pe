@@ -281,6 +281,10 @@ function orderDetailRow(changes: Row = {}) {
 function createData(overrides: DataOverrides = {}): DataOverrides {
   return {
     "detalle_pedido.findUnique": orderDetailRow(),
+    // C2 de la 11.6a (D63): el estado del pedido se lee con el pedido bloqueado, y de la version
+    // solo su receta, para bloquearla antes de leer la version.
+    "pedido.findUnique": { id_pedido: PEDIDO, id_cliente: CLIENTE, estado: "aprobado" },
+    "version_receta.findUnique": { id_receta: "RTE00000001" },
     "producto.findFirst": { id_producto: PRODUCTO, nombre_producto: "Puerta metalica" },
     "ruta_fabricacion.findFirst": {
       id_ruta: RUTA,
@@ -1333,5 +1337,100 @@ describe("H5: crear una orden por pedido lee el detalle una sola vez", () => {
     expect(argsOf("pedido.update")).toEqual([
       { where: { id_pedido: PEDIDO }, data: { estado: "en_produccion" } },
     ]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C2 de la 11.6a (D63): crear una orden decide con su origen bloqueado
+// ---------------------------------------------------------------------------
+
+// Crear leia el detalle de pedido, el producto, la ruta, la version de receta y la campania fuera
+// de la transaccion y sin bloquear nada, y no miraba el estado del pedido: con el formulario
+// abierto mientras se cancelaba el pedido, la orden se creaba y pasaba el pedido cancelado a
+// «en_produccion» (hallazgo 2 de la 11.6). Ahora, dentro de la transaccion, bloquea el pedido (el
+// mismo candado que cancelar, editar y crear una proforma), la campania, la ruta y la receta de la
+// version, en ese orden, antes de las lecturas que deciden, y exige que el pedido este registrado
+// o aprobado, lo mismo que ofrece el formulario.
+describe("C2 de la 11.6a: crear una orden decide con su origen bloqueado", () => {
+  const RECETA = "RTE00000001";
+  // La version solo se lee antes del candado para saber su receta: id_receta no cambia.
+  const withRecipeRef = (overrides: DataOverrides = {}) =>
+    createData({ "version_receta.findUnique": { id_receta: RECETA }, ...overrides });
+
+  const indexOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
+
+  it("una orden para un pedido cancelado se rechaza sin escribir", async () => {
+    const { calls, outcome } = await runAction(createWorkOrderAction, {
+      name: "C2",
+      form: orderForm,
+      data: withRecipeRef({
+        "pedido.findUnique": { id_pedido: PEDIDO, id_cliente: CLIENTE, estado: "cancelado" },
+        "detalle_pedido.findUnique": orderDetailRow({
+          pedido: { id_pedido: PEDIDO, id_cliente: CLIENTE, estado: "cancelado" },
+        }),
+      }),
+    });
+
+    expect(outcome).toBe(
+      "error: El pedido PED00000001 está cancelado: solo se crean órdenes para pedidos registrados o aprobados.",
+    );
+    expect(indexOf(calls, "orden_trabajo.create")).toBe(-1);
+    expect(indexOf(calls, "pedido.update")).toBe(-1);
+  });
+
+  it("bloquea el pedido antes de leer su estado", async () => {
+    const { calls } = await runAction(createWorkOrderAction, { name: "C2", form: orderForm, data: withRecipeRef() });
+
+    expectRowLockedBefore(calls, {
+      table: "pedido",
+      id: PEDIDO,
+      reads: (call) => call.prisma === "pedido.findUnique",
+    });
+  });
+
+  it("bloquea la campania antes de leerla", async () => {
+    const { calls } = await runAction(createWorkOrderAction, { name: "C2", form: campaignForm, data: withRecipeRef() });
+
+    expectRowLockedBefore(calls, {
+      table: "campania_produccion",
+      id: CAMPANIA,
+      reads: (call) => call.prisma === "campania_produccion.findFirst",
+    });
+  });
+
+  it("bloquea la ruta antes de leerla", async () => {
+    const { calls } = await runAction(createWorkOrderAction, { name: "C2", form: createForm, data: withRecipeRef() });
+
+    expectRowLockedBefore(calls, {
+      table: "ruta_fabricacion",
+      id: RUTA,
+      reads: (call) => call.prisma === "ruta_fabricacion.findFirst",
+    });
+  });
+
+  it("bloquea la receta de la version antes de leer la version", async () => {
+    const { calls } = await runAction(createWorkOrderAction, { name: "C2", form: createForm, data: withRecipeRef() });
+
+    expectRowLockedBefore(calls, {
+      table: "receta_tecnica",
+      id: RECETA,
+      reads: (call) => call.prisma === "version_receta.findFirst",
+    });
+  });
+
+  it("los candados van en el orden pedido, campania, ruta, receta, y el producto se lee dentro", async () => {
+    const { calls } = await runAction(createWorkOrderAction, {
+      name: "C2",
+      form: { ...orderForm, tipo_produccion: "pedido" },
+      data: withRecipeRef(),
+    });
+    const locks = calls
+      .filter(isPrismaCall)
+      .filter((call) => call.prisma === "$queryRaw")
+      .map((call) => /FROM aceros\.(\w+)/.exec((call.args as { sql: string }).sql)?.[1]);
+
+    expect(locks).toEqual(["pedido", "ruta_fabricacion", "receta_tecnica"]);
+    expect(indexOf(calls, "producto.findFirst")).toBeGreaterThan(indexOf(calls, "prisma.$transaction"));
   });
 });

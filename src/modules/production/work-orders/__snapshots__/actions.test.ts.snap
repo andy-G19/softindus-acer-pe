@@ -995,6 +995,48 @@ exports[`createWorkOrderAction > campania inexistente o no activa > llamadas 1`]
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -1067,6 +1109,10 @@ exports[`createWorkOrderAction > campania inexistente o no activa > llamadas 1`]
       },
     },
     "prisma": "campania_produccion.findFirst",
+  },
+  {
+    "args": "La campaña seleccionada no existe o no está activa.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1083,6 +1129,48 @@ exports[`createWorkOrderAction > campania sin productos registrados: acepta el p
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -1155,10 +1243,6 @@ exports[`createWorkOrderAction > campania sin productos registrados: acepta el p
       },
     },
     "prisma": "campania_produccion.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1279,6 +1363,48 @@ exports[`createWorkOrderAction > campania: el producto no pertenece a sus detall
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -1352,6 +1478,10 @@ exports[`createWorkOrderAction > campania: el producto no pertenece a sus detall
     },
     "prisma": "campania_produccion.findFirst",
   },
+  {
+    "args": "El producto seleccionado no pertenece a la campania.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
@@ -1409,22 +1539,72 @@ exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el de
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_detalle_pedido": true,
         "id_pedido": true,
         "id_producto": true,
-        "pedido": {
-          "select": {
-            "id_cliente": true,
-          },
-        },
       },
       "where": {
         "id_detalle_pedido": "DPE00000001",
       },
     },
     "prisma": "detalle_pedido.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+        "id_pedido": true,
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1478,10 +1658,6 @@ exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el de
       },
     },
     "prisma": "version_receta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1613,22 +1789,25 @@ exports[`createWorkOrderAction > pedido: el detalle es de otro producto que el e
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_detalle_pedido": true,
         "id_pedido": true,
         "id_producto": true,
-        "pedido": {
-          "select": {
-            "id_cliente": true,
-          },
-        },
       },
       "where": {
         "id_detalle_pedido": "DPE00000001",
       },
     },
     "prisma": "detalle_pedido.findUnique",
+  },
+  {
+    "args": "El detalle de pedido pertenece a otro producto.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1645,22 +1824,25 @@ exports[`createWorkOrderAction > pedido: el detalle no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
       "select": {
         "id_detalle_pedido": true,
         "id_pedido": true,
         "id_producto": true,
-        "pedido": {
-          "select": {
-            "id_cliente": true,
-          },
-        },
       },
       "where": {
         "id_detalle_pedido": "DPE00000001",
       },
     },
     "prisma": "detalle_pedido.findUnique",
+  },
+  {
+    "args": "El detalle de pedido seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1677,6 +1859,39 @@ exports[`createWorkOrderAction > producto inexistente o inactivo > llamadas 1`] 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -1688,6 +1903,10 @@ exports[`createWorkOrderAction > producto inexistente o inactivo > llamadas 1`] 
       },
     },
     "prisma": "producto.findFirst",
+  },
+  {
+    "args": "El producto seleccionado no existe o está inactivo.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1704,6 +1923,39 @@ exports[`createWorkOrderAction > receta de otro producto > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -1755,6 +2007,10 @@ exports[`createWorkOrderAction > receta de otro producto > llamadas 1`] = `
       },
     },
     "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": "La receta seleccionada pertenece a otro producto.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1771,6 +2027,39 @@ exports[`createWorkOrderAction > receta tecnica inactiva > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -1822,6 +2111,10 @@ exports[`createWorkOrderAction > receta tecnica inactiva > llamadas 1`] = `
       },
     },
     "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": "La receta seleccionada no esta vigente o activa.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1838,6 +2131,39 @@ exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -1889,10 +2215,6 @@ exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el
       },
     },
     "prisma": "version_receta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2013,6 +2335,39 @@ exports[`createWorkOrderAction > ruta de otro producto > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -2040,6 +2395,10 @@ exports[`createWorkOrderAction > ruta de otro producto > llamadas 1`] = `
       },
     },
     "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": "La ruta seleccionada pertenece a otro producto.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2056,6 +2415,39 @@ exports[`createWorkOrderAction > ruta inexistente o inactiva > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -2083,6 +2475,10 @@ exports[`createWorkOrderAction > ruta inexistente o inactiva > llamadas 1`] = `
       },
     },
     "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": "La ruta seleccionada no existe, está inactiva o no pertenece al producto.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2099,6 +2495,39 @@ exports[`createWorkOrderAction > ruta sin etapas activas > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -2126,6 +2555,10 @@ exports[`createWorkOrderAction > ruta sin etapas activas > llamadas 1`] = `
       },
     },
     "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": "La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2142,6 +2575,39 @@ exports[`createWorkOrderAction > version de receta inexistente > llamadas 1`] = 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -2193,6 +2659,10 @@ exports[`createWorkOrderAction > version de receta inexistente > llamadas 1`] = 
       },
     },
     "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": "La versión de receta seleccionada no existe, no está vigente o no pertenece al producto.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2209,6 +2679,39 @@ exports[`createWorkOrderAction > version de receta no vigente > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -2260,6 +2763,10 @@ exports[`createWorkOrderAction > version de receta no vigente > llamadas 1`] = `
       },
     },
     "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": "La receta seleccionada no esta vigente o activa.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2276,6 +2783,39 @@ exports[`createWorkOrderAction > version sin materiales > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_producto": true,
@@ -2327,6 +2867,10 @@ exports[`createWorkOrderAction > version sin materiales > llamadas 1`] = `
       },
     },
     "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": "La versión de receta no tiene materiales registrados. Agregue materiales antes de crear la orden.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
