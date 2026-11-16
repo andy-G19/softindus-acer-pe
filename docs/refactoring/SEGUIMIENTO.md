@@ -9198,7 +9198,7 @@ Datos leídos de la API de GitHub el 2026-11-16 (UTC) y comparados con git:
 
 ### Sub-entrega 11.6a — Órdenes de trabajo: cantidades, crear y alerta de stock
 
-Fecha: 2026-11-16 (Lima). Estado: preparada en `staging`, sin publicar. Plan en
+Fecha: 2026-11-16 (Lima). Estado: verificada en staging (CI #189). Plan en
 `tmp/e11-diff/plan-11-6.md`, con las decisiones D62 a D72 aprobadas: cantidades de material en
 centésimos (D62); crear decide dentro de la transacción con el pedido, la campaña, la ruta y la
 receta bloqueados, y solo para pedidos registrados o aprobados (D63); la alerta de stock con
@@ -9216,7 +9216,8 @@ registrados sin tocarlos, y la 11.6 se parte en 11.6a, 11.6b y 11.6c (D72).
 | f64752b | fix | `syncStockAlert` actualiza la alerta solo si sigue activa (`updateMany` con el estado en el `where`) y, si ya no queda ninguna, abre otra (D64); arregla también la salida de inventario. Rojo antes. |
 | bb79cc2 | fix | El detalle de la orden calcula el disponible, el faltante y si alcanza en centésimos (D65). Rojo antes. |
 | 2c112f0 | feat | Crear con `FormActionState`, clave `orden_trabajo:nueva` (primera sentencia), cada rechazo en su campo, `returnTo` y guardia de descarte; al guardar va al detalle de la orden creada (D66). Rojo antes. |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 9abbc08 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -9311,6 +9312,39 @@ Hallazgos:
    daría 2.68). Cambiarlo haría distintos los requerimientos de órdenes nuevas y viejas. Destino:
    decisión del responsable (D71).
 
+#### Publicación, CI y verificación en staging
+
+1. Push de los 7 commits (hasta `9abbc08`): CI #189 en verde (de 19:49:21 a 19:53:46 UTC del
+   2026-11-16); Vercel desplegó staging (19:51:19 UTC). Sin migraciones.
+2. Con ADMIN, sin escribir (origen comprobado en llamada aparte): la página de nueva orden trae
+   el campo de la clave y la guarda en `orden_trabajo:nueva`; ofrece 4 detalles de pedido
+   (PED00000007, dos del PED00000008 y PED00000002) y, para reposición, la Lampa Agricola Reforzada
+   con la «Ruta estándar para lampa» (6 etapas) y la «Receta Original Lampa Reforzada #1 - V4» (3
+   materiales). El detalle de la OTR00000004 calcula la plancha como 299.79 − 20.00 = 279.79
+   disponible, faltante 0.00, «Suficiente», sin aviso de críticos. Ningún material de staging
+   tiene stock exactamente igual a lo requerido: el caso de C4 solo lo prueban las pruebas. Última
+   orden: OTR00000009 (9 en el listado).
+3. Envíos autorizados por el responsable, una orden de reposición para no tocar ningún pedido:
+
+   | Paso | Resultado |
+   |---|---|
+   | 1. Lampa, `RUT00000002`, `VER00000005`, cantidad 1, inicio 16/11/2026 y entrega estimada 10/11/2026 | «La fecha estimada de entrega no puede ser anterior a la fecha de inicio.» junto a «Entrega estimada», enfocada, y «Revisa los datos de la orden de trabajo.» arriba; lo elegido conservado y la misma clave `624e2b15…`; sin escribir (el esquema rechaza antes de la transacción) |
+   | 2. El mismo formulario con entrega 30/11/2026 y observaciones «Prueba 11.6a C5», con la misma clave | OTR00000010 pendiente, reposición, con sus fechas y observaciones y 3 materiales congelados; un solo aviso «Orden de trabajo creada correctamente», el detalle de la orden creada (no el listado) y la clave renovada (`557015d6…`) |
+
+4. Después, solo leyendo: el detalle de la OTR00000010 muestra el stock sin cambios (plancha
+   299.79 con 20.00 reservado, mango 1190.00, alambre 14.90), faltante 0.00 en los tres y
+   «Suficiente»; el listado tiene 10 órdenes, la única nueva es la OTR00000010, así que el envío
+   rechazado no gastó correlativo.
+5. Que la misma clave repetida responde con la misma orden no se probó en staging: el formulario
+   renueva la clave al guardar y no se forzó un envío a mano. Lo prueban la acción y Postgres.
+6. Tropiezos de método sin efecto en los datos: Vercel pidió iniciar sesión antes de abrir
+   staging; las listas de `SearchableSelect` no se abrían con `focus()` desde un script y se
+   abrieron con un clic sobre la captura. Antes de cada envío se comprobó el contenido del
+   formulario.
+7. Datos de prueba que quedan en staging: la OTR00000010 pendiente, de reposición, con su
+   requerimiento congelado y sin movimientos de stock. Anularla es otra escritura y su migración
+   llega en la 11.6b.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -9336,7 +9370,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a preparada en `staging` (C0 a C6), por publicar |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a verificada en staging (CI #189) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
