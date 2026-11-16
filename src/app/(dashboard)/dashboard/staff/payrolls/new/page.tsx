@@ -9,8 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -19,14 +17,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
+import { staffNotifications } from "@/modules/staff/notifications";
 import { generatePayrollAction } from "@/modules/staff/payrolls/actions";
+import { PayrollForm } from "@/modules/staff/payrolls/payroll-form";
 import { getPayrollFormOperators } from "@/modules/staff/payrolls/queries";
+
+type NewPayrollPageProps = {
+  searchParams?: Promise<{ returnTo?: string | string[] }>;
+};
 
 function getPaymentModeLabel(mode: string) {
   const labels: Record<string, string> = {
@@ -38,8 +41,13 @@ function getPaymentModeLabel(mode: string) {
   return labels[mode] ?? mode;
 }
 
-export default async function NewPayrollPage() {
+export default async function NewPayrollPage({ searchParams }: NewPayrollPageProps) {
   await requireRole([APP_ROLES.ADMIN]);
+
+  const params = searchParams ? await searchParams : {};
+  // C6 de la 11.5 (D59): al guardar o cancelar vuelve a la pagina de la que vino; sin ella, al
+  // listado de planillas, como antes.
+  const backHref = getSafeReturnTo(params.returnTo, navigationHrefs.payrolls);
 
   const today = new Date();
   const currentDate = today.toISOString().split("T")[0];
@@ -65,7 +73,7 @@ export default async function NewPayrollPage() {
       <PageHeader
         title="Generar planilla de pago"
         description="Selecciona un operario y un periodo. El sistema calculará el monto según asistencias válidas, tarifa configurada y descuentos."
-        backHref={navigationHrefs.payrolls}
+        backHref={backHref}
         backLabel="Volver al listado"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Personal", href: navigationHrefs.staff },
@@ -95,67 +103,14 @@ export default async function NewPayrollPage() {
                 }
               />
             ) : (
-              <form action={generatePayrollAction} className="space-y-4">
-                <div className="space-y-2">
-                  <SearchableSelect
-                    name="id_operario"
-                    label="Operario"
-                    placeholder="Buscar operario..."
-                    items={operatorItems}
-                    required
-                    emptyMessage="No hay operarios activos disponibles."
-                  />
-
-                  <p className="text-xs text-muted-foreground">
-                    La tarifa se multiplicará por las asistencias válidas del
-                    periodo seleccionado.
-                  </p>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="periodo_inicio">Inicio del periodo</Label>
-                    <Input
-                      id="periodo_inicio"
-                      name="periodo_inicio"
-                      type="date"
-                      required
-                      defaultValue={sevenDaysAgo}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="periodo_fin">Fin del periodo</Label>
-                    <Input
-                      id="periodo_fin"
-                      name="periodo_fin"
-                      type="date"
-                      required
-                      defaultValue={currentDate}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="descuentos">Descuentos</Label>
-                    <Input
-                      id="descuentos"
-                      name="descuentos"
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      defaultValue="0"
-                      placeholder="Ejemplo: 10.00"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2 sm:flex-row">
-                  <Button type="submit">Generar planilla</Button>
-                  <Button variant="outline" asChild>
-                    <Link href="/dashboard/staff/payrolls">Ver listado</Link>
-                  </Button>
-                </div>
-              </form>
+              <PayrollForm
+                action={generatePayrollAction}
+                operators={operatorItems}
+                defaultStartDate={sevenDaysAgo}
+                defaultEndDate={currentDate}
+                successNotification={staffNotifications["payroll-created"]}
+                returnTo={backHref}
+              />
             )}
           </CardContent>
         </Card>

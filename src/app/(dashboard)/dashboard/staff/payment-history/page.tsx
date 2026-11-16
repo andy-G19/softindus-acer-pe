@@ -19,10 +19,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { requireRole } from "@/lib/authz";
 import { getOperatorPaymentHistoryData } from "@/modules/staff/payment-history/queries";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { APP_ROLES } from "@/lib/permissions";
 
 function getPaymentMethodLabel(method: string | null) {
@@ -41,9 +43,15 @@ function getPaymentMethodLabel(method: string | null) {
   return labels[method] ?? method;
 }
 
-export default async function PaymentHistoryPage() {
+type PaymentHistoryPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function PaymentHistoryPage({ searchParams }: PaymentHistoryPageProps) {
   await requireRole([APP_ROLES.ADMIN]);
 
+  const params = (await searchParams) ?? {};
+  const { page, pageSize, skip, take } = getPaginationParams(params);
   const today = new Date();
 
   const {
@@ -52,7 +60,10 @@ export default async function PaymentHistoryPage() {
     totalPaidAmount,
     monthlyPaidAmount,
     latestPayments,
-  } = await getOperatorPaymentHistoryData(today);
+  } = await getOperatorPaymentHistoryData(today, { skip, take });
+
+  // El historial no tiene filtros: el total de pagos es el de la paginacion.
+  const meta = getPaginationMeta({ totalItems: totalPayments, page, pageSize });
 
   return (
     <div className="space-y-6">
@@ -158,6 +169,13 @@ export default async function PaymentHistoryPage() {
           )}
         </CardContent>
       </Card>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.paymentHistory}
+        searchParams={params}
+        itemLabel="pagos"
+      />
     </div>
   );
 }

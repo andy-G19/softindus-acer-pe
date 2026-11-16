@@ -6,7 +6,6 @@ import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import {
   Card,
   CardContent,
@@ -26,16 +25,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { staffNotifications } from "@/modules/staff/notifications";
 import { cancelPayrollAction } from "@/modules/staff/payrolls/actions";
+import { PayrollAnnulAction } from "@/modules/staff/payrolls/payroll-annul-action";
 import { getPayrollListData } from "@/modules/staff/payrolls/queries";
 
 type PayrollsPageProps = {
@@ -85,6 +88,7 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
   const estado = parseStringParam(params, "estado");
   const from = parseDateParam(params, "from");
   const to = parseDateParam(params, "to");
+  const { page, pageSize, skip, take } = getPaginationParams(params);
 
   const {
     totalPayrolls,
@@ -93,15 +97,21 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
     canceledPayrolls,
     pendingNetAmount,
     latestPayrolls,
-  } = await getPayrollListData({
-    q,
-    operario,
-    periodo,
-    modalidad,
-    estado,
-    from,
-    to,
-  });
+  } = await getPayrollListData(
+    {
+      q,
+      operario,
+      periodo,
+      modalidad,
+      estado,
+      from,
+      to,
+    },
+    { skip, take },
+  );
+
+  // El conteo de la tarjeta «Planillas generadas» usa el mismo where que el listado.
+  const meta = getPaginationMeta({ totalItems: totalPayrolls, page, pageSize });
 
   return (
     <div className="space-y-6">
@@ -257,22 +267,13 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
                           Sin acción
                         </span>
                       ) : (
-                        <form action={cancelPayrollAction}>
-                          <input
-                            type="hidden"
-                            name="id_planilla"
-                            value={payroll.id_planilla}
-                          />
-
-                          <ConfirmDeleteButton
-                            title="¿Anular planilla?"
-                            description="Esta acción anulará la planilla y no se puede deshacer. Verifique antes de continuar."
-                            confirmText="Confirmar anulación"
-                            entityName="planilla"
-                          >
-                            Anular
-                          </ConfirmDeleteButton>
-                        </form>
+                        // C8 de la 11.5 (D60): confirma con el operario, el periodo y la consecuencia;
+                        // un rechazo queda en la confirmacion.
+                        <PayrollAnnulAction
+                          payroll={payroll}
+                          action={cancelPayrollAction}
+                          successNotification={staffNotifications["payroll-annulled"]}
+                        />
                       )}
                     </TableCell>
                   </TableRow>
@@ -282,6 +283,13 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
           )}
         </CardContent>
       </Card>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.payrolls}
+        searchParams={params as Record<string, string | string[] | undefined>}
+        itemLabel="planillas"
+      />
     </div>
   );
 }

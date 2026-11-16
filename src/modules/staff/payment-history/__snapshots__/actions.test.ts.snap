@@ -1,0 +1,1209 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`registerOperatorPaymentAction > con observaciones y transferencia > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "historial_pago_operario",
+      "prefijo": "HPO",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-11-09T00:00:00.000Z,
+        "id_historial_pago": "HPO00000001",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000009",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "transferencia",
+        "monto_pagado": "90.00",
+        "observaciones": "Abono en cuenta",
+        "periodo": "2026-11-02 a 2026-11-08",
+      },
+    },
+    "prisma": "historial_pago_operario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "pagado",
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago registrado para la planilla PLA00000009.",
+      "enTransaccion": true,
+      "entidad_afectada": "historial_pago_operario",
+      "id_registro_afectado": "HPO00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "HPO00000001",
+      },
+      "where": {
+        "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payment-history",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > con observaciones y transferencia > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+    "id_historial_pago": "HPO00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "transferencia",
+    "monto_pagado": "90.00",
+    "observaciones": " Abono en cuenta ",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > la clave es de otra operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > la clave es de otra operacion > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > la misma clave ya registrada: responde con el pago registrado sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payment-history",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > la misma clave ya registrada: responde con el pago registrado sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+    "id_historial_pago": "HPO00000004",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > la planilla esta anulada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "No se puede pagar una planilla anulada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > la planilla esta anulada > resultado 1`] = `
+{
+  "error": "No se puede pagar una planilla anulada.",
+  "fieldErrors": {
+    "id_planilla": [
+      "No se puede pagar una planilla anulada.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > la planilla no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "La planilla seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > la planilla no existe > resultado 1`] = `
+{
+  "error": "La planilla seleccionada no existe.",
+  "fieldErrors": {
+    "id_planilla": [
+      "La planilla seleccionada no existe.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > la planilla ya fue pagada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "La planilla seleccionada ya fue pagada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > la planilla ya fue pagada > resultado 1`] = `
+{
+  "error": "La planilla seleccionada ya fue pagada.",
+  "fieldErrors": {
+    "id_planilla": [
+      "La planilla seleccionada ya fue pagada.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > la planilla ya tiene un pago en el historial > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "Esta planilla ya tiene un pago registrado en el historial.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > la planilla ya tiene un pago en el historial > resultado 1`] = `
+{
+  "error": "Esta planilla ya tiene un pago registrado en el historial.",
+  "fieldErrors": {
+    "id_planilla": [
+      "Esta planilla ya tiene un pago registrado en el historial.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > metodo de pago desconocido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > metodo de pago desconocido > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "metodo_pago": [
+      "Seleccione un método de pago válido.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "cheque",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > monto cero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > monto cero > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "El monto pagado debe ser mayor a cero.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "0",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > monto que no es numero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > monto que no es numero > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "El monto pagado debe ser un número válido.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "noventa",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > paga el neto: historial, planilla pagada y bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "historial_pago_operario",
+      "prefijo": "HPO",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_pago": 2026-11-09T00:00:00.000Z,
+        "id_historial_pago": "HPO00000001",
+        "id_operario": "OPE00000003",
+        "id_planilla": "PLA00000009",
+        "id_usuario_registro": "USU00000001",
+        "metodo_pago": "efectivo",
+        "monto_pagado": "90.00",
+        "observaciones": null,
+        "periodo": "2026-11-02 a 2026-11-08",
+      },
+    },
+    "prisma": "historial_pago_operario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_pago": "pagado",
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pago registrado para la planilla PLA00000009.",
+      "enTransaccion": true,
+      "entidad_afectada": "historial_pago_operario",
+      "id_registro_afectado": "HPO00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": {
+      "data": {
+        "id_registro_resultado": "HPO00000001",
+      },
+      "where": {
+        "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/staff",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payrolls",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/staff/payment-history",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > paga el neto: historial, planilla pagada y bitacora > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+    "id_historial_pago": "HPO00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > sin permiso: el maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > sin permiso: el maestro de taller > resultado 1`] = `
+{
+  "error": "No tienes permisos para registrar pagos de planilla.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > sin planilla, fecha ni monto > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > sin planilla, fecha ni monto > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "fecha_pago": [
+      "La fecha de pago es obligatoria.",
+    ],
+    "id_planilla": [
+      "Debe seleccionar una planilla pendiente.",
+    ],
+    "monto_pagado": [
+      "El monto pagado es obligatorio.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "",
+    "id_planilla": "",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > tres decimales sobre 90.00 > resultado 1`] = `
+{
+  "error": "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.009",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.10 > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > un centimo de mas sobre un neto de 30.10 > resultado 1`] = `
+{
+  "error": "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "30.11",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > un centimo de menos sobre 90.00 > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b3c2d",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "pagar_planilla",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_planilla FROM aceros.planilla_pago WHERE id_planilla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PLA00000009",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "where": {
+        "id_planilla": "PLA00000009",
+      },
+    },
+    "prisma": "planilla_pago.findUnique",
+  },
+  {
+    "args": "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > un centimo de menos sobre 90.00 > resultado 1`] = `
+{
+  "error": "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+  "fieldErrors": {
+    "monto_pagado": [
+      "Para esta versión MVP, el monto pagado debe coincidir con el monto neto de la planilla.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-11-09",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "89.99",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > una fecha que no es fecha > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > una fecha que no es fecha > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "fecha_pago": [
+      "La fecha de pago no es válida.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "abc",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;
+
+exports[`registerOperatorPaymentAction > una fecha que no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`registerOperatorPaymentAction > una fecha que no existe > resultado 1`] = `
+{
+  "error": "Revisa los datos del pago.",
+  "fieldErrors": {
+    "fecha_pago": [
+      "La fecha de pago no es válida.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "fecha_pago": "2026-02-30",
+    "id_planilla": "PLA00000009",
+    "metodo_pago": "efectivo",
+    "monto_pagado": "90.00",
+    "observaciones": "",
+  },
+}
+`;

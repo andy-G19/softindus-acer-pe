@@ -9,9 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
   TableBody,
@@ -20,14 +17,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
+import { staffNotifications } from "@/modules/staff/notifications";
 import { registerOperatorPaymentAction } from "@/modules/staff/payment-history/actions";
+import { OperatorPaymentForm } from "@/modules/staff/payment-history/operator-payment-form";
 import { getPendingPayrolls } from "@/modules/staff/payment-history/queries";
+
+type NewOperatorPaymentPageProps = {
+  searchParams?: Promise<{ returnTo?: string | string[] }>;
+};
 
 function getPaymentModeLabel(mode: string) {
   const labels: Record<string, string> = {
@@ -39,8 +41,13 @@ function getPaymentModeLabel(mode: string) {
   return labels[mode] ?? mode;
 }
 
-export default async function NewOperatorPaymentPage() {
+export default async function NewOperatorPaymentPage({ searchParams }: NewOperatorPaymentPageProps) {
   await requireRole([APP_ROLES.ADMIN]);
+
+  const params = searchParams ? await searchParams : {};
+  // C7 de la 11.5 (D59): al guardar o cancelar vuelve a la pagina de la que vino; sin ella, al
+  // historial de pagos, como antes.
+  const backHref = getSafeReturnTo(params.returnTo, navigationHrefs.paymentHistory);
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -51,7 +58,7 @@ export default async function NewOperatorPaymentPage() {
       <PageHeader
         title="Registrar pago de planilla"
         description="Selecciona una planilla pendiente y registra el pago realizado al operario. El sistema guardará el historial y marcará la planilla como pagada."
-        backHref={navigationHrefs.paymentHistory}
+        backHref={backHref}
         backLabel="Volver al historial"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Personal", href: navigationHrefs.staff },
@@ -88,102 +95,16 @@ export default async function NewOperatorPaymentPage() {
                 }
               />
             ) : (
-              <form
+              <OperatorPaymentForm
                 action={registerOperatorPaymentAction}
-                className="space-y-4"
-              >
-                <div className="space-y-2">
-                  <Label htmlFor="id_planilla">Planilla pendiente</Label>
-                  <NativeSelect
-                    id="id_planilla"
-                    name="id_planilla"
-                    required
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      Seleccione una planilla
-                    </option>
-
-                    {pendingPayrolls.map((payroll) => (
-                      <option
-                        key={payroll.id_planilla}
-                        value={payroll.id_planilla}
-                      >
-                        {payroll.id_planilla} ·{" "}
-                        {payroll.operario.apellidos},{" "}
-                        {payroll.operario.nombres} · Neto:{" "}
-                        {formatMoney(payroll.monto_neto)}
-                      </option>
-                    ))}
-                  </NativeSelect>
-
-                  <p className="text-xs text-muted-foreground">
-                    Para esta versión, el monto pagado debe ser igual al monto
-                    neto de la planilla seleccionada.
-                  </p>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="fecha_pago">Fecha de pago</Label>
-                    <Input
-                      id="fecha_pago"
-                      name="fecha_pago"
-                      type="date"
-                      required
-                      defaultValue={today}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="monto_pagado">Monto pagado</Label>
-                    <Input
-                      id="monto_pagado"
-                      name="monto_pagado"
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      required
-                      placeholder="Ejemplo: 160.00"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="metodo_pago">Método de pago</Label>
-                    <NativeSelect
-                      id="metodo_pago"
-                      name="metodo_pago"
-                      required
-                      defaultValue="efectivo"
-                    >
-                      <option value="efectivo">Efectivo</option>
-                      <option value="transferencia">Transferencia</option>
-                      <option value="yape">Yape</option>
-                      <option value="plin">Plin</option>
-                      <option value="otro">Otro</option>
-                    </NativeSelect>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="observaciones">Observaciones</Label>
-                  <Textarea
-                    id="observaciones"
-                    name="observaciones"
-                    rows={4}
-                    placeholder="Ejemplo: Pago entregado en efectivo al finalizar la semana."
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2 sm:flex-row">
-                  <Button type="submit">Registrar pago</Button>
-                  <Button variant="outline" asChild>
-                    <Link href="/dashboard/staff/payment-history">
-                      Ver historial
-                    </Link>
-                  </Button>
-                </div>
-              </form>
+                payrolls={pendingPayrolls.map((payroll) => ({
+                  value: payroll.id_planilla,
+                  label: `${payroll.id_planilla} · ${payroll.operario.apellidos}, ${payroll.operario.nombres} · Neto: ${formatMoney(payroll.monto_neto)}`,
+                }))}
+                defaultDate={today}
+                successNotification={staffNotifications["operator-payment-registered"]}
+                returnTo={backHref}
+              />
             )}
           </CardContent>
         </Card>

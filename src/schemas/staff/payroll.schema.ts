@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+import { toDateInputValue } from "@/lib/date-range";
+
+// C3 de la 11.5 (D58): una fecha debe existir, con la regla de la asistencia (hallazgo 68 de la
+// 10.8a): new Date convierte el 30 de febrero en el 2 de marzo sin avisar y un texto que no es
+// fecha llegaba a Prisma como fecha invalida. Un POST hecho a mano puede omitir el campo
+// (formData.get devuelve null): el mensaje sigue en espanol.
+const isRealDate = (value: string) => toDateInputValue(value) === value;
+
 export const payrollSchema = z
   .object({
     id_operario: z
@@ -8,15 +16,17 @@ export const payrollSchema = z
       .min(1, "Debe seleccionar un operario."),
 
     periodo_inicio: z
-      .string()
+      .string({ error: "La fecha de inicio del periodo es obligatoria." })
       .trim()
       .min(1, "La fecha de inicio del periodo es obligatoria.")
+      .refine((value) => !value || isRealDate(value), "La fecha de inicio del periodo no es válida.")
       .transform((value) => new Date(`${value}T00:00:00`)),
 
     periodo_fin: z
-      .string()
+      .string({ error: "La fecha de fin del periodo es obligatoria." })
       .trim()
       .min(1, "La fecha de fin del periodo es obligatoria.")
+      .refine((value) => !value || isRealDate(value), "La fecha de fin del periodo no es válida.")
       .transform((value) => new Date(`${value}T00:00:00`)),
 
     descuentos: z

@@ -174,6 +174,17 @@ export async function lockScrapRow(tx: RowLockClient, idChatarra: string) {
   `);
 }
 
+// Planillas (C4 de la 11.5, D54): anular y pagar bloquean la planilla antes de leerla. Generar
+// bloquea el operario (lockOperatorRow); ninguna operacion toma las dos filas.
+export async function lockPayrollRow(tx: RowLockClient, idPlanilla: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_planilla
+    FROM aceros.planilla_pago
+    WHERE id_planilla = ${idPlanilla}
+    FOR NO KEY UPDATE
+  `);
+}
+
 export async function lockPurchaseRow(tx: RowLockClient, idCompra: string) {
   await tx.$queryRaw(Prisma.sql`
     SELECT id_compra
