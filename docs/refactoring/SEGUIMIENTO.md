@@ -9027,7 +9027,7 @@ Datos leídos de la API de GitHub el 2026-11-14 (UTC) y comparados con git:
 
 ### Sub-entrega 11.5 — Planillas y su pago
 
-Fecha: 2026-11-14 (Lima). Estado: preparada, sin publicar. Plan en `tmp/e11-diff/plan-11-5.md`,
+Fecha: 2026-11-14 (Lima). Estado: verificada en staging. Plan en `tmp/e11-diff/plan-11-5.md`,
 con las decisiones D53 a D61 aprobadas: montos de planilla en centésimos y pago exactamente igual
 al neto, sin tocar la tarifa (D53); generar bloquea el operario y anular y pagar bloquean la
 planilla con `lockPayrollRow` (D54); un periodo que se cruza con otra planilla no anulada del
@@ -9048,7 +9048,8 @@ listados paginados (D61).
 | 8f121ba | feat | Pagar con lo mismo y clave `pago_planilla:nuevo`; la planilla que ya no es una opción deja el campo sin elegir (D59). |
 | 80647de | feat | Anular con `ConfirmActionButton` y `RowStatusState`, nombrando la planilla, el operario, el periodo y la consecuencia; sale `ConfirmDeleteButton` de planillas (D60). |
 | 1576958 | feat | Planillas e historial de pagos paginados de 20 en 20, con los filtros en los enlaces (D61). |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| c14863b | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -9145,6 +9146,41 @@ Hallazgos:
     «En la siguiente subfase registraremos el pago real.», cuando el pago ya existe. Destino: fix
     propio de textos.
 
+#### Publicación, CI y verificación en staging
+
+1. Push de los 11 commits (hasta `c14863b`): CI #185 en verde; Vercel desplegó staging (01:47:35
+   UTC del 2026-11-16). Sin migraciones.
+2. Con ADMIN, sin escribir (origen comprobado en llamada aparte): generar planilla sin `<main>`
+   anidado, con clave y «Cancelar» al listado; el listado de planillas («Mostrando 1-1 de 1») y el
+   historial de pagos («Mostrando 0-0 de 0») paginados. Datos de partida: 2 operarios activos
+   (Godoy Ramirez Anderson, S/ 80.00; Obregon Barzola Nelson, S/ 85.00), sus asistencias (Godoy
+   asistió el 06/07 y faltó el 07/07; Obregon asistió el 01/10), la planilla PLA00000001 de Godoy
+   anulada (01/07 al 07/07) y ningún pago.
+3. Envíos autorizados por el responsable:
+
+   | Paso | Resultado |
+   |---|---|
+   | 1. Obregon, 28/09 al 04/10, descuento 10.01 | PLA00000002: 85.00 − 10.01 = 74.99, pendiente; un aviso, vuelta al listado, clave renovada |
+   | 2. Obregon, 01/10 al 01/10 | «…ya tiene la planilla PLA00000002, del 28/09/2026 al 04/10/2026, que se cruza con el periodo seleccionado.» en «Inicio del periodo», enfocado; lo escrito conservado, la misma clave, sin escribir |
+   | 3. Godoy, 01/07 al 07/07 (el periodo exacto de la anulada) | «…ya tiene una planilla generada para el periodo seleccionado.» en su campo (D57); la misma clave |
+   | 4. El mismo formulario corregido al 06/07–07/07, con la misma clave | PLA00000003: 80.00 (una asistencia válida y una falta), pendiente: solo se cruza con la anulada |
+   | 5. Pagar PLA00000002 con 75.00 y después con 74.99, con la misma clave | 75.00: «…debe coincidir con el monto neto…» en «Monto pagado», sin escribir; 74.99: un solo pago HPO00000001, un aviso, vuelta al historial; PLA00000002 pagada y sin «Anular» |
+   | 6. Anular PLA00000003 desde su fila | La confirmación dice «¿Anular la planilla PLA00000003?» y «La planilla de Godoy Ramirez, Anderson del 06/07/2026 al 07/07/2026 queda anulada y ya no se puede pagar. Sus días pueden entrar en otra planilla, pero no con este mismo periodo. No se puede deshacer.», con el botón destructivo; anulada, un aviso, la fila sin botón y el foco en ella |
+
+4. El paso 1 se autorizó con un descuento de 10.005, pero el navegador no lo envía: el campo tiene
+   `step="0.01"` y responde «Introduce un valor válido…». No se escribió nada y el responsable
+   autorizó 10.01, que da los mismos montos guardados. El redondeo del tercer decimal solo llega
+   con un POST hecho a mano y lo prueban la acción y Postgres (C2).
+5. El pago quedó con fecha 16/11/2026, la que propone el formulario (el día UTC), cuando en Lima
+   era 15/11 (hallazgo 3 de la 10.3c, abierto).
+6. Tropiezos de método sin efecto en los datos: los clics por referencia del navegador caían en
+   otro elemento (coordenadas de la página de 707×741 aplicadas sobre las de la captura de
+   800×839) y en un momento el panel dejó de recibir eventos porque la ventana quedó tapada; se
+   escribió con `form_input`, se envió con Enter y, con la ventana al frente, con clics sobre la
+   captura. Antes de cada envío se comprobó el contenido del formulario.
+7. Datos de prueba que quedan en staging: PLA00000002 de Obregon pagada con HPO00000001 (S/ 74.99)
+   y PLA00000003 de Godoy anulada. La aplicación no borra planillas ni pagos.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -9170,7 +9206,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 preparada (C0 a C10), sin publicar |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 verificada en staging (CI #185) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
