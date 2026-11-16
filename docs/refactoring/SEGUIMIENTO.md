@@ -9025,6 +9025,126 @@ Datos leídos de la API de GitHub el 2026-11-14 (UTC) y comparados con git:
 - Vercel desplegó `4991a0d` en producción (`success` a las 04:05:39 UTC). La sub-entrega no trae
   migraciones.
 
+### Sub-entrega 11.5 — Planillas y su pago
+
+Fecha: 2026-11-14 (Lima). Estado: preparada, sin publicar. Plan en `tmp/e11-diff/plan-11-5.md`,
+con las decisiones D53 a D61 aprobadas: montos de planilla en centésimos y pago exactamente igual
+al neto, sin tocar la tarifa (D53); generar bloquea el operario y anular y pagar bloquean la
+planilla con `lockPayrollRow` (D54); un periodo que se cruza con otra planilla no anulada del
+operario se rechaza (D55, regla de negocio nueva); un descuento que deja el neto en 0.00 se rechaza
+(D56); sin migración para el periodo de una planilla anulada (D57); fechas validadas en el esquema
+(D58); generar y pagar con resultado y clave (D59); anular con `ConfirmActionButton` (D60), y
+listados paginados (D61).
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| afb6d58 | docs | Integración de la 11.4b en `main` (PR #47). |
+| 2561e51 | test | Caracterización de generar (16 casos), anular (7) y pagar (16); hasta aquí no tenían pruebas. |
+| f5bc075 | fix | `payroll-amounts.ts`: bruto, descuento y neto en centésimos, el neto sobre el descuento ya redondeado, y el pago igual al neto (D53); 5 casos rojos antes. |
+| 2086ea6 | fix | Fechas de la planilla y del pago validadas con la regla de la asistencia, y mensajes en español si faltan (D58); 12 casos rojos antes. |
+| 1831848 | fix | Generar bloquea el operario y anular y pagar la planilla (`lockPayrollRow`), y deciden dentro de la transacción (D54); 12 casos rojos antes; 5 pruebas en Postgres. |
+| f624aec | fix | Un periodo que se cruza con otra planilla no anulada y un neto de 0.00 se rechazan (D55, D56); 9 casos rojos antes en tres niveles: la función, la acción y Postgres. |
+| 04e8fd9 | feat | Generar con `FormActionState`, clave `planilla:nueva` (primera sentencia), errores en su campo, `returnTo` y guardia de descarte; sin `console.log` (D59). El asunto del commit terminó con un «+» de más. |
+| 8f121ba | feat | Pagar con lo mismo y clave `pago_planilla:nuevo`; la planilla que ya no es una opción deja el campo sin elegir (D59). |
+| 80647de | feat | Anular con `ConfirmActionButton` y `RowStatusState`, nombrando la planilla, el operario, el periodo y la consecuencia; sale `ConfirmDeleteButton` de planillas (D60). |
+| 1576958 | feat | Planillas e historial de pagos paginados de 20 en 20, con los filtros en los enlaces (D61). |
+| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Diseño:
+
+- `calculatePayrollAmounts` cuenta en centésimos: el bruto son las asistencias válidas por la
+  tarifa, el descuento se redondea como su columna y el neto es el bruto menos ese descuento
+  redondeado; los tres textos se mandan tal cual. `checkPayrollPayment` acepta el pago solo si,
+  redondeado, es igual al neto. La tarifa y su unidad no cambian (hallazgo 57 de la 10.8a).
+- Ninguna operación toma las dos filas: generar bloquea el operario (dos generaciones del mismo
+  operario van en fila y la segunda ve la planilla de la primera), y anular y pagar bloquean la
+  planilla (un pago y una anulación simultáneos no se cruzan).
+- El cruce de periodos es `periodo_inicio <= fin` y `periodo_fin >= inicio` sobre las planillas no
+  anuladas del operario: dos intervalos se cruzan si ninguno termina antes de que empiece el otro,
+  y compartir un solo día también es cruzarse.
+- Generar y pagar reclaman su clave como primera sentencia y lanzan un rechazo con su campo para
+  liberarla; anular no tiene clave y devuelve el rechazo desde la transacción antes de escribir.
+- La confirmación de anular dice la consecuencia que el código aplica: ya no se puede pagar, sus
+  días pueden entrar en otra planilla (el cruce no cuenta las anuladas), pero no con el mismo
+  periodo exacto (la comprobación del periodo repetido y el índice único siguen ocupándolo, D57).
+- El formulario de pago aplica la lección del hallazgo 9 de la 11.4b: una planilla enviada que ya
+  no está entre las opciones deja el campo vacío, en lugar de que el navegador elija otra (aquí,
+  pagarle a otro operario).
+
+Evidencia:
+
+1. Rojo antes de cada `fix`: C2 con 5 casos, C3 con 12, C4 con 12 y C5 con 9. En C6 a C9 (`feat`)
+   las pruebas se escribieron con el código y la caracterización de C1 mostró cada cambio de
+   contrato.
+2. Mutaciones: C1 18 de 18, C2 10 de 10, C3 6 de 6 y 2 equivalentes (quitar `!value ||` de la
+   guarda: `isRealDate("")` ya es verdadero, comprobado con `tsx`), C4 8 de 8, C5 8 de 8, C6 15 de
+   15, C7 13 de 13, C8 11 de 11 y C9 9 de 9; en total, 98 de 98 y 2 equivalentes. Cuatro
+   mutaciones vivas se resolvieron antes de cerrar su commit: tres con mejores datos de prueba (un
+   operario de prueba que ya era semanal en C1, una fila anulada sin pagos en C8 y conteos iguales
+   que no distinguían el total filtrado en C9) y una reemplazada por estar mal diseñada (en C2
+   hacía el mismo cálculo que el código).
+3. Snapshots revisados uno por uno: C2 cambia el neto del descuento de 10.005 (90.00 → 89.99) y
+   rechaza los pagos de 30.11 y 90.009; C3, los cuatro casos de fechas, que antes escribían; C4 solo
+   el orden (transacción, candado, lecturas, `rollback`), con cero resultados y valores cambiados;
+   C5 una lectura más, la del cruce; C6 a C8 el contrato de las respuestas y los formularios; C9
+   `take: 50` → `skip`/`take: 20` y el pie de paginación.
+4. Pruebas contra Postgres (8 en `payroll.integration.test.ts`): la planilla cuadra en `numeric`
+   (100.00 − 10.01 = 89.99); un periodo repetido no escribe ni gasta correlativo; pagar dos veces
+   deja un pago; una pagada no se anula; una anulada no se paga ni se vuelve a anular; un pago
+   distinto del neto no escribe; un periodo que se cruza con una pagada o comparte un día con una
+   pendiente se rechaza, y uno que solo se cruza con una anulada se genera.
+5. Una prueba existente cambió por diseño: en C8, anular una planilla pagada ya no termina en
+   `rollback` sino en `commit` sin escrituras, porque anular no reclama clave y devuelve el
+   rechazo; la prueba exige ahora que no haya `update`, bitácora ni revalidación.
+6. Tropiezos de método sin efecto en el código: los heredocs de bash no aguantaron comillas
+   anidadas (se escribieron los parches con la herramienta de escritura); `Errno 22` de Windows al
+   reescribir un archivo (comprobado intacto y repetido); dos mutaciones con `\r\n` que el
+   ejecutor normaliza (su aserción falló antes de escribir); en C4 la sangría del cuerpo de
+   generar quedó un nivel corta y se corrigió antes de las pruebas.
+7. CSS compilado igual byte a byte en cada commit (112.316 bytes).
+8. `npm run check` terminó con código 0 antes de cada commit, hasta 5.299 pruebas en 317
+   archivos; las de integración pasan de 60 a 68 en 13 archivos. Lint mantiene el aviso anterior
+   (`_line` en `orders/actions.ts`).
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 306 / 5.161 | 317 / 5.299 |
+| Pruebas contra Postgres real (archivos / pruebas) | 12 / 60 | 13 / 68 |
+| Acciones de planillas caracterizadas | 0 / 3 | 3 / 3 |
+| Acciones de planillas que lanzan un error de validación a la página de error | 3 | 0 |
+| Operaciones de planillas que deciden fuera de la transacción o sin bloquear su fila | 3 | 0 |
+| Montos de planillas calculados o comparados con `number` | 2 acciones | 0 |
+| Acciones con clave de operación | 9 | 11 |
+| Páginas con `ConfirmDeleteButton` | 2 | 1 (órdenes de trabajo) |
+| Listados de Personal cortados en 50 filas sin paginar | 2 | 0 |
+
+Hallazgos:
+
+1. Bruto, descuento y neto se redondeaban por separado: con 10.005 de descuento la planilla no
+   cuadraba. Corregido en `f5bc075`.
+2. El pago aceptaba montos distintos del neto según el error de coma flotante. Corregido en
+   `f5bc075`.
+3. Dos envíos registraban dos pagos de la misma planilla. Corregido en `1831848` (candado) y
+   `8f121ba` (clave).
+4. Pagar y anular a la vez dejaban una planilla anulada con un pago. Corregido en `1831848`.
+5. Periodos que se cruzan pagaban dos veces las asistencias comunes. Corregido en `f624aec` (D55).
+6. Un neto de 0.00 no se podía pagar. Corregido en `f624aec` (D56).
+7. Un texto que no es fecha llevaba a la página de error y una fecha que no existe se corría.
+   Corregido en `2086ea6`.
+8. Sigue abierto: una planilla anulada bloquea su mismo periodo exacto (la comprobación y el
+   índice único `uq_planilla_operario_periodo` la incluyen). Corregirlo sería un índice parcial,
+   una migración. Destino: decisión del responsable (D57).
+9. Generar escribía en el log del servidor el nombre del operario y sus montos. Corregido en
+   `04e8fd9`.
+10. La caracterización del listado nunca mostraba el botón de anular: las filas generadas no
+    estaban pendientes y traían pagos. Corregido en `80647de` con dos filas a propósito.
+11. Menor: la tarjeta «Planillas generadas» dice «Total histórico registrado.» pero cuenta con los
+    filtros; «Pagadas» dice «Se marcarán en la siguiente subfase.» y las reglas de generar dicen
+    «En la siguiente subfase registraremos el pago real.», cuando el pago ya existe. Destino: fix
+    propio de textos.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -9050,7 +9170,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 en preparación |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 preparada (C0 a C10), sin publicar |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 

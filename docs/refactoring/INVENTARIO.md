@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 972 |
+| Archivos fuente analizados | 988 |
 | Páginas | 179 |
 | Páginas en ranuras paralelas (@ranura) | 53 |
 | Páginas que interceptan una ruta | 33 |
-| Declaraciones JSX de formulario | 22 |
+| Declaraciones JSX de formulario | 19 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 111 |
 
@@ -194,10 +194,10 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/staff/operators/new` | — | `src/app/(dashboard)/dashboard/staff/operators/new/page.tsx` | 0 | OperatorForm |
 | `/dashboard/staff/operators` | — | `src/app/(dashboard)/dashboard/staff/operators/page.tsx` | 0 | — |
 | `/dashboard/staff` | — | `src/app/(dashboard)/dashboard/staff/page.tsx` | 0 | — |
-| `/dashboard/staff/payment-history/new` | — | `src/app/(dashboard)/dashboard/staff/payment-history/new/page.tsx` | 1 | — |
+| `/dashboard/staff/payment-history/new` | — | `src/app/(dashboard)/dashboard/staff/payment-history/new/page.tsx` | 0 | OperatorPaymentForm |
 | `/dashboard/staff/payment-history` | — | `src/app/(dashboard)/dashboard/staff/payment-history/page.tsx` | 0 | — |
-| `/dashboard/staff/payrolls/new` | — | `src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx` | 1 | — |
-| `/dashboard/staff/payrolls` | — | `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 1 | — |
+| `/dashboard/staff/payrolls/new` | — | `src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx` | 0 | PayrollForm |
+| `/dashboard/staff/payrolls` | — | `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 0 | — |
 | `/dashboard/staff/tasks/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/staff/tasks/@panel/(.)new/page.tsx` | 0 | TaskForm |
 | `/dashboard/staff/tasks` | `@panel` | `src/app/(dashboard)/dashboard/staff/tasks/@panel/page.tsx` | 0 | — |
 | `/dashboard/staff/tasks/new` | — | `src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx` | 0 | TaskForm |
@@ -234,9 +234,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 231 | `{updateWorkOrderProgressAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 375 | `{annulWorkOrderAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 394 | `{finishWorkOrderAction}` |
-| `src/app/(dashboard)/dashboard/staff/payment-history/new/page.tsx` | 91 | `{registerOperatorPaymentAction}` |
-| `src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx` | 98 | `{generatePayrollAction}` |
-| `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 260 | `{cancelPayrollAction}` |
 | `src/components/forms/action-form.tsx` | 48 | `{action}` |
 | `src/components/forms/filter-bar.tsx` | 39 | `{action}` |
 | `src/components/table/row-actions.tsx` | 44 | `{action}` |
