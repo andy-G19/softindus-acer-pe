@@ -9027,7 +9027,8 @@ Datos leídos de la API de GitHub el 2026-11-14 (UTC) y comparados con git:
 
 ### Sub-entrega 11.5 — Planillas y su pago
 
-Fecha: 2026-11-14 (Lima). Estado: verificada en staging. Plan en `tmp/e11-diff/plan-11-5.md`,
+Fecha: 2026-11-14 (Lima). Estado: integrada en `main` (PR #48, merge `4721e02`). Plan en
+`tmp/e11-diff/plan-11-5.md`,
 con las decisiones D53 a D61 aprobadas: montos de planilla en centésimos y pago exactamente igual
 al neto, sin tocar la tarifa (D53); generar bloquea el operario y anular y pagar bloquean la
 planilla con `lockPayrollRow` (D54); un periodo que se cruza con otra planilla no anulada del
@@ -9181,6 +9182,20 @@ Hallazgos:
 7. Datos de prueba que quedan en staging: PLA00000002 de Obregon pagada con HPO00000001 (S/ 74.99)
    y PLA00000003 de Godoy anulada. La aplicación no borra planillas ni pagos.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-16 (UTC) y comparados con git:
+
+- La verificación `6438d4a` se publicó en `staging`: CI #186 en verde (5m 22s).
+- PR #48, abierto a las 12:33:38 UTC y fusionado con merge commit a las 13:29:11 UTC del
+  2026-11-16: 12 commits, de `afb6d58` a `6438d4a`, y 37 archivos (+7.587 −632). Su CI, el #187,
+  sobre `6438d4a`, terminó en verde (5m 52s).
+- El merge commit `4721e02` tiene como padres `4991a0d` (`main`) y `6438d4a` (`staging`), y su
+  árbol es el de `6438d4a` (`afd1cd07`): `main` y `staging` tienen el mismo contenido. CI #188 en
+  verde (5m 47s).
+- Vercel desplegó `4721e02` en producción (`success` a las 13:31:01 UTC). La sub-entrega no trae
+  migraciones.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -9206,7 +9221,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 verificada en staging (CI #185) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a en preparación |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
