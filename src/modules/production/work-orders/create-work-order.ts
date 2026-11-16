@@ -3,6 +3,7 @@ import "server-only";
 import { registerAuditLog } from "@/lib/audit";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { claimOperation, completeOperation } from "@/lib/idempotency";
 import { calculateRequiredQuantityRounded } from "@/lib/recipe-quantities";
 import { lockCampaignRow, lockOrderRow, lockRecipeRow, lockRouteRow } from "@/lib/row-locks";
 import type { WorkOrderInput } from "@/schemas/production/work-order.schema";
@@ -21,6 +22,12 @@ import type { WorkOrderInput } from "@/schemas/production/work-order.schema";
  * campania, la ruta y la receta de la version. Ninguna otra operacion toma dos de ellos al reves.
  * Antes se leia todo fuera y sin bloquear, y no se miraba el estado del pedido: con el formulario
  * abierto mientras se cancelaba el pedido, la orden se creaba y lo pasaba a «en_produccion».
+ *
+ * C5 de la 11.6a (D66): la clave de operacion se reclama como primera sentencia de la transaccion,
+ * antes de los candados y los correlativos, y se completa antes del commit. Un reenvio con la misma
+ * clave devuelve la orden ya creada sin leer ni escribir nada. Cada rechazo lanza
+ * WorkOrderRejectedError con el campo que lo causa: la transaccion se revierte, libera la clave, y
+ * la accion lo convierte en el error de ese campo.
  */
 export type CreateWorkOrderParams = {
   data: WorkOrderInput;
@@ -29,6 +36,26 @@ export type CreateWorkOrderParams = {
 
 /** Los pedidos que admiten una orden: los mismos que ofrece el formulario. */
 const PRODUCIBLE_ORDER_STATES = ["registrado", "aprobado"];
+
+const CREATE_OPERATION = "crear_orden_trabajo";
+
+/** Los campos del formulario a los que apunta un rechazo. */
+export type WorkOrderRejectedField =
+  | "id_detalle_pedido"
+  | "id_campania"
+  | "id_producto"
+  | "id_ruta"
+  | "id_version_receta";
+
+/** Un rechazo dentro de la transaccion: la deshace, y con ella el reclamo de la clave. */
+export class WorkOrderRejectedError extends Error {
+  constructor(
+    readonly field: WorkOrderRejectedField,
+    message: string,
+  ) {
+    super(message);
+  }
+}
 
 function parseDate(value: string) {
   return new Date(`${value}T00:00:00`);
@@ -48,6 +75,20 @@ export async function createWorkOrder({
   idUsuario,
 }: CreateWorkOrderParams) {
   return prisma.$transaction(async (tx) => {
+    const claim = await claimOperation(tx, {
+      clave: data.clave_operacion,
+      tipo: CREATE_OPERATION,
+      userId: idUsuario,
+    });
+
+    if (claim.estado === "repetida") {
+      if (!claim.idRegistro) {
+        throw new Error("La operacion repetida no tiene una orden de trabajo registrada.");
+      }
+
+      return claim.idRegistro;
+    }
+
     let effectiveProductId = data.id_producto ?? "";
     let idCliente: string | null = null;
     let idDetallePedido: string | null = null;
@@ -55,7 +96,7 @@ export async function createWorkOrder({
 
     if (data.tipo_produccion === "pedido") {
       if (!data.id_detalle_pedido) {
-        throw new Error("Para una orden por pedido debe seleccionar un detalle de pedido.");
+        throw new WorkOrderRejectedError("id_detalle_pedido", "Para una orden por pedido debe seleccionar un detalle de pedido.");
       }
 
       // El detalle se lee una sola vez (H5): de el solo se usan su pedido y su producto, que no
@@ -73,11 +114,11 @@ export async function createWorkOrder({
       });
 
       if (!orderDetail) {
-        throw new Error("El detalle de pedido seleccionado no existe.");
+        throw new WorkOrderRejectedError("id_detalle_pedido", "El detalle de pedido seleccionado no existe.");
       }
 
       if (data.id_producto && orderDetail.id_producto !== data.id_producto) {
-        throw new Error("El detalle de pedido pertenece a otro producto.");
+        throw new WorkOrderRejectedError("id_detalle_pedido", "El detalle de pedido pertenece a otro producto.");
       }
 
       // El estado del pedido si cambia (cancelar, editar): se lee con el pedido bloqueado.
@@ -95,11 +136,12 @@ export async function createWorkOrder({
       });
 
       if (!order) {
-        throw new Error("El detalle de pedido seleccionado no existe.");
+        throw new WorkOrderRejectedError("id_detalle_pedido", "El detalle de pedido seleccionado no existe.");
       }
 
       if (!PRODUCIBLE_ORDER_STATES.includes(order.estado)) {
-        throw new Error(
+        throw new WorkOrderRejectedError(
+          "id_detalle_pedido",
           `El pedido ${order.id_pedido} está ${order.estado}: solo se crean órdenes para pedidos registrados o aprobados.`,
         );
       }
@@ -115,7 +157,7 @@ export async function createWorkOrder({
         data.tipo_produccion === "reposicion_stock") &&
       !data.id_producto
     ) {
-      throw new Error("Seleccione un producto.");
+      throw new WorkOrderRejectedError("id_producto", "Seleccione un producto.");
     }
 
     // Los demas candados se toman antes de las lecturas que deciden, que siguen en su orden de
@@ -153,7 +195,7 @@ export async function createWorkOrder({
     });
 
     if (!product) {
-      throw new Error("El producto seleccionado no existe o está inactivo.");
+      throw new WorkOrderRejectedError("id_producto", "El producto seleccionado no existe o está inactivo.");
     }
 
     const route = await tx.ruta_fabricacion.findFirst({
@@ -171,17 +213,19 @@ export async function createWorkOrder({
     });
 
     if (!route) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        "id_ruta",
         "La ruta seleccionada no existe, está inactiva o no pertenece al producto.",
       );
     }
 
     if (route.id_producto !== effectiveProductId) {
-      throw new Error("La ruta seleccionada pertenece a otro producto.");
+      throw new WorkOrderRejectedError("id_ruta", "La ruta seleccionada pertenece a otro producto.");
     }
 
     if (route.etapa_ruta.length === 0) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        "id_ruta",
         "La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden.",
       );
     }
@@ -211,7 +255,8 @@ export async function createWorkOrder({
     });
 
     if (!version) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        "id_version_receta",
         "La versión de receta seleccionada no existe, no está vigente o no pertenece al producto.",
       );
     }
@@ -220,15 +265,16 @@ export async function createWorkOrder({
       version.estado !== "vigente" ||
       version.receta_tecnica.estado !== "activa"
     ) {
-      throw new Error("La receta seleccionada no esta vigente o activa.");
+      throw new WorkOrderRejectedError("id_version_receta", "La receta seleccionada no esta vigente o activa.");
     }
 
     if (version.receta_tecnica.id_producto !== effectiveProductId) {
-      throw new Error("La receta seleccionada pertenece a otro producto.");
+      throw new WorkOrderRejectedError("id_version_receta", "La receta seleccionada pertenece a otro producto.");
     }
 
     if (version.detalle_receta.length === 0) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        "id_version_receta",
         "La versión de receta no tiene materiales registrados. Agregue materiales antes de crear la orden.",
       );
     }
@@ -237,7 +283,7 @@ export async function createWorkOrder({
 
     if (data.tipo_produccion === "campania") {
       if (!data.id_campania) {
-        throw new Error("Para una orden por campania debe seleccionar una campania.");
+        throw new WorkOrderRejectedError("id_campania", "Para una orden por campania debe seleccionar una campania.");
       }
 
       const campaign = await tx.campania_produccion.findFirst({
@@ -257,7 +303,7 @@ export async function createWorkOrder({
       });
 
       if (!campaign) {
-        throw new Error("La campaña seleccionada no existe o no está activa.");
+        throw new WorkOrderRejectedError("id_campania", "La campaña seleccionada no existe o no está activa.");
       }
 
       idCampania = campaign.id_campania;
@@ -268,7 +314,7 @@ export async function createWorkOrder({
           return detail.id_producto === effectiveProductId;
         })
       ) {
-        throw new Error("El producto seleccionado no pertenece a la campania.");
+        throw new WorkOrderRejectedError("id_producto", "El producto seleccionado no pertenece a la campania.");
       }
     }
 
@@ -342,6 +388,8 @@ export async function createWorkOrder({
       detalle: `Orden de trabajo creada para el producto ${effectiveProductId}. Requerimiento congelado: ${version.detalle_receta.length} material(es).`,
       tx,
     });
+
+    await completeOperation(tx, { clave: data.clave_operacion, idRegistro: idOrdenTrabajo });
 
     return idOrdenTrabajo;
   });

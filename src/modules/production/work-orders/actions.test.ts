@@ -46,6 +46,11 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Crear devuelve un FormActionState (C5 de la 11.6a): su id de operacion fijo, para el snapshot.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -140,9 +145,8 @@ async function runAction(action: Action, actionCase: ActionCase) {
 
   const { calls, result } = await characterizeHandler(async () => {
     try {
-      await action(formOf(actionCase.form));
-
-      return "termino sin redirigir";
+      // Desde C5 de la 11.6a crear devuelve su estado (FormActionState); las demas redirigen.
+      return (await action(formOf(actionCase.form))) ?? "termino sin redirigir";
     } catch (error) {
       return (
         describeNavigationError(error) ??
@@ -212,7 +216,26 @@ function whereOf(args: PrismaArgs) {
 
 // --- Creacion --------------------------------------------------------------
 
+// C5 de la 11.6a (D66): crear recibe el estado anterior del formulario y una clave de operacion.
+const CLAVE = "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c";
+
+const createAction = (formData: FormData) => createWorkOrderAction({ status: "idle" }, formData);
+
+/** La clave ya estaba en la tabla: el INSERT no devuelve filas y se lee la guardada. */
+function storedKey(changes: Row = {}): DataOverrides {
+  return {
+    "operacion_idempotente.createManyAndReturn": [],
+    "operacion_idempotente.findUniqueOrThrow": {
+      tipo_operacion: "crear_orden_trabajo",
+      id_usuario: "USU00000001",
+      id_registro_resultado: "OTR00000009",
+      ...changes,
+    },
+  };
+}
+
 const createForm: FormFields = {
+  clave_operacion: CLAVE,
   tipo_produccion: "reposicion_stock",
   id_detalle_pedido: "",
   id_campania: "",
@@ -473,7 +496,21 @@ function requirementWithOrder(
 // Casos
 // ---------------------------------------------------------------------------
 
-defineActionSuite("createWorkOrderAction", createWorkOrderAction, [
+defineActionSuite("createWorkOrderAction", createAction, [
+  {
+    name: "sin clave de operacion",
+    form: { ...createForm, clave_operacion: "" },
+  },
+  {
+    name: "la misma clave ya registrada: responde con la orden creada sin escribir",
+    form: createForm,
+    data: createData(storedKey()),
+  },
+  {
+    name: "la clave es de otra operacion",
+    form: createForm,
+    data: createData(storedKey({ tipo_operacion: "crear_compra" })),
+  },
   {
     name: "datos invalidos: responde el primer mensaje de Zod sin consultar",
     form: { ...createForm, cantidad: "0" },
@@ -1324,7 +1361,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
 // cliente se reutilizan.
 describe("H5: crear una orden por pedido lee el detalle una sola vez", () => {
   it("lee el detalle una vez y pasa a produccion el pedido de esa lectura", async () => {
-    const { calls, outcome } = await runAction(createWorkOrderAction, {
+    const { calls, outcome } = await runAction(createAction, {
       name: "H5",
       form: orderForm,
       data: createData(),
@@ -1333,7 +1370,10 @@ describe("H5: crear una orden por pedido lee el detalle una sola vez", () => {
     const argsOf = (key: string) =>
       prismaCalls.filter((call) => call.prisma === key).map((call) => call.args as Row);
 
-    expect(outcome).toBe("redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created");
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: "OTR00000001", clave_operacion: CLAVE },
+    });
     expect(argsOf("detalle_pedido.findUnique")).toHaveLength(1);
     expect(argsOf("orden_trabajo.create")).toEqual([
       { data: expect.objectContaining({ id_cliente: CLIENTE, id_detalle_pedido: DETALLE }) },
@@ -1365,7 +1405,7 @@ describe("C2 de la 11.6a: crear una orden decide con su origen bloqueado", () =>
     calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
 
   it("una orden para un pedido cancelado se rechaza sin escribir", async () => {
-    const { calls, outcome } = await runAction(createWorkOrderAction, {
+    const { calls, outcome } = await runAction(createAction, {
       name: "C2",
       form: orderForm,
       data: withRecipeRef({
@@ -1376,15 +1416,16 @@ describe("C2 de la 11.6a: crear una orden decide con su origen bloqueado", () =>
       }),
     });
 
-    expect(outcome).toBe(
-      "error: El pedido PED00000001 está cancelado: solo se crean órdenes para pedidos registrados o aprobados.",
-    );
+    const message =
+      "El pedido PED00000001 está cancelado: solo se crean órdenes para pedidos registrados o aprobados.";
+
+    expect(outcome).toMatchObject({ status: "error", error: message, fieldErrors: { id_detalle_pedido: [message] } });
     expect(indexOf(calls, "orden_trabajo.create")).toBe(-1);
     expect(indexOf(calls, "pedido.update")).toBe(-1);
   });
 
   it("bloquea el pedido antes de leer su estado", async () => {
-    const { calls } = await runAction(createWorkOrderAction, { name: "C2", form: orderForm, data: withRecipeRef() });
+    const { calls } = await runAction(createAction, { name: "C2", form: orderForm, data: withRecipeRef() });
 
     expectRowLockedBefore(calls, {
       table: "pedido",
@@ -1394,7 +1435,7 @@ describe("C2 de la 11.6a: crear una orden decide con su origen bloqueado", () =>
   });
 
   it("bloquea la campania antes de leerla", async () => {
-    const { calls } = await runAction(createWorkOrderAction, { name: "C2", form: campaignForm, data: withRecipeRef() });
+    const { calls } = await runAction(createAction, { name: "C2", form: campaignForm, data: withRecipeRef() });
 
     expectRowLockedBefore(calls, {
       table: "campania_produccion",
@@ -1404,7 +1445,7 @@ describe("C2 de la 11.6a: crear una orden decide con su origen bloqueado", () =>
   });
 
   it("bloquea la ruta antes de leerla", async () => {
-    const { calls } = await runAction(createWorkOrderAction, { name: "C2", form: createForm, data: withRecipeRef() });
+    const { calls } = await runAction(createAction, { name: "C2", form: createForm, data: withRecipeRef() });
 
     expectRowLockedBefore(calls, {
       table: "ruta_fabricacion",
@@ -1414,7 +1455,7 @@ describe("C2 de la 11.6a: crear una orden decide con su origen bloqueado", () =>
   });
 
   it("bloquea la receta de la version antes de leer la version", async () => {
-    const { calls } = await runAction(createWorkOrderAction, { name: "C2", form: createForm, data: withRecipeRef() });
+    const { calls } = await runAction(createAction, { name: "C2", form: createForm, data: withRecipeRef() });
 
     expectRowLockedBefore(calls, {
       table: "receta_tecnica",
@@ -1424,7 +1465,7 @@ describe("C2 de la 11.6a: crear una orden decide con su origen bloqueado", () =>
   });
 
   it("los candados van en el orden pedido, campania, ruta, receta, y el producto se lee dentro", async () => {
-    const { calls } = await runAction(createWorkOrderAction, {
+    const { calls } = await runAction(createAction, {
       name: "C2",
       form: { ...orderForm, tipo_produccion: "pedido" },
       data: withRecipeRef(),
@@ -1436,5 +1477,88 @@ describe("C2 de la 11.6a: crear una orden decide con su origen bloqueado", () =>
 
     expect(locks).toEqual(["pedido", "ruta_fabricacion", "receta_tecnica"]);
     expect(indexOf(calls, "producto.findFirst")).toBeGreaterThan(indexOf(calls, "prisma.$transaction"));
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C5 de la 11.6a (D66): crear con resultado e idempotencia
+// ---------------------------------------------------------------------------
+
+// Crear redirigia al detalle al guardar y lanzaba cualquier rechazo, que se veia en la pagina de
+// error: el formulario se perdia. Y un doble envio creaba dos ordenes. Ahora devuelve un
+// FormActionState: el rechazo queda en el formulario, en el campo que lo causa y con lo enviado, y
+// el exito trae la orden creada para que el formulario vaya a su detalle. La clave se reclama
+// como primera sentencia de la transaccion (antes de los candados) y se completa antes del commit;
+// un rechazo despues del reclamo lanza dentro de la transaccion, que la deshace y libera la clave.
+describe("C5 de la 11.6a: crear con resultado e idempotencia", () => {
+  const indexOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
+
+  it("reclama la clave antes de los candados, la completa antes del commit y no redirige", async () => {
+    const { calls, outcome } = await runAction(createAction, { name: "C5", form: createForm, data: createData() });
+    const claim = calls.find((call) => isPrismaCall(call) && call.prisma === "operacion_idempotente.createManyAndReturn");
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: "OTR00000001", clave_operacion: CLAVE },
+    });
+    expect(claim && isPrismaCall(claim) ? (claim.args as { data: Row[] }).data : null).toEqual([
+      expect.objectContaining({ clave: CLAVE, tipo_operacion: "crear_orden_trabajo", id_usuario: "USU00000001" }),
+    ]);
+    expect(indexOf(calls, "operacion_idempotente.createManyAndReturn")).toBeGreaterThan(indexOf(calls, "prisma.$transaction"));
+    expect(indexOf(calls, "operacion_idempotente.createManyAndReturn")).toBeLessThan(indexOf(calls, "$queryRaw"));
+    expect(indexOf(calls, "requerimiento_orden_material.createMany")).toBeLessThan(
+      indexOf(calls, "operacion_idempotente.updateMany"),
+    );
+    expect(indexOf(calls, "operacion_idempotente.updateMany")).toBeLessThan(
+      indexOf(calls, "prisma.$transaction:commit"),
+    );
+    expect(calls.filter((call) => "effect" in call && call.effect === "revalidatePath").length).toBeGreaterThan(0);
+  });
+
+  it("la misma clave responde con la orden ya creada, sin candados ni escrituras", async () => {
+    const { calls, outcome } = await runAction(createAction, {
+      name: "C5",
+      form: createForm,
+      data: createData(storedKey()),
+    });
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: "OTR00000009", clave_operacion: CLAVE },
+    });
+    expect(indexOf(calls, "$queryRaw")).toBe(-1);
+    expect(indexOf(calls, "orden_trabajo.create")).toBe(-1);
+    expect(indexOf(calls, "operacion_idempotente.updateMany")).toBe(-1);
+  });
+
+  it("datos invalidos: el error queda en su campo, con lo enviado, sin consultar", async () => {
+    const { calls, outcome } = await runAction(createAction, {
+      name: "C5",
+      form: { ...createForm, cantidad: "0" },
+    });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      fieldErrors: { cantidad: ["La cantidad debe ser mayor a 0."] },
+      values: expect.objectContaining({ cantidad: "0", id_ruta: RUTA, id_version_receta: VERSION }),
+    });
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it.each([
+    ["el detalle de pedido no existe", orderForm, { "detalle_pedido.findUnique": null }, "id_detalle_pedido"],
+    ["el producto inactivo", createForm, { "producto.findFirst": null }, "id_producto"],
+    ["la ruta inactiva", createForm, { "ruta_fabricacion.findFirst": null }, "id_ruta"],
+    ["la version inexistente", createForm, { "version_receta.findFirst": null }, "id_version_receta"],
+    ["la campania no activa", campaignForm, { "campania_produccion.findFirst": null }, "id_campania"],
+  ] as const)("%s revierte la transaccion y deja el error en su campo, con lo enviado", async (_name, form, data, field) => {
+    const { calls, outcome } = await runAction(createAction, { name: "C5", form, data: createData({ ...data }) });
+
+    expect(outcome).toMatchObject({ status: "error", values: expect.objectContaining({ id_ruta: RUTA }) });
+    expect(Object.keys((outcome as { fieldErrors?: Row }).fieldErrors ?? {})).toEqual([field]);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "operacion_idempotente.updateMany")).toBe(-1);
+    expect(indexOf(calls, "orden_trabajo.create")).toBe(-1);
   });
 });

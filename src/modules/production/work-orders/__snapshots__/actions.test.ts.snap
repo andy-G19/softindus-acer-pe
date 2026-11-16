@@ -988,7 +988,7 @@ exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > res
 exports[`createWorkOrderAction > campania inexistente o no activa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -997,6 +997,22 @@ exports[`createWorkOrderAction > campania inexistente o no activa > llamadas 1`]
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1117,12 +1133,36 @@ exports[`createWorkOrderAction > campania inexistente o no activa > llamadas 1`]
 ]
 `;
 
-exports[`createWorkOrderAction > campania inexistente o no activa > resultado 1`] = `"error: La campaña seleccionada no existe o no está activa."`;
+exports[`createWorkOrderAction > campania inexistente o no activa > resultado 1`] = `
+{
+  "error": "La campaña seleccionada no existe o no está activa.",
+  "fieldErrors": {
+    "id_campania": [
+      "La campaña seleccionada no existe o no está activa.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "CAM00000001",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "campania",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > campania sin productos registrados: acepta el producto y crea la orden > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1131,6 +1171,22 @@ exports[`createWorkOrderAction > campania sin productos registrados: acepta el p
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1333,6 +1389,17 @@ exports[`createWorkOrderAction > campania sin productos registrados: acepta el p
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "OTR00000001",
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -1351,12 +1418,34 @@ exports[`createWorkOrderAction > campania sin productos registrados: acepta el p
 ]
 `;
 
-exports[`createWorkOrderAction > campania sin productos registrados: acepta el producto y crea la orden > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created"`;
+exports[`createWorkOrderAction > campania sin productos registrados: acepta el producto y crea la orden > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_orden_trabajo": "OTR00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "CAM00000001",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "alta",
+    "tipo_produccion": "campania",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > campania: el producto no pertenece a sus detalles > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1365,6 +1454,22 @@ exports[`createWorkOrderAction > campania: el producto no pertenece a sus detall
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1485,12 +1590,36 @@ exports[`createWorkOrderAction > campania: el producto no pertenece a sus detall
 ]
 `;
 
-exports[`createWorkOrderAction > campania: el producto no pertenece a sus detalles > resultado 1`] = `"error: El producto seleccionado no pertenece a la campania."`;
+exports[`createWorkOrderAction > campania: el producto no pertenece a sus detalles > resultado 1`] = `
+{
+  "error": "El producto seleccionado no pertenece a la campania.",
+  "fieldErrors": {
+    "id_producto": [
+      "El producto seleccionado no pertenece a la campania.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "CAM00000001",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "campania",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > datos invalidos: responde el primer mensaje de Zod sin consultar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1499,12 +1628,36 @@ exports[`createWorkOrderAction > datos invalidos: responde el primer mensaje de 
 ]
 `;
 
-exports[`createWorkOrderAction > datos invalidos: responde el primer mensaje de Zod sin consultar > resultado 1`] = `"error: La cantidad debe ser mayor a 0."`;
+exports[`createWorkOrderAction > datos invalidos: responde el primer mensaje de Zod sin consultar > resultado 1`] = `
+{
+  "error": "Revisa los datos de la orden de trabajo.",
+  "fieldErrors": {
+    "cantidad": [
+      "La cantidad debe ser mayor a 0.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "0",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > fecha estimada anterior al inicio: lo rechaza la validacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1513,26 +1666,36 @@ exports[`createWorkOrderAction > fecha estimada anterior al inicio: lo rechaza l
 ]
 `;
 
-exports[`createWorkOrderAction > fecha estimada anterior al inicio: lo rechaza la validacion > resultado 1`] = `"error: La fecha estimada de entrega no puede ser anterior a la fecha de inicio."`;
-
-exports[`createWorkOrderAction > pedido sin detalle: lo rechaza la validacion del formulario > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
+exports[`createWorkOrderAction > fecha estimada anterior al inicio: lo rechaza la validacion > resultado 1`] = `
+{
+  "error": "Revisa los datos de la orden de trabajo.",
+  "fieldErrors": {
+    "fecha_entrega_estimada": [
+      "La fecha estimada de entrega no puede ser anterior a la fecha de inicio.",
     ],
   },
-]
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-01",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
 `;
 
-exports[`createWorkOrderAction > pedido sin detalle: lo rechaza la validacion del formulario > resultado 1`] = `"error: Para una orden por pedido debe seleccionar un detalle de pedido."`;
-
-exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el del detalle y pasa el pedido a produccion > llamadas 1`] = `
+exports[`createWorkOrderAction > la clave es de otra operacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1541,6 +1704,216 @@ exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el de
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > la clave es de otra operacion > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > la misma clave ya registrada: responde con la orden creada sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > la misma clave ya registrada: responde con la orden creada sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_orden_trabajo": "OTR00000009",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > pedido sin detalle: lo rechaza la validacion del formulario > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createWorkOrderAction > pedido sin detalle: lo rechaza la validacion del formulario > resultado 1`] = `
+{
+  "error": "Revisa los datos de la orden de trabajo.",
+  "fieldErrors": {
+    "id_detalle_pedido": [
+      "Para una orden por pedido debe seleccionar un detalle de pedido.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "pedido",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el del detalle y pasa el pedido a produccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1759,6 +2132,17 @@ exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el de
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "OTR00000001",
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -1777,12 +2161,34 @@ exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el de
 ]
 `;
 
-exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el del detalle y pasa el pedido a produccion > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created"`;
+exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el del detalle y pasa el pedido a produccion > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_orden_trabajo": "OTR00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "DPE00000001",
+    "id_producto": "",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "pedido",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > pedido: el detalle es de otro producto que el elegido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1791,6 +2197,22 @@ exports[`createWorkOrderAction > pedido: el detalle es de otro producto que el e
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1812,12 +2234,36 @@ exports[`createWorkOrderAction > pedido: el detalle es de otro producto que el e
 ]
 `;
 
-exports[`createWorkOrderAction > pedido: el detalle es de otro producto que el elegido > resultado 1`] = `"error: El detalle de pedido pertenece a otro producto."`;
+exports[`createWorkOrderAction > pedido: el detalle es de otro producto que el elegido > resultado 1`] = `
+{
+  "error": "El detalle de pedido pertenece a otro producto.",
+  "fieldErrors": {
+    "id_detalle_pedido": [
+      "El detalle de pedido pertenece a otro producto.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "DPE00000001",
+    "id_producto": "PRO00000009",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "pedido",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > pedido: el detalle no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1826,6 +2272,22 @@ exports[`createWorkOrderAction > pedido: el detalle no existe > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1847,12 +2309,36 @@ exports[`createWorkOrderAction > pedido: el detalle no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`createWorkOrderAction > pedido: el detalle no existe > resultado 1`] = `"error: El detalle de pedido seleccionado no existe."`;
+exports[`createWorkOrderAction > pedido: el detalle no existe > resultado 1`] = `
+{
+  "error": "El detalle de pedido seleccionado no existe.",
+  "fieldErrors": {
+    "id_detalle_pedido": [
+      "El detalle de pedido seleccionado no existe.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "DPE00000001",
+    "id_producto": "",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "pedido",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > producto inexistente o inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1861,6 +2347,22 @@ exports[`createWorkOrderAction > producto inexistente o inactivo > llamadas 1`] 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1911,12 +2413,36 @@ exports[`createWorkOrderAction > producto inexistente o inactivo > llamadas 1`] 
 ]
 `;
 
-exports[`createWorkOrderAction > producto inexistente o inactivo > resultado 1`] = `"error: El producto seleccionado no existe o está inactivo."`;
+exports[`createWorkOrderAction > producto inexistente o inactivo > resultado 1`] = `
+{
+  "error": "El producto seleccionado no existe o está inactivo.",
+  "fieldErrors": {
+    "id_producto": [
+      "El producto seleccionado no existe o está inactivo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > receta de otro producto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1925,6 +2451,22 @@ exports[`createWorkOrderAction > receta de otro producto > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -2015,12 +2557,36 @@ exports[`createWorkOrderAction > receta de otro producto > llamadas 1`] = `
 ]
 `;
 
-exports[`createWorkOrderAction > receta de otro producto > resultado 1`] = `"error: La receta seleccionada pertenece a otro producto."`;
+exports[`createWorkOrderAction > receta de otro producto > resultado 1`] = `
+{
+  "error": "La receta seleccionada pertenece a otro producto.",
+  "fieldErrors": {
+    "id_version_receta": [
+      "La receta seleccionada pertenece a otro producto.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > receta tecnica inactiva > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2029,6 +2595,22 @@ exports[`createWorkOrderAction > receta tecnica inactiva > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -2119,12 +2701,36 @@ exports[`createWorkOrderAction > receta tecnica inactiva > llamadas 1`] = `
 ]
 `;
 
-exports[`createWorkOrderAction > receta tecnica inactiva > resultado 1`] = `"error: La receta seleccionada no esta vigente o activa."`;
+exports[`createWorkOrderAction > receta tecnica inactiva > resultado 1`] = `
+{
+  "error": "La receta seleccionada no esta vigente o activa.",
+  "fieldErrors": {
+    "id_version_receta": [
+      "La receta seleccionada no esta vigente o activa.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el requerimiento > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2133,6 +2739,22 @@ exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -2305,6 +2927,17 @@ exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "OTR00000001",
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -2323,12 +2956,34 @@ exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el
 ]
 `;
 
-exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el requerimiento > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created"`;
+exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el requerimiento > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_orden_trabajo": "OTR00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "Lote para stock de tienda",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > ruta de otro producto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2337,6 +2992,22 @@ exports[`createWorkOrderAction > ruta de otro producto > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -2403,12 +3074,36 @@ exports[`createWorkOrderAction > ruta de otro producto > llamadas 1`] = `
 ]
 `;
 
-exports[`createWorkOrderAction > ruta de otro producto > resultado 1`] = `"error: La ruta seleccionada pertenece a otro producto."`;
+exports[`createWorkOrderAction > ruta de otro producto > resultado 1`] = `
+{
+  "error": "La ruta seleccionada pertenece a otro producto.",
+  "fieldErrors": {
+    "id_ruta": [
+      "La ruta seleccionada pertenece a otro producto.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > ruta inexistente o inactiva > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2417,6 +3112,22 @@ exports[`createWorkOrderAction > ruta inexistente o inactiva > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -2483,12 +3194,36 @@ exports[`createWorkOrderAction > ruta inexistente o inactiva > llamadas 1`] = `
 ]
 `;
 
-exports[`createWorkOrderAction > ruta inexistente o inactiva > resultado 1`] = `"error: La ruta seleccionada no existe, está inactiva o no pertenece al producto."`;
+exports[`createWorkOrderAction > ruta inexistente o inactiva > resultado 1`] = `
+{
+  "error": "La ruta seleccionada no existe, está inactiva o no pertenece al producto.",
+  "fieldErrors": {
+    "id_ruta": [
+      "La ruta seleccionada no existe, está inactiva o no pertenece al producto.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > ruta sin etapas activas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2497,6 +3232,22 @@ exports[`createWorkOrderAction > ruta sin etapas activas > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -2563,12 +3314,74 @@ exports[`createWorkOrderAction > ruta sin etapas activas > llamadas 1`] = `
 ]
 `;
 
-exports[`createWorkOrderAction > ruta sin etapas activas > resultado 1`] = `"error: La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden."`;
+exports[`createWorkOrderAction > ruta sin etapas activas > resultado 1`] = `
+{
+  "error": "La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden.",
+  "fieldErrors": {
+    "id_ruta": [
+      "La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createWorkOrderAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > version de receta inexistente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2577,6 +3390,22 @@ exports[`createWorkOrderAction > version de receta inexistente > llamadas 1`] = 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -2667,12 +3496,36 @@ exports[`createWorkOrderAction > version de receta inexistente > llamadas 1`] = 
 ]
 `;
 
-exports[`createWorkOrderAction > version de receta inexistente > resultado 1`] = `"error: La versión de receta seleccionada no existe, no está vigente o no pertenece al producto."`;
+exports[`createWorkOrderAction > version de receta inexistente > resultado 1`] = `
+{
+  "error": "La versión de receta seleccionada no existe, no está vigente o no pertenece al producto.",
+  "fieldErrors": {
+    "id_version_receta": [
+      "La versión de receta seleccionada no existe, no está vigente o no pertenece al producto.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > version de receta no vigente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2681,6 +3534,22 @@ exports[`createWorkOrderAction > version de receta no vigente > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -2771,12 +3640,36 @@ exports[`createWorkOrderAction > version de receta no vigente > llamadas 1`] = `
 ]
 `;
 
-exports[`createWorkOrderAction > version de receta no vigente > resultado 1`] = `"error: La receta seleccionada no esta vigente o activa."`;
+exports[`createWorkOrderAction > version de receta no vigente > resultado 1`] = `
+{
+  "error": "La receta seleccionada no esta vigente o activa.",
+  "fieldErrors": {
+    "id_version_receta": [
+      "La receta seleccionada no esta vigente o activa.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > version sin materiales > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2785,6 +3678,22 @@ exports[`createWorkOrderAction > version sin materiales > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -2875,7 +3784,31 @@ exports[`createWorkOrderAction > version sin materiales > llamadas 1`] = `
 ]
 `;
 
-exports[`createWorkOrderAction > version sin materiales > resultado 1`] = `"error: La versión de receta no tiene materiales registrados. Agregue materiales antes de crear la orden."`;
+exports[`createWorkOrderAction > version sin materiales > resultado 1`] = `
+{
+  "error": "La versión de receta no tiene materiales registrados. Agregue materiales antes de crear la orden.",
+  "fieldErrors": {
+    "id_version_receta": [
+      "La versión de receta no tiene materiales registrados. Agregue materiales antes de crear la orden.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`deliverAdditionalMaterialAction > el requerimiento es de otra orden > llamadas 1`] = `
 [

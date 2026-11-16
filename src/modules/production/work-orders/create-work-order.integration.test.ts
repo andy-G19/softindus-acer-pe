@@ -7,8 +7,11 @@ import { getTestDatabase } from "@/testing/test-database";
 // Crear una orden de trabajo contra Postgres real (PGlite), C2 de la 11.6a (D63). Corre la accion
 // entera: los candados del pedido, la ruta y la receta (su SQL se ejecuta de verdad sobre las
 // tablas), las lecturas dentro de la transaccion, los correlativos, el requerimiento congelado y
-// la bitacora. Solo se reemplazan la sesion y la cache de Next. La accion todavia redirige al
-// guardar y lanza un error al rechazar: la prueba traduce lo primero a «guardado».
+// la bitacora. Solo se reemplazan la sesion y la cache de Next.
+//
+// C5 de la 11.6a (D66): la accion devuelve su estado y reclama una clave de operacion. Un rechazo
+// deshace la transaccion y libera la clave: el envio corregido con la misma clave crea la orden.
+// Repetir esa clave responde con la misma orden sin crear otra.
 //
 // Lo que no se puede probar aqui: cancelar un pedido mientras se crea su orden. En Postgres la
 // segunda espera el candado del pedido y ve el estado final; PGlite atiende una sola transaccion
@@ -27,7 +30,7 @@ const MATERIAL = "MAT00000001";
 const RUTA = "RUT00000001";
 const RECETA = "RTE00000001";
 const VERSION = "VRE00000001";
-const SAVED = "guardado";
+const CLAVE = "3f6a9c21-8d4b-4e7a-b1c2-5d6e7f8a9b0c";
 
 let prisma: PrismaClient;
 
@@ -104,10 +107,11 @@ beforeAll(async () => {
   }
 });
 
-async function createForOrder(idDetallePedido: string) {
+async function createForOrder(idDetallePedido: string, clave: string = crypto.randomUUID()) {
   const formData = new FormData();
 
   for (const [key, value] of Object.entries({
+    clave_operacion: clave,
     tipo_produccion: "pedido",
     id_detalle_pedido: idDetallePedido,
     id_campania: "",
@@ -123,20 +127,11 @@ async function createForOrder(idDetallePedido: string) {
     formData.set(key, value);
   }
 
-  try {
-    await createWorkOrderAction(formData);
-
-    return "termino sin redirigir";
-  } catch (error) {
-    const digest = (error as { digest?: unknown }).digest;
-
-    return typeof digest === "string" && digest.startsWith("NEXT_REDIRECT")
-      ? SAVED
-      : error instanceof Error
-        ? error.message
-        : String(error);
-  }
+  return createWorkOrderAction({ status: "idle" }, formData);
 }
+
+const CANCELLED =
+  "El pedido PED00000001 está cancelado: solo se crean órdenes para pedidos registrados o aprobados.";
 
 const orderStatus = async (idPedido: string) =>
   (await prisma.pedido.findUniqueOrThrow({ where: { id_pedido: idPedido }, select: { estado: true } })).estado;
@@ -148,19 +143,36 @@ const workOrdersOf = (idDetallePedido: string) =>
   });
 
 describe("crear una orden de trabajo en Postgres", () => {
-  it("un pedido cancelado no recibe una orden ni vuelve a produccion", async () => {
-    expect(await createForOrder("DPE00000001")).toBe(
-      "El pedido PED00000001 está cancelado: solo se crean órdenes para pedidos registrados o aprobados.",
-    );
+  it("un pedido cancelado no recibe una orden ni vuelve a produccion, y la clave queda libre", async () => {
+    expect(await createForOrder("DPE00000001", CLAVE)).toMatchObject({
+      status: "error",
+      error: CANCELLED,
+      fieldErrors: { id_detalle_pedido: [CANCELLED] },
+    });
 
     expect(await workOrdersOf("DPE00000001")).toEqual([]);
     expect(await orderStatus("PED00000001")).toBe("cancelado");
+    expect(await prisma.operacion_idempotente.findUnique({ where: { clave: CLAVE } })).toBeNull();
   });
 
-  it("un pedido aprobado recibe su orden, con su cliente y su requerimiento, y pasa a produccion", async () => {
-    expect(await createForOrder("DPE00000002")).toBe(SAVED);
-
+  it("corregido con la misma clave, el pedido aprobado recibe su orden, con su cliente y su requerimiento, y pasa a produccion", async () => {
+    const result = await createForOrder("DPE00000002", CLAVE);
     const orders = await workOrdersOf("DPE00000002");
+
+    expect(result).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: orders[0]?.id_orden_trabajo, clave_operacion: CLAVE },
+    });
+    expect(
+      await prisma.operacion_idempotente.findUnique({
+        where: { clave: CLAVE },
+        select: { tipo_operacion: true, id_usuario: true, id_registro_resultado: true },
+      }),
+    ).toEqual({
+      tipo_operacion: "crear_orden_trabajo",
+      id_usuario: USUARIO,
+      id_registro_resultado: orders[0]?.id_orden_trabajo,
+    });
 
     expect(orders.map((order) => [order.id_cliente, order.requerimiento_orden_material.map((r) => r.cantidad_requerida.toFixed(2))])).toEqual([
       [CLIENTE, ["5.00"]],
@@ -168,10 +180,21 @@ describe("crear una orden de trabajo en Postgres", () => {
     expect(await orderStatus("PED00000002")).toBe("en_produccion");
   });
 
-  it("el mismo pedido, ya en produccion, no recibe una segunda orden", async () => {
-    expect(await createForOrder("DPE00000002")).toBe(
-      "El pedido PED00000002 está en_produccion: solo se crean órdenes para pedidos registrados o aprobados.",
-    );
+  it("repetir la misma clave responde con la misma orden, sin crear otra", async () => {
+    const [created] = await workOrdersOf("DPE00000002");
+
+    expect(await createForOrder("DPE00000002", CLAVE)).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: created.id_orden_trabajo, clave_operacion: CLAVE },
+    });
+    expect(await workOrdersOf("DPE00000002")).toHaveLength(1);
+  });
+
+  it("con otra clave, el mismo pedido, ya en produccion, no recibe una segunda orden", async () => {
+    expect(await createForOrder("DPE00000002")).toMatchObject({
+      status: "error",
+      error: "El pedido PED00000002 está en_produccion: solo se crean órdenes para pedidos registrados o aprobados.",
+    });
 
     expect(await workOrdersOf("DPE00000002")).toHaveLength(1);
   });
