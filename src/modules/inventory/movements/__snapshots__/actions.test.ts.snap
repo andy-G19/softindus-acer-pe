@@ -242,18 +242,6 @@ exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimi
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
-      },
-      "where": {
-        "estado_alerta": "activa",
-        "id_material": "MAT00000006",
-      },
-    },
-    "prisma": "alerta_stock.findFirst",
-  },
-  {
-    "args": {
       "data": {
         "estado_alerta": "atendida",
         "fecha_atencion": 2026-07-15T15:00:00.000Z,
@@ -262,10 +250,11 @@ exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimi
         "stock_detectado": 8.75,
       },
       "where": {
-        "id_alerta": "id_alerta-1",
+        "estado_alerta": "activa",
+        "id_material": "MAT00000006",
       },
     },
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -440,18 +429,6 @@ exports[`createInventoryOutputAction > el maestro de taller registra la salida i
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
-      },
-      "where": {
-        "estado_alerta": "activa",
-        "id_material": "MAT00000006",
-      },
-    },
-    "prisma": "alerta_stock.findFirst",
-  },
-  {
-    "args": {
       "data": {
         "estado_alerta": "atendida",
         "fecha_atencion": 2026-07-15T15:00:00.000Z,
@@ -460,10 +437,11 @@ exports[`createInventoryOutputAction > el maestro de taller registra la salida i
         "stock_detectado": 8.75,
       },
       "where": {
-        "id_alerta": "id_alerta-1",
+        "estado_alerta": "activa",
+        "id_material": "MAT00000006",
       },
     },
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -1082,18 +1060,6 @@ exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra e
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
-      },
-      "where": {
-        "estado_alerta": "activa",
-        "id_material": "MAT00000006",
-      },
-    },
-    "prisma": "alerta_stock.findFirst",
-  },
-  {
-    "args": {
       "data": {
         "estado_alerta": "atendida",
         "fecha_atencion": 2026-07-15T15:00:00.000Z,
@@ -1102,10 +1068,11 @@ exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra e
         "stock_detectado": 2.25,
       },
       "where": {
-        "id_alerta": "id_alerta-1",
+        "estado_alerta": "activa",
+        "id_material": "MAT00000006",
       },
     },
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {

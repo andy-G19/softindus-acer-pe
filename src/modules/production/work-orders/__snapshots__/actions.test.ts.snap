@@ -3074,15 +3074,19 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+        "mensaje": "El material Plancha LAC 1/16 recupero stock por encima del minimo.",
+        "stock_detectado": 34.5,
       },
       "where": {
         "estado_alerta": "activa",
         "id_material": "MAT00000001",
       },
     },
-    "prisma": "alerta_stock.findFirst",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -3474,18 +3478,6 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
-      },
-      "where": {
-        "estado_alerta": "activa",
-        "id_material": "MAT00000001",
-      },
-    },
-    "prisma": "alerta_stock.findFirst",
-  },
-  {
-    "args": {
       "data": {
         "estado_alerta": "atendida",
         "fecha_atencion": 2026-07-15T15:00:00.000Z,
@@ -3494,10 +3486,11 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
         "stock_detectado": 51.25,
       },
       "where": {
-        "id_alerta": "ALE00000003",
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
       },
     },
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -3550,15 +3543,17 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
+      "data": {
+        "mensaje": "El material Soldadura 6011 quedo en stock critico tras mover la orden OTR00000007.",
+        "stock_detectado": 1.43,
+        "stock_minimo": 5,
       },
       "where": {
         "estado_alerta": "activa",
         "id_material": "MAT00000002",
       },
     },
-    "prisma": "alerta_stock.findFirst",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -3632,28 +3627,17 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
-      },
-      "where": {
-        "estado_alerta": "activa",
-        "id_material": "MAT00000004",
-      },
-    },
-    "prisma": "alerta_stock.findFirst",
-  },
-  {
-    "args": {
       "data": {
         "mensaje": "El material Tornillo 1/4 quedo en stock critico tras mover la orden OTR00000007.",
         "stock_detectado": 10,
         "stock_minimo": 20,
       },
       "where": {
-        "id_alerta": "ALE00000004",
+        "estado_alerta": "activa",
+        "id_material": "MAT00000004",
       },
     },
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -3706,15 +3690,19 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+        "mensaje": "El material Perno 3/8 recupero stock por encima del minimo.",
+        "stock_detectado": 90,
       },
       "where": {
         "estado_alerta": "activa",
         "id_material": "MAT00000005",
       },
     },
-    "prisma": "alerta_stock.findFirst",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -3851,15 +3839,19 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+        "mensaje": "El material Plancha LAC 1/16 recupero stock por encima del minimo.",
+        "stock_detectado": 31.25,
       },
       "where": {
         "estado_alerta": "activa",
         "id_material": "MAT00000001",
       },
     },
-    "prisma": "alerta_stock.findFirst",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -5060,28 +5052,17 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
-      },
-      "where": {
-        "estado_alerta": "activa",
-        "id_material": "MAT00000001",
-      },
-    },
-    "prisma": "alerta_stock.findFirst",
-  },
-  {
-    "args": {
       "data": {
         "mensaje": "El material Plancha LAC 1/16 quedo en stock critico tras mover la orden OTR00000007.",
         "stock_detectado": 8,
         "stock_minimo": 8,
       },
       "where": {
-        "id_alerta": "ALE00000003",
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
       },
     },
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -5456,18 +5437,6 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
-      },
-      "where": {
-        "estado_alerta": "activa",
-        "id_material": "MAT00000001",
-      },
-    },
-    "prisma": "alerta_stock.findFirst",
-  },
-  {
-    "args": {
       "data": {
         "estado_alerta": "atendida",
         "fecha_atencion": 2026-07-15T15:00:00.000Z,
@@ -5476,10 +5445,11 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
         "stock_detectado": 22.25,
       },
       "where": {
-        "id_alerta": "ALE00000003",
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
       },
     },
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {

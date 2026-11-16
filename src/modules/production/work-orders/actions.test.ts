@@ -440,11 +440,15 @@ function stockInDb(changes: StockInDb = {}): DataOverrides {
 }
 
 // Alertas activas por material: el caso decide cuales existen.
+// Desde C3 de la 11.6a (D64) la alerta activa no se lee antes: la escritura es un compare-and-set
+// (updateMany con el estado «activa» en el where) y su conteo dice si habia una. Los materiales
+// con alerta activa cuentan 1; los demas, 0, y entonces se abre otra.
 function activeAlerts(byMaterial: Record<string, string>) {
   return (args: PrismaArgs) => {
-    const idAlerta = byMaterial[String(whereOf(args).id_material)];
+    const where = whereOf(args);
+    const idAlerta = byMaterial[String(where.id_material)];
 
-    return idAlerta ? { id_alerta: idAlerta } : null;
+    return { count: idAlerta && where.estado_alerta === "activa" ? 1 : 0 };
   };
 }
 
@@ -685,7 +689,7 @@ defineActionSuite("deliverWorkOrderMaterialsAction", deliverWorkOrderMaterialsAc
           requirementRow(REQ_PERNO, PERNO, { requerida: "10.00" }),
         ],
       }),
-      "alerta_stock.findFirst": activeAlerts({
+      "alerta_stock.updateMany": activeAlerts({
         [PLANCHA]: "ALE00000003",
         [TORNILLO]: "ALE00000004",
       }),
@@ -702,7 +706,7 @@ defineActionSuite("deliverWorkOrderMaterialsAction", deliverWorkOrderMaterialsAc
           requirementRow(REQ_SOLDADURA, SOLDADURA, { requerida: "8.57" }),
         ],
       }),
-      "alerta_stock.findFirst": null,
+      "alerta_stock.updateMany": { count: 0 },
       // Otra entrega se llevo la soldadura entre la lectura y la transaccion:
       // la base tiene 5.00 y se piden 8.57.
       ...stockInDb({ [SOLDADURA]: { stock: "5.00", minimo: "5.00" } }),
@@ -801,7 +805,7 @@ defineActionSuite("deliverAdditionalMaterialAction", deliverAdditionalMaterialAc
         entregada: "68.75",
         material: { stock: "40.00", minimo: "10.00" },
       }),
-      "alerta_stock.findFirst": null,
+      "alerta_stock.updateMany": { count: 0 },
       ...stockInDb({ [PLANCHA]: { stock: "40.00", minimo: "10.00" } }),
     },
   },
@@ -889,7 +893,7 @@ defineActionSuite("returnWorkOrderMaterialAction", returnWorkOrderMaterialAction
         entregada: "10.00",
         material: { stock: "5.00", minimo: "8.00" },
       }),
-      "alerta_stock.findFirst": activeAlerts({ [PLANCHA]: "ALE00000003" }),
+      "alerta_stock.updateMany": activeAlerts({ [PLANCHA]: "ALE00000003" }),
       ...stockInDb({ [PLANCHA]: { stock: "5.00", minimo: "8.00" } }),
     },
   },
@@ -903,7 +907,7 @@ defineActionSuite("returnWorkOrderMaterialAction", returnWorkOrderMaterialAction
         { requerida: "68.75", entregada: "10.00", devuelta: "1.00", material: { stock: "20.00", minimo: "8.00" } },
         { estado: "finalizada" },
       ),
-      "alerta_stock.findFirst": activeAlerts({ [PLANCHA]: "ALE00000003" }),
+      "alerta_stock.updateMany": activeAlerts({ [PLANCHA]: "ALE00000003" }),
       ...stockInDb({ [PLANCHA]: { stock: "20.00", minimo: "8.00" } }),
     },
   },
@@ -1234,7 +1238,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
             requirementRow(REQ_PLANCHA, PLANCHA, { requerida: "68.75", entregada: "20.00" }),
           ],
         }),
-        "alerta_stock.findFirst": activeAlerts({ [PLANCHA]: "ALE00000003" }),
+        "alerta_stock.updateMany": activeAlerts({ [PLANCHA]: "ALE00000003" }),
         ...stockInDb({ [PLANCHA]: { stock: "70.00", minimo: "30.00" } }),
       },
     });
@@ -1247,7 +1251,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
 
     // 21.25 queda bajo el minimo 30: la alerta sigue activa con el stock real.
     // Con la lectura, 51.25 la habria dado por atendida.
-    expect(written(calls, "alerta_stock.update")).toEqual([
+    expect(written(calls, "alerta_stock.updateMany")).toEqual([
       expect.objectContaining({ stock_detectado: 21.25, stock_minimo: 30 }),
     ]);
   });
@@ -1263,7 +1267,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
           // Lee 40.00, sobre el minimo 10.
           material: { stock: "40.00", minimo: "10.00" },
         }),
-        "alerta_stock.findFirst": null,
+        "alerta_stock.updateMany": { count: 0 },
         ...stockInDb({ [PLANCHA]: { stock: "12.00", minimo: "10.00" } }),
       },
     });
@@ -1289,7 +1293,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
           // Lee 5.00, bajo el minimo 8.
           material: { stock: "5.00", minimo: "8.00" },
         }),
-        "alerta_stock.findFirst": activeAlerts({ [PLANCHA]: "ALE00000003" }),
+        "alerta_stock.updateMany": activeAlerts({ [PLANCHA]: "ALE00000003" }),
         ...stockInDb({ [PLANCHA]: { stock: "15.00", minimo: "8.00" } }),
       },
     });
@@ -1302,7 +1306,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
 
     // 18 supera el minimo 8: la alerta se atiende. Con la lectura, 8.00 la
     // habria dejado activa.
-    expect(written(calls, "alerta_stock.update")).toEqual([
+    expect(written(calls, "alerta_stock.updateMany")).toEqual([
       expect.objectContaining({ estado_alerta: "atendida", stock_detectado: 18 }),
     ]);
   });
