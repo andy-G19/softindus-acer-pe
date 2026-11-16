@@ -8598,19 +8598,22 @@ exports[`/dashboard/production/work-orders/new > con opciones > resultado 1`] = 
 </div>
 </section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
 <section>
 <div>
-<label>Tipo de producción *</label>
-<select name="tipo_produccion" required="">
+<label for="tipo_produccion">Tipo de producción<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_produccion" required="" aria-describedby="tipo_produccion-ayuda" name="tipo_produccion">
 <option value="pedido" selected="">Por pedido</option>
 <option value="campania">Por campaña</option>
 <option value="reposicion_stock">Reposición de stock</option>
 </select>
-<p>El producto controla las rutas y recetas disponibles.</p>
+<p id="tipo_produccion-ayuda">El producto controla las rutas y recetas disponibles.</p>
 </div>
 <div>
-<label>Prioridad *</label>
-<select name="prioridad" required="">
+<label for="prioridad">Prioridad<span aria-hidden="true">*</span>
+</label>
+<select id="prioridad" required="" name="prioridad">
 <option value="alta">Alta</option>
 <option value="media" selected="">Media</option>
 <option value="baja">Baja</option>
@@ -8619,10 +8622,10 @@ exports[`/dashboard/production/work-orders/new > con opciones > resultado 1`] = 
 </section>
 <section>
 <div>
-<label for="id_detalle_pedido-_R_f_">Detalle de pedido *</label>
+<label for="id_detalle_pedido">Detalle de pedido *</label>
 <input type="hidden" name="id_detalle_pedido" value=""/>
 <div>
-<input id="id_detalle_pedido-_R_f_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_detalle_pedido-_R_f_-listbox" aria-expanded="false" required="" placeholder="Buscar por cliente, producto o pedido..." value=""/>
+<input id="id_detalle_pedido" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_detalle_pedido-listbox" aria-expanded="false" required="" placeholder="Buscar por cliente, producto o pedido..." value=""/>
 </div>
 </div>
 </section>
@@ -8635,42 +8638,44 @@ exports[`/dashboard/production/work-orders/new > con opciones > resultado 1`] = 
 <section>
 <div>
 <div>
-<label for="id_ruta-_R_ar_">Ruta de fabricación *</label>
+<label for="id_ruta">Ruta de fabricación *</label>
 <input type="hidden" name="id_ruta" value=""/>
 <div>
-<input id="id_ruta-_R_ar_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_ruta-_R_ar_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar ruta del producto..." value=""/>
+<input id="id_ruta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_ruta-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar ruta del producto..." value=""/>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label for="id_version_receta-_R_cr_">Versión de receta *</label>
+<label for="id_version_receta">Versión de receta *</label>
 <input type="hidden" name="id_version_receta" value=""/>
 <div>
-<input id="id_version_receta-_R_cr_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_version_receta-_R_cr_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar receta del producto..." value=""/>
+<input id="id_version_receta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_version_receta-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar receta del producto..." value=""/>
 </div>
 </div>
 </div>
 </section>
 <section>
 <div>
-<label>Cantidad *</label>
-<input type="number" min="0.01" step="0.01" required="" placeholder="Ej. 50" name="cantidad" value=""/>
+<label for="cantidad">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad" required="" min="0.01" step="0.01" placeholder="Ej. 50" name="cantidad" value=""/>
 </div>
 <div>
-<label>Fecha de inicio *</label>
-<input type="date" required="" name="fecha_inicio" value="2026-07-15"/>
+<label for="fecha_inicio">Fecha de inicio<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_inicio" required="" name="fecha_inicio" value="2026-07-15"/>
 </div>
 <div>
-<label>Entrega estimada</label>
-<input type="date" name="fecha_entrega_estimada"/>
+<label for="fecha_entrega_estimada">Entrega estimada</label>
+<input type="date" id="fecha_entrega_estimada" name="fecha_entrega_estimada"/>
 </div>
 </section>
-<section>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="4" maxLength="700" placeholder="Ej. Priorizar corte y prensado durante la mañana.">
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" maxLength="700" placeholder="Ej. Priorizar corte y prensado durante la mañana.">
 </textarea>
-</section>
+</div>
 <div role="alert">
 <div>Esta orden queda registrada en estado pendiente. Los avances por etapa de producción se generan y actualizan desde la pantalla de avances de la orden.</div>
 </div>
@@ -8865,19 +8870,22 @@ exports[`/dashboard/production/work-orders/new > sin rutas: no permite crear > r
 <div>Para crear una orden necesitas tener productos activos, rutas de fabricación activas y versiones de receta vigentes con materiales registrados.</div>
 </div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
 <section>
-<div>
-<label>Tipo de producción *</label>
-<select name="tipo_produccion" required="" disabled="">
+<div data-disabled="true">
+<label for="tipo_produccion">Tipo de producción<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_produccion" required="" disabled="" aria-describedby="tipo_produccion-ayuda" name="tipo_produccion">
 <option value="pedido" selected="">Por pedido</option>
 <option value="campania">Por campaña</option>
 <option value="reposicion_stock">Reposición de stock</option>
 </select>
-<p>El producto controla las rutas y recetas disponibles.</p>
+<p id="tipo_produccion-ayuda">El producto controla las rutas y recetas disponibles.</p>
 </div>
-<div>
-<label>Prioridad *</label>
-<select name="prioridad" required="" disabled="">
+<div data-disabled="true">
+<label for="prioridad">Prioridad<span aria-hidden="true">*</span>
+</label>
+<select id="prioridad" required="" disabled="" name="prioridad">
 <option value="alta">Alta</option>
 <option value="media" selected="">Media</option>
 <option value="baja">Baja</option>
@@ -8886,10 +8894,10 @@ exports[`/dashboard/production/work-orders/new > sin rutas: no permite crear > r
 </section>
 <section>
 <div>
-<label for="id_detalle_pedido-_R_f_">Detalle de pedido *</label>
+<label for="id_detalle_pedido">Detalle de pedido *</label>
 <input type="hidden" name="id_detalle_pedido" value=""/>
 <div>
-<input id="id_detalle_pedido-_R_f_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_detalle_pedido-_R_f_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar por cliente, producto o pedido..." value=""/>
+<input id="id_detalle_pedido" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_detalle_pedido-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar por cliente, producto o pedido..." value=""/>
 </div>
 </div>
 </section>
@@ -8902,42 +8910,44 @@ exports[`/dashboard/production/work-orders/new > sin rutas: no permite crear > r
 <section>
 <div>
 <div>
-<label for="id_ruta-_R_ar_">Ruta de fabricación *</label>
+<label for="id_ruta">Ruta de fabricación *</label>
 <input type="hidden" name="id_ruta" value=""/>
 <div>
-<input id="id_ruta-_R_ar_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_ruta-_R_ar_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar ruta del producto..." value=""/>
+<input id="id_ruta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_ruta-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar ruta del producto..." value=""/>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label for="id_version_receta-_R_cr_">Versión de receta *</label>
+<label for="id_version_receta">Versión de receta *</label>
 <input type="hidden" name="id_version_receta" value=""/>
 <div>
-<input id="id_version_receta-_R_cr_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_version_receta-_R_cr_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar receta del producto..." value=""/>
+<input id="id_version_receta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_version_receta-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar receta del producto..." value=""/>
 </div>
 </div>
 </div>
 </section>
 <section>
-<div>
-<label>Cantidad *</label>
-<input type="number" min="0.01" step="0.01" required="" disabled="" placeholder="Ej. 50" name="cantidad" value=""/>
+<div data-disabled="true">
+<label for="cantidad">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad" required="" disabled="" min="0.01" step="0.01" placeholder="Ej. 50" name="cantidad" value=""/>
 </div>
-<div>
-<label>Fecha de inicio *</label>
-<input type="date" required="" disabled="" name="fecha_inicio" value="2026-07-15"/>
+<div data-disabled="true">
+<label for="fecha_inicio">Fecha de inicio<span aria-hidden="true">*</span>
+</label>
+<input type="date" id="fecha_inicio" required="" disabled="" name="fecha_inicio" value="2026-07-15"/>
 </div>
-<div>
-<label>Entrega estimada</label>
-<input type="date" disabled="" name="fecha_entrega_estimada"/>
+<div data-disabled="true">
+<label for="fecha_entrega_estimada">Entrega estimada</label>
+<input type="date" id="fecha_entrega_estimada" disabled="" name="fecha_entrega_estimada"/>
 </div>
 </section>
-<section>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="4" maxLength="700" disabled="" placeholder="Ej. Priorizar corte y prensado durante la mañana.">
+<div data-disabled="true">
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" disabled="" name="observaciones" rows="4" maxLength="700" placeholder="Ej. Priorizar corte y prensado durante la mañana.">
 </textarea>
-</section>
+</div>
 <div role="alert">
 <div>Esta orden queda registrada en estado pendiente. Los avances por etapa de producción se generan y actualizan desde la pantalla de avances de la orden.</div>
 </div>

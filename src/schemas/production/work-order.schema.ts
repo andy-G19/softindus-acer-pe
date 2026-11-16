@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { operationKeySchema } from "@/schemas/operation-key.schema";
+
 const optionalIdSchema = z
   .string()
   .trim()
@@ -15,6 +17,9 @@ const optionalTextSchema = z
 
 export const workOrderSchema = z
   .object({
+    // C5 de la 11.6a (D66): la clave de idempotencia del formulario (OperationKeyField).
+    clave_operacion: operationKeySchema,
+
     tipo_produccion: z.enum(["pedido", "campania", "reposicion_stock"]),
 
     id_detalle_pedido: optionalIdSchema,

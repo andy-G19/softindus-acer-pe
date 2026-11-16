@@ -510,7 +510,11 @@ describe("C4 de la 11.2c: la salida abre, actualiza o atiende la alerta de stock
   const stock = (actual: string, minimo: string): DataOverrides => ({
     $queryRaw: lockedRows(materialRow({ stock_actual: D(actual), stock_reservado: D("0.00"), stock_minimo: D(minimo) })),
   });
-  const ACTIVA = { id_alerta: "ALE00000004" };
+  // Desde C3 de la 11.6a (D64) la escritura de la alerta es un compare-and-set: su conteo dice si
+  // habia una activa (1) o no (0), en lugar de una lectura previa.
+  const ACTIVA = { count: 1 };
+  const SIN_ALERTA = { count: 0 };
+  const WHERE_ACTIVA = { id_material: MATERIAL, estado_alerta: "activa" };
 
   type Calls = Awaited<ReturnType<typeof runAction>>["calls"];
 
@@ -518,17 +522,28 @@ describe("C4 de la 11.2c: la salida abre, actualiza o atiende la alerta de stock
     calls
       .filter((call) => "prisma" in call && kind.test(call.prisma))
       .map((call) => ({ prisma: (call as { prisma: string }).prisma, args: (call as { args: unknown }).args }));
-  const alertWrites = (calls: Calls) => alertCalls(calls, /^alerta_stock\.(create|update)/);
+  const alertWrites = (calls: Calls) => alertCalls(calls, /^alerta_stock\.(create|update|updateMany)$/);
 
   it("sin orden, deja el stock en el minimo: abre la alerta con el mensaje de la salida", async () => {
     const { calls, outcome } = await runAction({
       name: "salida al minimo",
       form: form({ cantidad: "3.00" }),
-      data: { ...stock("8.00", "5.00"), "alerta_stock.findFirst": null },
+      data: { ...stock("8.00", "5.00"), "alerta_stock.updateMany": SIN_ALERTA },
     });
 
     expect(outcome).toMatchObject({ status: "success" });
     expect(alertWrites(calls)).toEqual([
+      {
+        prisma: "alerta_stock.updateMany",
+        args: {
+          where: WHERE_ACTIVA,
+          data: {
+            stock_detectado: 5,
+            stock_minimo: 5,
+            mensaje: "El material Plancha LAC 2 mm quedo en stock critico tras una salida de inventario.",
+          },
+        },
+      },
       {
         prisma: "alerta_stock.create",
         args: {
@@ -549,14 +564,14 @@ describe("C4 de la 11.2c: la salida abre, actualiza o atiende la alerta de stock
     const { calls } = await runAction({
       name: "salida a una orden bajo el minimo",
       form: form({ id_orden_trabajo: OT, cantidad: "3.00" }),
-      data: { ...stock("6.00", "5.00"), "orden_trabajo.findUnique": workOrderRow(), "alerta_stock.findFirst": ACTIVA },
+      data: { ...stock("6.00", "5.00"), "orden_trabajo.findUnique": workOrderRow(), "alerta_stock.updateMany": ACTIVA },
     });
 
     expect(alertWrites(calls)).toEqual([
       {
-        prisma: "alerta_stock.update",
+        prisma: "alerta_stock.updateMany",
         args: {
-          where: { id_alerta: "ALE00000004" },
+          where: WHERE_ACTIVA,
           data: {
             stock_detectado: 3,
             stock_minimo: 5,
@@ -571,14 +586,14 @@ describe("C4 de la 11.2c: la salida abre, actualiza o atiende la alerta de stock
     const { calls } = await runAction({
       name: "salida por encima del minimo",
       form: form({ cantidad: "3.00" }),
-      data: { ...stock("20.00", "5.00"), "alerta_stock.findFirst": ACTIVA },
+      data: { ...stock("20.00", "5.00"), "alerta_stock.updateMany": ACTIVA },
     });
 
     expect(alertWrites(calls)).toEqual([
       {
-        prisma: "alerta_stock.update",
+        prisma: "alerta_stock.updateMany",
         args: {
-          where: { id_alerta: "ALE00000004" },
+          where: WHERE_ACTIVA,
           data: {
             estado_alerta: "atendida",
             fecha_atencion: expect.any(Date),
@@ -591,22 +606,20 @@ describe("C4 de la 11.2c: la salida abre, actualiza o atiende la alerta de stock
     ]);
   });
 
-  it("busca la alerta activa del material, dentro de la transaccion y despues del kardex", async () => {
+  it("escribe la alerta activa del material, dentro de la transaccion y despues del kardex", async () => {
     const { calls } = await runAction({
       name: "salida sin alerta",
       form: form({ cantidad: "3.00" }),
-      data: { ...stock("20.00", "5.00"), "alerta_stock.findFirst": null },
+      data: { ...stock("20.00", "5.00"), "alerta_stock.updateMany": SIN_ALERTA },
     });
     const index = (name: string) => calls.findIndex((call) => "prisma" in call && call.prisma === name);
 
-    expect(alertCalls(calls, /^alerta_stock\./)).toEqual([
-      {
-        prisma: "alerta_stock.findFirst",
-        args: { where: { id_material: MATERIAL, estado_alerta: "activa" }, select: { id_alerta: true } },
-      },
+    // Sin alerta activa y por encima del minimo: el compare-and-set no encuentra nada que atender.
+    expect(alertCalls(calls, /^alerta_stock\./).map((call) => [call.prisma, (call.args as { where: unknown }).where])).toEqual([
+      ["alerta_stock.updateMany", WHERE_ACTIVA],
     ]);
-    expect(index("alerta_stock.findFirst")).toBeGreaterThan(index("movimiento_inventario.create"));
-    expect(index("alerta_stock.findFirst")).toBeLessThan(index("operacion_idempotente.updateMany"));
+    expect(index("alerta_stock.updateMany")).toBeGreaterThan(index("movimiento_inventario.create"));
+    expect(index("alerta_stock.updateMany")).toBeLessThan(index("operacion_idempotente.updateMany"));
   });
 
   it("un rechazo por stock insuficiente no toca las alertas", async () => {

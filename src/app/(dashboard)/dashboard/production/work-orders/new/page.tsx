@@ -1,9 +1,15 @@
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { dashboardBreadcrumbs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
+import { productionNotifications } from "@/modules/production/notifications";
+import { createWorkOrderAction } from "@/modules/production/work-orders/actions";
 import { getNewWorkOrderFormData } from "@/modules/production/work-orders/queries";
 import { WorkOrderForm } from "@/modules/production/work-orders/components/work-order-form";
+
+type NewWorkOrderPageProps = {
+  searchParams?: Promise<{ returnTo?: string | string[] }>;
+};
 
 function getTodayInputValue() {
   return new Date().toISOString().slice(0, 10);
@@ -17,8 +23,13 @@ function toDecimalString(value: unknown) {
   return Number(value.toString()).toFixed(2);
 }
 
-export default async function NewWorkOrderPage() {
+export default async function NewWorkOrderPage({ searchParams }: NewWorkOrderPageProps) {
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+
+  const params = searchParams ? await searchParams : {};
+  // C5 de la 11.6a (D66): Cancelar vuelve a la pagina de la que vino; sin ella, al listado de
+  // ordenes, como antes. Al guardar, el formulario va al detalle de la orden creada.
+  const backHref = getSafeReturnTo(params.returnTo, navigationHrefs.workOrders);
 
   const { products, routes, versions, orderDetails, campaigns } =
     await getNewWorkOrderFormData();
@@ -73,7 +84,7 @@ export default async function NewWorkOrderPage() {
       <PageHeader
         title="Nueva orden de trabajo"
         description="Registra una orden de producción por pedido, campaña o reposición de stock."
-        backHref="/dashboard/production/work-orders"
+        backHref={backHref}
         backLabel="Volver a órdenes"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Producción", href: "/dashboard/production" },
@@ -96,6 +107,9 @@ export default async function NewWorkOrderPage() {
       ) : null}
 
       <WorkOrderForm
+        action={createWorkOrderAction}
+        successNotification={productionNotifications["work-order-created"]}
+        returnTo={backHref}
         products={formProducts}
         routes={formRoutes}
         versions={formVersions}

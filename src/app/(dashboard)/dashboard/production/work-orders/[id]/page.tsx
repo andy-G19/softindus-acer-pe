@@ -33,6 +33,8 @@ import {
   getSafeReturnTo,
   navigationHrefs,
 } from "@/lib/navigation";
+import { formatCents } from "@/lib/decimal-cents";
+import { quantityHundredths } from "@/lib/material-quantities";
 import { toNumber } from "@/lib/numbers";
 import {
   deliverWorkOrderMaterialsAction,
@@ -48,6 +50,24 @@ type WorkOrderDetailPageProps = {
 
 function formatDecimal(value: unknown) {
   return toNumber(value).toFixed(2);
+}
+
+/**
+ * Disponible, faltante y si el stock alcanza, en centesimos como guardan sus columnas
+ * numeric(10, 2) (C4 de la 11.6a, D65, hallazgo 27 de la 10.6b). En number, 0.30 - 0.10 daba
+ * 0.19999999999999998: frente a 0.20 la fila decia «Insuficiente» con un faltante de «0.00».
+ */
+function stockCoverage(currentStock: unknown, reservedStock: unknown, required: number) {
+  const available =
+    quantityHundredths(String(currentStock ?? 0)) - quantityHundredths(String(reservedStock ?? 0));
+  const requiredHundredths = quantityHundredths(required);
+  const shortage = requiredHundredths > available ? requiredHundredths - available : 0n;
+
+  return {
+    availableStock: toNumber(formatCents(available)),
+    shortage: toNumber(formatCents(shortage)),
+    hasEnoughStock: available >= requiredHundredths,
+  };
 }
 
 function getOrderBadgeVariant(status: string) {
@@ -105,7 +125,11 @@ export default async function WorkOrderDetailPage({
 
         const currentStock = toNumber(requirement.material.stock_actual);
         const reservedStock = toNumber(requirement.material.stock_reservado);
-        const availableStock = currentStock - reservedStock;
+        const coverage = stockCoverage(
+          requirement.material.stock_actual,
+          requirement.material.stock_reservado,
+          requiredWithWaste,
+        );
 
         // El costo es el congelado al crear la orden, no el actual: así el costo
         // planificado no cambia cada vez que llega una compra nueva.
@@ -124,9 +148,7 @@ export default async function WorkOrderDetailPage({
           requiredWithWaste,
           currentStock,
           reservedStock,
-          availableStock,
-          shortage: Math.max(requiredWithWaste - availableStock, 0),
-          hasEnoughStock: availableStock >= requiredWithWaste,
+          ...coverage,
           estimatedCost: requiredWithWaste * unitCost,
         };
       })
@@ -144,7 +166,11 @@ export default async function WorkOrderDetailPage({
 
         const currentStock = toNumber(detail.material.stock_actual);
         const reservedStock = toNumber(detail.material.stock_reservado);
-        const availableStock = currentStock - reservedStock;
+        const coverage = stockCoverage(
+          detail.material.stock_actual,
+          detail.material.stock_reservado,
+          requiredWithWaste,
+        );
 
         const unitCost = toNumber(detail.material.costo_unitario_actual);
 
@@ -161,9 +187,7 @@ export default async function WorkOrderDetailPage({
           requiredWithWaste,
           currentStock,
           reservedStock,
-          availableStock,
-          shortage: Math.max(requiredWithWaste - availableStock, 0),
-          hasEnoughStock: availableStock >= requiredWithWaste,
+          ...coverage,
           estimatedCost: requiredWithWaste * unitCost,
         };
       }) ?? []);

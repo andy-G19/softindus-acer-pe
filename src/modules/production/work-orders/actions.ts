@@ -2,8 +2,15 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireRole } from "@/lib/authz";
-import { createWorkOrder } from "@/modules/production/work-orders/create-work-order";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import type { FieldErrors } from "@/lib/errors";
+import { IdempotencyConflictError } from "@/lib/idempotency";
+import { APP_ROLES } from "@/lib/permissions";
+import {
+  createWorkOrder,
+  WorkOrderRejectedError,
+} from "@/modules/production/work-orders/create-work-order";
 import {
   closeWorkOrderMaterials,
   reopenWorkOrderMaterials,
@@ -25,39 +32,110 @@ import {
 } from "@/schemas/production/work-order-materials.schema";
 import { workOrderSchema } from "@/schemas/production/work-order.schema";
 
-export async function createWorkOrderAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+/** Lo que el formulario de la orden envio, tal cual, para volver a mostrarlo. */
+export type WorkOrderFormValues = {
+  tipo_produccion: string;
+  id_detalle_pedido: string;
+  id_campania: string;
+  id_producto: string;
+  id_ruta: string;
+  id_version_receta: string;
+  cantidad: string;
+  fecha_inicio: string;
+  fecha_entrega_estimada: string;
+  prioridad: string;
+  observaciones: string;
+};
+
+// C5 de la 11.6a (D66): crear no redirige; devuelve el resultado y el formulario da el aviso y va
+// al detalle de la orden creada. Antes cualquier rechazo lanzaba un error que se veia en la pagina
+// de error y el formulario se perdia; ahora queda en el formulario, junto al campo que lo causa y
+// con lo enviado. Sin permiso responde con un error. El exito lleva la clave confirmada para que
+// el formulario genere otra (OperationKeyField).
+export type WorkOrderFormState = FormActionState<
+  WorkOrderFormValues,
+  { id_orden_trabajo: string; clave_operacion: string }
+>;
+
+function getWorkOrderFormValues(formData: FormData): WorkOrderFormValues {
+  const text = (name: keyof WorkOrderFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    tipo_produccion: text("tipo_produccion"),
+    id_detalle_pedido: text("id_detalle_pedido"),
+    id_campania: text("id_campania"),
+    id_producto: text("id_producto"),
+    id_ruta: text("id_ruta"),
+    id_version_receta: text("id_version_receta"),
+    cantidad: text("cantidad"),
+    fecha_inicio: text("fecha_inicio"),
+    fecha_entrega_estimada: text("fecha_entrega_estimada"),
+    prioridad: text("prioridad"),
+    observaciones: text("observaciones"),
+  };
+}
+
+export async function createWorkOrderAction(
+  _prevState: WorkOrderFormState,
+  formData: FormData,
+): Promise<WorkOrderFormState> {
+  const values = getWorkOrderFormValues(formData);
+  const fail = (error: string, fieldErrors?: FieldErrors): WorkOrderFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
+
+  if (!session) {
+    return fail("No tienes permisos para crear órdenes de trabajo.");
+  }
 
   const parsed = workOrderSchema.safeParse({
-    tipo_produccion: formData.get("tipo_produccion"),
-    id_detalle_pedido: formData.get("id_detalle_pedido") ?? "",
-    id_campania: formData.get("id_campania") ?? "",
-    id_producto: formData.get("id_producto"),
-    id_ruta: formData.get("id_ruta"),
-    id_version_receta: formData.get("id_version_receta"),
-    cantidad: formData.get("cantidad"),
-    fecha_inicio: formData.get("fecha_inicio"),
-    fecha_entrega_estimada: formData.get("fecha_entrega_estimada") ?? "",
-    prioridad: formData.get("prioridad"),
-    observaciones: formData.get("observaciones") ?? "",
+    ...values,
+    clave_operacion: formData.get("clave_operacion"),
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos inválidos.");
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+    // La clave va en un campo oculto: su mensaje es el general, no el de un campo.
+    const keyError = fieldErrors.clave_operacion?.[0];
+
+    return fail(keyError ?? "Revisa los datos de la orden de trabajo.", fieldErrors);
   }
 
-  const data = parsed.data;
+  let idOrdenTrabajo: string;
 
-  const idOrdenTrabajo = await createWorkOrder({
-    data,
-    idUsuario: session.user.id,
-  });
+  try {
+    idOrdenTrabajo = await createWorkOrder({
+      data: parsed.data,
+      idUsuario: session.user.id,
+    });
+  } catch (error) {
+    if (error instanceof WorkOrderRejectedError) {
+      return fail(error.message, { [error.field]: [error.message] });
+    }
+
+    if (error instanceof IdempotencyConflictError) {
+      return fail(error.message);
+    }
+
+    throw error;
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/work-orders");
 
-  redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}?toast=work-order-created`);
+  return {
+    status: "success",
+    data: { id_orden_trabajo: idOrdenTrabajo, clave_operacion: parsed.data.clave_operacion },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 export async function deliverWorkOrderMaterialsAction(formData: FormData) {

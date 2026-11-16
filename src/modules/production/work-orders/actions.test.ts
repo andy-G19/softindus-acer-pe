@@ -46,6 +46,11 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Crear devuelve un FormActionState (C5 de la 11.6a): su id de operacion fijo, para el snapshot.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -140,9 +145,8 @@ async function runAction(action: Action, actionCase: ActionCase) {
 
   const { calls, result } = await characterizeHandler(async () => {
     try {
-      await action(formOf(actionCase.form));
-
-      return "termino sin redirigir";
+      // Desde C5 de la 11.6a crear devuelve su estado (FormActionState); las demas redirigen.
+      return (await action(formOf(actionCase.form))) ?? "termino sin redirigir";
     } catch (error) {
       return (
         describeNavigationError(error) ??
@@ -212,7 +216,26 @@ function whereOf(args: PrismaArgs) {
 
 // --- Creacion --------------------------------------------------------------
 
+// C5 de la 11.6a (D66): crear recibe el estado anterior del formulario y una clave de operacion.
+const CLAVE = "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c";
+
+const createAction = (formData: FormData) => createWorkOrderAction({ status: "idle" }, formData);
+
+/** La clave ya estaba en la tabla: el INSERT no devuelve filas y se lee la guardada. */
+function storedKey(changes: Row = {}): DataOverrides {
+  return {
+    "operacion_idempotente.createManyAndReturn": [],
+    "operacion_idempotente.findUniqueOrThrow": {
+      tipo_operacion: "crear_orden_trabajo",
+      id_usuario: "USU00000001",
+      id_registro_resultado: "OTR00000009",
+      ...changes,
+    },
+  };
+}
+
 const createForm: FormFields = {
+  clave_operacion: CLAVE,
   tipo_produccion: "reposicion_stock",
   id_detalle_pedido: "",
   id_campania: "",
@@ -281,6 +304,10 @@ function orderDetailRow(changes: Row = {}) {
 function createData(overrides: DataOverrides = {}): DataOverrides {
   return {
     "detalle_pedido.findUnique": orderDetailRow(),
+    // C2 de la 11.6a (D63): el estado del pedido se lee con el pedido bloqueado, y de la version
+    // solo su receta, para bloquearla antes de leer la version.
+    "pedido.findUnique": { id_pedido: PEDIDO, id_cliente: CLIENTE, estado: "aprobado" },
+    "version_receta.findUnique": { id_receta: "RTE00000001" },
     "producto.findFirst": { id_producto: PRODUCTO, nombre_producto: "Puerta metalica" },
     "ruta_fabricacion.findFirst": {
       id_ruta: RUTA,
@@ -436,11 +463,15 @@ function stockInDb(changes: StockInDb = {}): DataOverrides {
 }
 
 // Alertas activas por material: el caso decide cuales existen.
+// Desde C3 de la 11.6a (D64) la alerta activa no se lee antes: la escritura es un compare-and-set
+// (updateMany con el estado «activa» en el where) y su conteo dice si habia una. Los materiales
+// con alerta activa cuentan 1; los demas, 0, y entonces se abre otra.
 function activeAlerts(byMaterial: Record<string, string>) {
   return (args: PrismaArgs) => {
-    const idAlerta = byMaterial[String(whereOf(args).id_material)];
+    const where = whereOf(args);
+    const idAlerta = byMaterial[String(where.id_material)];
 
-    return idAlerta ? { id_alerta: idAlerta } : null;
+    return { count: idAlerta && where.estado_alerta === "activa" ? 1 : 0 };
   };
 }
 
@@ -465,7 +496,21 @@ function requirementWithOrder(
 // Casos
 // ---------------------------------------------------------------------------
 
-defineActionSuite("createWorkOrderAction", createWorkOrderAction, [
+defineActionSuite("createWorkOrderAction", createAction, [
+  {
+    name: "sin clave de operacion",
+    form: { ...createForm, clave_operacion: "" },
+  },
+  {
+    name: "la misma clave ya registrada: responde con la orden creada sin escribir",
+    form: createForm,
+    data: createData(storedKey()),
+  },
+  {
+    name: "la clave es de otra operacion",
+    form: createForm,
+    data: createData(storedKey({ tipo_operacion: "crear_compra" })),
+  },
   {
     name: "datos invalidos: responde el primer mensaje de Zod sin consultar",
     form: { ...createForm, cantidad: "0" },
@@ -681,7 +726,7 @@ defineActionSuite("deliverWorkOrderMaterialsAction", deliverWorkOrderMaterialsAc
           requirementRow(REQ_PERNO, PERNO, { requerida: "10.00" }),
         ],
       }),
-      "alerta_stock.findFirst": activeAlerts({
+      "alerta_stock.updateMany": activeAlerts({
         [PLANCHA]: "ALE00000003",
         [TORNILLO]: "ALE00000004",
       }),
@@ -698,7 +743,7 @@ defineActionSuite("deliverWorkOrderMaterialsAction", deliverWorkOrderMaterialsAc
           requirementRow(REQ_SOLDADURA, SOLDADURA, { requerida: "8.57" }),
         ],
       }),
-      "alerta_stock.findFirst": null,
+      "alerta_stock.updateMany": { count: 0 },
       // Otra entrega se llevo la soldadura entre la lectura y la transaccion:
       // la base tiene 5.00 y se piden 8.57.
       ...stockInDb({ [SOLDADURA]: { stock: "5.00", minimo: "5.00" } }),
@@ -797,7 +842,7 @@ defineActionSuite("deliverAdditionalMaterialAction", deliverAdditionalMaterialAc
         entregada: "68.75",
         material: { stock: "40.00", minimo: "10.00" },
       }),
-      "alerta_stock.findFirst": null,
+      "alerta_stock.updateMany": { count: 0 },
       ...stockInDb({ [PLANCHA]: { stock: "40.00", minimo: "10.00" } }),
     },
   },
@@ -885,7 +930,7 @@ defineActionSuite("returnWorkOrderMaterialAction", returnWorkOrderMaterialAction
         entregada: "10.00",
         material: { stock: "5.00", minimo: "8.00" },
       }),
-      "alerta_stock.findFirst": activeAlerts({ [PLANCHA]: "ALE00000003" }),
+      "alerta_stock.updateMany": activeAlerts({ [PLANCHA]: "ALE00000003" }),
       ...stockInDb({ [PLANCHA]: { stock: "5.00", minimo: "8.00" } }),
     },
   },
@@ -899,7 +944,7 @@ defineActionSuite("returnWorkOrderMaterialAction", returnWorkOrderMaterialAction
         { requerida: "68.75", entregada: "10.00", devuelta: "1.00", material: { stock: "20.00", minimo: "8.00" } },
         { estado: "finalizada" },
       ),
-      "alerta_stock.findFirst": activeAlerts({ [PLANCHA]: "ALE00000003" }),
+      "alerta_stock.updateMany": activeAlerts({ [PLANCHA]: "ALE00000003" }),
       ...stockInDb({ [PLANCHA]: { stock: "20.00", minimo: "8.00" } }),
     },
   },
@@ -1211,7 +1256,9 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
       .map((call) => (call.args as { data: Row }).data);
   }
 
-  function expectKardex(data: Row, expected: { anterior: string; cantidad: number; resultante: string }) {
+  // Desde C1 de la 11.6a (D62) el kardex recibe la cantidad ya redondeada como su columna, en
+  // texto: el mismo que va al descuento y a lo entregado.
+  function expectKardex(data: Row, expected: { anterior: string; cantidad: string; resultante: string }) {
     expect(String(data.stock_anterior)).toBe(D(expected.anterior).toString());
     expect(data.cantidad).toBe(expected.cantidad);
     expect(String(data.stock_resultante)).toBe(D(expected.resultante).toString());
@@ -1228,7 +1275,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
             requirementRow(REQ_PLANCHA, PLANCHA, { requerida: "68.75", entregada: "20.00" }),
           ],
         }),
-        "alerta_stock.findFirst": activeAlerts({ [PLANCHA]: "ALE00000003" }),
+        "alerta_stock.updateMany": activeAlerts({ [PLANCHA]: "ALE00000003" }),
         ...stockInDb({ [PLANCHA]: { stock: "70.00", minimo: "30.00" } }),
       },
     });
@@ -1237,11 +1284,11 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
 
     const [kardex] = written(calls, "movimiento_inventario.create");
 
-    expectKardex(kardex, { anterior: "70.00", cantidad: 48.75, resultante: "21.25" });
+    expectKardex(kardex, { anterior: "70.00", cantidad: "48.75", resultante: "21.25" });
 
     // 21.25 queda bajo el minimo 30: la alerta sigue activa con el stock real.
     // Con la lectura, 51.25 la habria dado por atendida.
-    expect(written(calls, "alerta_stock.update")).toEqual([
+    expect(written(calls, "alerta_stock.updateMany")).toEqual([
       expect.objectContaining({ stock_detectado: 21.25, stock_minimo: 30 }),
     ]);
   });
@@ -1257,7 +1304,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
           // Lee 40.00, sobre el minimo 10.
           material: { stock: "40.00", minimo: "10.00" },
         }),
-        "alerta_stock.findFirst": null,
+        "alerta_stock.updateMany": { count: 0 },
         ...stockInDb({ [PLANCHA]: { stock: "12.00", minimo: "10.00" } }),
       },
     });
@@ -1266,7 +1313,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
 
     const [kardex] = written(calls, "movimiento_inventario.create");
 
-    expectKardex(kardex, { anterior: "12.00", cantidad: 5.5, resultante: "6.50" });
+    expectKardex(kardex, { anterior: "12.00", cantidad: "5.50", resultante: "6.50" });
     expect(written(calls, "alerta_stock.create")).toEqual([
       expect.objectContaining({ stock_detectado: 6.5, stock_minimo: 10, estado_alerta: "activa" }),
     ]);
@@ -1283,7 +1330,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
           // Lee 5.00, bajo el minimo 8.
           material: { stock: "5.00", minimo: "8.00" },
         }),
-        "alerta_stock.findFirst": activeAlerts({ [PLANCHA]: "ALE00000003" }),
+        "alerta_stock.updateMany": activeAlerts({ [PLANCHA]: "ALE00000003" }),
         ...stockInDb({ [PLANCHA]: { stock: "15.00", minimo: "8.00" } }),
       },
     });
@@ -1292,11 +1339,11 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
 
     const [kardex] = written(calls, "movimiento_inventario.create");
 
-    expectKardex(kardex, { anterior: "15.00", cantidad: 3, resultante: "18.00" });
+    expectKardex(kardex, { anterior: "15.00", cantidad: "3.00", resultante: "18.00" });
 
     // 18 supera el minimo 8: la alerta se atiende. Con la lectura, 8.00 la
     // habria dejado activa.
-    expect(written(calls, "alerta_stock.update")).toEqual([
+    expect(written(calls, "alerta_stock.updateMany")).toEqual([
       expect.objectContaining({ estado_alerta: "atendida", stock_detectado: 18 }),
     ]);
   });
@@ -1314,7 +1361,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
 // cliente se reutilizan.
 describe("H5: crear una orden por pedido lee el detalle una sola vez", () => {
   it("lee el detalle una vez y pasa a produccion el pedido de esa lectura", async () => {
-    const { calls, outcome } = await runAction(createWorkOrderAction, {
+    const { calls, outcome } = await runAction(createAction, {
       name: "H5",
       form: orderForm,
       data: createData(),
@@ -1323,7 +1370,10 @@ describe("H5: crear una orden por pedido lee el detalle una sola vez", () => {
     const argsOf = (key: string) =>
       prismaCalls.filter((call) => call.prisma === key).map((call) => call.args as Row);
 
-    expect(outcome).toBe("redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created");
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: "OTR00000001", clave_operacion: CLAVE },
+    });
     expect(argsOf("detalle_pedido.findUnique")).toHaveLength(1);
     expect(argsOf("orden_trabajo.create")).toEqual([
       { data: expect.objectContaining({ id_cliente: CLIENTE, id_detalle_pedido: DETALLE }) },
@@ -1331,5 +1381,184 @@ describe("H5: crear una orden por pedido lee el detalle una sola vez", () => {
     expect(argsOf("pedido.update")).toEqual([
       { where: { id_pedido: PEDIDO }, data: { estado: "en_produccion" } },
     ]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C2 de la 11.6a (D63): crear una orden decide con su origen bloqueado
+// ---------------------------------------------------------------------------
+
+// Crear leia el detalle de pedido, el producto, la ruta, la version de receta y la campania fuera
+// de la transaccion y sin bloquear nada, y no miraba el estado del pedido: con el formulario
+// abierto mientras se cancelaba el pedido, la orden se creaba y pasaba el pedido cancelado a
+// «en_produccion» (hallazgo 2 de la 11.6). Ahora, dentro de la transaccion, bloquea el pedido (el
+// mismo candado que cancelar, editar y crear una proforma), la campania, la ruta y la receta de la
+// version, en ese orden, antes de las lecturas que deciden, y exige que el pedido este registrado
+// o aprobado, lo mismo que ofrece el formulario.
+describe("C2 de la 11.6a: crear una orden decide con su origen bloqueado", () => {
+  const RECETA = "RTE00000001";
+  // La version solo se lee antes del candado para saber su receta: id_receta no cambia.
+  const withRecipeRef = (overrides: DataOverrides = {}) =>
+    createData({ "version_receta.findUnique": { id_receta: RECETA }, ...overrides });
+
+  const indexOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
+
+  it("una orden para un pedido cancelado se rechaza sin escribir", async () => {
+    const { calls, outcome } = await runAction(createAction, {
+      name: "C2",
+      form: orderForm,
+      data: withRecipeRef({
+        "pedido.findUnique": { id_pedido: PEDIDO, id_cliente: CLIENTE, estado: "cancelado" },
+        "detalle_pedido.findUnique": orderDetailRow({
+          pedido: { id_pedido: PEDIDO, id_cliente: CLIENTE, estado: "cancelado" },
+        }),
+      }),
+    });
+
+    const message =
+      "El pedido PED00000001 está cancelado: solo se crean órdenes para pedidos registrados o aprobados.";
+
+    expect(outcome).toMatchObject({ status: "error", error: message, fieldErrors: { id_detalle_pedido: [message] } });
+    expect(indexOf(calls, "orden_trabajo.create")).toBe(-1);
+    expect(indexOf(calls, "pedido.update")).toBe(-1);
+  });
+
+  it("bloquea el pedido antes de leer su estado", async () => {
+    const { calls } = await runAction(createAction, { name: "C2", form: orderForm, data: withRecipeRef() });
+
+    expectRowLockedBefore(calls, {
+      table: "pedido",
+      id: PEDIDO,
+      reads: (call) => call.prisma === "pedido.findUnique",
+    });
+  });
+
+  it("bloquea la campania antes de leerla", async () => {
+    const { calls } = await runAction(createAction, { name: "C2", form: campaignForm, data: withRecipeRef() });
+
+    expectRowLockedBefore(calls, {
+      table: "campania_produccion",
+      id: CAMPANIA,
+      reads: (call) => call.prisma === "campania_produccion.findFirst",
+    });
+  });
+
+  it("bloquea la ruta antes de leerla", async () => {
+    const { calls } = await runAction(createAction, { name: "C2", form: createForm, data: withRecipeRef() });
+
+    expectRowLockedBefore(calls, {
+      table: "ruta_fabricacion",
+      id: RUTA,
+      reads: (call) => call.prisma === "ruta_fabricacion.findFirst",
+    });
+  });
+
+  it("bloquea la receta de la version antes de leer la version", async () => {
+    const { calls } = await runAction(createAction, { name: "C2", form: createForm, data: withRecipeRef() });
+
+    expectRowLockedBefore(calls, {
+      table: "receta_tecnica",
+      id: RECETA,
+      reads: (call) => call.prisma === "version_receta.findFirst",
+    });
+  });
+
+  it("los candados van en el orden pedido, campania, ruta, receta, y el producto se lee dentro", async () => {
+    const { calls } = await runAction(createAction, {
+      name: "C2",
+      form: { ...orderForm, tipo_produccion: "pedido" },
+      data: withRecipeRef(),
+    });
+    const locks = calls
+      .filter(isPrismaCall)
+      .filter((call) => call.prisma === "$queryRaw")
+      .map((call) => /FROM aceros\.(\w+)/.exec((call.args as { sql: string }).sql)?.[1]);
+
+    expect(locks).toEqual(["pedido", "ruta_fabricacion", "receta_tecnica"]);
+    expect(indexOf(calls, "producto.findFirst")).toBeGreaterThan(indexOf(calls, "prisma.$transaction"));
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C5 de la 11.6a (D66): crear con resultado e idempotencia
+// ---------------------------------------------------------------------------
+
+// Crear redirigia al detalle al guardar y lanzaba cualquier rechazo, que se veia en la pagina de
+// error: el formulario se perdia. Y un doble envio creaba dos ordenes. Ahora devuelve un
+// FormActionState: el rechazo queda en el formulario, en el campo que lo causa y con lo enviado, y
+// el exito trae la orden creada para que el formulario vaya a su detalle. La clave se reclama
+// como primera sentencia de la transaccion (antes de los candados) y se completa antes del commit;
+// un rechazo despues del reclamo lanza dentro de la transaccion, que la deshace y libera la clave.
+describe("C5 de la 11.6a: crear con resultado e idempotencia", () => {
+  const indexOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
+
+  it("reclama la clave antes de los candados, la completa antes del commit y no redirige", async () => {
+    const { calls, outcome } = await runAction(createAction, { name: "C5", form: createForm, data: createData() });
+    const claim = calls.find((call) => isPrismaCall(call) && call.prisma === "operacion_idempotente.createManyAndReturn");
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: "OTR00000001", clave_operacion: CLAVE },
+    });
+    expect(claim && isPrismaCall(claim) ? (claim.args as { data: Row[] }).data : null).toEqual([
+      expect.objectContaining({ clave: CLAVE, tipo_operacion: "crear_orden_trabajo", id_usuario: "USU00000001" }),
+    ]);
+    expect(indexOf(calls, "operacion_idempotente.createManyAndReturn")).toBeGreaterThan(indexOf(calls, "prisma.$transaction"));
+    expect(indexOf(calls, "operacion_idempotente.createManyAndReturn")).toBeLessThan(indexOf(calls, "$queryRaw"));
+    expect(indexOf(calls, "requerimiento_orden_material.createMany")).toBeLessThan(
+      indexOf(calls, "operacion_idempotente.updateMany"),
+    );
+    expect(indexOf(calls, "operacion_idempotente.updateMany")).toBeLessThan(
+      indexOf(calls, "prisma.$transaction:commit"),
+    );
+    expect(calls.filter((call) => "effect" in call && call.effect === "revalidatePath").length).toBeGreaterThan(0);
+  });
+
+  it("la misma clave responde con la orden ya creada, sin candados ni escrituras", async () => {
+    const { calls, outcome } = await runAction(createAction, {
+      name: "C5",
+      form: createForm,
+      data: createData(storedKey()),
+    });
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: "OTR00000009", clave_operacion: CLAVE },
+    });
+    expect(indexOf(calls, "$queryRaw")).toBe(-1);
+    expect(indexOf(calls, "orden_trabajo.create")).toBe(-1);
+    expect(indexOf(calls, "operacion_idempotente.updateMany")).toBe(-1);
+  });
+
+  it("datos invalidos: el error queda en su campo, con lo enviado, sin consultar", async () => {
+    const { calls, outcome } = await runAction(createAction, {
+      name: "C5",
+      form: { ...createForm, cantidad: "0" },
+    });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      fieldErrors: { cantidad: ["La cantidad debe ser mayor a 0."] },
+      values: expect.objectContaining({ cantidad: "0", id_ruta: RUTA, id_version_receta: VERSION }),
+    });
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it.each([
+    ["el detalle de pedido no existe", orderForm, { "detalle_pedido.findUnique": null }, "id_detalle_pedido"],
+    ["el producto inactivo", createForm, { "producto.findFirst": null }, "id_producto"],
+    ["la ruta inactiva", createForm, { "ruta_fabricacion.findFirst": null }, "id_ruta"],
+    ["la version inexistente", createForm, { "version_receta.findFirst": null }, "id_version_receta"],
+    ["la campania no activa", campaignForm, { "campania_produccion.findFirst": null }, "id_campania"],
+  ] as const)("%s revierte la transaccion y deja el error en su campo, con lo enviado", async (_name, form, data, field) => {
+    const { calls, outcome } = await runAction(createAction, { name: "C5", form, data: createData({ ...data }) });
+
+    expect(outcome).toMatchObject({ status: "error", values: expect.objectContaining({ id_ruta: RUTA }) });
+    expect(Object.keys((outcome as { fieldErrors?: Row }).fieldErrors ?? {})).toEqual([field]);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "operacion_idempotente.updateMany")).toBe(-1);
+    expect(indexOf(calls, "orden_trabajo.create")).toBe(-1);
   });
 });

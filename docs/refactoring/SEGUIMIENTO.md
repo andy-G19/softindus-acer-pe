@@ -9027,7 +9027,8 @@ Datos leídos de la API de GitHub el 2026-11-14 (UTC) y comparados con git:
 
 ### Sub-entrega 11.5 — Planillas y su pago
 
-Fecha: 2026-11-14 (Lima). Estado: verificada en staging. Plan en `tmp/e11-diff/plan-11-5.md`,
+Fecha: 2026-11-14 (Lima). Estado: integrada en `main` (PR #48, merge `4721e02`). Plan en
+`tmp/e11-diff/plan-11-5.md`,
 con las decisiones D53 a D61 aprobadas: montos de planilla en centésimos y pago exactamente igual
 al neto, sin tocar la tarifa (D53); generar bloquea el operario y anular y pagar bloquean la
 planilla con `lockPayrollRow` (D54); un periodo que se cruza con otra planilla no anulada del
@@ -9181,6 +9182,169 @@ Hallazgos:
 7. Datos de prueba que quedan en staging: PLA00000002 de Obregon pagada con HPO00000001 (S/ 74.99)
    y PLA00000003 de Godoy anulada. La aplicación no borra planillas ni pagos.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-16 (UTC) y comparados con git:
+
+- La verificación `6438d4a` se publicó en `staging`: CI #186 en verde (5m 22s).
+- PR #48, abierto a las 12:33:38 UTC y fusionado con merge commit a las 13:29:11 UTC del
+  2026-11-16: 12 commits, de `afb6d58` a `6438d4a`, y 37 archivos (+7.587 −632). Su CI, el #187,
+  sobre `6438d4a`, terminó en verde (5m 52s).
+- El merge commit `4721e02` tiene como padres `4991a0d` (`main`) y `6438d4a` (`staging`), y su
+  árbol es el de `6438d4a` (`afd1cd07`): `main` y `staging` tienen el mismo contenido. CI #188 en
+  verde (5m 47s).
+- Vercel desplegó `4721e02` en producción (`success` a las 13:31:01 UTC). La sub-entrega no trae
+  migraciones.
+
+### Sub-entrega 11.6a — Órdenes de trabajo: cantidades, crear y alerta de stock
+
+Fecha: 2026-11-16 (Lima). Estado: verificada en staging (CI #189). Plan en
+`tmp/e11-diff/plan-11-6.md`, con las decisiones D62 a D72 aprobadas: cantidades de material en
+centésimos (D62); crear decide dentro de la transacción con el pedido, la campaña, la ruta y la
+receta bloqueados, y solo para pedidos registrados o aprobados (D63); la alerta de stock con
+compare-and-set (D64); disponible y faltante del detalle en centésimos (D65); crear con resultado e
+idempotencia (D66); la entrega adicional y la devolución con clave (D67), cerrar y reabrir con
+resultado (D68), y anular y finalizar con `ConfirmActionButton` (D69) quedan para la 11.6b; la
+cantidad producida de las campañas (D70) y el redondeo del requerimiento congelado (D71) quedan
+registrados sin tocarlos, y la 11.6 se parte en 11.6a, 11.6b y 11.6c (D72).
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 91cad22 | docs | Integración de la 11.5 en `main` (PR #48). |
+| cff19c9 | fix | `material-quantities.ts`: la entrega adicional, la devolución, el consumo y lo producido se redondean en centésimos antes de comparar y de escribir, y el mismo texto va al stock, a lo entregado y al kardex; una cantidad que se guardaría como 0.00 se rechaza en el esquema (D62). Rojo antes; 5 pruebas en Postgres. |
+| f974ac8 | fix | Crear lee todo dentro de la transacción, después de bloquear el pedido, la campaña, la ruta y la receta de la versión, y rechaza un pedido que no esté registrado o aprobado (D63). Rojo antes; 3 pruebas en Postgres. |
+| f64752b | fix | `syncStockAlert` actualiza la alerta solo si sigue activa (`updateMany` con el estado en el `where`) y, si ya no queda ninguna, abre otra (D64); arregla también la salida de inventario. Rojo antes. |
+| bb79cc2 | fix | El detalle de la orden calcula el disponible, el faltante y si alcanza en centésimos (D65). Rojo antes. |
+| 2c112f0 | feat | Crear con `FormActionState`, clave `orden_trabajo:nueva` (primera sentencia), cada rechazo en su campo, `returnTo` y guardia de descarte; al guardar va al detalle de la orden creada (D66). Rojo antes. |
+| 9abbc08 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
+
+Diseño:
+
+- Las cantidades se cuentan como las columnas `numeric(10, 2)` con `quantityHundredths` y
+  `roundMaterialQuantity` (`src/lib/material-quantities.ts`, sobre `decimal-cents.ts`): lo que se
+  compara es lo que se guarda, y el mismo texto va al `decrement`/`increment`, al requerimiento y
+  al kardex, como en la salida de inventario (11.2c).
+- Crear toma, en este orden, el pedido (`lockOrderRow`, el mismo candado que cancelar, editar y
+  crear una proforma), la campaña, la ruta y la receta de la versión (de la versión solo se lee
+  antes su receta, que no cambia). Ninguna otra operación toma dos de ellos al revés. Las lecturas
+  que deciden siguen en su orden de siempre, así que el mensaje que sale primero no cambia.
+- Crear reclama su clave antes de esos candados: dos envíos simultáneos chocan en la primera
+  sentencia y el segundo ve la orden del primero. Un rechazo posterior lanza
+  `WorkOrderRejectedError` con su campo, la transacción se revierte y la clave queda libre para el
+  envío corregido.
+- La alerta de stock ya no se lee antes de escribirla: el conteo del compare-and-set dice si había
+  una activa. Con el stock crítico, un conteo de 0 abre otra; con el stock recuperado, solo se
+  atiende la que sigue activa.
+- Al guardar, el formulario va al detalle de la orden creada, no al listado: `onLeave` recibe el
+  motivo (`saved` o `closed`) y Cancelar vuelve a la página de la que vino. El efecto de
+  `useDiscardGuard` que guarda `onLeave` corre antes que el de `useFormResult` que lo llama, porque
+  se declara antes.
+
+Evidencia:
+
+1. Rojo antes de cada commit de código. C1: entregar 0.005 y devolver 10.004. C2: el pedido
+   cancelado y cada candado antes de su lectura. C3: la alerta atendida después de leerla. C4: el
+   stock justo (0.30 − 0.10 frente a 0.20) en las dos ramas del detalle. C5: 41 pruebas en rojo,
+   entre la caracterización, el formulario, los permisos y Postgres.
+2. Mutaciones: C1 8 de 8, C2 8 de 8, C3 5 de 5, C4 7 de 7 y 1 equivalente (mostrar el disponible
+   restando en `number`: con dos decimales, `toFixed(2)` muestra lo mismo), C5 17 de 17; en total,
+   45 de 45 y 1 equivalente. Dos mutaciones vivas se resolvieron reforzando la prueba antes de
+   cerrar el commit: en C4, el faltante sin tope en cero (se sumaron una fila sobrada y una corta),
+   y en C5, el mensaje general (la prueba lo buscaba en todo el formulario y también aparece junto
+   al campo).
+3. Snapshots revisados uno por uno: C1 las cantidades redondeadas en las escrituras; C2 el orden
+   (transacción, candados, lecturas) y una lectura más, la del pedido; C3 la alerta pasa de
+   `findFirst` y `update` a `updateMany`; C5 `getAuthorizedSession`, el reclamo al inicio, el
+   completado antes del `commit`, los resultados como estado y, en la página nueva, el campo
+   oculto de la clave y las etiquetas asociadas a su control (`for`/`id`), sin cambiar ningún
+   texto visible.
+4. Pruebas contra Postgres (9 en dos archivos nuevos): el stock, lo entregado y el kardex cuadran
+   en `numeric`; un pedido cancelado no recibe una orden ni vuelve a producción, y su clave queda
+   libre; corregido con la misma clave, el pedido aprobado recibe su orden con su requerimiento;
+   repetir la clave devuelve la misma orden, y con otra clave el pedido ya en producción no recibe
+   una segunda.
+5. Tropiezos de método sin efecto en el código: al correr el rojo de C5, Vitest grabó 6 snapshots
+   de los casos nuevos con la salida rota; se descartaron con `git restore` y se grabaron con el
+   código. El `operationId` salía aleatorio en los snapshots de crear: se fijó con el doble de
+   `newOperationId` que usan las demás suites. El detalle de la orden mezcla saltos de línea CRLF y
+   LF; el parche los respetó.
+6. CSS compilado igual byte a byte en cada commit (112.316 bytes).
+7. `npm run check` terminó con código 0 antes de cada commit, hasta 5.345 pruebas en 323
+   archivos; las de integración pasan de 68 a 77 en 15 archivos. Lint mantiene el aviso anterior
+   (`_line` en `orders/actions.ts`).
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 317 / 5.299 | 323 / 5.345 |
+| Pruebas contra Postgres real (archivos / pruebas) | 13 / 68 | 15 / 77 |
+| Pruebas en Postgres de órdenes de trabajo | 0 | 9 |
+| Acciones de órdenes que lanzan un error de validación a la página de error | 8 | 7 (las de la 11.6b) |
+| Operaciones de órdenes que deciden fuera de la transacción | 1 (crear) | 0 |
+| Movimientos de material con cantidades sin redondear | 4 | 0 |
+| Acciones con clave de operación | 11 | 12 |
+| Páginas con `ConfirmDeleteButton` | 1 | 1 (sale en la 11.6b) |
+| Declaraciones JSX de formulario (inventario) | 19 | 18 |
+
+Hallazgos:
+
+1. Entregar 0.005 dejaba el stock igual mientras el kardex y lo entregado guardaban 0.01.
+   Corregido en `cff19c9`.
+2. Crear no miraba el estado del pedido: con el formulario abierto mientras se cancelaba el
+   pedido, la orden se creaba y pasaba el pedido cancelado a `en_produccion`. Corregido en
+   `f974ac8`.
+3. Dos envíos creaban dos órdenes con su requerimiento congelado. Corregido en `2c112f0`.
+4. La alerta atendida entre la lectura y la escritura se reescribía (hallazgo 7 de la 10.3a, que
+   se cierra). Corregido en `f64752b`, también para la salida de inventario.
+5. El detalle restaba el disponible en `number` y decía «Insuficiente» con un faltante de «0.00»
+   (hallazgo 27 de la 10.6b, que se cierra). Corregido en `bb79cc2`.
+6. Crear lanzaba sus rechazos a la página de error y el formulario se perdía. Corregido en
+   `2c112f0`; las otras 7 acciones de órdenes siguen así hasta la 11.6b.
+7. Sigue abierto: un pedido con varios detalles solo recibe una orden. La primera pasa el pedido a
+   `en_produccion`, el formulario solo ofrece detalles de pedidos registrados o aprobados y, desde
+   `f974ac8`, la acción también lo rechaza. Destino: decisión del responsable (si un pedido admite
+   una orden por detalle, el estado del pedido debe cambiar con la última, no con la primera).
+8. Sigue abierto: la cantidad producida de las campañas no la escribe nadie (hallazgo 9 de la
+   10.7a). Destino: decisión del responsable (D70).
+9. Sigue abierto: el requerimiento congelado redondea con `toFixed` (2.675 → 2.67; `numeric`
+   daría 2.68). Cambiarlo haría distintos los requerimientos de órdenes nuevas y viejas. Destino:
+   decisión del responsable (D71).
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 7 commits (hasta `9abbc08`): CI #189 en verde (de 19:49:21 a 19:53:46 UTC del
+   2026-11-16); Vercel desplegó staging (19:51:19 UTC). Sin migraciones.
+2. Con ADMIN, sin escribir (origen comprobado en llamada aparte): la página de nueva orden trae
+   el campo de la clave y la guarda en `orden_trabajo:nueva`; ofrece 4 detalles de pedido
+   (PED00000007, dos del PED00000008 y PED00000002) y, para reposición, la Lampa Agricola Reforzada
+   con la «Ruta estándar para lampa» (6 etapas) y la «Receta Original Lampa Reforzada #1 - V4» (3
+   materiales). El detalle de la OTR00000004 calcula la plancha como 299.79 − 20.00 = 279.79
+   disponible, faltante 0.00, «Suficiente», sin aviso de críticos. Ningún material de staging
+   tiene stock exactamente igual a lo requerido: el caso de C4 solo lo prueban las pruebas. Última
+   orden: OTR00000009 (9 en el listado).
+3. Envíos autorizados por el responsable, una orden de reposición para no tocar ningún pedido:
+
+   | Paso | Resultado |
+   |---|---|
+   | 1. Lampa, `RUT00000002`, `VER00000005`, cantidad 1, inicio 16/11/2026 y entrega estimada 10/11/2026 | «La fecha estimada de entrega no puede ser anterior a la fecha de inicio.» junto a «Entrega estimada», enfocada, y «Revisa los datos de la orden de trabajo.» arriba; lo elegido conservado y la misma clave `624e2b15…`; sin escribir (el esquema rechaza antes de la transacción) |
+   | 2. El mismo formulario con entrega 30/11/2026 y observaciones «Prueba 11.6a C5», con la misma clave | OTR00000010 pendiente, reposición, con sus fechas y observaciones y 3 materiales congelados; un solo aviso «Orden de trabajo creada correctamente», el detalle de la orden creada (no el listado) y la clave renovada (`557015d6…`) |
+
+4. Después, solo leyendo: el detalle de la OTR00000010 muestra el stock sin cambios (plancha
+   299.79 con 20.00 reservado, mango 1190.00, alambre 14.90), faltante 0.00 en los tres y
+   «Suficiente»; el listado tiene 10 órdenes, la única nueva es la OTR00000010, así que el envío
+   rechazado no gastó correlativo.
+5. Que la misma clave repetida responde con la misma orden no se probó en staging: el formulario
+   renueva la clave al guardar y no se forzó un envío a mano. Lo prueban la acción y Postgres.
+6. Tropiezos de método sin efecto en los datos: Vercel pidió iniciar sesión antes de abrir
+   staging; las listas de `SearchableSelect` no se abrían con `focus()` desde un script y se
+   abrieron con un clic sobre la captura. Antes de cada envío se comprobó el contenido del
+   formulario.
+7. Datos de prueba que quedan en staging: la OTR00000010 pendiente, de reposición, con su
+   requerimiento congelado y sin movimientos de stock. Anularla es otra escritura y su migración
+   llega en la 11.6b.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -9206,7 +9370,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 verificada en staging (CI #185) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a verificada en staging (CI #189) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 

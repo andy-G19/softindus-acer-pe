@@ -39,31 +39,25 @@ export async function syncStockAlert(
 ) {
   const { idMaterial, materialName, stockResultante, stockMinimo } = params;
 
-  const alertaActiva = await tx.alerta_stock.findFirst({
-    where: {
-      id_material: idMaterial,
-      estado_alerta: "activa",
-    },
-    select: {
-      id_alerta: true,
-    },
-  });
+  // C3 de la 11.6a (D64, hallazgo 7 de la 10.3a): cada escritura es un compare-and-set sobre la
+  // alerta que sigue activa. Antes se leia la alerta activa y se actualizaba por su id: si
+  // alguien la atendia entre las dos sentencias, se reescribia una alerta ya atendida y no se
+  // abria otra. Postgres vuelve a evaluar el where despues de esperar a quien tenga la fila, asi
+  // que una alerta atendida un instante antes ya no coincide. Dos movimientos del mismo material
+  // no se cruzan aqui: los pone en fila la escritura del stock que hacen antes de llamar.
+  const activeAlert = { id_material: idMaterial, estado_alerta: "activa" };
 
   if (stockResultante > stockMinimo) {
-    if (alertaActiva) {
-      await tx.alerta_stock.update({
-        where: {
-          id_alerta: alertaActiva.id_alerta,
-        },
-        data: {
-          estado_alerta: "atendida",
-          fecha_atencion: new Date(),
-          id_usuario_atencion: params.idUsuario,
-          stock_detectado: stockResultante,
-          mensaje: `El material ${materialName} recupero stock por encima del minimo.`,
-        },
-      });
-    }
+    await tx.alerta_stock.updateMany({
+      where: activeAlert,
+      data: {
+        estado_alerta: "atendida",
+        fecha_atencion: new Date(),
+        id_usuario_atencion: params.idUsuario,
+        stock_detectado: stockResultante,
+        mensaje: `El material ${materialName} recupero stock por encima del minimo.`,
+      },
+    });
 
     return;
   }
@@ -73,18 +67,16 @@ export async function syncStockAlert(
     : "tras una salida de inventario";
   const mensaje = `El material ${materialName} quedo en stock critico ${origen}.`;
 
-  if (alertaActiva) {
-    await tx.alerta_stock.update({
-      where: {
-        id_alerta: alertaActiva.id_alerta,
-      },
-      data: {
-        stock_detectado: stockResultante,
-        stock_minimo: stockMinimo,
-        mensaje,
-      },
-    });
+  const { count } = await tx.alerta_stock.updateMany({
+    where: activeAlert,
+    data: {
+      stock_detectado: stockResultante,
+      stock_minimo: stockMinimo,
+      mensaje,
+    },
+  });
 
+  if (count > 0) {
     return;
   }
 

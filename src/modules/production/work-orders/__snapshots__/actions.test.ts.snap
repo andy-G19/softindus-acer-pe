@@ -427,7 +427,7 @@ exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la me
   {
     "args": {
       "data": {
-        "cantidad_consumida": 60.5,
+        "cantidad_consumida": "60.50",
       },
       "where": {
         "id_requerimiento": "ROM00000001",
@@ -438,7 +438,7 @@ exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la me
   {
     "args": {
       "data": {
-        "cantidad_consumida": 8,
+        "cantidad_consumida": "8.00",
       },
       "where": {
         "id_requerimiento": "ROM00000002",
@@ -449,7 +449,7 @@ exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la me
   {
     "args": {
       "data": {
-        "cantidad_producida": 24,
+        "cantidad_producida": "24.00",
         "fecha_cierre_materiales": 2026-07-15T15:00:00.000Z,
       },
       "where": {
@@ -922,7 +922,7 @@ exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > lla
   {
     "args": {
       "data": {
-        "cantidad_consumida": 63.75,
+        "cantidad_consumida": "63.75",
       },
       "where": {
         "id_requerimiento": "ROM00000001",
@@ -933,7 +933,7 @@ exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > lla
   {
     "args": {
       "data": {
-        "cantidad_consumida": 0,
+        "cantidad_consumida": "0.00",
       },
       "where": {
         "id_requerimiento": "ROM00000002",
@@ -944,7 +944,7 @@ exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > lla
   {
     "args": {
       "data": {
-        "cantidad_producida": 0,
+        "cantidad_producida": "0.00",
         "fecha_cierre_materiales": 2026-07-15T15:00:00.000Z,
       },
       "where": {
@@ -988,177 +988,317 @@ exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > res
 exports[`createWorkOrderAction > campania inexistente o no activa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "id_producto": true,
-        "nombre_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000001",
-      },
-    },
-    "prisma": "producto.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "etapa_ruta": {
-          "where": {
-            "estado": true,
-          },
-        },
-      },
-      "where": {
-        "estado": true,
-        "id_ruta": "RUT00000001",
-      },
-    },
-    "prisma": "ruta_fabricacion.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "detalle_receta": {
-          "include": {
-            "material": {
-              "select": {
-                "costo_unitario_actual": true,
-                "id_material": true,
-              },
-            },
-          },
-          "orderBy": {
-            "id_detalle_receta": "asc",
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "id_version_receta": "VRE00000001",
-      },
-    },
-    "prisma": "version_receta.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "campania_detalle": {
-          "select": {
-            "id_producto": true,
-          },
-        },
-      },
-      "where": {
-        "estado": {
-          "in": [
-            "planificada",
-            "activa",
-          ],
-        },
-        "id_campania": "CAM00000001",
-      },
-    },
-    "prisma": "campania_produccion.findFirst",
-  },
-]
-`;
-
-exports[`createWorkOrderAction > campania inexistente o no activa > resultado 1`] = `"error: La campaña seleccionada no existe o no está activa."`;
-
-exports[`createWorkOrderAction > campania sin productos registrados: acepta el producto y crea la orden > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "id_producto": true,
-        "nombre_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000001",
-      },
-    },
-    "prisma": "producto.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "etapa_ruta": {
-          "where": {
-            "estado": true,
-          },
-        },
-      },
-      "where": {
-        "estado": true,
-        "id_ruta": "RUT00000001",
-      },
-    },
-    "prisma": "ruta_fabricacion.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "detalle_receta": {
-          "include": {
-            "material": {
-              "select": {
-                "costo_unitario_actual": true,
-                "id_material": true,
-              },
-            },
-          },
-          "orderBy": {
-            "id_detalle_receta": "asc",
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "id_version_receta": "VRE00000001",
-      },
-    },
-    "prisma": "version_receta.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "campania_detalle": {
-          "select": {
-            "id_producto": true,
-          },
-        },
-      },
-      "where": {
-        "estado": {
-          "in": [
-            "planificada",
-            "activa",
-          ],
-        },
-        "id_campania": "CAM00000001",
-      },
-    },
-    "prisma": "campania_produccion.findFirst",
   },
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "campania_detalle": {
+          "select": {
+            "id_producto": true,
+          },
+        },
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "planificada",
+            "activa",
+          ],
+        },
+        "id_campania": "CAM00000001",
+      },
+    },
+    "prisma": "campania_produccion.findFirst",
+  },
+  {
+    "args": "La campaña seleccionada no existe o no está activa.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > campania inexistente o no activa > resultado 1`] = `
+{
+  "error": "La campaña seleccionada no existe o no está activa.",
+  "fieldErrors": {
+    "id_campania": [
+      "La campaña seleccionada no existe o no está activa.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "CAM00000001",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "campania",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > campania sin productos registrados: acepta el producto y crea la orden > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "campania_detalle": {
+          "select": {
+            "id_producto": true,
+          },
+        },
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "planificada",
+            "activa",
+          ],
+        },
+        "id_campania": "CAM00000001",
+      },
+    },
+    "prisma": "campania_produccion.findFirst",
   },
   {
     "args": {
@@ -1249,6 +1389,17 @@ exports[`createWorkOrderAction > campania sin productos registrados: acepta el p
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "OTR00000001",
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -1267,16 +1418,96 @@ exports[`createWorkOrderAction > campania sin productos registrados: acepta el p
 ]
 `;
 
-exports[`createWorkOrderAction > campania sin productos registrados: acepta el producto y crea la orden > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created"`;
+exports[`createWorkOrderAction > campania sin productos registrados: acepta el producto y crea la orden > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_orden_trabajo": "OTR00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "CAM00000001",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "alta",
+    "tipo_produccion": "campania",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > campania: el producto no pertenece a sus detalles > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_campania FROM aceros.campania_produccion WHERE id_campania = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CAM00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1352,15 +1583,43 @@ exports[`createWorkOrderAction > campania: el producto no pertenece a sus detall
     },
     "prisma": "campania_produccion.findFirst",
   },
+  {
+    "args": "El producto seleccionado no pertenece a la campania.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
-exports[`createWorkOrderAction > campania: el producto no pertenece a sus detalles > resultado 1`] = `"error: El producto seleccionado no pertenece a la campania."`;
+exports[`createWorkOrderAction > campania: el producto no pertenece a sus detalles > resultado 1`] = `
+{
+  "error": "El producto seleccionado no pertenece a la campania.",
+  "fieldErrors": {
+    "id_producto": [
+      "El producto seleccionado no pertenece a la campania.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "CAM00000001",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "campania",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > datos invalidos: responde el primer mensaje de Zod sin consultar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1369,12 +1628,36 @@ exports[`createWorkOrderAction > datos invalidos: responde el primer mensaje de 
 ]
 `;
 
-exports[`createWorkOrderAction > datos invalidos: responde el primer mensaje de Zod sin consultar > resultado 1`] = `"error: La cantidad debe ser mayor a 0."`;
+exports[`createWorkOrderAction > datos invalidos: responde el primer mensaje de Zod sin consultar > resultado 1`] = `
+{
+  "error": "Revisa los datos de la orden de trabajo.",
+  "fieldErrors": {
+    "cantidad": [
+      "La cantidad debe ser mayor a 0.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "0",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > fecha estimada anterior al inicio: lo rechaza la validacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1383,12 +1666,192 @@ exports[`createWorkOrderAction > fecha estimada anterior al inicio: lo rechaza l
 ]
 `;
 
-exports[`createWorkOrderAction > fecha estimada anterior al inicio: lo rechaza la validacion > resultado 1`] = `"error: La fecha estimada de entrega no puede ser anterior a la fecha de inicio."`;
+exports[`createWorkOrderAction > fecha estimada anterior al inicio: lo rechaza la validacion > resultado 1`] = `
+{
+  "error": "Revisa los datos de la orden de trabajo.",
+  "fieldErrors": {
+    "fecha_entrega_estimada": [
+      "La fecha estimada de entrega no puede ser anterior a la fecha de inicio.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-01",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > la clave es de otra operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > la clave es de otra operacion > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > la misma clave ya registrada: responde con la orden creada sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > la misma clave ya registrada: responde con la orden creada sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_orden_trabajo": "OTR00000009",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > pedido sin detalle: lo rechaza la validacion del formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1397,16 +1860,60 @@ exports[`createWorkOrderAction > pedido sin detalle: lo rechaza la validacion de
 ]
 `;
 
-exports[`createWorkOrderAction > pedido sin detalle: lo rechaza la validacion del formulario > resultado 1`] = `"error: Para una orden por pedido debe seleccionar un detalle de pedido."`;
+exports[`createWorkOrderAction > pedido sin detalle: lo rechaza la validacion del formulario > resultado 1`] = `
+{
+  "error": "Revisa los datos de la orden de trabajo.",
+  "fieldErrors": {
+    "id_detalle_pedido": [
+      "Para una orden por pedido debe seleccionar un detalle de pedido.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "pedido",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el del detalle y pasa el pedido a produccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -1414,17 +1921,63 @@ exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el de
         "id_detalle_pedido": true,
         "id_pedido": true,
         "id_producto": true,
-        "pedido": {
-          "select": {
-            "id_cliente": true,
-          },
-        },
       },
       "where": {
         "id_detalle_pedido": "DPE00000001",
       },
     },
     "prisma": "detalle_pedido.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_pedido FROM aceros.pedido WHERE id_pedido = $1 FOR NO KEY UPDATE",
+      "values": [
+        "PED00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+        "id_pedido": true,
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1478,10 +2031,6 @@ exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el de
       },
     },
     "prisma": "version_receta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1583,6 +2132,17 @@ exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el de
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "OTR00000001",
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -1601,298 +2161,682 @@ exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el de
 ]
 `;
 
-exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el del detalle y pasa el pedido a produccion > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created"`;
+exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el del detalle y pasa el pedido a produccion > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_orden_trabajo": "OTR00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "DPE00000001",
+    "id_producto": "",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "pedido",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > pedido: el detalle es de otro producto que el elegido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "id_detalle_pedido": true,
-        "id_pedido": true,
-        "id_producto": true,
-        "pedido": {
-          "select": {
-            "id_cliente": true,
-          },
-        },
-      },
-      "where": {
-        "id_detalle_pedido": "DPE00000001",
-      },
-    },
-    "prisma": "detalle_pedido.findUnique",
-  },
-]
-`;
-
-exports[`createWorkOrderAction > pedido: el detalle es de otro producto que el elegido > resultado 1`] = `"error: El detalle de pedido pertenece a otro producto."`;
-
-exports[`createWorkOrderAction > pedido: el detalle no existe > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "id_detalle_pedido": true,
-        "id_pedido": true,
-        "id_producto": true,
-        "pedido": {
-          "select": {
-            "id_cliente": true,
-          },
-        },
-      },
-      "where": {
-        "id_detalle_pedido": "DPE00000001",
-      },
-    },
-    "prisma": "detalle_pedido.findUnique",
-  },
-]
-`;
-
-exports[`createWorkOrderAction > pedido: el detalle no existe > resultado 1`] = `"error: El detalle de pedido seleccionado no existe."`;
-
-exports[`createWorkOrderAction > producto inexistente o inactivo > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "id_producto": true,
-        "nombre_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000001",
-      },
-    },
-    "prisma": "producto.findFirst",
-  },
-]
-`;
-
-exports[`createWorkOrderAction > producto inexistente o inactivo > resultado 1`] = `"error: El producto seleccionado no existe o está inactivo."`;
-
-exports[`createWorkOrderAction > receta de otro producto > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "id_producto": true,
-        "nombre_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000001",
-      },
-    },
-    "prisma": "producto.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "etapa_ruta": {
-          "where": {
-            "estado": true,
-          },
-        },
-      },
-      "where": {
-        "estado": true,
-        "id_ruta": "RUT00000001",
-      },
-    },
-    "prisma": "ruta_fabricacion.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "detalle_receta": {
-          "include": {
-            "material": {
-              "select": {
-                "costo_unitario_actual": true,
-                "id_material": true,
-              },
-            },
-          },
-          "orderBy": {
-            "id_detalle_receta": "asc",
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "id_version_receta": "VRE00000001",
-      },
-    },
-    "prisma": "version_receta.findFirst",
-  },
-]
-`;
-
-exports[`createWorkOrderAction > receta de otro producto > resultado 1`] = `"error: La receta seleccionada pertenece a otro producto."`;
-
-exports[`createWorkOrderAction > receta tecnica inactiva > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "id_producto": true,
-        "nombre_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000001",
-      },
-    },
-    "prisma": "producto.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "etapa_ruta": {
-          "where": {
-            "estado": true,
-          },
-        },
-      },
-      "where": {
-        "estado": true,
-        "id_ruta": "RUT00000001",
-      },
-    },
-    "prisma": "ruta_fabricacion.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "detalle_receta": {
-          "include": {
-            "material": {
-              "select": {
-                "costo_unitario_actual": true,
-                "id_material": true,
-              },
-            },
-          },
-          "orderBy": {
-            "id_detalle_receta": "asc",
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "id_version_receta": "VRE00000001",
-      },
-    },
-    "prisma": "version_receta.findFirst",
-  },
-]
-`;
-
-exports[`createWorkOrderAction > receta tecnica inactiva > resultado 1`] = `"error: La receta seleccionada no esta vigente o activa."`;
-
-exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el requerimiento > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "id_producto": true,
-        "nombre_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000001",
-      },
-    },
-    "prisma": "producto.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "etapa_ruta": {
-          "where": {
-            "estado": true,
-          },
-        },
-      },
-      "where": {
-        "estado": true,
-        "id_ruta": "RUT00000001",
-      },
-    },
-    "prisma": "ruta_fabricacion.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "detalle_receta": {
-          "include": {
-            "material": {
-              "select": {
-                "costo_unitario_actual": true,
-                "id_material": true,
-              },
-            },
-          },
-          "orderBy": {
-            "id_detalle_receta": "asc",
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "id_version_receta": "VRE00000001",
-      },
-    },
-    "prisma": "version_receta.findFirst",
   },
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_pedido": true,
+        "id_pedido": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_detalle_pedido": "DPE00000001",
+      },
+    },
+    "prisma": "detalle_pedido.findUnique",
+  },
+  {
+    "args": "El detalle de pedido pertenece a otro producto.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > pedido: el detalle es de otro producto que el elegido > resultado 1`] = `
+{
+  "error": "El detalle de pedido pertenece a otro producto.",
+  "fieldErrors": {
+    "id_detalle_pedido": [
+      "El detalle de pedido pertenece a otro producto.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "DPE00000001",
+    "id_producto": "PRO00000009",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "pedido",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > pedido: el detalle no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_detalle_pedido": true,
+        "id_pedido": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_detalle_pedido": "DPE00000001",
+      },
+    },
+    "prisma": "detalle_pedido.findUnique",
+  },
+  {
+    "args": "El detalle de pedido seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > pedido: el detalle no existe > resultado 1`] = `
+{
+  "error": "El detalle de pedido seleccionado no existe.",
+  "fieldErrors": {
+    "id_detalle_pedido": [
+      "El detalle de pedido seleccionado no existe.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "DPE00000001",
+    "id_producto": "",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "pedido",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > producto inexistente o inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": "El producto seleccionado no existe o está inactivo.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > producto inexistente o inactivo > resultado 1`] = `
+{
+  "error": "El producto seleccionado no existe o está inactivo.",
+  "fieldErrors": {
+    "id_producto": [
+      "El producto seleccionado no existe o está inactivo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > receta de otro producto > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": "La receta seleccionada pertenece a otro producto.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > receta de otro producto > resultado 1`] = `
+{
+  "error": "La receta seleccionada pertenece a otro producto.",
+  "fieldErrors": {
+    "id_version_receta": [
+      "La receta seleccionada pertenece a otro producto.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > receta tecnica inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": "La receta seleccionada no esta vigente o activa.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > receta tecnica inactiva > resultado 1`] = `
+{
+  "error": "La receta seleccionada no esta vigente o activa.",
+  "fieldErrors": {
+    "id_version_receta": [
+      "La receta seleccionada no esta vigente o activa.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el requerimiento > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
   },
   {
     "args": {
@@ -1983,6 +2927,17 @@ exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "OTR00000001",
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -2001,16 +2956,87 @@ exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el
 ]
 `;
 
-exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el requerimiento > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created"`;
+exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el requerimiento > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_orden_trabajo": "OTR00000001",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "Lote para stock de tienda",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > ruta de otro producto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2041,19 +3067,96 @@ exports[`createWorkOrderAction > ruta de otro producto > llamadas 1`] = `
     },
     "prisma": "ruta_fabricacion.findFirst",
   },
+  {
+    "args": "La ruta seleccionada pertenece a otro producto.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
-exports[`createWorkOrderAction > ruta de otro producto > resultado 1`] = `"error: La ruta seleccionada pertenece a otro producto."`;
+exports[`createWorkOrderAction > ruta de otro producto > resultado 1`] = `
+{
+  "error": "La ruta seleccionada pertenece a otro producto.",
+  "fieldErrors": {
+    "id_ruta": [
+      "La ruta seleccionada pertenece a otro producto.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > ruta inexistente o inactiva > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2084,19 +3187,96 @@ exports[`createWorkOrderAction > ruta inexistente o inactiva > llamadas 1`] = `
     },
     "prisma": "ruta_fabricacion.findFirst",
   },
+  {
+    "args": "La ruta seleccionada no existe, está inactiva o no pertenece al producto.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
-exports[`createWorkOrderAction > ruta inexistente o inactiva > resultado 1`] = `"error: La ruta seleccionada no existe, está inactiva o no pertenece al producto."`;
+exports[`createWorkOrderAction > ruta inexistente o inactiva > resultado 1`] = `
+{
+  "error": "La ruta seleccionada no existe, está inactiva o no pertenece al producto.",
+  "fieldErrors": {
+    "id_ruta": [
+      "La ruta seleccionada no existe, está inactiva o no pertenece al producto.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > ruta sin etapas activas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2127,19 +3307,134 @@ exports[`createWorkOrderAction > ruta sin etapas activas > llamadas 1`] = `
     },
     "prisma": "ruta_fabricacion.findFirst",
   },
+  {
+    "args": "La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
-exports[`createWorkOrderAction > ruta sin etapas activas > resultado 1`] = `"error: La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden."`;
+exports[`createWorkOrderAction > ruta sin etapas activas > resultado 1`] = `
+{
+  "error": "La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden.",
+  "fieldErrors": {
+    "id_ruta": [
+      "La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
+
+exports[`createWorkOrderAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createWorkOrderAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > version de receta inexistente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2194,19 +3489,96 @@ exports[`createWorkOrderAction > version de receta inexistente > llamadas 1`] = 
     },
     "prisma": "version_receta.findFirst",
   },
+  {
+    "args": "La versión de receta seleccionada no existe, no está vigente o no pertenece al producto.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
-exports[`createWorkOrderAction > version de receta inexistente > resultado 1`] = `"error: La versión de receta seleccionada no existe, no está vigente o no pertenece al producto."`;
+exports[`createWorkOrderAction > version de receta inexistente > resultado 1`] = `
+{
+  "error": "La versión de receta seleccionada no existe, no está vigente o no pertenece al producto.",
+  "fieldErrors": {
+    "id_version_receta": [
+      "La versión de receta seleccionada no existe, no está vigente o no pertenece al producto.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > version de receta no vigente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2261,19 +3633,96 @@ exports[`createWorkOrderAction > version de receta no vigente > llamadas 1`] = `
     },
     "prisma": "version_receta.findFirst",
   },
+  {
+    "args": "La receta seleccionada no esta vigente o activa.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
-exports[`createWorkOrderAction > version de receta no vigente > resultado 1`] = `"error: La receta seleccionada no esta vigente o activa."`;
+exports[`createWorkOrderAction > version de receta no vigente > resultado 1`] = `
+{
+  "error": "La receta seleccionada no esta vigente o activa.",
+  "fieldErrors": {
+    "id_version_receta": [
+      "La receta seleccionada no esta vigente o activa.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`createWorkOrderAction > version sin materiales > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "crear_orden_trabajo",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_receta": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_receta FROM aceros.receta_tecnica WHERE id_receta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RTE00000001",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2328,10 +3777,38 @@ exports[`createWorkOrderAction > version sin materiales > llamadas 1`] = `
     },
     "prisma": "version_receta.findFirst",
   },
+  {
+    "args": "La versión de receta no tiene materiales registrados. Agregue materiales antes de crear la orden.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
-exports[`createWorkOrderAction > version sin materiales > resultado 1`] = `"error: La versión de receta no tiene materiales registrados. Agregue materiales antes de crear la orden."`;
+exports[`createWorkOrderAction > version sin materiales > resultado 1`] = `
+{
+  "error": "La versión de receta no tiene materiales registrados. Agregue materiales antes de crear la orden.",
+  "fieldErrors": {
+    "id_version_receta": [
+      "La versión de receta no tiene materiales registrados. Agregue materiales antes de crear la orden.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "25",
+    "fecha_entrega_estimada": "2026-07-31",
+    "fecha_inicio": "2026-07-20",
+    "id_campania": "",
+    "id_detalle_pedido": "",
+    "id_producto": "PRO00000001",
+    "id_ruta": "RUT00000001",
+    "id_version_receta": "VRE00000001",
+    "observaciones": "",
+    "prioridad": "media",
+    "tipo_produccion": "reposicion_stock",
+  },
+}
+`;
 
 exports[`deliverAdditionalMaterialAction > el requerimiento es de otra orden > llamadas 1`] = `
 [
@@ -2483,7 +3960,7 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 5.5,
+          "decrement": "5.50",
         },
       },
       "select": {
@@ -2493,7 +3970,7 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
       "where": {
         "id_material": "MAT00000001",
         "stock_actual": {
-          "gte": 5.5,
+          "gte": "5.50",
         },
       },
     },
@@ -2502,7 +3979,7 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
   {
     "args": {
       "data": {
-        "cantidad": 5.5,
+        "cantidad": "5.50",
         "id_material": "MAT00000001",
         "id_movimiento": "MVI00000001",
         "id_orden_trabajo": "OTR00000007",
@@ -2519,7 +3996,7 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
     "args": {
       "data": {
         "cantidad_entregada": {
-          "increment": 5.5,
+          "increment": "5.50",
         },
       },
       "where": {
@@ -2530,15 +4007,19 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+        "mensaje": "El material Plancha LAC 1/16 recupero stock por encima del minimo.",
+        "stock_detectado": 34.5,
       },
       "where": {
         "estado_alerta": "activa",
         "id_material": "MAT00000001",
       },
     },
-    "prisma": "alerta_stock.findFirst",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -2883,7 +4364,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 48.75,
+          "decrement": "48.75",
         },
       },
       "select": {
@@ -2893,7 +4374,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
       "where": {
         "id_material": "MAT00000001",
         "stock_actual": {
-          "gte": 48.75,
+          "gte": "48.75",
         },
       },
     },
@@ -2902,7 +4383,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   {
     "args": {
       "data": {
-        "cantidad": 48.75,
+        "cantidad": "48.75",
         "id_material": "MAT00000001",
         "id_movimiento": "MVI00000001",
         "id_orden_trabajo": "OTR00000007",
@@ -2919,7 +4400,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "cantidad_entregada": {
-          "increment": 48.75,
+          "increment": "48.75",
         },
       },
       "where": {
@@ -2927,18 +4408,6 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
       },
     },
     "prisma": "requerimiento_orden_material.update",
-  },
-  {
-    "args": {
-      "select": {
-        "id_alerta": true,
-      },
-      "where": {
-        "estado_alerta": "activa",
-        "id_material": "MAT00000001",
-      },
-    },
-    "prisma": "alerta_stock.findFirst",
   },
   {
     "args": {
@@ -2950,16 +4419,17 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
         "stock_detectado": 51.25,
       },
       "where": {
-        "id_alerta": "ALE00000003",
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
       },
     },
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 8.57,
+          "decrement": "8.57",
         },
       },
       "select": {
@@ -2969,7 +4439,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
       "where": {
         "id_material": "MAT00000002",
         "stock_actual": {
-          "gte": 8.57,
+          "gte": "8.57",
         },
       },
     },
@@ -2978,7 +4448,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   {
     "args": {
       "data": {
-        "cantidad": 8.57,
+        "cantidad": "8.57",
         "id_material": "MAT00000002",
         "id_movimiento": "MVI00000002",
         "id_orden_trabajo": "OTR00000007",
@@ -2995,7 +4465,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "cantidad_entregada": {
-          "increment": 8.57,
+          "increment": "8.57",
         },
       },
       "where": {
@@ -3006,15 +4476,17 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
+      "data": {
+        "mensaje": "El material Soldadura 6011 quedo en stock critico tras mover la orden OTR00000007.",
+        "stock_detectado": 1.43,
+        "stock_minimo": 5,
       },
       "where": {
         "estado_alerta": "activa",
         "id_material": "MAT00000002",
       },
     },
-    "prisma": "alerta_stock.findFirst",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -3041,7 +4513,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 50,
+          "decrement": "50.00",
         },
       },
       "select": {
@@ -3051,7 +4523,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
       "where": {
         "id_material": "MAT00000004",
         "stock_actual": {
-          "gte": 50,
+          "gte": "50.00",
         },
       },
     },
@@ -3060,7 +4532,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   {
     "args": {
       "data": {
-        "cantidad": 50,
+        "cantidad": "50.00",
         "id_material": "MAT00000004",
         "id_movimiento": "MVI00000003",
         "id_orden_trabajo": "OTR00000007",
@@ -3077,7 +4549,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "cantidad_entregada": {
-          "increment": 50,
+          "increment": "50.00",
         },
       },
       "where": {
@@ -3088,34 +4560,23 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
-      },
-      "where": {
-        "estado_alerta": "activa",
-        "id_material": "MAT00000004",
-      },
-    },
-    "prisma": "alerta_stock.findFirst",
-  },
-  {
-    "args": {
       "data": {
         "mensaje": "El material Tornillo 1/4 quedo en stock critico tras mover la orden OTR00000007.",
         "stock_detectado": 10,
         "stock_minimo": 20,
       },
       "where": {
-        "id_alerta": "ALE00000004",
+        "estado_alerta": "activa",
+        "id_material": "MAT00000004",
       },
     },
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 10,
+          "decrement": "10.00",
         },
       },
       "select": {
@@ -3125,7 +4586,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
       "where": {
         "id_material": "MAT00000005",
         "stock_actual": {
-          "gte": 10,
+          "gte": "10.00",
         },
       },
     },
@@ -3134,7 +4595,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   {
     "args": {
       "data": {
-        "cantidad": 10,
+        "cantidad": "10.00",
         "id_material": "MAT00000005",
         "id_movimiento": "MVI00000004",
         "id_orden_trabajo": "OTR00000007",
@@ -3151,7 +4612,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "cantidad_entregada": {
-          "increment": 10,
+          "increment": "10.00",
         },
       },
       "where": {
@@ -3162,15 +4623,19 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+        "mensaje": "El material Perno 3/8 recupero stock por encima del minimo.",
+        "stock_detectado": 90,
       },
       "where": {
         "estado_alerta": "activa",
         "id_material": "MAT00000005",
       },
     },
-    "prisma": "alerta_stock.findFirst",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -3260,7 +4725,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 68.75,
+          "decrement": "68.75",
         },
       },
       "select": {
@@ -3270,7 +4735,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
       "where": {
         "id_material": "MAT00000001",
         "stock_actual": {
-          "gte": 68.75,
+          "gte": "68.75",
         },
       },
     },
@@ -3279,7 +4744,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
   {
     "args": {
       "data": {
-        "cantidad": 68.75,
+        "cantidad": "68.75",
         "id_material": "MAT00000001",
         "id_movimiento": "MVI00000001",
         "id_orden_trabajo": "OTR00000007",
@@ -3296,7 +4761,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
     "args": {
       "data": {
         "cantidad_entregada": {
-          "increment": 68.75,
+          "increment": "68.75",
         },
       },
       "where": {
@@ -3307,21 +4772,25 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+        "mensaje": "El material Plancha LAC 1/16 recupero stock por encima del minimo.",
+        "stock_detectado": 31.25,
       },
       "where": {
         "estado_alerta": "activa",
         "id_material": "MAT00000001",
       },
     },
-    "prisma": "alerta_stock.findFirst",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 8.57,
+          "decrement": "8.57",
         },
       },
       "select": {
@@ -3331,7 +4800,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
       "where": {
         "id_material": "MAT00000002",
         "stock_actual": {
-          "gte": 8.57,
+          "gte": "8.57",
         },
       },
     },
@@ -4472,7 +5941,7 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
     "args": {
       "data": {
         "stock_actual": {
-          "increment": 3,
+          "increment": "3.00",
         },
       },
       "select": {
@@ -4488,7 +5957,7 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
   {
     "args": {
       "data": {
-        "cantidad": 3,
+        "cantidad": "3.00",
         "id_material": "MAT00000001",
         "id_movimiento": "MVI00000001",
         "id_orden_trabajo": "OTR00000007",
@@ -4505,7 +5974,7 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
     "args": {
       "data": {
         "cantidad_devuelta": {
-          "increment": 3,
+          "increment": "3.00",
         },
       },
       "where": {
@@ -4516,28 +5985,17 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
   },
   {
     "args": {
-      "select": {
-        "id_alerta": true,
-      },
-      "where": {
-        "estado_alerta": "activa",
-        "id_material": "MAT00000001",
-      },
-    },
-    "prisma": "alerta_stock.findFirst",
-  },
-  {
-    "args": {
       "data": {
         "mensaje": "El material Plancha LAC 1/16 quedo en stock critico tras mover la orden OTR00000007.",
         "stock_detectado": 8,
         "stock_minimo": 8,
       },
       "where": {
-        "id_alerta": "ALE00000003",
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
       },
     },
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
@@ -4868,7 +6326,7 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
     "args": {
       "data": {
         "stock_actual": {
-          "increment": 2.25,
+          "increment": "2.25",
         },
       },
       "select": {
@@ -4884,7 +6342,7 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
   {
     "args": {
       "data": {
-        "cantidad": 2.25,
+        "cantidad": "2.25",
         "id_material": "MAT00000001",
         "id_movimiento": "MVI00000001",
         "id_orden_trabajo": "OTR00000007",
@@ -4901,7 +6359,7 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
     "args": {
       "data": {
         "cantidad_devuelta": {
-          "increment": 2.25,
+          "increment": "2.25",
         },
       },
       "where": {
@@ -4909,18 +6367,6 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
       },
     },
     "prisma": "requerimiento_orden_material.update",
-  },
-  {
-    "args": {
-      "select": {
-        "id_alerta": true,
-      },
-      "where": {
-        "estado_alerta": "activa",
-        "id_material": "MAT00000001",
-      },
-    },
-    "prisma": "alerta_stock.findFirst",
   },
   {
     "args": {
@@ -4932,10 +6378,11 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
         "stock_detectado": 22.25,
       },
       "where": {
-        "id_alerta": "ALE00000003",
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
       },
     },
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": {
