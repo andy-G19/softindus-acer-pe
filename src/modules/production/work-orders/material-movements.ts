@@ -2,8 +2,9 @@ import "server-only";
 
 import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
+import { formatCents } from "@/lib/decimal-cents";
+import { quantityHundredths, roundMaterialQuantity } from "@/lib/material-quantities";
 import { calculatePendingDelivery } from "@/lib/material-reconciliation";
-import { toNumber } from "@/lib/numbers";
 import { lockWorkOrderRow } from "@/lib/row-locks";
 import {
   deliverMaterials,
@@ -106,11 +107,12 @@ export async function deliverPendingMaterials({
           idMaterial: requirement.id_material,
           materialName: requirement.material.nombre_material,
           materialIsActive: requirement.material.estado,
-          quantity: pending,
-          stockActual: toNumber(requirement.material.stock_actual),
+          // C1 de la 11.6a (D62): la cantidad y el stock se comparan y se escriben en centesimos.
+          quantity: roundMaterialQuantity(pending),
+          stockActual: quantityHundredths(requirement.material.stock_actual),
         };
       })
-      .filter((line) => line.quantity > 0);
+      .filter((line) => quantityHundredths(line.quantity) > 0n);
 
     if (lines.length === 0) {
       throw new Error(
@@ -128,13 +130,13 @@ export async function deliverPendingMaterials({
       );
     }
 
-    const insufficient = lines.filter((line) => line.stockActual < line.quantity);
+    const insufficient = lines.filter((line) => line.stockActual < quantityHundredths(line.quantity));
 
     if (insufficient.length > 0) {
       const detail = insufficient
         .map(
           (line) =>
-            `${line.materialName} requiere ${line.quantity.toFixed(2)} y tiene ${line.stockActual.toFixed(2)}`,
+            `${line.materialName} requiere ${line.quantity} y tiene ${formatCents(line.stockActual)}`,
         )
         .join("; ");
 
@@ -217,11 +219,14 @@ export async function deliverAdditionalMaterial({
       );
     }
 
-    const stockActual = toNumber(requirement.material.stock_actual);
+    // C1 de la 11.6a (D62): la cantidad redondeada como sus columnas se compara con el stock en
+    // centesimos y es la que se escribe.
+    const cantidad = roundMaterialQuantity(data.cantidad);
+    const stockActual = quantityHundredths(requirement.material.stock_actual);
 
-    if (stockActual < data.cantidad) {
+    if (stockActual < quantityHundredths(cantidad)) {
       throw new Error(
-        `Stock insuficiente para ${requirement.material.nombre_material}: se piden ${data.cantidad.toFixed(2)} y hay ${stockActual.toFixed(2)}.`,
+        `Stock insuficiente para ${requirement.material.nombre_material}: se piden ${cantidad} y hay ${formatCents(stockActual)}.`,
       );
     }
 
@@ -233,7 +238,7 @@ export async function deliverAdditionalMaterial({
           idRequerimiento: requirement.id_requerimiento,
           idMaterial: requirement.id_material,
           materialName: requirement.material.nombre_material,
-          quantity: data.cantidad,
+          quantity: cantidad,
         },
       ],
       motivo: `Entrega adicional a la orden ${data.id_orden_trabajo}: ${data.motivo}`,
@@ -244,7 +249,7 @@ export async function deliverAdditionalMaterial({
       entidad_afectada: "orden_trabajo",
       id_registro_afectado: data.id_orden_trabajo,
       accion: "entrega_adicional",
-      detalle: `Entrega adicional de ${data.cantidad.toFixed(2)} ${requirement.unidad_medida} de ${requirement.material.nombre_material}. Motivo: ${data.motivo}`,
+      detalle: `Entrega adicional de ${cantidad} ${requirement.unidad_medida} de ${requirement.material.nombre_material}. Motivo: ${data.motivo}`,
       tx,
     });
   });
@@ -291,19 +296,21 @@ export async function returnMaterialToWarehouse({
       );
     }
 
-    const entregado = toNumber(requirement.cantidad_entregada);
-    const devuelto = toNumber(requirement.cantidad_devuelta);
-    const devolvible = Number((entregado - devuelto).toFixed(2));
+    // C1 de la 11.6a (D62): lo devolvible y la cantidad, en centesimos como sus columnas.
+    const cantidad = roundMaterialQuantity(data.cantidad);
+    const entregado = quantityHundredths(requirement.cantidad_entregada);
+    const devuelto = quantityHundredths(requirement.cantidad_devuelta);
+    const devolvible = entregado - devuelto;
 
-    if (devolvible <= 0) {
+    if (devolvible <= 0n) {
       throw new Error(
-        `No queda material de ${requirement.material.nombre_material} por devolver: se entregaron ${entregado.toFixed(2)} y ya se devolvieron ${devuelto.toFixed(2)}.`,
+        `No queda material de ${requirement.material.nombre_material} por devolver: se entregaron ${formatCents(entregado)} y ya se devolvieron ${formatCents(devuelto)}.`,
       );
     }
 
-    if (data.cantidad > devolvible) {
+    if (quantityHundredths(cantidad) > devolvible) {
       throw new Error(
-        `No se puede devolver ${data.cantidad.toFixed(2)} de ${requirement.material.nombre_material}: solo quedan ${devolvible.toFixed(2)} sin devolver.`,
+        `No se puede devolver ${cantidad} de ${requirement.material.nombre_material}: solo quedan ${formatCents(devolvible)} sin devolver.`,
       );
     }
 
@@ -313,7 +320,7 @@ export async function returnMaterialToWarehouse({
       idRequerimiento: requirement.id_requerimiento,
       idMaterial: requirement.id_material,
       materialName: requirement.material.nombre_material,
-      quantity: data.cantidad,
+      quantity: cantidad,
       motivo: data.motivo
         ? `Devolucion de la orden ${data.id_orden_trabajo}: ${data.motivo}`
         : `Devolucion de material no usado de la orden ${data.id_orden_trabajo}`,
@@ -324,7 +331,7 @@ export async function returnMaterialToWarehouse({
       entidad_afectada: "orden_trabajo",
       id_registro_afectado: data.id_orden_trabajo,
       accion: "devolver_material",
-      detalle: `Devolucion de ${data.cantidad.toFixed(2)} ${requirement.unidad_medida} de ${requirement.material.nombre_material}.${data.motivo ? ` Motivo: ${data.motivo}` : ""}`,
+      detalle: `Devolucion de ${cantidad} ${requirement.unidad_medida} de ${requirement.material.nombre_material}.${data.motivo ? ` Motivo: ${data.motivo}` : ""}`,
       tx,
     });
   });

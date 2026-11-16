@@ -33,8 +33,11 @@ export type DeliveryLine = {
   idRequerimiento: string;
   idMaterial: string;
   materialName: string;
-  /** Cantidad a sacar del almacen en esta entrega. */
-  quantity: number;
+  /**
+   * Cantidad a sacar del almacen en esta entrega, ya redondeada como sus columnas (C1 de la
+   * 11.6a, D62): el mismo texto va al descuento, al kardex y a lo entregado.
+   */
+  quantity: string;
 };
 
 export type DeliveryParams = {
@@ -143,7 +146,8 @@ export type ReturnParams = {
   idRequerimiento: string;
   idMaterial: string;
   materialName: string;
-  quantity: number;
+  /** Ya redondeada como sus columnas (C1 de la 11.6a, D62). */
+  quantity: string;
   motivo: string;
 };
 

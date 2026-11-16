@@ -427,7 +427,7 @@ exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la me
   {
     "args": {
       "data": {
-        "cantidad_consumida": 60.5,
+        "cantidad_consumida": "60.50",
       },
       "where": {
         "id_requerimiento": "ROM00000001",
@@ -438,7 +438,7 @@ exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la me
   {
     "args": {
       "data": {
-        "cantidad_consumida": 8,
+        "cantidad_consumida": "8.00",
       },
       "where": {
         "id_requerimiento": "ROM00000002",
@@ -449,7 +449,7 @@ exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la me
   {
     "args": {
       "data": {
-        "cantidad_producida": 24,
+        "cantidad_producida": "24.00",
         "fecha_cierre_materiales": 2026-07-15T15:00:00.000Z,
       },
       "where": {
@@ -922,7 +922,7 @@ exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > lla
   {
     "args": {
       "data": {
-        "cantidad_consumida": 63.75,
+        "cantidad_consumida": "63.75",
       },
       "where": {
         "id_requerimiento": "ROM00000001",
@@ -933,7 +933,7 @@ exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > lla
   {
     "args": {
       "data": {
-        "cantidad_consumida": 0,
+        "cantidad_consumida": "0.00",
       },
       "where": {
         "id_requerimiento": "ROM00000002",
@@ -944,7 +944,7 @@ exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > lla
   {
     "args": {
       "data": {
-        "cantidad_producida": 0,
+        "cantidad_producida": "0.00",
         "fecha_cierre_materiales": 2026-07-15T15:00:00.000Z,
       },
       "where": {
@@ -2483,7 +2483,7 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 5.5,
+          "decrement": "5.50",
         },
       },
       "select": {
@@ -2493,7 +2493,7 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
       "where": {
         "id_material": "MAT00000001",
         "stock_actual": {
-          "gte": 5.5,
+          "gte": "5.50",
         },
       },
     },
@@ -2502,7 +2502,7 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
   {
     "args": {
       "data": {
-        "cantidad": 5.5,
+        "cantidad": "5.50",
         "id_material": "MAT00000001",
         "id_movimiento": "MVI00000001",
         "id_orden_trabajo": "OTR00000007",
@@ -2519,7 +2519,7 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
     "args": {
       "data": {
         "cantidad_entregada": {
-          "increment": 5.5,
+          "increment": "5.50",
         },
       },
       "where": {
@@ -2883,7 +2883,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 48.75,
+          "decrement": "48.75",
         },
       },
       "select": {
@@ -2893,7 +2893,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
       "where": {
         "id_material": "MAT00000001",
         "stock_actual": {
-          "gte": 48.75,
+          "gte": "48.75",
         },
       },
     },
@@ -2902,7 +2902,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   {
     "args": {
       "data": {
-        "cantidad": 48.75,
+        "cantidad": "48.75",
         "id_material": "MAT00000001",
         "id_movimiento": "MVI00000001",
         "id_orden_trabajo": "OTR00000007",
@@ -2919,7 +2919,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "cantidad_entregada": {
-          "increment": 48.75,
+          "increment": "48.75",
         },
       },
       "where": {
@@ -2959,7 +2959,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 8.57,
+          "decrement": "8.57",
         },
       },
       "select": {
@@ -2969,7 +2969,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
       "where": {
         "id_material": "MAT00000002",
         "stock_actual": {
-          "gte": 8.57,
+          "gte": "8.57",
         },
       },
     },
@@ -2978,7 +2978,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   {
     "args": {
       "data": {
-        "cantidad": 8.57,
+        "cantidad": "8.57",
         "id_material": "MAT00000002",
         "id_movimiento": "MVI00000002",
         "id_orden_trabajo": "OTR00000007",
@@ -2995,7 +2995,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "cantidad_entregada": {
-          "increment": 8.57,
+          "increment": "8.57",
         },
       },
       "where": {
@@ -3041,7 +3041,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 50,
+          "decrement": "50.00",
         },
       },
       "select": {
@@ -3051,7 +3051,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
       "where": {
         "id_material": "MAT00000004",
         "stock_actual": {
-          "gte": 50,
+          "gte": "50.00",
         },
       },
     },
@@ -3060,7 +3060,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   {
     "args": {
       "data": {
-        "cantidad": 50,
+        "cantidad": "50.00",
         "id_material": "MAT00000004",
         "id_movimiento": "MVI00000003",
         "id_orden_trabajo": "OTR00000007",
@@ -3077,7 +3077,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "cantidad_entregada": {
-          "increment": 50,
+          "increment": "50.00",
         },
       },
       "where": {
@@ -3115,7 +3115,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 10,
+          "decrement": "10.00",
         },
       },
       "select": {
@@ -3125,7 +3125,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
       "where": {
         "id_material": "MAT00000005",
         "stock_actual": {
-          "gte": 10,
+          "gte": "10.00",
         },
       },
     },
@@ -3134,7 +3134,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
   {
     "args": {
       "data": {
-        "cantidad": 10,
+        "cantidad": "10.00",
         "id_material": "MAT00000005",
         "id_movimiento": "MVI00000004",
         "id_orden_trabajo": "OTR00000007",
@@ -3151,7 +3151,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
     "args": {
       "data": {
         "cantidad_entregada": {
-          "increment": 10,
+          "increment": "10.00",
         },
       },
       "where": {
@@ -3260,7 +3260,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 68.75,
+          "decrement": "68.75",
         },
       },
       "select": {
@@ -3270,7 +3270,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
       "where": {
         "id_material": "MAT00000001",
         "stock_actual": {
-          "gte": 68.75,
+          "gte": "68.75",
         },
       },
     },
@@ -3279,7 +3279,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
   {
     "args": {
       "data": {
-        "cantidad": 68.75,
+        "cantidad": "68.75",
         "id_material": "MAT00000001",
         "id_movimiento": "MVI00000001",
         "id_orden_trabajo": "OTR00000007",
@@ -3296,7 +3296,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
     "args": {
       "data": {
         "cantidad_entregada": {
-          "increment": 68.75,
+          "increment": "68.75",
         },
       },
       "where": {
@@ -3321,7 +3321,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
     "args": {
       "data": {
         "stock_actual": {
-          "decrement": 8.57,
+          "decrement": "8.57",
         },
       },
       "select": {
@@ -3331,7 +3331,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
       "where": {
         "id_material": "MAT00000002",
         "stock_actual": {
-          "gte": 8.57,
+          "gte": "8.57",
         },
       },
     },
@@ -4472,7 +4472,7 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
     "args": {
       "data": {
         "stock_actual": {
-          "increment": 3,
+          "increment": "3.00",
         },
       },
       "select": {
@@ -4488,7 +4488,7 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
   {
     "args": {
       "data": {
-        "cantidad": 3,
+        "cantidad": "3.00",
         "id_material": "MAT00000001",
         "id_movimiento": "MVI00000001",
         "id_orden_trabajo": "OTR00000007",
@@ -4505,7 +4505,7 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
     "args": {
       "data": {
         "cantidad_devuelta": {
-          "increment": 3,
+          "increment": "3.00",
         },
       },
       "where": {
@@ -4868,7 +4868,7 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
     "args": {
       "data": {
         "stock_actual": {
-          "increment": 2.25,
+          "increment": "2.25",
         },
       },
       "select": {
@@ -4884,7 +4884,7 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
   {
     "args": {
       "data": {
-        "cantidad": 2.25,
+        "cantidad": "2.25",
         "id_material": "MAT00000001",
         "id_movimiento": "MVI00000001",
         "id_orden_trabajo": "OTR00000007",
@@ -4901,7 +4901,7 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
     "args": {
       "data": {
         "cantidad_devuelta": {
-          "increment": 2.25,
+          "increment": "2.25",
         },
       },
       "where": {

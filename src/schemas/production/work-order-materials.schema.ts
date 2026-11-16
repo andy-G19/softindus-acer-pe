@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { hasCents } from "@/lib/client-payment-amounts";
+
 const MAX_CANTIDAD = 99999999.99;
 
 /**
@@ -24,6 +26,9 @@ export const additionalDeliverySchema = z.object({
   cantidad: z.coerce
     .number({ message: "La cantidad debe ser numérica." })
     .positive("La cantidad debe ser mayor que cero.")
+    // C1 de la 11.6a (D62): lo que la columna guardaria como 0.00 tampoco es una cantidad. Solo
+    // mira los positivos: un cero ya tiene su mensaje y lo repetiria.
+    .refine((value) => value <= 0 || hasCents(value), "La cantidad debe ser mayor que cero.")
     .max(MAX_CANTIDAD, "La cantidad es demasiado alta."),
 
   motivo: z
@@ -55,6 +60,9 @@ export const materialReturnSchema = z.object({
   cantidad: z.coerce
     .number({ message: "La cantidad debe ser numérica." })
     .positive("La cantidad debe ser mayor que cero.")
+    // C1 de la 11.6a (D62): lo que la columna guardaria como 0.00 tampoco es una cantidad. Solo
+    // mira los positivos: un cero ya tiene su mensaje y lo repetiria.
+    .refine((value) => value <= 0 || hasCents(value), "La cantidad debe ser mayor que cero.")
     .max(MAX_CANTIDAD, "La cantidad es demasiado alta."),
 
   motivo: z

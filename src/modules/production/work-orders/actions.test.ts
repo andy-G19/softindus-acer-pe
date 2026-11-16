@@ -1211,7 +1211,9 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
       .map((call) => (call.args as { data: Row }).data);
   }
 
-  function expectKardex(data: Row, expected: { anterior: string; cantidad: number; resultante: string }) {
+  // Desde C1 de la 11.6a (D62) el kardex recibe la cantidad ya redondeada como su columna, en
+  // texto: el mismo que va al descuento y a lo entregado.
+  function expectKardex(data: Row, expected: { anterior: string; cantidad: string; resultante: string }) {
     expect(String(data.stock_anterior)).toBe(D(expected.anterior).toString());
     expect(data.cantidad).toBe(expected.cantidad);
     expect(String(data.stock_resultante)).toBe(D(expected.resultante).toString());
@@ -1237,7 +1239,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
 
     const [kardex] = written(calls, "movimiento_inventario.create");
 
-    expectKardex(kardex, { anterior: "70.00", cantidad: 48.75, resultante: "21.25" });
+    expectKardex(kardex, { anterior: "70.00", cantidad: "48.75", resultante: "21.25" });
 
     // 21.25 queda bajo el minimo 30: la alerta sigue activa con el stock real.
     // Con la lectura, 51.25 la habria dado por atendida.
@@ -1266,7 +1268,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
 
     const [kardex] = written(calls, "movimiento_inventario.create");
 
-    expectKardex(kardex, { anterior: "12.00", cantidad: 5.5, resultante: "6.50" });
+    expectKardex(kardex, { anterior: "12.00", cantidad: "5.50", resultante: "6.50" });
     expect(written(calls, "alerta_stock.create")).toEqual([
       expect.objectContaining({ stock_detectado: 6.5, stock_minimo: 10, estado_alerta: "activa" }),
     ]);
@@ -1292,7 +1294,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
 
     const [kardex] = written(calls, "movimiento_inventario.create");
 
-    expectKardex(kardex, { anterior: "15.00", cantidad: 3, resultante: "18.00" });
+    expectKardex(kardex, { anterior: "15.00", cantidad: "3.00", resultante: "18.00" });
 
     // 18 supera el minimo 8: la alerta se atiende. Con la lectura, 8.00 la
     // habria dejado activa.

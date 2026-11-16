@@ -2,6 +2,7 @@ import "server-only";
 
 import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
+import { roundMaterialQuantity } from "@/lib/material-quantities";
 import { validateClosure } from "@/lib/material-reconciliation";
 import { lockWorkOrderRow } from "@/lib/row-locks";
 import type {
@@ -82,8 +83,13 @@ export async function closeWorkOrderMaterials({
       );
     }
 
+    // C1 de la 11.6a (D62): lo consumido y lo producido se redondean como sus columnas antes de
+    // validar y de escribir, y la bitacora nombra lo que se guarda.
+    const cantidadProducida = roundMaterialQuantity(data.cantidad_producida);
+
     const closures = data.lineas.map((linea) => {
       const requirement = requirementById.get(linea.id_requerimiento);
+      const consumida = roundMaterialQuantity(linea.cantidad_consumida);
 
       if (!requirement) {
         throw new Error("Se recibio un material que no pertenece a esta orden.");
@@ -92,7 +98,7 @@ export async function closeWorkOrderMaterials({
       const validation = validateClosure(
         {
           delivered: requirement.cantidad_entregada,
-          consumed: linea.cantidad_consumida,
+          consumed: consumida,
           returned: requirement.cantidad_devuelta,
         },
         requirement.material.nombre_material,
@@ -104,7 +110,7 @@ export async function closeWorkOrderMaterials({
 
       return {
         idRequerimiento: requirement.id_requerimiento,
-        consumida: linea.cantidad_consumida,
+        consumida,
         merma: validation.waste,
         materialName: requirement.material.nombre_material,
       };
@@ -122,7 +128,7 @@ export async function closeWorkOrderMaterials({
     await tx.orden_trabajo.update({
       where: { id_orden_trabajo: data.id_orden_trabajo },
       data: {
-        cantidad_producida: data.cantidad_producida,
+        cantidad_producida: cantidadProducida,
         fecha_cierre_materiales: new Date(),
       },
     });
@@ -132,7 +138,7 @@ export async function closeWorkOrderMaterials({
       entidad_afectada: "orden_trabajo",
       id_registro_afectado: data.id_orden_trabajo,
       accion: "cerrar_materiales",
-      detalle: `Materiales cerrados. Producido: ${data.cantidad_producida.toFixed(2)}. Merma total derivada: ${mermaTotal.toFixed(2)}.`,
+      detalle: `Materiales cerrados. Producido: ${cantidadProducida}. Merma total derivada: ${mermaTotal.toFixed(2)}.`,
       tx,
     });
   });
