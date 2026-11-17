@@ -1116,7 +1116,12 @@ defineActionSuite("reopenWorkOrderMaterialsAction", reopenAction, [
   },
 ]);
 
-defineActionSuite("annulWorkOrderAction", annulWorkOrderAction, [
+// C4 de la 11.6b (D76): anular y finalizar reciben el estado anterior del boton de la fila
+// (ConfirmActionButton).
+const annulAction = (formData: FormData) => annulWorkOrderAction({ status: "idle" }, formData);
+const finishAction = (formData: FormData) => finishWorkOrderAction({ status: "idle" }, formData);
+
+defineActionSuite("annulWorkOrderAction", annulAction, [
   {
     name: "sin orden en el formulario",
     form: { id_orden_trabajo: "" },
@@ -1157,7 +1162,7 @@ defineActionSuite("annulWorkOrderAction", annulWorkOrderAction, [
   },
 ]);
 
-defineActionSuite("finishWorkOrderAction", finishWorkOrderAction, [
+defineActionSuite("finishWorkOrderAction", finishAction, [
   {
     name: "sin orden en el formulario",
     form: { id_orden_trabajo: "" },
@@ -1995,6 +2000,104 @@ describe("C3 de la 11.6b: entregar lo pendiente con resultado", () => {
     expect((outcome as { error: string }).error).toContain(message);
     expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
     expect(indexOf(calls, "movimiento_inventario.create")).toBe(-1);
+    expect(indexOf(calls, "revalidatePath")).toBe(-1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C4 de la 11.6b (D76): anular y finalizar desde la fila con resultado
+// ---------------------------------------------------------------------------
+
+// Redirigian (anular al listado, finalizar al detalle) y lanzaban cualquier rechazo a la pagina de
+// error. Ahora responden con un RowStatusState para ConfirmActionButton: el rechazo queda en la
+// confirmacion y el exito trae el estado que quedo; el listado se repinta con la revalidacion.
+// Finalizar una orden ya finalizada responde «ya estaba finalizada» sin escribir ni revalidar. El
+// id sigue sin recortarse (entrega 6): viaja tal cual a la consulta y a la respuesta.
+describe("C4 de la 11.6b: anular y finalizar con resultado", () => {
+  const indexOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
+  const caseOf = (suite: string, name: string) => {
+    const found = suites.get(suite)?.cases.find((actionCase) => actionCase.name === name);
+
+    if (!found) {
+      throw new Error(`No existe el caso ${name} de ${suite}.`);
+    }
+
+    return found;
+  };
+
+  it.each([
+    ["annulWorkOrderAction", annulAction, "anula la orden", "anulada"],
+    ["finishWorkOrderAction", finishAction, "finaliza con todas las etapas terminadas", "finalizada"],
+  ] as const)("%s guarda, revalida y responde con el estado, sin redirigir", async (suite, action, name, estado) => {
+    const { calls, outcome } = await runAction(action, caseOf(suite, name));
+
+    expect(outcome).toMatchObject({ status: "success", data: { estado }, values: { id: OT } });
+    expect(indexOf(calls, "orden_trabajo.update")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "orden_trabajo.update")).toBeLessThan(indexOf(calls, "prisma.$transaction:commit"));
+    expect(calls.filter((call) => "effect" in call && call.effect === "revalidatePath").length).toBeGreaterThan(0);
+  });
+
+  it("anular no recorta el id: responde con el que llego", async () => {
+    const { outcome } = await runAction(
+      annulAction,
+      caseOf("annulWorkOrderAction", "el id no se recorta: viaja tal cual a la consulta y a la redireccion"),
+    );
+
+    expect(outcome).toMatchObject({ status: "success", values: { id: ` ${OT} ` } });
+  });
+
+  it.each([
+    ["annulWorkOrderAction", annulAction],
+    ["finishWorkOrderAction", finishAction],
+  ] as const)("%s sin orden en el formulario responde con el error, sin consultar", async (suite, action) => {
+    const { calls, outcome } = await runAction(action, caseOf(suite, "sin orden en el formulario"));
+
+    expect(outcome).toMatchObject({ status: "error", error: "No se recibio la orden de trabajo.", values: { id: "" } });
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it.each([
+    ["annulWorkOrderAction", annulAction, "la orden no existe", "La orden de trabajo no existe."],
+    ["annulWorkOrderAction", annulAction, "orden ya anulada", "La orden de trabajo ya esta anulada."],
+    ["annulWorkOrderAction", annulAction, "orden finalizada", "No se puede anular una orden finalizada desde el listado."],
+    [
+      "annulWorkOrderAction",
+      annulAction,
+      "orden con movimientos de inventario",
+      "No se puede anular una orden con consumos registrados sin reversar inventario.",
+    ],
+    ["finishWorkOrderAction", finishAction, "la orden no existe", "La orden de trabajo no existe."],
+    ["finishWorkOrderAction", finishAction, "orden anulada", "No se puede finalizar una orden anulada."],
+    ["finishWorkOrderAction", finishAction, "orden sin avances generados", "La orden no tiene avances generados."],
+    [
+      "finishWorkOrderAction",
+      finishAction,
+      "etapas sin terminar",
+      "Solo se puede finalizar una orden cuando todas sus etapas estan terminadas.",
+    ],
+  ] as const)("%s, %s: responde con el mensaje, revierte y no escribe", async (suite, action, name, message) => {
+    const { calls, outcome } = await runAction(action, caseOf(suite, name));
+
+    expect(outcome).toMatchObject({ status: "error", error: message, values: { id: OT } });
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "orden_trabajo.update")).toBe(-1);
+    expect(indexOf(calls, "revalidatePath")).toBe(-1);
+  });
+
+  it("finalizar una orden ya finalizada responde que ya lo estaba, sin escribir ni revalidar", async () => {
+    const { calls, outcome } = await runAction(
+      finishAction,
+      caseOf("finishWorkOrderAction", "orden ya finalizada: vuelve al detalle sin toast ni escrituras"),
+    );
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "La orden de trabajo ya estaba finalizada.",
+      values: { id: OT },
+    });
+    expect(indexOf(calls, "orden_trabajo.update")).toBe(-1);
+    expect(indexOf(calls, "registerAuditLog")).toBe(-1);
     expect(indexOf(calls, "revalidatePath")).toBe(-1);
   });
 });

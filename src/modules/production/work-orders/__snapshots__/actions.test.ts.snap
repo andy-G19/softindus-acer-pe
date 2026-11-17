@@ -3,7 +3,7 @@
 exports[`annulWorkOrderAction > anula la orden > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -85,12 +85,23 @@ exports[`annulWorkOrderAction > anula la orden > llamadas 1`] = `
 ]
 `;
 
-exports[`annulWorkOrderAction > anula la orden > resultado 1`] = `"redirect:/dashboard/production/work-orders?toast=work-order-annulled"`;
+exports[`annulWorkOrderAction > anula la orden > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulada",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`annulWorkOrderAction > el id no se recorta: viaja tal cual a la consulta y a la redireccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -172,12 +183,23 @@ exports[`annulWorkOrderAction > el id no se recorta: viaja tal cual a la consult
 ]
 `;
 
-exports[`annulWorkOrderAction > el id no se recorta: viaja tal cual a la consulta y a la redireccion > resultado 1`] = `"redirect:/dashboard/production/work-orders?toast=work-order-annulled"`;
+exports[`annulWorkOrderAction > el id no se recorta: viaja tal cual a la consulta y a la redireccion > resultado 1`] = `
+{
+  "data": {
+    "estado": "anulada",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": " OTR00000007 ",
+  },
+}
+`;
 
 exports[`annulWorkOrderAction > la orden no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -220,12 +242,21 @@ exports[`annulWorkOrderAction > la orden no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`annulWorkOrderAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+exports[`annulWorkOrderAction > la orden no existe > resultado 1`] = `
+{
+  "error": "La orden de trabajo no existe.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`annulWorkOrderAction > orden con movimientos de inventario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -268,12 +299,21 @@ exports[`annulWorkOrderAction > orden con movimientos de inventario > llamadas 1
 ]
 `;
 
-exports[`annulWorkOrderAction > orden con movimientos de inventario > resultado 1`] = `"error: No se puede anular una orden con consumos registrados sin reversar inventario."`;
+exports[`annulWorkOrderAction > orden con movimientos de inventario > resultado 1`] = `
+{
+  "error": "No se puede anular una orden con consumos registrados sin reversar inventario.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`annulWorkOrderAction > orden finalizada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -316,12 +356,21 @@ exports[`annulWorkOrderAction > orden finalizada > llamadas 1`] = `
 ]
 `;
 
-exports[`annulWorkOrderAction > orden finalizada > resultado 1`] = `"error: No se puede anular una orden finalizada desde el listado."`;
+exports[`annulWorkOrderAction > orden finalizada > resultado 1`] = `
+{
+  "error": "No se puede anular una orden finalizada desde el listado.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`annulWorkOrderAction > orden ya anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -364,12 +413,21 @@ exports[`annulWorkOrderAction > orden ya anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`annulWorkOrderAction > orden ya anulada > resultado 1`] = `"error: La orden de trabajo ya esta anulada."`;
+exports[`annulWorkOrderAction > orden ya anulada > resultado 1`] = `
+{
+  "error": "La orden de trabajo ya esta anulada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`annulWorkOrderAction > sin orden en el formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -378,7 +436,16 @@ exports[`annulWorkOrderAction > sin orden en el formulario > llamadas 1`] = `
 ]
 `;
 
-exports[`annulWorkOrderAction > sin orden en el formulario > resultado 1`] = `"error: No se recibio la orden de trabajo."`;
+exports[`annulWorkOrderAction > sin orden en el formulario > resultado 1`] = `
+{
+  "error": "No se recibio la orden de trabajo.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "",
+  },
+}
+`;
 
 exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la merma derivada > llamadas 1`] = `
 [
@@ -5963,7 +6030,7 @@ exports[`deliverWorkOrderMaterialsAction > stock insuficiente: detalla cada mate
 exports[`finishWorkOrderAction > etapas sin terminar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6004,12 +6071,21 @@ exports[`finishWorkOrderAction > etapas sin terminar > llamadas 1`] = `
 ]
 `;
 
-exports[`finishWorkOrderAction > etapas sin terminar > resultado 1`] = `"error: Solo se puede finalizar una orden cuando todas sus etapas estan terminadas."`;
+exports[`finishWorkOrderAction > etapas sin terminar > resultado 1`] = `
+{
+  "error": "Solo se puede finalizar una orden cuando todas sus etapas estan terminadas.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`finishWorkOrderAction > finaliza con todas las etapas terminadas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6089,12 +6165,23 @@ exports[`finishWorkOrderAction > finaliza con todas las etapas terminadas > llam
 ]
 `;
 
-exports[`finishWorkOrderAction > finaliza con todas las etapas terminadas > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-finished"`;
+exports[`finishWorkOrderAction > finaliza con todas las etapas terminadas > resultado 1`] = `
+{
+  "data": {
+    "estado": "finalizada",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`finishWorkOrderAction > la orden no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6135,12 +6222,21 @@ exports[`finishWorkOrderAction > la orden no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`finishWorkOrderAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+exports[`finishWorkOrderAction > la orden no existe > resultado 1`] = `
+{
+  "error": "La orden de trabajo no existe.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`finishWorkOrderAction > orden anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6181,12 +6277,21 @@ exports[`finishWorkOrderAction > orden anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`finishWorkOrderAction > orden anulada > resultado 1`] = `"error: No se puede finalizar una orden anulada."`;
+exports[`finishWorkOrderAction > orden anulada > resultado 1`] = `
+{
+  "error": "No se puede finalizar una orden anulada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`finishWorkOrderAction > orden sin avances generados > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6227,12 +6332,21 @@ exports[`finishWorkOrderAction > orden sin avances generados > llamadas 1`] = `
 ]
 `;
 
-exports[`finishWorkOrderAction > orden sin avances generados > resultado 1`] = `"error: La orden no tiene avances generados."`;
+exports[`finishWorkOrderAction > orden sin avances generados > resultado 1`] = `
+{
+  "error": "La orden no tiene avances generados.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`finishWorkOrderAction > orden ya finalizada: vuelve al detalle sin toast ni escrituras > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6273,12 +6387,21 @@ exports[`finishWorkOrderAction > orden ya finalizada: vuelve al detalle sin toas
 ]
 `;
 
-exports[`finishWorkOrderAction > orden ya finalizada: vuelve al detalle sin toast ni escrituras > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007"`;
+exports[`finishWorkOrderAction > orden ya finalizada: vuelve al detalle sin toast ni escrituras > resultado 1`] = `
+{
+  "error": "La orden de trabajo ya estaba finalizada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`finishWorkOrderAction > sin orden en el formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6287,7 +6410,16 @@ exports[`finishWorkOrderAction > sin orden en el formulario > llamadas 1`] = `
 ]
 `;
 
-exports[`finishWorkOrderAction > sin orden en el formulario > resultado 1`] = `"error: No se recibio la orden de trabajo."`;
+exports[`finishWorkOrderAction > sin orden en el formulario > resultado 1`] = `
+{
+  "error": "No se recibio la orden de trabajo.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "",
+  },
+}
+`;
 
 exports[`reopenWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
 [

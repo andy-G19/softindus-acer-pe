@@ -574,14 +574,8 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 <div>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders%3Ffrom%3D2026-13-45%26q%3D%2Blote%2B%26q%3Dotro">Ver detalle</a>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1/progress?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders%3Ffrom%3D2026-13-45%26q%3D%2Blote%2B%26q%3Dotro">Ver avances</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button type="submit">Anular</button>
-</form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="link" type="submit">Finalizar</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
+<button data-variant="outline" type="button">Finalizar</button>
 </div>
 </td>
 </tr>
@@ -615,14 +609,8 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 <div>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-2?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders%3Ffrom%3D2026-13-45%26q%3D%2Blote%2B%26q%3Dotro">Ver detalle</a>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-2/progress?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders%3Ffrom%3D2026-13-45%26q%3D%2Blote%2B%26q%3Dotro">Ver avances</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-2"/>
-<button type="submit">Anular</button>
-</form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-2"/>
-<button data-variant="link" type="submit">Finalizar</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
+<button data-variant="outline" type="button">Finalizar</button>
 </div>
 </td>
 </tr>
@@ -636,8 +624,7 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 <a data-variant="outline" href="/dashboard/production/work-orders?from=2026-13-45&amp;q=+lote+&amp;page=2">Siguiente</a>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1011,14 +998,8 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 <div>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders">Ver detalle</a>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1/progress?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders">Ver avances</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button type="submit">Anular</button>
-</form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="link" type="submit">Finalizar</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
+<button data-variant="outline" type="button">Finalizar</button>
 </div>
 </td>
 </tr>
@@ -1115,10 +1096,7 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 <div>
 <a data-variant="link" href="/dashboard/production/work-orders/OTR00000004?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders">Ver detalle</a>
 <a data-variant="link" href="/dashboard/production/work-orders/OTR00000004/progress?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders">Ver avances</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="OTR00000004"/>
-<button type="submit">Anular</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
 </div>
 </td>
 </tr>
@@ -1132,8 +1110,7 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 <a data-variant="outline" href="/dashboard/production/work-orders?page=2">Siguiente</a>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1507,14 +1484,8 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 <div>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders">Ver detalle</a>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1/progress?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders">Ver avances</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button type="submit">Anular</button>
-</form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="link" type="submit">Finalizar</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
+<button data-variant="outline" type="button">Finalizar</button>
 </div>
 </td>
 </tr>
@@ -1548,14 +1519,8 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 <div>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-2?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders">Ver detalle</a>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-2/progress?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders">Ver avances</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-2"/>
-<button type="submit">Anular</button>
-</form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-2"/>
-<button data-variant="link" type="submit">Finalizar</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
+<button data-variant="outline" type="button">Finalizar</button>
 </div>
 </td>
 </tr>
@@ -1569,8 +1534,7 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/production/work-orders?page=2">Siguiente</a>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -2347,14 +2311,8 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 <div>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders%3Fto%3D2026-07-31">Ver detalle</a>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1/progress?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders%3Fto%3D2026-07-31">Ver avances</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button type="submit">Anular</button>
-</form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="link" type="submit">Finalizar</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
+<button data-variant="outline" type="button">Finalizar</button>
 </div>
 </td>
 </tr>
@@ -2388,14 +2346,8 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 <div>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-2?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders%3Fto%3D2026-07-31">Ver detalle</a>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-2/progress?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders%3Fto%3D2026-07-31">Ver avances</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-2"/>
-<button type="submit">Anular</button>
-</form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-2"/>
-<button data-variant="link" type="submit">Finalizar</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
+<button data-variant="outline" type="button">Finalizar</button>
 </div>
 </td>
 </tr>
@@ -2409,8 +2361,7 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/production/work-orders?to=2026-07-31&amp;page=2">Siguiente</a>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -3164,14 +3115,8 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 <div>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders%3Fq%3Dpuerta%26product%3DPRO00000001%26client%3DCLI00000001%26campaign%3DCAM00000001%26type%3Dpedido%26status%3Den_proceso%26priority%3Dalta%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Ver detalle</a>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1/progress?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders%3Fq%3Dpuerta%26product%3DPRO00000001%26client%3DCLI00000001%26campaign%3DCAM00000001%26type%3Dpedido%26status%3Den_proceso%26priority%3Dalta%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Ver avances</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button type="submit">Anular</button>
-</form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="link" type="submit">Finalizar</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
+<button data-variant="outline" type="button">Finalizar</button>
 </div>
 </td>
 </tr>
@@ -3205,14 +3150,8 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 <div>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-2?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders%3Fq%3Dpuerta%26product%3DPRO00000001%26client%3DCLI00000001%26campaign%3DCAM00000001%26type%3Dpedido%26status%3Den_proceso%26priority%3Dalta%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Ver detalle</a>
 <a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-2/progress?returnTo=%2Fdashboard%2Fproduction%2Fwork-orders%3Fq%3Dpuerta%26product%3DPRO00000001%26client%3DCLI00000001%26campaign%3DCAM00000001%26type%3Dpedido%26status%3Den_proceso%26priority%3Dalta%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Ver avances</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-2"/>
-<button type="submit">Anular</button>
-</form>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-2"/>
-<button data-variant="link" type="submit">Finalizar</button>
-</form>
+<button data-variant="destructive" type="button">Anular</button>
+<button data-variant="outline" type="button">Finalizar</button>
 </div>
 </td>
 </tr>
@@ -3226,8 +3165,7 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 <a data-variant="outline" href="/dashboard/production/work-orders?q=puerta&amp;product=PRO00000001&amp;client=CLI00000001&amp;campaign=CAM00000001&amp;type=pedido&amp;status=en_proceso&amp;priority=alta&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente</a>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;

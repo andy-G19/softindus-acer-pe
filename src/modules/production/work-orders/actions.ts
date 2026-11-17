@@ -1,9 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import type { FieldErrors } from "@/lib/errors";
 import { IdempotencyConflictError } from "@/lib/idempotency";
 import { APP_ROLES } from "@/lib/permissions";
@@ -468,41 +467,75 @@ export async function reopenWorkOrderMaterialsAction(
   };
 }
 
-export async function annulWorkOrderAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
-
+// C4 de la 11.6b (D76): anular y finalizar responden a ConfirmActionButton, en la fila del listado,
+// con un RowStatusState en lugar de redirigir (anular iba al listado y finalizar al detalle). Antes
+// cualquier rechazo lanzaba un error que se veia en la pagina de error; ahora queda en la
+// confirmacion. Sin permiso responden con un error. El id no se recorta (entrega 6): viaja tal cual
+// a la consulta y a la respuesta.
+export async function annulWorkOrderAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
   const idOrdenTrabajo = String(formData.get("id_orden_trabajo") ?? "");
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
-  if (!idOrdenTrabajo) {
-    throw new Error("No se recibio la orden de trabajo.");
+  if (!session) {
+    return rowStatusError(idOrdenTrabajo, "No tienes permisos para anular órdenes de trabajo.");
   }
 
-  await annulWorkOrder({ idOrdenTrabajo, idUsuario: session.user.id });
+  if (!idOrdenTrabajo) {
+    return rowStatusError(idOrdenTrabajo, "No se recibio la orden de trabajo.");
+  }
+
+  try {
+    await annulWorkOrder({ idOrdenTrabajo, idUsuario: session.user.id });
+  } catch (error) {
+    if (error instanceof WorkOrderRejectedError) {
+      return rowStatusError(idOrdenTrabajo, error.message);
+    }
+
+    throw error;
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/work-orders");
   revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
 
-  redirect("/dashboard/production/work-orders?toast=work-order-annulled");
+  return rowStatusDone(idOrdenTrabajo, "anulada");
 }
 
-export async function finishWorkOrderAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
-
+export async function finishWorkOrderAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
   const idOrdenTrabajo = String(formData.get("id_orden_trabajo") ?? "");
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
-  if (!idOrdenTrabajo) {
-    throw new Error("No se recibio la orden de trabajo.");
+  if (!session) {
+    return rowStatusError(idOrdenTrabajo, "No tienes permisos para finalizar órdenes de trabajo.");
   }
 
-  const result = await finishWorkOrder({
-    idOrdenTrabajo,
-    idUsuario: session.user.id,
-  });
+  if (!idOrdenTrabajo) {
+    return rowStatusError(idOrdenTrabajo, "No se recibio la orden de trabajo.");
+  }
 
+  let result: Awaited<ReturnType<typeof finishWorkOrder>>;
+
+  try {
+    result = await finishWorkOrder({ idOrdenTrabajo, idUsuario: session.user.id });
+  } catch (error) {
+    if (error instanceof WorkOrderRejectedError) {
+      return rowStatusError(idOrdenTrabajo, error.message);
+    }
+
+    throw error;
+  }
+
+  // No escribio nada: se responde como un rechazo, sin revalidar. Un repintado quitaria el boton
+  // de la fila y su mensaje con el.
   if (result === "ya_finalizada") {
-    redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
+    return rowStatusError(idOrdenTrabajo, "La orden de trabajo ya estaba finalizada.");
   }
 
   revalidatePath("/dashboard");
@@ -510,5 +543,5 @@ export async function finishWorkOrderAction(formData: FormData) {
   revalidatePath("/dashboard/production/work-orders");
   revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
 
-  redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}?toast=work-order-finished`);
+  return rowStatusDone(idOrdenTrabajo, "finalizada");
 }

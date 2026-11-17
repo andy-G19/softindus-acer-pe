@@ -8,7 +8,6 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -30,11 +29,16 @@ import {
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { parseDateParam } from "@/lib/search-params";
+import { productionNotifications } from "@/modules/production/notifications";
 import { getWorkOrderListData } from "@/modules/production/work-orders/queries";
 import {
   annulWorkOrderAction,
   finishWorkOrderAction,
 } from "@/modules/production/work-orders/actions";
+import {
+  WorkOrderAnnulAction,
+  WorkOrderFinishAction,
+} from "@/modules/production/work-orders/work-order-status-actions";
 
 type WorkOrdersPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -371,36 +375,21 @@ export default async function WorkOrdersPage({
                       </Link>
                     </Button>
 
+                    {/* C4 de la 11.6b (D76): con confirmacion; un rechazo queda en ella. */}
                     {canChangeStatus ? (
-                      <form action={annulWorkOrderAction}>
-                        <input
-                          type="hidden"
-                          name="id_orden_trabajo"
-                          value={order.id_orden_trabajo}
-                        />
-                        <ConfirmDeleteButton
-                          title="¿Anular orden de trabajo?"
-                          description="Esta acción anulará la orden de trabajo y no se puede deshacer."
-                          confirmText="Confirmar anulación"
-                          entityName="orden de trabajo"
-                          className="rounded-none border-0 bg-transparent px-0 py-0 hover:bg-transparent"
-                        >
-                          Anular
-                        </ConfirmDeleteButton>
-                      </form>
+                      <WorkOrderAnnulAction
+                        order={order}
+                        action={annulWorkOrderAction}
+                        successNotification={productionNotifications["work-order-annulled"]}
+                      />
                     ) : null}
 
                     {canChangeStatus && order._count.avance_orden > 0 ? (
-                      <form action={finishWorkOrderAction}>
-                        <input
-                          type="hidden"
-                          name="id_orden_trabajo"
-                          value={order.id_orden_trabajo}
-                        />
-                        <Button type="submit" variant="link" className="h-auto justify-start p-0">
-                          Finalizar
-                        </Button>
-                      </form>
+                      <WorkOrderFinishAction
+                        order={order}
+                        action={finishWorkOrderAction}
+                        successNotification={productionNotifications["work-order-finished"]}
+                      />
                     ) : null}
                   </div>
                 </TableCell>

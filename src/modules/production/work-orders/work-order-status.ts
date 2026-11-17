@@ -3,15 +3,17 @@ import "server-only";
 import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { lockWorkOrderRow } from "@/lib/row-locks";
+import { WorkOrderRejectedError } from "@/modules/production/work-orders/work-order-rejected-error";
 
 /**
  * Cambios de estado de la orden de trabajo: anular y finalizar.
  *
  * Son casos de uso y no server actions: viven fuera de actions.ts porque alli toda
  * funcion async exportada se convierte en un endpoint invocable por POST. La accion
- * autoriza, lee el formulario, revalida y redirige; el caso de uso recibe el usuario ya
- * verificado, abre la transaccion y aplica las reglas dentro de ella. Lanza los mismos
- * errores que la accion mostraba antes de separarse.
+ * autoriza, lee el formulario y revalida; el caso de uso recibe el usuario ya verificado,
+ * abre la transaccion y aplica las reglas dentro de ella. Desde C4 de la 11.6b (D76) cada
+ * rechazo lanza WorkOrderRejectedError sin campo, con el mismo mensaje: la accion lo muestra
+ * en la confirmacion de la fila.
  *
  * Cada caso de uso bloquea la orden antes de leerla (H1): dos operaciones simultaneas
  * sobre la misma orden quedan en fila, y la segunda valida con lo que confirmo la
@@ -46,19 +48,20 @@ export async function annulWorkOrder({
     });
 
     if (!workOrder) {
-      throw new Error("La orden de trabajo no existe.");
+      throw new WorkOrderRejectedError(null, "La orden de trabajo no existe.");
     }
 
     if (workOrder.estado === "anulada") {
-      throw new Error("La orden de trabajo ya esta anulada.");
+      throw new WorkOrderRejectedError(null, "La orden de trabajo ya esta anulada.");
     }
 
     if (workOrder.estado === "finalizada") {
-      throw new Error("No se puede anular una orden finalizada desde el listado.");
+      throw new WorkOrderRejectedError(null, "No se puede anular una orden finalizada desde el listado.");
     }
 
     if (workOrder.movimiento_inventario.length > 0) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        null,
         "No se puede anular una orden con consumos registrados sin reversar inventario.",
       );
     }
@@ -85,8 +88,8 @@ export async function annulWorkOrder({
 }
 
 /**
- * Finalizar una orden ya finalizada no es un error: la accion vuelve al detalle sin
- * toast. Por eso el resultado distingue ese caso en lugar de lanzar.
+ * Finalizar una orden ya finalizada no lanza: no escribe nada y la transaccion termina bien.
+ * La accion responde «ya estaba finalizada» sin revalidar (C4 de la 11.6b).
  */
 export type FinishWorkOrderResult = "finalizada" | "ya_finalizada";
 
@@ -111,11 +114,11 @@ export async function finishWorkOrder({
     });
 
     if (!workOrder) {
-      throw new Error("La orden de trabajo no existe.");
+      throw new WorkOrderRejectedError(null, "La orden de trabajo no existe.");
     }
 
     if (workOrder.estado === "anulada") {
-      throw new Error("No se puede finalizar una orden anulada.");
+      throw new WorkOrderRejectedError(null, "No se puede finalizar una orden anulada.");
     }
 
     if (workOrder.estado === "finalizada") {
@@ -123,7 +126,7 @@ export async function finishWorkOrder({
     }
 
     if (workOrder.avance_orden.length === 0) {
-      throw new Error("La orden no tiene avances generados.");
+      throw new WorkOrderRejectedError(null, "La orden no tiene avances generados.");
     }
 
     const allStagesFinished = workOrder.avance_orden.every(
@@ -131,7 +134,8 @@ export async function finishWorkOrder({
     );
 
     if (!allStagesFinished) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        null,
         "Solo se puede finalizar una orden cuando todas sus etapas estan terminadas.",
       );
     }

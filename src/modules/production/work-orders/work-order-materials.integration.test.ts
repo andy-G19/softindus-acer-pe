@@ -2,6 +2,7 @@ import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import type { PrismaClient } from "@/generated/prisma/client";
 import {
+  annulWorkOrderAction,
   closeWorkOrderMaterialsAction,
   deliverAdditionalMaterialAction,
   deliverWorkOrderMaterialsAction,
@@ -15,7 +16,7 @@ import { getTestDatabase } from "@/testing/test-database";
 // kardex, el requerimiento congelado, la alerta y la bitacora. Solo se reemplazan la sesion y la
 // cache de Next. Desde C1 de la 11.6b la entrega adicional y la devolucion devuelven su estado y
 // reclaman una clave de operacion (runState); desde C2, cerrar y reabrir devuelven su estado sin
-// clave (runForm), y desde C3 tambien entregar lo pendiente.
+// clave (runForm), y desde C3 tambien entregar lo pendiente; desde C4, anular.
 //
 // Las columnas son numeric(10, 2) y cada una redondea por su lado: una cantidad sin redondear
 // dejaba el stock, lo entregado y el kardex en desacuerdo (hallazgo 1 de la 11.6).
@@ -459,5 +460,43 @@ describe("C3 de la 11.6b: entregar lo pendiente con resultado", () => {
       devuelta: "0.00",
       kardex: [],
     });
+  });
+});
+
+describe("C4 de la 11.6b: anular con resultado", () => {
+  async function annulment(idOrden: string) {
+    const order = await prisma.orden_trabajo.findUniqueOrThrow({ where: { id_orden_trabajo: idOrden } });
+    const logs = await prisma.bitacora_operacion.count({ where: { id_registro_afectado: idOrden, accion: "anular" } });
+
+    return { estado: order.estado, bitacora: logs };
+  }
+
+  it("un segundo envio responde que ya esta anulada y no vuelve a escribir", async () => {
+    const { idOrden } = await seedOrder("15", { stock: "20.00" });
+
+    expect(await runForm(annulWorkOrderAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "success",
+      data: { estado: "anulada" },
+    });
+    expect(await runForm(annulWorkOrderAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "error",
+      error: "La orden de trabajo ya esta anulada.",
+    });
+
+    expect(await annulment(idOrden)).toEqual({ estado: "anulada", bitacora: 1 });
+  });
+
+  it("una orden con material entregado no se anula y queda como estaba", async () => {
+    const { idOrden } = await seedOrder("16", { stock: "20.00" });
+
+    expect(await runForm(deliverWorkOrderMaterialsAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "success",
+    });
+    expect(await runForm(annulWorkOrderAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "error",
+      error: "No se puede anular una orden con consumos registrados sin reversar inventario.",
+    });
+
+    expect(await annulment(idOrden)).toEqual({ estado: "pendiente", bitacora: 0 });
   });
 });

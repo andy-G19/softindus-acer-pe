@@ -319,7 +319,8 @@ const MODULOS: ModuloDeAcciones[] = [
       reopenWorkOrderMaterialsAction: SOLO_ADMIN,
     },
     // C5 de la 11.6a (D66); entrega adicional y devolucion en C1 de la 11.6b (D73); cerrar y
-    // reabrir en C2 (D74); entregar lo pendiente en C3 (D75).
+    // reabrir en C2 (D74); entregar lo pendiente en C3 (D75); anular y finalizar en C4 (D76): ya
+    // ninguna accion de ordenes redirige.
     rechazanConResultado: [
       "createWorkOrderAction",
       "deliverWorkOrderMaterialsAction",
@@ -327,6 +328,8 @@ const MODULOS: ModuloDeAcciones[] = [
       "returnWorkOrderMaterialAction",
       "closeWorkOrderMaterialsAction",
       "reopenWorkOrderMaterialsAction",
+      "annulWorkOrderAction",
+      "finishWorkOrderAction",
     ],
   },
   {
