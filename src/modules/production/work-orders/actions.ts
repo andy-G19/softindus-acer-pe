@@ -283,42 +283,135 @@ export async function returnWorkOrderMaterialAction(
   });
 }
 
-export async function closeWorkOrderMaterialsAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+/** Lo que el formulario de cierre envio, tal cual, para volver a mostrarlo. */
+export type CloseMaterialsFormValues = {
+  cantidad_producida: string;
+  lineas: { id_requerimiento: string; cantidad_consumida: string }[];
+};
 
-  const idOrdenTrabajo = String(formData.get("id_orden_trabajo") ?? "").trim();
-  const requirementIds = formData.getAll("id_requerimiento").map(String);
+/** Lo que el formulario de reapertura envio, para volver a mostrarlo. */
+export type ReopenMaterialsFormValues = { motivo: string };
+
+// C2 de la 11.6b (D74): cerrar y reabrir no redirigen; devuelven el resultado y el detalle se
+// repinta con la revalidacion. Antes cualquier rechazo lanzaba un error que se veia en la pagina de
+// error y se perdia lo declarado; ahora queda en el formulario, en el campo que lo causa (el consumo
+// de una linea, en lineas.<posicion>.cantidad_consumida) y con lo enviado. Sin permiso responden
+// con un error. Sin clave: la fecha de cierre, leida con la orden bloqueada, ya hace que un segundo
+// cierre o una segunda reapertura no escriba.
+export type CloseMaterialsFormState = FormActionState<CloseMaterialsFormValues, { id_orden_trabajo: string }>;
+export type ReopenMaterialsFormState = FormActionState<ReopenMaterialsFormValues, { id_orden_trabajo: string }>;
+
+const workOrderClosurePaths = (idOrdenTrabajo: string) => [
+  "/dashboard",
+  "/dashboard/production/work-orders",
+  `/dashboard/production/work-orders/${idOrdenTrabajo}`,
+];
+
+/**
+ * Los errores del esquema por campo. Las claves salen de la ruta de cada problema porque flatten de
+ * Zod no conserva las rutas anidadas (lineas.1.cantidad_consumida).
+ */
+function closeFieldErrors(issues: { path: PropertyKey[]; message: string }[]) {
+  const fieldErrors: Record<string, string[]> = {};
+
+  for (const issue of issues) {
+    const key = issue.path.map(String).join(".");
+
+    fieldErrors[key] = [...(fieldErrors[key] ?? []), issue.message];
+  }
+
+  return fieldErrors;
+}
+
+export async function closeWorkOrderMaterialsAction(
+  _prevState: CloseMaterialsFormState,
+  formData: FormData,
+): Promise<CloseMaterialsFormState> {
   const consumedValues = formData.getAll("cantidad_consumida").map(String);
+  const values: CloseMaterialsFormValues = {
+    cantidad_producida: formData.get("cantidad_producida")?.toString() ?? "",
+    lineas: formData.getAll("id_requerimiento").map((id, index) => ({
+      id_requerimiento: String(id),
+      cantidad_consumida: consumedValues[index] ?? "",
+    })),
+  };
+  const fail = (error: string, fieldErrors?: FieldErrors): CloseMaterialsFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
+
+  if (!session) {
+    return fail("No tienes permisos para cerrar materiales de órdenes de trabajo.");
+  }
 
   const parsed = closeMaterialsSchema.safeParse({
-    id_orden_trabajo: idOrdenTrabajo,
+    id_orden_trabajo: String(formData.get("id_orden_trabajo") ?? "").trim(),
     cantidad_producida: formData.get("cantidad_producida"),
-    lineas: requirementIds.map((id, index) => ({
-      id_requerimiento: id,
-      cantidad_consumida: consumedValues[index] ?? "0",
+    lineas: values.lineas.map((linea) => ({
+      id_requerimiento: linea.id_requerimiento,
+      // Una linea sin valor se declaraba en cero, como antes.
+      cantidad_consumida: linea.cantidad_consumida || "0",
     })),
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+    const fieldErrors = closeFieldErrors(parsed.error.issues);
+    // La orden, los materiales y su lista van en campos ocultos: su mensaje es el general.
+    const hiddenError = parsed.error.issues.find(
+      (issue) => issue.path[0] === "id_orden_trabajo" || issue.path.at(-1) === "id_requerimiento" || issue.path.join(".") === "lineas",
+    )?.message;
+
+    return fail(hiddenError ?? "Revisa el cierre de materiales.", fieldErrors);
   }
 
   const data = parsed.data;
 
-  await closeWorkOrderMaterials({ data, idUsuario: session.user.id });
+  try {
+    await closeWorkOrderMaterials({ data, idUsuario: session.user.id });
+  } catch (error) {
+    if (error instanceof WorkOrderRejectedError) {
+      return fail(error.message, error.fieldErrors);
+    }
 
-  revalidatePath("/dashboard");
-  revalidatePath("/dashboard/production/work-orders");
-  revalidatePath(`/dashboard/production/work-orders/${data.id_orden_trabajo}`);
+    throw error;
+  }
 
-  redirect(
-    `/dashboard/production/work-orders/${data.id_orden_trabajo}?toast=work-order-materials-closed`,
-  );
+  for (const path of workOrderClosurePaths(data.id_orden_trabajo)) {
+    revalidatePath(path);
+  }
+
+  return {
+    status: "success",
+    data: { id_orden_trabajo: data.id_orden_trabajo },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 // Solo ADMIN: reabrir habilita reescribir la merma declarada (ver material-closure.ts).
-export async function reopenWorkOrderMaterialsAction(formData: FormData) {
-  const session = await requireRole(["ADMIN"]);
+export async function reopenWorkOrderMaterialsAction(
+  _prevState: ReopenMaterialsFormState,
+  formData: FormData,
+): Promise<ReopenMaterialsFormState> {
+  const values: ReopenMaterialsFormValues = { motivo: formData.get("motivo")?.toString() ?? "" };
+  const fail = (error: string, fieldErrors?: FieldErrors): ReopenMaterialsFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN]);
+
+  if (!session) {
+    return fail("No tienes permisos para reabrir el cierre de materiales.");
+  }
 
   const parsed = reopenMaterialsSchema.safeParse({
     id_orden_trabajo: formData.get("id_orden_trabajo"),
@@ -326,20 +419,35 @@ export async function reopenWorkOrderMaterialsAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+    // La orden va en un campo oculto: su mensaje es el general, no el de un campo.
+    const hiddenError = fieldErrors.id_orden_trabajo?.[0];
+
+    return fail(hiddenError ?? "Revisa el motivo de la reapertura.", fieldErrors);
   }
 
   const data = parsed.data;
 
-  await reopenWorkOrderMaterials({ data, idUsuario: session.user.id });
+  try {
+    await reopenWorkOrderMaterials({ data, idUsuario: session.user.id });
+  } catch (error) {
+    if (error instanceof WorkOrderRejectedError) {
+      return fail(error.message, error.fieldErrors);
+    }
 
-  revalidatePath("/dashboard");
-  revalidatePath("/dashboard/production/work-orders");
-  revalidatePath(`/dashboard/production/work-orders/${data.id_orden_trabajo}`);
+    throw error;
+  }
 
-  redirect(
-    `/dashboard/production/work-orders/${data.id_orden_trabajo}?toast=work-order-materials-reopened`,
-  );
+  for (const path of workOrderClosurePaths(data.id_orden_trabajo)) {
+    revalidatePath(path);
+  }
+
+  return {
+    status: "success",
+    data: { id_orden_trabajo: data.id_orden_trabajo },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 export async function annulWorkOrderAction(formData: FormData) {

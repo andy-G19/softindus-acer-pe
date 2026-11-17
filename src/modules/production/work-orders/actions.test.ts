@@ -985,6 +985,10 @@ defineActionSuite("returnWorkOrderMaterialAction", returnAction, [
   },
 ]);
 
+// C2 de la 11.6b (D74): cerrar y reabrir reciben el estado anterior de su formulario.
+const closeAction = (formData: FormData) => closeWorkOrderMaterialsAction({ status: "idle" }, formData);
+const reopenAction = (formData: FormData) => reopenWorkOrderMaterialsAction({ status: "idle" }, formData);
+
 const closeForm: FormFields = {
   id_orden_trabajo: OT,
   cantidad_producida: "24",
@@ -1006,7 +1010,7 @@ function closableOrder(changes: Row = {}) {
   });
 }
 
-defineActionSuite("closeWorkOrderMaterialsAction", closeWorkOrderMaterialsAction, [
+defineActionSuite("closeWorkOrderMaterialsAction", closeAction, [
   {
     name: "sin lineas de materiales",
     form: { id_orden_trabajo: OT, cantidad_producida: "24" },
@@ -1065,7 +1069,7 @@ const reopenForm: FormFields = {
   motivo: "Se conto mal la plancha sobrante",
 };
 
-defineActionSuite("reopenWorkOrderMaterialsAction", reopenWorkOrderMaterialsAction, [
+defineActionSuite("reopenWorkOrderMaterialsAction", reopenAction, [
   {
     name: "motivo demasiado corto",
     form: { ...reopenForm, motivo: "error" },
@@ -1780,5 +1784,154 @@ describe("C1 de la 11.6b: entrega adicional y devolucion con resultado e idempot
     expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
     expect(indexOf(calls, "movimiento_inventario.create")).toBe(-1);
     expect(indexOf(calls, "operacion_idempotente.updateMany")).toBe(-1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C2 de la 11.6b (D74): cerrar y reabrir con resultado
+// ---------------------------------------------------------------------------
+
+// Las dos redirigian al detalle al guardar y lanzaban cualquier rechazo a la pagina de error, donde
+// se perdia lo declarado (el consumo de cada material y lo producido, o el motivo). Ahora devuelven
+// un FormActionState: el rechazo queda en su campo con lo enviado (el consumo de una linea, en
+// lineas.<posicion>.cantidad_consumida) y el exito trae la orden; el detalle se repinta con la
+// revalidacion. Sin clave: la fecha de cierre ya hace que un segundo cierre, o una segunda
+// reapertura, no escriba.
+describe("C2 de la 11.6b: cerrar y reabrir con resultado", () => {
+  const indexOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
+  const fieldsOf = (outcome: unknown) => Object.keys((outcome as { fieldErrors?: Row }).fieldErrors ?? {});
+  const closeValues = {
+    cantidad_producida: "24",
+    lineas: [
+      { id_requerimiento: REQ_PLANCHA, cantidad_consumida: "60.5" },
+      { id_requerimiento: REQ_SOLDADURA, cantidad_consumida: "8" },
+    ],
+  };
+
+  it("cerrar guarda, revalida y responde con la orden, sin redirigir", async () => {
+    const { calls, outcome } = await runAction(closeAction, {
+      name: "C2",
+      form: closeForm,
+      data: { "orden_trabajo.findUnique": closableOrder() },
+    });
+
+    expect(outcome).toMatchObject({ status: "success", data: { id_orden_trabajo: OT }, values: closeValues });
+    expect(indexOf(calls, "orden_trabajo.update")).toBeLessThan(indexOf(calls, "prisma.$transaction:commit"));
+    expect(calls.filter((call) => "effect" in call && call.effect === "revalidatePath").length).toBeGreaterThan(0);
+  });
+
+  it.each([
+    ["lo producido negativo", { ...closeForm, cantidad_producida: "-1" }, "cantidad_producida"],
+    ["el consumo de la segunda linea negativo", { ...closeForm, cantidad_consumida: ["60.5", "-2"] }, "lineas.1.cantidad_consumida"],
+  ] as [string, FormFields, string][])("cerrar con %s: el error queda en su campo, con lo enviado, sin consultar", async (_name, form, field) => {
+    const { calls, outcome } = await runAction(closeAction, { name: "C2", form });
+    const sent = form as FormFields;
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      values: {
+        cantidad_producida: sent.cantidad_producida,
+        lineas: [
+          { id_requerimiento: REQ_PLANCHA, cantidad_consumida: (sent.cantidad_consumida as string[])[0] },
+          { id_requerimiento: REQ_SOLDADURA, cantidad_consumida: (sent.cantidad_consumida as string[])[1] },
+        ],
+      },
+    });
+    expect(fieldsOf(outcome)).toContain(field);
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it("cerrar sin lineas responde con el mensaje general, sin consultar", async () => {
+    const { calls, outcome } = await runAction(closeAction, {
+      name: "C2",
+      form: { id_orden_trabajo: OT, cantidad_producida: "24" },
+    });
+
+    expect(outcome).toMatchObject({ status: "error", error: "La orden no tiene materiales que conciliar." });
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it("un consumo que con lo devuelto supera lo entregado queda en su linea y revierte", async () => {
+    const { calls, outcome } = await runAction(closeAction, {
+      name: "C2",
+      form: { ...closeForm, cantidad_consumida: ["64", "8"] },
+      data: { "orden_trabajo.findUnique": closableOrder() },
+    });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      values: { cantidad_producida: "24", lineas: [{ cantidad_consumida: "64" }, { cantidad_consumida: "8" }] },
+    });
+    expect(fieldsOf(outcome)).toEqual(["lineas.0.cantidad_consumida"]);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "orden_trabajo.update")).toBe(-1);
+  });
+
+  it.each([
+    ["la orden no existe", closeForm, null],
+    ["la orden anulada", closeForm, closableOrder({ estado: "anulada" })],
+    ["los materiales ya cerrados", closeForm, closableOrder({ fecha_cierre_materiales: CLOSED_AT })],
+    ["la orden sin requerimiento congelado", closeForm, workOrderRow()],
+    [
+      "no declara todos los materiales",
+      { ...closeForm, id_requerimiento: [REQ_PLANCHA], cantidad_consumida: ["60.5"] },
+      closableOrder(),
+    ],
+    ["declara un material que no es de la orden", { ...closeForm, id_requerimiento: [REQ_PLANCHA, REQ_PERNO] }, closableOrder()],
+  ] as [string, FormFields, Row | null][])("cerrar con %s responde con el mensaje general y revierte", async (_name, form, order) => {
+    const { calls, outcome } = await runAction(closeAction, {
+      name: "C2",
+      form,
+      data: { "orden_trabajo.findUnique": order },
+    });
+
+    expect(outcome).toMatchObject({ status: "error", values: { cantidad_producida: "24" } });
+    expect(fieldsOf(outcome)).toEqual([]);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "orden_trabajo.update")).toBe(-1);
+  });
+
+  it("reabrir guarda, revalida y responde con la orden, sin redirigir", async () => {
+    const { calls, outcome } = await runAction(reopenAction, {
+      name: "C2",
+      form: reopenForm,
+      data: {
+        "orden_trabajo.findUnique": workOrderRow({ fecha_cierre_materiales: CLOSED_AT, cantidad_producida: D("24.00") }),
+      },
+    });
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: OT },
+      values: { motivo: reopenForm.motivo },
+    });
+    expect(indexOf(calls, "orden_trabajo.update")).toBeLessThan(indexOf(calls, "prisma.$transaction:commit"));
+    expect(calls.filter((call) => "effect" in call && call.effect === "revalidatePath").length).toBeGreaterThan(0);
+  });
+
+  it("reabrir con un motivo corto deja el error en el motivo, con lo enviado, sin consultar", async () => {
+    const { calls, outcome } = await runAction(reopenAction, { name: "C2", form: { ...reopenForm, motivo: "error" } });
+
+    expect(outcome).toMatchObject({ status: "error", values: { motivo: "error" } });
+    expect(fieldsOf(outcome)).toEqual(["motivo"]);
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it.each([
+    ["la orden no existe", null],
+    ["los materiales no cerrados", workOrderRow()],
+    ["la orden anulada", workOrderRow({ estado: "anulada", fecha_cierre_materiales: CLOSED_AT })],
+  ] as const)("reabrir con %s responde con el mensaje general y revierte", async (_name, order) => {
+    const { calls, outcome } = await runAction(reopenAction, {
+      name: "C2",
+      form: reopenForm,
+      data: { "orden_trabajo.findUnique": order },
+    });
+
+    expect(outcome).toMatchObject({ status: "error", values: { motivo: reopenForm.motivo } });
+    expect(fieldsOf(outcome)).toEqual([]);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "orden_trabajo.update")).toBe(-1);
   });
 });

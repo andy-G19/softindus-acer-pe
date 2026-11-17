@@ -318,8 +318,15 @@ const MODULOS: ModuloDeAcciones[] = [
     rolesPorAccion: {
       reopenWorkOrderMaterialsAction: SOLO_ADMIN,
     },
-    // C5 de la 11.6a (D66).
-    rechazanConResultado: ["createWorkOrderAction", "deliverAdditionalMaterialAction", "returnWorkOrderMaterialAction"],
+    // C5 de la 11.6a (D66); entrega adicional y devolucion en C1 de la 11.6b (D73); cerrar y
+    // reabrir en C2 (D74).
+    rechazanConResultado: [
+      "createWorkOrderAction",
+      "deliverAdditionalMaterialAction",
+      "returnWorkOrderMaterialAction",
+      "closeWorkOrderMaterialsAction",
+      "reopenWorkOrderMaterialsAction",
+    ],
   },
   {
     ruta: "staff/attendance/actions",

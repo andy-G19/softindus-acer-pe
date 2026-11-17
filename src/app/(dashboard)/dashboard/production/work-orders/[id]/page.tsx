@@ -6,8 +6,6 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -25,7 +23,7 @@ import {
   summarizeMaterialLine,
 } from "@/lib/material-reconciliation";
 import { applyWaste, roundQuantity } from "@/lib/recipe-quantities";
-import { CloseMaterialsForm } from "@/modules/production/work-orders/close-materials-form";
+import { MaterialClosureSection } from "@/modules/production/work-orders/material-closure-section";
 import { MaterialMovementForm } from "@/modules/production/work-orders/material-movement-form";
 import { getWorkOrderDetail } from "@/modules/production/work-orders/queries";
 import {
@@ -38,6 +36,7 @@ import { quantityHundredths } from "@/lib/material-quantities";
 import { toNumber } from "@/lib/numbers";
 import { productionNotifications } from "@/modules/production/notifications";
 import {
+  closeWorkOrderMaterialsAction,
   deliverAdditionalMaterialAction,
   deliverWorkOrderMaterialsAction,
   reopenWorkOrderMaterialsAction,
@@ -565,8 +564,13 @@ export default async function WorkOrderDetailPage({
               </Table>
             </div>
 
-            {materialsClosed ? (
-              <>
+            {/* C2 de la 11.6b (D74): la seccion queda montada al cerrar y al reabrir para dar su aviso. */}
+            <MaterialClosureSection
+              idOrdenTrabajo={workOrder.id_orden_trabajo}
+              closed={materialsClosed}
+              canReopen={canReopenMaterials}
+              hasDeliveries={hasDeliveries}
+              closedSummary={
                 <Alert variant="success">
                   <AlertDescription>
                     Materiales cerrados el{" "}
@@ -579,93 +583,38 @@ export default async function WorkOrderDetailPage({
                     de {formatDecimal(workOrder.cantidad)} planificadas.
                   </AlertDescription>
                 </Alert>
-
-                {canReopenMaterials ? (
-                  <form
-                    action={reopenWorkOrderMaterialsAction}
-                    className="space-y-3 rounded-lg border border-border/80 p-4"
-                  >
-                    <input
-                      type="hidden"
-                      name="id_orden_trabajo"
-                      value={workOrder.id_orden_trabajo}
-                    />
-
-                    <div>
-                      <h3 className="font-semibold">Reabrir el cierre</h3>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        Permite volver a declarar el consumo y las unidades
-                        producidas. No revierte ningún movimiento de almacén:
-                        las entregas y devoluciones quedan intactas. Queda
-                        registrado en la bitácora.
-                      </p>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="motivo_reapertura">Motivo *</Label>
-                      <Textarea
-                        id="motivo_reapertura"
-                        name="motivo"
-                        rows={2}
-                        maxLength={300}
-                        required
-                        placeholder="Ej. el conteo de barras estaba mal, sobraron 2.5 en el almacén de planta."
-                      />
-                    </div>
-
-                    <Button type="submit" variant="outline">
-                      Reabrir cierre de materiales
-                    </Button>
-                  </form>
-                ) : null}
-              </>
-            ) : hasDeliveries ? (
-              <>
-                <div className="rounded-lg border border-border/80 p-4">
-                  <h3 className="mb-3 font-semibold">
-                    Entrega adicional o devolución
-                  </h3>
-                  <MaterialMovementForm
-                    idOrdenTrabajo={workOrder.id_orden_trabajo}
-                    additionalAction={deliverAdditionalMaterialAction}
-                    returnAction={returnWorkOrderMaterialAction}
-                    additionalNotification={productionNotifications["work-order-additional-delivery"]}
-                    returnNotification={productionNotifications["work-order-material-returned"]}
-                    options={reconciliationRows.map((row) => ({
-                      idRequerimiento: row.idRequerimiento,
-                      materialName: row.materialName,
-                      unidad: row.unidad,
-                      stockActual: row.stockActual,
-                      returnable: Number(
-                        (row.delivered - row.returned).toFixed(2),
-                      ),
-                    }))}
-                  />
-                </div>
-
-                <div className="rounded-lg border border-border/80 p-4">
-                  <h3 className="mb-3 font-semibold">Cerrar materiales</h3>
-                  <CloseMaterialsForm
-                    idOrdenTrabajo={workOrder.id_orden_trabajo}
-                    productUnit={workOrder.producto.unidad_medida}
-                    lines={reconciliationRows.map((row) => ({
-                      idRequerimiento: row.idRequerimiento,
-                      materialName: row.materialName,
-                      unidad: row.unidad,
-                      delivered: row.delivered,
-                      returned: row.returned,
-                    }))}
-                  />
-                </div>
-              </>
-            ) : (
-              <Alert variant="info">
-                <AlertDescription>
-                  Todavía no se entregó material a esta orden. La conciliación
-                  se habilita con la primera entrega.
-                </AlertDescription>
-              </Alert>
-            )}
+              }
+              movementForm={
+                <MaterialMovementForm
+                  idOrdenTrabajo={workOrder.id_orden_trabajo}
+                  additionalAction={deliverAdditionalMaterialAction}
+                  returnAction={returnWorkOrderMaterialAction}
+                  additionalNotification={productionNotifications["work-order-additional-delivery"]}
+                  returnNotification={productionNotifications["work-order-material-returned"]}
+                  options={reconciliationRows.map((row) => ({
+                    idRequerimiento: row.idRequerimiento,
+                    materialName: row.materialName,
+                    unidad: row.unidad,
+                    stockActual: row.stockActual,
+                    returnable: Number(
+                      (row.delivered - row.returned).toFixed(2),
+                    ),
+                  }))}
+                />
+              }
+              productUnit={workOrder.producto.unidad_medida}
+              lines={reconciliationRows.map((row) => ({
+                idRequerimiento: row.idRequerimiento,
+                materialName: row.materialName,
+                unidad: row.unidad,
+                delivered: row.delivered,
+                returned: row.returned,
+              }))}
+              closeAction={closeWorkOrderMaterialsAction}
+              reopenAction={reopenWorkOrderMaterialsAction}
+              closeNotification={productionNotifications["work-order-materials-closed"]}
+              reopenNotification={productionNotifications["work-order-materials-reopened"]}
+            />
           </CardContent>
         </Card>
       ) : null}

@@ -383,7 +383,7 @@ exports[`annulWorkOrderAction > sin orden en el formulario > resultado 1`] = `"e
 exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la merma derivada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -488,12 +488,33 @@ exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la me
 ]
 `;
 
-exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la merma derivada > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-closed"`;
+exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la merma derivada > resultado 1`] = `
+{
+  "data": {
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad_producida": "24",
+    "lineas": [
+      {
+        "cantidad_consumida": "60.5",
+        "id_requerimiento": "ROM00000001",
+      },
+      {
+        "cantidad_consumida": "8",
+        "id_requerimiento": "ROM00000002",
+      },
+    ],
+  },
+}
+`;
 
 exports[`closeWorkOrderMaterialsAction > consumo y devolucion superan lo entregado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -541,12 +562,36 @@ exports[`closeWorkOrderMaterialsAction > consumo y devolucion superan lo entrega
 ]
 `;
 
-exports[`closeWorkOrderMaterialsAction > consumo y devolucion superan lo entregado > resultado 1`] = `"error: Plancha LAC 1/16: lo consumido (64.00) más lo devuelto (5.00) suma 69.00, que supera lo entregado (68.75)."`;
+exports[`closeWorkOrderMaterialsAction > consumo y devolucion superan lo entregado > resultado 1`] = `
+{
+  "error": "Plancha LAC 1/16: lo consumido (64.00) más lo devuelto (5.00) suma 69.00, que supera lo entregado (68.75).",
+  "fieldErrors": {
+    "lineas.0.cantidad_consumida": [
+      "Plancha LAC 1/16: lo consumido (64.00) más lo devuelto (5.00) suma 69.00, que supera lo entregado (68.75).",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_producida": "24",
+    "lineas": [
+      {
+        "cantidad_consumida": "64",
+        "id_requerimiento": "ROM00000001",
+      },
+      {
+        "cantidad_consumida": "8",
+        "id_requerimiento": "ROM00000002",
+      },
+    ],
+  },
+}
+`;
 
 exports[`closeWorkOrderMaterialsAction > declara un material que no es de la orden > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -594,12 +639,32 @@ exports[`closeWorkOrderMaterialsAction > declara un material que no es de la ord
 ]
 `;
 
-exports[`closeWorkOrderMaterialsAction > declara un material que no es de la orden > resultado 1`] = `"error: Se recibio un material que no pertenece a esta orden."`;
+exports[`closeWorkOrderMaterialsAction > declara un material que no es de la orden > resultado 1`] = `
+{
+  "error": "Se recibio un material que no pertenece a esta orden.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_producida": "24",
+    "lineas": [
+      {
+        "cantidad_consumida": "60.5",
+        "id_requerimiento": "ROM00000001",
+      },
+      {
+        "cantidad_consumida": "8",
+        "id_requerimiento": "ROM00000005",
+      },
+    ],
+  },
+}
+`;
 
 exports[`closeWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -647,12 +712,32 @@ exports[`closeWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`closeWorkOrderMaterialsAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+exports[`closeWorkOrderMaterialsAction > la orden no existe > resultado 1`] = `
+{
+  "error": "La orden de trabajo no existe.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_producida": "24",
+    "lineas": [
+      {
+        "cantidad_consumida": "60.5",
+        "id_requerimiento": "ROM00000001",
+      },
+      {
+        "cantidad_consumida": "8",
+        "id_requerimiento": "ROM00000002",
+      },
+    ],
+  },
+}
+`;
 
 exports[`closeWorkOrderMaterialsAction > materiales ya cerrados > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -700,12 +785,32 @@ exports[`closeWorkOrderMaterialsAction > materiales ya cerrados > llamadas 1`] =
 ]
 `;
 
-exports[`closeWorkOrderMaterialsAction > materiales ya cerrados > resultado 1`] = `"error: Los materiales de esta orden ya fueron cerrados."`;
+exports[`closeWorkOrderMaterialsAction > materiales ya cerrados > resultado 1`] = `
+{
+  "error": "Los materiales de esta orden ya fueron cerrados.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_producida": "24",
+    "lineas": [
+      {
+        "cantidad_consumida": "60.5",
+        "id_requerimiento": "ROM00000001",
+      },
+      {
+        "cantidad_consumida": "8",
+        "id_requerimiento": "ROM00000002",
+      },
+    ],
+  },
+}
+`;
 
 exports[`closeWorkOrderMaterialsAction > no declara todos los materiales > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -753,12 +858,28 @@ exports[`closeWorkOrderMaterialsAction > no declara todos los materiales > llama
 ]
 `;
 
-exports[`closeWorkOrderMaterialsAction > no declara todos los materiales > resultado 1`] = `"error: El cierre debe declarar el consumo de todos los materiales de la orden."`;
+exports[`closeWorkOrderMaterialsAction > no declara todos los materiales > resultado 1`] = `
+{
+  "error": "El cierre debe declarar el consumo de todos los materiales de la orden.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_producida": "24",
+    "lineas": [
+      {
+        "cantidad_consumida": "60.5",
+        "id_requerimiento": "ROM00000001",
+      },
+    ],
+  },
+}
+`;
 
 exports[`closeWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -806,12 +927,32 @@ exports[`closeWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`closeWorkOrderMaterialsAction > orden anulada > resultado 1`] = `"error: No se puede cerrar materiales de una orden anulada."`;
+exports[`closeWorkOrderMaterialsAction > orden anulada > resultado 1`] = `
+{
+  "error": "No se puede cerrar materiales de una orden anulada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_producida": "24",
+    "lineas": [
+      {
+        "cantidad_consumida": "60.5",
+        "id_requerimiento": "ROM00000001",
+      },
+      {
+        "cantidad_consumida": "8",
+        "id_requerimiento": "ROM00000002",
+      },
+    ],
+  },
+}
+`;
 
 exports[`closeWorkOrderMaterialsAction > orden sin requerimiento congelado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -859,12 +1000,32 @@ exports[`closeWorkOrderMaterialsAction > orden sin requerimiento congelado > lla
 ]
 `;
 
-exports[`closeWorkOrderMaterialsAction > orden sin requerimiento congelado > resultado 1`] = `"error: Esta orden no tiene requerimiento congelado que conciliar."`;
+exports[`closeWorkOrderMaterialsAction > orden sin requerimiento congelado > resultado 1`] = `
+{
+  "error": "Esta orden no tiene requerimiento congelado que conciliar.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_producida": "24",
+    "lineas": [
+      {
+        "cantidad_consumida": "60.5",
+        "id_requerimiento": "ROM00000001",
+      },
+      {
+        "cantidad_consumida": "8",
+        "id_requerimiento": "ROM00000002",
+      },
+    ],
+  },
+}
+`;
 
 exports[`closeWorkOrderMaterialsAction > sin lineas de materiales > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -873,12 +1034,27 @@ exports[`closeWorkOrderMaterialsAction > sin lineas de materiales > llamadas 1`]
 ]
 `;
 
-exports[`closeWorkOrderMaterialsAction > sin lineas de materiales > resultado 1`] = `"error: La orden no tiene materiales que conciliar."`;
+exports[`closeWorkOrderMaterialsAction > sin lineas de materiales > resultado 1`] = `
+{
+  "error": "La orden no tiene materiales que conciliar.",
+  "fieldErrors": {
+    "lineas": [
+      "La orden no tiene materiales que conciliar.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad_producida": "24",
+    "lineas": [],
+  },
+}
+`;
 
 exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -983,7 +1159,28 @@ exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > lla
 ]
 `;
 
-exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-closed"`;
+exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > resultado 1`] = `
+{
+  "data": {
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad_producida": "0",
+    "lineas": [
+      {
+        "cantidad_consumida": "63.75",
+        "id_requerimiento": "ROM00000001",
+      },
+      {
+        "cantidad_consumida": "",
+        "id_requerimiento": "ROM00000002",
+      },
+    ],
+  },
+}
+`;
 
 exports[`createWorkOrderAction > campania inexistente o no activa > llamadas 1`] = `
 [
@@ -5994,7 +6191,7 @@ exports[`finishWorkOrderAction > sin orden en el formulario > resultado 1`] = `"
 exports[`reopenWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -6033,12 +6230,22 @@ exports[`reopenWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`reopenWorkOrderMaterialsAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+exports[`reopenWorkOrderMaterialsAction > la orden no existe > resultado 1`] = `
+{
+  "error": "La orden de trabajo no existe.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "motivo": "Se conto mal la plancha sobrante",
+  },
+}
+`;
 
 exports[`reopenWorkOrderMaterialsAction > materiales no cerrados > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -6077,12 +6284,22 @@ exports[`reopenWorkOrderMaterialsAction > materiales no cerrados > llamadas 1`] 
 ]
 `;
 
-exports[`reopenWorkOrderMaterialsAction > materiales no cerrados > resultado 1`] = `"error: Los materiales de esta orden no estan cerrados."`;
+exports[`reopenWorkOrderMaterialsAction > materiales no cerrados > resultado 1`] = `
+{
+  "error": "Los materiales de esta orden no estan cerrados.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "motivo": "Se conto mal la plancha sobrante",
+  },
+}
+`;
 
 exports[`reopenWorkOrderMaterialsAction > motivo demasiado corto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -6090,12 +6307,26 @@ exports[`reopenWorkOrderMaterialsAction > motivo demasiado corto > llamadas 1`] 
 ]
 `;
 
-exports[`reopenWorkOrderMaterialsAction > motivo demasiado corto > resultado 1`] = `"error: Explica por qué se reabre el cierre (mínimo 10 caracteres)."`;
+exports[`reopenWorkOrderMaterialsAction > motivo demasiado corto > resultado 1`] = `
+{
+  "error": "Revisa el motivo de la reapertura.",
+  "fieldErrors": {
+    "motivo": [
+      "Explica por qué se reabre el cierre (mínimo 10 caracteres).",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "motivo": "error",
+  },
+}
+`;
 
 exports[`reopenWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -6134,12 +6365,22 @@ exports[`reopenWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`reopenWorkOrderMaterialsAction > orden anulada > resultado 1`] = `"error: No se puede reabrir el cierre de una orden anulada."`;
+exports[`reopenWorkOrderMaterialsAction > orden anulada > resultado 1`] = `
+{
+  "error": "No se puede reabrir el cierre de una orden anulada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "motivo": "Se conto mal la plancha sobrante",
+  },
+}
+`;
 
 exports[`reopenWorkOrderMaterialsAction > reabre un cierre sin produccion declarada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -6224,12 +6465,23 @@ exports[`reopenWorkOrderMaterialsAction > reabre un cierre sin produccion declar
 ]
 `;
 
-exports[`reopenWorkOrderMaterialsAction > reabre un cierre sin produccion declarada > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-reopened"`;
+exports[`reopenWorkOrderMaterialsAction > reabre un cierre sin produccion declarada > resultado 1`] = `
+{
+  "data": {
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "motivo": "Se conto mal la plancha sobrante",
+  },
+}
+`;
 
 exports[`reopenWorkOrderMaterialsAction > reabre y deja en la bitacora la produccion declarada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -6314,7 +6566,18 @@ exports[`reopenWorkOrderMaterialsAction > reabre y deja en la bitacora la produc
 ]
 `;
 
-exports[`reopenWorkOrderMaterialsAction > reabre y deja en la bitacora la produccion declarada > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-reopened"`;
+exports[`reopenWorkOrderMaterialsAction > reabre y deja en la bitacora la produccion declarada > resultado 1`] = `
+{
+  "data": {
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "motivo": "Se conto mal la plancha sobrante",
+  },
+}
+`;
 
 exports[`returnWorkOrderMaterialAction > cantidad no numerica > llamadas 1`] = `
 [

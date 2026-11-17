@@ -4,6 +4,7 @@ import type { PrismaClient } from "@/generated/prisma/client";
 import {
   closeWorkOrderMaterialsAction,
   deliverAdditionalMaterialAction,
+  reopenWorkOrderMaterialsAction,
   returnWorkOrderMaterialAction,
 } from "@/modules/production/work-orders/actions";
 import { getTestDatabase } from "@/testing/test-database";
@@ -11,9 +12,9 @@ import { getTestDatabase } from "@/testing/test-database";
 // Movimientos de material de una orden de trabajo contra Postgres real (PGlite), C1 de la 11.6a
 // (D62). Corre las acciones enteras: el candado de la orden, el descuento atomico del stock, el
 // kardex, el requerimiento congelado, la alerta y la bitacora. Solo se reemplazan la sesion y la
-// cache de Next. Cerrar todavia redirige al guardar y lanza un error al rechazar: la prueba
-// traduce lo primero a «guardado». Desde C1 de la 11.6b la entrega adicional y la devolucion
-// devuelven su estado y reclaman una clave de operacion (runState).
+// cache de Next. Desde C1 de la 11.6b la entrega adicional y la devolucion devuelven su estado y
+// reclaman una clave de operacion (runState); desde C2, cerrar y reabrir devuelven su estado sin
+// clave (runForm).
 //
 // Las columnas son numeric(10, 2) y cada una redondea por su lado: una cantidad sin redondear
 // dejaba el stock, lo entregado y el kardex en desacuerdo (hallazgo 1 de la 11.6).
@@ -26,7 +27,6 @@ vi.mock("next/cache", () => ({ revalidatePath: () => undefined }));
 
 const USUARIO = "USU00000001";
 const PRODUCTO = "PRO00000001";
-const SAVED = "guardado";
 
 let prisma: PrismaClient;
 
@@ -54,9 +54,9 @@ async function seedOrder(
   suffix: string,
   { stock, entregada = "0.00" }: { stock: string; entregada?: string },
 ) {
-  const idOrden = `OTR0000000${suffix}`;
-  const idMaterial = `MAT0000000${suffix}`;
-  const idRequerimiento = `ROM0000000${suffix}`;
+  const idOrden = `OTR${suffix.padStart(8, "0")}`;
+  const idMaterial = `MAT${suffix.padStart(8, "0")}`;
+  const idRequerimiento = `ROM${suffix.padStart(8, "0")}`;
 
   await prisma.material.create({
     data: {
@@ -97,30 +97,6 @@ async function seedOrder(
   return { idOrden, idMaterial, idRequerimiento };
 }
 
-async function run(action: (formData: FormData) => Promise<void>, fields: Record<string, string | string[]>) {
-  const formData = new FormData();
-
-  for (const [key, value] of Object.entries(fields)) {
-    for (const item of Array.isArray(value) ? value : [value]) {
-      formData.append(key, item);
-    }
-  }
-
-  try {
-    await action(formData);
-
-    return "termino sin redirigir";
-  } catch (error) {
-    const digest = (error as { digest?: unknown }).digest;
-
-    return typeof digest === "string" && digest.startsWith("NEXT_REDIRECT")
-      ? SAVED
-      : error instanceof Error
-        ? error.message
-        : String(error);
-  }
-}
-
 type StateAction = (
   prevState: { status: "idle" },
   formData: FormData,
@@ -136,6 +112,19 @@ async function runState(
 
   for (const [key, value] of Object.entries({ ...fields, clave_operacion: clave })) {
     formData.set(key, value);
+  }
+
+  return action({ status: "idle" }, formData);
+}
+
+/** Una accion sin clave que devuelve su estado; un campo repetido (las lineas del cierre) va como lista. */
+async function runForm(action: StateAction, fields: Record<string, string | string[]>) {
+  const formData = new FormData();
+
+  for (const [key, value] of Object.entries(fields)) {
+    for (const item of Array.isArray(value) ? value : [value]) {
+      formData.append(key, item);
+    }
   }
 
   return action({ status: "idle" }, formData);
@@ -250,13 +239,13 @@ describe("C1 de la 11.6a: cantidades de material en centesimos", () => {
     const { idOrden, idRequerimiento } = await seedOrder("5", { stock: "20.00", entregada: "3.00" });
 
     expect(
-      await run(closeWorkOrderMaterialsAction, {
+      await runForm(closeWorkOrderMaterialsAction, {
         id_orden_trabajo: idOrden,
         cantidad_producida: "2.675",
         id_requerimiento: [idRequerimiento],
         cantidad_consumida: ["3.00"],
       }),
-    ).toBe(SAVED);
+    ).toMatchObject({ status: "success", data: { id_orden_trabajo: idOrden } });
 
     const order = await prisma.orden_trabajo.findUniqueOrThrow({ where: { id_orden_trabajo: idOrden } });
     const log = await prisma.bitacora_operacion.findFirstOrThrow({
@@ -343,5 +332,93 @@ describe("C1 de la 11.6b: la misma clave mueve el stock una sola vez", () => {
       status: "success",
     });
     expect((await snapshot(idMaterial, idRequerimiento)).stock).toBe("1.00");
+  });
+});
+
+// C2 de la 11.6b (D74): cerrar y reabrir devuelven su estado. Sin clave: la fecha de cierre, leida
+// con la orden bloqueada, ya hace que un segundo cierre o una segunda reapertura no escriba. Un
+// rechazo deja la orden como estaba, con el error en la linea que lo causa.
+describe("C2 de la 11.6b: cerrar y reabrir con resultado", () => {
+  const closureOf = async (idOrden: string, idRequerimiento: string) => {
+    const order = await prisma.orden_trabajo.findUniqueOrThrow({ where: { id_orden_trabajo: idOrden } });
+    const requirement = await prisma.requerimiento_orden_material.findUniqueOrThrow({
+      where: { id_requerimiento: idRequerimiento },
+    });
+    const logs = await prisma.bitacora_operacion.count({
+      where: { id_registro_afectado: idOrden, accion: { in: ["cerrar_materiales", "reabrir_materiales"] } },
+    });
+
+    return {
+      cerrada: order.fecha_cierre_materiales !== null,
+      producida: order.cantidad_producida?.toFixed(2) ?? null,
+      consumida: requirement.cantidad_consumida.toFixed(2),
+      bitacora: logs,
+    };
+  };
+  const closeFields = (idOrden: string, idRequerimiento: string, consumida: string, producida: string) => ({
+    id_orden_trabajo: idOrden,
+    cantidad_producida: producida,
+    id_requerimiento: [idRequerimiento],
+    cantidad_consumida: [consumida],
+  });
+
+  it("un segundo cierre responde que ya estaban cerrados y no cambia lo declarado", async () => {
+    const { idOrden, idRequerimiento } = await seedOrder("10", { stock: "20.00", entregada: "3.00" });
+
+    expect(
+      await runForm(closeWorkOrderMaterialsAction, closeFields(idOrden, idRequerimiento, "2.50", "1")),
+    ).toMatchObject({ status: "success" });
+    expect(
+      await runForm(closeWorkOrderMaterialsAction, closeFields(idOrden, idRequerimiento, "3.00", "5")),
+    ).toMatchObject({ status: "error", error: "Los materiales de esta orden ya fueron cerrados." });
+
+    expect(await closureOf(idOrden, idRequerimiento)).toEqual({
+      cerrada: true,
+      producida: "1.00",
+      consumida: "2.50",
+      bitacora: 1,
+    });
+  });
+
+  it("un consumo que supera lo entregado queda en su linea y no escribe nada", async () => {
+    const { idOrden, idRequerimiento } = await seedOrder("11", { stock: "20.00", entregada: "3.00" });
+
+    const result = await runForm(closeWorkOrderMaterialsAction, closeFields(idOrden, idRequerimiento, "3.50", "1"));
+
+    expect(result).toMatchObject({ status: "error" });
+    expect(Object.keys(result.fieldErrors ?? {})).toEqual(["lineas.0.cantidad_consumida"]);
+    expect(await closureOf(idOrden, idRequerimiento)).toEqual({
+      cerrada: false,
+      producida: null,
+      consumida: "0.00",
+      bitacora: 0,
+    });
+  });
+
+  it("reabrir limpia lo declarado, una segunda reapertura no escribe y se puede cerrar de nuevo", async () => {
+    const { idOrden, idRequerimiento } = await seedOrder("12", { stock: "20.00", entregada: "3.00" });
+    const reopenFields = { id_orden_trabajo: idOrden, motivo: "Se conto mal la plancha sobrante" };
+
+    await runForm(closeWorkOrderMaterialsAction, closeFields(idOrden, idRequerimiento, "3.00", "1"));
+
+    expect(await runForm(reopenWorkOrderMaterialsAction, reopenFields)).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: idOrden },
+    });
+    expect(await runForm(reopenWorkOrderMaterialsAction, reopenFields)).toMatchObject({
+      status: "error",
+      error: "Los materiales de esta orden no estan cerrados.",
+    });
+    expect(await closureOf(idOrden, idRequerimiento)).toEqual({
+      cerrada: false,
+      producida: null,
+      consumida: "0.00",
+      bitacora: 2,
+    });
+
+    expect(
+      await runForm(closeWorkOrderMaterialsAction, closeFields(idOrden, idRequerimiento, "2.00", "1")),
+    ).toMatchObject({ status: "success" });
+    expect(await closureOf(idOrden, idRequerimiento)).toMatchObject({ cerrada: true, consumida: "2.00", bitacora: 3 });
   });
 });
