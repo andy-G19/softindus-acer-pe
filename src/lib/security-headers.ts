@@ -54,7 +54,7 @@ export function getHstsHeader(): HttpHeader {
  * pedido pero no bloquea nada todavia (solo se reportaria via el header,
  * ya que no hay endpoint de report-uri configurado). Se eligio Report-Only
  * en vez de enforcing porque no hay forma de validar en un navegador real
- * contra el stack de la app (Tailwind v4, radix-ui, sweetalert2,
+ * contra el stack de la app (Tailwind v4, radix-ui,
  * react-toastify, estilos inline via prop `style`) antes de desplegar, y
  * la prioridad explicita de este bloque es no romper el sistema.
  */
