@@ -485,3 +485,41 @@ describe("H8: actualizar un avance escribe todo en una transaccion", () => {
     });
   }
 });
+
+// ---------------------------------------------------------------------------
+// C2 de la 11.6c (D79): el porcentaje en centesimos antes de la regla
+// ---------------------------------------------------------------------------
+
+// La columna es numeric(5, 2): lo que la accion manda se redondea al guardarse. La regla (en
+// proceso o pausada, mas de 0 y menos de 100) se aplicaba al numero sin redondear, asi que 99.995
+// «en proceso» llegaba a la base y quedaba en 100.00, y 0.004 quedaba en 0.00. La escritura y la
+// bitacora deben llevar el porcentaje que la regla decide sobre el numero ya redondeado.
+describe("C2 de la 11.6c: el porcentaje en centesimos antes de la regla", () => {
+  const writtenPercentage = (calls: Awaited<ReturnType<typeof runAction>>["calls"]) =>
+    calls
+      .filter((call): call is PrismaCall => "prisma" in call && call.prisma === "avance_orden.update")
+      .map((call) => (call.args as { data: Row }).data.porcentaje_avance);
+  const auditDetail = (calls: Awaited<ReturnType<typeof runAction>>["calls"]) =>
+    calls
+      .filter((call) => "effect" in call && call.effect === "registerAuditLog")
+      .map((call) => ((call as { args: { detalle: string } }).args.detalle));
+
+  it.each([
+    ["en_proceso", "99.995", 99, "Avance actualizado a en_proceso (99%)."],
+    ["pausada", "99.995", 99, "Avance actualizado a pausada (99%)."],
+    ["en_proceso", "0.004", 1, "Avance actualizado a en_proceso (1%)."],
+    ["en_proceso", "45.678", 45.68, "Avance actualizado a en_proceso (45.68%)."],
+  ])("%s con %s escribe %s", async (estado, porcentaje, esperado, detalle) => {
+    const { calls } = await runAction(updateWorkOrderProgressAction, {
+      name: "C2",
+      form: updateForm({ estado_etapa: estado, porcentaje_avance: porcentaje }),
+      data: {
+        "avance_orden.findUnique": advanceRow(),
+        "avance_orden.findMany": stages("terminada", estado, "pendiente"),
+      },
+    });
+
+    expect(writtenPercentage(calls)).toEqual([esperado]);
+    expect(auditDetail(calls)).toEqual([detalle]);
+  });
+});

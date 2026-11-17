@@ -18,6 +18,7 @@ import {
   navigationHrefs,
 } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
+import { normalizeProgressPercentage } from "@/lib/progress-percentage";
 import { getWorkOrderProgress } from "@/modules/production/work-order-progress/queries";
 import {
   generateWorkOrderProgressAction,
@@ -69,28 +70,6 @@ function getOrderBadgeVariant(status: string) {
   }
 
   return "secondary" as const;
-}
-
-function getDefaultPercentageByStatus(status: string, currentPercentage: unknown) {
-  if (status === "pendiente") {
-    return 0;
-  }
-
-  if (status === "terminada") {
-    return 100;
-  }
-
-  const value = toNumber(currentPercentage);
-
-  if (value <= 0) {
-    return 1;
-  }
-
-  if (value >= 100) {
-    return 99;
-  }
-
-  return value;
 }
 
 export default async function WorkOrderProgressPage({
@@ -222,9 +201,10 @@ export default async function WorkOrderProgressPage({
       {sortedAdvances.length > 0 ? (
         <section className="space-y-4">
           {sortedAdvances.map((advance) => {
-            const defaultPercentage = getDefaultPercentageByStatus(
+            // C2 de la 11.6c (D79): la misma regla con la que la accion guarda.
+            const defaultPercentage = normalizeProgressPercentage(
               advance.estado_etapa,
-              advance.porcentaje_avance,
+              toNumber(advance.porcentaje_avance),
             );
 
             return (

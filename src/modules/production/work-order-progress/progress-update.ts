@@ -3,6 +3,7 @@ import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
+import { normalizeProgressPercentage } from "@/lib/progress-percentage";
 import { lockWorkOrderRow } from "@/lib/row-locks";
 import type { UpdateWorkOrderProgressInput } from "@/schemas/production/work-order-progress.schema";
 
@@ -11,30 +12,9 @@ import type { UpdateWorkOrderProgressInput } from "@/schemas/production/work-ord
  *
  * Caso de uso y no server action (C1 de la 11.6c, D78): la accion autoriza, valida, revalida y
  * redirige; este modulo recibe los datos ya validados y el usuario verificado, abre la transaccion
- * y aplica las reglas dentro de ella, con los mismos errores.
+ * y aplica las reglas dentro de ella, con los mismos errores. La regla del porcentaje vive en
+ * src/lib/progress-percentage.ts (C2 de la 11.6c, D79): la comparte con la pagina de avances.
  */
-function normalizeProgressPercentage(
-  estadoEtapa: string,
-  porcentajeAvance: number,
-) {
-  if (estadoEtapa === "pendiente") {
-    return 0;
-  }
-
-  if (estadoEtapa === "terminada") {
-    return 100;
-  }
-
-  if (porcentajeAvance <= 0) {
-    return 1;
-  }
-
-  if (porcentajeAvance >= 100) {
-    return 99;
-  }
-
-  return porcentajeAvance;
-}
 
 // Recibe el cliente de la transaccion de quien lo llama, que ya bloqueo la orden (H8):
 // lee los avances y escribe el estado con lo confirmado por las demas operaciones.
