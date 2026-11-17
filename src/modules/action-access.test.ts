@@ -343,6 +343,8 @@ const MODULOS: ModuloDeAcciones[] = [
       "updateWorkOrderProgressAction",
       "reassignWorkOrderProgressAction",
     ],
+    // Generar en C3 de la 11.6c (D80).
+    rechazanConResultado: ["generateWorkOrderProgressAction"],
   },
   {
     ruta: "staff/attendance/actions",

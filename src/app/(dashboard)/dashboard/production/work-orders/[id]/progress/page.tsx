@@ -19,6 +19,8 @@ import {
 } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { normalizeProgressPercentage } from "@/lib/progress-percentage";
+import { productionNotifications } from "@/modules/production/notifications";
+import { GenerateProgressAction } from "@/modules/production/work-order-progress/generate-progress-action";
 import { getWorkOrderProgress } from "@/modules/production/work-order-progress/queries";
 import {
   generateWorkOrderProgressAction,
@@ -184,17 +186,17 @@ export default async function WorkOrderProgressPage({
             </Alert>
           ) : null}
 
-          <form action={generateWorkOrderProgressAction} className="mt-5">
-            <input
-              type="hidden"
-              name="id_orden_trabajo"
-              value={workOrder.id_orden_trabajo}
+          {/* C3 de la 11.6c (D80): con confirmacion; un rechazo queda en ella. */}
+          <div className="mt-5">
+            <GenerateProgressAction
+              idOrdenTrabajo={workOrder.id_orden_trabajo}
+              routeName={workOrder.ruta_fabricacion?.nombre_ruta ?? null}
+              stageCount={workOrder.ruta_fabricacion?.etapa_ruta.length ?? 0}
+              disabled={!canGenerateProgress}
+              action={generateWorkOrderProgressAction}
+              successNotification={productionNotifications["work-order-progress-generated"]}
             />
-
-            <Button type="submit" disabled={!canGenerateProgress}>
-              Generar avances por etapa
-            </Button>
-          </form>
+          </div>
         </section>
       ) : null}
 

@@ -7171,13 +7171,11 @@ exports[`/dashboard/production/work-orders/[id]/progress > ruta sin etapas activ
 <div role="alert">
 <div>La ruta asociada no tiene etapas activas.</div>
 </div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="default" type="submit" disabled="">Generar avances por etapa</button>
-</form>
-</section>
+<div>
+<button data-variant="default" type="button" aria-disabled="true">Generar avances por etapa</button>
 </div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</section>
+</div>",
   "outcome": "render",
 }
 `;
@@ -7362,13 +7360,11 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances con ruta 
 <section>
 <h2>La orden todavía no tiene avances generados</h2>
 <p>El sistema puede crear automáticamente un avance por cada etapa activa de la ruta de fabricación asociada a esta orden.</p>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="default" type="submit">Generar avances por etapa</button>
-</form>
-</section>
+<div>
+<button data-variant="default" type="button">Generar avances por etapa</button>
 </div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</section>
+</div>",
   "outcome": "render",
 }
 `;
@@ -7556,13 +7552,11 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances y sin rut
 <div role="alert">
 <div>Esta orden no tiene una ruta de fabricación asociada.</div>
 </div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="default" type="submit" disabled="">Generar avances por etapa</button>
-</form>
-</section>
+<div>
+<button data-variant="default" type="button" aria-disabled="true">Generar avances por etapa</button>
 </div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</section>
+</div>",
   "outcome": "render",
 }
 `;

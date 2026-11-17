@@ -1,13 +1,16 @@
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import type { PrismaClient } from "@/generated/prisma/client";
-import { updateWorkOrderProgressAction } from "@/modules/production/work-order-progress/actions";
+import {
+  generateWorkOrderProgressAction,
+  updateWorkOrderProgressAction,
+} from "@/modules/production/work-order-progress/actions";
 import { getTestDatabase } from "@/testing/test-database";
 
 // Avances de una orden de trabajo contra Postgres real (PGlite), C2 de la 11.6c (D79). Corre la
 // accion entera: el candado de la orden, el avance, la sincronizacion del estado de la orden y la
 // bitacora. Solo se reemplazan la sesion, la cache de Next y la redireccion, que corta la accion
-// al terminar bien.
+// al terminar bien. Desde C3, generar devuelve su estado (runState) y no redirige.
 //
 // porcentaje_avance es numeric(5, 2) y redondea por su lado: la regla «en proceso o pausada, mas de
 // 0 y menos de 100» se aplicaba al numero sin redondear, y 99.995 quedaba guardado como 100.00 en
@@ -58,8 +61,11 @@ beforeAll(async () => {
   });
 });
 
-/** Una orden pendiente con sus dos avances pendientes; devuelve el avance de la primera etapa. */
-async function seedOrder(suffix: string) {
+/**
+ * Una orden pendiente con sus dos avances pendientes, o sin avances; devuelve el avance de la
+ * primera etapa.
+ */
+async function seedOrder(suffix: string, { avances = true }: { avances?: boolean } = {}) {
   const idOrden = `OTR${suffix.padStart(8, "0")}`;
   const idAvance = `AVN${suffix.padStart(7, "0")}1`;
 
@@ -75,6 +81,10 @@ async function seedOrder(suffix: string) {
       id_usuario_registro: USUARIO,
     },
   });
+  if (!avances) {
+    return { idOrden, idAvance };
+  }
+
   await prisma.avance_orden.createMany({
     data: [
       { id_avance: idAvance, id_orden_trabajo: idOrden, id_etapa_ruta: "ETR00000001", id_usuario_actualiza: USUARIO },
@@ -119,5 +129,46 @@ describe("C2 de la 11.6c: el porcentaje en centesimos antes de la regla", () => 
     await update({ id_avance: idAvance, estado_etapa: estado, porcentaje_avance: porcentaje, observaciones: "" });
 
     expect(await stored(idOrden, idAvance)).toEqual({ etapa: estado, porcentaje: guardado, orden });
+  });
+});
+
+describe("C3 de la 11.6c: generar con resultado", () => {
+  async function runState(fields: Record<string, string>) {
+    const formData = new FormData();
+
+    for (const [key, value] of Object.entries(fields)) {
+      formData.set(key, value);
+    }
+
+    return generateWorkOrderProgressAction({ status: "idle" }, formData);
+  }
+
+  it("un segundo envio responde que ya hay avances y no crea otro juego", async () => {
+    const { idOrden } = await seedOrder("5", { avances: false });
+
+    expect(await runState({ id_orden_trabajo: idOrden })).toMatchObject({
+      status: "success",
+      data: { estado: "generado" },
+    });
+    expect(await runState({ id_orden_trabajo: idOrden })).toMatchObject({
+      status: "error",
+      error: "Esta orden ya tiene avances generados.",
+    });
+
+    const advances = await prisma.avance_orden.findMany({
+      where: { id_orden_trabajo: idOrden },
+      include: { etapa_ruta: { select: { orden_secuencia: true } } },
+    });
+    const order = await prisma.orden_trabajo.findUniqueOrThrow({ where: { id_orden_trabajo: idOrden } });
+
+    expect(
+      advances
+        .map((advance) => [advance.etapa_ruta.orden_secuencia, advance.estado_etapa, advance.porcentaje_avance.toFixed(2)])
+        .sort(),
+    ).toEqual([
+      [1, "pendiente", "0.00"],
+      [2, "pendiente", "0.00"],
+    ]);
+    expect(order.estado).toBe("pendiente");
   });
 });

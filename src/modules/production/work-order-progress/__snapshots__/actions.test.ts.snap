@@ -3,7 +3,7 @@
 exports[`generateWorkOrderProgressAction > genera un avance por etapa activa y deja la orden pendiente, sin bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -122,12 +122,23 @@ exports[`generateWorkOrderProgressAction > genera un avance por etapa activa y d
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > genera un avance por etapa activa y deja la orden pendiente, sin bitacora > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-generated"`;
+exports[`generateWorkOrderProgressAction > genera un avance por etapa activa y deja la orden pendiente, sin bitacora > resultado 1`] = `
+{
+  "data": {
+    "estado": "generado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > la orden no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -176,12 +187,21 @@ exports[`generateWorkOrderProgressAction > la orden no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+exports[`generateWorkOrderProgressAction > la orden no existe > resultado 1`] = `
+{
+  "error": "La orden de trabajo no existe.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > la orden ya tiene avances > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -230,12 +250,21 @@ exports[`generateWorkOrderProgressAction > la orden ya tiene avances > llamadas 
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > la orden ya tiene avances > resultado 1`] = `"error: Esta orden ya tiene avances generados."`;
+exports[`generateWorkOrderProgressAction > la orden ya tiene avances > resultado 1`] = `
+{
+  "error": "Esta orden ya tiene avances generados.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > orden anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -284,12 +313,21 @@ exports[`generateWorkOrderProgressAction > orden anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > orden anulada > resultado 1`] = `"error: No se pueden generar avances para una orden anulada o finalizada."`;
+exports[`generateWorkOrderProgressAction > orden anulada > resultado 1`] = `
+{
+  "error": "No se pueden generar avances para una orden anulada o finalizada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -338,12 +376,21 @@ exports[`generateWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > orden finalizada > resultado 1`] = `"error: No se pueden generar avances para una orden anulada o finalizada."`;
+exports[`generateWorkOrderProgressAction > orden finalizada > resultado 1`] = `
+{
+  "error": "No se pueden generar avances para una orden anulada o finalizada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > orden sin ruta de fabricacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -392,12 +439,21 @@ exports[`generateWorkOrderProgressAction > orden sin ruta de fabricacion > llama
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > orden sin ruta de fabricacion > resultado 1`] = `"error: La orden no tiene una ruta de fabricación asociada."`;
+exports[`generateWorkOrderProgressAction > orden sin ruta de fabricacion > resultado 1`] = `
+{
+  "error": "La orden no tiene una ruta de fabricación asociada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > ruta sin etapas activas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -446,12 +502,21 @@ exports[`generateWorkOrderProgressAction > ruta sin etapas activas > llamadas 1`
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > ruta sin etapas activas > resultado 1`] = `"error: La ruta asociada no tiene etapas activas."`;
+exports[`generateWorkOrderProgressAction > ruta sin etapas activas > resultado 1`] = `
+{
+  "error": "La ruta asociada no tiene etapas activas.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > sin orden en el formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -460,7 +525,16 @@ exports[`generateWorkOrderProgressAction > sin orden en el formulario > llamadas
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > sin orden en el formulario > resultado 1`] = `"error: No se recibió la orden de trabajo."`;
+exports[`generateWorkOrderProgressAction > sin orden en el formulario > resultado 1`] = `
+{
+  "error": "No se recibió la orden de trabajo.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "",
+  },
+}
+`;
 
 exports[`reassignWorkOrderProgressAction > datos invalidos: sin motivo > llamadas 1`] = `
 [

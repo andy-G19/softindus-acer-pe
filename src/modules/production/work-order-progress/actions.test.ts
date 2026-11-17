@@ -39,6 +39,12 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Generar devuelve un RowStatusState desde C3 de la 11.6c (D80): su id de operacion fijo, para el
+// snapshot.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -125,9 +131,8 @@ async function runAction(action: Action, actionCase: ActionCase) {
 
   const { calls, result } = await characterizeHandler(async () => {
     try {
-      await action(formData);
-
-      return "termino sin redirigir";
+      // Desde C3 de la 11.6c generar devuelve su estado (RowStatusState); las demas redirigen.
+      return (await action(formData)) ?? "termino sin redirigir";
     } catch (error) {
       return (
         describeNavigationError(error) ??
@@ -241,7 +246,10 @@ const newOperator = { id_operario: OTRO_OPERARIO, nombres: "Rosa", apellidos: "H
 // Casos
 // ---------------------------------------------------------------------------
 
-defineActionSuite("generateWorkOrderProgressAction", generateWorkOrderProgressAction, [
+// C3 de la 11.6c (D80): generar recibe el estado anterior del boton (ConfirmActionButton).
+const generateAction = (formData: FormData) => generateWorkOrderProgressAction({ status: "idle" }, formData);
+
+defineActionSuite("generateWorkOrderProgressAction", generateAction, [
   {
     name: "sin orden en el formulario",
     form: { id_orden_trabajo: "" },
@@ -521,5 +529,77 @@ describe("C2 de la 11.6c: el porcentaje en centesimos antes de la regla", () => 
 
     expect(writtenPercentage(calls)).toEqual([esperado]);
     expect(auditDetail(calls)).toEqual([detalle]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C3 de la 11.6c (D80): generar con resultado
+// ---------------------------------------------------------------------------
+
+// Redirigia a los avances al generar y lanzaba cualquier rechazo a la pagina de error. Ahora
+// responde con un RowStatusState para ConfirmActionButton: el rechazo queda en la confirmacion y el
+// exito trae la orden; la pagina se repinta con la revalidacion. Sin clave: con la orden bloqueada,
+// un segundo envio ve los avances del primero y se rechaza. El id no se recorta, como antes.
+describe("C3 de la 11.6c: generar con resultado", () => {
+  type Calls = Awaited<ReturnType<typeof runAction>>["calls"];
+  const indexOf = (calls: Calls, key: string) =>
+    calls.findIndex((call) =>
+      "prisma" in call ? call.prisma === key : "effect" in call && (call as { effect: string }).effect === key,
+    );
+  const caseOf = (name: string) => {
+    const found = suites.get("generateWorkOrderProgressAction")?.cases.find((actionCase) => actionCase.name === name);
+
+    if (!found) {
+      throw new Error(`No existe el caso ${name}.`);
+    }
+
+    return found;
+  };
+
+  it("genera, revalida y responde con la orden, sin redirigir", async () => {
+    const { calls, outcome } = await runAction(
+      generateAction,
+      caseOf("genera un avance por etapa activa y deja la orden pendiente, sin bitacora"),
+    );
+
+    expect(outcome).toMatchObject({ status: "success", data: { estado: "generado" }, values: { id: OT } });
+    expect(indexOf(calls, "avance_orden.createMany")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "avance_orden.createMany")).toBeLessThan(indexOf(calls, "prisma.$transaction:commit"));
+    expect(indexOf(calls, "revalidatePath")).toBeGreaterThan(-1);
+  });
+
+  it("el id no se recorta: viaja tal cual a la consulta y a la respuesta", async () => {
+    const { calls, outcome } = await runAction(generateAction, {
+      name: "C3",
+      form: { id_orden_trabajo: ` ${OT} ` },
+      data: { "orden_trabajo.findUnique": workOrderWithRoute() },
+    });
+    const found = calls.find((call) => "prisma" in call && call.prisma === "orden_trabajo.findUnique");
+
+    expect(outcome).toMatchObject({ status: "success", values: { id: ` ${OT} ` } });
+    expect(found).toMatchObject({ args: { where: { id_orden_trabajo: ` ${OT} ` } } });
+  });
+
+  it("sin orden en el formulario responde con el error, sin consultar", async () => {
+    const { calls, outcome } = await runAction(generateAction, caseOf("sin orden en el formulario"));
+
+    expect(outcome).toMatchObject({ status: "error", error: "No se recibió la orden de trabajo.", values: { id: "" } });
+    expect(calls.filter((call) => "prisma" in call)).toEqual([]);
+  });
+
+  it.each([
+    ["la orden no existe", "La orden de trabajo no existe."],
+    ["orden anulada", "No se pueden generar avances para una orden anulada o finalizada."],
+    ["orden finalizada", "No se pueden generar avances para una orden anulada o finalizada."],
+    ["orden sin ruta de fabricacion", "La orden no tiene una ruta de fabricación asociada."],
+    ["ruta sin etapas activas", "La ruta asociada no tiene etapas activas."],
+    ["la orden ya tiene avances", "Esta orden ya tiene avances generados."],
+  ])("%s: responde con el mensaje, revierte y no crea avances", async (name, message) => {
+    const { calls, outcome } = await runAction(generateAction, caseOf(name));
+
+    expect(outcome).toMatchObject({ status: "error", error: message, values: { id: OT } });
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "avance_orden.createMany")).toBe(-1);
+    expect(indexOf(calls, "revalidatePath")).toBe(-1);
   });
 });
