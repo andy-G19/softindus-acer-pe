@@ -624,7 +624,10 @@ defineActionSuite("createWorkOrderAction", createAction, [
   },
 ]);
 
-defineActionSuite("deliverWorkOrderMaterialsAction", deliverWorkOrderMaterialsAction, [
+// C3 de la 11.6b (D75): entregar lo pendiente recibe el estado anterior del boton (ConfirmActionButton).
+const deliverPendingAction = (formData: FormData) => deliverWorkOrderMaterialsAction({ status: "idle" }, formData);
+
+defineActionSuite("deliverWorkOrderMaterialsAction", deliverPendingAction, [
   {
     name: "sin orden en el formulario",
     form: { id_orden_trabajo: "   " },
@@ -1309,7 +1312,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
   }
 
   it("entrega lo pendiente: otra orden se llevo 30 de plancha despues de la lectura", async () => {
-    const { calls, outcome } = await runAction(deliverWorkOrderMaterialsAction, {
+    const { calls, outcome } = await runAction(deliverPendingAction, {
       name: "H2 entrega pendiente",
       form: { id_orden_trabajo: OT },
       data: {
@@ -1324,7 +1327,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
       },
     });
 
-    expect(outcome).toBe("redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-delivered");
+    expect(outcome).toMatchObject({ status: "success", values: { id: OT } });
 
     const [kardex] = written(calls, "movimiento_inventario.create");
 
@@ -1933,5 +1936,65 @@ describe("C2 de la 11.6b: cerrar y reabrir con resultado", () => {
     expect(fieldsOf(outcome)).toEqual([]);
     expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
     expect(indexOf(calls, "orden_trabajo.update")).toBe(-1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C3 de la 11.6b (D75): entregar lo pendiente con resultado
+// ---------------------------------------------------------------------------
+
+// Redirigia al detalle al entregar y lanzaba cualquier rechazo a la pagina de error. Ahora
+// responde con un RowStatusState para ConfirmActionButton: el rechazo queda en la confirmacion con
+// su mensaje y el exito trae la orden; el detalle se repinta con la revalidacion. Sin clave: lo
+// pendiente ya hace que un segundo envio no entregue nada («No queda nada pendiente»).
+describe("C3 de la 11.6b: entregar lo pendiente con resultado", () => {
+  const indexOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
+  const deliverCase = (name: string) => {
+    const found = suites.get("deliverWorkOrderMaterialsAction")?.cases.find((actionCase) => actionCase.name === name);
+
+    if (!found) {
+      throw new Error(`No existe el caso ${name}.`);
+    }
+
+    return found;
+  };
+
+  it("entrega, revalida y responde con la orden, sin redirigir", async () => {
+    const { calls, outcome } = await runAction(
+      deliverPendingAction,
+      deliverCase("entrega lo pendiente: descuenta stock, registra kardex y sincroniza alertas"),
+    );
+
+    expect(outcome).toMatchObject({ status: "success", data: { estado: "entregado" }, values: { id: OT } });
+    expect(indexOf(calls, "movimiento_inventario.create")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "movimiento_inventario.create")).toBeLessThan(indexOf(calls, "prisma.$transaction:commit"));
+    expect(calls.filter((call) => "effect" in call && call.effect === "revalidatePath").length).toBeGreaterThan(0);
+  });
+
+  it("sin orden en el formulario responde con el error, sin consultar", async () => {
+    const { calls, outcome } = await runAction(deliverPendingAction, deliverCase("sin orden en el formulario"));
+
+    expect(outcome).toMatchObject({ status: "error", error: "No se recibio la orden de trabajo.", values: { id: "" } });
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it.each([
+    ["la orden no existe", "La orden de trabajo no existe."],
+    ["orden anulada", "No se puede entregar material a una orden anulada o finalizada."],
+    ["orden finalizada", "No se puede entregar material a una orden anulada o finalizada."],
+    ["materiales ya cerrados", "Los materiales de esta orden ya fueron cerrados: no se puede mover mas material."],
+    ["orden sin requerimiento congelado", "Esta orden no tiene requerimiento congelado"],
+    ["nada pendiente por entregar", "No queda nada pendiente por entregar en esta orden."],
+    ["materiales inactivos: los nombra a todos", "No se puede entregar materiales inactivos:"],
+    ["stock insuficiente: detalla cada material", "Stock insuficiente para entregar la orden:"],
+  ])("%s: responde con el mensaje, revierte y no mueve stock", async (name, message) => {
+    const { calls, outcome } = await runAction(deliverPendingAction, deliverCase(name));
+
+    expect(outcome).toMatchObject({ status: "error", values: { id: OT } });
+    expect((outcome as { error: string }).error).toContain(message);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "movimiento_inventario.create")).toBe(-1);
+    expect(indexOf(calls, "revalidatePath")).toBe(-1);
   });
 });

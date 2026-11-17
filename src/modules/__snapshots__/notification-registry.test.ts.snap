@@ -130,6 +130,7 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx [closeNotification] -> work-order-materials-closed",
   "src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx [reopenNotification] -> work-order-materials-reopened",
   "src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx [returnNotification] -> work-order-material-returned",
+  "src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx [successNotification] -> work-order-materials-delivered",
   "src/app/(dashboard)/dashboard/production/work-orders/new/page.tsx [successNotification] -> work-order-created",
   "src/app/(dashboard)/dashboard/staff/attendance/@panel/(.)new/page.tsx [successNotification] -> attendance-created",
   "src/app/(dashboard)/dashboard/staff/attendance/new/page.tsx [successNotification] -> attendance-created",

@@ -4953,7 +4953,7 @@ exports[`deliverAdditionalMaterialAction > stock insuficiente > resultado 1`] = 
 exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock, registra kardex y sincroniza alertas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5309,12 +5309,23 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
 ]
 `;
 
-exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock, registra kardex y sincroniza alertas > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-delivered"`;
+exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock, registra kardex y sincroniza alertas > resultado 1`] = `
+{
+  "data": {
+    "estado": "entregado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la transaccion: se revierte y no revalida > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5451,12 +5462,21 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
 ]
 `;
 
-exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la transaccion: se revierte y no revalida > resultado 1`] = `"error: Stock insuficiente para Soldadura 6011. La operacion fue cancelada."`;
+exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la transaccion: se revierte y no revalida > resultado 1`] = `
+{
+  "error": "Stock insuficiente para Soldadura 6011. La operacion fue cancelada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`deliverWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5500,12 +5520,21 @@ exports[`deliverWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`deliverWorkOrderMaterialsAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+exports[`deliverWorkOrderMaterialsAction > la orden no existe > resultado 1`] = `
+{
+  "error": "La orden de trabajo no existe.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`deliverWorkOrderMaterialsAction > materiales inactivos: los nombra a todos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5549,12 +5578,21 @@ exports[`deliverWorkOrderMaterialsAction > materiales inactivos: los nombra a to
 ]
 `;
 
-exports[`deliverWorkOrderMaterialsAction > materiales inactivos: los nombra a todos > resultado 1`] = `"error: No se puede entregar materiales inactivos: Plancha LAC 1/16, Pintura anticorrosiva."`;
+exports[`deliverWorkOrderMaterialsAction > materiales inactivos: los nombra a todos > resultado 1`] = `
+{
+  "error": "No se puede entregar materiales inactivos: Plancha LAC 1/16, Pintura anticorrosiva.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`deliverWorkOrderMaterialsAction > materiales ya cerrados > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5598,12 +5636,21 @@ exports[`deliverWorkOrderMaterialsAction > materiales ya cerrados > llamadas 1`]
 ]
 `;
 
-exports[`deliverWorkOrderMaterialsAction > materiales ya cerrados > resultado 1`] = `"error: Los materiales de esta orden ya fueron cerrados: no se puede mover mas material."`;
+exports[`deliverWorkOrderMaterialsAction > materiales ya cerrados > resultado 1`] = `
+{
+  "error": "Los materiales de esta orden ya fueron cerrados: no se puede mover mas material.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`deliverWorkOrderMaterialsAction > nada pendiente por entregar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5647,12 +5694,21 @@ exports[`deliverWorkOrderMaterialsAction > nada pendiente por entregar > llamada
 ]
 `;
 
-exports[`deliverWorkOrderMaterialsAction > nada pendiente por entregar > resultado 1`] = `"error: No queda nada pendiente por entregar en esta orden. Usa la entrega adicional si produccion necesita mas material."`;
+exports[`deliverWorkOrderMaterialsAction > nada pendiente por entregar > resultado 1`] = `
+{
+  "error": "No queda nada pendiente por entregar en esta orden. Usa la entrega adicional si produccion necesita mas material.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`deliverWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5696,12 +5752,21 @@ exports[`deliverWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`deliverWorkOrderMaterialsAction > orden anulada > resultado 1`] = `"error: No se puede entregar material a una orden anulada o finalizada."`;
+exports[`deliverWorkOrderMaterialsAction > orden anulada > resultado 1`] = `
+{
+  "error": "No se puede entregar material a una orden anulada o finalizada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`deliverWorkOrderMaterialsAction > orden finalizada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5745,12 +5810,21 @@ exports[`deliverWorkOrderMaterialsAction > orden finalizada > llamadas 1`] = `
 ]
 `;
 
-exports[`deliverWorkOrderMaterialsAction > orden finalizada > resultado 1`] = `"error: No se puede entregar material a una orden anulada o finalizada."`;
+exports[`deliverWorkOrderMaterialsAction > orden finalizada > resultado 1`] = `
+{
+  "error": "No se puede entregar material a una orden anulada o finalizada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`deliverWorkOrderMaterialsAction > orden sin requerimiento congelado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5794,12 +5868,21 @@ exports[`deliverWorkOrderMaterialsAction > orden sin requerimiento congelado > l
 ]
 `;
 
-exports[`deliverWorkOrderMaterialsAction > orden sin requerimiento congelado > resultado 1`] = `"error: Esta orden no tiene requerimiento congelado: se creo antes de que el sistema lo registrara. No es posible entregar material contra ella."`;
+exports[`deliverWorkOrderMaterialsAction > orden sin requerimiento congelado > resultado 1`] = `
+{
+  "error": "Esta orden no tiene requerimiento congelado: se creo antes de que el sistema lo registrara. No es posible entregar material contra ella.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`deliverWorkOrderMaterialsAction > sin orden en el formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5808,12 +5891,21 @@ exports[`deliverWorkOrderMaterialsAction > sin orden en el formulario > llamadas
 ]
 `;
 
-exports[`deliverWorkOrderMaterialsAction > sin orden en el formulario > resultado 1`] = `"error: No se recibio la orden de trabajo."`;
+exports[`deliverWorkOrderMaterialsAction > sin orden en el formulario > resultado 1`] = `
+{
+  "error": "No se recibio la orden de trabajo.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "",
+  },
+}
+`;
 
 exports[`deliverWorkOrderMaterialsAction > stock insuficiente: detalla cada material > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5857,7 +5949,16 @@ exports[`deliverWorkOrderMaterialsAction > stock insuficiente: detalla cada mate
 ]
 `;
 
-exports[`deliverWorkOrderMaterialsAction > stock insuficiente: detalla cada material > resultado 1`] = `"error: Stock insuficiente para entregar la orden: Plancha LAC 1/16 requiere 68.75 y tiene 50.50; Pintura anticorrosiva requiere 4.00 y tiene 3.50."`;
+exports[`deliverWorkOrderMaterialsAction > stock insuficiente: detalla cada material > resultado 1`] = `
+{
+  "error": "Stock insuficiente para entregar la orden: Plancha LAC 1/16 requiere 68.75 y tiene 50.50; Pintura anticorrosiva requiere 4.00 y tiene 3.50.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`finishWorkOrderAction > etapas sin terminar > llamadas 1`] = `
 [

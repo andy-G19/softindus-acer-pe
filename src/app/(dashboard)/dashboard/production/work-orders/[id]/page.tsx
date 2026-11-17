@@ -23,6 +23,7 @@ import {
   summarizeMaterialLine,
 } from "@/lib/material-reconciliation";
 import { applyWaste, roundQuantity } from "@/lib/recipe-quantities";
+import { DeliverPendingAction } from "@/modules/production/work-orders/deliver-pending-action";
 import { MaterialClosureSection } from "@/modules/production/work-orders/material-closure-section";
 import { MaterialMovementForm } from "@/modules/production/work-orders/material-movement-form";
 import { getWorkOrderDetail } from "@/modules/production/work-orders/queries";
@@ -32,7 +33,7 @@ import {
   navigationHrefs,
 } from "@/lib/navigation";
 import { formatCents } from "@/lib/decimal-cents";
-import { quantityHundredths } from "@/lib/material-quantities";
+import { pendingDeliveryQuantity, quantityHundredths } from "@/lib/material-quantities";
 import { toNumber } from "@/lib/numbers";
 import { productionNotifications } from "@/modules/production/notifications";
 import {
@@ -251,6 +252,19 @@ export default async function WorkOrderDetailPage({
     hasFrozenRequirement &&
     !materialsClosed &&
     pendingDeliveryTotal > 0;
+
+  // C3 de la 11.6b (D75): lo que dice la confirmacion es lo que entrega la accion, con la misma
+  // funcion y el mismo filtro de las lineas en 0.00.
+  const pendingDeliveryLines = workOrder.requerimiento_orden_material
+    .map((requirement) => ({
+      materialName: requirement.material.nombre_material,
+      quantity: pendingDeliveryQuantity({
+        required: requirement.cantidad_requerida,
+        delivered: requirement.cantidad_entregada,
+      }),
+      unidad: requirement.unidad_medida,
+    }))
+    .filter((line) => quantityHundredths(line.quantity) > 0n);
   const backHref = getSafeReturnTo(
     queryParams.returnTo,
     navigationHrefs.workOrders,
@@ -286,19 +300,13 @@ export default async function WorkOrderDetailPage({
             ) : null}
 
             {canDeliverMaterials ? (
-              <form action={deliverWorkOrderMaterialsAction}>
-                <input
-                  type="hidden"
-                  name="id_orden_trabajo"
-                  value={workOrder.id_orden_trabajo}
-                />
-
-                <Button type="submit">
-                  {hasDeliveries
-                    ? "Entregar lo pendiente"
-                    : "Entregar materiales"}
-                </Button>
-              </form>
+              <DeliverPendingAction
+                idOrdenTrabajo={workOrder.id_orden_trabajo}
+                hasDeliveries={hasDeliveries}
+                lines={pendingDeliveryLines}
+                action={deliverWorkOrderMaterialsAction}
+                successNotification={productionNotifications["work-order-materials-delivered"]}
+              />
             ) : null}
 
             <Button variant="outline" asChild>

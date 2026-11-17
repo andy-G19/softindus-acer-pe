@@ -3342,10 +3342,7 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 <div>
 <button type="button" aria-label="Volver a órdenes">
 <svg/>Volver a órdenes</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="default" type="submit">Entregar lo pendiente</button>
-</form>
+<button data-variant="default" type="button">Entregar lo pendiente</button>
 <a data-variant="outline" href="/dashboard/production/work-orders/id_orden_trabajo-1/progress">Ver avances</a>
 <span data-variant="info">en_proceso</span>
 </div>
@@ -5071,10 +5068,7 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 <div>
 <button type="button" aria-label="Volver a órdenes">
 <svg/>Volver a órdenes</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="default" type="submit">Entregar materiales</button>
-</form>
+<button data-variant="default" type="button">Entregar materiales</button>
 <a data-variant="outline" href="/dashboard/production/work-orders/id_orden_trabajo-1/progress">Ver avances</a>
 <span data-variant="secondary">pendiente</span>
 </div>
@@ -5286,8 +5280,7 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;

@@ -4,6 +4,7 @@ import type { PrismaClient } from "@/generated/prisma/client";
 import {
   closeWorkOrderMaterialsAction,
   deliverAdditionalMaterialAction,
+  deliverWorkOrderMaterialsAction,
   reopenWorkOrderMaterialsAction,
   returnWorkOrderMaterialAction,
 } from "@/modules/production/work-orders/actions";
@@ -14,7 +15,7 @@ import { getTestDatabase } from "@/testing/test-database";
 // kardex, el requerimiento congelado, la alerta y la bitacora. Solo se reemplazan la sesion y la
 // cache de Next. Desde C1 de la 11.6b la entrega adicional y la devolucion devuelven su estado y
 // reclaman una clave de operacion (runState); desde C2, cerrar y reabrir devuelven su estado sin
-// clave (runForm).
+// clave (runForm), y desde C3 tambien entregar lo pendiente.
 //
 // Las columnas son numeric(10, 2) y cada una redondea por su lado: una cantidad sin redondear
 // dejaba el stock, lo entregado y el kardex en desacuerdo (hallazgo 1 de la 11.6).
@@ -420,5 +421,43 @@ describe("C2 de la 11.6b: cerrar y reabrir con resultado", () => {
       await runForm(closeWorkOrderMaterialsAction, closeFields(idOrden, idRequerimiento, "2.00", "1")),
     ).toMatchObject({ status: "success" });
     expect(await closureOf(idOrden, idRequerimiento)).toMatchObject({ cerrada: true, consumida: "2.00", bitacora: 3 });
+  });
+});
+
+describe("C3 de la 11.6b: entregar lo pendiente con resultado", () => {
+  it("un segundo envio no entrega nada: responde que no queda pendiente y el stock baja una vez", async () => {
+    const { idOrden, idMaterial, idRequerimiento } = await seedOrder("13", { stock: "20.00", entregada: "1.50" });
+
+    expect(await runForm(deliverWorkOrderMaterialsAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "success",
+    });
+    expect(await runForm(deliverWorkOrderMaterialsAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "error",
+      error:
+        "No queda nada pendiente por entregar en esta orden. Usa la entrega adicional si produccion necesita mas material.",
+    });
+
+    expect(await snapshot(idMaterial, idRequerimiento)).toEqual({
+      stock: "16.50",
+      entregada: "5.00",
+      devuelta: "0.00",
+      kardex: [["salida", "3.50", "20.00", "16.50"]],
+    });
+  });
+
+  it("sin stock suficiente responde con el detalle y no escribe", async () => {
+    const { idOrden, idMaterial, idRequerimiento } = await seedOrder("14", { stock: "3.00" });
+
+    expect(await runForm(deliverWorkOrderMaterialsAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "error",
+      error: "Stock insuficiente para entregar la orden: Plancha 14 requiere 5.00 y tiene 3.00.",
+    });
+
+    expect(await snapshot(idMaterial, idRequerimiento)).toEqual({
+      stock: "3.00",
+      entregada: "0.00",
+      devuelta: "0.00",
+      kardex: [],
+    });
   });
 });

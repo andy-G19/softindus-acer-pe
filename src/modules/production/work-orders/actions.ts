@@ -7,6 +7,7 @@ import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import type { FieldErrors } from "@/lib/errors";
 import { IdempotencyConflictError } from "@/lib/idempotency";
 import { APP_ROLES } from "@/lib/permissions";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { createWorkOrder } from "@/modules/production/work-orders/create-work-order";
 import {
   closeWorkOrderMaterials,
@@ -136,25 +137,42 @@ export async function createWorkOrderAction(
   };
 }
 
-export async function deliverWorkOrderMaterialsAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
-
+// C3 de la 11.6b (D75): entregar lo pendiente responde a ConfirmActionButton con un RowStatusState
+// en lugar de redirigir. Antes cualquier rechazo (stock insuficiente, material inactivo, nada
+// pendiente) lanzaba un error que se veia en la pagina de error; ahora queda en la confirmacion. Sin
+// permiso responde con un error. Sin clave: lo pendiente, calculado con la orden bloqueada, ya hace
+// que un segundo envio no entregue nada.
+export async function deliverWorkOrderMaterialsAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
   const idOrdenTrabajo = String(formData.get("id_orden_trabajo") ?? "").trim();
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
-  if (!idOrdenTrabajo) {
-    throw new Error("No se recibio la orden de trabajo.");
+  if (!session) {
+    return rowStatusError(idOrdenTrabajo, "No tienes permisos para entregar materiales a órdenes de trabajo.");
   }
 
-  await deliverPendingMaterials({ idOrdenTrabajo, idUsuario: session.user.id });
+  if (!idOrdenTrabajo) {
+    return rowStatusError(idOrdenTrabajo, "No se recibio la orden de trabajo.");
+  }
+
+  try {
+    await deliverPendingMaterials({ idOrdenTrabajo, idUsuario: session.user.id });
+  } catch (error) {
+    if (error instanceof WorkOrderRejectedError) {
+      return rowStatusError(idOrdenTrabajo, error.message);
+    }
+
+    throw error;
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/inventory");
   revalidatePath("/dashboard/production/work-orders");
   revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
 
-  redirect(
-    `/dashboard/production/work-orders/${idOrdenTrabajo}?toast=work-order-materials-delivered`,
-  );
+  return rowStatusDone(idOrdenTrabajo, "entregado");
 }
 
 /** Lo que el formulario de entrega adicional o devolucion envio, para volver a mostrarlo. */

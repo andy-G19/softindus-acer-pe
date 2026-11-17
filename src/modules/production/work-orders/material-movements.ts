@@ -4,8 +4,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { formatCents } from "@/lib/decimal-cents";
 import { claimOperation, completeOperation } from "@/lib/idempotency";
-import { quantityHundredths, roundMaterialQuantity } from "@/lib/material-quantities";
-import { calculatePendingDelivery } from "@/lib/material-reconciliation";
+import { pendingDeliveryQuantity, quantityHundredths, roundMaterialQuantity } from "@/lib/material-quantities";
 import { lockWorkOrderRow } from "@/lib/row-locks";
 import {
   deliverMaterials,
@@ -68,6 +67,10 @@ export type ReturnMaterialToWarehouseParams = {
  *
  * Lee del snapshot y no de la receta: la orden ya fijo su plan al crearse, y una edicion
  * posterior de la receta no debe cambiar lo que se entrega.
+ *
+ * Sin clave de operacion (C3 de la 11.6b, D75): lo pendiente se calcula con la orden bloqueada,
+ * asi que un segundo envio ve que no queda nada y no entrega. Cada rechazo lanza
+ * WorkOrderRejectedError sin campo: la accion lo muestra en la confirmacion.
  */
 export async function deliverPendingMaterials({
   idOrdenTrabajo,
@@ -87,48 +90,51 @@ export async function deliverPendingMaterials({
     });
 
     if (!workOrder) {
-      throw new Error("La orden de trabajo no existe.");
+      throw new WorkOrderRejectedError(null, "La orden de trabajo no existe.");
     }
 
     if (workOrder.estado === "anulada" || workOrder.estado === "finalizada") {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        null,
         "No se puede entregar material a una orden anulada o finalizada.",
       );
     }
 
     if (workOrder.fecha_cierre_materiales) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        null,
         "Los materiales de esta orden ya fueron cerrados: no se puede mover mas material.",
       );
     }
 
     if (workOrder.requerimiento_orden_material.length === 0) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        null,
         "Esta orden no tiene requerimiento congelado: se creo antes de que el sistema lo registrara. No es posible entregar material contra ella.",
       );
     }
 
     const lines = workOrder.requerimiento_orden_material
       .map((requirement) => {
-        const pending = calculatePendingDelivery({
-          required: requirement.cantidad_requerida,
-          delivered: requirement.cantidad_entregada,
-        });
-
         return {
           idRequerimiento: requirement.id_requerimiento,
           idMaterial: requirement.id_material,
           materialName: requirement.material.nombre_material,
           materialIsActive: requirement.material.estado,
           // C1 de la 11.6a (D62): la cantidad y el stock se comparan y se escriben en centesimos.
-          quantity: roundMaterialQuantity(pending),
+          // C3 de la 11.6b (D75): la misma funcion con la que la confirmacion dice lo que sale.
+          quantity: pendingDeliveryQuantity({
+            required: requirement.cantidad_requerida,
+            delivered: requirement.cantidad_entregada,
+          }),
           stockActual: quantityHundredths(requirement.material.stock_actual),
         };
       })
       .filter((line) => quantityHundredths(line.quantity) > 0n);
 
     if (lines.length === 0) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        null,
         "No queda nada pendiente por entregar en esta orden. Usa la entrega adicional si produccion necesita mas material.",
       );
     }
@@ -136,7 +142,8 @@ export async function deliverPendingMaterials({
     const inactiveMaterials = lines.filter((line) => !line.materialIsActive);
 
     if (inactiveMaterials.length > 0) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        null,
         `No se puede entregar materiales inactivos: ${inactiveMaterials
           .map((line) => line.materialName)
           .join(", ")}.`,
@@ -153,7 +160,7 @@ export async function deliverPendingMaterials({
         )
         .join("; ");
 
-      throw new Error(`Stock insuficiente para entregar la orden: ${detail}.`);
+      throw new WorkOrderRejectedError(null, `Stock insuficiente para entregar la orden: ${detail}.`);
     }
 
     await deliverMaterials(tx, {
