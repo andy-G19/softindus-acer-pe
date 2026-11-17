@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 995 |
+| Archivos fuente analizados | 1003 |
 | Páginas | 179 |
 | Páginas en ranuras paralelas (@ranura) | 53 |
 | Páginas que interceptan una ruta | 33 |
-| Declaraciones JSX de formulario | 18 |
+| Declaraciones JSX de formulario | 12 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 111 |
 
@@ -168,11 +168,11 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/production/routes/[id]/stages` | — | `src/app/(dashboard)/dashboard/production/routes/[id]/stages/page.tsx` | 0 | — |
 | `/dashboard/production/routes/new` | — | `src/app/(dashboard)/dashboard/production/routes/new/page.tsx` | 0 | RouteForm |
 | `/dashboard/production/routes` | — | `src/app/(dashboard)/dashboard/production/routes/page.tsx` | 0 | — |
-| `/dashboard/production/work-orders/[id]` | — | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 2 | CloseMaterialsForm, MaterialMovementForm |
+| `/dashboard/production/work-orders/[id]` | — | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 0 | MaterialMovementForm |
 | `/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign` | — | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign/page.tsx` | 1 | — |
 | `/dashboard/production/work-orders/[id]/progress` | — | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 2 | — |
 | `/dashboard/production/work-orders/new` | — | `src/app/(dashboard)/dashboard/production/work-orders/new/page.tsx` | 0 | WorkOrderForm |
-| `/dashboard/production/work-orders` | — | `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 2 | — |
+| `/dashboard/production/work-orders` | — | `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 0 | — |
 | `/dashboard/reports/export-history` | — | `src/app/(dashboard)/dashboard/reports/export-history/page.tsx` | 0 | — |
 | `/dashboard/reports/financial` | — | `src/app/(dashboard)/dashboard/reports/financial/page.tsx` | 0 | — |
 | `/dashboard/reports/inventory` | — | `src/app/(dashboard)/dashboard/reports/inventory/page.tsx` | 0 | — |
@@ -227,21 +227,15 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 253 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 178 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 165 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 287 | `{deliverWorkOrderMaterialsAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 581 | `{reopenWorkOrderMaterialsAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign/page.tsx` | 102 | `{reassignWorkOrderProgressAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 208 | `{generateWorkOrderProgressAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 231 | `{updateWorkOrderProgressAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 375 | `{annulWorkOrderAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 394 | `{finishWorkOrderAction}` |
 | `src/components/forms/action-form.tsx` | 48 | `{action}` |
 | `src/components/forms/filter-bar.tsx` | 39 | `{action}` |
 | `src/components/table/row-actions.tsx` | 44 | `{action}` |
 | `src/modules/auth/components/login-form.tsx` | 162 | `{formAction}` |
 | `src/modules/auth/components/logout-button.tsx` | 8 | `{async () => { "use server"; await signOut({ redirectTo: "/login", }); }}` |
 | `src/modules/gallery/dialog-demo.tsx` | 72 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/modules/production/work-orders/close-materials-form.tsx` | 60 | `{closeWorkOrderMaterialsAction}` |
-| `src/modules/production/work-orders/material-movement-form.tsx` | 52 | `{ isReturn ? returnWorkOrderMaterialAction : deliverAdditionalMaterialAction }` |
 
 ## Entradas de servidor
 
