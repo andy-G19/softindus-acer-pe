@@ -9553,7 +9553,7 @@ Datos leídos de la API de GitHub el 2026-11-17 (UTC) y comparados con git:
 
 ### Sub-entrega 11.6c — Órdenes de trabajo: avances de producción
 
-Fecha: 2026-11-17 (Lima). Estado: preparada en `staging`, sin publicar. Plan en
+Fecha: 2026-11-17 (Lima). Estado: verificada en staging (CI #198). Plan en
 `tmp/e11-diff/plan-11-6c.md`, aprobado el 2026-11-17 con las decisiones D78 a D82 y D83 en la
 opción A: avances por caso de uso (D78); el porcentaje en centésimos con una sola regla (D79);
 generar con `ConfirmActionButton` (D80); actualizar una etapa con resultado en su tarjeta (D81);
@@ -9568,7 +9568,8 @@ reasignar con resultado en su página (D82); la finalización automática de la 
 | 1650881 | feat | Generar con `ConfirmActionButton` y `RowStatusState`; la confirmación dice cuántas etapas y de qué ruta (D80). Rojo antes; 1 prueba en Postgres. |
 | 35519e7 | feat | Actualizar una etapa con resultado en su tarjeta (`StageProgressForm`), con ids por etapa; la tarjeta queda montada cuando la orden se finaliza (D81). Rojo antes; 1 prueba en Postgres. |
 | 5784b48 | feat | Reasignar con resultado en su página (`ReassignProgressForm`); los rechazos del operario en su campo (D82). Rojo antes; 1 prueba en Postgres. |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 1170e44 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -9651,10 +9652,36 @@ Hallazgos:
 7. Sigue abierto, de accesibilidad: al generar, el botón desaparece con el repintado y el foco queda
    en `body`, como al entregar lo pendiente (hallazgo 7 de la 11.6b). Destino: la 11.7.
 
-Verificación pendiente en staging, con autorización por cada escritura: generar los avances de la
-OTR00000010 (6 etapas de la «Ruta estándar para lampa»); actualizar la etapa 1 a «en proceso» y
-luego a «pausada» con una observación, mirando el estado de la orden; asignar un operario a la etapa
-1 desde «Reasignar». No se terminan las 6 etapas: finalizaría la orden (D83).
+8. Visto en staging, por revisar en la 11.7: la barra de Vercel de los despliegues de vista previa
+   midió el INP (lo que tarda la pantalla en responder a una interacción) y avisó dos veces: 3.491
+   ms en un botón primario de la página de avances, tras confirmar «Generar», y 662,8 ms en el
+   buscador de operarios de la reasignación. No se midió con las herramientas del navegador, así
+   que no se sabe si la espera es de la pantalla o de la respuesta del servidor. Su aviso tapaba la
+   página y dos clics cayeron en él; no se envió nada en esos clics (comprobado por la red).
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 7 commits (hasta `1170e44`): CI #198 en verde (de 20:19:04 a 20:24:05 UTC del
+   2026-11-17); Vercel desplegó staging (20:20:39 UTC). Sin migraciones.
+2. Con ADMIN, sin escribir (origen comprobado en llamada aparte): la OTR00000010 pendiente y sin
+   avances; la confirmación de «Generar avances por etapa» dice «Se crean 6 avances pendientes, uno
+   por cada etapa activa de la ruta «Ruta estándar para lampa».», con el botón normal; al cancelar,
+   el foco vuelve al botón. Operarios activos: OPE00000001 y OPE00000002.
+3. Envíos autorizados por el responsable, todos en la OTR00000010:
+
+   | Paso | Resultado |
+   |---|---|
+   | V1. Confirmar «Generar» | Un aviso «Avances de orden generados correctamente»; AVN00000007 a AVN00000012, pendientes al 0%; la orden sigue pendiente; el foco queda en `body` (hallazgo 7) |
+   | V2. Etapa 1 «En proceso», 30%, «Prueba 11.6c C4: corte iniciado» | Un aviso «Avance de orden actualizado»; la orden y la etapa en `en_proceso`, con su fecha de inicio; el mismo nodo del formulario, con lo guardado. Cada campo se anuncia con su etiqueta |
+   | V3. La misma etapa «Pausada», 50%, «Prueba 11.6c C4: pausa por máquina ocupada» | Un aviso; la orden y la etapa en `pausada`; «Pausadas» en 1 |
+   | V4a. Reasignar a Obregon Barzola, Nelson (OPE00000002) con el motivo «   » | «El motivo de reasignacion es obligatorio.» junto a «Motivo», enfocado, y «Revisa los datos de la reasignación.»; el operario elegido conservado; sin aviso; el operario actual sigue sin asignar |
+   | V4b. El mismo operario con «Prueba 11.6c C5: asignación en staging» | Un aviso «Tarea reasignada correctamente» y vuelta a los avances; la etapa 1 con Obregon Barzola, Nelson y su historial «Sin operario anterior -> Obregon Barzola, Nelson» |
+
+4. Al actualizar una etapa no hay un rechazo del servidor que se pueda enviar desde la pantalla:
+   los campos tienen `max` y `maxLength`. Lo prueban la acción y Postgres.
+5. Datos de prueba que quedan en staging: la OTR00000010 `pausada`, con 6 avances (la etapa 1
+   pausada al 50% y con OPE00000002), una reasignación y sus entradas en la bitácora. No se terminó
+   ninguna etapa: terminar las 6 finalizaría la orden (D83).
 
 ## Secuencia de próximas entregas
 
@@ -9681,7 +9708,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c preparada en `staging` (C0 a C6), por publicar |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c verificada en staging (CI #198) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
