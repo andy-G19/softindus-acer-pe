@@ -9376,7 +9376,9 @@ reabrir con resultado, en su sección, sin clave (D74); entregar lo pendiente co
 | 043603d | feat | Entregar lo pendiente con `ConfirmActionButton` y `RowStatusState`; la confirmación dice cuánto sale de cada material con `pendingDeliveryQuantity`, la función que usa la entrega (D75). Rojo antes; 2 pruebas en Postgres. |
 | 7083b7b | feat | Anular y finalizar desde la fila con `ConfirmActionButton` y `RowStatusState`; «ya estaba finalizada» responde sin escribir ni revalidar; sale el último `ConfirmDeleteButton` de las páginas (D76). Rojo antes; 2 pruebas en Postgres. |
 | 5434592 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
-| (este) | docs | Verificación en staging. |
+| fa30c93 | docs | Verificación en staging. |
+| 02ae54b | fix | La propuesta de consumo del cierre sigue a lo entregado y lo devuelto cuando el detalle se repinta, sin pisar lo que el usuario escribió: el formulario guarda solo lo editado (hallazgo 9, de la verificación en staging). Rojo antes. |
+| (este) | docs | Registro del arreglo del hallazgo 9. |
 
 Diseño:
 
@@ -9413,7 +9415,9 @@ Evidencia:
    formulario, los permisos y Postgres; C2 57 pruebas (la sección en jsdom repinta desde dentro de
    la acción); C3 37; C4 48. En el rojo de C2 dos `it.each` con `as const` no compilaban (arreglos
    `readonly`); se tiparon sin cambiar lo que prueban.
-2. Mutaciones: C1 19 de 19, C2 29 de 29, C3 19 de 19, C4 22 de 22; en total, 89 de 89.
+2. Mutaciones: C1 19 de 19, C2 29 de 29, C3 19 de 19, C4 22 de 22, y el arreglo del hallazgo 9
+   4 de 4 (entre ellas, la propuesta fijada al montar, que es el defecto original); en total, 93
+   de 93.
 3. Snapshots revisados uno por uno: en las acciones, `requireRole` → `getAuthorizedSession` y el
    resultado como estado, con las mismas llamadas; en el detalle, los ids por línea, el asterisco
    de «Unidades producidas» y «Motivo» en su `span aria-hidden` (como todo `Field`) y el botón de
@@ -9430,7 +9434,7 @@ Evidencia:
    exportadas» de costeos (`action-access.test.ts`), que C3 no toca; sola pasó 376 de 376 y en
    `npm run check` todo pasó: tiempo de importación bajo carga, no un defecto.
 6. CSS compilado igual byte a byte en cada commit (112.316 bytes).
-7. `npm run check` terminó con código 0 antes de cada commit, hasta 5.434 pruebas en 327 archivos;
+7. `npm run check` terminó con código 0 antes de cada commit, hasta 5.436 pruebas en 327 archivos;
    las de integración pasan de 77 a 88 en 15 archivos. Lint mantiene el aviso anterior (`_line` en
    `orders/actions.ts`).
 
@@ -9438,7 +9442,7 @@ Métricas:
 
 | Métrica | Antes | Después |
 |---|---|---|
-| Archivos de prueba / pruebas aprobadas | 323 / 5.345 | 327 / 5.434 |
+| Archivos de prueba / pruebas aprobadas | 323 / 5.345 | 327 / 5.436 |
 | Pruebas contra Postgres real (archivos / pruebas) | 15 / 77 | 15 / 88 |
 | Pruebas en Postgres de órdenes de trabajo | 9 | 20 |
 | Acciones de órdenes que lanzan un error de validación a la página de error | 7 | 0 |
@@ -9471,15 +9475,18 @@ Hallazgos:
 8. Sin prueba automática: la lista de materiales que arma el detalle para la confirmación de
    entrega (el snapshot de la página no abre la confirmación). La cantidad la cubre la función
    compartida; la lista se comprobó en staging (abajo, paso 2).
-9. Sigue abierto, hallado en staging: el cierre propone como consumo lo entregado menos lo devuelto
-   que había cuando se montó el formulario (`useState` inicial de `CloseMaterialsForm`). Una entrega
-   adicional o una devolución en la misma página repinta lo entregado y lo devuelto, pero no la
-   propuesta: tras E2 y E3 el mango proponía 1.00 (debía ser 1.50) y la tabla mostraba una merma de
-   0.50 que nadie declaró; si no se corrige a mano, se cierra con esa merma. Al reabrir, el
-   formulario se monta otra vez y propone bien (1.50). Antes de la 11.6b cada movimiento navegaba
-   con `redirect`, que también conservaba el estado del cliente, así que probablemente ya pasaba.
-   Destino: decisión del responsable (un `fix` con prueba en rojo que repinte la propuesta, sin
-   pisar lo que el usuario ya escribió).
+9. Hallado en staging: el cierre proponía como consumo lo entregado menos lo devuelto que había
+   cuando se montó el formulario (`useState` inicial de `CloseMaterialsForm`). Una entrega adicional
+   o una devolución en la misma página repintaba lo entregado y lo devuelto, pero no la propuesta:
+   tras E2 y E3 el mango proponía 1.00 (debía ser 1.50) y la tabla mostraba una merma de 0.50 que
+   nadie declaró; si no se corregía a mano, se cerraba con esa merma. Al reabrir, el formulario se
+   montaba otra vez y proponía bien (1.50). Antes de la 11.6b cada movimiento navegaba con
+   `redirect`, que también conservaba el estado del cliente, así que probablemente ya pasaba.
+   Corregido en `02ae54b`: el estado guarda solo lo que el usuario escribió y cada campo muestra
+   eso o la propuesta de las líneas que llegan, calculada al pintar, sin un efecto que copie las
+   props al estado. Dos pruebas en jsdom repintan la sección: la propuesta pasa a la nueva y lo ya
+   escrito se conserva. Su verificación en staging necesita otra escritura (una entrega adicional o
+   una devolución en la OTR00000010 y mirar la propuesta sin cerrar): pendiente de autorización.
 
 #### Publicación, CI y verificación en staging
 
