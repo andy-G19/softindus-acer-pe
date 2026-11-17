@@ -6076,8 +6076,9 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </div>
 <div>
 <div>
-<label>Estado *</label>
-<select name="estado_etapa" required="">
+<label for="estado_etapa_id_avance-2">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado_etapa_id_avance-2" required="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada" selected="">Pausada</option>
@@ -6085,9 +6086,10 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </select>
 </div>
 <div>
-<label>Porcentaje *</label>
-<input type="number" min="0" max="100" step="0.01" required="" name="porcentaje_avance" value="22.5"/>
-<p>Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
+<label for="porcentaje_avance_id_avance-2">Porcentaje<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="porcentaje_avance_id_avance-2" required="" aria-describedby="porcentaje_avance_id_avance-2-ayuda" min="0" max="100" step="0.01" name="porcentaje_avance" value="22.5"/>
+<p id="porcentaje_avance_id_avance-2-ayuda">Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
 </div>
 <div>
 <label>Operario</label>
@@ -6115,8 +6117,8 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">
+<label for="observaciones_id_avance-2">Observaciones</label>
+<textarea id="observaciones_id_avance-2" name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">
 </textarea>
 </div>
 <div>
@@ -6157,8 +6159,9 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </div>
 <div>
 <div>
-<label>Estado *</label>
-<select name="estado_etapa" required="">
+<label for="estado_etapa_id_avance-1">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado_etapa_id_avance-1" required="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
@@ -6166,9 +6169,10 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </select>
 </div>
 <div>
-<label>Porcentaje *</label>
-<input type="number" min="0" max="100" step="0.01" required="" name="porcentaje_avance" value="100"/>
-<p>Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
+<label for="porcentaje_avance_id_avance-1">Porcentaje<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="porcentaje_avance_id_avance-1" required="" aria-describedby="porcentaje_avance_id_avance-1-ayuda" min="0" max="100" step="0.01" name="porcentaje_avance" value="100"/>
+<p id="porcentaje_avance_id_avance-1-ayuda">Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
 </div>
 <div>
 <label>Operario</label>
@@ -6196,8 +6200,8 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">observaciones-1</textarea>
+<label for="observaciones_id_avance-1">Observaciones</label>
+<textarea id="observaciones_id_avance-1" name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">observaciones-1</textarea>
 </div>
 <div>
 <button data-variant="default" type="submit">Actualizar etapa</button>
@@ -6422,8 +6426,9 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </div>
 <div>
 <div>
-<label>Estado *</label>
-<select name="estado_etapa" required="">
+<label for="estado_etapa_id_avance-1">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado_etapa_id_avance-1" required="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
@@ -6431,9 +6436,10 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </select>
 </div>
 <div>
-<label>Porcentaje *</label>
-<input type="number" min="0" max="100" step="0.01" required="" name="porcentaje_avance" value="11.5"/>
-<p>Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
+<label for="porcentaje_avance_id_avance-1">Porcentaje<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="porcentaje_avance_id_avance-1" required="" aria-describedby="porcentaje_avance_id_avance-1-ayuda" min="0" max="100" step="0.01" name="porcentaje_avance" value="11.5"/>
+<p id="porcentaje_avance_id_avance-1-ayuda">Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
 </div>
 <div>
 <label>Operario</label>
@@ -6461,8 +6467,8 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">observaciones-1</textarea>
+<label for="observaciones_id_avance-1">Observaciones</label>
+<textarea id="observaciones_id_avance-1" name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">observaciones-1</textarea>
 </div>
 <div>
 <button data-variant="default" type="submit">Actualizar etapa</button>
@@ -6501,8 +6507,9 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </div>
 <div>
 <div>
-<label>Estado *</label>
-<select name="estado_etapa" required="">
+<label for="estado_etapa_id_avance-2">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado_etapa_id_avance-2" required="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
@@ -6510,9 +6517,10 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </select>
 </div>
 <div>
-<label>Porcentaje *</label>
-<input type="number" min="0" max="100" step="0.01" required="" name="porcentaje_avance" value="22.5"/>
-<p>Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
+<label for="porcentaje_avance_id_avance-2">Porcentaje<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="porcentaje_avance_id_avance-2" required="" aria-describedby="porcentaje_avance_id_avance-2-ayuda" min="0" max="100" step="0.01" name="porcentaje_avance" value="22.5"/>
+<p id="porcentaje_avance_id_avance-2-ayuda">Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
 </div>
 <div>
 <label>Operario</label>
@@ -6540,8 +6548,8 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">
+<label for="observaciones_id_avance-2">Observaciones</label>
+<textarea id="observaciones_id_avance-2" name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">
 </textarea>
 </div>
 <div>
@@ -6835,19 +6843,21 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 <span data-variant="secondary">estado_etapa-1</span>
 </div>
 <div>
-<div>
-<label>Estado *</label>
-<select name="estado_etapa" required="" disabled="">
+<div data-disabled="true">
+<label for="estado_etapa_id_avance-1">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado_etapa_id_avance-1" required="" disabled="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
 <option value="terminada">Terminada</option>
 </select>
 </div>
-<div>
-<label>Porcentaje *</label>
-<input type="number" min="0" max="100" step="0.01" required="" disabled="" name="porcentaje_avance" value="11.5"/>
-<p>Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
+<div data-disabled="true">
+<label for="porcentaje_avance_id_avance-1">Porcentaje<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="porcentaje_avance_id_avance-1" required="" disabled="" aria-describedby="porcentaje_avance_id_avance-1-ayuda" min="0" max="100" step="0.01" name="porcentaje_avance" value="11.5"/>
+<p id="porcentaje_avance_id_avance-1-ayuda">Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
 </div>
 <div>
 <label>Operario</label>
@@ -6873,9 +6883,9 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 <p>Requiere máquina</p>
 </div>
 </div>
-<div>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="3" maxLength="700" disabled="" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">observaciones-1</textarea>
+<div data-disabled="true">
+<label for="observaciones_id_avance-1">Observaciones</label>
+<textarea id="observaciones_id_avance-1" disabled="" name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">observaciones-1</textarea>
 </div>
 <div>
 <button data-variant="default" type="submit" disabled="">Actualizar etapa</button>
@@ -6913,19 +6923,21 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 <span data-variant="secondary">estado_etapa-2</span>
 </div>
 <div>
-<div>
-<label>Estado *</label>
-<select name="estado_etapa" required="" disabled="">
+<div data-disabled="true">
+<label for="estado_etapa_id_avance-2">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado_etapa_id_avance-2" required="" disabled="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
 <option value="terminada">Terminada</option>
 </select>
 </div>
-<div>
-<label>Porcentaje *</label>
-<input type="number" min="0" max="100" step="0.01" required="" disabled="" name="porcentaje_avance" value="22.5"/>
-<p>Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
+<div data-disabled="true">
+<label for="porcentaje_avance_id_avance-2">Porcentaje<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="porcentaje_avance_id_avance-2" required="" disabled="" aria-describedby="porcentaje_avance_id_avance-2-ayuda" min="0" max="100" step="0.01" name="porcentaje_avance" value="22.5"/>
+<p id="porcentaje_avance_id_avance-2-ayuda">Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
 </div>
 <div>
 <label>Operario</label>
@@ -6951,9 +6963,9 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 <p>No requiere máquina</p>
 </div>
 </div>
-<div>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="3" maxLength="700" disabled="" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">
+<div data-disabled="true">
+<label for="observaciones_id_avance-2">Observaciones</label>
+<textarea id="observaciones_id_avance-2" disabled="" name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">
 </textarea>
 </div>
 <div>

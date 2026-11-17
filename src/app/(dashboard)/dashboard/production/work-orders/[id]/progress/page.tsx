@@ -6,11 +6,8 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
 import { Label } from "@/components/ui/label";
-import { NativeSelect } from "@/components/ui/native-select";
-import { Textarea } from "@/components/ui/textarea";
 import { formatDateTime } from "@/lib/formatters";
 import {
   dashboardBreadcrumbs,
@@ -21,6 +18,7 @@ import { toNumber } from "@/lib/numbers";
 import { normalizeProgressPercentage } from "@/lib/progress-percentage";
 import { productionNotifications } from "@/modules/production/notifications";
 import { GenerateProgressAction } from "@/modules/production/work-order-progress/generate-progress-action";
+import { StageProgressForm } from "@/modules/production/work-order-progress/stage-progress-form";
 import { getWorkOrderProgress } from "@/modules/production/work-order-progress/queries";
 import {
   generateWorkOrderProgressAction,
@@ -210,76 +208,48 @@ export default async function WorkOrderProgressPage({
             );
 
             return (
-              <form
+              // C4 de la 11.6c (D81): cada etapa es su formulario con resultado; las partes que
+              // se renderizan en el servidor van como contenido de la tarjeta.
+              <StageProgressForm
                 key={advance.id_avance}
+                idAvance={advance.id_avance}
+                estadoEtapa={advance.estado_etapa}
+                porcentajeAvance={defaultPercentage}
+                observaciones={advance.observaciones}
+                disabled={!canEditProgress}
                 action={updateWorkOrderProgressAction}
-                className="rounded-xl border border-border/80 bg-card p-5 shadow-sm"
-              >
-                <input type="hidden" name="id_avance" value={advance.id_avance} />
-
-                <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
-                  <div>
-                    <p className="font-mono text-xs text-muted-foreground">
-                      {advance.id_avance}
-                    </p>
-
-                    <h2 className="mt-1 text-xl font-semibold text-foreground">
-                      {advance.etapa_ruta.orden_secuencia}.{" "}
-                      {advance.etapa_ruta.nombre_etapa}
-                    </h2>
-
-                    {advance.etapa_ruta.descripcion ? (
-                      <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
-                        {advance.etapa_ruta.descripcion}
+                successNotification={productionNotifications["work-order-progress-updated"]}
+                header={
+                  <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
+                    <div>
+                      <p className="font-mono text-xs text-muted-foreground">
+                        {advance.id_avance}
                       </p>
-                    ) : null}
 
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      Actualizado por: {advance.usuario.nombres}{" "}
-                      {advance.usuario.apellidos}
-                    </p>
+                      <h2 className="mt-1 text-xl font-semibold text-foreground">
+                        {advance.etapa_ruta.orden_secuencia}.{" "}
+                        {advance.etapa_ruta.nombre_etapa}
+                      </h2>
+
+                      {advance.etapa_ruta.descripcion ? (
+                        <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
+                          {advance.etapa_ruta.descripcion}
+                        </p>
+                      ) : null}
+
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        Actualizado por: {advance.usuario.nombres}{" "}
+                        {advance.usuario.apellidos}
+                      </p>
+                    </div>
+
+                    <Badge variant={getStageBadgeVariant(advance.estado_etapa)}>
+                      {advance.estado_etapa}
+                    </Badge>
                   </div>
-
-                  <Badge variant={getStageBadgeVariant(advance.estado_etapa)}>
-                    {advance.estado_etapa}
-                  </Badge>
-                </div>
-
-                <div className="mt-5 grid gap-5 md:grid-cols-4">
-                  <div className="space-y-2">
-                    <Label>Estado *</Label>
-                    <NativeSelect
-                      name="estado_etapa"
-                      required
-                      defaultValue={advance.estado_etapa}
-                      disabled={!canEditProgress}
-                    >
-                      <option value="pendiente">Pendiente</option>
-                      <option value="en_proceso">En proceso</option>
-                      <option value="pausada">Pausada</option>
-                      <option value="terminada">Terminada</option>
-                    </NativeSelect>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Porcentaje *</Label>
-                    <Input
-                      name="porcentaje_avance"
-                      type="number"
-                      min="0"
-                      max="100"
-                      step="0.01"
-                      required
-                      defaultValue={defaultPercentage}
-                      disabled={!canEditProgress}
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Pendiente se guarda como 0%. Terminada se guarda como
-                      100%.
-                    </p>
-                  </div>
-
-                  <div className="space-y-2 md:col-span-2">
+                }
+                operator={
+                  <>
                     <Label>Operario</Label>
                     <div className="flex flex-col gap-3 rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm md:flex-row md:items-center md:justify-between">
                       <div>
@@ -304,103 +274,87 @@ export default async function WorkOrderProgressPage({
                         </Button>
                       ) : null}
                     </div>
-                  </div>
-                </div>
+                  </>
+                }
+                details={
+                  <div className="mt-5 grid gap-5 md:grid-cols-3">
+                    <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
+                      <p className="text-muted-foreground">Inicio de etapa</p>
+                      <p className="mt-1 font-medium text-foreground">
+                        {formatDateTime(advance.fecha_inicio_etapa)}
+                      </p>
+                    </div>
 
-                <div className="mt-5 grid gap-5 md:grid-cols-3">
-                  <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
-                    <p className="text-muted-foreground">Inicio de etapa</p>
-                    <p className="mt-1 font-medium text-foreground">
-                      {formatDateTime(advance.fecha_inicio_etapa)}
-                    </p>
-                  </div>
+                    <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
+                      <p className="text-muted-foreground">Fin de etapa</p>
+                      <p className="mt-1 font-medium text-foreground">
+                        {formatDateTime(advance.fecha_fin_etapa)}
+                      </p>
+                    </div>
 
-                  <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
-                    <p className="text-muted-foreground">Fin de etapa</p>
-                    <p className="mt-1 font-medium text-foreground">
-                      {formatDateTime(advance.fecha_fin_etapa)}
-                    </p>
-                  </div>
-
-                  <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
-                    <p className="text-muted-foreground">Máquina</p>
-                    <p className="mt-1 font-medium text-foreground">
-                      {advance.etapa_ruta.requiere_maquina
-                        ? "Requiere máquina"
-                        : "No requiere máquina"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-5 space-y-2">
-                  <Label>Observaciones</Label>
-                  <Textarea
-                    name="observaciones"
-                    rows={3}
-                    maxLength={700}
-                    defaultValue={advance.observaciones ?? ""}
-                    disabled={!canEditProgress}
-                    placeholder="Ej. Etapa pausada por falta de material o máquina ocupada."
-                  />
-                </div>
-
-                <div className="mt-5 flex justify-end">
-                  <Button type="submit" disabled={!canEditProgress}>
-                    Actualizar etapa
-                  </Button>
-                </div>
-
-                {advance.reasignacion_tarea.length > 0 ? (
-                  <div className="mt-5 rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
-                    <p className="font-medium text-foreground">
-                      Historial de reasignaciones
-                    </p>
-
-                    <div className="mt-3 space-y-3">
-                      {advance.reasignacion_tarea.map((reassignment) => {
-                        const previousOperator =
-                          reassignment
-                            .operario_reasignacion_tarea_id_operario_anteriorTooperario;
-                        const nextOperator =
-                          reassignment
-                            .operario_reasignacion_tarea_id_operario_nuevoTooperario;
-
-                        return (
-                          <div
-                            key={reassignment.id_reasignacion}
-                            className="rounded-md border border-border/80 bg-card p-3"
-                          >
-                            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                              <p className="font-medium text-foreground">
-                                {previousOperator
-                                  ? `${previousOperator.apellidos}, ${previousOperator.nombres}`
-                                  : "Sin operario anterior"}{" "}
-                                -&gt; {nextOperator.apellidos},{" "}
-                                {nextOperator.nombres}
-                              </p>
-
-                              <span className="text-xs text-muted-foreground">
-                                {formatDateTime(
-                                  reassignment.fecha_reasignacion,
-                                )}
-                              </span>
-                            </div>
-
-                            <p className="mt-2 text-muted-foreground">
-                              {reassignment.motivo}
-                            </p>
-
-                            <p className="mt-1 text-xs text-muted-foreground">
-                              Responsable: {reassignment.usuario.nombres}{" "}
-                              {reassignment.usuario.apellidos}
-                            </p>
-                          </div>
-                        );
-                      })}
+                    <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
+                      <p className="text-muted-foreground">Máquina</p>
+                      <p className="mt-1 font-medium text-foreground">
+                        {advance.etapa_ruta.requiere_maquina
+                          ? "Requiere máquina"
+                          : "No requiere máquina"}
+                      </p>
                     </div>
                   </div>
-                ) : null}
-              </form>
+                }
+                history={
+                  advance.reasignacion_tarea.length > 0 ? (
+                    <div className="mt-5 rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
+                      <p className="font-medium text-foreground">
+                        Historial de reasignaciones
+                      </p>
+
+                      <div className="mt-3 space-y-3">
+                        {advance.reasignacion_tarea.map((reassignment) => {
+                          const previousOperator =
+                            reassignment
+                              .operario_reasignacion_tarea_id_operario_anteriorTooperario;
+                          const nextOperator =
+                            reassignment
+                              .operario_reasignacion_tarea_id_operario_nuevoTooperario;
+
+                          return (
+                            <div
+                              key={reassignment.id_reasignacion}
+                              className="rounded-md border border-border/80 bg-card p-3"
+                            >
+                              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                                <p className="font-medium text-foreground">
+                                  {previousOperator
+                                    ? `${previousOperator.apellidos}, ${previousOperator.nombres}`
+                                    : "Sin operario anterior"}{" "}
+                                  -&gt; {nextOperator.apellidos},{" "}
+                                  {nextOperator.nombres}
+                                </p>
+
+                                <span className="text-xs text-muted-foreground">
+                                  {formatDateTime(
+                                    reassignment.fecha_reasignacion,
+                                  )}
+                                </span>
+                              </div>
+
+                              <p className="mt-2 text-muted-foreground">
+                                {reassignment.motivo}
+                              </p>
+
+                              <p className="mt-1 text-xs text-muted-foreground">
+                                Responsable: {reassignment.usuario.nombres}{" "}
+                                {reassignment.usuario.apellidos}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : null
+                }
+              />
             );
           })}
         </section>

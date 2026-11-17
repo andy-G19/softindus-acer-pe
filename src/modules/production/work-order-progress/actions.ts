@@ -2,7 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import type { FieldErrors } from "@/lib/errors";
 import { APP_ROLES } from "@/lib/permissions";
 import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { generateWorkOrderProgress } from "@/modules/production/work-order-progress/progress-generation";
@@ -57,8 +59,44 @@ export async function generateWorkOrderProgressAction(
   return rowStatusDone(idOrdenTrabajo, "generado");
 }
 
-export async function updateWorkOrderProgressAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+/** Lo que el formulario de una etapa envio, tal cual, para volver a mostrarlo. */
+export type StageProgressFormValues = {
+  estado_etapa: string;
+  porcentaje_avance: string;
+  observaciones: string;
+};
+
+// C4 de la 11.6c (D81): actualizar una etapa no redirige; devuelve el resultado y la pagina se
+// repinta con la revalidacion. Antes cualquier rechazo lanzaba un error que se veia en la pagina de
+// error y se perdia lo escrito; ahora queda en su campo, o como mensaje general, con lo enviado.
+// Sin permiso responde con un error. Sin clave: repetir el envio reescribe los mismos valores.
+export type StageProgressFormState = FormActionState<
+  StageProgressFormValues,
+  { id_avance: string; id_orden_trabajo: string }
+>;
+
+export async function updateWorkOrderProgressAction(
+  _prevState: StageProgressFormState,
+  formData: FormData,
+): Promise<StageProgressFormState> {
+  const values: StageProgressFormValues = {
+    estado_etapa: formData.get("estado_etapa")?.toString() ?? "",
+    porcentaje_avance: formData.get("porcentaje_avance")?.toString() ?? "",
+    observaciones: formData.get("observaciones")?.toString() ?? "",
+  };
+  const fail = (error: string, fieldErrors?: FieldErrors): StageProgressFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
+
+  if (!session) {
+    return fail("No tienes permisos para actualizar avances de órdenes de trabajo.");
+  }
 
   const parsed = updateWorkOrderProgressSchema.safeParse({
     id_avance: formData.get("id_avance"),
@@ -68,13 +106,27 @@ export async function updateWorkOrderProgressAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos inválidos.");
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+    // El avance va en un campo oculto: su mensaje es el general, no el de un campo.
+    const hiddenError = fieldErrors.id_avance?.[0];
+
+    return fail(hiddenError ?? "Revisa los datos de la etapa.", hiddenError ? undefined : fieldErrors);
   }
 
-  const idOrdenTrabajo = await updateWorkOrderProgress({
-    data: parsed.data,
-    idUsuario: session.user.id,
-  });
+  let idOrdenTrabajo: string;
+
+  try {
+    idOrdenTrabajo = await updateWorkOrderProgress({
+      data: parsed.data,
+      idUsuario: session.user.id,
+    });
+  } catch (error) {
+    if (error instanceof WorkOrderRejectedError) {
+      return fail(error.message, error.fieldErrors);
+    }
+
+    throw error;
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
@@ -84,9 +136,12 @@ export async function updateWorkOrderProgressAction(formData: FormData) {
     `/dashboard/production/work-orders/${idOrdenTrabajo}/progress`,
   );
 
-  redirect(
-    `/dashboard/production/work-orders/${idOrdenTrabajo}/progress?toast=work-order-progress-updated`,
-  );
+  return {
+    status: "success",
+    data: { id_avance: parsed.data.id_avance, id_orden_trabajo: idOrdenTrabajo },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 export async function reassignWorkOrderProgressAction(formData: FormData) {

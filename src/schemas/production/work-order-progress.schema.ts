@@ -13,7 +13,10 @@ export const updateWorkOrderProgressSchema = z.object({
     .trim()
     .min(1, "El avance de producción es obligatorio."),
 
-  estado_etapa: z.enum(["pendiente", "en_proceso", "pausada", "terminada"]),
+  // C4 de la 11.6c (D81): el error queda junto al campo, en espanol.
+  estado_etapa: z.enum(["pendiente", "en_proceso", "pausada", "terminada"], {
+    error: "Selecciona un estado válido para la etapa.",
+  }),
 
   porcentaje_avance: z.coerce
     .number()

@@ -131,7 +131,8 @@ async function runAction(action: Action, actionCase: ActionCase) {
 
   const { calls, result } = await characterizeHandler(async () => {
     try {
-      // Desde C3 de la 11.6c generar devuelve su estado (RowStatusState); las demas redirigen.
+      // Desde C3 de la 11.6c generar devuelve su estado (RowStatusState), y desde C4 actualizar
+      // (FormActionState); reasignar redirige.
       return (await action(formData)) ?? "termino sin redirigir";
     } catch (error) {
       return (
@@ -297,7 +298,10 @@ defineActionSuite("generateWorkOrderProgressAction", generateAction, [
   },
 ]);
 
-defineActionSuite("updateWorkOrderProgressAction", updateWorkOrderProgressAction, [
+// C4 de la 11.6c (D81): actualizar recibe el estado anterior de su formulario.
+const updateAction = (formData: FormData) => updateWorkOrderProgressAction({ status: "idle" }, formData);
+
+defineActionSuite("updateWorkOrderProgressAction", updateAction, [
   {
     name: "datos invalidos: responde el primer mensaje de Zod sin consultar",
     form: updateForm({ porcentaje_avance: "120" }),
@@ -485,7 +489,7 @@ describe("H8: actualizar un avance escribe todo en una transaccion", () => {
 
   for (const actionCase of updates) {
     it(actionCase.name, async () => {
-      const { calls } = await runAction(updateWorkOrderProgressAction, actionCase);
+      const { calls } = await runAction(updateAction, actionCase);
       const audit = calls.filter((call) => "effect" in call && call.effect === "registerAuditLog");
 
       expect(calls.filter((call) => "fueraDeTransaccion" in call)).toEqual([]);
@@ -518,7 +522,7 @@ describe("C2 de la 11.6c: el porcentaje en centesimos antes de la regla", () => 
     ["en_proceso", "0.004", 1, "Avance actualizado a en_proceso (1%)."],
     ["en_proceso", "45.678", 45.68, "Avance actualizado a en_proceso (45.68%)."],
   ])("%s con %s escribe %s", async (estado, porcentaje, esperado, detalle) => {
-    const { calls } = await runAction(updateWorkOrderProgressAction, {
+    const { calls } = await runAction(updateAction, {
       name: "C2",
       form: updateForm({ estado_etapa: estado, porcentaje_avance: porcentaje }),
       data: {
@@ -600,6 +604,89 @@ describe("C3 de la 11.6c: generar con resultado", () => {
     expect(outcome).toMatchObject({ status: "error", error: message, values: { id: OT } });
     expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
     expect(indexOf(calls, "avance_orden.createMany")).toBe(-1);
+    expect(indexOf(calls, "revalidatePath")).toBe(-1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C4 de la 11.6c (D81): actualizar una etapa con resultado
+// ---------------------------------------------------------------------------
+
+// Redirigia a los avances al guardar y lanzaba cualquier rechazo a la pagina de error, donde se
+// perdia lo escrito (estado, porcentaje, observaciones). Ahora devuelve un FormActionState: el
+// rechazo queda en su campo con lo enviado y el exito trae el avance y su orden; la pagina se
+// repinta con la revalidacion. Sin clave: repetir el envio reescribe los mismos valores.
+describe("C4 de la 11.6c: actualizar una etapa con resultado", () => {
+  type Calls = Awaited<ReturnType<typeof runAction>>["calls"];
+  const indexOf = (calls: Calls, key: string) =>
+    calls.findIndex((call) =>
+      "prisma" in call ? call.prisma === key : "effect" in call && (call as { effect: string }).effect === key,
+    );
+  const fieldsOf = (outcome: unknown) => Object.keys((outcome as { fieldErrors?: Row }).fieldErrors ?? {});
+  const caseOf = (name: string) => {
+    const found = suites.get("updateWorkOrderProgressAction")?.cases.find((actionCase) => actionCase.name === name);
+
+    if (!found) {
+      throw new Error(`No existe el caso ${name}.`);
+    }
+
+    return found;
+  };
+
+  it("guarda, revalida y responde con el avance y su orden, sin redirigir", async () => {
+    const { calls, outcome } = await runAction(
+      updateAction,
+      caseOf("pausa con 100 %: baja a 99 %, borra la fecha de fin previa y pausa la orden"),
+    );
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_avance: AVANCE, id_orden_trabajo: OT },
+      values: { estado_etapa: "pausada", porcentaje_avance: "100", observaciones: "" },
+    });
+    expect(indexOf(calls, "avance_orden.update")).toBeLessThan(indexOf(calls, "prisma.$transaction:commit"));
+    expect(indexOf(calls, "revalidatePath")).toBeGreaterThan(-1);
+  });
+
+  it.each([
+    ["el porcentaje mayor a 100", { porcentaje_avance: "120" }, "porcentaje_avance", "El porcentaje no puede ser mayor a 100."],
+    ["un estado que no existe", { estado_etapa: "cancelada" }, "estado_etapa", "Selecciona un estado válido para la etapa."],
+    ["observaciones de mas de 700 caracteres", { observaciones: "x".repeat(701) }, "observaciones", "Las observaciones no deben superar 700 caracteres."],
+  ])("con %s el error queda en su campo, con lo enviado, sin consultar", async (_name, changes, field, message) => {
+    const form = updateForm(changes);
+    const { calls, outcome } = await runAction(updateAction, { name: "C4", form });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      fieldErrors: { [field]: [message] },
+      values: {
+        estado_etapa: form.estado_etapa,
+        porcentaje_avance: form.porcentaje_avance,
+        observaciones: form.observaciones,
+      },
+    });
+    expect(fieldsOf(outcome)).toEqual([field]);
+    expect(calls.filter((call) => "prisma" in call)).toEqual([]);
+  });
+
+  it("sin avance en el formulario responde con el mensaje general, sin consultar", async () => {
+    const { calls, outcome } = await runAction(updateAction, { name: "C4", form: updateForm({ id_avance: "" }) });
+
+    expect(outcome).toMatchObject({ status: "error", error: "El avance de producción es obligatorio." });
+    expect(calls.filter((call) => "prisma" in call)).toEqual([]);
+  });
+
+  it.each([
+    ["el avance no existe", "El avance seleccionado no existe."],
+    ["orden anulada", "No se puede modificar el avance de una orden anulada o finalizada."],
+    ["orden finalizada", "No se puede modificar el avance de una orden anulada o finalizada."],
+  ])("%s: responde con el mensaje general, revierte y no escribe", async (name, message) => {
+    const { calls, outcome } = await runAction(updateAction, caseOf(name));
+
+    expect(outcome).toMatchObject({ status: "error", error: message, values: { estado_etapa: "en_proceso" } });
+    expect(fieldsOf(outcome)).toEqual([]);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "avance_orden.update")).toBe(-1);
     expect(indexOf(calls, "revalidatePath")).toBe(-1);
   });
 });

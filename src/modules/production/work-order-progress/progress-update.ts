@@ -5,14 +5,16 @@ import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { normalizeProgressPercentage } from "@/lib/progress-percentage";
 import { lockWorkOrderRow } from "@/lib/row-locks";
+import { WorkOrderRejectedError } from "@/modules/production/work-orders/work-order-rejected-error";
 import type { UpdateWorkOrderProgressInput } from "@/schemas/production/work-order-progress.schema";
 
 /**
  * Actualizar una etapa de una orden de trabajo y sincronizar el estado de la orden.
  *
- * Caso de uso y no server action (C1 de la 11.6c, D78): la accion autoriza, valida, revalida y
- * redirige; este modulo recibe los datos ya validados y el usuario verificado, abre la transaccion
- * y aplica las reglas dentro de ella, con los mismos errores. La regla del porcentaje vive en
+ * Caso de uso y no server action (C1 de la 11.6c, D78): la accion autoriza, valida y revalida;
+ * este modulo recibe los datos ya validados y el usuario verificado, abre la transaccion y aplica
+ * las reglas dentro de ella. Desde C4 (D81) cada rechazo lanza WorkOrderRejectedError sin campo,
+ * con el mismo mensaje: la accion lo muestra en la tarjeta de la etapa. La regla del porcentaje vive en
  * src/lib/progress-percentage.ts (C2 de la 11.6c, D79): la comparte con la pagina de avances.
  */
 
@@ -135,7 +137,7 @@ export async function updateWorkOrderProgress({
     });
 
     if (!located) {
-      throw new Error("El avance seleccionado no existe.");
+      throw new WorkOrderRejectedError(null, "El avance seleccionado no existe.");
     }
 
     // El avance nunca cambia de orden: basta su id para saber que fila bloquear antes
@@ -152,14 +154,15 @@ export async function updateWorkOrderProgress({
     });
 
     if (!advance) {
-      throw new Error("El avance seleccionado no existe.");
+      throw new WorkOrderRejectedError(null, "El avance seleccionado no existe.");
     }
 
     if (
       advance.orden_trabajo.estado === "anulada" ||
       advance.orden_trabajo.estado === "finalizada"
     ) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        null,
         "No se puede modificar el avance de una orden anulada o finalizada.",
       );
     }

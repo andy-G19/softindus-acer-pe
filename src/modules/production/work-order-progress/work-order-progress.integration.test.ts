@@ -10,7 +10,8 @@ import { getTestDatabase } from "@/testing/test-database";
 // Avances de una orden de trabajo contra Postgres real (PGlite), C2 de la 11.6c (D79). Corre la
 // accion entera: el candado de la orden, el avance, la sincronizacion del estado de la orden y la
 // bitacora. Solo se reemplazan la sesion, la cache de Next y la redireccion, que corta la accion
-// al terminar bien. Desde C3, generar devuelve su estado (runState) y no redirige.
+// al terminar bien. Desde C3, generar devuelve su estado (runState) y no redirige; desde C4,
+// actualizar tambien (update).
 //
 // porcentaje_avance es numeric(5, 2) y redondea por su lado: la regla «en proceso o pausada, mas de
 // 0 y menos de 100» se aplicaba al numero sin redondear, y 99.995 quedaba guardado como 100.00 en
@@ -107,7 +108,7 @@ async function update(fields: Record<string, string>) {
     formData.set(key, value);
   }
 
-  await expect(updateWorkOrderProgressAction(formData)).rejects.toThrow(/^redirect:/);
+  return updateWorkOrderProgressAction({ status: "idle" }, formData);
 }
 
 async function stored(idOrden: string, idAvance: string) {
@@ -126,7 +127,9 @@ describe("C2 de la 11.6c: el porcentaje en centesimos antes de la regla", () => 
   ])("orden %s: %s con %s guarda %s y la orden queda %s", async (suffix, estado, porcentaje, guardado, orden) => {
     const { idOrden, idAvance } = await seedOrder(suffix);
 
-    await update({ id_avance: idAvance, estado_etapa: estado, porcentaje_avance: porcentaje, observaciones: "" });
+    expect(
+      await update({ id_avance: idAvance, estado_etapa: estado, porcentaje_avance: porcentaje, observaciones: "" }),
+    ).toMatchObject({ status: "success" });
 
     expect(await stored(idOrden, idAvance)).toEqual({ etapa: estado, porcentaje: guardado, orden });
   });
@@ -170,5 +173,32 @@ describe("C3 de la 11.6c: generar con resultado", () => {
       [2, "pendiente", "0.00"],
     ]);
     expect(order.estado).toBe("pendiente");
+  });
+});
+
+describe("C4 de la 11.6c: actualizar una etapa con resultado", () => {
+  it("terminar la ultima etapa finaliza la orden (D83); despues ya no se puede modificar y no escribe", async () => {
+    const { idOrden, idAvance } = await seedOrder("6");
+    const segundo = `${idAvance.slice(0, -1)}2`;
+    const terminar = (id: string) =>
+      update({ id_avance: id, estado_etapa: "terminada", porcentaje_avance: "40", observaciones: "" });
+
+    expect(await terminar(idAvance)).toMatchObject({ status: "success", data: { id_avance: idAvance, id_orden_trabajo: idOrden } });
+    // Con la otra etapa pendiente, la orden queda pendiente: no hay ninguna en proceso ni pausada.
+    expect(await stored(idOrden, idAvance)).toEqual({ etapa: "terminada", porcentaje: "100.00", orden: "pendiente" });
+    expect(await terminar(segundo)).toMatchObject({ status: "success" });
+    expect(await stored(idOrden, segundo)).toEqual({ etapa: "terminada", porcentaje: "100.00", orden: "finalizada" });
+
+    expect(
+      await update({ id_avance: idAvance, estado_etapa: "en_proceso", porcentaje_avance: "50", observaciones: "Reabrir" }),
+    ).toMatchObject({
+      status: "error",
+      error: "No se puede modificar el avance de una orden anulada o finalizada.",
+      values: { estado_etapa: "en_proceso", porcentaje_avance: "50", observaciones: "Reabrir" },
+    });
+    expect(await stored(idOrden, idAvance)).toEqual({ etapa: "terminada", porcentaje: "100.00", orden: "finalizada" });
+    expect(
+      await prisma.bitacora_operacion.count({ where: { id_registro_afectado: { in: [idAvance, segundo] }, accion: "actualizar" } }),
+    ).toBe(2);
   });
 });
