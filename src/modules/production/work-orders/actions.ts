@@ -7,10 +7,7 @@ import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import type { FieldErrors } from "@/lib/errors";
 import { IdempotencyConflictError } from "@/lib/idempotency";
 import { APP_ROLES } from "@/lib/permissions";
-import {
-  createWorkOrder,
-  WorkOrderRejectedError,
-} from "@/modules/production/work-orders/create-work-order";
+import { createWorkOrder } from "@/modules/production/work-orders/create-work-order";
 import {
   closeWorkOrderMaterials,
   reopenWorkOrderMaterials,
@@ -24,6 +21,7 @@ import {
   annulWorkOrder,
   finishWorkOrder,
 } from "@/modules/production/work-orders/work-order-status";
+import { WorkOrderRejectedError } from "@/modules/production/work-orders/work-order-rejected-error";
 import {
   additionalDeliverySchema,
   closeMaterialsSchema,
@@ -116,7 +114,7 @@ export async function createWorkOrderAction(
     });
   } catch (error) {
     if (error instanceof WorkOrderRejectedError) {
-      return fail(error.message, { [error.field]: [error.message] });
+      return fail(error.message, error.fieldErrors);
     }
 
     if (error instanceof IdempotencyConflictError) {
@@ -159,58 +157,130 @@ export async function deliverWorkOrderMaterialsAction(formData: FormData) {
   );
 }
 
-export async function deliverAdditionalMaterialAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+/** Lo que el formulario de entrega adicional o devolucion envio, para volver a mostrarlo. */
+export type MaterialMovementFormValues = {
+  id_requerimiento: string;
+  cantidad: string;
+  motivo: string;
+};
 
-  const parsed = additionalDeliverySchema.safeParse({
+type MaterialMovementResult = {
+  id_orden_trabajo: string;
+  /** El movimiento del kardex que registro la operacion. */
+  id_movimiento: string;
+  clave_operacion: string;
+};
+
+// C1 de la 11.6b (D73): la entrega adicional y la devolucion no redirigen; devuelven el resultado
+// y el detalle se repinta con la revalidacion. Antes cualquier rechazo lanzaba un error que se
+// veia en la pagina de error y se perdia lo escrito; ahora queda en el formulario, junto al campo
+// que lo causa y con lo enviado. Sin permiso responden con un error. El exito lleva la clave
+// confirmada para que el formulario genere otra (OperationKeyField).
+export type AdditionalDeliveryFormState = FormActionState<MaterialMovementFormValues, MaterialMovementResult>;
+export type MaterialReturnFormState = FormActionState<MaterialMovementFormValues, MaterialMovementResult>;
+
+type MaterialMovementFormState = AdditionalDeliveryFormState | MaterialReturnFormState;
+
+type MaterialMovementOperation<Input> = {
+  schema: {
+    safeParse: (
+      value: unknown,
+    ) =>
+      | { success: true; data: Input & { id_orden_trabajo: string; clave_operacion: string } }
+      | { success: false; error: { flatten: () => { fieldErrors: FieldErrors } } };
+  };
+  run: (params: { data: Input; idUsuario: string }) => Promise<string>;
+};
+
+/** El cuerpo comun de las dos acciones: permiso, esquema, caso de uso, revalidacion y resultado. */
+async function runMaterialMovement<Input>(
+  formData: FormData,
+  { schema, run }: MaterialMovementOperation<Input>,
+): Promise<MaterialMovementFormState> {
+  const values: MaterialMovementFormValues = {
+    id_requerimiento: formData.get("id_requerimiento")?.toString() ?? "",
+    cantidad: formData.get("cantidad")?.toString() ?? "",
+    motivo: formData.get("motivo")?.toString() ?? "",
+  };
+  const fail = (error: string, fieldErrors?: FieldErrors): MaterialMovementFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
+
+  if (!session) {
+    return fail("No tienes permisos para mover material de órdenes de trabajo.");
+  }
+
+  const parsed = schema.safeParse({
+    ...values,
     id_orden_trabajo: formData.get("id_orden_trabajo"),
-    id_requerimiento: formData.get("id_requerimiento"),
-    cantidad: formData.get("cantidad"),
-    motivo: formData.get("motivo"),
+    clave_operacion: formData.get("clave_operacion"),
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+    // La clave y la orden van en campos ocultos: su mensaje es el general, no el de un campo.
+    const hiddenError = fieldErrors.clave_operacion?.[0] ?? fieldErrors.id_orden_trabajo?.[0];
+
+    return fail(hiddenError ?? "Revisa los datos del movimiento de material.", fieldErrors);
   }
 
   const data = parsed.data;
+  let idMovimiento: string;
 
-  await deliverAdditionalMaterial({ data, idUsuario: session.user.id });
+  try {
+    idMovimiento = await run({ data, idUsuario: session.user.id });
+  } catch (error) {
+    if (error instanceof WorkOrderRejectedError) {
+      return fail(error.message, error.fieldErrors);
+    }
+
+    if (error instanceof IdempotencyConflictError) {
+      return fail(error.message);
+    }
+
+    throw error;
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/inventory");
   revalidatePath(`/dashboard/production/work-orders/${data.id_orden_trabajo}`);
 
-  redirect(
-    `/dashboard/production/work-orders/${data.id_orden_trabajo}?toast=work-order-additional-delivery`,
-  );
+  return {
+    status: "success",
+    data: {
+      id_orden_trabajo: data.id_orden_trabajo,
+      id_movimiento: idMovimiento,
+      clave_operacion: data.clave_operacion,
+    },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
-export async function returnWorkOrderMaterialAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
-
-  const parsed = materialReturnSchema.safeParse({
-    id_orden_trabajo: formData.get("id_orden_trabajo"),
-    id_requerimiento: formData.get("id_requerimiento"),
-    cantidad: formData.get("cantidad"),
-    motivo: formData.get("motivo") ?? "",
+export async function deliverAdditionalMaterialAction(
+  _prevState: AdditionalDeliveryFormState,
+  formData: FormData,
+): Promise<AdditionalDeliveryFormState> {
+  return runMaterialMovement(formData, {
+    schema: additionalDeliverySchema,
+    run: deliverAdditionalMaterial,
   });
+}
 
-  if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
-  }
-
-  const data = parsed.data;
-
-  await returnMaterialToWarehouse({ data, idUsuario: session.user.id });
-
-  revalidatePath("/dashboard");
-  revalidatePath("/dashboard/inventory");
-  revalidatePath(`/dashboard/production/work-orders/${data.id_orden_trabajo}`);
-
-  redirect(
-    `/dashboard/production/work-orders/${data.id_orden_trabajo}?toast=work-order-material-returned`,
-  );
+export async function returnWorkOrderMaterialAction(
+  _prevState: MaterialReturnFormState,
+  formData: FormData,
+): Promise<MaterialReturnFormState> {
+  return runMaterialMovement(formData, {
+    schema: materialReturnSchema,
+    run: returnMaterialToWarehouse,
+  });
 }
 
 export async function closeWorkOrderMaterialsAction(formData: FormData) {

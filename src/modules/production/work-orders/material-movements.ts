@@ -3,6 +3,7 @@ import "server-only";
 import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { formatCents } from "@/lib/decimal-cents";
+import { claimOperation, completeOperation } from "@/lib/idempotency";
 import { quantityHundredths, roundMaterialQuantity } from "@/lib/material-quantities";
 import { calculatePendingDelivery } from "@/lib/material-reconciliation";
 import { lockWorkOrderRow } from "@/lib/row-locks";
@@ -10,6 +11,7 @@ import {
   deliverMaterials,
   returnMaterial,
 } from "@/modules/production/work-orders/material-delivery";
+import { WorkOrderRejectedError } from "@/modules/production/work-orders/work-order-rejected-error";
 import type {
   AdditionalDeliveryInput,
   MaterialReturnInput,
@@ -34,7 +36,18 @@ import type {
  * mover el mismo material a la vez. Por eso el stock que leen estos casos de uso solo
  * sirve para validar y explicar un rechazo; el que anotan el kardex y la alerta lo
  * devuelve la escritura en material-delivery.ts (H2).
+ *
+ * C1 de la 11.6b (D73): el candado pone en fila dos envios iguales, pero el segundo volvia a
+ * validar y movia el stock otra vez: una entrega adicional salia dos veces y una devolucion
+ * parcial volvia dos veces (el segundo envio solo «ve lo ya devuelto» cuando se devuelve todo).
+ * Por eso la entrega adicional y la devolucion reclaman la clave de operacion como primera
+ * sentencia de la transaccion, antes del candado, y la completan con su movimiento del kardex. Un
+ * reenvio con la misma clave responde con ese movimiento sin leer ni escribir. Cada rechazo lanza
+ * WorkOrderRejectedError con su campo, la transaccion se revierte y la clave queda libre.
  */
+const ADDITIONAL_OPERATION = "entrega_adicional_material";
+const RETURN_OPERATION = "devolver_material";
+
 export type DeliverPendingMaterialsParams = {
   idOrdenTrabajo: string;
   idUsuario: string;
@@ -174,8 +187,22 @@ export async function deliverPendingMaterials({
 export async function deliverAdditionalMaterial({
   data,
   idUsuario,
-}: DeliverAdditionalMaterialParams) {
-  await prisma.$transaction(async (tx) => {
+}: DeliverAdditionalMaterialParams): Promise<string> {
+  return prisma.$transaction(async (tx) => {
+    const claim = await claimOperation(tx, {
+      clave: data.clave_operacion,
+      tipo: ADDITIONAL_OPERATION,
+      userId: idUsuario,
+    });
+
+    if (claim.estado === "repetida") {
+      if (!claim.idRegistro) {
+        throw new Error("La operacion repetida no tiene una entrega registrada.");
+      }
+
+      return claim.idRegistro;
+    }
+
     await lockWorkOrderRow(tx, data.id_orden_trabajo);
 
     const requirement = await tx.requerimiento_orden_material.findUnique({
@@ -193,28 +220,30 @@ export async function deliverAdditionalMaterial({
     });
 
     if (!requirement) {
-      throw new Error("El material solicitado no pertenece a esta orden.");
+      throw new WorkOrderRejectedError("id_requerimiento", "El material solicitado no pertenece a esta orden.");
     }
 
     if (requirement.orden_trabajo.id_orden_trabajo !== data.id_orden_trabajo) {
-      throw new Error("El material solicitado no pertenece a esta orden.");
+      throw new WorkOrderRejectedError("id_requerimiento", "El material solicitado no pertenece a esta orden.");
     }
 
     if (
       requirement.orden_trabajo.estado === "anulada" ||
       requirement.orden_trabajo.estado === "finalizada"
     ) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        null,
         "No se puede entregar material a una orden anulada o finalizada.",
       );
     }
 
     if (requirement.orden_trabajo.fecha_cierre_materiales) {
-      throw new Error("Los materiales de esta orden ya fueron cerrados.");
+      throw new WorkOrderRejectedError(null, "Los materiales de esta orden ya fueron cerrados.");
     }
 
     if (!requirement.material.estado) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        "id_requerimiento",
         `No se puede entregar ${requirement.material.nombre_material}: el material esta inactivo.`,
       );
     }
@@ -225,12 +254,13 @@ export async function deliverAdditionalMaterial({
     const stockActual = quantityHundredths(requirement.material.stock_actual);
 
     if (stockActual < quantityHundredths(cantidad)) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        "cantidad",
         `Stock insuficiente para ${requirement.material.nombre_material}: se piden ${cantidad} y hay ${formatCents(stockActual)}.`,
       );
     }
 
-    await deliverMaterials(tx, {
+    const [idMovimiento] = await deliverMaterials(tx, {
       idOrdenTrabajo: data.id_orden_trabajo,
       idUsuario,
       lines: [
@@ -252,6 +282,10 @@ export async function deliverAdditionalMaterial({
       detalle: `Entrega adicional de ${cantidad} ${requirement.unidad_medida} de ${requirement.material.nombre_material}. Motivo: ${data.motivo}`,
       tx,
     });
+
+    await completeOperation(tx, { clave: data.clave_operacion, idRegistro: idMovimiento });
+
+    return idMovimiento;
   });
 }
 
@@ -264,8 +298,22 @@ export async function deliverAdditionalMaterial({
 export async function returnMaterialToWarehouse({
   data,
   idUsuario,
-}: ReturnMaterialToWarehouseParams) {
-  await prisma.$transaction(async (tx) => {
+}: ReturnMaterialToWarehouseParams): Promise<string> {
+  return prisma.$transaction(async (tx) => {
+    const claim = await claimOperation(tx, {
+      clave: data.clave_operacion,
+      tipo: RETURN_OPERATION,
+      userId: idUsuario,
+    });
+
+    if (claim.estado === "repetida") {
+      if (!claim.idRegistro) {
+        throw new Error("La operacion repetida no tiene una devolucion registrada.");
+      }
+
+      return claim.idRegistro;
+    }
+
     await lockWorkOrderRow(tx, data.id_orden_trabajo);
 
     const requirement = await tx.requerimiento_orden_material.findUnique({
@@ -283,15 +331,16 @@ export async function returnMaterialToWarehouse({
     });
 
     if (!requirement || requirement.orden_trabajo.id_orden_trabajo !== data.id_orden_trabajo) {
-      throw new Error("El material indicado no pertenece a esta orden.");
+      throw new WorkOrderRejectedError("id_requerimiento", "El material indicado no pertenece a esta orden.");
     }
 
     if (requirement.orden_trabajo.estado === "anulada") {
-      throw new Error("No se puede devolver material de una orden anulada.");
+      throw new WorkOrderRejectedError(null, "No se puede devolver material de una orden anulada.");
     }
 
     if (requirement.orden_trabajo.fecha_cierre_materiales) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        null,
         "Los materiales de esta orden ya fueron cerrados: no se puede mover mas material.",
       );
     }
@@ -303,18 +352,20 @@ export async function returnMaterialToWarehouse({
     const devolvible = entregado - devuelto;
 
     if (devolvible <= 0n) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        "id_requerimiento",
         `No queda material de ${requirement.material.nombre_material} por devolver: se entregaron ${formatCents(entregado)} y ya se devolvieron ${formatCents(devuelto)}.`,
       );
     }
 
     if (quantityHundredths(cantidad) > devolvible) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        "cantidad",
         `No se puede devolver ${cantidad} de ${requirement.material.nombre_material}: solo quedan ${formatCents(devolvible)} sin devolver.`,
       );
     }
 
-    await returnMaterial(tx, {
+    const idMovimiento = await returnMaterial(tx, {
       idOrdenTrabajo: data.id_orden_trabajo,
       idUsuario,
       idRequerimiento: requirement.id_requerimiento,
@@ -334,5 +385,9 @@ export async function returnMaterialToWarehouse({
       detalle: `Devolucion de ${cantidad} ${requirement.unidad_medida} de ${requirement.material.nombre_material}.${data.motivo ? ` Motivo: ${data.motivo}` : ""}`,
       tx,
     });
+
+    await completeOperation(tx, { clave: data.clave_operacion, idRegistro: idMovimiento });
+
+    return idMovimiento;
   });
 }

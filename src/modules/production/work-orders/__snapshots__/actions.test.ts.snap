@@ -3813,7 +3813,7 @@ exports[`createWorkOrderAction > version sin materiales > resultado 1`] = `
 exports[`deliverAdditionalMaterialAction > el requerimiento es de otra orden > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3822,6 +3822,22 @@ exports[`deliverAdditionalMaterialAction > el requerimiento es de otra orden > l
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "entrega_adicional_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -3857,12 +3873,28 @@ exports[`deliverAdditionalMaterialAction > el requerimiento es de otra orden > l
 ]
 `;
 
-exports[`deliverAdditionalMaterialAction > el requerimiento es de otra orden > resultado 1`] = `"error: El material solicitado no pertenece a esta orden."`;
+exports[`deliverAdditionalMaterialAction > el requerimiento es de otra orden > resultado 1`] = `
+{
+  "error": "El material solicitado no pertenece a esta orden.",
+  "fieldErrors": {
+    "id_requerimiento": [
+      "El material solicitado no pertenece a esta orden.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "5.5",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "Se rompio una pieza al cortar",
+  },
+}
+`;
 
 exports[`deliverAdditionalMaterialAction > el requerimiento no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3871,6 +3903,22 @@ exports[`deliverAdditionalMaterialAction > el requerimiento no existe > llamadas
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "entrega_adicional_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -3906,12 +3954,28 @@ exports[`deliverAdditionalMaterialAction > el requerimiento no existe > llamadas
 ]
 `;
 
-exports[`deliverAdditionalMaterialAction > el requerimiento no existe > resultado 1`] = `"error: El material solicitado no pertenece a esta orden."`;
+exports[`deliverAdditionalMaterialAction > el requerimiento no existe > resultado 1`] = `
+{
+  "error": "El material solicitado no pertenece a esta orden.",
+  "fieldErrors": {
+    "id_requerimiento": [
+      "El material solicitado no pertenece a esta orden.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "5.5",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "Se rompio una pieza al cortar",
+  },
+}
+`;
 
 exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y sin tocar alertas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -3920,6 +3984,22 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "entrega_adicional_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -4033,6 +4113,17 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "MVI00000001",
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -4051,12 +4142,27 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
 ]
 `;
 
-exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y sin tocar alertas > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-additional-delivery"`;
+exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y sin tocar alertas > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_movimiento": "MVI00000001",
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "5.5",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "Se rompio una pieza al cortar",
+  },
+}
+`;
 
-exports[`deliverAdditionalMaterialAction > material inactivo > llamadas 1`] = `
+exports[`deliverAdditionalMaterialAction > la clave es de otra operacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -4065,6 +4171,163 @@ exports[`deliverAdditionalMaterialAction > material inactivo > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "entrega_adicional_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`deliverAdditionalMaterialAction > la clave es de otra operacion > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "5.5",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "Se rompio una pieza al cortar",
+  },
+}
+`;
+
+exports[`deliverAdditionalMaterialAction > la misma clave ya registrada: responde con la entrega hecha sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "entrega_adicional_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`deliverAdditionalMaterialAction > la misma clave ya registrada: responde con la entrega hecha sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_movimiento": "MVI00000009",
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "5.5",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "Se rompio una pieza al cortar",
+  },
+}
+`;
+
+exports[`deliverAdditionalMaterialAction > material inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "entrega_adicional_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -4100,12 +4363,28 @@ exports[`deliverAdditionalMaterialAction > material inactivo > llamadas 1`] = `
 ]
 `;
 
-exports[`deliverAdditionalMaterialAction > material inactivo > resultado 1`] = `"error: No se puede entregar Plancha LAC 1/16: el material esta inactivo."`;
+exports[`deliverAdditionalMaterialAction > material inactivo > resultado 1`] = `
+{
+  "error": "No se puede entregar Plancha LAC 1/16: el material esta inactivo.",
+  "fieldErrors": {
+    "id_requerimiento": [
+      "No se puede entregar Plancha LAC 1/16: el material esta inactivo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "5.5",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "Se rompio una pieza al cortar",
+  },
+}
+`;
 
 exports[`deliverAdditionalMaterialAction > materiales ya cerrados > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -4114,6 +4393,22 @@ exports[`deliverAdditionalMaterialAction > materiales ya cerrados > llamadas 1`]
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "entrega_adicional_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -4149,12 +4444,24 @@ exports[`deliverAdditionalMaterialAction > materiales ya cerrados > llamadas 1`]
 ]
 `;
 
-exports[`deliverAdditionalMaterialAction > materiales ya cerrados > resultado 1`] = `"error: Los materiales de esta orden ya fueron cerrados."`;
+exports[`deliverAdditionalMaterialAction > materiales ya cerrados > resultado 1`] = `
+{
+  "error": "Los materiales de esta orden ya fueron cerrados.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "5.5",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "Se rompio una pieza al cortar",
+  },
+}
+`;
 
 exports[`deliverAdditionalMaterialAction > motivo demasiado corto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -4163,12 +4470,28 @@ exports[`deliverAdditionalMaterialAction > motivo demasiado corto > llamadas 1`]
 ]
 `;
 
-exports[`deliverAdditionalMaterialAction > motivo demasiado corto > resultado 1`] = `"error: Explica por qué se necesita material adicional (mínimo 10 caracteres)."`;
+exports[`deliverAdditionalMaterialAction > motivo demasiado corto > resultado 1`] = `
+{
+  "error": "Revisa los datos del movimiento de material.",
+  "fieldErrors": {
+    "motivo": [
+      "Explica por qué se necesita material adicional (mínimo 10 caracteres).",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "5.5",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "rotura",
+  },
+}
+`;
 
 exports[`deliverAdditionalMaterialAction > orden anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -4177,6 +4500,22 @@ exports[`deliverAdditionalMaterialAction > orden anulada > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "entrega_adicional_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -4212,12 +4551,24 @@ exports[`deliverAdditionalMaterialAction > orden anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`deliverAdditionalMaterialAction > orden anulada > resultado 1`] = `"error: No se puede entregar material a una orden anulada o finalizada."`;
+exports[`deliverAdditionalMaterialAction > orden anulada > resultado 1`] = `
+{
+  "error": "No se puede entregar material a una orden anulada o finalizada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "5.5",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "Se rompio una pieza al cortar",
+  },
+}
+`;
 
 exports[`deliverAdditionalMaterialAction > orden finalizada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -4226,6 +4577,22 @@ exports[`deliverAdditionalMaterialAction > orden finalizada > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "entrega_adicional_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -4261,12 +4628,54 @@ exports[`deliverAdditionalMaterialAction > orden finalizada > llamadas 1`] = `
 ]
 `;
 
-exports[`deliverAdditionalMaterialAction > orden finalizada > resultado 1`] = `"error: No se puede entregar material a una orden anulada o finalizada."`;
+exports[`deliverAdditionalMaterialAction > orden finalizada > resultado 1`] = `
+{
+  "error": "No se puede entregar material a una orden anulada o finalizada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "5.5",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "Se rompio una pieza al cortar",
+  },
+}
+`;
+
+exports[`deliverAdditionalMaterialAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`deliverAdditionalMaterialAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "5.5",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "Se rompio una pieza al cortar",
+  },
+}
+`;
 
 exports[`deliverAdditionalMaterialAction > stock insuficiente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -4275,6 +4684,22 @@ exports[`deliverAdditionalMaterialAction > stock insuficiente > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "entrega_adicional_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -4310,7 +4735,23 @@ exports[`deliverAdditionalMaterialAction > stock insuficiente > llamadas 1`] = `
 ]
 `;
 
-exports[`deliverAdditionalMaterialAction > stock insuficiente > resultado 1`] = `"error: Stock insuficiente para Plancha LAC 1/16: se piden 5.50 y hay 5.25."`;
+exports[`deliverAdditionalMaterialAction > stock insuficiente > resultado 1`] = `
+{
+  "error": "Stock insuficiente para Plancha LAC 1/16: se piden 5.50 y hay 5.25.",
+  "fieldErrors": {
+    "cantidad": [
+      "Stock insuficiente para Plancha LAC 1/16: se piden 5.50 y hay 5.25.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "5.5",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "Se rompio una pieza al cortar",
+  },
+}
+`;
 
 exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock, registra kardex y sincroniza alertas > llamadas 1`] = `
 [
@@ -5878,7 +6319,7 @@ exports[`reopenWorkOrderMaterialsAction > reabre y deja en la bitacora la produc
 exports[`returnWorkOrderMaterialAction > cantidad no numerica > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5887,12 +6328,28 @@ exports[`returnWorkOrderMaterialAction > cantidad no numerica > llamadas 1`] = `
 ]
 `;
 
-exports[`returnWorkOrderMaterialAction > cantidad no numerica > resultado 1`] = `"error: La cantidad debe ser numérica."`;
+exports[`returnWorkOrderMaterialAction > cantidad no numerica > resultado 1`] = `
+{
+  "error": "Revisa los datos del movimiento de material.",
+  "fieldErrors": {
+    "cantidad": [
+      "La cantidad debe ser numérica.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "tres",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "",
+  },
+}
+`;
 
 exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue critico: actualiza la alerta > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -5901,6 +6358,22 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "devolver_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -6009,6 +6482,17 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "MVI00000001",
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -6027,12 +6511,27 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
 ]
 `;
 
-exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue critico: actualiza la alerta > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-material-returned"`;
+exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue critico: actualiza la alerta > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_movimiento": "MVI00000001",
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "3",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "",
+  },
+}
+`;
 
 exports[`returnWorkOrderMaterialAction > el requerimiento es de otra orden > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6041,6 +6540,22 @@ exports[`returnWorkOrderMaterialAction > el requerimiento es de otra orden > lla
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "devolver_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -6076,12 +6591,28 @@ exports[`returnWorkOrderMaterialAction > el requerimiento es de otra orden > lla
 ]
 `;
 
-exports[`returnWorkOrderMaterialAction > el requerimiento es de otra orden > resultado 1`] = `"error: El material indicado no pertenece a esta orden."`;
+exports[`returnWorkOrderMaterialAction > el requerimiento es de otra orden > resultado 1`] = `
+{
+  "error": "El material indicado no pertenece a esta orden.",
+  "fieldErrors": {
+    "id_requerimiento": [
+      "El material indicado no pertenece a esta orden.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "",
+  },
+}
+`;
 
 exports[`returnWorkOrderMaterialAction > el requerimiento no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6090,6 +6621,22 @@ exports[`returnWorkOrderMaterialAction > el requerimiento no existe > llamadas 1
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "devolver_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -6125,12 +6672,28 @@ exports[`returnWorkOrderMaterialAction > el requerimiento no existe > llamadas 1
 ]
 `;
 
-exports[`returnWorkOrderMaterialAction > el requerimiento no existe > resultado 1`] = `"error: El material indicado no pertenece a esta orden."`;
+exports[`returnWorkOrderMaterialAction > el requerimiento no existe > resultado 1`] = `
+{
+  "error": "El material indicado no pertenece a esta orden.",
+  "fieldErrors": {
+    "id_requerimiento": [
+      "El material indicado no pertenece a esta orden.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "",
+  },
+}
+`;
 
-exports[`returnWorkOrderMaterialAction > materiales ya cerrados > llamadas 1`] = `
+exports[`returnWorkOrderMaterialAction > la clave es de otra operacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6139,6 +6702,163 @@ exports[`returnWorkOrderMaterialAction > materiales ya cerrados > llamadas 1`] =
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "devolver_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": "La clave de la operacion ya se uso en otra operacion.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`returnWorkOrderMaterialAction > la clave es de otra operacion > resultado 1`] = `
+{
+  "error": "La clave de la operacion ya se uso en otra operacion.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "",
+  },
+}
+`;
+
+exports[`returnWorkOrderMaterialAction > la misma clave ya registrada: responde con la devolucion hecha sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "devolver_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_registro_resultado": true,
+        "id_usuario": true,
+        "tipo_operacion": true,
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.findUniqueOrThrow",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`returnWorkOrderMaterialAction > la misma clave ya registrada: responde con la devolucion hecha sin escribir > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_movimiento": "MVI00000009",
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "3",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "",
+  },
+}
+`;
+
+exports[`returnWorkOrderMaterialAction > materiales ya cerrados > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "devolver_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -6174,12 +6894,24 @@ exports[`returnWorkOrderMaterialAction > materiales ya cerrados > llamadas 1`] =
 ]
 `;
 
-exports[`returnWorkOrderMaterialAction > materiales ya cerrados > resultado 1`] = `"error: Los materiales de esta orden ya fueron cerrados: no se puede mover mas material."`;
+exports[`returnWorkOrderMaterialAction > materiales ya cerrados > resultado 1`] = `
+{
+  "error": "Los materiales de esta orden ya fueron cerrados: no se puede mover mas material.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "",
+  },
+}
+`;
 
 exports[`returnWorkOrderMaterialAction > no queda nada por devolver > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6188,6 +6920,22 @@ exports[`returnWorkOrderMaterialAction > no queda nada por devolver > llamadas 1
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "devolver_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -6223,12 +6971,28 @@ exports[`returnWorkOrderMaterialAction > no queda nada por devolver > llamadas 1
 ]
 `;
 
-exports[`returnWorkOrderMaterialAction > no queda nada por devolver > resultado 1`] = `"error: No queda material de Plancha LAC 1/16 por devolver: se entregaron 10.00 y ya se devolvieron 10.00."`;
+exports[`returnWorkOrderMaterialAction > no queda nada por devolver > resultado 1`] = `
+{
+  "error": "No queda material de Plancha LAC 1/16 por devolver: se entregaron 10.00 y ya se devolvieron 10.00.",
+  "fieldErrors": {
+    "id_requerimiento": [
+      "No queda material de Plancha LAC 1/16 por devolver: se entregaron 10.00 y ya se devolvieron 10.00.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "",
+  },
+}
+`;
 
 exports[`returnWorkOrderMaterialAction > orden anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6237,6 +7001,22 @@ exports[`returnWorkOrderMaterialAction > orden anulada > llamadas 1`] = `
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "devolver_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -6272,12 +7052,24 @@ exports[`returnWorkOrderMaterialAction > orden anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`returnWorkOrderMaterialAction > orden anulada > resultado 1`] = `"error: No se puede devolver material de una orden anulada."`;
+exports[`returnWorkOrderMaterialAction > orden anulada > resultado 1`] = `
+{
+  "error": "No se puede devolver material de una orden anulada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "",
+  },
+}
+`;
 
 exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y atiende la alerta > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6286,6 +7078,22 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "devolver_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -6396,6 +7204,17 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
     "effect": "registerAuditLog",
   },
   {
+    "args": {
+      "data": {
+        "id_registro_resultado": "MVI00000001",
+      },
+      "where": {
+        "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+      },
+    },
+    "prisma": "operacion_idempotente.updateMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
@@ -6414,12 +7233,27 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
 ]
 `;
 
-exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y atiende la alerta > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-material-returned"`;
+exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y atiende la alerta > resultado 1`] = `
+{
+  "data": {
+    "clave_operacion": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+    "id_movimiento": "MVI00000001",
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "cantidad": "2.25",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "Sobro una plancha entera",
+  },
+}
+`;
 
 exports[`returnWorkOrderMaterialAction > pide devolver mas de lo que queda > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -6428,6 +7262,22 @@ exports[`returnWorkOrderMaterialAction > pide devolver mas de lo que queda > lla
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "clave": "7c2e4a10-5b3d-4e8f-9a1c-2d3e4f5a6b7c",
+          "id_usuario": "USU00000001",
+          "tipo_operacion": "devolver_material",
+        },
+      ],
+      "select": {
+        "clave": true,
+      },
+      "skipDuplicates": true,
+    },
+    "prisma": "operacion_idempotente.createManyAndReturn",
   },
   {
     "args": {
@@ -6463,4 +7313,50 @@ exports[`returnWorkOrderMaterialAction > pide devolver mas de lo que queda > lla
 ]
 `;
 
-exports[`returnWorkOrderMaterialAction > pide devolver mas de lo que queda > resultado 1`] = `"error: No se puede devolver 7.00 de Plancha LAC 1/16: solo quedan 6.00 sin devolver."`;
+exports[`returnWorkOrderMaterialAction > pide devolver mas de lo que queda > resultado 1`] = `
+{
+  "error": "No se puede devolver 7.00 de Plancha LAC 1/16: solo quedan 6.00 sin devolver.",
+  "fieldErrors": {
+    "cantidad": [
+      "No se puede devolver 7.00 de Plancha LAC 1/16: solo quedan 6.00 sin devolver.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "7",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "",
+  },
+}
+`;
+
+exports[`returnWorkOrderMaterialAction > sin clave de operacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`returnWorkOrderMaterialAction > sin clave de operacion > resultado 1`] = `
+{
+  "error": "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+  "fieldErrors": {
+    "clave_operacion": [
+      "No se pudo identificar el envío. Recarga la página e inténtalo de nuevo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "cantidad": "3",
+    "id_requerimiento": "ROM00000001",
+    "motivo": "",
+  },
+}
+`;

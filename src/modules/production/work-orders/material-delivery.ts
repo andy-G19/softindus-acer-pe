@@ -5,6 +5,7 @@ import {
 } from "@/lib/correlatives-core";
 import { toNumber } from "@/lib/numbers";
 import { syncStockAlert } from "@/modules/inventory/alerts/stock-alert-sync";
+import { WorkOrderRejectedError } from "@/modules/production/work-orders/work-order-rejected-error";
 
 /**
  * Entrega de material del almacen a una orden de trabajo.
@@ -95,7 +96,8 @@ export async function deliverMaterials(
     });
 
     if (!material) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        "cantidad",
         `Stock insuficiente para ${line.materialName}. La operacion fue cancelada.`,
       );
     }
@@ -137,6 +139,9 @@ export async function deliverMaterials(
       idUsuario,
     });
   }
+
+  // C1 de la 11.6b (D73): la entrega adicional guarda su movimiento en la clave de operacion.
+  return movementIds;
 }
 
 /** Sin stock, como DeliveryLine: lo devuelve la propia escritura (H2). */
@@ -220,4 +225,7 @@ export async function returnMaterial(
     idOrdenTrabajo: params.idOrdenTrabajo,
     idUsuario: params.idUsuario,
   });
+
+  // C1 de la 11.6b (D73): la devolucion guarda su movimiento en la clave de operacion.
+  return idMovimiento;
 }

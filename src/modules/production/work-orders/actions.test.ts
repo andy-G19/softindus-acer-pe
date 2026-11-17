@@ -751,14 +751,34 @@ defineActionSuite("deliverWorkOrderMaterialsAction", deliverWorkOrderMaterialsAc
   },
 ]);
 
+// C1 de la 11.6b (D73): la entrega adicional y la devolucion reciben el estado anterior del
+// formulario y una clave de operacion.
+const additionalAction = (formData: FormData) => deliverAdditionalMaterialAction({ status: "idle" }, formData);
+const returnAction = (formData: FormData) => returnWorkOrderMaterialAction({ status: "idle" }, formData);
+
 const additionalForm: FormFields = {
+  clave_operacion: CLAVE,
   id_orden_trabajo: OT,
   id_requerimiento: REQ_PLANCHA,
   cantidad: "5.5",
   motivo: "Se rompio una pieza al cortar",
 };
 
-defineActionSuite("deliverAdditionalMaterialAction", deliverAdditionalMaterialAction, [
+defineActionSuite("deliverAdditionalMaterialAction", additionalAction, [
+  {
+    name: "sin clave de operacion",
+    form: { ...additionalForm, clave_operacion: "" },
+  },
+  {
+    name: "la misma clave ya registrada: responde con la entrega hecha sin escribir",
+    form: additionalForm,
+    data: storedKey({ tipo_operacion: "entrega_adicional_material", id_registro_resultado: "MVI00000009" }),
+  },
+  {
+    name: "la clave es de otra operacion",
+    form: additionalForm,
+    data: storedKey({ tipo_operacion: "devolver_material" }),
+  },
   {
     name: "motivo demasiado corto",
     form: { ...additionalForm, motivo: "rotura" },
@@ -849,13 +869,28 @@ defineActionSuite("deliverAdditionalMaterialAction", deliverAdditionalMaterialAc
 ]);
 
 const returnForm: FormFields = {
+  clave_operacion: CLAVE,
   id_orden_trabajo: OT,
   id_requerimiento: REQ_PLANCHA,
   cantidad: "3",
   motivo: "",
 };
 
-defineActionSuite("returnWorkOrderMaterialAction", returnWorkOrderMaterialAction, [
+defineActionSuite("returnWorkOrderMaterialAction", returnAction, [
+  {
+    name: "sin clave de operacion",
+    form: { ...returnForm, clave_operacion: "" },
+  },
+  {
+    name: "la misma clave ya registrada: responde con la devolucion hecha sin escribir",
+    form: returnForm,
+    data: storedKey({ tipo_operacion: "devolver_material", id_registro_resultado: "MVI00000009" }),
+  },
+  {
+    name: "la clave es de otra operacion",
+    form: returnForm,
+    data: storedKey({ tipo_operacion: "entrega_adicional_material" }),
+  },
   {
     name: "cantidad no numerica",
     form: { ...returnForm, cantidad: "tres" },
@@ -1192,7 +1227,12 @@ function describeWorkOrderLock(
     throw new Error(`No existe la suite ${suite}.`);
   }
 
-  const reachingDatabase = found.cases.filter((actionCase) => actionCase.data !== undefined);
+  // Desde C1 de la 11.6b, una clave ya registrada responde antes del candado, a proposito: no
+  // decide nada sobre la orden ni escribe. Esos casos llegan a la base pero no cuentan aqui.
+  const reachingDatabase = found.cases.filter(
+    (actionCase) =>
+      actionCase.data !== undefined && !("operacion_idempotente.createManyAndReturn" in actionCase.data),
+  );
 
   describe(`H1: ${suite} decide con la orden bloqueada`, () => {
     it(`cubre los ${expectedCases} casos que llegan a la base`, () => {
@@ -1294,7 +1334,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
   });
 
   it("entrega adicional: el stock real deja el material en critico y abre la alerta", async () => {
-    const { calls, outcome } = await runAction(deliverAdditionalMaterialAction, {
+    const { calls, outcome } = await runAction(additionalAction, {
       name: "H2 entrega adicional",
       form: additionalForm,
       data: {
@@ -1309,7 +1349,8 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
       },
     });
 
-    expect(outcome).toBe("redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-additional-delivery");
+    // Desde C1 de la 11.6b el exito no redirige: responde con el movimiento.
+    expect(outcome).toMatchObject({ status: "success", data: { id_movimiento: "MVI00000001" } });
 
     const [kardex] = written(calls, "movimiento_inventario.create");
 
@@ -1320,7 +1361,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
   });
 
   it("devolucion: una compra sumo 10 despues de la lectura y el material sale de critico", async () => {
-    const { calls, outcome } = await runAction(returnWorkOrderMaterialAction, {
+    const { calls, outcome } = await runAction(returnAction, {
       name: "H2 devolucion",
       form: returnForm,
       data: {
@@ -1335,7 +1376,8 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
       },
     });
 
-    expect(outcome).toBe("redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-material-returned");
+    // Desde C1 de la 11.6b el exito no redirige: responde con el movimiento.
+    expect(outcome).toMatchObject({ status: "success", data: { id_movimiento: "MVI00000001" } });
 
     const [kardex] = written(calls, "movimiento_inventario.create");
 
@@ -1560,5 +1602,183 @@ describe("C5 de la 11.6a: crear con resultado e idempotencia", () => {
     expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
     expect(indexOf(calls, "operacion_idempotente.updateMany")).toBe(-1);
     expect(indexOf(calls, "orden_trabajo.create")).toBe(-1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C1 de la 11.6b (D73): entrega adicional y devolucion con resultado e idempotencia
+// ---------------------------------------------------------------------------
+
+// Las dos redirigian al detalle al guardar y lanzaban cualquier rechazo a la pagina de error, donde
+// se perdia lo escrito. Y no tenian clave: el candado de la orden ponia en fila dos envios
+// iguales, pero el segundo volvia a validar y movia el stock otra vez (hallazgos 1 y 2 de la
+// 11.6b: una entrega adicional salia dos veces y una devolucion parcial volvia dos veces). Ahora
+// devuelven un FormActionState: el rechazo queda en su campo con lo enviado y el exito trae el
+// movimiento del kardex. La clave se reclama como primera sentencia, antes del candado de la
+// orden, y se completa con el movimiento antes del commit.
+describe("C1 de la 11.6b: entrega adicional y devolucion con resultado e idempotencia", () => {
+  const indexOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
+  const claimOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"]) => {
+    const claim = calls.find((call) => isPrismaCall(call) && call.prisma === "operacion_idempotente.createManyAndReturn");
+
+    return claim && isPrismaCall(claim) ? (claim.args as { data: Row[] }).data : null;
+  };
+
+  const additionalOk: DataOverrides = {
+      "requerimiento_orden_material.findUnique": requirementWithOrder(REQ_PLANCHA, PLANCHA, {
+        requerida: "68.75",
+        entregada: "68.75",
+        material: { stock: "40.00", minimo: "10.00" },
+      }),
+      "alerta_stock.updateMany": { count: 0 },
+      ...stockInDb({ [PLANCHA]: { stock: "40.00", minimo: "10.00" } }),
+    };
+
+  const returnOk: DataOverrides = {
+    "requerimiento_orden_material.findUnique": requirementWithOrder(REQ_PLANCHA, PLANCHA, {
+      requerida: "68.75",
+      entregada: "10.00",
+      material: { stock: "20.00", minimo: "8.00" },
+    }),
+    "alerta_stock.updateMany": { count: 0 },
+    ...stockInDb({ [PLANCHA]: { stock: "20.00", minimo: "8.00" } }),
+  };
+
+  it.each([
+    ["la entrega adicional", additionalAction, additionalForm, additionalOk, "entrega_adicional_material"],
+    ["la devolucion", returnAction, returnForm, returnOk, "devolver_material"],
+  ] as const)("%s reclama la clave antes del candado, la completa con el movimiento y no redirige", async (_name, action, form, data, tipo) => {
+    const { calls, outcome } = await runAction(action, { name: "C1", form, data });
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: OT, id_movimiento: "MVI00000001", clave_operacion: CLAVE },
+    });
+    expect(claimOf(calls)).toEqual([
+      expect.objectContaining({ clave: CLAVE, tipo_operacion: tipo, id_usuario: "USU00000001" }),
+    ]);
+    expect(indexOf(calls, "operacion_idempotente.createManyAndReturn")).toBeGreaterThan(indexOf(calls, "prisma.$transaction"));
+    expect(indexOf(calls, "operacion_idempotente.createManyAndReturn")).toBeLessThan(indexOf(calls, "$queryRaw"));
+    expect(indexOf(calls, "movimiento_inventario.create")).toBeLessThan(indexOf(calls, "operacion_idempotente.updateMany"));
+    expect(indexOf(calls, "operacion_idempotente.updateMany")).toBeLessThan(indexOf(calls, "prisma.$transaction:commit"));
+    expect(calls.filter((call) => "effect" in call && call.effect === "revalidatePath").length).toBeGreaterThan(0);
+  });
+
+  it.each([
+    ["la entrega adicional", additionalAction, additionalForm, "entrega_adicional_material"],
+    ["la devolucion", returnAction, returnForm, "devolver_material"],
+  ] as const)("%s con la misma clave responde con el movimiento ya hecho, sin candado ni stock", async (_name, action, form, tipo) => {
+    const { calls, outcome } = await runAction(action, {
+      name: "C1",
+      form,
+      data: storedKey({ tipo_operacion: tipo, id_registro_resultado: "MVI00000009" }),
+    });
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: OT, id_movimiento: "MVI00000009", clave_operacion: CLAVE },
+    });
+    expect(indexOf(calls, "$queryRaw")).toBe(-1);
+    expect(indexOf(calls, "movimiento_inventario.create")).toBe(-1);
+    expect(indexOf(calls, "operacion_idempotente.updateMany")).toBe(-1);
+  });
+
+  it.each([
+    ["entrega: motivo corto", additionalAction, { ...additionalForm, motivo: "rotura" }, "motivo"],
+    ["devolucion: cantidad no numerica", returnAction, { ...returnForm, cantidad: "tres" }, "cantidad"],
+  ] as const)("%s: el error queda en su campo, con lo enviado, sin consultar", async (_name, action, form, field) => {
+    const { calls, outcome } = await runAction(action, { name: "C1", form });
+    const sent = form as FormFields;
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      values: expect.objectContaining({ id_requerimiento: REQ_PLANCHA, cantidad: sent.cantidad, motivo: sent.motivo }),
+    });
+    expect(Object.keys((outcome as { fieldErrors?: Row }).fieldErrors ?? {})).toContain(field);
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it.each([
+    [
+      "entrega: stock insuficiente",
+      additionalAction,
+      additionalForm,
+      {
+        "requerimiento_orden_material.findUnique": requirementWithOrder(REQ_PLANCHA, PLANCHA, {
+          requerida: "68.75",
+          material: { stock: "5.25" },
+        }),
+      },
+      ["cantidad"],
+    ],
+    [
+      "entrega: material inactivo",
+      additionalAction,
+      additionalForm,
+      {
+        "requerimiento_orden_material.findUnique": requirementWithOrder(REQ_PLANCHA, PLANCHA, {
+          requerida: "68.75",
+          material: { estado: false },
+        }),
+      },
+      ["id_requerimiento"],
+    ],
+    [
+      "entrega: el requerimiento no existe",
+      additionalAction,
+      additionalForm,
+      { "requerimiento_orden_material.findUnique": null },
+      ["id_requerimiento"],
+    ],
+    [
+      "entrega: orden anulada, sin campo",
+      additionalAction,
+      additionalForm,
+      {
+        "requerimiento_orden_material.findUnique": requirementWithOrder(
+          REQ_PLANCHA,
+          PLANCHA,
+          { requerida: "68.75" },
+          { estado: "anulada" },
+        ),
+      },
+      [],
+    ],
+    [
+      "devolucion: pide mas de lo que queda",
+      returnAction,
+      { ...returnForm, cantidad: "7" },
+      {
+        "requerimiento_orden_material.findUnique": requirementWithOrder(REQ_PLANCHA, PLANCHA, {
+          requerida: "68.75",
+          entregada: "10.00",
+          devuelta: "4.00",
+        }),
+      },
+      ["cantidad"],
+    ],
+    [
+      "devolucion: materiales ya cerrados, sin campo",
+      returnAction,
+      returnForm,
+      {
+        "requerimiento_orden_material.findUnique": requirementWithOrder(
+          REQ_PLANCHA,
+          PLANCHA,
+          { requerida: "68.75", entregada: "10.00" },
+          { fecha_cierre_materiales: CLOSED_AT },
+        ),
+      },
+      [],
+    ],
+  ] as const)("%s revierte la transaccion y responde con el error, con lo enviado", async (_name, action, form, data, fields) => {
+    const { calls, outcome } = await runAction(action, { name: "C1", form, data: { ...data } });
+
+    expect(outcome).toMatchObject({ status: "error", values: expect.objectContaining({ cantidad: form.cantidad }) });
+    expect(Object.keys((outcome as { fieldErrors?: Row }).fieldErrors ?? {})).toEqual(fields);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "movimiento_inventario.create")).toBe(-1);
+    expect(indexOf(calls, "operacion_idempotente.updateMany")).toBe(-1);
   });
 });

@@ -319,7 +319,7 @@ const MODULOS: ModuloDeAcciones[] = [
       reopenWorkOrderMaterialsAction: SOLO_ADMIN,
     },
     // C5 de la 11.6a (D66).
-    rechazanConResultado: ["createWorkOrderAction"],
+    rechazanConResultado: ["createWorkOrderAction", "deliverAdditionalMaterialAction", "returnWorkOrderMaterialAction"],
   },
   {
     ruta: "staff/attendance/actions",

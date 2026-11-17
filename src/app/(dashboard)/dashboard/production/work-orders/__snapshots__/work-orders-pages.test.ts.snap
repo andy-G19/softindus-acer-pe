@@ -3556,6 +3556,7 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 <div>
 <h3>Entrega adicional o devolución</h3>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
 <input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
 <div>
 <div>
@@ -3568,23 +3569,25 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 </div>
 <div>
 <label for="id_requerimiento">Material</label>
-<select id="id_requerimiento" name="id_requerimiento" required="">
+<select id="id_requerimiento" required="" aria-describedby="id_requerimiento-ayuda" name="id_requerimiento">
 <option value="id_requerimiento-1" selected="">nombre_material-1</option>
 <option value="id_requerimiento-2">nombre_material-2</option>
 </select>
-<p>Stock disponible en almacén: <span>11.50 unidad_medida-1</span>
+<p id="id_requerimiento-ayuda">Stock disponible en almacén: <span>11.50 unidad_medida-1</span>
 </p>
 </div>
 </div>
 <div>
-<label for="cantidad">Cantidad *</label>
-<input type="number" id="cantidad" min="0.01" step="0.01" max="11.5" required="" placeholder="Ej. 2.50" name="cantidad"/>
+<label for="cantidad">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad" required="" min="0.01" step="0.01" max="11.5" placeholder="Ej. 2.50" name="cantidad"/>
 </div>
 <div>
-<label for="motivo">Motivo *</label>
-<textarea id="motivo" name="motivo" rows="3" maxLength="300" required="" placeholder="Ej. se malogró una pieza durante el forjado y hubo que rehacerla.">
+<label for="motivo">Motivo<span aria-hidden="true">*</span>
+</label>
+<textarea id="motivo" required="" aria-describedby="motivo-ayuda" name="motivo" rows="3" maxLength="300" placeholder="Ej. se malogró una pieza durante el forjado y hubo que rehacerla.">
 </textarea>
-<p>Obligatorio: una salida por encima del plan sin explicación es imposible de auditar después.</p>
+<p id="motivo-ayuda">Obligatorio: una salida por encima del plan sin explicación es imposible de auditar después.</p>
 </div>
 <button data-variant="default" type="submit">Registrar entrega adicional</button>
 </form>
@@ -5848,6 +5851,7 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 <div>
 <h3>Entrega adicional o devolución</h3>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="clave_operacion"/>
 <input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
 <div>
 <div>
@@ -5860,23 +5864,25 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 </div>
 <div>
 <label for="id_requerimiento">Material</label>
-<select id="id_requerimiento" name="id_requerimiento" required="">
+<select id="id_requerimiento" required="" aria-describedby="id_requerimiento-ayuda" name="id_requerimiento">
 <option value="id_requerimiento-1" selected="">nombre_material-1</option>
 <option value="id_requerimiento-2">nombre_material-2</option>
 </select>
-<p>Stock disponible en almacén: <span>11.50 unidad_medida-1</span>
+<p id="id_requerimiento-ayuda">Stock disponible en almacén: <span>11.50 unidad_medida-1</span>
 </p>
 </div>
 </div>
 <div>
-<label for="cantidad">Cantidad *</label>
-<input type="number" id="cantidad" min="0.01" step="0.01" max="11.5" required="" placeholder="Ej. 2.50" name="cantidad"/>
+<label for="cantidad">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad" required="" min="0.01" step="0.01" max="11.5" placeholder="Ej. 2.50" name="cantidad"/>
 </div>
 <div>
-<label for="motivo">Motivo *</label>
-<textarea id="motivo" name="motivo" rows="3" maxLength="300" required="" placeholder="Ej. se malogró una pieza durante el forjado y hubo que rehacerla.">
+<label for="motivo">Motivo<span aria-hidden="true">*</span>
+</label>
+<textarea id="motivo" required="" aria-describedby="motivo-ayuda" name="motivo" rows="3" maxLength="300" placeholder="Ej. se malogró una pieza durante el forjado y hubo que rehacerla.">
 </textarea>
-<p>Obligatorio: una salida por encima del plan sin explicación es imposible de auditar después.</p>
+<p id="motivo-ayuda">Obligatorio: una salida por encima del plan sin explicación es imposible de auditar después.</p>
 </div>
 <button data-variant="default" type="submit">Registrar entrega adicional</button>
 </form>

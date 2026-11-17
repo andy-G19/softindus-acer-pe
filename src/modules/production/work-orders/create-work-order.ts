@@ -6,6 +6,7 @@ import { prisma } from "@/lib/db";
 import { claimOperation, completeOperation } from "@/lib/idempotency";
 import { calculateRequiredQuantityRounded } from "@/lib/recipe-quantities";
 import { lockCampaignRow, lockOrderRow, lockRecipeRow, lockRouteRow } from "@/lib/row-locks";
+import { WorkOrderRejectedError } from "@/modules/production/work-orders/work-order-rejected-error";
 import type { WorkOrderInput } from "@/schemas/production/work-order.schema";
 
 /**
@@ -38,24 +39,6 @@ export type CreateWorkOrderParams = {
 const PRODUCIBLE_ORDER_STATES = ["registrado", "aprobado"];
 
 const CREATE_OPERATION = "crear_orden_trabajo";
-
-/** Los campos del formulario a los que apunta un rechazo. */
-export type WorkOrderRejectedField =
-  | "id_detalle_pedido"
-  | "id_campania"
-  | "id_producto"
-  | "id_ruta"
-  | "id_version_receta";
-
-/** Un rechazo dentro de la transaccion: la deshace, y con ella el reclamo de la clave. */
-export class WorkOrderRejectedError extends Error {
-  constructor(
-    readonly field: WorkOrderRejectedField,
-    message: string,
-  ) {
-    super(message);
-  }
-}
 
 function parseDate(value: string) {
   return new Date(`${value}T00:00:00`);

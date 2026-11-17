@@ -36,9 +36,12 @@ import {
 import { formatCents } from "@/lib/decimal-cents";
 import { quantityHundredths } from "@/lib/material-quantities";
 import { toNumber } from "@/lib/numbers";
+import { productionNotifications } from "@/modules/production/notifications";
 import {
+  deliverAdditionalMaterialAction,
   deliverWorkOrderMaterialsAction,
   reopenWorkOrderMaterialsAction,
+  returnWorkOrderMaterialAction,
 } from "@/modules/production/work-orders/actions";
 
 type WorkOrderDetailPageProps = {
@@ -624,6 +627,10 @@ export default async function WorkOrderDetailPage({
                   </h3>
                   <MaterialMovementForm
                     idOrdenTrabajo={workOrder.id_orden_trabajo}
+                    additionalAction={deliverAdditionalMaterialAction}
+                    returnAction={returnWorkOrderMaterialAction}
+                    additionalNotification={productionNotifications["work-order-additional-delivery"]}
+                    returnNotification={productionNotifications["work-order-material-returned"]}
                     options={reconciliationRows.map((row) => ({
                       idRequerimiento: row.idRequerimiento,
                       materialName: row.materialName,
