@@ -9378,7 +9378,8 @@ reabrir con resultado, en su sección, sin clave (D74); entregar lo pendiente co
 | 5434592 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
 | fa30c93 | docs | Verificación en staging. |
 | 02ae54b | fix | La propuesta de consumo del cierre sigue a lo entregado y lo devuelto cuando el detalle se repinta, sin pisar lo que el usuario escribió: el formulario guarda solo lo editado (hallazgo 9, de la verificación en staging). Rojo antes. |
-| (este) | docs | Registro del arreglo del hallazgo 9. |
+| 405fddc | docs | Registro del arreglo del hallazgo 9. |
+| (este) | docs | Verificación del arreglo en staging. |
 
 Diseño:
 
@@ -9485,8 +9486,7 @@ Hallazgos:
    Corregido en `02ae54b`: el estado guarda solo lo que el usuario escribió y cada campo muestra
    eso o la propuesta de las líneas que llegan, calculada al pintar, sin un efecto que copie las
    props al estado. Dos pruebas en jsdom repintan la sección: la propuesta pasa a la nueva y lo ya
-   escrito se conserva. Su verificación en staging necesita otra escritura (una entrega adicional o
-   una devolución en la OTR00000010 y mirar la propuesta sin cerrar): pendiente de autorización.
+   escrito se conserva. Verificado en staging (abajo, paso 7).
 
 #### Publicación, CI y verificación en staging
 
@@ -9525,9 +9525,17 @@ Hallazgos:
 5. Al cerrar (E4b) se vio el hallazgo 9: la propuesta del mango seguía en 1.00 y se escribió 1.50
    a mano, el valor autorizado.
 6. Datos de prueba que quedan en staging: la OTR00000010 con sus materiales entregados (mango 2.00,
-   devuelto 0.50), la conciliación abierta y su bitácora (entregar, entrega adicional, devolución,
-   cerrar y reabrir); el stock baja 0.02 de plancha, 1.50 de mango y 0.01 de alambre; dos filas en
-   `operacion_idempotente`.
+   devuelto 0.75), la conciliación abierta y su bitácora (entregar, entrega adicional, dos
+   devoluciones, cerrar y reabrir); el stock baja 0.02 de plancha, 1.25 de mango y 0.01 de alambre;
+   tres filas en `operacion_idempotente`.
+7. Arreglo del hallazgo 9 (`02ae54b`): push hasta `405fddc`, CI #194 en verde (de 17:17:24 a
+   17:23:43 UTC); Vercel desplegó staging (17:19:03 UTC). Con autorización del responsable, en la
+   OTR00000010 abierta (mango 2.00 entregado y 0.50 devuelto, propuesta 0.02 / 1.50 / 0.01) y sin
+   recargar: se escribió 0.01 en el consumo de la plancha, sin enviar, y se registró una devolución
+   de 0.25 de mango («Prueba 11.6b hallazgo 9: devolución»). Un aviso «Devolución registrada»; mango
+   1188.75 y devuelto 0.75; el cierre propone **1.25** para el mango (antes se quedaba en 1.50) y
+   la plancha conserva el 0.01 escrito; la merma total derivada, 0.01, es solo la de la plancha. No
+   se cerró nada.
 
 ## Secuencia de próximas entregas
 
