@@ -1,9 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import type { FieldErrors } from "@/lib/errors";
 import { APP_ROLES } from "@/lib/permissions";
 import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
@@ -144,8 +143,43 @@ export async function updateWorkOrderProgressAction(
   };
 }
 
-export async function reassignWorkOrderProgressAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+/** Lo que el formulario de reasignacion envio, tal cual, para volver a mostrarlo. */
+export type ReassignProgressFormValues = {
+  id_operario_nuevo: string;
+  motivo: string;
+};
+
+// C5 de la 11.6c (D82): reasignar no redirige; devuelve el resultado y el formulario da el aviso y
+// vuelve a los avances. Antes cualquier rechazo lanzaba un error que se veia en la pagina de error y
+// se perdia lo escrito; ahora queda en su campo (el operario) o como mensaje general, con lo
+// enviado. Sin permiso responde con un error. Sin clave: un segundo envio con el mismo operario se
+// rechaza porque ya es el actual.
+export type ReassignProgressFormState = FormActionState<
+  ReassignProgressFormValues,
+  { id_avance: string; id_orden_trabajo: string }
+>;
+
+export async function reassignWorkOrderProgressAction(
+  _prevState: ReassignProgressFormState,
+  formData: FormData,
+): Promise<ReassignProgressFormState> {
+  const values: ReassignProgressFormValues = {
+    id_operario_nuevo: formData.get("id_operario_nuevo")?.toString() ?? "",
+    motivo: formData.get("motivo")?.toString() ?? "",
+  };
+  const fail = (error: string, fieldErrors?: FieldErrors): ReassignProgressFormState => ({
+    status: "error",
+    error,
+    fieldErrors,
+    values,
+    operationId: newOperationId(),
+  });
+
+  const session = await getAuthorizedSession([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
+
+  if (!session) {
+    return fail("No tienes permisos para reasignar avances de órdenes de trabajo.");
+  }
 
   const parsed = reassignWorkOrderProgressSchema.safeParse({
     id_avance: formData.get("id_avance"),
@@ -154,13 +188,29 @@ export async function reassignWorkOrderProgressAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+    // El avance va en un campo oculto: su mensaje es el general, no el de un campo.
+    const hiddenError = fieldErrors.id_avance?.[0];
+
+    return fail(hiddenError ?? "Revisa los datos de la reasignación.", hiddenError ? undefined : fieldErrors);
   }
 
-  const { idOrdenTrabajo, idAvance } = await reassignWorkOrderProgress({
-    data: parsed.data,
-    idUsuario: session.user.id,
-  });
+  let reassigned: { idOrdenTrabajo: string; idAvance: string };
+
+  try {
+    reassigned = await reassignWorkOrderProgress({
+      data: parsed.data,
+      idUsuario: session.user.id,
+    });
+  } catch (error) {
+    if (error instanceof WorkOrderRejectedError) {
+      return fail(error.message, error.fieldErrors);
+    }
+
+    throw error;
+  }
+
+  const { idOrdenTrabajo, idAvance } = reassigned;
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
@@ -173,7 +223,10 @@ export async function reassignWorkOrderProgressAction(formData: FormData) {
     `/dashboard/production/work-orders/${idOrdenTrabajo}/progress/${idAvance}/reassign`,
   );
 
-  redirect(
-    `/dashboard/production/work-orders/${idOrdenTrabajo}/progress?toast=work-order-progress-reassigned`,
-  );
+  return {
+    status: "success",
+    data: { id_avance: idAvance, id_orden_trabajo: idOrdenTrabajo },
+    values,
+    operationId: newOperationId(),
+  };
 }

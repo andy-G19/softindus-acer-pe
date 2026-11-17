@@ -1,20 +1,17 @@
 import { Layers, UserRoundCheck } from "lucide-react";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
-import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { reassignWorkOrderProgressAction } from "@/modules/production/work-order-progress/actions";
+import { productionNotifications } from "@/modules/production/notifications";
 import { getAdvanceReassignData } from "@/modules/production/work-order-progress/queries";
-import Link from "next/link";
+import { ReassignProgressForm } from "@/modules/production/work-order-progress/reassign-progress-form";
 
 type ReassignWorkOrderProgressPageProps = {
   params: Promise<{
@@ -99,48 +96,15 @@ export default async function ReassignWorkOrderProgressPage({
         </Alert>
       ) : null}
 
-      <form
+      {/* C5 de la 11.6c (D82): el resultado queda en el formulario y al guardar vuelve a los avances. */}
+      <ReassignProgressForm
+        idAvance={advance.id_avance}
+        operators={operatorItems}
+        disabled={!canReassign}
+        progressHref={`/dashboard/production/work-orders/${advance.orden_trabajo.id_orden_trabajo}/progress`}
         action={reassignWorkOrderProgressAction}
-        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
-      >
-        <input type="hidden" name="id_avance" value={advance.id_avance} />
-
-        <SearchableSelect
-          name="id_operario_nuevo"
-          label="Nuevo operario"
-          placeholder="Buscar operario activo..."
-          items={operatorItems}
-          required
-          disabled={!canReassign}
-          emptyMessage="No hay operarios activos disponibles."
-        />
-
-        <div className="space-y-2">
-          <Label>Motivo de reasignación *</Label>
-          <Textarea
-            name="motivo"
-            rows={4}
-            required
-            maxLength={255}
-            disabled={!canReassign}
-            placeholder="Ej. Operario reasignado por carga de trabajo o ausencia."
-          />
-        </div>
-
-        <div className="flex items-center justify-between pt-4">
-          <Button variant="link" className="h-auto p-0" asChild>
-            <Link
-              href={`/dashboard/production/work-orders/${advance.orden_trabajo.id_orden_trabajo}/progress`}
-            >
-              Cancelar
-            </Link>
-          </Button>
-
-          <Button type="submit" disabled={!canReassign}>
-            Guardar reasignación
-          </Button>
-        </div>
-      </form>
+        successNotification={productionNotifications["work-order-progress-reassigned"]}
+      />
 
       <Card>
         <CardHeader>

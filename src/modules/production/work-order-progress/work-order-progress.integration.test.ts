@@ -3,6 +3,7 @@ import { beforeAll, describe, expect, it, vi } from "vitest";
 import type { PrismaClient } from "@/generated/prisma/client";
 import {
   generateWorkOrderProgressAction,
+  reassignWorkOrderProgressAction,
   updateWorkOrderProgressAction,
 } from "@/modules/production/work-order-progress/actions";
 import { getTestDatabase } from "@/testing/test-database";
@@ -11,7 +12,7 @@ import { getTestDatabase } from "@/testing/test-database";
 // accion entera: el candado de la orden, el avance, la sincronizacion del estado de la orden y la
 // bitacora. Solo se reemplazan la sesion, la cache de Next y la redireccion, que corta la accion
 // al terminar bien. Desde C3, generar devuelve su estado (runState) y no redirige; desde C4,
-// actualizar tambien (update).
+// actualizar tambien (update), y desde C5 reasignar (reassign).
 //
 // porcentaje_avance es numeric(5, 2) y redondea por su lado: la regla «en proceso o pausada, mas de
 // 0 y menos de 100» se aplicaba al numero sin redondear, y 99.995 quedaba guardado como 100.00 en
@@ -200,5 +201,41 @@ describe("C4 de la 11.6c: actualizar una etapa con resultado", () => {
     expect(
       await prisma.bitacora_operacion.count({ where: { id_registro_afectado: { in: [idAvance, segundo] }, accion: "actualizar" } }),
     ).toBe(2);
+  });
+});
+
+describe("C5 de la 11.6c: reasignar con resultado", () => {
+  async function reassign(fields: Record<string, string>) {
+    const formData = new FormData();
+
+    for (const [key, value] of Object.entries(fields)) {
+      formData.set(key, value);
+    }
+
+    return reassignWorkOrderProgressAction({ status: "idle" }, formData);
+  }
+
+  it("un segundo envio con el mismo operario se rechaza en su campo y no registra otra reasignacion", async () => {
+    await prisma.operario.create({
+      data: { id_operario: "OPE00000071", nombres: "Rosa", apellidos: "Huaman", modalidad_pago: "jornal" },
+    });
+    const { idAvance } = await seedOrder("7");
+    const fields = { id_avance: idAvance, id_operario_nuevo: "OPE00000071", motivo: "Cambio de turno" };
+
+    expect(await reassign(fields)).toMatchObject({ status: "success", data: { id_avance: idAvance } });
+    expect(await reassign(fields)).toMatchObject({
+      status: "error",
+      error: "El nuevo operario debe ser distinto al operario actual.",
+      fieldErrors: { id_operario_nuevo: ["El nuevo operario debe ser distinto al operario actual."] },
+      values: { id_operario_nuevo: "OPE00000071", motivo: "Cambio de turno" },
+    });
+
+    const advance = await prisma.avance_orden.findUniqueOrThrow({ where: { id_avance: idAvance } });
+    const reassignments = await prisma.reasignacion_tarea.findMany({ where: { id_avance: idAvance } });
+
+    expect(advance.id_operario).toBe("OPE00000071");
+    expect(reassignments.map((item) => [item.id_operario_anterior, item.id_operario_nuevo, item.motivo])).toEqual([
+      [null, "OPE00000071", "Cambio de turno"],
+    ]);
   });
 });

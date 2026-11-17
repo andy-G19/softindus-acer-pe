@@ -7766,15 +7766,18 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_avance" value="id_avance-1"/>
 <div>
-<label for="id_operario_nuevo-_R_l_">Nuevo operario *</label>
+<div>
+<label for="id_operario_nuevo">Nuevo operario *</label>
 <input type="hidden" name="id_operario_nuevo" value=""/>
 <div>
-<input id="id_operario_nuevo-_R_l_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-_R_l_-listbox" aria-expanded="false" required="" placeholder="Buscar operario activo..." value=""/>
+<input id="id_operario_nuevo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-listbox" aria-expanded="false" required="" placeholder="Buscar operario activo..." value=""/>
+</div>
 </div>
 </div>
 <div>
-<label>Motivo de reasignación *</label>
-<textarea name="motivo" rows="4" required="" maxLength="255" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
+<label for="motivo">Motivo de reasignación<span aria-hidden="true">*</span>
+</label>
+<textarea id="motivo" required="" name="motivo" rows="4" maxLength="255" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
 </textarea>
 </div>
 <div>
@@ -7945,15 +7948,18 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_avance" value="id_avance-1"/>
 <div>
-<label for="id_operario_nuevo-_R_l_">Nuevo operario *</label>
+<div>
+<label for="id_operario_nuevo">Nuevo operario *</label>
 <input type="hidden" name="id_operario_nuevo" value=""/>
 <div>
-<input id="id_operario_nuevo-_R_l_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-_R_l_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar operario activo..." value=""/>
+<input id="id_operario_nuevo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar operario activo..." value=""/>
 </div>
 </div>
-<div>
-<label>Motivo de reasignación *</label>
-<textarea name="motivo" rows="4" required="" maxLength="255" disabled="" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
+</div>
+<div data-disabled="true">
+<label for="motivo">Motivo de reasignación<span aria-hidden="true">*</span>
+</label>
+<textarea id="motivo" required="" disabled="" name="motivo" rows="4" maxLength="255" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
 </textarea>
 </div>
 <div>
@@ -8132,15 +8138,18 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_avance" value="id_avance-1"/>
 <div>
-<label for="id_operario_nuevo-_R_l_">Nuevo operario *</label>
+<div>
+<label for="id_operario_nuevo">Nuevo operario *</label>
 <input type="hidden" name="id_operario_nuevo" value=""/>
 <div>
-<input id="id_operario_nuevo-_R_l_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-_R_l_-listbox" aria-expanded="false" required="" placeholder="Buscar operario activo..." value=""/>
+<input id="id_operario_nuevo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-listbox" aria-expanded="false" required="" placeholder="Buscar operario activo..." value=""/>
+</div>
 </div>
 </div>
 <div>
-<label>Motivo de reasignación *</label>
-<textarea name="motivo" rows="4" required="" maxLength="255" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
+<label for="motivo">Motivo de reasignación<span aria-hidden="true">*</span>
+</label>
+<textarea id="motivo" required="" name="motivo" rows="4" maxLength="255" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
 </textarea>
 </div>
 <div>
@@ -8322,15 +8331,18 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_avance" value="id_avance-1"/>
 <div>
-<label for="id_operario_nuevo-_R_l_">Nuevo operario *</label>
+<div>
+<label for="id_operario_nuevo">Nuevo operario *</label>
 <input type="hidden" name="id_operario_nuevo" value=""/>
 <div>
-<input id="id_operario_nuevo-_R_l_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-_R_l_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar operario activo..." value=""/>
+<input id="id_operario_nuevo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar operario activo..." value=""/>
 </div>
 </div>
-<div>
-<label>Motivo de reasignación *</label>
-<textarea name="motivo" rows="4" required="" maxLength="255" disabled="" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
+</div>
+<div data-disabled="true">
+<label for="motivo">Motivo de reasignación<span aria-hidden="true">*</span>
+</label>
+<textarea id="motivo" required="" disabled="" name="motivo" rows="4" maxLength="255" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
 </textarea>
 </div>
 <div>

@@ -4,14 +4,16 @@ import { registerAuditLog } from "@/lib/audit";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { lockWorkOrderRow } from "@/lib/row-locks";
+import { WorkOrderRejectedError } from "@/modules/production/work-orders/work-order-rejected-error";
 import type { ReassignWorkOrderProgressInput } from "@/schemas/production/work-order-progress.schema";
 
 /**
  * Reasignar el operario de un avance de una orden de trabajo.
  *
- * Caso de uso y no server action (C1 de la 11.6c, D78): la accion autoriza, valida, revalida y
- * redirige; este modulo recibe los datos ya validados y el usuario verificado, abre la transaccion
- * y aplica las reglas dentro de ella, con los mismos errores.
+ * Caso de uso y no server action (C1 de la 11.6c, D78): la accion autoriza, valida y revalida;
+ * este modulo recibe los datos ya validados y el usuario verificado, abre la transaccion y aplica
+ * las reglas dentro de ella. Desde C5 (D82) cada rechazo lanza WorkOrderRejectedError con el mismo
+ * mensaje: los del operario, en su campo; los de la orden y el avance, como mensaje general.
  */
 export type ReassignWorkOrderProgressParams = {
   data: ReassignWorkOrderProgressInput;
@@ -36,7 +38,7 @@ export async function reassignWorkOrderProgress({
     });
 
     if (!located) {
-      throw new Error("El avance seleccionado no existe.");
+      throw new WorkOrderRejectedError(null, "El avance seleccionado no existe.");
     }
 
     // El avance nunca cambia de orden: basta su id para saber que fila bloquear antes
@@ -69,24 +71,28 @@ export async function reassignWorkOrderProgress({
     ]);
 
     if (!advance) {
-      throw new Error("El avance seleccionado no existe.");
+      throw new WorkOrderRejectedError(null, "El avance seleccionado no existe.");
     }
 
     if (
       advance.orden_trabajo.estado === "anulada" ||
       advance.orden_trabajo.estado === "finalizada"
     ) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        null,
         "No se puede reasignar el avance de una orden anulada o finalizada.",
       );
     }
 
     if (!newOperator) {
-      throw new Error("El nuevo operario no existe o esta inactivo.");
+      throw new WorkOrderRejectedError("id_operario_nuevo", "El nuevo operario no existe o esta inactivo.");
     }
 
     if (advance.id_operario === newOperator.id_operario) {
-      throw new Error("El nuevo operario debe ser distinto al operario actual.");
+      throw new WorkOrderRejectedError(
+        "id_operario_nuevo",
+        "El nuevo operario debe ser distinto al operario actual.",
+      );
     }
 
     const reassignmentDate = new Date();
