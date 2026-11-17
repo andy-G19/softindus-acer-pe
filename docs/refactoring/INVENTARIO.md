@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 1003 |
+| Archivos fuente analizados | 1016 |
 | Páginas | 179 |
 | Páginas en ranuras paralelas (@ranura) | 53 |
 | Páginas que interceptan una ruta | 33 |
-| Declaraciones JSX de formulario | 12 |
+| Declaraciones JSX de formulario | 9 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 111 |
 
@@ -169,8 +169,8 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/production/routes/new` | — | `src/app/(dashboard)/dashboard/production/routes/new/page.tsx` | 0 | RouteForm |
 | `/dashboard/production/routes` | — | `src/app/(dashboard)/dashboard/production/routes/page.tsx` | 0 | — |
 | `/dashboard/production/work-orders/[id]` | — | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 0 | MaterialMovementForm |
-| `/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign` | — | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign/page.tsx` | 1 | — |
-| `/dashboard/production/work-orders/[id]/progress` | — | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 2 | — |
+| `/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign` | — | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign/page.tsx` | 0 | ReassignProgressForm |
+| `/dashboard/production/work-orders/[id]/progress` | — | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 0 | StageProgressForm |
 | `/dashboard/production/work-orders/new` | — | `src/app/(dashboard)/dashboard/production/work-orders/new/page.tsx` | 0 | WorkOrderForm |
 | `/dashboard/production/work-orders` | — | `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 0 | — |
 | `/dashboard/reports/export-history` | — | `src/app/(dashboard)/dashboard/reports/export-history/page.tsx` | 0 | — |
@@ -227,9 +227,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 253 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 178 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 165 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign/page.tsx` | 102 | `{reassignWorkOrderProgressAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 208 | `{generateWorkOrderProgressAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 231 | `{updateWorkOrderProgressAction}` |
 | `src/components/forms/action-form.tsx` | 48 | `{action}` |
 | `src/components/forms/filter-bar.tsx` | 39 | `{action}` |
 | `src/components/table/row-actions.tsx` | 44 | `{action}` |

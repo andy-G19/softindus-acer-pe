@@ -9551,6 +9551,111 @@ Datos leídos de la API de GitHub el 2026-11-17 (UTC) y comparados con git:
 - Vercel desplegó `acac7db` en producción (`success` a las 17:57:23 UTC). La sub-entrega no trae
   migraciones.
 
+### Sub-entrega 11.6c — Órdenes de trabajo: avances de producción
+
+Fecha: 2026-11-17 (Lima). Estado: preparada en `staging`, sin publicar. Plan en
+`tmp/e11-diff/plan-11-6c.md`, aprobado el 2026-11-17 con las decisiones D78 a D82 y D83 en la
+opción A: avances por caso de uso (D78); el porcentaje en centésimos con una sola regla (D79);
+generar con `ConfirmActionButton` (D80); actualizar una etapa con resultado en su tarjeta (D81);
+reasignar con resultado en su página (D82); la finalización automática de la orden al terminar su
+última etapa se registra y se decide después de la 11.6, junto con D77 (D83, opción A).
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| f012fbb | docs | Integración de la 11.6b en `main` (PR #50). |
+| 2f7c825 | refactor | Las tres transacciones de avances pasan a casos de uso (`progress-generation.ts`, `progress-update.ts`, `progress-reassignment.ts`); `actions.ts` baja de 485 a 104 líneas. Caracterizaciones intactas: ningún snapshot cambió. El módulo entra en `action-access.test.ts` (D78). |
+| f87bfd2 | fix | `progress-percentage.ts` redondea el porcentaje en centésimos como la columna antes de la regla, y la usan la acción y la página: 99.995 «en proceso» quedaba en 100.00 y 0.004 en 0.00 (D79). Rojo antes, también en Postgres. |
+| 1650881 | feat | Generar con `ConfirmActionButton` y `RowStatusState`; la confirmación dice cuántas etapas y de qué ruta (D80). Rojo antes; 1 prueba en Postgres. |
+| 35519e7 | feat | Actualizar una etapa con resultado en su tarjeta (`StageProgressForm`), con ids por etapa; la tarjeta queda montada cuando la orden se finaliza (D81). Rojo antes; 1 prueba en Postgres. |
+| 5784b48 | feat | Reasignar con resultado en su página (`ReassignProgressForm`); los rechazos del operario en su campo (D82). Rojo antes; 1 prueba en Postgres. |
+| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Diseño:
+
+- Con esta sub-entrega ninguna acción de órdenes ni de avances redirige ni lanza un rechazo a la
+  página de error, y ninguna acción de Producción usa `redirect`. Los avisos ya no salen por
+  `?toast=`: las páginas pasan cada clave literal del catálogo de Producción.
+- Los casos de uso lanzan `WorkOrderRejectedError` (el de las órdenes): con el campo
+  `id_operario_nuevo` en los dos rechazos del operario y sin campo en los demás. Las llamadas a
+  Prisma, el candado, la bitácora y las revalidaciones no cambiaron en ninguna acción.
+- Ninguna de las tres lleva clave. Con la orden bloqueada, un segundo «Generar» ve los avances del
+  primero; una segunda reasignación al mismo operario se rechaza porque ya es el actual; repetir una
+  actualización reescribe los mismos valores.
+- El porcentaje se redondea con `toCents` (`decimal-cents.ts`), en enteros y con la mitad lejos del
+  cero como `numeric`, no con `toFixed`. La regla no cambia (mayor que 0 y menor que 100, con 1 y
+  99 como topes); se aplica sobre el número que la columna guardaría.
+- Terminar la última etapa finaliza la orden y repinta todas las tarjetas deshabilitadas en la
+  misma respuesta. Cada tarjeta guarda su resultado y la página la mantiene bajo la misma `key`,
+  así su aviso sale. Una prueba pinta la página real dos veces y exige el mismo nodo del formulario.
+- Reasignar vuelve siempre a los avances de su orden: la página solo se abre desde ahí, así que el
+  destino es fijo y no un `returnTo` de la URL (el plan decía `returnTo`; se simplificó).
+
+Evidencia:
+
+1. Rojo antes de cada commit de `fix` y `feat`, en un mensaje aparte: C2 7 pruebas, C3 27, C4 38,
+   C5 25. Dos errores míos en el rojo, corregidos antes de pasar a verde: en C3 el `runAction` de
+   las pruebas de avances descartaba lo que devuelve la acción (todas redirigían hasta entonces),
+   así que las pruebas nuevas no habrían pasado ni con el código correcto; en C4 una comparación de
+   la prueba de Postgres siempre pasaba, y se cambió por el estado real de la orden (`pendiente`).
+   En C2 una expectativa de la prueba de unidad suponía la regla «entre 1 y 99»; la regla vigente
+   es «mayor que 0», y 0.005 queda en 0.01.
+2. Mutaciones: C1 8 de 8, C2 8 de 8, C3 16 de 16, C4 19 de 19, C5 18 de 18; en total, 69 de 69.
+   Dos sobrevivieron en la primera pasada y se mataron con una prueba que fija lo que el código ya
+   hacía: en C3, «recorta el id» (generar nunca recortó el id del formulario); en C4, «la página
+   desmonta la tarjeta al finalizar» (la prueba de la página pintada dos veces).
+3. Snapshots revisados uno por uno: en las acciones, `requireRole` → `getAuthorizedSession` y el
+   resultado como estado, con las mismas llamadas; en las páginas, los formularios sin
+   `action` de servidor, las etiquetas asociadas a su campo con ids por etapa, la ayuda del
+   porcentaje con `aria-describedby` y el operario con un id estable; en el registro de avisos, las
+   páginas de avances y de reasignación como emisoras de sus 3 claves.
+4. Pruebas contra Postgres (7 nuevas, en un archivo nuevo): el porcentaje en centésimos (4 casos);
+   generar dos veces deja un solo juego de avances; terminar las dos etapas finaliza la orden (D83)
+   y después ya no se puede modificar; reasignar dos veces al mismo operario deja una reasignación.
+5. En una corrida completa intermedia de C4 volvió a fallar una vez «la tabla incluye todas las
+   acciones exportadas» de costeos (`action-access.test.ts`), como en la 11.6b; en `npm run check`
+   todo pasó: tiempo de importación bajo carga.
+6. CSS compilado igual byte a byte en cada commit (112.316 bytes).
+7. `npm run check` terminó con código 0 antes de cada commit, hasta 5.517 pruebas en 333 archivos;
+   las de integración pasan de 88 a 95 en 16 archivos. Lint mantiene el aviso anterior (`_line` en
+   `orders/actions.ts`).
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 327 / 5.436 | 333 / 5.517 |
+| Pruebas contra Postgres real (archivos / pruebas) | 15 / 88 | 16 / 95 |
+| Acciones de avances que lanzan un error de validación a la página de error | 3 | 0 |
+| Acciones de avances que redirigen | 3 | 0 |
+| Avisos de avances que salen por `?toast=` | 3 | 0 |
+| Archivos de acciones de Producción fuera de la tabla de acceso | 1 | 0 |
+| Reglas del porcentaje de avance (página y acción) | 2 | 1 |
+| `work-order-progress/actions.ts` | 485 líneas | 232 |
+| Declaraciones JSX de formulario (inventario) | 12 | 9 |
+
+Hallazgos:
+
+1. El porcentaje se guardaba distinto de lo que se decidía (99.995 «en proceso» como 100.00,
+   0.004 como 0.00). Corregido en `f87bfd2`.
+2. La regla del porcentaje estaba duplicada en la página y la acción. Corregido en `f87bfd2`.
+3. Sigue abierto: «Finalizar» del listado nunca puede tener éxito. Terminar la última etapa ya
+   finaliza la orden (`syncWorkOrderStatus`), sin una entrada «finalizar» en la bitácora, y
+   «Finalizar» exige todas las etapas terminadas. Destino: decisión del responsable (D83, opción
+   A), junto con D77.
+4. Las 3 acciones lanzaban sus rechazos a la página de error y se perdía lo escrito. Corregido en
+   `1650881`, `35519e7` y `5784b48`.
+5. Las etiquetas de los formularios de avances no estaban asociadas a su control. Corregido en
+   `35519e7` y `5784b48`.
+6. Menor, sin cambiar: actualizar una etapa con los mismos valores vuelve a escribirla y deja otra
+   entrada en la bitácora; las migas de la reasignación saltan la orden y sus avances.
+7. Sigue abierto, de accesibilidad: al generar, el botón desaparece con el repintado y el foco queda
+   en `body`, como al entregar lo pendiente (hallazgo 7 de la 11.6b). Destino: la 11.7.
+
+Verificación pendiente en staging, con autorización por cada escritura: generar los avances de la
+OTR00000010 (6 etapas de la «Ruta estándar para lampa»); actualizar la etapa 1 a «en proceso» y
+luego a «pausada» con una observación, mirando el estado de la orden; asignar un operario a la etapa
+1 desde «Reasignar». No se terminan las 6 etapas: finalizaría la orden (D83).
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -9576,7 +9681,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c en preparación |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c preparada en `staging` (C0 a C6), por publicar |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
