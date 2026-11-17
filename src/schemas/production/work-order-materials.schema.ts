@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { hasCents } from "@/lib/client-payment-amounts";
+import { operationKeySchema } from "@/schemas/operation-key.schema";
 
 const MAX_CANTIDAD = 99999999.99;
 
@@ -13,6 +14,9 @@ const MAX_CANTIDAD = 99999999.99;
  * lo previsto.
  */
 export const additionalDeliverySchema = z.object({
+  // C1 de la 11.6b (D73): la clave de idempotencia del formulario (OperationKeyField).
+  clave_operacion: operationKeySchema,
+
   id_orden_trabajo: z
     .string()
     .trim()
@@ -47,6 +51,9 @@ export type AdditionalDeliveryInput = z.infer<typeof additionalDeliverySchema>;
  * es parte del flujo normal y no requiere justificacion.
  */
 export const materialReturnSchema = z.object({
+  // C1 de la 11.6b (D73): la clave de idempotencia del formulario (OperationKeyField).
+  clave_operacion: operationKeySchema,
+
   id_orden_trabajo: z
     .string()
     .trim()

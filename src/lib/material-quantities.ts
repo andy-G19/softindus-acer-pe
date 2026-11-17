@@ -1,4 +1,6 @@
 import { formatCents, toCents } from "@/lib/decimal-cents";
+import { calculatePendingDelivery } from "@/lib/material-reconciliation";
+import type { NumericInput } from "@/lib/numbers";
 import type { AmountValue } from "@/lib/supplier-payment-amounts";
 
 /**
@@ -25,4 +27,13 @@ export function quantityHundredths(value: AmountValue) {
 /** La cantidad como la guarda su columna, en texto con dos decimales. */
 export function roundMaterialQuantity(value: AmountValue) {
   return formatCents(quantityHundredths(value));
+}
+
+/**
+ * Lo que falta entregar de una linea del requerimiento, como lo entrega la accion: redondeado como
+ * su columna. La confirmacion de «Entregar lo pendiente» lo muestra con esta misma funcion (C3 de
+ * la 11.6b, D75), asi que dice lo que sale del almacen; una linea en 0.00 no se entrega.
+ */
+export function pendingDeliveryQuantity(params: { required: NumericInput; delivered: NumericInput }) {
+  return roundMaterialQuantity(calculatePendingDelivery(params));
 }

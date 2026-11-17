@@ -9198,7 +9198,7 @@ Datos leídos de la API de GitHub el 2026-11-16 (UTC) y comparados con git:
 
 ### Sub-entrega 11.6a — Órdenes de trabajo: cantidades, crear y alerta de stock
 
-Fecha: 2026-11-16 (Lima). Estado: verificada en staging (CI #189). Plan en
+Fecha: 2026-11-16 (Lima). Estado: integrada en `main` (PR #49, merge `0958f81`). Plan en
 `tmp/e11-diff/plan-11-6.md`, con las decisiones D62 a D72 aprobadas: cantidades de material en
 centésimos (D62); crear decide dentro de la transacción con el pedido, la campaña, la ruta y la
 receta bloqueados, y solo para pedidos registrados o aprobados (D63); la alerta de stock con
@@ -9345,6 +9345,198 @@ Hallazgos:
    requerimiento congelado y sin movimientos de stock. Anularla es otra escritura y su migración
    llega en la 11.6b.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-16 (UTC) y comparados con git:
+
+- La verificación `f155552` se publicó en `staging`: CI #190 en verde (6m 10s).
+- PR #49, abierto a las 22:47:16 UTC y fusionado con merge commit a las 22:54:14 UTC del
+  2026-11-16: 8 commits, de `91cad22` a `f155552`, y 28 archivos (+4.127 −891). Su CI, el #191,
+  sobre `f155552`, terminó en verde (6m 7s).
+- El merge commit `0958f81` tiene como padres `4721e02` (`main`) y `f155552` (`staging`), y su
+  árbol es el de `f155552` (`599fc457`): `main` y `staging` tienen el mismo contenido. CI #192 en
+  verde (4m 23s).
+- Vercel desplegó `0958f81` en producción (`success` a las 22:56:08 UTC). La sub-entrega no trae
+  migraciones.
+
+### Sub-entrega 11.6b — Órdenes de trabajo: movimientos de material, cierre, anular y finalizar
+
+Fecha: 2026-11-17 (Lima). Estado: verificada en staging (CI #193). Plan en
+`tmp/e11-diff/plan-11-6b.md`, aprobado el 2026-11-17 con las decisiones D73 a D76 y D77 en la
+opción A: la entrega adicional y la devolución con resultado y clave por orden (D73); cerrar y
+reabrir con resultado, en su sección, sin clave (D74); entregar lo pendiente con
+`ConfirmActionButton`, sin clave (D75); anular y finalizar desde la fila con `ConfirmActionButton`
+(D76); el pedido de una orden anulada se registra y se decide después de la 11.6 (D77, opción A).
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 4b9399a | docs | Integración de la 11.6a en `main` (PR #49). |
+| 0fdcb82 | feat | La entrega adicional y la devolución devuelven `FormActionState`, reclaman su clave (`entrega_adicional:<orden>`, tipo `entrega_adicional_material`; `devolucion_material:<orden>`, tipo `devolver_material`) como primera sentencia y completan con su movimiento del kardex; cada rechazo en su campo con lo escrito. Un formulario por operación bajo el mismo selector «Operación». `WorkOrderRejectedError` pasa a su propio archivo (D73). Rojo antes; 4 pruebas en Postgres. |
+| 6640a61 | feat | Cerrar y reabrir devuelven `FormActionState`; `MaterialClosureSection` guarda los dos resultados y queda montada cuando el cierre cambia lo que muestra el detalle; el consumo excesivo queda en su línea (`lineas.<posición>.cantidad_consumida`) (D74). Rojo antes; 3 pruebas en Postgres. |
+| 043603d | feat | Entregar lo pendiente con `ConfirmActionButton` y `RowStatusState`; la confirmación dice cuánto sale de cada material con `pendingDeliveryQuantity`, la función que usa la entrega (D75). Rojo antes; 2 pruebas en Postgres. |
+| 7083b7b | feat | Anular y finalizar desde la fila con `ConfirmActionButton` y `RowStatusState`; «ya estaba finalizada» responde sin escribir ni revalidar; sale el último `ConfirmDeleteButton` de las páginas (D76). Rojo antes; 2 pruebas en Postgres. |
+| 5434592 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| fa30c93 | docs | Verificación en staging. |
+| 02ae54b | fix | La propuesta de consumo del cierre sigue a lo entregado y lo devuelto cuando el detalle se repinta, sin pisar lo que el usuario escribió: el formulario guarda solo lo editado (hallazgo 9, de la verificación en staging). Rojo antes. |
+| 405fddc | docs | Registro del arreglo del hallazgo 9. |
+| (este) | docs | Verificación del arreglo en staging. |
+
+Diseño:
+
+- Con esta sub-entrega ninguna de las 8 acciones de órdenes de trabajo redirige ni lanza un
+  rechazo a la página de error: responden con su estado y el detalle o el listado se repinta con
+  `revalidatePath`. Los avisos ya no salen por `?toast=`: las páginas pasan cada clave literal del
+  catálogo de Producción (`notification-registry.test.ts` las cuenta como emisoras).
+- Los casos de uso lanzan `WorkOrderRejectedError` (con campo o con `null`) para que la
+  transacción se revierta, y con ella el reclamo de la clave; la acción lo convierte en el error de
+  su campo o en el mensaje general. Las llamadas a Prisma, el candado, la bitácora y las
+  revalidaciones no cambiaron en ninguna acción: en los snapshots solo cambian
+  `getAuthorizedSession` y el resultado.
+- Solo la entrega adicional y la devolución llevan clave. Entregar lo pendiente, cerrar y reabrir
+  leen con la orden bloqueada lo que hace idempotente un segundo envío (lo pendiente, la fecha de
+  cierre): el segundo espera al primero y no escribe. Anular y finalizar tampoco la necesitan: el
+  segundo envío ve la orden ya anulada o finalizada.
+- Cerrar convierte «Cerrar materiales» en el resumen del cierre con «Reabrir», y reabrir lo
+  devuelve, en el mismo repintado que trae el éxito. Un formulario que se desmonta en ese repintado
+  no da su aviso (hallazgo 9 de la 11.2a): `MaterialClosureSection` es la dueña de los dos
+  `useActionState` y de los dos `useFormResult`, y los formularios solo pintan su estado. Lo
+  consumido de cada línea vive fuera de `ActionForm`, así que se conserva cuando los campos se
+  remontan tras un error.
+- La confirmación de «Entregar lo pendiente» y la entrega calculan cada cantidad con la misma
+  función pura (`pendingDeliveryQuantity` en `material-quantities.ts`) y el mismo filtro de las
+  líneas en 0.00: lo que dice es lo que sale.
+- Anular confirma con el botón destructivo y finalizar con el normal. Finalizar una orden ya
+  finalizada responde «La orden de trabajo ya estaba finalizada.» como rechazo: un repintado
+  quitaría el botón de la fila y su mensaje con él. Tras finalizar se queda en el listado (antes
+  iba al detalle). El id de anular y finalizar sigue sin recortarse (entrega 6).
+
+Evidencia:
+
+1. Rojo antes de cada commit de código, en un mensaje aparte: C1 la caracterización, el
+   formulario, los permisos y Postgres; C2 57 pruebas (la sección en jsdom repinta desde dentro de
+   la acción); C3 37; C4 48. En el rojo de C2 dos `it.each` con `as const` no compilaban (arreglos
+   `readonly`); se tiparon sin cambiar lo que prueban.
+2. Mutaciones: C1 19 de 19, C2 29 de 29, C3 19 de 19, C4 22 de 22, y el arreglo del hallazgo 9
+   4 de 4 (entre ellas, la propuesta fijada al montar, que es el defecto original); en total, 93
+   de 93.
+3. Snapshots revisados uno por uno: en las acciones, `requireRole` → `getAuthorizedSession` y el
+   resultado como estado, con las mismas llamadas; en el detalle, los ids por línea, el asterisco
+   de «Unidades producidas» y «Motivo» en su `span aria-hidden` (como todo `Field`) y el botón de
+   entrega sin formulario; en el listado, «Anular» destructivo y «Finalizar» `outline`, sin
+   formularios; en el registro de avisos, el detalle y el listado como emisores de sus 7 claves.
+4. Pruebas contra Postgres (11 nuevas en el mismo archivo): la misma clave saca el stock una vez y
+   devuelve una vez, y un rechazo la libera; un segundo cierre no reescribe lo declarado, un consumo
+   excesivo no escribe nada, y reabrir limpia lo declarado y deja volver a cerrar; un segundo envío
+   de entregar lo pendiente no entrega y sin stock no escribe; un segundo envío de anular no
+   escribe y una orden con material entregado no se anula. Finalizar no tiene prueba en Postgres:
+   necesita etapas y avances (11.6c); lo cubre la caracterización. `seedOrder` rellena el id con
+   ceros: un sufijo de dos dígitos daba 12 caracteres para un `Char(11)`.
+5. En una corrida completa intermedia de C3 falló una vez «la tabla incluye todas las acciones
+   exportadas» de costeos (`action-access.test.ts`), que C3 no toca; sola pasó 376 de 376 y en
+   `npm run check` todo pasó: tiempo de importación bajo carga, no un defecto.
+6. CSS compilado igual byte a byte en cada commit (112.316 bytes).
+7. `npm run check` terminó con código 0 antes de cada commit, hasta 5.436 pruebas en 327 archivos;
+   las de integración pasan de 77 a 88 en 15 archivos. Lint mantiene el aviso anterior (`_line` en
+   `orders/actions.ts`).
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 323 / 5.345 | 327 / 5.436 |
+| Pruebas contra Postgres real (archivos / pruebas) | 15 / 77 | 15 / 88 |
+| Pruebas en Postgres de órdenes de trabajo | 9 | 20 |
+| Acciones de órdenes que lanzan un error de validación a la página de error | 7 | 0 |
+| Acciones de órdenes que redirigen | 7 | 0 |
+| Avisos de órdenes que salen por `?toast=` | 7 | 0 |
+| Acciones con clave de operación | 12 | 14 |
+| Páginas con `ConfirmDeleteButton` | 1 | 0 |
+| Declaraciones JSX de formulario (inventario) | 18 | 12 |
+
+Hallazgos:
+
+1. Una entrega adicional enviada dos veces sacaba el stock dos veces. Corregido en `0fdcb82`.
+2. Una devolución parcial enviada dos veces devolvía dos veces: el segundo envío solo «veía lo ya
+   devuelto» cuando se devolvía todo. Corregido en `0fdcb82`.
+3. Las 7 acciones lanzaban sus rechazos a la página de error y en el detalle se perdía lo escrito
+   (cantidad, motivo, consumos declarados). Corregido en `0fdcb82`, `6640a61`, `043603d` y
+   `7083b7b`.
+4. Sigue abierto: anular la orden de un pedido lo deja en `en_produccion` para siempre, porque la
+   regla de pedidos cuenta también las órdenes anuladas: no se puede editar, cancelar ni crearle
+   otra orden. Destino: decisión del responsable (D77, opción A), con un `fix` propio cuando se
+   decida a qué estado vuelve el pedido. La confirmación de anular no promete nada sobre el pedido.
+5. El listado ofrecía «Anular» a órdenes con movimientos de material y la acción las rechazaba en
+   la página de error. Corregido en `7083b7b`: el mensaje queda en la confirmación.
+6. Menor, sin cambiar: anular dice «desde el listado» aunque es el único sitio desde el que se
+   anula.
+7. Sigue abierto, de accesibilidad: al entregar todo lo pendiente el botón desaparece de la
+   cabecera con el repintado y el foco queda en `body`, como antes con la redirección:
+   `ConfirmActionButton` solo devuelve el foco a una fila o a una tabla. Destino: la 11.7, junto con
+   el retiro de `showConfirm`.
+8. Sin prueba automática: la lista de materiales que arma el detalle para la confirmación de
+   entrega (el snapshot de la página no abre la confirmación). La cantidad la cubre la función
+   compartida; la lista se comprobó en staging (abajo, paso 2).
+9. Hallado en staging: el cierre proponía como consumo lo entregado menos lo devuelto que había
+   cuando se montó el formulario (`useState` inicial de `CloseMaterialsForm`). Una entrega adicional
+   o una devolución en la misma página repintaba lo entregado y lo devuelto, pero no la propuesta:
+   tras E2 y E3 el mango proponía 1.00 (debía ser 1.50) y la tabla mostraba una merma de 0.50 que
+   nadie declaró; si no se corregía a mano, se cerraba con esa merma. Al reabrir, el formulario se
+   montaba otra vez y proponía bien (1.50). Antes de la 11.6b cada movimiento navegaba con
+   `redirect`, que también conservaba el estado del cliente, así que probablemente ya pasaba.
+   Corregido en `02ae54b`: el estado guarda solo lo que el usuario escribió y cada campo muestra
+   eso o la propuesta de las líneas que llegan, calculada al pintar, sin un efecto que copie las
+   props al estado. Dos pruebas en jsdom repintan la sección: la propuesta pasa a la nueva y lo ya
+   escrito se conserva. Verificado en staging (abajo, paso 7).
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 6 commits (hasta `5434592`): CI #193 en verde (de 16:13:01 a 16:17:36 UTC del
+   2026-11-17); Vercel desplegó staging (16:14:48 UTC). Sin migraciones. Abierta sin sesión, la URL
+   de staging redirigió al login de producción (comportamiento conocido de `AUTH_URL`, 10.3c): no se
+   hizo nada ahí y se volvió al login de staging, donde el responsable inició sesión como ADMIN.
+2. Con ADMIN, sin escribir (origen comprobado en llamada aparte): la OTR00000010 pendiente y sin
+   entregas (plancha 299.79 con 20.00 reservado, mango 1190.00, alambre 14.90). La confirmación de
+   «Entregar materiales» dice «Salen del almacén 3 materiales: plancha metálica de 2mm 0.02 unidad,
+   mango de 1.20 metros 1.00 unidad, Alambre de soldadura… 0.01 Kg…», con el botón normal; al
+   cancelar, el foco vuelve al botón. En el listado, «Anular» destructivo en las 9 órdenes vivas y
+   ninguno en la anulada (OTR00000007); «Finalizar» `outline` solo en la OTR00000001, la única con
+   avances. Las confirmaciones de anular (OTR00000010) y finalizar (OTR00000001) dicen su orden, su
+   producto y su consecuencia con el botón destructivo y el normal; se cancelaron y las dos órdenes
+   siguen pendientes.
+3. Envíos autorizados por el responsable, todos en la OTR00000010:
+
+   | Paso | Resultado |
+   |---|---|
+   | E1. Confirmar «Entregar materiales» | Un aviso «Materiales entregados a la orden»; MVI00000073 a 75; stock 299.77 / 1189.00 / 14.89; entregado 0.02 / 1.00 / 0.01; el botón desaparece y el foco queda en `body` (hallazgo 7) |
+   | E2a. Entrega adicional de mango por 2000 | El navegador no envía: «Cantidad» tiene `max` igual al stock (1189). El rechazo por stock solo lo prueban la acción y Postgres; el responsable eligió rechazar por motivo |
+   | E2b. Mango 1.00 con el motivo «rotura» | «Explica por qué se necesita material adicional (mínimo 10 caracteres).» junto a «Motivo», enfocado, y «Revisa los datos del movimiento de material.» arriba; lo escrito conservado y la misma clave `a0769858…`; sin aviso ni escritura |
+   | E2c. El mismo formulario con el motivo «Prueba 11.6b C1: entrega adicional en staging», misma clave | Un aviso «Entrega adicional registrada»; MVI00000076; mango 1188.00, entregado 2.00 («Entregado por encima del plan»); formulario vacío y clave renovada (`0729d634…`) |
+   | E3. Devolución de mango por 0.50, «Prueba 11.6b C1: devolución parcial» (clave `8996a4ed…`, tope 2.00) | Un aviso «Devolución registrada»; mango 1188.50, devuelto 0.50; clave renovada (`449f704c…`) |
+   | E4a. Consumo del mango en 3, sin enviar | La alerta «Hay materiales donde lo consumido más lo devuelto supera lo entregado…» y «Cerrar materiales» deshabilitado |
+   | E4b. Cerrar con 0.02 / 1.50 / 0.01 y producido 1 | Un aviso «Materiales cerrados» aunque la sección cambia en el mismo repintado; «Materiales cerrados el 17 nov. 2026. Unidades producidas: 1.00 unidad de 1.00 planificadas.»; consumido 0.02 / 1.50 / 0.01, merma 0.00; sin movimientos ni cierre; stock sin cambios |
+   | E5a. Reabrir con el motivo «corto» | «Explica por qué se reabre el cierre (mínimo 10 caracteres).» junto a «Motivo», enfocado, y «Revisa el motivo de la reapertura.»; lo escrito conservado; sin aviso; el cierre sigue |
+   | E5b. Reabrir con «Prueba 11.6b C2: reabrir en staging» | Un aviso «Cierre de materiales reabierto» aunque la sección vuelve a cambiar; consumido «-»; vuelven los movimientos y el cierre, que propone 1.50 para el mango |
+   | E6. Confirmar «Anular» | «No se puede anular una orden con consumos registrados sin reversar inventario.» dentro de la confirmación; sin aviso; la orden sigue pendiente; al cancelar, el foco vuelve a su botón |
+
+4. Después, solo leyendo: las salidas MVI00000073 a 76 llevan la OTR00000010 y el stock que dejó
+   cada una; la devolución no aparece en «Entradas», que lista las de compra, y se ve en el stock y
+   en lo devuelto. Ninguno de los tres materiales abrió una alerta de stock. El listado sigue con 10
+   órdenes.
+5. Al cerrar (E4b) se vio el hallazgo 9: la propuesta del mango seguía en 1.00 y se escribió 1.50
+   a mano, el valor autorizado.
+6. Datos de prueba que quedan en staging: la OTR00000010 con sus materiales entregados (mango 2.00,
+   devuelto 0.75), la conciliación abierta y su bitácora (entregar, entrega adicional, dos
+   devoluciones, cerrar y reabrir); el stock baja 0.02 de plancha, 1.25 de mango y 0.01 de alambre;
+   tres filas en `operacion_idempotente`.
+7. Arreglo del hallazgo 9 (`02ae54b`): push hasta `405fddc`, CI #194 en verde (de 17:17:24 a
+   17:23:43 UTC); Vercel desplegó staging (17:19:03 UTC). Con autorización del responsable, en la
+   OTR00000010 abierta (mango 2.00 entregado y 0.50 devuelto, propuesta 0.02 / 1.50 / 0.01) y sin
+   recargar: se escribió 0.01 en el consumo de la plancha, sin enviar, y se registró una devolución
+   de 0.25 de mango («Prueba 11.6b hallazgo 9: devolución»). Un aviso «Devolución registrada»; mango
+   1188.75 y devuelto 0.75; el cierre propone **1.25** para el mango (antes se quedaba en 1.50) y
+   la plancha conserva el 0.01 escrito; la merma total derivada, 0.01, es solo la de la plancha. No
+   se cerró nada.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -9370,7 +9562,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a verificada en staging (CI #189) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b verificada en staging (CI #193) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 

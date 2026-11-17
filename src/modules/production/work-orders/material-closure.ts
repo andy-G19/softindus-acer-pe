@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { roundMaterialQuantity } from "@/lib/material-quantities";
 import { validateClosure } from "@/lib/material-reconciliation";
 import { lockWorkOrderRow } from "@/lib/row-locks";
+import { WorkOrderRejectedError } from "@/modules/production/work-orders/work-order-rejected-error";
 import type {
   CloseMaterialsInput,
   ReopenMaterialsInput,
@@ -17,6 +18,9 @@ import type {
  * validados por el esquema y el usuario ya verificado, abren la transaccion y aplican las
  * reglas dentro de ella. Solo escriben declaraciones (consumido, producido, fecha de
  * cierre): no mueven stock.
+ *
+ * Un rechazo lanza WorkOrderRejectedError (C2 de la 11.6b, D74): revierte la transaccion y la
+ * accion lo muestra en el formulario, en la linea que lo causa o como mensaje general.
  *
  * Cada caso de uso bloquea la orden antes de leer (H1), igual que las entregas y las
  * devoluciones: el cierre valida lo consumido contra lo entregado y devuelto ya
@@ -55,19 +59,19 @@ export async function closeWorkOrderMaterials({
     });
 
     if (!workOrder) {
-      throw new Error("La orden de trabajo no existe.");
+      throw new WorkOrderRejectedError(null, "La orden de trabajo no existe.");
     }
 
     if (workOrder.estado === "anulada") {
-      throw new Error("No se puede cerrar materiales de una orden anulada.");
+      throw new WorkOrderRejectedError(null, "No se puede cerrar materiales de una orden anulada.");
     }
 
     if (workOrder.fecha_cierre_materiales) {
-      throw new Error("Los materiales de esta orden ya fueron cerrados.");
+      throw new WorkOrderRejectedError(null, "Los materiales de esta orden ya fueron cerrados.");
     }
 
     if (workOrder.requerimiento_orden_material.length === 0) {
-      throw new Error("Esta orden no tiene requerimiento congelado que conciliar.");
+      throw new WorkOrderRejectedError(null, "Esta orden no tiene requerimiento congelado que conciliar.");
     }
 
     const requirementById = new Map(
@@ -78,7 +82,8 @@ export async function closeWorkOrderMaterials({
     );
 
     if (data.lineas.length !== requirementById.size) {
-      throw new Error(
+      throw new WorkOrderRejectedError(
+        null,
         "El cierre debe declarar el consumo de todos los materiales de la orden.",
       );
     }
@@ -87,12 +92,12 @@ export async function closeWorkOrderMaterials({
     // validar y de escribir, y la bitacora nombra lo que se guarda.
     const cantidadProducida = roundMaterialQuantity(data.cantidad_producida);
 
-    const closures = data.lineas.map((linea) => {
+    const closures = data.lineas.map((linea, index) => {
       const requirement = requirementById.get(linea.id_requerimiento);
       const consumida = roundMaterialQuantity(linea.cantidad_consumida);
 
       if (!requirement) {
-        throw new Error("Se recibio un material que no pertenece a esta orden.");
+        throw new WorkOrderRejectedError(null, "Se recibio un material que no pertenece a esta orden.");
       }
 
       const validation = validateClosure(
@@ -105,7 +110,8 @@ export async function closeWorkOrderMaterials({
       );
 
       if (!validation.ok) {
-        throw new Error(validation.error);
+        // C2 de la 11.6b (D74): lo consumido de esta linea es el campo que lo causa.
+        throw new WorkOrderRejectedError(`lineas.${index}.cantidad_consumida`, validation.error);
       }
 
       return {
@@ -180,15 +186,15 @@ export async function reopenWorkOrderMaterials({
     });
 
     if (!workOrder) {
-      throw new Error("La orden de trabajo no existe.");
+      throw new WorkOrderRejectedError(null, "La orden de trabajo no existe.");
     }
 
     if (!workOrder.fecha_cierre_materiales) {
-      throw new Error("Los materiales de esta orden no estan cerrados.");
+      throw new WorkOrderRejectedError(null, "Los materiales de esta orden no estan cerrados.");
     }
 
     if (workOrder.estado === "anulada") {
-      throw new Error("No se puede reabrir el cierre de una orden anulada.");
+      throw new WorkOrderRejectedError(null, "No se puede reabrir el cierre de una orden anulada.");
     }
 
     const producidaAnterior = workOrder.cantidad_producida

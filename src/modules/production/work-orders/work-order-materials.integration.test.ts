@@ -2,8 +2,11 @@ import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import type { PrismaClient } from "@/generated/prisma/client";
 import {
+  annulWorkOrderAction,
   closeWorkOrderMaterialsAction,
   deliverAdditionalMaterialAction,
+  deliverWorkOrderMaterialsAction,
+  reopenWorkOrderMaterialsAction,
   returnWorkOrderMaterialAction,
 } from "@/modules/production/work-orders/actions";
 import { getTestDatabase } from "@/testing/test-database";
@@ -11,8 +14,9 @@ import { getTestDatabase } from "@/testing/test-database";
 // Movimientos de material de una orden de trabajo contra Postgres real (PGlite), C1 de la 11.6a
 // (D62). Corre las acciones enteras: el candado de la orden, el descuento atomico del stock, el
 // kardex, el requerimiento congelado, la alerta y la bitacora. Solo se reemplazan la sesion y la
-// cache de Next. Las acciones todavia redirigen al guardar y lanzan un error al rechazar: la
-// prueba traduce lo primero a «guardado».
+// cache de Next. Desde C1 de la 11.6b la entrega adicional y la devolucion devuelven su estado y
+// reclaman una clave de operacion (runState); desde C2, cerrar y reabrir devuelven su estado sin
+// clave (runForm), y desde C3 tambien entregar lo pendiente; desde C4, anular.
 //
 // Las columnas son numeric(10, 2) y cada una redondea por su lado: una cantidad sin redondear
 // dejaba el stock, lo entregado y el kardex en desacuerdo (hallazgo 1 de la 11.6).
@@ -25,7 +29,6 @@ vi.mock("next/cache", () => ({ revalidatePath: () => undefined }));
 
 const USUARIO = "USU00000001";
 const PRODUCTO = "PRO00000001";
-const SAVED = "guardado";
 
 let prisma: PrismaClient;
 
@@ -53,9 +56,9 @@ async function seedOrder(
   suffix: string,
   { stock, entregada = "0.00" }: { stock: string; entregada?: string },
 ) {
-  const idOrden = `OTR0000000${suffix}`;
-  const idMaterial = `MAT0000000${suffix}`;
-  const idRequerimiento = `ROM0000000${suffix}`;
+  const idOrden = `OTR${suffix.padStart(8, "0")}`;
+  const idMaterial = `MAT${suffix.padStart(8, "0")}`;
+  const idRequerimiento = `ROM${suffix.padStart(8, "0")}`;
 
   await prisma.material.create({
     data: {
@@ -96,7 +99,28 @@ async function seedOrder(
   return { idOrden, idMaterial, idRequerimiento };
 }
 
-async function run(action: (formData: FormData) => Promise<void>, fields: Record<string, string | string[]>) {
+type StateAction = (
+  prevState: { status: "idle" },
+  formData: FormData,
+) => Promise<{ status: string; error?: string; fieldErrors?: Record<string, string[] | undefined>; data?: unknown }>;
+
+/** Una accion que devuelve su estado, con la clave dada o una nueva. */
+async function runState(
+  action: StateAction,
+  fields: Record<string, string>,
+  clave: string = crypto.randomUUID(),
+) {
+  const formData = new FormData();
+
+  for (const [key, value] of Object.entries({ ...fields, clave_operacion: clave })) {
+    formData.set(key, value);
+  }
+
+  return action({ status: "idle" }, formData);
+}
+
+/** Una accion sin clave que devuelve su estado; un campo repetido (las lineas del cierre) va como lista. */
+async function runForm(action: StateAction, fields: Record<string, string | string[]>) {
   const formData = new FormData();
 
   for (const [key, value] of Object.entries(fields)) {
@@ -105,19 +129,7 @@ async function run(action: (formData: FormData) => Promise<void>, fields: Record
     }
   }
 
-  try {
-    await action(formData);
-
-    return "termino sin redirigir";
-  } catch (error) {
-    const digest = (error as { digest?: unknown }).digest;
-
-    return typeof digest === "string" && digest.startsWith("NEXT_REDIRECT")
-      ? SAVED
-      : error instanceof Error
-        ? error.message
-        : String(error);
-  }
+  return action({ status: "idle" }, formData);
 }
 
 /** Stock, lo entregado y devuelto, y los movimientos del kardex de ese material. */
@@ -149,13 +161,13 @@ describe("C1 de la 11.6a: cantidades de material en centesimos", () => {
     const { idOrden, idMaterial, idRequerimiento } = await seedOrder("1", { stock: "20.00" });
 
     expect(
-      await run(deliverAdditionalMaterialAction, {
+      await runState(deliverAdditionalMaterialAction, {
         id_orden_trabajo: idOrden,
         id_requerimiento: idRequerimiento,
         cantidad: "0.005",
         motivo: "Pieza rota",
       }),
-    ).toBe(SAVED);
+    ).toMatchObject({ status: "success" });
 
     expect(await snapshot(idMaterial, idRequerimiento)).toEqual({
       stock: "19.99",
@@ -169,13 +181,13 @@ describe("C1 de la 11.6a: cantidades de material en centesimos", () => {
     const { idOrden, idMaterial, idRequerimiento } = await seedOrder("2", { stock: "10.00" });
 
     expect(
-      await run(deliverAdditionalMaterialAction, {
+      await runState(deliverAdditionalMaterialAction, {
         id_orden_trabajo: idOrden,
         id_requerimiento: idRequerimiento,
         cantidad: "10.004",
         motivo: "Pieza rota",
       }),
-    ).toBe(SAVED);
+    ).toMatchObject({ status: "success" });
 
     expect(await snapshot(idMaterial, idRequerimiento)).toEqual({
       stock: "0.00",
@@ -189,13 +201,13 @@ describe("C1 de la 11.6a: cantidades de material en centesimos", () => {
     const { idOrden, idMaterial, idRequerimiento } = await seedOrder("3", { stock: "20.00" });
 
     expect(
-      await run(deliverAdditionalMaterialAction, {
+      await runState(deliverAdditionalMaterialAction, {
         id_orden_trabajo: idOrden,
         id_requerimiento: idRequerimiento,
         cantidad: "0.004",
         motivo: "Pieza rota",
       }),
-    ).toBe("La cantidad debe ser mayor que cero.");
+    ).toMatchObject({ status: "error", fieldErrors: { cantidad: ["La cantidad debe ser mayor que cero."] } });
 
     expect(await snapshot(idMaterial, idRequerimiento)).toEqual({
       stock: "20.00",
@@ -209,13 +221,13 @@ describe("C1 de la 11.6a: cantidades de material en centesimos", () => {
     const { idOrden, idMaterial, idRequerimiento } = await seedOrder("4", { stock: "15.00", entregada: "5.00" });
 
     expect(
-      await run(returnWorkOrderMaterialAction, {
+      await runState(returnWorkOrderMaterialAction, {
         id_orden_trabajo: idOrden,
         id_requerimiento: idRequerimiento,
         cantidad: "5.004",
         motivo: "",
       }),
-    ).toBe(SAVED);
+    ).toMatchObject({ status: "success" });
 
     expect(await snapshot(idMaterial, idRequerimiento)).toEqual({
       stock: "20.00",
@@ -229,13 +241,13 @@ describe("C1 de la 11.6a: cantidades de material en centesimos", () => {
     const { idOrden, idRequerimiento } = await seedOrder("5", { stock: "20.00", entregada: "3.00" });
 
     expect(
-      await run(closeWorkOrderMaterialsAction, {
+      await runForm(closeWorkOrderMaterialsAction, {
         id_orden_trabajo: idOrden,
         cantidad_producida: "2.675",
         id_requerimiento: [idRequerimiento],
         cantidad_consumida: ["3.00"],
       }),
-    ).toBe(SAVED);
+    ).toMatchObject({ status: "success", data: { id_orden_trabajo: idOrden } });
 
     const order = await prisma.orden_trabajo.findUniqueOrThrow({ where: { id_orden_trabajo: idOrden } });
     const log = await prisma.bitacora_operacion.findFirstOrThrow({
@@ -244,5 +256,247 @@ describe("C1 de la 11.6a: cantidades de material en centesimos", () => {
 
     expect(order.cantidad_producida?.toFixed(2)).toBe("2.68");
     expect(log.detalle).toContain("Producido: 2.68.");
+  });
+});
+
+// C1 de la 11.6b (D73): el candado de la orden pone en fila dos envios iguales, pero sin clave el
+// segundo volvia a validar y movia el stock otra vez. Con la misma clave, el segundo responde con
+// el movimiento del primero sin escribir. PGlite atiende una transaccion a la vez: los envios van
+// uno tras otro, como un reenvio, no a la vez.
+describe("C1 de la 11.6b: la misma clave mueve el stock una sola vez", () => {
+  const operationOf = (clave: string) =>
+    prisma.operacion_idempotente.findUnique({
+      where: { clave },
+      select: { tipo_operacion: true, id_registro_resultado: true },
+    });
+
+  it("una entrega adicional enviada dos veces con la misma clave saca el stock una vez", async () => {
+    const { idOrden, idMaterial, idRequerimiento } = await seedOrder("6", { stock: "20.00" });
+    const clave = crypto.randomUUID();
+    const fields = { id_orden_trabajo: idOrden, id_requerimiento: idRequerimiento, cantidad: "2", motivo: "Pieza rota" };
+
+    const first = await runState(deliverAdditionalMaterialAction, fields, clave);
+    const second = await runState(deliverAdditionalMaterialAction, fields, clave);
+    const [movement] = await prisma.movimiento_inventario.findMany({ where: { id_material: idMaterial } });
+
+    expect(first).toMatchObject({ status: "success", data: { id_movimiento: movement.id_movimiento } });
+    expect(second).toMatchObject({ status: "success", data: { id_movimiento: movement.id_movimiento } });
+    expect(await snapshot(idMaterial, idRequerimiento)).toEqual({
+      stock: "18.00",
+      entregada: "2.00",
+      devuelta: "0.00",
+      kardex: [["salida", "2.00", "20.00", "18.00"]],
+    });
+    expect(await operationOf(clave)).toEqual({
+      tipo_operacion: "entrega_adicional_material",
+      id_registro_resultado: movement.id_movimiento,
+    });
+  });
+
+  it("una devolucion parcial enviada dos veces con la misma clave devuelve una vez", async () => {
+    const { idOrden, idMaterial, idRequerimiento } = await seedOrder("7", { stock: "10.00", entregada: "10.00" });
+    const clave = crypto.randomUUID();
+    const fields = { id_orden_trabajo: idOrden, id_requerimiento: idRequerimiento, cantidad: "2", motivo: "" };
+
+    await runState(returnWorkOrderMaterialAction, fields, clave);
+    await runState(returnWorkOrderMaterialAction, fields, clave);
+
+    expect(await snapshot(idMaterial, idRequerimiento)).toEqual({
+      stock: "12.00",
+      entregada: "10.00",
+      devuelta: "2.00",
+      kardex: [["devolucion", "2.00", "10.00", "12.00"]],
+    });
+  });
+
+  it("dos devoluciones parciales con claves distintas son dos operaciones y devuelven las dos", async () => {
+    const { idOrden, idMaterial, idRequerimiento } = await seedOrder("8", { stock: "10.00", entregada: "10.00" });
+    const fields = { id_orden_trabajo: idOrden, id_requerimiento: idRequerimiento, cantidad: "2", motivo: "" };
+
+    await runState(returnWorkOrderMaterialAction, fields);
+    await runState(returnWorkOrderMaterialAction, fields);
+
+    expect((await snapshot(idMaterial, idRequerimiento)).devuelta).toBe("4.00");
+  });
+
+  it("un rechazo libera la clave: la entrega corregida con la misma clave sale", async () => {
+    const { idOrden, idMaterial, idRequerimiento } = await seedOrder("9", { stock: "5.00" });
+    const clave = crypto.randomUUID();
+    const fields = { id_orden_trabajo: idOrden, id_requerimiento: idRequerimiento, motivo: "Pieza rota" };
+
+    expect(await runState(deliverAdditionalMaterialAction, { ...fields, cantidad: "6" }, clave)).toMatchObject({
+      status: "error",
+      fieldErrors: { cantidad: [expect.stringContaining("Stock insuficiente")] },
+    });
+    expect(await operationOf(clave)).toBeNull();
+
+    expect(await runState(deliverAdditionalMaterialAction, { ...fields, cantidad: "4" }, clave)).toMatchObject({
+      status: "success",
+    });
+    expect((await snapshot(idMaterial, idRequerimiento)).stock).toBe("1.00");
+  });
+});
+
+// C2 de la 11.6b (D74): cerrar y reabrir devuelven su estado. Sin clave: la fecha de cierre, leida
+// con la orden bloqueada, ya hace que un segundo cierre o una segunda reapertura no escriba. Un
+// rechazo deja la orden como estaba, con el error en la linea que lo causa.
+describe("C2 de la 11.6b: cerrar y reabrir con resultado", () => {
+  const closureOf = async (idOrden: string, idRequerimiento: string) => {
+    const order = await prisma.orden_trabajo.findUniqueOrThrow({ where: { id_orden_trabajo: idOrden } });
+    const requirement = await prisma.requerimiento_orden_material.findUniqueOrThrow({
+      where: { id_requerimiento: idRequerimiento },
+    });
+    const logs = await prisma.bitacora_operacion.count({
+      where: { id_registro_afectado: idOrden, accion: { in: ["cerrar_materiales", "reabrir_materiales"] } },
+    });
+
+    return {
+      cerrada: order.fecha_cierre_materiales !== null,
+      producida: order.cantidad_producida?.toFixed(2) ?? null,
+      consumida: requirement.cantidad_consumida.toFixed(2),
+      bitacora: logs,
+    };
+  };
+  const closeFields = (idOrden: string, idRequerimiento: string, consumida: string, producida: string) => ({
+    id_orden_trabajo: idOrden,
+    cantidad_producida: producida,
+    id_requerimiento: [idRequerimiento],
+    cantidad_consumida: [consumida],
+  });
+
+  it("un segundo cierre responde que ya estaban cerrados y no cambia lo declarado", async () => {
+    const { idOrden, idRequerimiento } = await seedOrder("10", { stock: "20.00", entregada: "3.00" });
+
+    expect(
+      await runForm(closeWorkOrderMaterialsAction, closeFields(idOrden, idRequerimiento, "2.50", "1")),
+    ).toMatchObject({ status: "success" });
+    expect(
+      await runForm(closeWorkOrderMaterialsAction, closeFields(idOrden, idRequerimiento, "3.00", "5")),
+    ).toMatchObject({ status: "error", error: "Los materiales de esta orden ya fueron cerrados." });
+
+    expect(await closureOf(idOrden, idRequerimiento)).toEqual({
+      cerrada: true,
+      producida: "1.00",
+      consumida: "2.50",
+      bitacora: 1,
+    });
+  });
+
+  it("un consumo que supera lo entregado queda en su linea y no escribe nada", async () => {
+    const { idOrden, idRequerimiento } = await seedOrder("11", { stock: "20.00", entregada: "3.00" });
+
+    const result = await runForm(closeWorkOrderMaterialsAction, closeFields(idOrden, idRequerimiento, "3.50", "1"));
+
+    expect(result).toMatchObject({ status: "error" });
+    expect(Object.keys(result.fieldErrors ?? {})).toEqual(["lineas.0.cantidad_consumida"]);
+    expect(await closureOf(idOrden, idRequerimiento)).toEqual({
+      cerrada: false,
+      producida: null,
+      consumida: "0.00",
+      bitacora: 0,
+    });
+  });
+
+  it("reabrir limpia lo declarado, una segunda reapertura no escribe y se puede cerrar de nuevo", async () => {
+    const { idOrden, idRequerimiento } = await seedOrder("12", { stock: "20.00", entregada: "3.00" });
+    const reopenFields = { id_orden_trabajo: idOrden, motivo: "Se conto mal la plancha sobrante" };
+
+    await runForm(closeWorkOrderMaterialsAction, closeFields(idOrden, idRequerimiento, "3.00", "1"));
+
+    expect(await runForm(reopenWorkOrderMaterialsAction, reopenFields)).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: idOrden },
+    });
+    expect(await runForm(reopenWorkOrderMaterialsAction, reopenFields)).toMatchObject({
+      status: "error",
+      error: "Los materiales de esta orden no estan cerrados.",
+    });
+    expect(await closureOf(idOrden, idRequerimiento)).toEqual({
+      cerrada: false,
+      producida: null,
+      consumida: "0.00",
+      bitacora: 2,
+    });
+
+    expect(
+      await runForm(closeWorkOrderMaterialsAction, closeFields(idOrden, idRequerimiento, "2.00", "1")),
+    ).toMatchObject({ status: "success" });
+    expect(await closureOf(idOrden, idRequerimiento)).toMatchObject({ cerrada: true, consumida: "2.00", bitacora: 3 });
+  });
+});
+
+describe("C3 de la 11.6b: entregar lo pendiente con resultado", () => {
+  it("un segundo envio no entrega nada: responde que no queda pendiente y el stock baja una vez", async () => {
+    const { idOrden, idMaterial, idRequerimiento } = await seedOrder("13", { stock: "20.00", entregada: "1.50" });
+
+    expect(await runForm(deliverWorkOrderMaterialsAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "success",
+    });
+    expect(await runForm(deliverWorkOrderMaterialsAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "error",
+      error:
+        "No queda nada pendiente por entregar en esta orden. Usa la entrega adicional si produccion necesita mas material.",
+    });
+
+    expect(await snapshot(idMaterial, idRequerimiento)).toEqual({
+      stock: "16.50",
+      entregada: "5.00",
+      devuelta: "0.00",
+      kardex: [["salida", "3.50", "20.00", "16.50"]],
+    });
+  });
+
+  it("sin stock suficiente responde con el detalle y no escribe", async () => {
+    const { idOrden, idMaterial, idRequerimiento } = await seedOrder("14", { stock: "3.00" });
+
+    expect(await runForm(deliverWorkOrderMaterialsAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "error",
+      error: "Stock insuficiente para entregar la orden: Plancha 14 requiere 5.00 y tiene 3.00.",
+    });
+
+    expect(await snapshot(idMaterial, idRequerimiento)).toEqual({
+      stock: "3.00",
+      entregada: "0.00",
+      devuelta: "0.00",
+      kardex: [],
+    });
+  });
+});
+
+describe("C4 de la 11.6b: anular con resultado", () => {
+  async function annulment(idOrden: string) {
+    const order = await prisma.orden_trabajo.findUniqueOrThrow({ where: { id_orden_trabajo: idOrden } });
+    const logs = await prisma.bitacora_operacion.count({ where: { id_registro_afectado: idOrden, accion: "anular" } });
+
+    return { estado: order.estado, bitacora: logs };
+  }
+
+  it("un segundo envio responde que ya esta anulada y no vuelve a escribir", async () => {
+    const { idOrden } = await seedOrder("15", { stock: "20.00" });
+
+    expect(await runForm(annulWorkOrderAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "success",
+      data: { estado: "anulada" },
+    });
+    expect(await runForm(annulWorkOrderAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "error",
+      error: "La orden de trabajo ya esta anulada.",
+    });
+
+    expect(await annulment(idOrden)).toEqual({ estado: "anulada", bitacora: 1 });
+  });
+
+  it("una orden con material entregado no se anula y queda como estaba", async () => {
+    const { idOrden } = await seedOrder("16", { stock: "20.00" });
+
+    expect(await runForm(deliverWorkOrderMaterialsAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "success",
+    });
+    expect(await runForm(annulWorkOrderAction, { id_orden_trabajo: idOrden })).toMatchObject({
+      status: "error",
+      error: "No se puede anular una orden con consumos registrados sin reversar inventario.",
+    });
+
+    expect(await annulment(idOrden)).toEqual({ estado: "pendiente", bitacora: 0 });
   });
 });

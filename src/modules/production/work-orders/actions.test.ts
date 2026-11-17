@@ -624,7 +624,10 @@ defineActionSuite("createWorkOrderAction", createAction, [
   },
 ]);
 
-defineActionSuite("deliverWorkOrderMaterialsAction", deliverWorkOrderMaterialsAction, [
+// C3 de la 11.6b (D75): entregar lo pendiente recibe el estado anterior del boton (ConfirmActionButton).
+const deliverPendingAction = (formData: FormData) => deliverWorkOrderMaterialsAction({ status: "idle" }, formData);
+
+defineActionSuite("deliverWorkOrderMaterialsAction", deliverPendingAction, [
   {
     name: "sin orden en el formulario",
     form: { id_orden_trabajo: "   " },
@@ -751,14 +754,34 @@ defineActionSuite("deliverWorkOrderMaterialsAction", deliverWorkOrderMaterialsAc
   },
 ]);
 
+// C1 de la 11.6b (D73): la entrega adicional y la devolucion reciben el estado anterior del
+// formulario y una clave de operacion.
+const additionalAction = (formData: FormData) => deliverAdditionalMaterialAction({ status: "idle" }, formData);
+const returnAction = (formData: FormData) => returnWorkOrderMaterialAction({ status: "idle" }, formData);
+
 const additionalForm: FormFields = {
+  clave_operacion: CLAVE,
   id_orden_trabajo: OT,
   id_requerimiento: REQ_PLANCHA,
   cantidad: "5.5",
   motivo: "Se rompio una pieza al cortar",
 };
 
-defineActionSuite("deliverAdditionalMaterialAction", deliverAdditionalMaterialAction, [
+defineActionSuite("deliverAdditionalMaterialAction", additionalAction, [
+  {
+    name: "sin clave de operacion",
+    form: { ...additionalForm, clave_operacion: "" },
+  },
+  {
+    name: "la misma clave ya registrada: responde con la entrega hecha sin escribir",
+    form: additionalForm,
+    data: storedKey({ tipo_operacion: "entrega_adicional_material", id_registro_resultado: "MVI00000009" }),
+  },
+  {
+    name: "la clave es de otra operacion",
+    form: additionalForm,
+    data: storedKey({ tipo_operacion: "devolver_material" }),
+  },
   {
     name: "motivo demasiado corto",
     form: { ...additionalForm, motivo: "rotura" },
@@ -849,13 +872,28 @@ defineActionSuite("deliverAdditionalMaterialAction", deliverAdditionalMaterialAc
 ]);
 
 const returnForm: FormFields = {
+  clave_operacion: CLAVE,
   id_orden_trabajo: OT,
   id_requerimiento: REQ_PLANCHA,
   cantidad: "3",
   motivo: "",
 };
 
-defineActionSuite("returnWorkOrderMaterialAction", returnWorkOrderMaterialAction, [
+defineActionSuite("returnWorkOrderMaterialAction", returnAction, [
+  {
+    name: "sin clave de operacion",
+    form: { ...returnForm, clave_operacion: "" },
+  },
+  {
+    name: "la misma clave ya registrada: responde con la devolucion hecha sin escribir",
+    form: returnForm,
+    data: storedKey({ tipo_operacion: "devolver_material", id_registro_resultado: "MVI00000009" }),
+  },
+  {
+    name: "la clave es de otra operacion",
+    form: returnForm,
+    data: storedKey({ tipo_operacion: "entrega_adicional_material" }),
+  },
   {
     name: "cantidad no numerica",
     form: { ...returnForm, cantidad: "tres" },
@@ -950,6 +988,10 @@ defineActionSuite("returnWorkOrderMaterialAction", returnWorkOrderMaterialAction
   },
 ]);
 
+// C2 de la 11.6b (D74): cerrar y reabrir reciben el estado anterior de su formulario.
+const closeAction = (formData: FormData) => closeWorkOrderMaterialsAction({ status: "idle" }, formData);
+const reopenAction = (formData: FormData) => reopenWorkOrderMaterialsAction({ status: "idle" }, formData);
+
 const closeForm: FormFields = {
   id_orden_trabajo: OT,
   cantidad_producida: "24",
@@ -971,7 +1013,7 @@ function closableOrder(changes: Row = {}) {
   });
 }
 
-defineActionSuite("closeWorkOrderMaterialsAction", closeWorkOrderMaterialsAction, [
+defineActionSuite("closeWorkOrderMaterialsAction", closeAction, [
   {
     name: "sin lineas de materiales",
     form: { id_orden_trabajo: OT, cantidad_producida: "24" },
@@ -1030,7 +1072,7 @@ const reopenForm: FormFields = {
   motivo: "Se conto mal la plancha sobrante",
 };
 
-defineActionSuite("reopenWorkOrderMaterialsAction", reopenWorkOrderMaterialsAction, [
+defineActionSuite("reopenWorkOrderMaterialsAction", reopenAction, [
   {
     name: "motivo demasiado corto",
     form: { ...reopenForm, motivo: "error" },
@@ -1074,7 +1116,12 @@ defineActionSuite("reopenWorkOrderMaterialsAction", reopenWorkOrderMaterialsActi
   },
 ]);
 
-defineActionSuite("annulWorkOrderAction", annulWorkOrderAction, [
+// C4 de la 11.6b (D76): anular y finalizar reciben el estado anterior del boton de la fila
+// (ConfirmActionButton).
+const annulAction = (formData: FormData) => annulWorkOrderAction({ status: "idle" }, formData);
+const finishAction = (formData: FormData) => finishWorkOrderAction({ status: "idle" }, formData);
+
+defineActionSuite("annulWorkOrderAction", annulAction, [
   {
     name: "sin orden en el formulario",
     form: { id_orden_trabajo: "" },
@@ -1115,7 +1162,7 @@ defineActionSuite("annulWorkOrderAction", annulWorkOrderAction, [
   },
 ]);
 
-defineActionSuite("finishWorkOrderAction", finishWorkOrderAction, [
+defineActionSuite("finishWorkOrderAction", finishAction, [
   {
     name: "sin orden en el formulario",
     form: { id_orden_trabajo: "" },
@@ -1192,7 +1239,12 @@ function describeWorkOrderLock(
     throw new Error(`No existe la suite ${suite}.`);
   }
 
-  const reachingDatabase = found.cases.filter((actionCase) => actionCase.data !== undefined);
+  // Desde C1 de la 11.6b, una clave ya registrada responde antes del candado, a proposito: no
+  // decide nada sobre la orden ni escribe. Esos casos llegan a la base pero no cuentan aqui.
+  const reachingDatabase = found.cases.filter(
+    (actionCase) =>
+      actionCase.data !== undefined && !("operacion_idempotente.createManyAndReturn" in actionCase.data),
+  );
 
   describe(`H1: ${suite} decide con la orden bloqueada`, () => {
     it(`cubre los ${expectedCases} casos que llegan a la base`, () => {
@@ -1265,7 +1317,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
   }
 
   it("entrega lo pendiente: otra orden se llevo 30 de plancha despues de la lectura", async () => {
-    const { calls, outcome } = await runAction(deliverWorkOrderMaterialsAction, {
+    const { calls, outcome } = await runAction(deliverPendingAction, {
       name: "H2 entrega pendiente",
       form: { id_orden_trabajo: OT },
       data: {
@@ -1280,7 +1332,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
       },
     });
 
-    expect(outcome).toBe("redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-delivered");
+    expect(outcome).toMatchObject({ status: "success", values: { id: OT } });
 
     const [kardex] = written(calls, "movimiento_inventario.create");
 
@@ -1294,7 +1346,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
   });
 
   it("entrega adicional: el stock real deja el material en critico y abre la alerta", async () => {
-    const { calls, outcome } = await runAction(deliverAdditionalMaterialAction, {
+    const { calls, outcome } = await runAction(additionalAction, {
       name: "H2 entrega adicional",
       form: additionalForm,
       data: {
@@ -1309,7 +1361,8 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
       },
     });
 
-    expect(outcome).toBe("redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-additional-delivery");
+    // Desde C1 de la 11.6b el exito no redirige: responde con el movimiento.
+    expect(outcome).toMatchObject({ status: "success", data: { id_movimiento: "MVI00000001" } });
 
     const [kardex] = written(calls, "movimiento_inventario.create");
 
@@ -1320,7 +1373,7 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
   });
 
   it("devolucion: una compra sumo 10 despues de la lectura y el material sale de critico", async () => {
-    const { calls, outcome } = await runAction(returnWorkOrderMaterialAction, {
+    const { calls, outcome } = await runAction(returnAction, {
       name: "H2 devolucion",
       form: returnForm,
       data: {
@@ -1335,7 +1388,8 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
       },
     });
 
-    expect(outcome).toBe("redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-material-returned");
+    // Desde C1 de la 11.6b el exito no redirige: responde con el movimiento.
+    expect(outcome).toMatchObject({ status: "success", data: { id_movimiento: "MVI00000001" } });
 
     const [kardex] = written(calls, "movimiento_inventario.create");
 
@@ -1560,5 +1614,490 @@ describe("C5 de la 11.6a: crear con resultado e idempotencia", () => {
     expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
     expect(indexOf(calls, "operacion_idempotente.updateMany")).toBe(-1);
     expect(indexOf(calls, "orden_trabajo.create")).toBe(-1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C1 de la 11.6b (D73): entrega adicional y devolucion con resultado e idempotencia
+// ---------------------------------------------------------------------------
+
+// Las dos redirigian al detalle al guardar y lanzaban cualquier rechazo a la pagina de error, donde
+// se perdia lo escrito. Y no tenian clave: el candado de la orden ponia en fila dos envios
+// iguales, pero el segundo volvia a validar y movia el stock otra vez (hallazgos 1 y 2 de la
+// 11.6b: una entrega adicional salia dos veces y una devolucion parcial volvia dos veces). Ahora
+// devuelven un FormActionState: el rechazo queda en su campo con lo enviado y el exito trae el
+// movimiento del kardex. La clave se reclama como primera sentencia, antes del candado de la
+// orden, y se completa con el movimiento antes del commit.
+describe("C1 de la 11.6b: entrega adicional y devolucion con resultado e idempotencia", () => {
+  const indexOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
+  const claimOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"]) => {
+    const claim = calls.find((call) => isPrismaCall(call) && call.prisma === "operacion_idempotente.createManyAndReturn");
+
+    return claim && isPrismaCall(claim) ? (claim.args as { data: Row[] }).data : null;
+  };
+
+  const additionalOk: DataOverrides = {
+      "requerimiento_orden_material.findUnique": requirementWithOrder(REQ_PLANCHA, PLANCHA, {
+        requerida: "68.75",
+        entregada: "68.75",
+        material: { stock: "40.00", minimo: "10.00" },
+      }),
+      "alerta_stock.updateMany": { count: 0 },
+      ...stockInDb({ [PLANCHA]: { stock: "40.00", minimo: "10.00" } }),
+    };
+
+  const returnOk: DataOverrides = {
+    "requerimiento_orden_material.findUnique": requirementWithOrder(REQ_PLANCHA, PLANCHA, {
+      requerida: "68.75",
+      entregada: "10.00",
+      material: { stock: "20.00", minimo: "8.00" },
+    }),
+    "alerta_stock.updateMany": { count: 0 },
+    ...stockInDb({ [PLANCHA]: { stock: "20.00", minimo: "8.00" } }),
+  };
+
+  it.each([
+    ["la entrega adicional", additionalAction, additionalForm, additionalOk, "entrega_adicional_material"],
+    ["la devolucion", returnAction, returnForm, returnOk, "devolver_material"],
+  ] as const)("%s reclama la clave antes del candado, la completa con el movimiento y no redirige", async (_name, action, form, data, tipo) => {
+    const { calls, outcome } = await runAction(action, { name: "C1", form, data });
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: OT, id_movimiento: "MVI00000001", clave_operacion: CLAVE },
+    });
+    expect(claimOf(calls)).toEqual([
+      expect.objectContaining({ clave: CLAVE, tipo_operacion: tipo, id_usuario: "USU00000001" }),
+    ]);
+    expect(indexOf(calls, "operacion_idempotente.createManyAndReturn")).toBeGreaterThan(indexOf(calls, "prisma.$transaction"));
+    expect(indexOf(calls, "operacion_idempotente.createManyAndReturn")).toBeLessThan(indexOf(calls, "$queryRaw"));
+    expect(indexOf(calls, "movimiento_inventario.create")).toBeLessThan(indexOf(calls, "operacion_idempotente.updateMany"));
+    expect(indexOf(calls, "operacion_idempotente.updateMany")).toBeLessThan(indexOf(calls, "prisma.$transaction:commit"));
+    expect(calls.filter((call) => "effect" in call && call.effect === "revalidatePath").length).toBeGreaterThan(0);
+  });
+
+  it.each([
+    ["la entrega adicional", additionalAction, additionalForm, "entrega_adicional_material"],
+    ["la devolucion", returnAction, returnForm, "devolver_material"],
+  ] as const)("%s con la misma clave responde con el movimiento ya hecho, sin candado ni stock", async (_name, action, form, tipo) => {
+    const { calls, outcome } = await runAction(action, {
+      name: "C1",
+      form,
+      data: storedKey({ tipo_operacion: tipo, id_registro_resultado: "MVI00000009" }),
+    });
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: OT, id_movimiento: "MVI00000009", clave_operacion: CLAVE },
+    });
+    expect(indexOf(calls, "$queryRaw")).toBe(-1);
+    expect(indexOf(calls, "movimiento_inventario.create")).toBe(-1);
+    expect(indexOf(calls, "operacion_idempotente.updateMany")).toBe(-1);
+  });
+
+  it.each([
+    ["entrega: motivo corto", additionalAction, { ...additionalForm, motivo: "rotura" }, "motivo"],
+    ["devolucion: cantidad no numerica", returnAction, { ...returnForm, cantidad: "tres" }, "cantidad"],
+  ] as const)("%s: el error queda en su campo, con lo enviado, sin consultar", async (_name, action, form, field) => {
+    const { calls, outcome } = await runAction(action, { name: "C1", form });
+    const sent = form as FormFields;
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      values: expect.objectContaining({ id_requerimiento: REQ_PLANCHA, cantidad: sent.cantidad, motivo: sent.motivo }),
+    });
+    expect(Object.keys((outcome as { fieldErrors?: Row }).fieldErrors ?? {})).toContain(field);
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it.each([
+    [
+      "entrega: stock insuficiente",
+      additionalAction,
+      additionalForm,
+      {
+        "requerimiento_orden_material.findUnique": requirementWithOrder(REQ_PLANCHA, PLANCHA, {
+          requerida: "68.75",
+          material: { stock: "5.25" },
+        }),
+      },
+      ["cantidad"],
+    ],
+    [
+      "entrega: material inactivo",
+      additionalAction,
+      additionalForm,
+      {
+        "requerimiento_orden_material.findUnique": requirementWithOrder(REQ_PLANCHA, PLANCHA, {
+          requerida: "68.75",
+          material: { estado: false },
+        }),
+      },
+      ["id_requerimiento"],
+    ],
+    [
+      "entrega: el requerimiento no existe",
+      additionalAction,
+      additionalForm,
+      { "requerimiento_orden_material.findUnique": null },
+      ["id_requerimiento"],
+    ],
+    [
+      "entrega: orden anulada, sin campo",
+      additionalAction,
+      additionalForm,
+      {
+        "requerimiento_orden_material.findUnique": requirementWithOrder(
+          REQ_PLANCHA,
+          PLANCHA,
+          { requerida: "68.75" },
+          { estado: "anulada" },
+        ),
+      },
+      [],
+    ],
+    [
+      "devolucion: pide mas de lo que queda",
+      returnAction,
+      { ...returnForm, cantidad: "7" },
+      {
+        "requerimiento_orden_material.findUnique": requirementWithOrder(REQ_PLANCHA, PLANCHA, {
+          requerida: "68.75",
+          entregada: "10.00",
+          devuelta: "4.00",
+        }),
+      },
+      ["cantidad"],
+    ],
+    [
+      "devolucion: materiales ya cerrados, sin campo",
+      returnAction,
+      returnForm,
+      {
+        "requerimiento_orden_material.findUnique": requirementWithOrder(
+          REQ_PLANCHA,
+          PLANCHA,
+          { requerida: "68.75", entregada: "10.00" },
+          { fecha_cierre_materiales: CLOSED_AT },
+        ),
+      },
+      [],
+    ],
+  ] as const)("%s revierte la transaccion y responde con el error, con lo enviado", async (_name, action, form, data, fields) => {
+    const { calls, outcome } = await runAction(action, { name: "C1", form, data: { ...data } });
+
+    expect(outcome).toMatchObject({ status: "error", values: expect.objectContaining({ cantidad: form.cantidad }) });
+    expect(Object.keys((outcome as { fieldErrors?: Row }).fieldErrors ?? {})).toEqual(fields);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "movimiento_inventario.create")).toBe(-1);
+    expect(indexOf(calls, "operacion_idempotente.updateMany")).toBe(-1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C2 de la 11.6b (D74): cerrar y reabrir con resultado
+// ---------------------------------------------------------------------------
+
+// Las dos redirigian al detalle al guardar y lanzaban cualquier rechazo a la pagina de error, donde
+// se perdia lo declarado (el consumo de cada material y lo producido, o el motivo). Ahora devuelven
+// un FormActionState: el rechazo queda en su campo con lo enviado (el consumo de una linea, en
+// lineas.<posicion>.cantidad_consumida) y el exito trae la orden; el detalle se repinta con la
+// revalidacion. Sin clave: la fecha de cierre ya hace que un segundo cierre, o una segunda
+// reapertura, no escriba.
+describe("C2 de la 11.6b: cerrar y reabrir con resultado", () => {
+  const indexOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
+  const fieldsOf = (outcome: unknown) => Object.keys((outcome as { fieldErrors?: Row }).fieldErrors ?? {});
+  const closeValues = {
+    cantidad_producida: "24",
+    lineas: [
+      { id_requerimiento: REQ_PLANCHA, cantidad_consumida: "60.5" },
+      { id_requerimiento: REQ_SOLDADURA, cantidad_consumida: "8" },
+    ],
+  };
+
+  it("cerrar guarda, revalida y responde con la orden, sin redirigir", async () => {
+    const { calls, outcome } = await runAction(closeAction, {
+      name: "C2",
+      form: closeForm,
+      data: { "orden_trabajo.findUnique": closableOrder() },
+    });
+
+    expect(outcome).toMatchObject({ status: "success", data: { id_orden_trabajo: OT }, values: closeValues });
+    expect(indexOf(calls, "orden_trabajo.update")).toBeLessThan(indexOf(calls, "prisma.$transaction:commit"));
+    expect(calls.filter((call) => "effect" in call && call.effect === "revalidatePath").length).toBeGreaterThan(0);
+  });
+
+  it.each([
+    ["lo producido negativo", { ...closeForm, cantidad_producida: "-1" }, "cantidad_producida"],
+    ["el consumo de la segunda linea negativo", { ...closeForm, cantidad_consumida: ["60.5", "-2"] }, "lineas.1.cantidad_consumida"],
+  ] as [string, FormFields, string][])("cerrar con %s: el error queda en su campo, con lo enviado, sin consultar", async (_name, form, field) => {
+    const { calls, outcome } = await runAction(closeAction, { name: "C2", form });
+    const sent = form as FormFields;
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      values: {
+        cantidad_producida: sent.cantidad_producida,
+        lineas: [
+          { id_requerimiento: REQ_PLANCHA, cantidad_consumida: (sent.cantidad_consumida as string[])[0] },
+          { id_requerimiento: REQ_SOLDADURA, cantidad_consumida: (sent.cantidad_consumida as string[])[1] },
+        ],
+      },
+    });
+    expect(fieldsOf(outcome)).toContain(field);
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it("cerrar sin lineas responde con el mensaje general, sin consultar", async () => {
+    const { calls, outcome } = await runAction(closeAction, {
+      name: "C2",
+      form: { id_orden_trabajo: OT, cantidad_producida: "24" },
+    });
+
+    expect(outcome).toMatchObject({ status: "error", error: "La orden no tiene materiales que conciliar." });
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it("un consumo que con lo devuelto supera lo entregado queda en su linea y revierte", async () => {
+    const { calls, outcome } = await runAction(closeAction, {
+      name: "C2",
+      form: { ...closeForm, cantidad_consumida: ["64", "8"] },
+      data: { "orden_trabajo.findUnique": closableOrder() },
+    });
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      values: { cantidad_producida: "24", lineas: [{ cantidad_consumida: "64" }, { cantidad_consumida: "8" }] },
+    });
+    expect(fieldsOf(outcome)).toEqual(["lineas.0.cantidad_consumida"]);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "orden_trabajo.update")).toBe(-1);
+  });
+
+  it.each([
+    ["la orden no existe", closeForm, null],
+    ["la orden anulada", closeForm, closableOrder({ estado: "anulada" })],
+    ["los materiales ya cerrados", closeForm, closableOrder({ fecha_cierre_materiales: CLOSED_AT })],
+    ["la orden sin requerimiento congelado", closeForm, workOrderRow()],
+    [
+      "no declara todos los materiales",
+      { ...closeForm, id_requerimiento: [REQ_PLANCHA], cantidad_consumida: ["60.5"] },
+      closableOrder(),
+    ],
+    ["declara un material que no es de la orden", { ...closeForm, id_requerimiento: [REQ_PLANCHA, REQ_PERNO] }, closableOrder()],
+  ] as [string, FormFields, Row | null][])("cerrar con %s responde con el mensaje general y revierte", async (_name, form, order) => {
+    const { calls, outcome } = await runAction(closeAction, {
+      name: "C2",
+      form,
+      data: { "orden_trabajo.findUnique": order },
+    });
+
+    expect(outcome).toMatchObject({ status: "error", values: { cantidad_producida: "24" } });
+    expect(fieldsOf(outcome)).toEqual([]);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "orden_trabajo.update")).toBe(-1);
+  });
+
+  it("reabrir guarda, revalida y responde con la orden, sin redirigir", async () => {
+    const { calls, outcome } = await runAction(reopenAction, {
+      name: "C2",
+      form: reopenForm,
+      data: {
+        "orden_trabajo.findUnique": workOrderRow({ fecha_cierre_materiales: CLOSED_AT, cantidad_producida: D("24.00") }),
+      },
+    });
+
+    expect(outcome).toMatchObject({
+      status: "success",
+      data: { id_orden_trabajo: OT },
+      values: { motivo: reopenForm.motivo },
+    });
+    expect(indexOf(calls, "orden_trabajo.update")).toBeLessThan(indexOf(calls, "prisma.$transaction:commit"));
+    expect(calls.filter((call) => "effect" in call && call.effect === "revalidatePath").length).toBeGreaterThan(0);
+  });
+
+  it("reabrir con un motivo corto deja el error en el motivo, con lo enviado, sin consultar", async () => {
+    const { calls, outcome } = await runAction(reopenAction, { name: "C2", form: { ...reopenForm, motivo: "error" } });
+
+    expect(outcome).toMatchObject({ status: "error", values: { motivo: "error" } });
+    expect(fieldsOf(outcome)).toEqual(["motivo"]);
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it.each([
+    ["la orden no existe", null],
+    ["los materiales no cerrados", workOrderRow()],
+    ["la orden anulada", workOrderRow({ estado: "anulada", fecha_cierre_materiales: CLOSED_AT })],
+  ] as const)("reabrir con %s responde con el mensaje general y revierte", async (_name, order) => {
+    const { calls, outcome } = await runAction(reopenAction, {
+      name: "C2",
+      form: reopenForm,
+      data: { "orden_trabajo.findUnique": order },
+    });
+
+    expect(outcome).toMatchObject({ status: "error", values: { motivo: reopenForm.motivo } });
+    expect(fieldsOf(outcome)).toEqual([]);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "orden_trabajo.update")).toBe(-1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C3 de la 11.6b (D75): entregar lo pendiente con resultado
+// ---------------------------------------------------------------------------
+
+// Redirigia al detalle al entregar y lanzaba cualquier rechazo a la pagina de error. Ahora
+// responde con un RowStatusState para ConfirmActionButton: el rechazo queda en la confirmacion con
+// su mensaje y el exito trae la orden; el detalle se repinta con la revalidacion. Sin clave: lo
+// pendiente ya hace que un segundo envio no entregue nada («No queda nada pendiente»).
+describe("C3 de la 11.6b: entregar lo pendiente con resultado", () => {
+  const indexOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
+  const deliverCase = (name: string) => {
+    const found = suites.get("deliverWorkOrderMaterialsAction")?.cases.find((actionCase) => actionCase.name === name);
+
+    if (!found) {
+      throw new Error(`No existe el caso ${name}.`);
+    }
+
+    return found;
+  };
+
+  it("entrega, revalida y responde con la orden, sin redirigir", async () => {
+    const { calls, outcome } = await runAction(
+      deliverPendingAction,
+      deliverCase("entrega lo pendiente: descuenta stock, registra kardex y sincroniza alertas"),
+    );
+
+    expect(outcome).toMatchObject({ status: "success", data: { estado: "entregado" }, values: { id: OT } });
+    expect(indexOf(calls, "movimiento_inventario.create")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "movimiento_inventario.create")).toBeLessThan(indexOf(calls, "prisma.$transaction:commit"));
+    expect(calls.filter((call) => "effect" in call && call.effect === "revalidatePath").length).toBeGreaterThan(0);
+  });
+
+  it("sin orden en el formulario responde con el error, sin consultar", async () => {
+    const { calls, outcome } = await runAction(deliverPendingAction, deliverCase("sin orden en el formulario"));
+
+    expect(outcome).toMatchObject({ status: "error", error: "No se recibio la orden de trabajo.", values: { id: "" } });
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it.each([
+    ["la orden no existe", "La orden de trabajo no existe."],
+    ["orden anulada", "No se puede entregar material a una orden anulada o finalizada."],
+    ["orden finalizada", "No se puede entregar material a una orden anulada o finalizada."],
+    ["materiales ya cerrados", "Los materiales de esta orden ya fueron cerrados: no se puede mover mas material."],
+    ["orden sin requerimiento congelado", "Esta orden no tiene requerimiento congelado"],
+    ["nada pendiente por entregar", "No queda nada pendiente por entregar en esta orden."],
+    ["materiales inactivos: los nombra a todos", "No se puede entregar materiales inactivos:"],
+    ["stock insuficiente: detalla cada material", "Stock insuficiente para entregar la orden:"],
+  ])("%s: responde con el mensaje, revierte y no mueve stock", async (name, message) => {
+    const { calls, outcome } = await runAction(deliverPendingAction, deliverCase(name));
+
+    expect(outcome).toMatchObject({ status: "error", values: { id: OT } });
+    expect((outcome as { error: string }).error).toContain(message);
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "movimiento_inventario.create")).toBe(-1);
+    expect(indexOf(calls, "revalidatePath")).toBe(-1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C4 de la 11.6b (D76): anular y finalizar desde la fila con resultado
+// ---------------------------------------------------------------------------
+
+// Redirigian (anular al listado, finalizar al detalle) y lanzaban cualquier rechazo a la pagina de
+// error. Ahora responden con un RowStatusState para ConfirmActionButton: el rechazo queda en la
+// confirmacion y el exito trae el estado que quedo; el listado se repinta con la revalidacion.
+// Finalizar una orden ya finalizada responde «ya estaba finalizada» sin escribir ni revalidar. El
+// id sigue sin recortarse (entrega 6): viaja tal cual a la consulta y a la respuesta.
+describe("C4 de la 11.6b: anular y finalizar con resultado", () => {
+  const indexOf = (calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) =>
+    calls.findIndex((call) => (isPrismaCall(call) ? call.prisma === key : "effect" in call && call.effect === key));
+  const caseOf = (suite: string, name: string) => {
+    const found = suites.get(suite)?.cases.find((actionCase) => actionCase.name === name);
+
+    if (!found) {
+      throw new Error(`No existe el caso ${name} de ${suite}.`);
+    }
+
+    return found;
+  };
+
+  it.each([
+    ["annulWorkOrderAction", annulAction, "anula la orden", "anulada"],
+    ["finishWorkOrderAction", finishAction, "finaliza con todas las etapas terminadas", "finalizada"],
+  ] as const)("%s guarda, revalida y responde con el estado, sin redirigir", async (suite, action, name, estado) => {
+    const { calls, outcome } = await runAction(action, caseOf(suite, name));
+
+    expect(outcome).toMatchObject({ status: "success", data: { estado }, values: { id: OT } });
+    expect(indexOf(calls, "orden_trabajo.update")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "orden_trabajo.update")).toBeLessThan(indexOf(calls, "prisma.$transaction:commit"));
+    expect(calls.filter((call) => "effect" in call && call.effect === "revalidatePath").length).toBeGreaterThan(0);
+  });
+
+  it("anular no recorta el id: responde con el que llego", async () => {
+    const { outcome } = await runAction(
+      annulAction,
+      caseOf("annulWorkOrderAction", "el id no se recorta: viaja tal cual a la consulta y a la redireccion"),
+    );
+
+    expect(outcome).toMatchObject({ status: "success", values: { id: ` ${OT} ` } });
+  });
+
+  it.each([
+    ["annulWorkOrderAction", annulAction],
+    ["finishWorkOrderAction", finishAction],
+  ] as const)("%s sin orden en el formulario responde con el error, sin consultar", async (suite, action) => {
+    const { calls, outcome } = await runAction(action, caseOf(suite, "sin orden en el formulario"));
+
+    expect(outcome).toMatchObject({ status: "error", error: "No se recibio la orden de trabajo.", values: { id: "" } });
+    expect(calls.filter(isPrismaCall)).toEqual([]);
+  });
+
+  it.each([
+    ["annulWorkOrderAction", annulAction, "la orden no existe", "La orden de trabajo no existe."],
+    ["annulWorkOrderAction", annulAction, "orden ya anulada", "La orden de trabajo ya esta anulada."],
+    ["annulWorkOrderAction", annulAction, "orden finalizada", "No se puede anular una orden finalizada desde el listado."],
+    [
+      "annulWorkOrderAction",
+      annulAction,
+      "orden con movimientos de inventario",
+      "No se puede anular una orden con consumos registrados sin reversar inventario.",
+    ],
+    ["finishWorkOrderAction", finishAction, "la orden no existe", "La orden de trabajo no existe."],
+    ["finishWorkOrderAction", finishAction, "orden anulada", "No se puede finalizar una orden anulada."],
+    ["finishWorkOrderAction", finishAction, "orden sin avances generados", "La orden no tiene avances generados."],
+    [
+      "finishWorkOrderAction",
+      finishAction,
+      "etapas sin terminar",
+      "Solo se puede finalizar una orden cuando todas sus etapas estan terminadas.",
+    ],
+  ] as const)("%s, %s: responde con el mensaje, revierte y no escribe", async (suite, action, name, message) => {
+    const { calls, outcome } = await runAction(action, caseOf(suite, name));
+
+    expect(outcome).toMatchObject({ status: "error", error: message, values: { id: OT } });
+    expect(indexOf(calls, "prisma.$transaction:rollback")).toBeGreaterThan(-1);
+    expect(indexOf(calls, "orden_trabajo.update")).toBe(-1);
+    expect(indexOf(calls, "revalidatePath")).toBe(-1);
+  });
+
+  it("finalizar una orden ya finalizada responde que ya lo estaba, sin escribir ni revalidar", async () => {
+    const { calls, outcome } = await runAction(
+      finishAction,
+      caseOf("finishWorkOrderAction", "orden ya finalizada: vuelve al detalle sin toast ni escrituras"),
+    );
+
+    expect(outcome).toMatchObject({
+      status: "error",
+      error: "La orden de trabajo ya estaba finalizada.",
+      values: { id: OT },
+    });
+    expect(indexOf(calls, "orden_trabajo.update")).toBe(-1);
+    expect(indexOf(calls, "registerAuditLog")).toBe(-1);
+    expect(indexOf(calls, "revalidatePath")).toBe(-1);
   });
 });
