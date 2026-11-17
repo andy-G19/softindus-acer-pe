@@ -68,8 +68,8 @@ type ConfirmDialogProps = ConfirmDialogOpenProps & {
   error?: ReactNode;
 };
 
-// Confirmacion accesible (entrega 8), sucesora de showConfirm y
-// ConfirmDeleteButton (que siguen con SweetAlert2 hasta la entrega 11). Los
+// Confirmacion accesible (entrega 8), sucesora de ConfirmDeleteButton (retirado en
+// la 11.7a) y de showConfirm (SweetAlert2), que se retira en la misma sub-entrega. Los
 // tipos exigen la entidad, la consecuencia y el verbo: no hay confirmaciones
 // genericas. Mientras esta pendiente no se puede cancelar ni cerrar con Esc.
 // Si onConfirm falla, la ventana queda abierta y el error sigue su curso.

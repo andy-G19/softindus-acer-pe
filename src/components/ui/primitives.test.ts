@@ -17,7 +17,6 @@ import { PaginationControls } from "@/components/pagination-controls";
 import {
   RowActions,
   RowEditLink,
-  RowToggleStatusButton,
 } from "@/components/table/row-actions";
 import { TableLoadingRows } from "@/components/table/table-loading-rows";
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -389,19 +388,9 @@ describe("Navegacion y listados", () => {
       h(
         RowActions,
         null,
+        // 11.7a: RowToggleStatusButton se retiro sin usos (hallazgo 74 de la 10.8a); activar e
+        // inactivar desde la fila usan ConfirmActionButton.
         h(RowEditLink, { href: "/dashboard/commercial/clients/CLI00000001/edit" }),
-        h(RowToggleStatusButton, { action: async () => {}, hiddenFieldName: "id_cliente", hiddenFieldValue: "CLI00000001", isActive: true }),
-        h(RowToggleStatusButton, { action: async () => {}, hiddenFieldName: "id_cliente", hiddenFieldValue: "CLI00000002", isActive: false }),
-      ),
-    ],
-    // Entrega 10: con sendsRequestedStatus envia tambien el estado pedido.
-    [
-      "acciones de fila con el estado pedido",
-      h(
-        RowActions,
-        null,
-        h(RowToggleStatusButton, { action: async () => {}, hiddenFieldName: "id_categoria_gasto", hiddenFieldValue: "CGA00000001", isActive: true, sendsRequestedStatus: true }),
-        h(RowToggleStatusButton, { action: async () => {}, hiddenFieldName: "id_categoria_gasto", hiddenFieldValue: "CGA00000002", isActive: false, sendsRequestedStatus: true }),
       ),
     ],
     ...([1, 2, 3] as const).map((page): Case => [
