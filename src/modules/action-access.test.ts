@@ -333,6 +333,25 @@ const MODULOS: ModuloDeAcciones[] = [
     ],
   },
   {
+    // C1 de la 11.6c (D78): los avances entran a la tabla con su comportamiento de hoy (redirigen
+    // sin permiso). Antes ninguna prueba comprobaba que un rol ajeno fuera rechazado.
+    ruta: "production/work-order-progress/actions",
+    cargar: () => import("@/modules/production/work-order-progress/actions"),
+    roles: ADMIN_Y_TALLER,
+    acciones: [
+      "generateWorkOrderProgressAction",
+      "updateWorkOrderProgressAction",
+      "reassignWorkOrderProgressAction",
+    ],
+    // Generar en C3 de la 11.6c (D80); actualizar en C4 (D81); reasignar en C5 (D82): ya ninguna
+    // accion de avances redirige.
+    rechazanConResultado: [
+      "generateWorkOrderProgressAction",
+      "updateWorkOrderProgressAction",
+      "reassignWorkOrderProgressAction",
+    ],
+  },
+  {
     ruta: "staff/attendance/actions",
     cargar: () => import("@/modules/staff/attendance/actions"),
     roles: ADMIN_Y_TALLER,

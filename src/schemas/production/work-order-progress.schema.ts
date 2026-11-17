@@ -13,7 +13,10 @@ export const updateWorkOrderProgressSchema = z.object({
     .trim()
     .min(1, "El avance de producción es obligatorio."),
 
-  estado_etapa: z.enum(["pendiente", "en_proceso", "pausada", "terminada"]),
+  // C4 de la 11.6c (D81): el error queda junto al campo, en espanol.
+  estado_etapa: z.enum(["pendiente", "en_proceso", "pausada", "terminada"], {
+    error: "Selecciona un estado válido para la etapa.",
+  }),
 
   porcentaje_avance: z.coerce
     .number()
@@ -40,3 +43,7 @@ export const reassignWorkOrderProgressSchema = z.object({
     .min(1, "El motivo de reasignacion es obligatorio.")
     .max(255, "El motivo no debe superar 255 caracteres."),
 });
+
+// C1 de la 11.6c (D78): lo que reciben los casos de uso de avances.
+export type UpdateWorkOrderProgressInput = z.infer<typeof updateWorkOrderProgressSchema>;
+export type ReassignWorkOrderProgressInput = z.infer<typeof reassignWorkOrderProgressSchema>;

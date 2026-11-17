@@ -6076,8 +6076,9 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </div>
 <div>
 <div>
-<label>Estado *</label>
-<select name="estado_etapa" required="">
+<label for="estado_etapa_id_avance-2">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado_etapa_id_avance-2" required="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada" selected="">Pausada</option>
@@ -6085,9 +6086,10 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </select>
 </div>
 <div>
-<label>Porcentaje *</label>
-<input type="number" min="0" max="100" step="0.01" required="" name="porcentaje_avance" value="22.5"/>
-<p>Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
+<label for="porcentaje_avance_id_avance-2">Porcentaje<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="porcentaje_avance_id_avance-2" required="" aria-describedby="porcentaje_avance_id_avance-2-ayuda" min="0" max="100" step="0.01" name="porcentaje_avance" value="22.5"/>
+<p id="porcentaje_avance_id_avance-2-ayuda">Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
 </div>
 <div>
 <label>Operario</label>
@@ -6115,8 +6117,8 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">
+<label for="observaciones_id_avance-2">Observaciones</label>
+<textarea id="observaciones_id_avance-2" name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">
 </textarea>
 </div>
 <div>
@@ -6157,8 +6159,9 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </div>
 <div>
 <div>
-<label>Estado *</label>
-<select name="estado_etapa" required="">
+<label for="estado_etapa_id_avance-1">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado_etapa_id_avance-1" required="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
@@ -6166,9 +6169,10 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </select>
 </div>
 <div>
-<label>Porcentaje *</label>
-<input type="number" min="0" max="100" step="0.01" required="" name="porcentaje_avance" value="100"/>
-<p>Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
+<label for="porcentaje_avance_id_avance-1">Porcentaje<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="porcentaje_avance_id_avance-1" required="" aria-describedby="porcentaje_avance_id_avance-1-ayuda" min="0" max="100" step="0.01" name="porcentaje_avance" value="100"/>
+<p id="porcentaje_avance_id_avance-1-ayuda">Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
 </div>
 <div>
 <label>Operario</label>
@@ -6196,8 +6200,8 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">observaciones-1</textarea>
+<label for="observaciones_id_avance-1">Observaciones</label>
+<textarea id="observaciones_id_avance-1" name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">observaciones-1</textarea>
 </div>
 <div>
 <button data-variant="default" type="submit">Actualizar etapa</button>
@@ -6422,8 +6426,9 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </div>
 <div>
 <div>
-<label>Estado *</label>
-<select name="estado_etapa" required="">
+<label for="estado_etapa_id_avance-1">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado_etapa_id_avance-1" required="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
@@ -6431,9 +6436,10 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </select>
 </div>
 <div>
-<label>Porcentaje *</label>
-<input type="number" min="0" max="100" step="0.01" required="" name="porcentaje_avance" value="11.5"/>
-<p>Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
+<label for="porcentaje_avance_id_avance-1">Porcentaje<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="porcentaje_avance_id_avance-1" required="" aria-describedby="porcentaje_avance_id_avance-1-ayuda" min="0" max="100" step="0.01" name="porcentaje_avance" value="11.5"/>
+<p id="porcentaje_avance_id_avance-1-ayuda">Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
 </div>
 <div>
 <label>Operario</label>
@@ -6461,8 +6467,8 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">observaciones-1</textarea>
+<label for="observaciones_id_avance-1">Observaciones</label>
+<textarea id="observaciones_id_avance-1" name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">observaciones-1</textarea>
 </div>
 <div>
 <button data-variant="default" type="submit">Actualizar etapa</button>
@@ -6501,8 +6507,9 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </div>
 <div>
 <div>
-<label>Estado *</label>
-<select name="estado_etapa" required="">
+<label for="estado_etapa_id_avance-2">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado_etapa_id_avance-2" required="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
@@ -6510,9 +6517,10 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </select>
 </div>
 <div>
-<label>Porcentaje *</label>
-<input type="number" min="0" max="100" step="0.01" required="" name="porcentaje_avance" value="22.5"/>
-<p>Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
+<label for="porcentaje_avance_id_avance-2">Porcentaje<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="porcentaje_avance_id_avance-2" required="" aria-describedby="porcentaje_avance_id_avance-2-ayuda" min="0" max="100" step="0.01" name="porcentaje_avance" value="22.5"/>
+<p id="porcentaje_avance_id_avance-2-ayuda">Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
 </div>
 <div>
 <label>Operario</label>
@@ -6540,8 +6548,8 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </div>
 </div>
 <div>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">
+<label for="observaciones_id_avance-2">Observaciones</label>
+<textarea id="observaciones_id_avance-2" name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">
 </textarea>
 </div>
 <div>
@@ -6835,19 +6843,21 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 <span data-variant="secondary">estado_etapa-1</span>
 </div>
 <div>
-<div>
-<label>Estado *</label>
-<select name="estado_etapa" required="" disabled="">
+<div data-disabled="true">
+<label for="estado_etapa_id_avance-1">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado_etapa_id_avance-1" required="" disabled="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
 <option value="terminada">Terminada</option>
 </select>
 </div>
-<div>
-<label>Porcentaje *</label>
-<input type="number" min="0" max="100" step="0.01" required="" disabled="" name="porcentaje_avance" value="11.5"/>
-<p>Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
+<div data-disabled="true">
+<label for="porcentaje_avance_id_avance-1">Porcentaje<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="porcentaje_avance_id_avance-1" required="" disabled="" aria-describedby="porcentaje_avance_id_avance-1-ayuda" min="0" max="100" step="0.01" name="porcentaje_avance" value="11.5"/>
+<p id="porcentaje_avance_id_avance-1-ayuda">Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
 </div>
 <div>
 <label>Operario</label>
@@ -6873,9 +6883,9 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 <p>Requiere máquina</p>
 </div>
 </div>
-<div>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="3" maxLength="700" disabled="" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">observaciones-1</textarea>
+<div data-disabled="true">
+<label for="observaciones_id_avance-1">Observaciones</label>
+<textarea id="observaciones_id_avance-1" disabled="" name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">observaciones-1</textarea>
 </div>
 <div>
 <button data-variant="default" type="submit" disabled="">Actualizar etapa</button>
@@ -6913,19 +6923,21 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 <span data-variant="secondary">estado_etapa-2</span>
 </div>
 <div>
-<div>
-<label>Estado *</label>
-<select name="estado_etapa" required="" disabled="">
+<div data-disabled="true">
+<label for="estado_etapa_id_avance-2">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado_etapa_id_avance-2" required="" disabled="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
 <option value="terminada">Terminada</option>
 </select>
 </div>
-<div>
-<label>Porcentaje *</label>
-<input type="number" min="0" max="100" step="0.01" required="" disabled="" name="porcentaje_avance" value="22.5"/>
-<p>Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
+<div data-disabled="true">
+<label for="porcentaje_avance_id_avance-2">Porcentaje<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="porcentaje_avance_id_avance-2" required="" disabled="" aria-describedby="porcentaje_avance_id_avance-2-ayuda" min="0" max="100" step="0.01" name="porcentaje_avance" value="22.5"/>
+<p id="porcentaje_avance_id_avance-2-ayuda">Pendiente se guarda como 0%. Terminada se guarda como 100%.</p>
 </div>
 <div>
 <label>Operario</label>
@@ -6951,9 +6963,9 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 <p>No requiere máquina</p>
 </div>
 </div>
-<div>
-<label>Observaciones</label>
-<textarea name="observaciones" rows="3" maxLength="700" disabled="" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">
+<div data-disabled="true">
+<label for="observaciones_id_avance-2">Observaciones</label>
+<textarea id="observaciones_id_avance-2" disabled="" name="observaciones" rows="3" maxLength="700" placeholder="Ej. Etapa pausada por falta de material o máquina ocupada.">
 </textarea>
 </div>
 <div>
@@ -7171,13 +7183,11 @@ exports[`/dashboard/production/work-orders/[id]/progress > ruta sin etapas activ
 <div role="alert">
 <div>La ruta asociada no tiene etapas activas.</div>
 </div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="default" type="submit" disabled="">Generar avances por etapa</button>
-</form>
-</section>
+<div>
+<button data-variant="default" type="button" aria-disabled="true">Generar avances por etapa</button>
 </div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</section>
+</div>",
   "outcome": "render",
 }
 `;
@@ -7362,13 +7372,11 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances con ruta 
 <section>
 <h2>La orden todavía no tiene avances generados</h2>
 <p>El sistema puede crear automáticamente un avance por cada etapa activa de la ruta de fabricación asociada a esta orden.</p>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="default" type="submit">Generar avances por etapa</button>
-</form>
-</section>
+<div>
+<button data-variant="default" type="button">Generar avances por etapa</button>
 </div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</section>
+</div>",
   "outcome": "render",
 }
 `;
@@ -7556,13 +7564,11 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances y sin rut
 <div role="alert">
 <div>Esta orden no tiene una ruta de fabricación asociada.</div>
 </div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
-<button data-variant="default" type="submit" disabled="">Generar avances por etapa</button>
-</form>
-</section>
+<div>
+<button data-variant="default" type="button" aria-disabled="true">Generar avances por etapa</button>
 </div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</section>
+</div>",
   "outcome": "render",
 }
 `;
@@ -7760,15 +7766,18 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_avance" value="id_avance-1"/>
 <div>
-<label for="id_operario_nuevo-_R_l_">Nuevo operario *</label>
+<div>
+<label for="id_operario_nuevo">Nuevo operario *</label>
 <input type="hidden" name="id_operario_nuevo" value=""/>
 <div>
-<input id="id_operario_nuevo-_R_l_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-_R_l_-listbox" aria-expanded="false" required="" placeholder="Buscar operario activo..." value=""/>
+<input id="id_operario_nuevo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-listbox" aria-expanded="false" required="" placeholder="Buscar operario activo..." value=""/>
+</div>
 </div>
 </div>
 <div>
-<label>Motivo de reasignación *</label>
-<textarea name="motivo" rows="4" required="" maxLength="255" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
+<label for="motivo">Motivo de reasignación<span aria-hidden="true">*</span>
+</label>
+<textarea id="motivo" required="" name="motivo" rows="4" maxLength="255" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
 </textarea>
 </div>
 <div>
@@ -7939,15 +7948,18 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_avance" value="id_avance-1"/>
 <div>
-<label for="id_operario_nuevo-_R_l_">Nuevo operario *</label>
+<div>
+<label for="id_operario_nuevo">Nuevo operario *</label>
 <input type="hidden" name="id_operario_nuevo" value=""/>
 <div>
-<input id="id_operario_nuevo-_R_l_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-_R_l_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar operario activo..." value=""/>
+<input id="id_operario_nuevo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar operario activo..." value=""/>
 </div>
 </div>
-<div>
-<label>Motivo de reasignación *</label>
-<textarea name="motivo" rows="4" required="" maxLength="255" disabled="" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
+</div>
+<div data-disabled="true">
+<label for="motivo">Motivo de reasignación<span aria-hidden="true">*</span>
+</label>
+<textarea id="motivo" required="" disabled="" name="motivo" rows="4" maxLength="255" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
 </textarea>
 </div>
 <div>
@@ -8126,15 +8138,18 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_avance" value="id_avance-1"/>
 <div>
-<label for="id_operario_nuevo-_R_l_">Nuevo operario *</label>
+<div>
+<label for="id_operario_nuevo">Nuevo operario *</label>
 <input type="hidden" name="id_operario_nuevo" value=""/>
 <div>
-<input id="id_operario_nuevo-_R_l_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-_R_l_-listbox" aria-expanded="false" required="" placeholder="Buscar operario activo..." value=""/>
+<input id="id_operario_nuevo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-listbox" aria-expanded="false" required="" placeholder="Buscar operario activo..." value=""/>
+</div>
 </div>
 </div>
 <div>
-<label>Motivo de reasignación *</label>
-<textarea name="motivo" rows="4" required="" maxLength="255" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
+<label for="motivo">Motivo de reasignación<span aria-hidden="true">*</span>
+</label>
+<textarea id="motivo" required="" name="motivo" rows="4" maxLength="255" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
 </textarea>
 </div>
 <div>
@@ -8316,15 +8331,18 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_avance" value="id_avance-1"/>
 <div>
-<label for="id_operario_nuevo-_R_l_">Nuevo operario *</label>
+<div>
+<label for="id_operario_nuevo">Nuevo operario *</label>
 <input type="hidden" name="id_operario_nuevo" value=""/>
 <div>
-<input id="id_operario_nuevo-_R_l_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-_R_l_-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar operario activo..." value=""/>
+<input id="id_operario_nuevo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar operario activo..." value=""/>
 </div>
 </div>
-<div>
-<label>Motivo de reasignación *</label>
-<textarea name="motivo" rows="4" required="" maxLength="255" disabled="" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
+</div>
+<div data-disabled="true">
+<label for="motivo">Motivo de reasignación<span aria-hidden="true">*</span>
+</label>
+<textarea id="motivo" required="" disabled="" name="motivo" rows="4" maxLength="255" placeholder="Ej. Operario reasignado por carga de trabajo o ausencia.">
 </textarea>
 </div>
 <div>

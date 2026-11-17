@@ -3,7 +3,7 @@
 exports[`generateWorkOrderProgressAction > genera un avance por etapa activa y deja la orden pendiente, sin bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -122,12 +122,23 @@ exports[`generateWorkOrderProgressAction > genera un avance por etapa activa y d
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > genera un avance por etapa activa y deja la orden pendiente, sin bitacora > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-generated"`;
+exports[`generateWorkOrderProgressAction > genera un avance por etapa activa y deja la orden pendiente, sin bitacora > resultado 1`] = `
+{
+  "data": {
+    "estado": "generado",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > la orden no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -176,12 +187,21 @@ exports[`generateWorkOrderProgressAction > la orden no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+exports[`generateWorkOrderProgressAction > la orden no existe > resultado 1`] = `
+{
+  "error": "La orden de trabajo no existe.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > la orden ya tiene avances > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -230,12 +250,21 @@ exports[`generateWorkOrderProgressAction > la orden ya tiene avances > llamadas 
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > la orden ya tiene avances > resultado 1`] = `"error: Esta orden ya tiene avances generados."`;
+exports[`generateWorkOrderProgressAction > la orden ya tiene avances > resultado 1`] = `
+{
+  "error": "Esta orden ya tiene avances generados.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > orden anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -284,12 +313,21 @@ exports[`generateWorkOrderProgressAction > orden anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > orden anulada > resultado 1`] = `"error: No se pueden generar avances para una orden anulada o finalizada."`;
+exports[`generateWorkOrderProgressAction > orden anulada > resultado 1`] = `
+{
+  "error": "No se pueden generar avances para una orden anulada o finalizada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -338,12 +376,21 @@ exports[`generateWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > orden finalizada > resultado 1`] = `"error: No se pueden generar avances para una orden anulada o finalizada."`;
+exports[`generateWorkOrderProgressAction > orden finalizada > resultado 1`] = `
+{
+  "error": "No se pueden generar avances para una orden anulada o finalizada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > orden sin ruta de fabricacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -392,12 +439,21 @@ exports[`generateWorkOrderProgressAction > orden sin ruta de fabricacion > llama
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > orden sin ruta de fabricacion > resultado 1`] = `"error: La orden no tiene una ruta de fabricación asociada."`;
+exports[`generateWorkOrderProgressAction > orden sin ruta de fabricacion > resultado 1`] = `
+{
+  "error": "La orden no tiene una ruta de fabricación asociada.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > ruta sin etapas activas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -446,12 +502,21 @@ exports[`generateWorkOrderProgressAction > ruta sin etapas activas > llamadas 1`
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > ruta sin etapas activas > resultado 1`] = `"error: La ruta asociada no tiene etapas activas."`;
+exports[`generateWorkOrderProgressAction > ruta sin etapas activas > resultado 1`] = `
+{
+  "error": "La ruta asociada no tiene etapas activas.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "OTR00000007",
+  },
+}
+`;
 
 exports[`generateWorkOrderProgressAction > sin orden en el formulario > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -460,12 +525,21 @@ exports[`generateWorkOrderProgressAction > sin orden en el formulario > llamadas
 ]
 `;
 
-exports[`generateWorkOrderProgressAction > sin orden en el formulario > resultado 1`] = `"error: No se recibió la orden de trabajo."`;
+exports[`generateWorkOrderProgressAction > sin orden en el formulario > resultado 1`] = `
+{
+  "error": "No se recibió la orden de trabajo.",
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id": "",
+  },
+}
+`;
 
 exports[`reassignWorkOrderProgressAction > datos invalidos: sin motivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -474,12 +548,27 @@ exports[`reassignWorkOrderProgressAction > datos invalidos: sin motivo > llamada
 ]
 `;
 
-exports[`reassignWorkOrderProgressAction > datos invalidos: sin motivo > resultado 1`] = `"error: El motivo de reasignacion es obligatorio."`;
+exports[`reassignWorkOrderProgressAction > datos invalidos: sin motivo > resultado 1`] = `
+{
+  "error": "Revisa los datos de la reasignación.",
+  "fieldErrors": {
+    "motivo": [
+      "El motivo de reasignacion es obligatorio.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_operario_nuevo": "OPE00000004",
+    "motivo": "  ",
+  },
+}
+`;
 
 exports[`reassignWorkOrderProgressAction > el avance no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -507,12 +596,23 @@ exports[`reassignWorkOrderProgressAction > el avance no existe > llamadas 1`] = 
 ]
 `;
 
-exports[`reassignWorkOrderProgressAction > el avance no existe > resultado 1`] = `"error: El avance seleccionado no existe."`;
+exports[`reassignWorkOrderProgressAction > el avance no existe > resultado 1`] = `
+{
+  "error": "El avance seleccionado no existe.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_operario_nuevo": "OPE00000004",
+    "motivo": "Cambio de turno",
+  },
+}
+`;
 
 exports[`reassignWorkOrderProgressAction > el nuevo operario es el mismo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -576,12 +676,27 @@ exports[`reassignWorkOrderProgressAction > el nuevo operario es el mismo > llama
 ]
 `;
 
-exports[`reassignWorkOrderProgressAction > el nuevo operario es el mismo > resultado 1`] = `"error: El nuevo operario debe ser distinto al operario actual."`;
+exports[`reassignWorkOrderProgressAction > el nuevo operario es el mismo > resultado 1`] = `
+{
+  "error": "El nuevo operario debe ser distinto al operario actual.",
+  "fieldErrors": {
+    "id_operario_nuevo": [
+      "El nuevo operario debe ser distinto al operario actual.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_operario_nuevo": "OPE00000001",
+    "motivo": "Cambio de turno",
+  },
+}
+`;
 
 exports[`reassignWorkOrderProgressAction > el nuevo operario no existe o esta inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -645,12 +760,27 @@ exports[`reassignWorkOrderProgressAction > el nuevo operario no existe o esta in
 ]
 `;
 
-exports[`reassignWorkOrderProgressAction > el nuevo operario no existe o esta inactivo > resultado 1`] = `"error: El nuevo operario no existe o esta inactivo."`;
+exports[`reassignWorkOrderProgressAction > el nuevo operario no existe o esta inactivo > resultado 1`] = `
+{
+  "error": "El nuevo operario no existe o esta inactivo.",
+  "fieldErrors": {
+    "id_operario_nuevo": [
+      "El nuevo operario no existe o esta inactivo.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_operario_nuevo": "OPE00000004",
+    "motivo": "Cambio de turno",
+  },
+}
+`;
 
 exports[`reassignWorkOrderProgressAction > orden anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -714,12 +844,23 @@ exports[`reassignWorkOrderProgressAction > orden anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`reassignWorkOrderProgressAction > orden anulada > resultado 1`] = `"error: No se puede reasignar el avance de una orden anulada o finalizada."`;
+exports[`reassignWorkOrderProgressAction > orden anulada > resultado 1`] = `
+{
+  "error": "No se puede reasignar el avance de una orden anulada o finalizada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_operario_nuevo": "OPE00000004",
+    "motivo": "Cambio de turno",
+  },
+}
+`;
 
 exports[`reassignWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -783,12 +924,23 @@ exports[`reassignWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
 ]
 `;
 
-exports[`reassignWorkOrderProgressAction > orden finalizada > resultado 1`] = `"error: No se puede reasignar el avance de una orden anulada o finalizada."`;
+exports[`reassignWorkOrderProgressAction > orden finalizada > resultado 1`] = `
+{
+  "error": "No se puede reasignar el avance de una orden anulada o finalizada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "id_operario_nuevo": "OPE00000004",
+    "motivo": "Cambio de turno",
+  },
+}
+`;
 
 exports[`reassignWorkOrderProgressAction > reasigna: registra la reasignacion, cambia el operario y deja bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -920,12 +1072,25 @@ exports[`reassignWorkOrderProgressAction > reasigna: registra la reasignacion, c
 ]
 `;
 
-exports[`reassignWorkOrderProgressAction > reasigna: registra la reasignacion, cambia el operario y deja bitacora > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-reassigned"`;
+exports[`reassignWorkOrderProgressAction > reasigna: registra la reasignacion, cambia el operario y deja bitacora > resultado 1`] = `
+{
+  "data": {
+    "id_avance": "AVN00000002",
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "id_operario_nuevo": "OPE00000004",
+    "motivo": "Cambio de turno",
+  },
+}
+`;
 
 exports[`updateWorkOrderProgressAction > datos invalidos: responde el primer mensaje de Zod sin consultar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -934,12 +1099,28 @@ exports[`updateWorkOrderProgressAction > datos invalidos: responde el primer men
 ]
 `;
 
-exports[`updateWorkOrderProgressAction > datos invalidos: responde el primer mensaje de Zod sin consultar > resultado 1`] = `"error: El porcentaje no puede ser mayor a 100."`;
+exports[`updateWorkOrderProgressAction > datos invalidos: responde el primer mensaje de Zod sin consultar > resultado 1`] = `
+{
+  "error": "Revisa los datos de la etapa.",
+  "fieldErrors": {
+    "porcentaje_avance": [
+      "El porcentaje no puede ser mayor a 100.",
+    ],
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "estado_etapa": "en_proceso",
+    "observaciones": "",
+    "porcentaje_avance": "120",
+  },
+}
+`;
 
 exports[`updateWorkOrderProgressAction > el avance no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -967,12 +1148,24 @@ exports[`updateWorkOrderProgressAction > el avance no existe > llamadas 1`] = `
 ]
 `;
 
-exports[`updateWorkOrderProgressAction > el avance no existe > resultado 1`] = `"error: El avance seleccionado no existe."`;
+exports[`updateWorkOrderProgressAction > el avance no existe > resultado 1`] = `
+{
+  "error": "El avance seleccionado no existe.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "estado_etapa": "en_proceso",
+    "observaciones": "",
+    "porcentaje_avance": "45",
+  },
+}
+`;
 
 exports[`updateWorkOrderProgressAction > en proceso con 0 %: sube a 1 %, fija el inicio y deja la orden en proceso > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1091,12 +1284,26 @@ exports[`updateWorkOrderProgressAction > en proceso con 0 %: sube a 1 %, fija el
 ]
 `;
 
-exports[`updateWorkOrderProgressAction > en proceso con 0 %: sube a 1 %, fija el inicio y deja la orden en proceso > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-updated"`;
+exports[`updateWorkOrderProgressAction > en proceso con 0 %: sube a 1 %, fija el inicio y deja la orden en proceso > resultado 1`] = `
+{
+  "data": {
+    "id_avance": "AVN00000002",
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "estado_etapa": "en_proceso",
+    "observaciones": "  Corte iniciado  ",
+    "porcentaje_avance": "0",
+  },
+}
+`;
 
 exports[`updateWorkOrderProgressAction > orden anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1144,12 +1351,24 @@ exports[`updateWorkOrderProgressAction > orden anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`updateWorkOrderProgressAction > orden anulada > resultado 1`] = `"error: No se puede modificar el avance de una orden anulada o finalizada."`;
+exports[`updateWorkOrderProgressAction > orden anulada > resultado 1`] = `
+{
+  "error": "No se puede modificar el avance de una orden anulada o finalizada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "estado_etapa": "en_proceso",
+    "observaciones": "",
+    "porcentaje_avance": "45",
+  },
+}
+`;
 
 exports[`updateWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1197,12 +1416,24 @@ exports[`updateWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
 ]
 `;
 
-exports[`updateWorkOrderProgressAction > orden finalizada > resultado 1`] = `"error: No se puede modificar el avance de una orden anulada o finalizada."`;
+exports[`updateWorkOrderProgressAction > orden finalizada > resultado 1`] = `
+{
+  "error": "No se puede modificar el avance de una orden anulada o finalizada.",
+  "fieldErrors": undefined,
+  "operationId": "operacion-de-prueba",
+  "status": "error",
+  "values": {
+    "estado_etapa": "en_proceso",
+    "observaciones": "",
+    "porcentaje_avance": "45",
+  },
+}
+`;
 
 exports[`updateWorkOrderProgressAction > pausa con 100 %: baja a 99 %, borra la fecha de fin previa y pausa la orden > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1321,12 +1552,26 @@ exports[`updateWorkOrderProgressAction > pausa con 100 %: baja a 99 %, borra la 
 ]
 `;
 
-exports[`updateWorkOrderProgressAction > pausa con 100 %: baja a 99 %, borra la fecha de fin previa y pausa la orden > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-updated"`;
+exports[`updateWorkOrderProgressAction > pausa con 100 %: baja a 99 %, borra la fecha de fin previa y pausa la orden > resultado 1`] = `
+{
+  "data": {
+    "id_avance": "AVN00000002",
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "estado_etapa": "pausada",
+    "observaciones": "",
+    "porcentaje_avance": "100",
+  },
+}
+`;
 
 exports[`updateWorkOrderProgressAction > termina la ultima etapa: 100 %, conserva el inicio, fija el fin y finaliza la orden > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1445,12 +1690,26 @@ exports[`updateWorkOrderProgressAction > termina la ultima etapa: 100 %, conserv
 ]
 `;
 
-exports[`updateWorkOrderProgressAction > termina la ultima etapa: 100 %, conserva el inicio, fija el fin y finaliza la orden > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-updated"`;
+exports[`updateWorkOrderProgressAction > termina la ultima etapa: 100 %, conserva el inicio, fija el fin y finaliza la orden > resultado 1`] = `
+{
+  "data": {
+    "id_avance": "AVN00000002",
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "estado_etapa": "terminada",
+    "observaciones": "",
+    "porcentaje_avance": "40",
+  },
+}
+`;
 
 exports[`updateWorkOrderProgressAction > vuelve a pendiente: 0 %, sin fechas, y la orden queda pendiente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1569,4 +1828,18 @@ exports[`updateWorkOrderProgressAction > vuelve a pendiente: 0 %, sin fechas, y 
 ]
 `;
 
-exports[`updateWorkOrderProgressAction > vuelve a pendiente: 0 %, sin fechas, y la orden queda pendiente > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-updated"`;
+exports[`updateWorkOrderProgressAction > vuelve a pendiente: 0 %, sin fechas, y la orden queda pendiente > resultado 1`] = `
+{
+  "data": {
+    "id_avance": "AVN00000002",
+    "id_orden_trabajo": "OTR00000007",
+  },
+  "operationId": "operacion-de-prueba",
+  "status": "success",
+  "values": {
+    "estado_etapa": "pendiente",
+    "observaciones": "",
+    "porcentaje_avance": "50",
+  },
+}
+`;
