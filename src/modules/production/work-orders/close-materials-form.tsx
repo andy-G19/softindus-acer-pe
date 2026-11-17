@@ -40,15 +40,20 @@ export function CloseMaterialsForm({
   pending,
 }: CloseMaterialsFormProps) {
   // Se propone como consumo lo entregado menos lo devuelto: el caso mayoritario es que se
-  // consumió todo lo que no volvió, y así el usuario solo corrige las excepciones. Vive fuera de
-  // ActionForm, así que lo escrito se conserva cuando sus campos se remontan tras un error.
-  const [consumed, setConsumed] = useState<Record<string, string>>(() =>
-    Object.fromEntries(
-      lines.map((line) => [
-        line.idRequerimiento,
-        Math.max(line.delivered - line.returned, 0).toFixed(2),
-      ]),
-    ),
+  // consumió todo lo que no volvió, y así el usuario solo corrige las excepciones.
+  //
+  // El estado guarda solo lo que el usuario escribió; cada campo muestra eso o, si no lo tocó, la
+  // propuesta de las líneas que llegan. Así una entrega adicional o una devolución en la misma
+  // página, que repinta lo entregado y lo devuelto, también mueve la propuesta de las líneas no
+  // tocadas sin pisar las demás (hallazgo 9 de la 11.6b: la propuesta se calculaba una sola vez, al
+  // montar). Vive fuera de ActionForm, así que lo escrito se conserva cuando sus campos se remontan
+  // tras un error.
+  const [edited, setEdited] = useState<Record<string, string>>({});
+  const consumed = Object.fromEntries(
+    lines.map((line) => [
+      line.idRequerimiento,
+      edited[line.idRequerimiento] ?? Math.max(line.delivered - line.returned, 0).toFixed(2),
+    ]),
   );
 
   const fieldErrors = state.status === "error" ? state.fieldErrors : undefined;
@@ -141,7 +146,7 @@ export function CloseMaterialsForm({
                       aria-describedby={hasError ? errorId : undefined}
                       value={consumed[row.idRequerimiento] ?? ""}
                       onChange={(event) =>
-                        setConsumed((current) => ({
+                        setEdited((current) => ({
                           ...current,
                           [row.idRequerimiento]: event.target.value,
                         }))

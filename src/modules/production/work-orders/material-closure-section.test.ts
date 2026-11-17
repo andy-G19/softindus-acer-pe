@@ -299,6 +299,40 @@ describe("MaterialClosureSection (C2 de la 11.6b)", () => {
     expect(consumedInputs().map((input) => input.value)).toEqual(["18.00", "60.00"]);
   });
 
+  // Hallazgo 9 de la 11.6b, visto en staging: la propuesta de consumo se calculaba una sola vez, al
+  // montar el formulario. Tras una entrega adicional y una devolucion en la misma pagina, el detalle
+  // repintaba lo entregado y lo devuelto, pero el mango seguia proponiendo 1.00 en vez de 1.50 y la
+  // tabla mostraba una merma que nadie declaro.
+  it("la propuesta sigue a lo entregado y lo devuelto cuando el detalle se repinta", async () => {
+    await render({});
+
+    expect(consumedInputs().map((input) => input.value)).toEqual(["18.00", "60.00"]);
+
+    // Una entrega adicional de 2 y una devolucion de 1 en la segunda linea.
+    await act(async () =>
+      repaint({ lines: [LINES[0], { ...LINES[1], delivered: 62, returned: 1 }] }),
+    );
+
+    expect(consumedInputs().map((input) => input.value)).toEqual(["18.00", "61.00"]);
+    expect(host.textContent).toContain("Merma total derivada: 0.00");
+  });
+
+  it("lo que el usuario ya escribio no se pisa al repintar; las demas lineas siguen a su propuesta", async () => {
+    await render({});
+
+    await type(consumedInputs()[0], "15");
+    await act(async () =>
+      repaint({
+        lines: [
+          { ...LINES[0], delivered: 25 },
+          { ...LINES[1], delivered: 62, returned: 1 },
+        ],
+      }),
+    );
+
+    expect(consumedInputs().map((input) => input.value)).toEqual(["15", "61.00"]);
+  });
+
   it("sin entregas no ofrece cerrar: la conciliacion empieza con la primera entrega", async () => {
     await render({}, { hasDeliveries: false });
 
