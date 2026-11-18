@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
+import { PAYMENT_METHOD_OPTIONS } from "@/modules/commercial/payment-labels";
 import {
   Table,
   TableBody,
@@ -290,11 +291,11 @@ export function QuoteForm({ action, orders, defaultOrderId, successNotification,
                 defaultValue={values?.metodo_pago_adelanto ?? ""}
               >
                 <option value="">Seleccione...</option>
-                <option value="efectivo">Efectivo</option>
-                <option value="transferencia">Transferencia</option>
-                <option value="yape">Yape</option>
-                <option value="plin">Plin</option>
-                <option value="otro">Otro</option>
+                {PAYMENT_METHOD_OPTIONS.map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
               </NativeSelect>
             )}
           </Field>

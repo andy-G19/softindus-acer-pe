@@ -4,6 +4,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PaymentFormState } from "@/modules/commercial/payments/actions";
+import { PAYMENT_METHOD_OPTIONS, PAYMENT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
 import { PaymentForm } from "@/modules/commercial/payments/payment-form";
 
 // Seccion del pago de cliente en el detalle de la proforma (C5 de la 11.3a) con React real: la
@@ -177,5 +178,24 @@ describe("PaymentForm", () => {
     expect(notifications.notify).toHaveBeenCalledWith(NOTIFICATION);
     expect(control<HTMLInputElement>("monto_pagado").disabled).toBe(true);
     expect(host.textContent).toContain("Esta proforma ya está pagada.");
+  });
+});
+
+/** Las opciones de un select como pares [valor, texto], en su orden. */
+function optionsOf(name: string) {
+  return [...control<HTMLSelectElement>(name).options].map((option) => [option.value, option.textContent]);
+}
+
+// C6 de la 11.7d (D106, hallazgo 4 de la 11.3c): el formulario tenia su propia copia de las
+// opciones, y el tipo en otro orden («Amortización» primero). Ahora usa las listas compartidas, las
+// mismas del filtro y del historial. El valor por defecto no cambia: va explicito.
+describe("C6 de la 11.7d: el pago de cliente usa las listas compartidas", () => {
+  it("ofrece el metodo y el tipo de las listas, en su orden, con «Amortización» elegida", async () => {
+    await render(() => ({ status: "idle" }) as unknown as PaymentFormState);
+
+    expect(optionsOf("metodo_pago")).toEqual(PAYMENT_METHOD_OPTIONS.map(([value, label]) => [value, label]));
+    expect(optionsOf("tipo_pago")).toEqual(PAYMENT_TYPE_OPTIONS.map(([value, label]) => [value, label]));
+    expect(control<HTMLSelectElement>("metodo_pago").value).toBe("efectivo");
+    expect(control<HTMLSelectElement>("tipo_pago").value).toBe("amortizacion");
   });
 });

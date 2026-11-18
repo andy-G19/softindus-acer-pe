@@ -4,6 +4,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { QuoteFormState } from "@/modules/commercial/quotes/actions";
+import { PAYMENT_METHOD_OPTIONS } from "@/modules/commercial/payment-labels";
 import { QuoteForm, type QuoteOrderOption } from "@/modules/commercial/quotes/quote-form";
 
 // Formulario de la proforma nueva (C4 de la 11.3a) con React real: la clave de la operacion, lo
@@ -198,5 +199,23 @@ describe("C5 de la 11.7d: volver a pedidos tras crear la proforma", () => {
 
     expect(notifications.notify).toHaveBeenCalledWith(NOTIFICATION);
     expect(router.push).toHaveBeenCalledWith(orders);
+  });
+});
+
+/** Las opciones de un select como pares [valor, texto], en su orden. */
+function optionsOf(name: string) {
+  return [...control<HTMLSelectElement>(name).options].map((option) => [option.value, option.textContent]);
+}
+
+// C6 de la 11.7d (D106): el metodo del adelanto sale de la lista compartida, despues de su opcion
+// vacia, que obliga a elegirlo cuando hay adelanto.
+describe("C6 de la 11.7d: la proforma usa la lista compartida de metodos", () => {
+  it("ofrece «Seleccione...» y los metodos de la lista, en su orden", async () => {
+    await render(() => ({ status: "idle" }) as unknown as QuoteFormState);
+
+    expect(optionsOf("metodo_pago_adelanto")).toEqual([
+      ["", "Seleccione..."],
+      ...PAYMENT_METHOD_OPTIONS.map(([value, label]) => [value, label]),
+    ]);
   });
 });

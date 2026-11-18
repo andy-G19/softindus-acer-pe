@@ -4,8 +4,9 @@
  * filtros, las tablas de los listados y los historiales del detalle de proforma leen las mismas
  * listas, asi que lo que se filtra es lo que se ve.
  *
- * Los formularios conservan su propia lista por ahora: el de pago ofrece «Amortización» primero
- * porque es su valor por defecto, y cambiar el orden cambiaria lo que se envia sin tocarlo.
+ * Los formularios de Comercial (pago de cliente, adelanto de la proforma y comprobante) usan las
+ * mismas listas desde la 11.7d (C6, D106). El pago ofrece el tipo en este orden; su valor por
+ * defecto, «Amortización», va explicito en el formulario, asi que el orden no cambia lo que envia.
  *
  * Modulo puro, sin Prisma ni `server-only`: lo usan paginas y componentes.
  */

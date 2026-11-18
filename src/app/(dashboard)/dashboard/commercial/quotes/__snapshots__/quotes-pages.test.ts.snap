@@ -1892,8 +1892,8 @@ exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite 
 <label for="tipo_pago">Tipo de pago<span aria-hidden="true">*</span>
 </label>
 <select id="tipo_pago" required="" disabled="" name="tipo_pago">
-<option value="amortizacion" selected="">Amortización</option>
 <option value="adelanto">Adelanto</option>
+<option value="amortizacion" selected="">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
 </div>
@@ -2253,8 +2253,8 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 <label for="tipo_pago">Tipo de pago<span aria-hidden="true">*</span>
 </label>
 <select id="tipo_pago" required="" name="tipo_pago">
-<option value="amortizacion" selected="">Amortización</option>
 <option value="adelanto">Adelanto</option>
+<option value="amortizacion" selected="">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
 </div>
@@ -2613,8 +2613,8 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 <label for="tipo_pago">Tipo de pago<span aria-hidden="true">*</span>
 </label>
 <select id="tipo_pago" required="" name="tipo_pago">
-<option value="amortizacion" selected="">Amortización</option>
 <option value="adelanto">Adelanto</option>
+<option value="amortizacion" selected="">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
 </div>
@@ -3061,8 +3061,8 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 <label for="tipo_pago">Tipo de pago<span aria-hidden="true">*</span>
 </label>
 <select id="tipo_pago" required="" disabled="" name="tipo_pago">
-<option value="amortizacion" selected="">Amortización</option>
 <option value="adelanto">Adelanto</option>
+<option value="amortizacion" selected="">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
 </div>
