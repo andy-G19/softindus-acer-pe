@@ -76,6 +76,7 @@ npm run check            # Prisma, lint, tipos, tests y build con entorno fictic
 npm run refactor:inventory # Actualiza el inventario estructural de refactorización
 npm run test              # Vitest (una sola corrida)
 npm run db:validate       # Valida prisma/schema.prisma
+npm run db:format         # Comprueba que prisma/schema.prisma esté formateado (prisma format lo arregla)
 npm run db:generate       # Regenera el cliente de Prisma (src/generated/prisma)
 npm run db:migrate        # Crea y aplica una migración (prisma migrate dev)
 npm run db:seed           # Ejecuta prisma/seed.ts
@@ -178,7 +179,7 @@ Ver el checklist completo en
 
 - Unitarias con Vitest (`npm run test`), incluidas en CI.
 - CI en `.github/workflows/ci.yml` ejecuta `npm run check`: `db:generate` →
-  `db:validate` → `lint` → `typecheck` → `test` → `build`.
+  `db:validate` → `db:format` → `lint` → `typecheck` → `test` → `build`.
 - Checklists manuales en `docs/`:
   [pruebas de seguridad](docs/pruebas-seguridad.md),
   [pruebas integrales por rol](docs/checklist-pruebas-integrales.md).

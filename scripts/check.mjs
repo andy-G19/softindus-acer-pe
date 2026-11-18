@@ -23,7 +23,8 @@ const env = {
 // Let Vitest and Next choose their own mode, regardless of the caller's shell.
 delete env.NODE_ENV;
 
-const steps = ["db:generate", "db:validate", "lint", "typecheck", "test", "build"];
+// db:format solo comprueba que schema.prisma este formateado (11.7b): no lo escribe.
+const steps = ["db:generate", "db:validate", "db:format", "lint", "typecheck", "test", "build"];
 for (const step of steps) {
   console.log(`\n[check] ${step}`);
   const code = await new Promise((resolve) => {
