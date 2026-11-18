@@ -33,7 +33,7 @@ exports[`/dashboard/petty-cash/boxes > listado > llamadas 1`] = `
 
 exports[`/dashboard/petty-cash/boxes > listado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -181,7 +181,7 @@ exports[`/dashboard/petty-cash/boxes > listado > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;

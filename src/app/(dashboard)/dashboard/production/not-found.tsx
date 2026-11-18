@@ -6,7 +6,7 @@ import { ErrorState } from "@/components/ui/error-state";
 
 export default function ProductionNotFoundPage() {
   return (
-    <main className="flex min-h-[60vh] items-center justify-center">
+    <div className="flex min-h-[60vh] items-center justify-center">
       <ErrorState
         icon={SearchX}
         title="Registro de producción no encontrado"
@@ -24,6 +24,6 @@ export default function ProductionNotFoundPage() {
           </>
         }
       />
-    </main>
+    </div>
   );
 }

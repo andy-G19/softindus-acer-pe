@@ -54,7 +54,7 @@ export default async function PettyCashBoxesPage() {
   }, 0);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Cajas chicas"
         description="Consulta las cajas chicas abiertas y cerradas, sus saldos, responsables, fechas de apertura y cantidad de movimientos registrados."
@@ -175,6 +175,6 @@ export default async function PettyCashBoxesPage() {
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

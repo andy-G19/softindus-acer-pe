@@ -184,7 +184,7 @@ exports[`/dashboard/petty-cash/monthly-summary > mes actual > llamadas 1`] = `
 
 exports[`/dashboard/petty-cash/monthly-summary > mes actual > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -555,7 +555,7 @@ exports[`/dashboard/petty-cash/monthly-summary > mes actual > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -744,7 +744,7 @@ exports[`/dashboard/petty-cash/monthly-summary > mes elegido > llamadas 1`] = `
 
 exports[`/dashboard/petty-cash/monthly-summary > mes elegido > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1115,7 +1115,7 @@ exports[`/dashboard/petty-cash/monthly-summary > mes elegido > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1304,7 +1304,7 @@ exports[`/dashboard/petty-cash/monthly-summary > mes invalido usa el actual > ll
 
 exports[`/dashboard/petty-cash/monthly-summary > mes invalido usa el actual > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1675,7 +1675,7 @@ exports[`/dashboard/petty-cash/monthly-summary > mes invalido usa el actual > re
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;

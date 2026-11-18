@@ -17,7 +17,7 @@ export default function ProductionErrorPage({
   reset,
 }: ProductionErrorPageProps) {
   return (
-    <main className="flex min-h-[60vh] items-center justify-center">
+    <div className="flex min-h-[60vh] items-center justify-center">
       <ErrorState
         title="Ocurrió un problema en Producción"
         description="El sistema no pudo completar la operación solicitada. Esto puede ocurrir por una validación, un dato relacionado que falta o una restricción del módulo."
@@ -33,6 +33,6 @@ export default function ProductionErrorPage({
           </>
         }
       />
-    </main>
+    </div>
   );
 }
