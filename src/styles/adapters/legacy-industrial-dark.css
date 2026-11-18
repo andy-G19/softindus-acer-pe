@@ -16,11 +16,6 @@
     border-color: var(--border);
   }
 
-  .industrial-dark :is(section, div, article).border-dashed {
-    background-color: color-mix(in srgb, var(--card) 78%, transparent);
-    border-color: color-mix(in srgb, var(--border) 70%, transparent);
-  }
-
   .industrial-dark :is(section, div, article).rounded-xl.border:has(> h2),
   .industrial-dark :is(section, div, article).rounded-lg.border:has(> h2) {
     background-color: var(--card);
