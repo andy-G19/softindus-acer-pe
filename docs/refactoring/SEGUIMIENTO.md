@@ -10075,7 +10075,7 @@ Datos leídos de la API de GitHub el 2026-11-18 (UTC) y comparados con git:
 
 ### Sub-entrega 11.7c2 — Los bloques con borde y el retiro del adaptador
 
-Fecha: 2026-11-18 (Lima). Estado: preparada en `staging` (sin push). Plan en
+Fecha: 2026-11-18 (Lima). Estado: verificada en staging (CI #215); falta el PR a `main`. Plan en
 `tmp/e11-diff/plan-11-7c2.md`, aprobado el 2026-11-18 con las decisiones D100 a D103:
 - D100: los bloques pasan a sus clases (D94), no se mueven tal cual (D99). Cada elemento declara lo
   que la pantalla mostraba; después se borran las reglas, el adaptador, su prueba y su import.
@@ -10094,7 +10094,8 @@ Fecha: 2026-11-18 (Lima). Estado: preparada en `staging` (sin push). Plan en
 | b7ca844 | refactor | R5 y R6: 7 bloques con tabla declaran `bg-card` (6 en el detalle de la proforma, 1 en la proforma nueva y «Cerrar materiales»); se van los 4 `:has()`. |
 | 21c1c41 | refactor | R1 y R2: `border-border/80`, `border-input` y `border-sidebar-border/80` → `border-border` en 118 literales de 60 archivos; «Reabrir el cierre» con `bg-card`; alertas y tarjeta de módulo sin el color de borde que no se veía (D101). |
 | 2c325c4 | refactor | Se borran el adaptador, su prueba y su import. |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 2966f8a | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -10187,6 +10188,26 @@ Hallazgos:
 3. `EmptyState className="border-0"`: el color de un borde de ancho 0 cambia sin que se vea
    (diferencia de paridad prevista).
 
+#### Publicación, CI y verificación en staging
+
+1. Push de los 7 commits (de `de2091d` a `2966f8a`): CI #215 en verde (de 19:02:46 a 19:08:37 UTC
+   del 2026-11-18); Vercel desplegó staging (`success` a las 19:04:46 UTC). Sin migraciones.
+2. Todo se hizo con ADMIN y en solo lectura, con el origen comprobado en una llamada aparte. La
+   base era de `de2091d` (18:02 UTC), antes de tocar código. Las huellas de después están en
+   `tmp/e11-diff/huellas-117c2-despues.txt`.
+3. El CSS servido no tiene ningún selector `.rounded-*.border` y trae `.bg-surface-dashed`. El
+   script que medía cada regla ya no encuentra ninguna.
+4. Paridad de las 24 páginas a 1280 × 900, 9.043 elementos:
+   - 22 páginas con 0 diferencias y la misma huella que la base.
+   - Compra `COM00000013` y galería, 1 diferencia cada una: la prevista (hallazgo 3). Es el
+     `EmptyState` con `border-0` dentro de una tabla («Todavía no hay pagos registrados…» y el
+     listado vacío de la galería). Su borde pasa del 5,5 % al 8 % de blanco, con un ancho
+     medido de 0 px, así que no se ve.
+5. El hover de una tarjeta de módulo del inicio deja el borde en `rgba(255, 255, 255, 0.08)`, como
+   antes, y el fondo en `--secondary`. Una primera lectura dio el fondo de reposo porque la
+   transición de 150 ms no había terminado.
+6. No se escribió nada en staging.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -10212,7 +10233,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 integrada en `main` (PR #54, CI #214); 11.7c2 preparada (adaptador retirado) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 integrada en `main` (PR #54, CI #214); 11.7c2 verificada en staging (CI #215; adaptador retirado) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
