@@ -10,54 +10,6 @@
     border-color: var(--border);
   }
 
-  .industrial-dark :is(section, div).overflow-hidden:has(table) {
-    overflow-x: auto;
-  }
-
-  .industrial-dark table {
-    min-width: max-content;
-    border-color: var(--border);
-    color: var(--foreground);
-  }
-
-  .industrial-dark thead {
-    background-color: var(--secondary);
-    color: var(--foreground);
-  }
-
-  .industrial-dark th {
-    border-color: var(--border);
-    color: var(--foreground);
-    font-weight: 600;
-  }
-
-  .industrial-dark td {
-    border-color: color-mix(in srgb, var(--border) 78%, transparent);
-  }
-
-  .industrial-dark tbody tr {
-    border-color: color-mix(in srgb, var(--border) 78%, transparent);
-    transition-property: background-color;
-    transition-duration: var(--motion-fast);
-  }
-
-  .industrial-dark tbody tr:hover {
-    background-color: color-mix(in srgb, var(--secondary) 70%, transparent);
-  }
-
-  .industrial-dark tfoot {
-    background-color: var(--secondary);
-    color: var(--foreground);
-  }
-
-  .industrial-dark caption {
-    color: var(--muted-foreground);
-  }
-
-  .industrial-dark td[colspan] {
-    color: var(--muted-foreground);
-  }
-
   /* El tema vive en <html> (11.7c). Sin el filtro, estas dos reglas alcanzarian el titulo del
      login, cuyo main llevaba la clase y por eso quedaba fuera. El filtro va en :where para no
      subir la especificidad. Las dos reglas salen del adaptador en el commit de los titulos. */

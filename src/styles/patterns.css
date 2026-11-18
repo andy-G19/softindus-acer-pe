@@ -135,4 +135,55 @@
     background-color: var(--popover);
     color: var(--popover-foreground);
   }
+
+  /* Tablas en toda la app (11.7c; antes en el adaptador, movidas tal cual). Ganan a las clases
+     de los componentes Table* donde chocan (por ejemplo, el borde y el hover de la fila): esa
+     limpieza va aparte (D99). */
+  .industrial-dark :is(section, div).overflow-hidden:has(table) {
+    overflow-x: auto;
+  }
+
+  .industrial-dark table {
+    min-width: max-content;
+    border-color: var(--border);
+    color: var(--foreground);
+  }
+
+  .industrial-dark thead {
+    background-color: var(--secondary);
+    color: var(--foreground);
+  }
+
+  .industrial-dark th {
+    border-color: var(--border);
+    color: var(--foreground);
+    font-weight: 600;
+  }
+
+  .industrial-dark td {
+    border-color: color-mix(in srgb, var(--border) 78%, transparent);
+  }
+
+  .industrial-dark tbody tr {
+    border-color: color-mix(in srgb, var(--border) 78%, transparent);
+    transition-property: background-color;
+    transition-duration: var(--motion-fast);
+  }
+
+  .industrial-dark tbody tr:hover {
+    background-color: color-mix(in srgb, var(--secondary) 70%, transparent);
+  }
+
+  .industrial-dark tfoot {
+    background-color: var(--secondary);
+    color: var(--foreground);
+  }
+
+  .industrial-dark caption {
+    color: var(--muted-foreground);
+  }
+
+  .industrial-dark td[colspan] {
+    color: var(--muted-foreground);
+  }
 }
