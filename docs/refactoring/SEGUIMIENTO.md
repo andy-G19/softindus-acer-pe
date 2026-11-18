@@ -10224,6 +10224,99 @@ Datos leídos de la API de GitHub el 2026-11-18 (UTC) y comparados con git:
 - Vercel desplegó `6f0b70f` en producción (`success` a las 19:49:50 UTC). La sub-entrega no trae
   migraciones.
 
+### Sub-entrega 11.7d1 — Arreglos de datos y navegación
+
+Fecha: 2026-11-18 (Lima). Estado: preparada en `staging` (sin push). Plan en
+`tmp/e11-diff/plan-11-7d.md`, aprobado el 2026-11-18 con las decisiones D104 a D110:
+- D104: la 11.7d se parte en dos. La 11.7d1 lleva los arreglos de datos y navegación (P1, P4, P5,
+  P6 y P7) y el cierre de P8. La 11.7d2 lleva los textos que se repiten en toda la app: el mismo
+  mensaje en la alerta y en el campo (P2) y los vacíos con filtro (P3).
+- D105: el alta rápida de proveedor busca el nombre dentro de la transacción, después de reservar
+  el correlativo. El tipo del alta rápida pasa a `defaultValue` porque la prueba roja reprodujo el
+  fallo.
+- D106: los formularios de pago de Comercial usan las listas compartidas.
+- D107: el detalle de proforma acepta volver al pedido y al reporte, y «Generar proforma» vuelve a
+  pedidos.
+- D108: los historiales del detalle de proforma desempatan por id.
+- D109: la venta de chatarra rechaza un peso o una cantidad que redondea a cero.
+- D110: el hallazgo 15 de la 10.6a (P8) se cierra sin código.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 77f4868 | docs | Integración de la 11.7c2 en `main` (PR #55). |
+| ce83be5 | fix | El alta rápida busca la razón social con `tx`, después de `getNextCorrelativeId`; si existe, lanza `ExistingSupplierError` para revertir la reserva (D105). Rojo antes. |
+| fd96532 | fix | El tipo del alta rápida usa `defaultValue` con su `onChange` (D105). Rojo antes. |
+| 787ac0d | fix | Los pagos y comprobantes del detalle de proforma ordenan por fecha y luego por id, los dos descendentes (D108). Rojo antes. |
+| 5c0a580 | fix | `scrap-sale.schema.ts` pide al menos 0.005 en peso y cantidad, como los otros esquemas de chatarra (D109). Rojo antes. |
+| 6612142 | fix | El detalle de proforma acepta el detalle de un pedido y el reporte de ventas y cobranzas como origen; los tres enlaces pasan `returnTo`; el alta de proforma nombra el listado al que vuelve y da la nota de filtros solo en proformas (D107). Rojo antes. |
+| 823f671 | fix | El pago de cliente, el adelanto de la proforma y el comprobante usan las listas de `payment-labels.ts`; el tipo de pago sale en el orden compartido (D106). Rojo antes. |
+| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Diseño:
+
+- **El alta rápida de proveedor (P1).**
+  - `proveedor` no tiene índice único por nombre, solo por `numero_documento`.
+  - La búsqueda iba antes de la transacción, así que dos altas a la vez con el mismo nombre creaban dos proveedores.
+  - **El arreglo:** `getNextCorrelativeId` bloquea la fila del contador (`FOR UPDATE`) hasta el final de la transacción. Si la búsqueda va después de esa reserva, las altas de proveedor se ponen en fila, y la segunda ve el proveedor que creó la primera.
+  - **Lanzar, no devolver.** Si el nombre existe, lanzar revierte la reserva. Devolver desde el callback guardaría el contador avanzado y se perdería un número; la prueba en Postgres en memoria lo comprueba.
+  - **Alternativas descartadas:**
+    - Un índice único por `lower(razon_social)` necesitaría una migración, y el alta normal sí admite dos proveedores con el mismo nombre y distinto documento.
+    - Un bloqueo consultivo por nombre sería un mecanismo nuevo al lado del correlativo.
+- **El tipo del alta rápida.** El hallazgo 13 de la 10.6a no lo había reproducido; la prueba roja en jsdom sí:
+  - tras un error del repuesto, el selector mostraba «Ferretería» mientras el estado guardaba «Taller»;
+  - React 19 reinicia el formulario tras la acción, y un `<select>` controlado no marca ninguna opción por defecto.
+- **Volver a la proforma (P5).**
+  - El pedido se reconoce por su id (`PED` y 8 cifras, sin subrutas), y su miga «Pedidos» lleva al listado del que vino el pedido.
+  - Al hacer que «Generar proforma» volviera a pedidos aparecieron dos defectos del alta de proforma, corregidos en el mismo commit con su prueba roja:
+    - su miga y su «Volver» siempre decían «Proformas»;
+    - la nota de filtros hablaba de la proforma nueva, que no sale en pedidos.
+  - Crear la proforma no cambia el estado del pedido, así que el pedido sigue en su lista filtrada.
+  - El alta ya no acepta cualquier ruta del panel con el texto «Proformas»: otra ruta vuelve a proformas, como el detalle.
+- **Las listas de pago (P4).** El valor por defecto del tipo de pago ya iba en `defaultValue`. Pasar al orden compartido cambia lo que se ve, no lo que se envía, aunque el comentario de `payment-labels.ts` decía lo contrario: se corrigió.
+- **El arnés de `RouteSheet` (P8).** El hallazgo 15 de la 10.6a decía que los snapshots de panel de las áreas que no doblan `RouteSheet` solo guardaban `<div data-state="open">`. Hoy guardan el diálogo con su título y sus campos, por ejemplo «Registrar máquina» en `machines-pages.test.ts.snap`. Se cierra sin código.
+
+Evidencia:
+
+1. Rojo antes de cada `fix`, en un mensaje aparte:
+   - C1, 2 pruebas de orden en `suppliers/actions.test.ts`:
+     - la búsqueda iba en la posición 2 y el correlativo en la 4;
+     - con el nombre existente no había reversión.
+   - C2: el selector mostraba `ferreteria` en lugar de `taller`.
+   - C3: el `orderBy` de los pagos era `{ fecha_pago: "desc" }`, sin desempate.
+   - C4: 0.004 no daba error ni en el peso ni en la cantidad.
+   - C5: 8 pruebas fallaron:
+     - el detalle no reconocía el pedido ni el reporte;
+     - los tres enlaces no llevaban `returnTo`;
+     - el alta decía «Proformas» viniendo de pedidos y aceptaba otra ruta;
+     - la nota de filtros aparecía al volver a pedidos.
+   - C6: el tipo de pago venía con «Amortización» primero.
+2. Mutaciones: 3 de 3 en C1, 2 de 2 en C2, 2 de 2 en C3, 3 de 3 en C4, 8 de 8 en C5 y 2 de 2 en C6 (`tmp/e11-diff/mut-117d1-*.py`).
+3. Prueba nueva en Postgres en memoria: `quick-supplier.integration.test.ts`, con 3 casos. El contador avanza 1 con un nombre nuevo, y no avanza con un nombre existente, activo o inactivo. No puede probar dos altas simultáneas, porque PGlite atiende una transacción a la vez.
+4. Snapshots revisados uno por uno:
+   - C1: 5 de llamadas, solo cambia el orden y aparece la reversión; los de resultado, iguales.
+   - C3: 5 de llamadas, solo el `orderBy`.
+   - C5: 9 de HTML, solo los `href` hacia la proforma.
+   - C6: 4 de HTML, solo la posición de «Amortización».
+5. `npm run check` terminó con código 0 antes de cada commit. Las pruebas pasan de 337 / 5.522 a 339 / 5.548. Lint mantiene el aviso anterior. El CSS compilado no cambió en ningún commit: 107.008 bytes, igual byte a byte.
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 337 / 5.522 | 339 / 5.548 |
+| Búsquedas de nombre del alta rápida fuera de la transacción | 1 | 0 |
+| Listas de opciones de pago copiadas en formularios de Comercial | 4 | 0 |
+| Enlaces a la proforma que pierden el origen | 3 | 0 |
+| Historiales del detalle de proforma sin desempate | 2 | 0 |
+| Esquemas de chatarra que aceptan lo que redondea a 0.00 | 1 de 3 | 0 de 3 |
+
+Hallazgos:
+
+1. El tipo del alta rápida sí perdía lo elegido tras un error (hallazgo 13 de la 10.6a, que no se había reproducido). Corregido en `fd96532`.
+2. El alta de proforma nombraba siempre «Proformas» y daba la nota de filtros sin mirar a qué listado volvía. Corregido en `6612142`.
+3. La lista de métodos de pago sigue copiada en el pago a proveedor, el pago de planilla y el filtro de pagos a proveedor. Son otras áreas, y una lista común pediría un módulo compartido. Destino: un paso propio, si se decide.
+4. El hallazgo 15 de la 10.6a ya no aplica (D110).
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -10249,7 +10342,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 integrada en `main` (PR #54, CI #214); 11.7c2 integrada en `main` (PR #55, CI #217; adaptador retirado) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 integrada en `main` (PR #54, CI #214); 11.7c2 integrada en `main` (PR #55, CI #217; adaptador retirado); 11.7d partida en d1 y d2: 11.7d1 preparada |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
