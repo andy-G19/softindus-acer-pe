@@ -1,4 +1,5 @@
 import type { MaterialFormValues } from "@/modules/inventory/materials/actions";
+import { formatDecimal } from "@/lib/formatters";
 
 type EditableMaterial = {
   id_material: string;
@@ -11,14 +12,6 @@ type EditableMaterial = {
   costo_unitario_actual: unknown;
 };
 
-function formatDecimal(value: unknown) {
-  if (value === null || value === undefined) {
-    return "0.00";
-  }
-
-  return Number(value.toString()).toFixed(2);
-}
-
 // Valores con los que el formulario abre la edicion de un material (entrega
 // 10.3): los numeros con dos decimales. Los usan la pagina de edicion y su
 // panel lateral, que muestran el mismo formulario.
@@ -30,9 +23,9 @@ export function getMaterialEditValues(
     nombre_material: material.nombre_material,
     categoria: material.categoria,
     unidad_medida: material.unidad_medida,
-    stock_actual: formatDecimal(material.stock_actual),
-    stock_reservado: formatDecimal(material.stock_reservado),
-    stock_minimo: formatDecimal(material.stock_minimo),
-    costo_unitario_actual: formatDecimal(material.costo_unitario_actual),
+    stock_actual: formatDecimal(material.stock_actual, { emptyText: "0.00" }),
+    stock_reservado: formatDecimal(material.stock_reservado, { emptyText: "0.00" }),
+    stock_minimo: formatDecimal(material.stock_minimo, { emptyText: "0.00" }),
+    costo_unitario_actual: formatDecimal(material.costo_unitario_actual, { emptyText: "0.00" }),
   };
 }

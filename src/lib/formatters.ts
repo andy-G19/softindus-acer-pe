@@ -78,9 +78,24 @@ export function formatDateTime(
   }).format(new Date(value));
 }
 
-export function formatDecimal(value: unknown, decimals = 2) {
+type DecimalOptions = {
+  /** Texto cuando falta el valor; lo decide cada pantalla ("-", "0.00"). */
+  emptyText: string;
+};
+
+/**
+ * Cantidad con dos decimales y sin separador de miles: "1234.50".
+ *
+ * Igual que `formatMoney`: sin opciones solo acepta un valor presente. Si puede
+ * faltar, quien llama decide qué mostrar: `formatDecimal(x ?? 0)` cuando falta
+ * significa cero, o `formatDecimal(x, { emptyText })`. Un valor no numérico se
+ * muestra como "-".
+ */
+export function formatDecimal(value: NonNullable<NumericInput>): string;
+export function formatDecimal(value: unknown, options: DecimalOptions): string;
+export function formatDecimal(value: unknown, options?: DecimalOptions) {
   if (value === null || value === undefined || value === "") {
-    return "-";
+    return options?.emptyText ?? "-";
   }
 
   const numericValue = Number(value.toString());
@@ -89,7 +104,7 @@ export function formatDecimal(value: unknown, decimals = 2) {
     return "-";
   }
 
-  return numericValue.toFixed(decimals);
+  return numericValue.toFixed(2);
 }
 
 // Este archivo sirve para centralizar funciones de formateo comunes en toda la aplicación,

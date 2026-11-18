@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
-import { formatDate, formatMoney } from "@/lib/formatters";
+import { formatDate, formatDecimal, formatMoney } from "@/lib/formatters";
 
 // Pruebas de caracterizacion: fijan lo que hoy muestran estos formateadores para
 // que unificar las copias locales no cambie ningun texto en pantalla.
@@ -144,6 +144,43 @@ describe("formatMoney con texto de vacio", () => {
     formatMoney(montoOpcional);
 
     expect(formatMoney(montoOpcional, { emptyText: "-" })).toBe("-");
+  });
+});
+
+const formatDecimalAtRuntime = formatDecimal as (value: unknown) => string;
+
+describe("formatDecimal", () => {
+  it("fija dos decimales, sin separador de miles", () => {
+    expect(formatDecimal(0)).toBe("0.00");
+    expect(formatDecimal("15.3")).toBe("15.30");
+    expect(formatDecimal(new Prisma.Decimal("1234.5"))).toBe("1234.50");
+    expect(formatDecimal(new Prisma.Decimal("-2.25"))).toBe("-2.25");
+  });
+
+  it("muestra un guion cuando falta el valor y no hay texto de vacio", () => {
+    expect(formatDecimalAtRuntime(null)).toBe("-");
+    expect(formatDecimalAtRuntime(undefined)).toBe("-");
+    expect(formatDecimalAtRuntime("")).toBe("-");
+  });
+
+  it("usa el texto indicado cuando falta el valor", () => {
+    expect(formatDecimal(null, { emptyText: "0.00" })).toBe("0.00");
+    expect(formatDecimal(undefined, { emptyText: "-" })).toBe("-");
+  });
+
+  it("muestra un guion si el valor no es numerico, aunque haya texto de vacio", () => {
+    expect(formatDecimalAtRuntime("abc")).toBe("-");
+    expect(formatDecimal(Number.NaN, { emptyText: "0.00" })).toBe("-");
+  });
+
+  it("obliga a decidir que mostrar si el valor puede faltar", () => {
+    // Comprobacion de tipos: la verifica typecheck, no la ejecucion.
+    const cantidadOpcional = null as Prisma.Decimal | null;
+
+    // @ts-expect-error: sin opciones solo acepta un valor presente
+    formatDecimal(cantidadOpcional);
+
+    expect(formatDecimal(cantidadOpcional ?? 0)).toBe("0.00");
   });
 });
 

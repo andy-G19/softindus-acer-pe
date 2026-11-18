@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDate } from "@/lib/formatters";
+import { formatDate, formatDecimal } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   setCurrentRecipeVersionAction,
@@ -31,14 +31,6 @@ type RecipeVersionsPageProps = {
     id: string;
   }>;
 };
-
-function formatDecimal(value: unknown) {
-  if (value === null || value === undefined) {
-    return "0.00";
-  }
-
-  return Number(value.toString()).toFixed(2);
-}
 
 function getVersionBadgeVariant(status: string) {
   if (status === "vigente") {

@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatMoney } from "@/lib/formatters";
+import { formatDecimal, formatMoney } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
@@ -35,14 +35,6 @@ import { inventoryNotifications } from "@/modules/inventory/notifications";
 type MaterialsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatDecimal(value: unknown) {
-  if (value === null || value === undefined) {
-    return "0.00";
-  }
-
-  return Number(value.toString()).toFixed(2);
-}
 
 function getSearchParam(
   params: Record<string, string | string[] | undefined>,

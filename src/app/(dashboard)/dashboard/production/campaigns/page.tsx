@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDate } from "@/lib/formatters";
+import { formatDate, formatDecimal } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
@@ -36,14 +36,6 @@ import { productionNotifications } from "@/modules/production/notifications";
 type ProductionCampaignsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatDecimal(value: unknown) {
-  if (value === null || value === undefined) {
-    return "0.00";
-  }
-
-  return Number(value.toString()).toFixed(2);
-}
 
 function getCampaignBadgeVariant(status: string) {
   if (status === "activa") {

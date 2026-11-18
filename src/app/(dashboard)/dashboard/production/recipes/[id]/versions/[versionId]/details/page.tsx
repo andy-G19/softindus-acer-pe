@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatMoney } from "@/lib/formatters";
+import { formatDecimal, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { applyWaste } from "@/lib/recipe-quantities";
 import { productionNotifications } from "@/modules/production/notifications";
@@ -31,14 +31,6 @@ type RecipeDetailsPageProps = {
     versionId: string;
   }>;
 };
-
-function formatDecimal(value: unknown) {
-  if (value === null || value === undefined) {
-    return "-";
-  }
-
-  return Number(value.toString()).toFixed(2);
-}
 
 export default async function RecipeDetailsPage({
   params,

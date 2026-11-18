@@ -17,16 +17,12 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
-import { formatDate } from "@/lib/formatters";
+import { formatDate, formatDecimal } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { createCostingFromWorkOrderAction } from "@/modules/costs/costings/actions";
 import { GenerateCostingAction } from "@/modules/costs/costings/generate-costing-action";
 import { getCostableWorkOrdersData } from "@/modules/costs/costings/queries";
-
-function formatDecimal(value: unknown) {
-  return toNumber(value).toFixed(2);
-}
 
 function getOrderBadgeVariant(status: string) {
   if (status === "finalizada") {

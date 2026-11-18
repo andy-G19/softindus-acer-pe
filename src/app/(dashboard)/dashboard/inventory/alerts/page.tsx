@@ -14,20 +14,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDate } from "@/lib/formatters";
+import { formatDate, formatDecimal } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { attendStockAlertAction } from "@/modules/inventory/alerts/actions";
 import { getStockAlertsData } from "@/modules/inventory/alerts/queries";
 import { StockAlertAttendButton } from "@/modules/inventory/alerts/stock-alert-attend-button";
 import { inventoryNotifications } from "@/modules/inventory/notifications";
-
-function formatDecimal(value: unknown) {
-  if (value === null || value === undefined) {
-    return "0.00";
-  }
-
-  return Number(value.toString()).toFixed(2);
-}
 
 export default async function InventoryAlertsPage() {
   const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);

@@ -24,7 +24,7 @@ import {
   getProductionCampaignDetail,
 } from "@/modules/production/campaigns/queries";
 import { productionNotifications } from "@/modules/production/notifications";
-import { formatDate } from "@/lib/formatters";
+import { formatDate, formatDecimal } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 
@@ -33,14 +33,6 @@ type ProductionCampaignDetailPageProps = {
     id: string;
   }>;
 };
-
-function formatDecimal(value: unknown) {
-  if (value === null || value === undefined) {
-    return "0.00";
-  }
-
-  return Number(value.toString()).toFixed(2);
-}
 
 export default async function ProductionCampaignDetailPage({
   params,
