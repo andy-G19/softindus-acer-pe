@@ -8,7 +8,7 @@ import { ActionForm } from "@/components/forms/action-form";
 import { Field } from "@/components/forms/field";
 import { DiscardConfirmDialog, useDiscardGuard, useFormResult } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -80,11 +80,7 @@ export function PettyCashBoxForm({ action, defaultDate, successNotification, ret
         onInput={() => markDirty(true)}
         onFocus={trackFocus}
       >
-        {state.status === "error" ? (
-          <Alert variant="destructive" role="alert" aria-live="polite">
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        ) : null}
+        <FormErrorAlert state={state} />
 
         <Field id="nombre_caja" label="Nombre de la caja" required errors={fieldErrors?.nombre_caja}>
           {(control) => (

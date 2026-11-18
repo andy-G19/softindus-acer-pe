@@ -140,9 +140,9 @@ describe("MachineForm", () => {
     expect(field<HTMLSelectElement>("estado").value).toBe("en_reparacion");
     expect(field<HTMLTextAreaElement>("observaciones").value).toBe("Cambiar antorcha");
     expect(document.activeElement).toBe(field("nombre"));
-    expect(document.querySelector('[role="alert"]')?.textContent).toContain(
-      "Ya existe una maquina registrada con ese nombre, tipo o codigo interno.",
-    );
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain("Ya existe una maquina registrada con ese nombre, tipo o codigo interno.");
     expect(field("nombre-error").textContent).toBe("Ya existe una maquina registrada con ese nombre, tipo o codigo interno.");
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(notifications.showError).not.toHaveBeenCalled();

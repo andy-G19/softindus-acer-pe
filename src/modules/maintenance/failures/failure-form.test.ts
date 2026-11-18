@@ -182,7 +182,9 @@ describe("FailureForm", () => {
     expect(combobox.getAttribute("aria-describedby")).toBe("id_maquina-error");
     expect(document.activeElement).toBe(combobox);
     expect(field("id_maquina-error").textContent).toBe(MACHINE_ERROR);
-    expect(document.querySelector('[role="alert"]')?.textContent).toBe(MACHINE_ERROR);
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain(MACHINE_ERROR);
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(notifications.showError).not.toHaveBeenCalled();
     expect(navigation.push).not.toHaveBeenCalled();

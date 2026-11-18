@@ -9,7 +9,7 @@ import { Field, FieldError } from "@/components/forms/field";
 import { useFormResult, useFormSurface } from "@/components/forms/form-surface";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SheetBody, SheetFooter } from "@/components/ui/sheet";
@@ -79,11 +79,7 @@ export function ScrapForm({ action, materials, workOrders, successNotification, 
 
   const fields = (
     <>
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       <div className="space-y-2">
         <SearchableSelect

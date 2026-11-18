@@ -9,7 +9,7 @@ import { Field, FieldError } from "@/components/forms/field";
 import { useFormResult, useFormSurface } from "@/components/forms/form-surface";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
@@ -90,11 +90,7 @@ export function AttendanceForm({
 
   const fields = (
     <>
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       <p className="text-sm text-muted-foreground">Las asistencias sin falta cuentan en la planilla del operario.</p>
 

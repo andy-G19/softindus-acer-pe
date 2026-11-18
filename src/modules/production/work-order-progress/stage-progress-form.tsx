@@ -6,7 +6,7 @@ import { ActionForm } from "@/components/forms/action-form";
 import { Field } from "@/components/forms/field";
 import { useFormResult } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
@@ -74,11 +74,7 @@ export function StageProgressForm({
 
       {header}
 
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite" className="mt-4">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} className="mt-4" />
 
       <div className="mt-5 grid gap-5 md:grid-cols-4">
         <Field

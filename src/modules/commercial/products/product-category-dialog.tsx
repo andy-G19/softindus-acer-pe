@@ -7,7 +7,7 @@ import { Field } from "@/components/forms/field";
 import { FormDialog } from "@/components/forms/form-dialog";
 import { useFormResult, useFormSurface } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { DialogBody, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -68,11 +68,7 @@ function CategoryForm({
           <input type="hidden" name="id_categoria_producto" value={category.id_categoria_producto} />
         ) : null}
 
-        {state.status === "error" ? (
-          <Alert variant="destructive" role="alert" aria-live="polite">
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        ) : null}
+        <FormErrorAlert state={state} />
 
         <Field
           id="categoria-nombre"

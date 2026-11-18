@@ -9,7 +9,7 @@ import { Field } from "@/components/forms/field";
 import { DiscardConfirmDialog, useDiscardGuard, useFormResult } from "@/components/forms/form-surface";
 import { OperationKeyField } from "@/components/forms/operation-key-field";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -116,11 +116,7 @@ export function ScrapSaleForm({
       >
         <OperationKeyField scope="venta_chatarra:nueva" completedKey={completedKey} />
 
-        {state.status === "error" ? (
-          <Alert variant="destructive" role="alert" aria-live="polite">
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        ) : null}
+        <FormErrorAlert state={state} />
 
         <div className="grid gap-5 md:grid-cols-2">
           <div className="md:col-span-2">

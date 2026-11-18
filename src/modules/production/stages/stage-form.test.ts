@@ -157,7 +157,9 @@ describe("StageForm", () => {
     expect(field<HTMLSelectElement>("id_maquina").value).toBe("MAQ00000002");
     expect(field<HTMLInputElement>("tiempo_maquina_minutos_unidad").value).toBe("6");
     expect(document.activeElement).toBe(field("orden_secuencia"));
-    expect(document.querySelector('[role="alert"]')?.textContent).toContain(message);
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain(message);
     expect(field("orden_secuencia-error").textContent).toBe(message);
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(notifications.showError).not.toHaveBeenCalled();

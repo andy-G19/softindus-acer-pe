@@ -6,6 +6,7 @@ import { ActionForm } from "@/components/forms/action-form";
 import { Field } from "@/components/forms/field";
 import { useFormResult } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Textarea } from "@/components/ui/textarea";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
@@ -152,11 +153,7 @@ function ReopenForm({ idOrdenTrabajo, state, formAction, pending }: ReopenFormPr
         </p>
       </div>
 
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       <Field id="motivo_reapertura" label="Motivo" required errors={fieldErrors?.motivo}>
         {(control) => (

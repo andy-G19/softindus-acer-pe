@@ -9,7 +9,7 @@ import { Field, FieldError } from "@/components/forms/field";
 import { useFormResult, useFormSurface } from "@/components/forms/form-surface";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -166,11 +166,7 @@ export function SparePartForm({
         <input type="hidden" name="id_repuesto" value={defaultValues.id_repuesto} />
       ) : null}
 
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       <Field id="nombre_repuesto" label="Nombre del repuesto" required errors={fieldErrors?.nombre_repuesto}>
         {(control) => <Input {...control} name="nombre_repuesto" defaultValue={values.nombre_repuesto} />}

@@ -141,7 +141,9 @@ describe("SupplierForm", () => {
     expect(field<HTMLSelectElement>("tipo_documento").value).toBe("ruc");
     expect(field<HTMLSelectElement>("condicion_pago").value).toBe("credito");
     expect(document.activeElement).toBe(field("numero_documento"));
-    expect(document.querySelector('[role="alert"]')?.textContent).toContain("Ya existe un proveedor con ese número de documento.");
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain("Ya existe un proveedor con ese número de documento.");
     expect(field("numero_documento-error").textContent).toBe("Ya existe un proveedor con ese número de documento.");
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(notifications.showError).not.toHaveBeenCalled();

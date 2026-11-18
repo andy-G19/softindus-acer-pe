@@ -60,3 +60,19 @@ describe("FormErrorAlert", () => {
     expect(html).toMatch(/class="[^"]*\bmt-4\b/);
   });
 });
+
+// C2 de la 11.7d2: los formularios pintan su error con FormErrorAlert. Una copia nueva del bloque
+// de antes (la alerta con `state.error` tal cual) volveria a repetir el mensaje de un campo.
+describe("C2 de la 11.7d2: ningun formulario pinta state.error en una alerta propia", () => {
+  it("no queda ninguna copia del bloque de antes", async () => {
+    const { readdirSync, readFileSync } = await import("node:fs");
+    const archivos = readdirSync("src", { recursive: true, encoding: "utf8" }).filter(
+      (f) => f.endsWith(".tsx") && !f.includes("generated"),
+    );
+    const copias = archivos.filter((f) =>
+      /<AlertDescription>\s*\{state\.error\}\s*<\/AlertDescription>/.test(readFileSync(`src/${f}`, "utf8")),
+    );
+
+    expect(copias).toEqual([]);
+  });
+});

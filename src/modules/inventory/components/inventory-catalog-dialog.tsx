@@ -7,7 +7,7 @@ import { Field } from "@/components/forms/field";
 import { FormDialog } from "@/components/forms/form-dialog";
 import { useFormResult, useFormSurface } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { DialogBody, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -72,11 +72,7 @@ function CatalogForm({
       <DialogBody className="space-y-4">
         {item ? <input type="hidden" name={idFieldName} value={item.id} /> : null}
 
-        {state.status === "error" ? (
-          <Alert variant="destructive" role="alert" aria-live="polite">
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        ) : null}
+        <FormErrorAlert state={state} />
 
         <Field id="catalogo-nombre" label="Nombre" required errors={fieldErrors?.nombre}>
           {(control) => <Input {...control} name="nombre" defaultValue={values.nombre} />}

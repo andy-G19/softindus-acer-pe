@@ -147,7 +147,9 @@ describe("ExpenseCategoryDialog", () => {
     expect(field<HTMLInputElement>("nombre_categoria").value).toBe("Fletes");
     expect(field<HTMLTextAreaElement>("descripcion").value).toBe("Taxis");
     expect(document.activeElement).toBe(field("nombre_categoria"));
-    expect(document.querySelector('[role="alert"]')?.textContent).toContain("Ya existe una categoria de gasto");
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain("Ya existe una categoria de gasto");
     expect(notifications.notify).not.toHaveBeenCalled();
   });
 

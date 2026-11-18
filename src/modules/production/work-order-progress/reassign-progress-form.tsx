@@ -16,7 +16,7 @@ import { Field, FieldError } from "@/components/forms/field";
 import { DiscardConfirmDialog, useDiscardGuard, useFormResult } from "@/components/forms/form-surface";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
@@ -107,11 +107,7 @@ export function ReassignProgressForm({
       >
         <input type="hidden" name="id_avance" value={idAvance} />
 
-        {state.status === "error" ? (
-          <Alert variant="destructive" role="alert" aria-live="polite">
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        ) : null}
+        <FormErrorAlert state={state} />
 
         <div className="space-y-2">
           <SearchableSelect

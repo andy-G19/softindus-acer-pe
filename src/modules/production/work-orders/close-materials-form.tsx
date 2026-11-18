@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ActionForm } from "@/components/forms/action-form";
 import { Field, FieldError } from "@/components/forms/field";
 import { SubmitButton } from "@/components/forms/submit-button";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { calculateWaste } from "@/lib/material-reconciliation";
@@ -89,11 +90,7 @@ export function CloseMaterialsForm({
     <ActionForm action={formAction} pending={pending} resultKey={resultKey} className="space-y-4">
       <input type="hidden" name="id_orden_trabajo" value={idOrdenTrabajo} />
 
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm">

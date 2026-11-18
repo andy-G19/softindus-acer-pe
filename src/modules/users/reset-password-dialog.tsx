@@ -7,6 +7,7 @@ import { Field } from "@/components/forms/field";
 import { FormDialog } from "@/components/forms/form-dialog";
 import { useFormResult, useFormSurface } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { DialogBody, DialogFooter } from "@/components/ui/dialog";
@@ -44,11 +45,7 @@ function ResetPasswordForm({ action, idUsuario, successNotification }: ResetPass
       <DialogBody className="space-y-4">
         <input type="hidden" name="id_usuario" value={idUsuario} />
 
-        {state.status === "error" ? (
-          <Alert variant="destructive" role="alert" aria-live="polite">
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        ) : null}
+        <FormErrorAlert state={state} />
 
         <Alert variant="warning">
           <AlertDescription>

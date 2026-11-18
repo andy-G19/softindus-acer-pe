@@ -220,7 +220,9 @@ describe("WorkOrderForm (C5 de la 11.6a)", () => {
     expect(control<HTMLInputElement>('input[name="cantidad"]').value).toBe("12.5");
     expect(control<HTMLInputElement>("#id_ruta").getAttribute("aria-invalid")).toBe("true");
     // El mensaje queda en el aviso general del formulario y junto al campo.
-    expect(control('[role="alert"]').textContent).toContain(message);
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(control('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain(message);
     expect(control("#id_ruta-error").textContent).toBe(message);
     // La clave sigue siendo la misma: el reenvio corregido es la misma operacion.
     expect(sessionStorage.getItem(STORAGE_KEY)).toBe(String(received[0].get("clave_operacion")));

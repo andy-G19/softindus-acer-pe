@@ -142,7 +142,9 @@ describe("RouteForm", () => {
     expect(hidden("id_producto")?.value).toBe("PRO00000002");
     expect(field<HTMLInputElement>("id_producto").value).toBe("Pico");
     expect(document.activeElement).toBe(field("nombre_ruta"));
-    expect(document.querySelector('[role="alert"]')?.textContent).toContain(message);
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain(message);
     expect(field("nombre_ruta-error").textContent).toBe(message);
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(navigation.push).not.toHaveBeenCalled();

@@ -8,6 +8,7 @@ import { ActionForm } from "@/components/forms/action-form";
 import { Field } from "@/components/forms/field";
 import { useFormResult, useFormSurface } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -75,11 +76,7 @@ export function CampaignForm({ action, defaultValues, submitLabel, successNotifi
     <>
       {idCampania ? <input type="hidden" name="id_campania" value={idCampania} /> : null}
 
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       {isVoided ? (
         <Alert variant="destructive">

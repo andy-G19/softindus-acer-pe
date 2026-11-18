@@ -7,7 +7,7 @@ import { Field } from "@/components/forms/field";
 import { useFormResult } from "@/components/forms/form-surface";
 import { OperationKeyField } from "@/components/forms/operation-key-field";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -148,11 +148,7 @@ function MovementForm({ mode, idOrdenTrabajo, options, action, notification, mod
       <OperationKeyField scope={`${KEY_SCOPE[mode]}:${idOrdenTrabajo}`} completedKey={completedKey} />
       <input type="hidden" name="id_orden_trabajo" value={idOrdenTrabajo} />
 
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       <div className="grid gap-4 md:grid-cols-2">
         {modeField}

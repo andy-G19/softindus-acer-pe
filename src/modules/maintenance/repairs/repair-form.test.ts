@@ -298,7 +298,9 @@ describe("RepairForm: resultado", () => {
 
     expect(field("id_falla").getAttribute("aria-invalid")).toBe("true");
     expect(field("id_falla-error").textContent).toBe("La falla seleccionada no existe.");
-    expect(document.querySelector('[role="alert"]')?.textContent).toBe("La falla seleccionada no existe.");
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain("La falla seleccionada no existe.");
   });
 
   it("al guardar da un solo aviso y vuelve al listado sin preguntar, aunque hubiera cambios", async () => {
