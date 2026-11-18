@@ -42,7 +42,7 @@ export function FilterBar({
       role="search"
       aria-label={label}
       className={cn(
-        "@container grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm",
+        "@container grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-3 rounded-xl border border-border bg-card p-4 shadow-sm",
         className,
       )}
     >

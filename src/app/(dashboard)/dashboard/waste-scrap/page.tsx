@@ -371,7 +371,7 @@ export default async function WasteScrapDashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 md:grid-cols-2">
-            <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
+            <div className="rounded-lg border border-border bg-secondary/40 p-4 text-sm">
               <p className="font-medium text-foreground">
                 Registro de retazos reutilizables
               </p>
@@ -381,7 +381,7 @@ export default async function WasteScrapDashboardPage() {
               </p>
             </div>
 
-            <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
+            <div className="rounded-lg border border-border bg-secondary/40 p-4 text-sm">
               <p className="font-medium text-foreground">
                 Registro de chatarra generada
               </p>
@@ -391,7 +391,7 @@ export default async function WasteScrapDashboardPage() {
               </p>
             </div>
 
-            <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
+            <div className="rounded-lg border border-border bg-secondary/40 p-4 text-sm">
               <p className="font-medium text-foreground">
                 Venta de chatarra
               </p>
@@ -401,7 +401,7 @@ export default async function WasteScrapDashboardPage() {
               </p>
             </div>
 
-            <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
+            <div className="rounded-lg border border-border bg-secondary/40 p-4 text-sm">
               <p className="font-medium text-foreground">
                 Cambio de estado de retazos
               </p>

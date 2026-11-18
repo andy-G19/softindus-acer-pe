@@ -202,7 +202,7 @@ export default async function MaintenanceDashboardPage() {
                 {latestFailures.map((failure) => (
                   <div
                     key={failure.id_falla}
-                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
+                    className="rounded-lg border border-border bg-secondary/40 p-3"
                   >
                     <p className="font-medium text-foreground">{failure.maquina.nombre}</p>
                     <p className="text-sm text-muted-foreground">
@@ -233,7 +233,7 @@ export default async function MaintenanceDashboardPage() {
                 {upcomingPreventiveMaintenance.map((maintenance) => (
                   <div
                     key={maintenance.id_mantenimiento}
-                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
+                    className="rounded-lg border border-border bg-secondary/40 p-3"
                   >
                     <p className="font-medium text-foreground">{maintenance.maquina.nombre}</p>
                     <p className="text-sm text-muted-foreground">

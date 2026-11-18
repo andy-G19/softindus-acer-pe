@@ -251,7 +251,7 @@ export function ScrapSaleForm({
           </div>
         </div>
 
-        <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm text-muted-foreground">
+        <div className="rounded-lg border border-border bg-secondary/40 p-4 text-sm text-muted-foreground">
           <p className="font-medium text-foreground">Efecto de la operación</p>
           <p className="mt-1">
             Al registrar la venta, la chatarra cambiará a estado <span className="font-semibold">vendida</span>. Si

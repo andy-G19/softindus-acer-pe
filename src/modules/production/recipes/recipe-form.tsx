@@ -175,7 +175,7 @@ export function RecipeForm({ action, products, successNotification, returnTo }: 
       action={formAction}
       pending={pending}
       resultKey={resultKey}
-      className="space-y-4 rounded-lg border border-border/80 bg-card p-6"
+      className="space-y-4 rounded-lg border border-border bg-card p-6"
     >
       {fields}
 

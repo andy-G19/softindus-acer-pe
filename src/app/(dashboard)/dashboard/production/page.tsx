@@ -199,7 +199,7 @@ export default async function ProductionDashboardPage() {
         ))}
       </section>
 
-      <section className="rounded-xl border border-border/80 bg-card p-6">
+      <section className="rounded-xl border border-border bg-card p-6">
         <h2 className="font-heading text-xl font-semibold text-foreground">
           Checklist operativo
         </h2>
@@ -208,7 +208,7 @@ export default async function ProductionDashboardPage() {
           {checklist.map((item) => (
             <div
               key={item.label}
-              className="flex items-start gap-3 rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm"
+              className="flex items-start gap-3 rounded-lg border border-border bg-secondary/40 p-4 text-sm"
             >
               {item.ok ? (
                 <CheckCircle2
@@ -230,7 +230,7 @@ export default async function ProductionDashboardPage() {
         </div>
       </section>
 
-      <section className="rounded-xl border border-border/80 bg-card p-5">
+      <section className="rounded-xl border border-border bg-card p-5">
         <p className="font-medium text-foreground">Estados actuales</p>
 
         <div className="mt-3 flex flex-wrap gap-2">

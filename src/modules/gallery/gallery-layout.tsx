@@ -48,7 +48,7 @@ export function GallerySection({ id, description, children }: GallerySectionProp
     <section
       id={id}
       aria-labelledby={`${id}-titulo`}
-      className="scroll-mt-28 space-y-6 rounded-xl border border-border/80 bg-card p-4 sm:p-6"
+      className="scroll-mt-28 space-y-6 rounded-xl border border-border bg-card p-4 sm:p-6"
     >
       <header className="space-y-1">
         <h2 id={`${id}-titulo`} className="font-heading text-xl font-semibold text-foreground">

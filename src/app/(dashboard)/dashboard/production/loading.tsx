@@ -11,7 +11,7 @@ export default function ProductionLoadingPage() {
         {Array.from({ length: 4 }).map((_, index) => (
           <div
             key={index}
-            className="rounded-xl border border-border/80 bg-card p-5"
+            className="rounded-xl border border-border bg-card p-5"
           >
             <div className="h-4 w-32 animate-pulse rounded bg-muted" />
             <div className="mt-4 h-8 w-20 animate-pulse rounded bg-muted" />
@@ -23,7 +23,7 @@ export default function ProductionLoadingPage() {
         {Array.from({ length: 6 }).map((_, index) => (
           <div
             key={index}
-            className="rounded-xl border border-border/80 bg-card p-6"
+            className="rounded-xl border border-border bg-card p-6"
           >
             <div className="h-5 w-40 animate-pulse rounded bg-muted" />
             <div className="mt-4 h-4 w-full animate-pulse rounded bg-muted" />

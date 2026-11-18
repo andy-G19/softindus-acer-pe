@@ -73,7 +73,7 @@ export default async function OrderDetailPage({
           tone="warning"
           icon={CircleDollarSign}
         />
-        <div className="rounded-xl border border-border/80 bg-card p-5">
+        <div className="rounded-xl border border-border bg-card p-5">
           <p className="font-mono text-[11px] font-medium uppercase tracking-[0.07em] text-muted-foreground">
             Estado
           </p>
@@ -83,7 +83,7 @@ export default async function OrderDetailPage({
         </div>
       </section>
 
-      <section className="rounded-xl border border-border/80 bg-card p-4">
+      <section className="rounded-xl border border-border bg-card p-4">
         <h2 className="font-heading font-semibold text-foreground">
           Datos del pedido
         </h2>
@@ -142,7 +142,7 @@ export default async function OrderDetailPage({
       </Table>
 
       <section className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-xl border border-border/80 bg-card p-4">
+        <div className="rounded-xl border border-border bg-card p-4">
           <h2 className="font-heading font-semibold text-foreground">
             Proformas
           </h2>
@@ -161,7 +161,7 @@ export default async function OrderDetailPage({
             ) : null}
           </div>
         </div>
-        <div className="rounded-xl border border-border/80 bg-card p-4">
+        <div className="rounded-xl border border-border bg-card p-4">
           <h2 className="font-heading font-semibold text-foreground">
             Comprobantes
           </h2>

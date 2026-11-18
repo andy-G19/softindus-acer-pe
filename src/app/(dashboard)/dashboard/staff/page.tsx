@@ -193,7 +193,7 @@ export default async function StaffDashboardPage() {
                 {latestOperators.map((operator) => (
                   <div
                     key={operator.id_operario}
-                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
+                    className="rounded-lg border border-border bg-secondary/40 p-3"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
@@ -228,7 +228,7 @@ export default async function StaffDashboardPage() {
                 {latestAttendance.map((attendance) => (
                   <div
                     key={attendance.id_asistencia}
-                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
+                    className="rounded-lg border border-border bg-secondary/40 p-3"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>

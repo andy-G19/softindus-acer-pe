@@ -187,14 +187,14 @@ export function MaterialForm({
         <div className="grid gap-4 @md:grid-cols-2">
           <div className="space-y-2">
             <span className="text-sm font-medium">Stock actual</span>
-            <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm">
+            <div className="flex h-8 items-center rounded-lg border border-border bg-muted px-2.5 text-sm">
               {defaultValues?.stock_actual || "0.00"}
             </div>
           </div>
 
           <div className="space-y-2">
             <span className="text-sm font-medium">Stock reservado</span>
-            <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm">
+            <div className="flex h-8 items-center rounded-lg border border-border bg-muted px-2.5 text-sm">
               {defaultValues?.stock_reservado || "0.00"}
             </div>
           </div>
@@ -252,7 +252,7 @@ export function MaterialForm({
       action={formAction}
       pending={pending}
       resultKey={resultKey}
-      className="@container space-y-4 rounded-lg border border-border/80 bg-card p-6"
+      className="@container space-y-4 rounded-lg border border-border bg-card p-6"
     >
       {fields}
 

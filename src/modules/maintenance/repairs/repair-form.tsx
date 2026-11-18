@@ -253,7 +253,7 @@ export function RepairForm({ action, failures, spareParts, defaultValues, succes
           )}
         </Field>
 
-        <div className="space-y-4 rounded-lg border border-border/80 bg-secondary/40 p-4">
+        <div className="space-y-4 rounded-lg border border-border bg-secondary/40 p-4">
           <div className="flex items-center justify-between gap-4">
             <div>
               <h2 className="text-base font-semibold">Repuestos usados</h2>
@@ -273,7 +273,7 @@ export function RepairForm({ action, failures, spareParts, defaultValues, succes
             const repuestoId = `id_repuesto-${item.key}`;
 
             return (
-              <div key={item.key} className="rounded-lg border border-border/80 p-4">
+              <div key={item.key} className="rounded-lg border border-border p-4">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="text-sm font-semibold">Repuesto {index + 1}</h3>
 

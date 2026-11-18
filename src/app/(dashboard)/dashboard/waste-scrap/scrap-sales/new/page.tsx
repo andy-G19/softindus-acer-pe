@@ -98,7 +98,7 @@ export default async function NewScrapSalePage({
             defaultDate={formatDateInput(new Date())}
             selectedScrapSummary={
               selectedScrap ? (
-                <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm text-muted-foreground">
+                <div className="rounded-lg border border-border bg-secondary/40 p-4 text-sm text-muted-foreground">
                   <p className="font-medium text-foreground">
                     Chatarra seleccionada
                   </p>

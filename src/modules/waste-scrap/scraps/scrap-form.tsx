@@ -199,7 +199,7 @@ export function ScrapForm({ action, materials, workOrders, successNotification, 
         )}
       </Field>
 
-      <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm text-muted-foreground">
+      <div className="rounded-lg border border-border bg-secondary/40 p-4 text-sm text-muted-foreground">
         <p className="font-medium text-foreground">Estado inicial de la chatarra</p>
         <p className="mt-1">
           Todo registro de chatarra se guardará inicialmente con estado{" "}
@@ -229,7 +229,7 @@ export function ScrapForm({ action, materials, workOrders, successNotification, 
       action={formAction}
       pending={pending}
       resultKey={resultKey}
-      className="space-y-4 rounded-lg border border-border/80 bg-card p-6"
+      className="space-y-4 rounded-lg border border-border bg-card p-6"
     >
       {fields}
 

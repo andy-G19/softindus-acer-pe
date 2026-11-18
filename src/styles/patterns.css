@@ -32,8 +32,10 @@
     color: color-mix(in srgb, var(--destructive) 72%, var(--foreground) 28%);
   }
 
+  /* Las alertas llevan el borde comun (--border, de base.css), no el de su estado: el adaptador
+     le ganaba a ese color, y es lo que se veia (D101 de la 11.7c2). Mostrar el color del estado
+     es una decision de diseno aparte. */
   .alert-state-success {
-    border-color: color-mix(in srgb, var(--success) 35%, transparent);
     background-color: color-mix(in srgb, var(--success) 12%, transparent);
     color: color-mix(in srgb, var(--success) 80%, var(--foreground) 20%);
   }
@@ -43,7 +45,6 @@
   }
 
   .alert-state-warning {
-    border-color: color-mix(in srgb, var(--warning) 35%, transparent);
     background-color: color-mix(in srgb, var(--warning) 12%, transparent);
     color: color-mix(in srgb, var(--warning) 80%, var(--foreground) 20%);
   }
@@ -53,7 +54,6 @@
   }
 
   .alert-state-info {
-    border-color: color-mix(in srgb, var(--info) 40%, transparent);
     background-color: color-mix(in srgb, var(--info) 12%, transparent);
     color: color-mix(in srgb, var(--info) 78%, var(--foreground) 22%);
   }

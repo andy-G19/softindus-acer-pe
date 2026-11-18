@@ -57,6 +57,7 @@
   --color-destructive-outline: var(--destructive-outline);
   --color-destructive-surface: var(--destructive-surface);
   --color-shell: var(--shell);
+  --color-surface-dashed: var(--surface-dashed);
   --color-accent-cyan-foreground: var(--accent-cyan-foreground);
   --shadow-raised: var(--shadow-raised);
   --shadow-raised-hover: var(--shadow-raised-hover);
@@ -121,6 +122,9 @@
 
   /* Superficies y textos propios de la identidad. */
   --shell: #0f1011;
+  /* Fondo de los bloques punteados (EmptyState, LoadingState): la tarjeta al 78 %,
+     mezclada en sRGB como la regla del adaptador a la que reemplaza (11.7c2). */
+  --surface-dashed: color-mix(in srgb, var(--card) 78%, transparent);
   --accent-cyan-foreground: #04252b;
 
   /* Sombras: cada valor es el que ya usaba su componente. */

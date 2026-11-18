@@ -122,7 +122,7 @@ export default async function QuoteDetailPage({
         />
       </div>
 
-      <section className="rounded-lg border bg-background p-8 print:border-0 print:p-0">
+      <section className="rounded-lg border bg-card p-8 print:border-0 print:p-0">
         <div className="space-y-8">
           <header className="flex items-start justify-between gap-6 border-b pb-6">
             <div>
@@ -233,7 +233,7 @@ export default async function QuoteDetailPage({
           <section>
             <h3 className="mb-3 font-semibold">Detalle de productos</h3>
 
-            <div className="overflow-hidden rounded-lg border">
+            <div className="overflow-hidden rounded-lg border bg-card">
               <table className="w-full text-sm">
                 <thead className="bg-muted">
                   <tr>
@@ -310,13 +310,13 @@ export default async function QuoteDetailPage({
                 successNotification={commercialNotifications["payment-registered"]}
               />
 
-              <div className="rounded-lg border p-4">
+              <div className="rounded-lg border bg-card p-4">
                 <h3 className="font-semibold">Historial de pagos</h3>
                 <p className="text-sm text-muted-foreground">
                   Pagos registrados para esta proforma.
                 </p>
 
-                <div className="mt-4 overflow-hidden rounded-lg border">
+                <div className="mt-4 overflow-hidden rounded-lg border bg-card">
                   <table className="w-full text-sm">
                     <thead className="bg-muted">
                       <tr>
@@ -372,13 +372,13 @@ export default async function QuoteDetailPage({
                 successNotification={commercialNotifications["receipt-created"]}
               />
 
-              <div className="rounded-lg border p-4">
+              <div className="rounded-lg border bg-card p-4">
                 <h3 className="font-semibold">Comprobantes emitidos</h3>
                 <p className="text-sm text-muted-foreground">
                   Historial de comprobantes registrados para esta proforma.
                 </p>
 
-                <div className="mt-4 overflow-hidden rounded-lg border">
+                <div className="mt-4 overflow-hidden rounded-lg border bg-card">
                   <table className="w-full text-sm">
                     <thead className="bg-muted">
                       <tr>

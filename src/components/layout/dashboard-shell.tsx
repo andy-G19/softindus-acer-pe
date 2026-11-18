@@ -105,7 +105,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
           <p className="mb-2 px-1 text-xs font-semibold uppercase text-muted-foreground">
             Navegación
           </p>
-          <div className="rounded-xl border border-sidebar-border/80 bg-sidebar p-2">
+          <div className="rounded-xl border border-border bg-sidebar p-2">
             <MobileDashboardNav menuItems={menuItems} />
           </div>
         </div>

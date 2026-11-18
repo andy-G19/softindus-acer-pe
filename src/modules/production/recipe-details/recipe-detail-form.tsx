@@ -210,7 +210,7 @@ export function RecipeDetailForm({
       </div>
 
       {showPreview ? (
-        <div className="space-y-3 rounded-lg border border-border/80 bg-secondary/40 p-4">
+        <div className="space-y-3 rounded-lg border border-border bg-secondary/40 p-4">
           <div className="flex flex-wrap items-end gap-3">
             <Field id="preview_quantity" label="Simular para una orden de">
               {(control) => (
@@ -229,7 +229,7 @@ export function RecipeDetailForm({
             <p className="pb-2 text-sm text-muted-foreground">unidades</p>
           </div>
 
-          <div className="rounded-lg border border-border/80 bg-card p-3 text-sm">
+          <div className="rounded-lg border border-border bg-card p-3 text-sm">
             <ul className="space-y-1 text-muted-foreground">
               <li>
                 Consumo por unidad con merma:{" "}
@@ -305,7 +305,7 @@ export function RecipeDetailForm({
       action={formAction}
       pending={pending}
       resultKey={resultKey}
-      className="space-y-5 rounded-lg border border-border/80 bg-card p-6"
+      className="space-y-5 rounded-lg border border-border bg-card p-6"
     >
       {fields}
 

@@ -340,7 +340,7 @@ export default async function WorkOrderDetailPage({
             {workOrder.ruta_fabricacion?.etapa_ruta.map((stage) => (
               <div
                 key={stage.id_etapa_ruta}
-                className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm"
+                className="rounded-lg border border-border bg-secondary/40 p-3 text-sm"
               >
                 <p className="font-medium">
                   {stage.orden_secuencia}. {stage.nombre_etapa}

@@ -80,7 +80,7 @@ export function ReceiptForm({ action, quoteId, suggestedAmount, hasReceipt, succ
       action={formAction}
       pending={pending}
       resultKey={resultKey}
-      className="space-y-4 rounded-lg border border-border/80 bg-card p-4"
+      className="space-y-4 rounded-lg border border-border bg-card p-4"
     >
       <input type="hidden" name="id_proforma" value={quoteId} />
       <OperationKeyField scope={`comprobante:${quoteId}`} completedKey={completedKey} />

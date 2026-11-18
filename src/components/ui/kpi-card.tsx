@@ -50,7 +50,7 @@ export function KpiCard({
         } as CSSProperties & Record<"--kpi-tone", string>
       }
       className={cn(
-        "relative h-full border border-border/80 bg-card shadow-raised transition duration-150 ease-out [--card-spacing:20px] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[var(--kpi-tone)]",
+        "relative h-full border border-border bg-card shadow-raised transition duration-150 ease-out [--card-spacing:20px] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[var(--kpi-tone)]",
         href &&
           "hover:-translate-y-[2px] hover:border-border hover:bg-secondary hover:shadow-raised-hover"
       )}

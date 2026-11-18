@@ -152,7 +152,7 @@ export function RecipeVersionForm({
         action={formAction}
         pending={pending}
         resultKey={resultKey}
-        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
+        className="space-y-5 rounded-xl border border-border bg-card p-6 shadow-sm"
         onInput={() => markDirty(true)}
         onFocus={trackFocus}
       >
@@ -182,7 +182,7 @@ export function RecipeVersionForm({
           )}
         </Field>
 
-        <section className="space-y-4 rounded-lg border border-border/80 p-4">
+        <section className="space-y-4 rounded-lg border border-border p-4">
           <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
             <div>
               <h2 className="font-semibold">Materiales de la versión</h2>
@@ -210,7 +210,7 @@ export function RecipeVersionForm({
               const materialErrors = fieldErrors?.[`${line}.id_material`];
 
               return (
-                <div key={detail.key} className="rounded-lg border border-border/80 p-4">
+                <div key={detail.key} className="rounded-lg border border-border p-4">
                   <div className="mb-4 flex items-center justify-between">
                     <h3 className="text-sm font-semibold">Material {index + 1}</h3>
 

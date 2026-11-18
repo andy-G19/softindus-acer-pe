@@ -122,7 +122,7 @@ export default async function ReassignWorkOrderProgressPage({
             return (
               <div
                 key={reassignment.id_reasignacion}
-                className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm"
+                className="rounded-lg border border-border bg-secondary/40 p-4 text-sm"
               >
                 <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                   <p className="font-medium text-foreground">

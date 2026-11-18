@@ -420,7 +420,7 @@ export default async function ReportsDashboardPage() {
               realCriticalMaterials.map((material) => (
                 <div
                   key={material.id_material}
-                  className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm"
+                  className="rounded-lg border border-border bg-secondary/40 p-3 text-sm"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
@@ -474,7 +474,7 @@ export default async function ReportsDashboardPage() {
 
           <CardContent>
             <div className="grid gap-3 md:grid-cols-2">
-              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
+              <div className="rounded-lg border border-border bg-secondary/40 p-3">
                 <p className="text-xs text-muted-foreground">
                   Cobranza de clientes
                 </p>
@@ -483,7 +483,7 @@ export default async function ReportsDashboardPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
+              <div className="rounded-lg border border-border bg-secondary/40 p-3">
                 <p className="text-xs text-muted-foreground">
                   Cuentas por cobrar
                 </p>
@@ -492,7 +492,7 @@ export default async function ReportsDashboardPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
+              <div className="rounded-lg border border-border bg-secondary/40 p-3">
                 <p className="text-xs text-muted-foreground">
                   Ingresos caja chica
                 </p>
@@ -501,7 +501,7 @@ export default async function ReportsDashboardPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
+              <div className="rounded-lg border border-border bg-secondary/40 p-3">
                 <p className="text-xs text-muted-foreground">
                   Egresos caja chica
                 </p>
@@ -510,7 +510,7 @@ export default async function ReportsDashboardPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 md:col-span-2">
+              <div className="rounded-lg border border-border bg-secondary/40 p-3 md:col-span-2">
                 <p className="text-xs text-muted-foreground">
                   Utilidad estimada del mes
                 </p>
@@ -536,7 +536,7 @@ export default async function ReportsDashboardPage() {
               latestCashMovements.map((movement) => (
                 <div
                   key={movement.id_movimiento_caja}
-                  className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm"
+                  className="rounded-lg border border-border bg-secondary/40 p-3 text-sm"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>

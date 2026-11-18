@@ -230,7 +230,7 @@ export default async function PettyCashDashboardPage() {
                 {latestBoxes.map((box) => (
                   <div
                     key={box.id_caja_chica}
-                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
+                    className="rounded-lg border border-border bg-secondary/40 p-3"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <p className="font-medium text-foreground">
