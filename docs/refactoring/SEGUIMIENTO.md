@@ -10073,6 +10073,120 @@ Datos leídos de la API de GitHub el 2026-11-18 (UTC) y comparados con git:
 - Vercel desplegó `d0f9f7e` en producción (`success` a las 17:45:13 UTC). La sub-entrega no trae
   migraciones.
 
+### Sub-entrega 11.7c2 — Los bloques con borde y el retiro del adaptador
+
+Fecha: 2026-11-18 (Lima). Estado: preparada en `staging` (sin push). Plan en
+`tmp/e11-diff/plan-11-7c2.md`, aprobado el 2026-11-18 con las decisiones D100 a D103:
+- D100: los bloques pasan a sus clases (D94), no se mueven tal cual (D99). Cada elemento declara lo
+  que la pantalla mostraba; después se borran las reglas, el adaptador, su prueba y su import.
+- D101: los bordes de las alertas se quedan como se veían (el borde común). El color de su estado
+  queda para una decisión de diseño aparte.
+- D102: los porcentajes se escriben en sRGB, como el adaptador: el fondo punteado es un token
+  (`--surface-dashed`) y la sombra va como propiedad arbitraria (`[box-shadow:var(--shadow-raised)]`).
+- D103: antes de tocar código se mide en staging qué decide cada regla, quitándola del CSSOM de la
+  pestaña.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| de2091d | docs | Integración de la 11.7c1 en `main` (PR #54). |
+| 8a521b4 | refactor | R3: las 4 `section` con `shadow-sm` llevan `[box-shadow:var(--shadow-raised)]`. |
+| 1811156 | refactor | R4: `EmptyState` y `LoadingState` llevan `border-border bg-surface-dashed`; token `--surface-dashed` en `tokens.css`. |
+| b7ca844 | refactor | R5 y R6: 7 bloques con tabla declaran `bg-card` (6 en el detalle de la proforma, 1 en la proforma nueva y «Cerrar materiales»); se van los 4 `:has()`. |
+| 21c1c41 | refactor | R1 y R2: `border-border/80`, `border-input` y `border-sidebar-border/80` → `border-border` en 118 literales de 60 archivos; «Reabrir el cierre» con `bg-card`; alertas y tarjeta de módulo sin el color de borde que no se veía (D101). |
+| 2c325c4 | refactor | Se borran el adaptador, su prueba y su import. |
+| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Diseño:
+
+- **Qué hacían las 6 reglas.** Todas iban en la capa `utilities` con especificidad 0-2-1 o 0-3-1,
+  así que ganaban a cualquier clase de Tailwind (0-1-0). La pantalla mostraba la regla, no la
+  clase. El caso grande era R2: el borde de todo `section`, `div`, `article` o `form` con
+  `rounded-lg` o `rounded-xl` y `border` era `--border`, dijera lo que dijera su clase.
+- **Por qué migrar y no mover (D100).** Casi todo el cambio era uno solo: `border-border/80` →
+  `border-border`. Con las reglas fuera, el código dice lo que se ve y un bloque ya no cambia de
+  aspecto si alguien cambia su radio. En los campos (11.7c1) se cruzaban muchos estados y se movió
+  tal cual.
+- **Cómo se encontraron los consumidores.**
+  - Un script recorre el AST de cada `.tsx` (`tmp/e11-diff/auditar-r1r2.cjs`) y lista cada
+    elemento que alcanzaban R1 y R2, con sus clases de borde y fondo: 113 bloques y 27 formularios.
+  - El cambio del C4 lo hizo otro script sobre ese mismo AST (`patch_117c2_c4.cjs`). Solo toca
+    los literales del `className` de esos elementos. `border-border/80` también está en elementos
+    que R2 no alcanzaba (el encabezado de los diálogos, `BackButton`, que es un `button`), y esos
+    no cambian.
+  - Dos casos que el primer análisis no vio:
+    - `ActionForm` pinta un `<form>`, así que R1 alcanzaba a 26 formularios más.
+    - `Card` trae `rounded-xl` en su clase base, así que un `<Card className="border …">` lo
+      alcanzaba R2.
+  - La medición en staging (D103) encontró un tercero: «Cerrar materiales» de la OT, cuya tabla
+    está en un componente hijo.
+- **Valores exactos (D102).**
+  - `bg-card/78` de Tailwind mezcla en oklab. El adaptador mezclaba en sRGB: el píxel es el mismo,
+    pero el valor computado no.
+  - La utilidad `shadow-raised` compone 5 capas (4 anillos vacíos y la sombra), y R3 ponía solo la
+    sombra.
+  - Para que la paridad sea exacta, el fondo punteado es un token y la sombra una propiedad
+    arbitraria.
+  - El compilador pone el token dentro de `@supports (color: color-mix(...))`. Sin `color-mix`
+    (navegadores anteriores a 2023), el fondo quedaría transparente, donde R4 caía a `--card`.
+- **Clases que no se veían (D101).** R2 también ganaba a:
+  - el color de estado del borde de las alertas: `.alert-state-*` y `border-destructive/35`;
+  - el `hover:border-[…--card-accent…]` de `ModuleAccessCard`.
+  Se quitaron para que el código diga lo que se ve. El comentario de `patterns.css` lo explica.
+- **`EmptyState` con `border-0`.** `cn()` le quita la clase `border`, así que a esos 6 usos no
+  los alcanzaba R2 sino R4, con el borde al 70 %. Ahora su color es `--border`. El borde tiene
+  ancho 0 y no se ve, pero la paridad lo marca.
+
+Evidencia:
+
+1. Base en staging antes de tocar código, sobre `de2091d` (mismo contenido que `main`), con ADMIN
+   y en solo lectura:
+   - Paridad de 24 páginas. Las 16 de la 11.7c1 dieron la misma huella que después de esa
+     sub-entrega, y se sumaron 8 con consumidores: detalle de pedido, inicio de Producción, compra
+     nueva, requisitos de una versión de receta, resumen mensual de caja, reporte de producción,
+     alertas de stock y proforma nueva. Las huellas están en `tmp/e11-diff/huellas-117c2-base.txt`.
+   - Medición regla por regla (D103, `tmp/e11-diff/medir-reglas.js`). Confirmó la auditoría:
+     - R2 cambia `border-border/80` (oklab, alfa 0,0627) por `--border` (alfa 0,08);
+     - R2 borra el color de las alertas en 5 páginas;
+     - R3 cambia la sombra en 3 `section`;
+     - R4 cambia el fondo de `EmptyState`;
+     - R6 cambia el fondo en la proforma (6 bloques) y en la OT (1);
+     - R1 y los bloques con `h2` no cambian nada.
+   - El CSS compilado une R5 y R6 en una sola regla `:is(...)` y parte R4 en 4 copias, por los
+     respaldos de `color-mix`.
+2. `npm run check` terminó con código 0 antes de cada commit. Pruebas: de 338 / 5.525 a 337 / 5.522
+   (sale `legacy-industrial-dark.test.ts`, con sus 3 pruebas). Lint mantiene el aviso anterior.
+3. Snapshots con clases: 3 en el C2 y 12 en el C4 (`primitives.test.ts` y `app-surfaces.test.ts`),
+   revisados clase por clase. Solo cambian el color de borde, el fondo punteado y el hover quitado.
+4. CSS compilado (`tmp/e11-diff/css_117c2.py`, por reglas):
+   - C1: de 109.366 a 109.354 bytes. Sale R3 y entra la propiedad arbitraria.
+   - C2: 108.873. Salen R4 y `bg-secondary/45`, que quedó sin uso; entran `.bg-surface-dashed` y su
+     token.
+   - C3: 108.559. Sale la regla con los 4 `:has()`.
+   - C4: 107.008. Salen R1, R2, los bordes de las alertas, `border-destructive/35`,
+     `border-sidebar-border/80` y el hover de la tarjeta de módulo. No entra nada.
+   - C5: igual byte a byte al C4, porque el adaptador ya estaba vacío.
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 338 / 5.525 | 337 / 5.522 |
+| Reglas / selectores del adaptador | 6 / 10 | el adaptador ya no existe |
+| Selectores `:has()` con `.industrial-dark` en el CSS compilado | 2 reglas (5 selectores) | 1 (el contenedor de tablas, en `patterns.css`) |
+| Elementos cuyo borde decidía una regla por combinación de clases | 140 (113 bloques y 27 formularios) | 0 |
+| Alertas de estado con su borde de color visible | 0 de 116 | 0 de 116 (ahora lo dice el código) |
+| CSS compilado | 109.366 bytes | 107.008 bytes |
+
+Hallazgos:
+
+1. Los bordes de color de las alertas no se veían: R2 les ganaba. Se quitaron sus clases (D101).
+   Destino: un `fix` de diseño, si se decide, junto con el hover de `ModuleAccessCard`.
+2. El análisis estático no ve las clases que llegan por componentes: `ActionForm` pinta un `form`
+   y `Card` trae `rounded-xl`. Lección: auditar también los componentes que reciben `className` y
+   medir en el navegador.
+3. `EmptyState className="border-0"`: el color de un borde de ancho 0 cambia sin que se vea
+   (diferencia de paridad prevista).
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -10098,7 +10212,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 integrada en `main` (PR #54, CI #214) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 integrada en `main` (PR #54, CI #214); 11.7c2 preparada (adaptador retirado) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
@@ -10152,7 +10266,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Enlaces a `/api/` con `next/link` (su prefetch ejecuta la ruta) | 6 | 0 | G4 |
 | Colores literales en los `.tsx` de la interfaz | 25 | 0 (regla de ESLint) | 8 |
 | Colores literales en las hojas, fuera de `tokens.css` | 27 | 0 (prueba) | 8 |
-| Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 6 / 10 | 8 y 11 |
+| Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 0 / 0 (adaptador retirado) | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
 | Copias locales de `FieldError` | 16 | 1 | 9 y 10 |
