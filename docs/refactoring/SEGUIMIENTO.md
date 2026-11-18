@@ -10226,7 +10226,7 @@ Datos leídos de la API de GitHub el 2026-11-18 (UTC) y comparados con git:
 
 ### Sub-entrega 11.7d1 — Arreglos de datos y navegación
 
-Fecha: 2026-11-18 (Lima). Estado: preparada en `staging` (sin push). Plan en
+Fecha: 2026-11-18 (Lima). Estado: verificada en staging (CI #219); falta el PR a `main`. Plan en
 `tmp/e11-diff/plan-11-7d.md`, aprobado el 2026-11-18 con las decisiones D104 a D110:
 - D104: la 11.7d se parte en dos. La 11.7d1 lleva los arreglos de datos y navegación (P1, P4, P5,
   P6 y P7) y el cierre de P8. La 11.7d2 lleva los textos que se repiten en toda la app: el mismo
@@ -10250,7 +10250,8 @@ Fecha: 2026-11-18 (Lima). Estado: preparada en `staging` (sin push). Plan en
 | 5c0a580 | fix | `scrap-sale.schema.ts` pide al menos 0.005 en peso y cantidad, como los otros esquemas de chatarra (D109). Rojo antes. |
 | 6612142 | fix | El detalle de proforma acepta el detalle de un pedido y el reporte de ventas y cobranzas como origen; los tres enlaces pasan `returnTo`; el alta de proforma nombra el listado al que vuelve y da la nota de filtros solo en proformas (D107). Rojo antes. |
 | 823f671 | fix | El pago de cliente, el adelanto de la proforma y el comprobante usan las listas de `payment-labels.ts`; el tipo de pago sale en el orden compartido (D106). Rojo antes. |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 67a3be9 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -10317,6 +10318,36 @@ Hallazgos:
 3. La lista de métodos de pago sigue copiada en el pago a proveedor, el pago de planilla y el filtro de pagos a proveedor. Son otras áreas, y una lista común pediría un módulo compartido. Destino: un paso propio, si se decide.
 4. El hallazgo 15 de la 10.6a ya no aplica (D110).
 
+#### Publicación, CI y verificación en staging
+
+1. Push de los 8 commits (de `77f4868` a `67a3be9`): CI #219 en verde (de 22:08:29 a 22:14:15 UTC
+   del 2026-11-18); Vercel desplegó staging (`success` a las 22:10:27 UTC). Sin migraciones.
+2. Todo se hizo con ADMIN y en solo lectura, con el origen comprobado en una llamada aparte. En la
+   red solo hubo GET y HEAD, ningún POST. La consola solo muestra los avisos de la barra de Vercel
+   (CSP en modo de informe).
+3. Desempate (D108): en PF-00000004 (`PRF00000004`), «Historial de pagos» muestra primero la
+   cancelación y después el adelanto, los dos del 11/11/2026. Antes salían al revés.
+4. Volver a la proforma (D107):
+   - Desde `PED00000008` con `returnTo` de pedidos aprobados: el enlace a PF-00000004 lleva el
+     pedido con su propio `returnTo`. En la proforma, la miga es «Comercial › Pedidos (con el
+     filtro) › PED00000008 › Detalle de proforma» y el botón «Volver al pedido». Al pulsarlo vuelve
+     al pedido, con su `returnTo` intacto.
+   - Desde el reporte de ventas y cobranzas (`searchCode=PED00000008`): el enlace lleva el reporte
+     con su filtro. Cargada directamente, como en otra pestaña, la proforma muestra «Reportes ›
+     Ventas y cobranzas» y «Volver al reporte».
+   - Con `returnTo` a `/orders/PED00000008/edit`, una subruta, vuelve a proformas.
+   - «Generar proforma» de pedidos registrados lleva `returnTo` con el filtro. El alta muestra
+     «Comercial › Pedidos › Nueva proforma» y «Volver a pedidos», con el pedido elegido. No se
+     guardó.
+5. Listas de pago (D106): el pago de cliente ofrece Efectivo, Transferencia, Yape, Plin y Otro, y el
+   tipo como Adelanto, Amortización y Cancelación, con «Amortización» elegida. El comprobante ofrece
+   Boleta, Factura, Recibo y Otro, con «Boleta» elegida. El adelanto de la proforma ofrece
+   «Seleccione...» y los cinco métodos.
+6. El alta rápida de proveedor (D105) y la venta de chatarra con 0.004 (D109) no se probaron en
+   staging. La primera escribe un proveedor. La segunda no escribe, porque el esquema la rechaza
+   antes de la transacción. Las cubren la prueba en Postgres en memoria y la del esquema.
+7. No se escribió nada en staging.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -10342,7 +10373,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 integrada en `main` (PR #54, CI #214); 11.7c2 integrada en `main` (PR #55, CI #217; adaptador retirado); 11.7d partida en d1 y d2: 11.7d1 preparada |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 integrada en `main` (PR #54, CI #214); 11.7c2 integrada en `main` (PR #55, CI #217; adaptador retirado); 11.7d partida en d1 y d2: 11.7d1 verificada en staging (CI #219) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
