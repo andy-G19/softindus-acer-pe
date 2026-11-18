@@ -10,49 +10,6 @@
     border-color: var(--border);
   }
 
-  .industrial-dark label {
-    color: var(--foreground);
-  }
-
-  .industrial-dark input,
-  .industrial-dark select,
-  .industrial-dark textarea {
-    background-color: var(--input);
-    border-color: var(--border);
-    color: var(--foreground);
-    transition-property: color, background-color, border-color, box-shadow;
-    transition-duration: var(--motion-fast);
-  }
-
-  .industrial-dark input:focus,
-  .industrial-dark select:focus,
-  .industrial-dark textarea:focus,
-  .industrial-dark input:focus-visible,
-  .industrial-dark select:focus-visible,
-  .industrial-dark textarea:focus-visible {
-    border-color: var(--ring);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 18%, transparent);
-    outline: none;
-  }
-
-  .industrial-dark input:disabled,
-  .industrial-dark select:disabled,
-  .industrial-dark textarea:disabled {
-    background-color: var(--muted);
-    color: var(--muted-foreground);
-    opacity: 1;
-  }
-
-  .industrial-dark input::placeholder,
-  .industrial-dark textarea::placeholder {
-    color: color-mix(in srgb, var(--muted-foreground) 78%, transparent);
-  }
-
-  .industrial-dark select option {
-    background-color: var(--popover);
-    color: var(--popover-foreground);
-  }
-
   .industrial-dark :is(section, div).overflow-hidden:has(table) {
     overflow-x: auto;
   }
