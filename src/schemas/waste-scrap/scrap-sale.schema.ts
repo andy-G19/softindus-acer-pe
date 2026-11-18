@@ -2,6 +2,11 @@ import { z } from "zod";
 
 import { hasCents } from "@/lib/client-payment-amounts";
 
+// C4 de la 11.7d (D109): cantidad_vendida y peso_vendido_kg son numeric(10,2). Lo que la base
+// redondea a 0.00 (menos de 0.005) tampoco es un peso ni una cantidad, como en scrap.schema.ts. El
+// redondeo lo hace la base: aqui no se redondea.
+const MIN_QUANTITY = 0.005;
+
 const optionalPositiveNumber = z.preprocess(
   (value) => {
     if (value === null || value === undefined || value === "") {
@@ -14,7 +19,7 @@ const optionalPositiveNumber = z.preprocess(
     .number({
       message: "El valor debe ser numérico.",
     })
-    .positive("El valor debe ser mayor que cero.")
+    .min(MIN_QUANTITY, "El valor debe ser mayor que cero.")
     .optional(),
 );
 

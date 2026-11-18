@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
+import { PAYMENT_METHOD_OPTIONS } from "@/modules/commercial/payment-labels";
 import {
   Table,
   TableBody,
@@ -25,7 +26,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { calculateQuoteAmounts, hasCents } from "@/lib/client-payment-amounts";
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { hasListFilters } from "@/lib/navigation";
+import { hasListFilters, navigationHrefs } from "@/lib/navigation";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
 import type { QuoteFormState } from "@/modules/commercial/quotes/actions";
 
@@ -63,6 +64,10 @@ type QuoteFormProps = {
 const initialState: QuoteFormState = { status: "idle" };
 
 const FILTER_HINT = "Puede no aparecer con los filtros activos del listado.";
+
+function isQuotesList(href: string) {
+  return new URL(href, "https://return-to.invalid").pathname === navigationHrefs.quotes;
+}
 
 const DISCARD = {
   title: "¿Descartar la proforma?",
@@ -107,7 +112,12 @@ export function QuoteForm({ action, orders, defaultOrderId, successNotification,
   const hasDefaultOrder = Boolean(defaultOrderId && selectedOrder);
 
   const notification = useMemo(
-    () => (hasListFilters(returnTo) ? { ...successNotification, description: FILTER_HINT } : successNotification),
+    // C5 de la 11.7d: la nota habla de la proforma nueva, que solo sale en el listado de proformas;
+    // al volver a pedidos («Generar proforma») no aplica.
+    () =>
+      isQuotesList(returnTo) && hasListFilters(returnTo)
+        ? { ...successNotification, description: FILTER_HINT }
+        : successNotification,
     [successNotification, returnTo],
   );
   const goBack = useCallback(() => router.push(returnTo), [router, returnTo]);
@@ -281,11 +291,11 @@ export function QuoteForm({ action, orders, defaultOrderId, successNotification,
                 defaultValue={values?.metodo_pago_adelanto ?? ""}
               >
                 <option value="">Seleccione...</option>
-                <option value="efectivo">Efectivo</option>
-                <option value="transferencia">Transferencia</option>
-                <option value="yape">Yape</option>
-                <option value="plin">Plin</option>
-                <option value="otro">Otro</option>
+                {PAYMENT_METHOD_OPTIONS.map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
               </NativeSelect>
             )}
           </Field>

@@ -223,7 +223,11 @@ export function SparePartForm({
                   <Label htmlFor="nuevo_proveedor_tipo">Tipo</Label>
                   <NativeSelect
                     id="nuevo_proveedor_tipo"
-                    value={newProviderType}
+                    // defaultValue y no value (C2 de la 11.7d): React 19 reinicia el formulario
+                    // tras la accion del repuesto, y un select controlado volvia a la primera
+                    // opcion mientras el estado guardaba la elegida. ActionForm remonta los
+                    // campos con el error, y el select nace con lo elegido.
+                    defaultValue={newProviderType}
                     onChange={(event) => setNewProviderType(event.target.value)}
                   >
                     {supplierTypes.map((supplierType) => (

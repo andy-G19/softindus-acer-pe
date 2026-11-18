@@ -461,3 +461,52 @@ defineHandlerCases<QuickCase>("createQuickSupplierAction", (quickCase) => create
     ...quickWith({}, { "proveedor.create": failWith(new Error("conexion perdida")) }),
   },
 ]);
+
+// C1 de la 11.7d (D105, hallazgo 5 de la 10.3b): el alta rapida buscaba la razon social antes de la
+// transaccion, sin nada que la ordenara: dos altas a la vez con el mismo nombre creaban dos
+// proveedores. Ahora la busca dentro de la transaccion, despues de reservar el correlativo de
+// proveedor, cuya fila queda bloqueada (FOR UPDATE) hasta el final: la segunda alta espera y ve la
+// primera. Si el nombre ya existe, la transaccion se revierte, y con ella la reserva del numero.
+// La espera en si no se puede probar aqui (ni en PGlite); esto fija el orden.
+describe("C1 de la 11.7d: el alta rapida busca el nombre con el correlativo reservado", () => {
+  function indexOf(calls: Awaited<ReturnType<typeof characterizeHandler>>["calls"], name: string) {
+    return calls.findIndex((call) =>
+      "prisma" in call ? call.prisma === name : "effect" in call && call.effect === name,
+    );
+  }
+
+  it("con un nombre nuevo, la busqueda va dentro de la transaccion y despues del correlativo", async () => {
+    mocks.correlatives.clear();
+    const { calls } = await characterizeHandler(
+      () => createQuickSupplierAction(quickInput),
+      { ...supplierType(true), ...existingByName(null) },
+    );
+
+    const transaccion = indexOf(calls, "prisma.$transaction");
+    const correlativo = indexOf(calls, "getNextCorrelativeId");
+    const busqueda = indexOf(calls, "proveedor.findFirst");
+
+    expect(transaccion).toBeGreaterThanOrEqual(0);
+    expect(correlativo, "el correlativo se reserva dentro de la transaccion").toBeGreaterThan(transaccion);
+    expect(busqueda, "la busqueda del nombre va despues de reservar el correlativo").toBeGreaterThan(correlativo);
+    expect(indexOf(calls, "proveedor.create")).toBeGreaterThan(busqueda);
+  });
+
+  it("con un nombre que ya existe, revierte la transaccion y devuelve el existente", async () => {
+    mocks.correlatives.clear();
+    const { calls, result } = await characterizeHandler(
+      () => createQuickSupplierAction({ ...quickInput, razon_social: "ferreteria el perno" }),
+      {
+        ...supplierType(true),
+        ...existingByName({ id_proveedor: OTRO_PROVEEDOR, razon_social: "Ferreteria El Perno", estado: true }),
+      },
+    );
+
+    expect(indexOf(calls, "proveedor.findFirst")).toBeGreaterThan(indexOf(calls, "getNextCorrelativeId"));
+    expect(indexOf(calls, "prisma.$transaction:rollback"), "la reserva del numero se deshace").toBeGreaterThan(
+      indexOf(calls, "proveedor.findFirst"),
+    );
+    expect(indexOf(calls, "proveedor.create")).toBe(-1);
+    expect(result).toEqual({ ok: true, supplier: { id: OTRO_PROVEEDOR, label: "Ferreteria El Perno" } });
+  });
+});

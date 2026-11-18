@@ -5,7 +5,7 @@ import { hasCents } from "@/lib/client-payment-amounts";
 import { PrintButton } from "@/components/commercial/print-button";
 import { PageHeader } from "@/components/navigation/page-header";
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs, type NavigationCrumb } from "@/lib/navigation";
 import type { SearchParamsRecord } from "@/lib/search-params";
 import { StateBadge } from "@/components/commercial/status-badge";
 import { commercialNotifications } from "@/modules/commercial/notifications";
@@ -41,13 +41,61 @@ const QUOTE_DETAIL_ORIGINS = [
   { href: navigationHrefs.orders, label: "Pedidos", backLabel: "Volver a pedidos" },
 ] as const;
 
-function resolveQuoteDetailOrigin(returnTo: string | string[] | undefined) {
+// C5 de la 11.7d (D107, hallazgo 5 de la 11.3c): tambien lo abren el detalle de un pedido y el
+// reporte de ventas y cobranzas. El pedido se reconoce por su id (`PED` y 8 cifras, sin subrutas) y
+// su miga lleva tambien a su listado, el `returnTo` que el pedido recibio. El reporte, por su ruta
+// exacta, bajo Reportes.
+const ORDER_DETAIL_PATH = /^\/dashboard\/commercial\/orders\/(PED\d{8})$/;
+
+type QuoteDetailOrigin = {
+  href: string;
+  backLabel: string;
+  crumbs: NavigationCrumb[];
+};
+
+function resolveQuoteDetailOrigin(returnTo: string | string[] | undefined): QuoteDetailOrigin {
   const [defaultOrigin] = QUOTE_DETAIL_ORIGINS;
   const safeHref = getSafeReturnTo(returnTo, defaultOrigin.href);
-  const pathname = safeHref.split(/[?#]/)[0];
-  const origin = QUOTE_DETAIL_ORIGINS.find((item) => item.href === pathname);
+  const url = new URL(safeHref, "https://return-to.invalid");
+  const commercial = { label: "Comercial", href: navigationHrefs.commercial };
+  const listOrigin = QUOTE_DETAIL_ORIGINS.find((item) => item.href === url.pathname);
 
-  return origin ? { ...origin, href: safeHref } : defaultOrigin;
+  if (listOrigin) {
+    return {
+      href: safeHref,
+      backLabel: listOrigin.backLabel,
+      crumbs: [commercial, { label: listOrigin.label, href: safeHref }],
+    };
+  }
+
+  const order = ORDER_DETAIL_PATH.exec(url.pathname);
+
+  if (order) {
+    const ordersHref = getSafeReturnTo(url.searchParams.get("returnTo") ?? undefined, navigationHrefs.orders);
+
+    return {
+      href: safeHref,
+      backLabel: "Volver al pedido",
+      crumbs: [commercial, { label: "Pedidos", href: ordersHref }, { label: order[1], href: safeHref }],
+    };
+  }
+
+  if (url.pathname === navigationHrefs.salesCollectionsReport) {
+    return {
+      href: safeHref,
+      backLabel: "Volver al reporte",
+      crumbs: [
+        { label: "Reportes", href: navigationHrefs.reports },
+        { label: "Ventas y cobranzas", href: safeHref },
+      ],
+    };
+  }
+
+  return {
+    href: defaultOrigin.href,
+    backLabel: defaultOrigin.backLabel,
+    crumbs: [commercial, { label: defaultOrigin.label, href: defaultOrigin.href }],
+  };
 }
 
 function calculateExpirationDate(
@@ -101,11 +149,7 @@ export default async function QuoteDetailPage({
           description="Revisa, imprime o guarda la proforma como PDF desde el navegador."
           backHref={origin.href}
           backLabel={origin.backLabel}
-          breadcrumbs={dashboardBreadcrumbs([
-            { label: "Comercial", href: navigationHrefs.commercial },
-            { label: origin.label, href: origin.href },
-            { label: "Detalle de proforma" },
-          ])}
+          breadcrumbs={dashboardBreadcrumbs([...origin.crumbs, { label: "Detalle de proforma" }])}
           actions={
             <>
               <PrintButton />

@@ -5,6 +5,7 @@ import { createRoot, hydrateRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { ReceiptFormState } from "@/modules/commercial/receipts/actions";
+import { RECEIPT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
 import { ReceiptForm } from "@/modules/commercial/receipts/receipt-form";
 
 // Seccion del comprobante en el detalle de la proforma (C6 de la 11.3b) con React real: la clave
@@ -180,5 +181,20 @@ describe("ReceiptForm", () => {
 
     expect(stored).toMatch(UUID);
     expect(stored).not.toBe(received[0].get("clave_operacion"));
+  });
+});
+
+/** Las opciones de un select como pares [valor, texto], en su orden. */
+function optionsOf(name: string) {
+  return [...control<HTMLSelectElement>(name).options].map((option) => [option.value, option.textContent]);
+}
+
+// C6 de la 11.7d (D106): el tipo de comprobante sale de la lista compartida; «Boleta» sigue elegida.
+describe("C6 de la 11.7d: el comprobante usa la lista compartida", () => {
+  it("ofrece los tipos de la lista, en su orden", async () => {
+    await render(() => ({ status: "idle" }) as unknown as ReceiptFormState);
+
+    expect(optionsOf("tipo_comprobante")).toEqual(RECEIPT_TYPE_OPTIONS.map(([value, label]) => [value, label]));
+    expect(control<HTMLSelectElement>("tipo_comprobante").value).toBe("boleta");
   });
 });

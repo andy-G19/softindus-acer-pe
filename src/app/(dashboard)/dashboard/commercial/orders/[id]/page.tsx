@@ -19,6 +19,7 @@ import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
   navigationHrefs,
+  withReturnTo,
 } from "@/lib/navigation";
 import { getOrderDetail } from "@/modules/commercial/orders/queries";
 
@@ -44,6 +45,8 @@ export default async function OrderDetailPage({
   }
 
   const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.orders);
+  // C5 de la 11.7d (D107): la proforma vuelve a este pedido, y el pedido a su listado.
+  const orderHref = withReturnTo(`${navigationHrefs.orders}/${id}`, backHref);
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
@@ -150,7 +153,7 @@ export default async function OrderDetailPage({
             {order.proforma.map((quote) => (
               <Link
                 key={quote.id_proforma}
-                href={`/dashboard/commercial/quotes/${quote.id_proforma}`}
+                href={withReturnTo(`/dashboard/commercial/quotes/${quote.id_proforma}`, orderHref)}
                 className="block rounded-md border border-border/80 px-3 py-2 transition hover:bg-secondary"
               >
                 {quote.numero_proforma} - {formatMoney(quote.monto_total)}

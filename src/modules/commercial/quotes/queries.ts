@@ -189,15 +189,12 @@ export async function getQuoteDetail(idProforma: string) {
       id_proforma: idProforma,
     },
     include: {
+      // C3 de la 11.7d (D108): la fecha es un dia; el id desempata las filas del mismo dia.
       comprobante_venta: {
-        orderBy: {
-          fecha_emision: "desc",
-        },
+        orderBy: [{ fecha_emision: "desc" }, { id_comprobante: "desc" }],
       },
       pago_cliente: {
-        orderBy: {
-          fecha_pago: "desc",
-        },
+        orderBy: [{ fecha_pago: "desc" }, { id_pago_cliente: "desc" }],
       },
       pedido: {
         include: {

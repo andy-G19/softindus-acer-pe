@@ -224,7 +224,8 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                       {canGenerateQuote ? (
                         <Button size="sm" asChild>
                           <Link
-                            href={`/dashboard/commercial/quotes/new?orderId=${order.id_pedido}`}
+                            // C5 de la 11.7d (D107): al guardar, el alta vuelve a este listado.
+                            href={withReturnTo(`/dashboard/commercial/quotes/new?orderId=${order.id_pedido}`, returnTo)}
                           >
                             Generar proforma
                           </Link>

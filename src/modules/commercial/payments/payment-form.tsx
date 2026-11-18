@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
+import { PAYMENT_METHOD_OPTIONS, PAYMENT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
 import { Textarea } from "@/components/ui/textarea";
 import { calculateClientPayment } from "@/lib/client-payment-amounts";
 import { formatMoney } from "@/lib/formatters";
@@ -131,11 +132,11 @@ export function PaymentForm({ action, quoteId, currentBalance, isPaid, successNo
         <Field id="metodo_pago" label="Método de pago" required disabled={isPaid} errors={fieldErrors?.metodo_pago}>
           {(control) => (
             <NativeSelect {...control} name="metodo_pago" defaultValue={values.metodo_pago}>
-              <option value="efectivo">Efectivo</option>
-              <option value="transferencia">Transferencia</option>
-              <option value="yape">Yape</option>
-              <option value="plin">Plin</option>
-              <option value="otro">Otro</option>
+              {PAYMENT_METHOD_OPTIONS.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </NativeSelect>
           )}
         </Field>
@@ -143,9 +144,11 @@ export function PaymentForm({ action, quoteId, currentBalance, isPaid, successNo
         <Field id="tipo_pago" label="Tipo de pago" required disabled={isPaid} errors={fieldErrors?.tipo_pago}>
           {(control) => (
             <NativeSelect {...control} name="tipo_pago" defaultValue={values.tipo_pago}>
-              <option value="amortizacion">Amortización</option>
-              <option value="adelanto">Adelanto</option>
-              <option value="cancelacion">Cancelación</option>
+              {PAYMENT_TYPE_OPTIONS.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </NativeSelect>
           )}
         </Field>

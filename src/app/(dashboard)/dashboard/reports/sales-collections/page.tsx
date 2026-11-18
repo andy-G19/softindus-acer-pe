@@ -31,7 +31,7 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { createReturnToHref, dashboardBreadcrumbs, navigationHrefs, withReturnTo } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
@@ -181,6 +181,8 @@ export default async function SalesCollectionsReportPage({
   const searchCode = parseStringParam(params, "searchCode");
 
   const filters = { dateFrom, dateTo, clientId, orderStatus, collectionStatus, searchCode };
+  // C5 de la 11.7d (D107): la proforma vuelve al reporte con sus filtros.
+  const reportHref = createReturnToHref(navigationHrefs.salesCollectionsReport, params);
   const pageHeader = {
     title: "Reporte de ventas y cobranzas",
     description: "Consulta pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos pendientes y estados de cobranza.",
@@ -395,7 +397,7 @@ export default async function SalesCollectionsReportPage({
                     <TableCell>
                       {row.quote ? (
                         <Link
-                          href={`/dashboard/commercial/quotes/${row.quote.id_proforma}`}
+                          href={withReturnTo(`/dashboard/commercial/quotes/${row.quote.id_proforma}`, reportHref)}
                           className="hover:underline"
                         >
                           <span className="font-medium">

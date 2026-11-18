@@ -419,6 +419,14 @@ export async function toggleSupplierStatusAction(
   return statusToggleDone(idProveedor, nextStatus);
 }
 
+// El nombre ya existe: se lanza desde la transaccion del alta rapida para revertirla (C1 de la
+// 11.7d). No se exporta: un archivo "use server" solo exporta acciones.
+class ExistingSupplierError extends Error {
+  constructor(readonly supplier: { id_proveedor: string; razon_social: string; estado: boolean }) {
+    super("Ya existe un proveedor con esa razón social.");
+  }
+}
+
 export type QuickSupplierResult =
   | { ok: true; supplier: { id: string; label: string } }
   | { ok: false; error: string };
@@ -455,47 +463,37 @@ export async function createQuickSupplierAction(input: {
     return { ok: false, error: "Selecciona un tipo de proveedor activo." };
   }
 
-  const existingSupplier = await prisma.proveedor.findFirst({
-    where: {
-      razon_social: {
-        equals: data.razon_social,
-        mode: "insensitive",
-      },
-    },
-    select: {
-      id_proveedor: true,
-      razon_social: true,
-      estado: true,
-    },
-  });
-
-  if (existingSupplier) {
-    if (!existingSupplier.estado) {
-      return {
-        ok: false,
-        error: `Ya existe un proveedor inactivo con esa razón social (${existingSupplier.id_proveedor}). Actívalo desde el módulo Proveedores.`,
-      };
-    }
-
-    // Ya existe y está activo: no se duplica, se devuelve el que hay para que
-    // el formulario lo seleccione.
-    return {
-      ok: true,
-      supplier: {
-        id: existingSupplier.id_proveedor,
-        label: existingSupplier.razon_social,
-      },
-    };
-  }
-
   let idProveedor = "";
 
+  // C1 de la 11.7d (D105): la razon social se busca dentro de la transaccion, despues de reservar el
+  // correlativo de proveedor. Esa reserva bloquea la fila del contador (FOR UPDATE) hasta el final,
+  // asi que dos altas de proveedor no corren a la vez: la segunda espera y ve la que creo la
+  // primera. Si el nombre ya existe, se lanza para revertir la transaccion, y con ella la reserva:
+  // devolver desde el callback guardaria el contador avanzado y se perderia un numero.
   try {
     await prisma.$transaction(async (tx) => {
       idProveedor = await getNextCorrelativeId(tx, {
         codigoEntidad: "proveedor",
         prefijo: "PVE",
       });
+
+      const existingSupplier = await tx.proveedor.findFirst({
+        where: {
+          razon_social: {
+            equals: data.razon_social,
+            mode: "insensitive",
+          },
+        },
+        select: {
+          id_proveedor: true,
+          razon_social: true,
+          estado: true,
+        },
+      });
+
+      if (existingSupplier) {
+        throw new ExistingSupplierError(existingSupplier);
+      }
 
       await tx.proveedor.create({
         data: {
@@ -517,7 +515,28 @@ export async function createQuickSupplierAction(input: {
         tx,
       });
     });
-  } catch {
+  } catch (error) {
+    if (error instanceof ExistingSupplierError) {
+      const existingSupplier = error.supplier;
+
+      if (!existingSupplier.estado) {
+        return {
+          ok: false,
+          error: `Ya existe un proveedor inactivo con esa razón social (${existingSupplier.id_proveedor}). Actívalo desde el módulo Proveedores.`,
+        };
+      }
+
+      // Ya existe y está activo: no se duplica, se devuelve el que hay para que
+      // el formulario lo seleccione.
+      return {
+        ok: true,
+        supplier: {
+          id: existingSupplier.id_proveedor,
+          label: existingSupplier.razon_social,
+        },
+      };
+    }
+
     return {
       ok: false,
       error: "No se pudo registrar el proveedor. Intenta nuevamente.",

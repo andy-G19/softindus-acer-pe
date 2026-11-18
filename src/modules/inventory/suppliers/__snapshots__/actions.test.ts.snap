@@ -60,6 +60,17 @@ exports[`createQuickSupplierAction > crea el proveedor con su correlativo y la b
     "prisma": "tipo_proveedor_catalogo.findUnique",
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -74,17 +85,6 @@ exports[`createQuickSupplierAction > crea el proveedor con su correlativo y la b
       },
     },
     "prisma": "proveedor.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "proveedor",
-      "prefijo": "PVE",
-    },
-    "effect": "getNextCorrelativeId",
   },
   {
     "args": {
@@ -177,6 +177,17 @@ exports[`createQuickSupplierAction > sin telefono lo guarda como null > llamadas
     "prisma": "tipo_proveedor_catalogo.findUnique",
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -191,17 +202,6 @@ exports[`createQuickSupplierAction > sin telefono lo guarda como null > llamadas
       },
     },
     "prisma": "proveedor.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "proveedor",
-      "prefijo": "PVE",
-    },
-    "effect": "getNextCorrelativeId",
   },
   {
     "args": {
@@ -336,6 +336,17 @@ exports[`createQuickSupplierAction > un fallo al crear revierte con el mensaje g
     "prisma": "tipo_proveedor_catalogo.findUnique",
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -350,17 +361,6 @@ exports[`createQuickSupplierAction > un fallo al crear revierte con el mensaje g
       },
     },
     "prisma": "proveedor.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "proveedor",
-      "prefijo": "PVE",
-    },
-    "effect": "getNextCorrelativeId",
   },
   {
     "args": {
@@ -411,6 +411,17 @@ exports[`createQuickSupplierAction > ya existe uno activo con esa razon social: 
     "prisma": "tipo_proveedor_catalogo.findUnique",
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -425,6 +436,10 @@ exports[`createQuickSupplierAction > ya existe uno activo con esa razon social: 
       },
     },
     "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": "Ya existe un proveedor con esa razón social.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -461,6 +476,17 @@ exports[`createQuickSupplierAction > ya existe uno inactivo con esa razon social
     "prisma": "tipo_proveedor_catalogo.findUnique",
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -475,6 +501,10 @@ exports[`createQuickSupplierAction > ya existe uno inactivo con esa razon social
       },
     },
     "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": "Ya existe un proveedor con esa razón social.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;

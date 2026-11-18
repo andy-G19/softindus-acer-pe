@@ -10,6 +10,7 @@ import { SubmitButton } from "@/components/forms/submit-button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
+import { RECEIPT_TYPE_OPTIONS } from "@/modules/commercial/payment-labels";
 import { Textarea } from "@/components/ui/textarea";
 import { calculateQuoteTotal } from "@/lib/client-payment-amounts";
 import { formatMoney } from "@/lib/formatters";
@@ -117,10 +118,11 @@ export function ReceiptForm({ action, quoteId, suggestedAmount, hasReceipt, succ
                 }
               }}
             >
-              <option value="boleta">Boleta</option>
-              <option value="factura">Factura</option>
-              <option value="recibo">Recibo</option>
-              <option value="otro">Otro</option>
+              {RECEIPT_TYPE_OPTIONS.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </NativeSelect>
           )}
         </Field>
