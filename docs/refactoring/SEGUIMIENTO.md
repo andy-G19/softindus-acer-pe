@@ -10055,8 +10055,8 @@ Hallazgos:
    - Buscador de clientes del pedido nuevo y abrir el panel de cliente: menos de 16 ms (igual).
    - Ninguna pasa de 200 ms. La confirmación se abrió y cerró tres veces sin aceptarla: ningún
      POST en la red y siguen 8 botones «Inactivar».
-7. El login no se pudo ver sin cerrar la sesión. Queda para que Andy lo revise en una ventana
-   privada (su base de paridad se perdió).
+7. El login no se pudo ver sin cerrar la sesión. Andy lo revisó en una ventana privada y lo dio
+   por bueno (su base de paridad se perdió, así que es una revisión a ojo).
 8. No se escribió nada en staging.
 
 ## Secuencia de próximas entregas
