@@ -206,13 +206,13 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 </div>
 </div>
 </header>
-<aside class="group/sidebar hidden md:block md:fixed md:inset-y-0 md:left-0 md:z-(--z-sidebar) md:w-19 md:overflow-hidden md:border-r md:border-sidebar-border/80 md:bg-sidebar md:transition-[width] md:duration-200 md:ease-out md:hover:w-64 md:hover:overflow-visible md:hover:shadow-sidebar md:focus-within:w-64 md:focus-within:overflow-visible">
+<aside class="group/sidebar hidden md:block md:fixed md:inset-y-0 md:left-0 md:z-(--z-sidebar) md:w-19 md:overflow-hidden md:border-r md:border-sidebar-border/80 md:bg-sidebar md:transition-[width] md:duration-200 md:ease-out md:hover:w-64 md:hover:overflow-visible md:hover:shadow-sidebar md:has-[:focus-visible]:w-64 md:has-[:focus-visible]:overflow-visible">
 <div class="h-full overflow-y-auto pt-24">
 <div class="px-3 pb-3">
-<p class="text-xs font-semibold uppercase text-muted-foreground hidden md:group-hover/sidebar:block md:group-focus-within/sidebar:block">Navegación</p>
+<p class="text-xs font-semibold uppercase text-muted-foreground hidden md:group-hover/sidebar:block md:group-has-[:focus-visible]/sidebar:block">Navegación</p>
 </div>
 <nav aria-label="Navegación principal" class="flex flex-col gap-1 px-2">
-<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard">
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-has-[:focus-visible]/sidebar:justify-start" href="/dashboard">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard size-4 shrink-0" aria-hidden="true">
 <rect width="7" height="9" x="3" y="3" rx="1">
 </rect>
@@ -223,9 +223,9 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 <rect width="7" height="5" x="3" y="16" rx="1">
 </rect>
 </svg>
-<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Dashboard</span>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-has-[:focus-visible]/sidebar:inline">Dashboard</span>
 </a>
-<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/users">
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-has-[:focus-visible]/sidebar:justify-start" href="/dashboard/users">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users size-4 shrink-0" aria-hidden="true">
 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2">
 </path>
@@ -236,9 +236,9 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 <circle cx="9" cy="7" r="4">
 </circle>
 </svg>
-<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Usuarios</span>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-has-[:focus-visible]/sidebar:inline">Usuarios</span>
 </a>
-<a aria-current="page" class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start sidebar-nav-link-active" href="/dashboard/commercial">
+<a aria-current="page" class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-has-[:focus-visible]/sidebar:justify-start sidebar-nav-link-active" href="/dashboard/commercial">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart size-4 shrink-0" aria-hidden="true">
 <circle cx="8" cy="21" r="1">
 </circle>
@@ -247,9 +247,9 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12">
 </path>
 </svg>
-<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Comercial</span>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-has-[:focus-visible]/sidebar:inline">Comercial</span>
 </a>
-<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/inventory">
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-has-[:focus-visible]/sidebar:justify-start" href="/dashboard/inventory">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package size-4 shrink-0" aria-hidden="true">
 <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z">
 </path>
@@ -260,9 +260,9 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 <path d="m7.5 4.27 9 5.15">
 </path>
 </svg>
-<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Inventario</span>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-has-[:focus-visible]/sidebar:inline">Inventario</span>
 </a>
-<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/production">
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-has-[:focus-visible]/sidebar:justify-start" href="/dashboard/production">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-factory size-4 shrink-0" aria-hidden="true">
 <path d="M12 16h.01">
 </path>
@@ -273,9 +273,9 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 <path d="M8 16h.01">
 </path>
 </svg>
-<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Producción</span>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-has-[:focus-visible]/sidebar:inline">Producción</span>
 </a>
-<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/waste-scrap">
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-has-[:focus-visible]/sidebar:justify-start" href="/dashboard/waste-scrap">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-recycle size-4 shrink-0" aria-hidden="true">
 <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5">
 </path>
@@ -290,9 +290,9 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 <path d="m13.378 9.633 4.096 1.098 1.097-4.096">
 </path>
 </svg>
-<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Mermas y chatarra</span>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-has-[:focus-visible]/sidebar:inline">Mermas y chatarra</span>
 </a>
-<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/costs">
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-has-[:focus-visible]/sidebar:justify-start" href="/dashboard/costs">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator size-4 shrink-0" aria-hidden="true">
 <rect width="16" height="20" x="4" y="2" rx="2">
 </rect>
@@ -315,9 +315,9 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 <path d="M8 18h.01">
 </path>
 </svg>
-<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Costos</span>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-has-[:focus-visible]/sidebar:inline">Costos</span>
 </a>
-<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/petty-cash">
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-has-[:focus-visible]/sidebar:justify-start" href="/dashboard/petty-cash">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet-cards size-4 shrink-0" aria-hidden="true">
 <path d="M3 11h3.75a2 2 0 0 1 1.6.8l.45.6a4 4 0 0 0 6.4 0l.45-.6a2 2 0 0 1 1.6-.8H21">
 </path>
@@ -326,9 +326,9 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 <rect x="3" y="3" width="18" height="18" rx="2">
 </rect>
 </svg>
-<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Caja chica</span>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-has-[:focus-visible]/sidebar:inline">Caja chica</span>
 </a>
-<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/staff">
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-has-[:focus-visible]/sidebar:justify-start" href="/dashboard/staff">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-check size-4 shrink-0" aria-hidden="true">
 <path d="M2 21a8 8 0 0 1 13.292-6">
 </path>
@@ -337,16 +337,16 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 <path d="m16 19 2 2 4-4">
 </path>
 </svg>
-<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Personal</span>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-has-[:focus-visible]/sidebar:inline">Personal</span>
 </a>
-<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/maintenance">
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-has-[:focus-visible]/sidebar:justify-start" href="/dashboard/maintenance">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench size-4 shrink-0" aria-hidden="true">
 <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z">
 </path>
 </svg>
-<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Mantenimiento</span>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-has-[:focus-visible]/sidebar:inline">Mantenimiento</span>
 </a>
-<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/reports">
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-has-[:focus-visible]/sidebar:justify-start" href="/dashboard/reports">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-column size-4 shrink-0" aria-hidden="true">
 <path d="M3 3v16a2 2 0 0 0 2 2h16">
 </path>
@@ -357,7 +357,7 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 <path d="M8 17v-3">
 </path>
 </svg>
-<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Reportes</span>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-has-[:focus-visible]/sidebar:inline">Reportes</span>
 </a>
 </nav>
 </div>
