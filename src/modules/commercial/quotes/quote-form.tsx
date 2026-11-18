@@ -138,7 +138,7 @@ export function QuoteForm({ action, orders, defaultOrderId, successNotification,
         action={formAction}
         pending={pending}
         resultKey={resultKey}
-        className="space-y-5 rounded-lg border border-border/80 bg-card p-6"
+        className="space-y-5 rounded-lg border border-border bg-card p-6"
         onInput={() => markDirty(true)}
         onFocus={trackFocus}
       >
@@ -187,24 +187,24 @@ export function QuoteForm({ action, orders, defaultOrderId, successNotification,
         </Field>
 
         {selectedOrder && (
-          <div className="space-y-4 rounded-lg border border-border/80 bg-card p-4">
+          <div className="space-y-4 rounded-lg border border-border bg-card p-4">
             <div>
               <h2 className="font-semibold">Resumen del pedido</h2>
               <p className="text-sm text-muted-foreground">Revisa los datos antes de generar la proforma.</p>
             </div>
 
             <div className="grid gap-4 md:grid-cols-3">
-              <div className="rounded-lg border border-border/80 bg-background p-3">
+              <div className="rounded-lg border border-border bg-background p-3">
                 <p className="text-xs text-muted-foreground">Cliente</p>
                 <p className="font-medium">{selectedOrder.cliente}</p>
               </div>
 
-              <div className="rounded-lg border border-border/80 bg-background p-3">
+              <div className="rounded-lg border border-border bg-background p-3">
                 <p className="text-xs text-muted-foreground">Fecha de pedido</p>
                 <p className="font-medium">{formatDate(selectedOrder.fecha_pedido)}</p>
               </div>
 
-              <div className="rounded-lg border border-border/80 bg-background p-3">
+              <div className="rounded-lg border border-border bg-background p-3">
                 <p className="text-xs text-muted-foreground">Entrega estimada</p>
                 <p className="font-medium">{formatDate(selectedOrder.fecha_entrega_estimada)}</p>
               </div>
@@ -292,7 +292,7 @@ export function QuoteForm({ action, orders, defaultOrderId, successNotification,
 
           <div className="space-y-2">
             <Label>Saldo calculado</Label>
-            <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm font-medium">
+            <div className="flex h-8 items-center rounded-lg border border-border bg-muted px-2.5 text-sm font-medium">
               {formatMoney(balance)}
             </div>
             <p className="text-xs text-muted-foreground">Se calcula como total menos adelanto.</p>

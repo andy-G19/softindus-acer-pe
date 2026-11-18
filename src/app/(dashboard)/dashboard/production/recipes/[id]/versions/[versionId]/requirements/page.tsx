@@ -157,7 +157,7 @@ export default async function MaterialRequirementsPage({
         </Alert>
       ) : null}
 
-      <section className="rounded-xl border border-border/80 bg-card p-6 [box-shadow:var(--shadow-raised)]">
+      <section className="rounded-xl border border-border bg-card p-6 [box-shadow:var(--shadow-raised)]">
         <form className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
           <Field
             id="quantity"

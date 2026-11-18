@@ -153,7 +153,7 @@ export default async function WorkOrderProgressPage({
       </section>
 
       {sortedAdvances.length === 0 ? (
-        <section className="rounded-xl border border-border/80 bg-card p-6 [box-shadow:var(--shadow-raised)]">
+        <section className="rounded-xl border border-border bg-card p-6 [box-shadow:var(--shadow-raised)]">
           <h2 className="text-lg font-semibold text-foreground">
             La orden todavía no tiene avances generados
           </h2>
@@ -247,7 +247,7 @@ export default async function WorkOrderProgressPage({
                 operator={
                   <>
                     <Label>Operario</Label>
-                    <div className="flex flex-col gap-3 rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm md:flex-row md:items-center md:justify-between">
+                    <div className="flex flex-col gap-3 rounded-lg border border-border bg-secondary/40 p-3 text-sm md:flex-row md:items-center md:justify-between">
                       <div>
                         <p className="font-medium text-foreground">
                           {advance.operario
@@ -274,21 +274,21 @@ export default async function WorkOrderProgressPage({
                 }
                 details={
                   <div className="mt-5 grid gap-5 md:grid-cols-3">
-                    <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
+                    <div className="rounded-lg border border-border bg-secondary/40 p-3 text-sm">
                       <p className="text-muted-foreground">Inicio de etapa</p>
                       <p className="mt-1 font-medium text-foreground">
                         {formatDateTime(advance.fecha_inicio_etapa)}
                       </p>
                     </div>
 
-                    <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
+                    <div className="rounded-lg border border-border bg-secondary/40 p-3 text-sm">
                       <p className="text-muted-foreground">Fin de etapa</p>
                       <p className="mt-1 font-medium text-foreground">
                         {formatDateTime(advance.fecha_fin_etapa)}
                       </p>
                     </div>
 
-                    <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
+                    <div className="rounded-lg border border-border bg-secondary/40 p-3 text-sm">
                       <p className="text-muted-foreground">Máquina</p>
                       <p className="mt-1 font-medium text-foreground">
                         {advance.etapa_ruta.requiere_maquina
@@ -300,7 +300,7 @@ export default async function WorkOrderProgressPage({
                 }
                 history={
                   advance.reasignacion_tarea.length > 0 ? (
-                    <div className="mt-5 rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
+                    <div className="mt-5 rounded-lg border border-border bg-secondary/40 p-4 text-sm">
                       <p className="font-medium text-foreground">
                         Historial de reasignaciones
                       </p>

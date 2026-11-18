@@ -96,7 +96,7 @@ export function ProfitabilitySection({
             </Alert>
           ) : (
             <>
-              <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
+              <div className="rounded-lg border border-border bg-secondary/40 p-4 text-sm">
                 <p className="font-medium text-foreground">
                   Vista previa de rentabilidad
                 </p>

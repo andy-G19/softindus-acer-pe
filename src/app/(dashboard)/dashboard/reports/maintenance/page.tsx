@@ -460,7 +460,7 @@ export default async function MaintenanceReportPage({
                 {machineRecurrences.slice(0, 8).map((machine) => (
                   <div
                     key={machine.machineId}
-                    className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm"
+                    className="rounded-lg border border-border bg-secondary/40 p-3 text-sm"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
@@ -519,7 +519,7 @@ export default async function MaintenanceReportPage({
                   return (
                     <div
                       key={maintenance.id_mantenimiento}
-                      className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm"
+                      className="rounded-lg border border-border bg-secondary/40 p-3 text-sm"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div>

@@ -76,7 +76,7 @@ export function PaymentForm({ action, quoteId, currentBalance, isPaid, successNo
       action={formAction}
       pending={pending}
       resultKey={resultKey}
-      className="space-y-4 rounded-lg border border-border/80 bg-card p-4"
+      className="space-y-4 rounded-lg border border-border bg-card p-4"
     >
       <input type="hidden" name="id_proforma" value={quoteId} />
       <OperationKeyField scope={`pago_cliente:${quoteId}`} completedKey={completedKey} />
@@ -151,7 +151,7 @@ export function PaymentForm({ action, quoteId, currentBalance, isPaid, successNo
         </Field>
       </div>
 
-      <div className="rounded-lg border border-border/80 bg-muted/40 p-3 text-sm">
+      <div className="rounded-lg border border-border bg-muted/40 p-3 text-sm">
         <div className="flex justify-between">
           <span>Saldo actual</span>
           <span className="font-medium">{formatMoney(balance)}</span>

@@ -394,7 +394,7 @@ export function WorkOrderForm({
         onSubmit={validateBeforeSubmit}
         onInput={() => markDirty(true)}
         onFocus={trackFocus}
-        className="space-y-6 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
+        className="space-y-6 rounded-xl border border-border bg-card p-6 shadow-sm"
       >
         <OperationKeyField scope="orden_trabajo:nueva" completedKey={completedKey} />
 
@@ -501,7 +501,7 @@ export function WorkOrderForm({
             <>
               <Label>Producto *</Label>
               <input type="hidden" name="id_producto" value={selectedProductId} />
-              <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm">
+              <div className="flex h-8 items-center rounded-lg border border-border bg-muted px-2.5 text-sm">
                 {selectedProduct
                   ? formatProductLabel(selectedProduct)
                   : "Seleccione primero un detalle de pedido"}

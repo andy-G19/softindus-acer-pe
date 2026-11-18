@@ -62,7 +62,7 @@ export function CostingDataCard({
           </div>
         </dl>
 
-        <div className="mt-5 rounded-lg border border-border/80 bg-secondary/40 p-4">
+        <div className="mt-5 rounded-lg border border-border bg-secondary/40 p-4">
           <h3 className="text-sm font-semibold text-foreground">
             Mano de obra y recálculo
           </h3>

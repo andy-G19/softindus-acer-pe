@@ -102,7 +102,7 @@ export function InventoryOutputForm({
         action={formAction}
         pending={pending}
         resultKey={resultKey}
-        className="space-y-4 rounded-xl border border-border/80 bg-card p-6"
+        className="space-y-4 rounded-xl border border-border bg-card p-6"
         onInput={() => markDirty(true)}
         onFocus={trackFocus}
       >

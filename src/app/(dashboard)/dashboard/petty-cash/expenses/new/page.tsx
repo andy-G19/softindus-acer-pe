@@ -125,7 +125,7 @@ export default async function NewPettyCashExpensePage({ searchParams }: NewPetty
                 {latestExpenses.map((expense) => (
                   <div
                     key={expense.id_movimiento_caja}
-                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
+                    className="rounded-lg border border-border bg-secondary/40 p-3"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>

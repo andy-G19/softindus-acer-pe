@@ -234,7 +234,7 @@ export function StageForm({
         </Field>
       </div>
 
-      <div className="space-y-5 rounded-lg border border-border/80 bg-secondary/40 p-4">
+      <div className="space-y-5 rounded-lg border border-border bg-secondary/40 p-4">
         <div className="grid gap-4 @md:grid-cols-2">
           <Field
             id="id_maquina"
@@ -324,7 +324,7 @@ export function StageForm({
         ) : null}
 
         {preview.durationMinutes > 0 ? (
-          <div className="rounded-lg border border-border/80 bg-card p-3 text-sm">
+          <div className="rounded-lg border border-border bg-card p-3 text-sm">
             <p className="font-medium text-foreground">Para una orden de {PREVIEW_QUANTITY} unidades</p>
             <ul className="mt-2 space-y-1 text-muted-foreground">
               <li>
@@ -403,7 +403,7 @@ export function StageForm({
       action={formAction}
       pending={pending}
       resultKey={resultKey}
-      className="@container space-y-4 rounded-lg border border-border/80 bg-card p-6"
+      className="@container space-y-4 rounded-lg border border-border bg-card p-6"
     >
       {fields}
 

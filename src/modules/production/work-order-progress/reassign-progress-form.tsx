@@ -103,7 +103,7 @@ export function ReassignProgressForm({
         resultKey={resultKey}
         onInput={() => markDirty(true)}
         onFocus={trackFocus}
-        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
+        className="space-y-5 rounded-xl border border-border bg-card p-6 shadow-sm"
       >
         <input type="hidden" name="id_avance" value={idAvance} />
 

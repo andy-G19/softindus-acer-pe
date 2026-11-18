@@ -68,7 +68,7 @@ export function StageProgressForm({
       action={formAction}
       pending={pending}
       resultKey={resultKey}
-      className="rounded-xl border border-border/80 bg-card p-5 shadow-sm"
+      className="rounded-xl border border-border bg-card p-5 shadow-sm"
     >
       <input type="hidden" name="id_avance" value={idAvance} />
 

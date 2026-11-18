@@ -203,7 +203,7 @@ export function ReusableScrapForm({
         </Field>
       </div>
 
-      <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm text-muted-foreground">
+      <div className="rounded-lg border border-border bg-secondary/40 p-4 text-sm text-muted-foreground">
         <p className="font-medium text-foreground">Estado inicial del retazo</p>
         <p className="mt-1">
           Todo retazo registrado se guardará inicialmente con estado <span className="font-semibold">disponible</span>.
@@ -234,7 +234,7 @@ export function ReusableScrapForm({
       action={formAction}
       pending={pending}
       resultKey={resultKey}
-      className="space-y-4 rounded-lg border border-border/80 bg-card p-6"
+      className="space-y-4 rounded-lg border border-border bg-card p-6"
     >
       {fields}
 

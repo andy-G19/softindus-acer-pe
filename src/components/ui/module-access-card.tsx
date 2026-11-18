@@ -56,7 +56,7 @@ export function ModuleAccessCard({
       style={{ "--card-accent": `var(--${tone})` } as React.CSSProperties}
       className="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45"
     >
-      <Card className="relative h-full border border-border/80 bg-card transition hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--card-accent)_45%,transparent)] hover:bg-secondary hover:shadow-card-hover">
+      <Card className="relative h-full border border-border bg-card transition hover:-translate-y-0.5 hover:bg-secondary hover:shadow-card-hover">
         {index ? (
           <span
             aria-hidden="true"

@@ -262,7 +262,7 @@ export default async function MaintenanceRecurrencesPage() {
                 {topFailureMachines.map((machine, index) => (
                   <div
                     key={machine.id_maquina}
-                    className="flex items-center justify-between gap-4 rounded-lg border border-border/80 bg-secondary/40 p-3"
+                    className="flex items-center justify-between gap-4 rounded-lg border border-border bg-secondary/40 p-3"
                   >
                     <div>
                       <p className="text-sm font-medium text-foreground">
@@ -303,7 +303,7 @@ export default async function MaintenanceRecurrencesPage() {
                 {topCostMachines.map((machine, index) => (
                   <div
                     key={machine.id_maquina}
-                    className="flex items-center justify-between gap-4 rounded-lg border border-border/80 bg-secondary/40 p-3"
+                    className="flex items-center justify-between gap-4 rounded-lg border border-border bg-secondary/40 p-3"
                   >
                     <div>
                       <p className="text-sm font-medium text-foreground">

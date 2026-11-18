@@ -101,12 +101,12 @@ export function MaterialClosureSection({
 
   return (
     <>
-      <div className="rounded-lg border border-border/80 p-4">
+      <div className="rounded-lg border border-border p-4">
         <h3 className="mb-3 font-semibold">Entrega adicional o devolución</h3>
         {movementForm}
       </div>
 
-      <div className="rounded-lg border border-border/80 bg-card p-4">
+      <div className="rounded-lg border border-border bg-card p-4">
         <h3 className="mb-3 font-semibold">Cerrar materiales</h3>
         <CloseMaterialsForm
           idOrdenTrabajo={idOrdenTrabajo}
@@ -139,7 +139,7 @@ function ReopenForm({ idOrdenTrabajo, state, formAction, pending }: ReopenFormPr
       action={formAction}
       pending={pending}
       resultKey={resultKey}
-      className="space-y-3 rounded-lg border border-border/80 p-4"
+      className="space-y-3 rounded-lg border border-border bg-card p-4"
     >
       <input type="hidden" name="id_orden_trabajo" value={idOrdenTrabajo} />
 

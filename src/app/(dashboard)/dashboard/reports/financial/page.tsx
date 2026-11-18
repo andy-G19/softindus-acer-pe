@@ -332,28 +332,28 @@ export default async function FinancialReportPage({
 
           <CardContent>
             <div className="grid gap-3 md:grid-cols-2">
-              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
+              <div className="rounded-lg border border-border bg-secondary/40 p-3">
                 <p className="text-xs text-muted-foreground">Materiales</p>
                 <p className="text-xl font-bold text-foreground">
                   {formatMoney(totalMaterialCost)}
                 </p>
               </div>
 
-              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
+              <div className="rounded-lg border border-border bg-secondary/40 p-3">
                 <p className="text-xs text-muted-foreground">Consumibles</p>
                 <p className="text-xl font-bold text-foreground">
                   {formatMoney(totalConsumableCost)}
                 </p>
               </div>
 
-              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
+              <div className="rounded-lg border border-border bg-secondary/40 p-3">
                 <p className="text-xs text-muted-foreground">Mano de obra</p>
                 <p className="text-xl font-bold text-foreground">
                   {formatMoney(totalLaborCost)}
                 </p>
               </div>
 
-              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
+              <div className="rounded-lg border border-border bg-secondary/40 p-3">
                 <p className="text-xs text-muted-foreground">
                   Costos indirectos
                 </p>
@@ -379,7 +379,7 @@ export default async function FinancialReportPage({
               supplierPendingRows.slice(0, 5).map((row) => (
                 <div
                   key={row.purchase.id_compra}
-                  className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm"
+                  className="rounded-lg border border-border bg-secondary/40 p-3 text-sm"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>

@@ -97,7 +97,7 @@ export function MessagesSection() {
         </GallerySample>
 
         <GallerySample label="Pantalla de esqueletos" className="block">
-          <div className="space-y-3 rounded-xl border border-border/80 bg-card p-5">
+          <div className="space-y-3 rounded-xl border border-border bg-card p-5">
             <LoadingState variant="inline" label="Cargando indicadores..." className="sr-only" />
             <Skeleton className="h-4 w-32" />
             <Skeleton className="h-8 w-20" />

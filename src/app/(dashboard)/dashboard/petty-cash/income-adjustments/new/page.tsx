@@ -147,7 +147,7 @@ export default async function NewPettyCashIncomeAdjustmentPage({
               <EmptyState label="Aún no hay ingresos ni ajustes registrados." />
             ) : (
               <div className="space-y-3">
-                <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
+                <div className="rounded-lg border border-border bg-secondary/40 p-3">
                   <p className="text-xs text-muted-foreground">
                     Ingresos recientes consultados
                   </p>
@@ -159,7 +159,7 @@ export default async function NewPettyCashIncomeAdjustmentPage({
                 {latestMovements.map((movement) => (
                   <div
                     key={movement.id_movimiento_caja}
-                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
+                    className="rounded-lg border border-border bg-secondary/40 p-3"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>

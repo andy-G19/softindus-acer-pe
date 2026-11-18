@@ -267,7 +267,7 @@ export function OrderForm({
         action={formAction}
         pending={pending}
         resultKey={resultKey}
-        className="space-y-5 rounded-lg border border-border/80 bg-card p-6"
+        className="space-y-5 rounded-lg border border-border bg-card p-6"
         onInput={() => markDirty(true)}
         onFocus={trackFocus}
       >
@@ -307,7 +307,7 @@ export function OrderForm({
           <FieldError id="id_cliente-error" messages={errorsOf("id_cliente")} />
         </div>
 
-        <div className="space-y-4 rounded-lg border border-border/80 p-4">
+        <div className="space-y-4 rounded-lg border border-border p-4">
           <div className="flex items-center justify-between gap-4">
             <div>
               <h2 className="font-semibold">Detalle del pedido</h2>
@@ -335,7 +335,7 @@ export function OrderForm({
               return (
                 <div
                   key={item.key}
-                  className="rounded-lg border border-border/80 p-4"
+                  className="rounded-lg border border-border p-4"
                 >
                   <div className="mb-4 flex items-center justify-between">
                     <h3 className="text-sm font-semibold">

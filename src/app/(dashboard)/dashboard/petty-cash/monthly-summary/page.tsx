@@ -407,7 +407,7 @@ export default async function MonthlyFinancialSummaryPage({
                 {expenseCategoryRows.map((row) => (
                   <div
                     key={row.category}
-                    className="flex items-center justify-between gap-3 rounded-lg border border-border/80 bg-secondary/40 p-3"
+                    className="flex items-center justify-between gap-3 rounded-lg border border-border bg-secondary/40 p-3"
                   >
                     <span className="text-sm font-medium text-foreground">
                       {row.category}
@@ -504,7 +504,7 @@ export default async function MonthlyFinancialSummaryPage({
                 {latestPayments.map((payment) => (
                   <div
                     key={payment.id_pago_cliente}
-                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
+                    className="rounded-lg border border-border bg-secondary/40 p-3"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
@@ -540,28 +540,28 @@ export default async function MonthlyFinancialSummaryPage({
 
         <CardContent className="px-0">
           <section className="mx-6 mb-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-lg border border-border/80 p-3">
+            <div className="rounded-lg border border-border p-3">
               <p className="text-xs text-muted-foreground">Materiales</p>
               <p className="text-lg font-bold text-foreground">
                 {formatMoney(productionCosts._sum.costo_materiales ?? 0)}
               </p>
             </div>
 
-            <div className="rounded-lg border border-border/80 p-3">
+            <div className="rounded-lg border border-border p-3">
               <p className="text-xs text-muted-foreground">Consumibles</p>
               <p className="text-lg font-bold text-foreground">
                 {formatMoney(productionCosts._sum.costo_consumibles ?? 0)}
               </p>
             </div>
 
-            <div className="rounded-lg border border-border/80 p-3">
+            <div className="rounded-lg border border-border p-3">
               <p className="text-xs text-muted-foreground">Mano de obra</p>
               <p className="text-lg font-bold text-foreground">
                 {formatMoney(productionCosts._sum.costo_mano_obra ?? 0)}
               </p>
             </div>
 
-            <div className="rounded-lg border border-border/80 p-3">
+            <div className="rounded-lg border border-border p-3">
               <p className="text-xs text-muted-foreground">
                 Costos indirectos
               </p>

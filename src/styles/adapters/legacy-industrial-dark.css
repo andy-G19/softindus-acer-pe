@@ -5,14 +5,4 @@
    legacy-industrial-dark.test.ts impide reglas sin consumidor y que el
    adaptador crezca. */
 @layer utilities {
-  .industrial-dark form.rounded-lg.border,
-  .industrial-dark form.rounded-xl.border {
-    background-color: var(--card);
-    border-color: var(--border);
-  }
-
-  .industrial-dark :is(section, div, article, form).rounded-lg.border,
-  .industrial-dark :is(section, div, article, form).rounded-xl.border {
-    border-color: var(--border);
-  }
 }
