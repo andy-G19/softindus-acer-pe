@@ -68,7 +68,7 @@ const valuesOf = (formData: FormData) => ({
   observaciones: String(formData.get("observaciones") ?? ""),
 });
 
-async function render(respond: (formData: FormData) => QuoteFormState) {
+async function render(respond: (formData: FormData) => QuoteFormState, returnTo: string = RETURN_TO) {
   const received: FormData[] = [];
   const action = vi.fn(async (_prev: QuoteFormState, formData: FormData) => {
     received.push(formData);
@@ -80,7 +80,7 @@ async function render(respond: (formData: FormData) => QuoteFormState) {
       h(QuoteForm, {
         action,
         orders: [order("PED00000004", "300.30"), order("PED00000005", "80.00")],
-        returnTo: RETURN_TO,
+        returnTo,
         successNotification: NOTIFICATION,
       }),
     );
@@ -175,5 +175,28 @@ describe("QuoteForm", () => {
 
     expect(stored).toMatch(UUID);
     expect(stored).not.toBe(received[0].get("clave_operacion"));
+  });
+});
+
+// C5 de la 11.7d (D107): «Generar proforma» del listado de pedidos vuelve a ese listado. La nota
+// de los filtros habla de la proforma recien creada, que nunca sale en pedidos: ahi no se da. El
+// pedido sigue en su lista, porque crear la proforma no cambia su estado.
+describe("C5 de la 11.7d: volver a pedidos tras crear la proforma", () => {
+  it("con pedidos filtrados avisa sin la nota de los filtros y vuelve a pedidos", async () => {
+    const orders = "/dashboard/commercial/orders?status=aprobado&page=3";
+    await render(
+      (formData) => ({
+        status: "success",
+        data: { id_proforma: "PRF00000013", clave_operacion: String(formData.get("clave_operacion")) },
+        values: valuesOf(formData),
+        operationId: "op-pedidos",
+      }),
+      orders,
+    );
+
+    await fillAndSubmit();
+
+    expect(notifications.notify).toHaveBeenCalledWith(NOTIFICATION);
+    expect(router.push).toHaveBeenCalledWith(orders);
   });
 });

@@ -296,7 +296,7 @@ exports[`/dashboard/reports/sales-collections > filtro por estado de cobranza en
 <td>estado-2</td>
 <td>S/ 0.00</td>
 <td>
-<a href="/dashboard/commercial/quotes/id_proforma-1">
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Freports%2Fsales-collections%3FcollectionStatus%3Dsin_pago">
 <span>numero_proforma-1</span>
 <br/>
 <span>estado-1</span>
@@ -620,7 +620,7 @@ exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza >
 <td>estado-1</td>
 <td>S/ 11.50</td>
 <td>
-<a href="/dashboard/commercial/quotes/id_proforma-1">
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Freports%2Fsales-collections">
 <span>numero_proforma-1</span>
 <br/>
 <span>estado-1</span>
@@ -670,7 +670,7 @@ exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza >
 <td>estado-1</td>
 <td>S/ 11.50</td>
 <td>
-<a href="/dashboard/commercial/quotes/id_proforma-1">
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Freports%2Fsales-collections">
 <span>numero_proforma-1</span>
 <br/>
 <span>estado-1</span>
@@ -698,7 +698,7 @@ exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza >
 <td>estado-2</td>
 <td>S/ 0.00</td>
 <td>
-<a href="/dashboard/commercial/quotes/id_proforma-1">
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Freports%2Fsales-collections">
 <span>numero_proforma-1</span>
 <br/>
 <span>estado-1</span>
@@ -1026,7 +1026,7 @@ exports[`/dashboard/reports/sales-collections > rango de mas de 366 dias > resul
 <td>estado-1</td>
 <td>S/ 11.50</td>
 <td>
-<a href="/dashboard/commercial/quotes/id_proforma-1">
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Freports%2Fsales-collections%3FdateFrom%3D2025-01-01%26dateTo%3D2026-07-31">
 <span>numero_proforma-1</span>
 <br/>
 <span>estado-1</span>
@@ -1054,7 +1054,7 @@ exports[`/dashboard/reports/sales-collections > rango de mas de 366 dias > resul
 <td>estado-2</td>
 <td>S/ 0.00</td>
 <td>
-<a href="/dashboard/commercial/quotes/id_proforma-1">
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Freports%2Fsales-collections%3FdateFrom%3D2025-01-01%26dateTo%3D2026-07-31">
 <span>numero_proforma-1</span>
 <br/>
 <span>estado-1</span>
@@ -1495,7 +1495,7 @@ exports[`/dashboard/reports/sales-collections > sin filtros, vendedor > resultad
 <td>estado-1</td>
 <td>S/ 11.50</td>
 <td>
-<a href="/dashboard/commercial/quotes/id_proforma-1">
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Freports%2Fsales-collections">
 <span>numero_proforma-1</span>
 <br/>
 <span>estado-1</span>
@@ -1523,7 +1523,7 @@ exports[`/dashboard/reports/sales-collections > sin filtros, vendedor > resultad
 <td>estado-2</td>
 <td>S/ 0.00</td>
 <td>
-<a href="/dashboard/commercial/quotes/id_proforma-1">
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Freports%2Fsales-collections">
 <span>numero_proforma-1</span>
 <br/>
 <span>estado-1</span>
@@ -2157,7 +2157,7 @@ exports[`/dashboard/reports/sales-collections > todos los filtros > resultado 1`
 <td>estado-1</td>
 <td>S/ 11.50</td>
 <td>
-<a href="/dashboard/commercial/quotes/id_proforma-1">
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Freports%2Fsales-collections%3FdateFrom%3D2026-07-01%26dateTo%3D2026-07-31%26clientId%3DCLI00000001%26orderStatus%3Daprobado%26collectionStatus%3Dcon_saldo%26searchCode%3D%2Bpf-0001%2B">
 <span>numero_proforma-1</span>
 <br/>
 <span>estado-1</span>
@@ -2185,7 +2185,7 @@ exports[`/dashboard/reports/sales-collections > todos los filtros > resultado 1`
 <td>estado-2</td>
 <td>S/ 0.00</td>
 <td>
-<a href="/dashboard/commercial/quotes/id_proforma-1">
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Freports%2Fsales-collections%3FdateFrom%3D2026-07-01%26dateTo%3D2026-07-31%26clientId%3DCLI00000001%26orderStatus%3Daprobado%26collectionStatus%3Dcon_saldo%26searchCode%3D%2Bpf-0001%2B">
 <span>numero_proforma-1</span>
 <br/>
 <span>estado-1</span>

@@ -25,7 +25,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { calculateQuoteAmounts, hasCents } from "@/lib/client-payment-amounts";
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { hasListFilters } from "@/lib/navigation";
+import { hasListFilters, navigationHrefs } from "@/lib/navigation";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
 import type { QuoteFormState } from "@/modules/commercial/quotes/actions";
 
@@ -63,6 +63,10 @@ type QuoteFormProps = {
 const initialState: QuoteFormState = { status: "idle" };
 
 const FILTER_HINT = "Puede no aparecer con los filtros activos del listado.";
+
+function isQuotesList(href: string) {
+  return new URL(href, "https://return-to.invalid").pathname === navigationHrefs.quotes;
+}
 
 const DISCARD = {
   title: "¿Descartar la proforma?",
@@ -107,7 +111,12 @@ export function QuoteForm({ action, orders, defaultOrderId, successNotification,
   const hasDefaultOrder = Boolean(defaultOrderId && selectedOrder);
 
   const notification = useMemo(
-    () => (hasListFilters(returnTo) ? { ...successNotification, description: FILTER_HINT } : successNotification),
+    // C5 de la 11.7d: la nota habla de la proforma nueva, que solo sale en el listado de proformas;
+    // al volver a pedidos («Generar proforma») no aplica.
+    () =>
+      isQuotesList(returnTo) && hasListFilters(returnTo)
+        ? { ...successNotification, description: FILTER_HINT }
+        : successNotification,
     [successNotification, returnTo],
   );
   const goBack = useCallback(() => router.push(returnTo), [router, returnTo]);

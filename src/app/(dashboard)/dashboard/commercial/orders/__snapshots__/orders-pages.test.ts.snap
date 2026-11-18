@@ -1285,7 +1285,7 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <div>
 <a data-variant="outline" href="/dashboard/commercial/orders/PED00000011?returnTo=%2Fdashboard%2Fcommercial%2Forders">Ver detalle</a>
 <a data-variant="outline" href="/dashboard/commercial/orders/PED00000011/edit?returnTo=%2Fdashboard%2Fcommercial%2Forders">Editar</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/new?orderId=PED00000011">Generar proforma</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/new?orderId=PED00000011&amp;returnTo=%2Fdashboard%2Fcommercial%2Forders">Generar proforma</a>
 <button data-variant="destructive" type="button">Cancelar</button>
 </div>
 </td>
@@ -1364,7 +1364,7 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <td>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/orders/PED00000015?returnTo=%2Fdashboard%2Fcommercial%2Forders">Ver detalle</a>
-<a data-variant="default" href="/dashboard/commercial/quotes/new?orderId=PED00000015">Generar proforma</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/new?orderId=PED00000015&amp;returnTo=%2Fdashboard%2Fcommercial%2Forders">Generar proforma</a>
 </div>
 </td>
 </tr>
@@ -1551,8 +1551,8 @@ exports[`/dashboard/commercial/orders/[id] > detalle > resultado 1`] = `
 <div>
 <h2>Proformas</h2>
 <div>
-<a href="/dashboard/commercial/quotes/id_proforma-1">numero_proforma-1 - S/ 11.50</a>
-<a href="/dashboard/commercial/quotes/id_proforma-2">numero_proforma-2 - S/ 22.50</a>
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Forders%2FPED00000001%3FreturnTo%3D%252Fdashboard%252Fcommercial%252Forders">numero_proforma-1 - S/ 11.50</a>
+<a href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Forders%2FPED00000001%3FreturnTo%3D%252Fdashboard%252Fcommercial%252Forders">numero_proforma-2 - S/ 22.50</a>
 </div>
 </div>
 <div>
@@ -1736,8 +1736,8 @@ exports[`/dashboard/commercial/orders/[id] > en produccion > resultado 1`] = `
 <div>
 <h2>Proformas</h2>
 <div>
-<a href="/dashboard/commercial/quotes/id_proforma-1">numero_proforma-1 - S/ 11.50</a>
-<a href="/dashboard/commercial/quotes/id_proforma-2">numero_proforma-2 - S/ 22.50</a>
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Forders%2FPED00000001%3FreturnTo%3D%252Fdashboard%252Fcommercial%252Forders">numero_proforma-1 - S/ 11.50</a>
+<a href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Forders%2FPED00000001%3FreturnTo%3D%252Fdashboard%252Fcommercial%252Forders">numero_proforma-2 - S/ 22.50</a>
 </div>
 </div>
 <div>
@@ -1977,8 +1977,8 @@ exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > resul
 <div>
 <h2>Proformas</h2>
 <div>
-<a href="/dashboard/commercial/quotes/id_proforma-1">numero_proforma-1 - S/ 11.50</a>
-<a href="/dashboard/commercial/quotes/id_proforma-2">numero_proforma-2 - S/ 22.50</a>
+<a href="/dashboard/commercial/quotes/id_proforma-1?returnTo=%2Fdashboard%2Fcommercial%2Forders%2FPED00000001%3FreturnTo%3D%252Fdashboard%252Fcommercial%252Forders%253Fstatus%253Daprobado">numero_proforma-1 - S/ 11.50</a>
+<a href="/dashboard/commercial/quotes/id_proforma-2?returnTo=%2Fdashboard%2Fcommercial%2Forders%2FPED00000001%3FreturnTo%3D%252Fdashboard%252Fcommercial%252Forders%253Fstatus%253Daprobado">numero_proforma-2 - S/ 22.50</a>
 </div>
 </div>
 <div>

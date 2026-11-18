@@ -15,11 +15,28 @@ type NewQuotePageProps = {
   }>;
 };
 
+const NEW_QUOTE_ORIGINS = [
+  { href: navigationHrefs.quotes, label: "Proformas", backLabel: "Volver a proformas" },
+  { href: navigationHrefs.orders, label: "Pedidos", backLabel: "Volver a pedidos" },
+] as const;
+
+function resolveNewQuoteOrigin(returnTo: string | string[] | undefined) {
+  const [defaultOrigin] = NEW_QUOTE_ORIGINS;
+  const safeHref = getSafeReturnTo(returnTo, defaultOrigin.href);
+  const pathname = new URL(safeHref, "https://return-to.invalid").pathname;
+  const origin = NEW_QUOTE_ORIGINS.find((item) => item.href === pathname);
+
+  return origin ? { ...origin, href: safeHref } : defaultOrigin;
+}
+
 export default async function NewQuotePage({ searchParams }: NewQuotePageProps) {
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const defaultOrderId = resolvedSearchParams.orderId;
-  // C4 de la 11.3a: vuelve al listado del que vino, con sus filtros.
-  const backHref = getSafeReturnTo(resolvedSearchParams.returnTo, navigationHrefs.quotes);
+  // C4 de la 11.3a: vuelve al listado del que vino, con sus filtros. C5 de la 11.7d (D107): ese
+  // listado es proformas o pedidos («Generar proforma»), y la miga y «Volver» lo nombran; otra ruta
+  // vuelve a proformas, como el detalle.
+  const origin = resolveNewQuoteOrigin(resolvedSearchParams.returnTo);
+  const backHref = origin.href;
 
   await requireRole(["ADMIN", "SELLER"]);
 
@@ -52,10 +69,10 @@ export default async function NewQuotePage({ searchParams }: NewQuotePageProps) 
         title="Nueva proforma"
         description="Genera una proforma digital a partir de un pedido registrado."
         backHref={backHref}
-        backLabel="Volver a proformas"
+        backLabel={origin.backLabel}
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Comercial", href: navigationHrefs.commercial },
-          { label: "Proformas", href: backHref },
+          { label: origin.label, href: backHref },
           { label: "Nueva proforma" },
         ])}
       />
