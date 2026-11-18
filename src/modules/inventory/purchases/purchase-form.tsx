@@ -234,7 +234,7 @@ export function PurchaseForm({
           </Alert>
         ) : null}
 
-        <section className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm">
+        <section className="space-y-5 rounded-xl border border-border/80 bg-card p-6 [box-shadow:var(--shadow-raised)]">
           <div className="space-y-2">
             <SearchableSelect
               id="id_proveedor"
@@ -323,7 +323,7 @@ export function PurchaseForm({
           </div>
         </section>
 
-        <section className="space-y-4 rounded-xl border border-border/80 bg-card p-6 shadow-sm">
+        <section className="space-y-4 rounded-xl border border-border/80 bg-card p-6 [box-shadow:var(--shadow-raised)]">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold text-foreground">Materiales comprados</h2>

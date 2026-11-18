@@ -16,10 +16,6 @@
     border-color: var(--border);
   }
 
-  .industrial-dark :is(section, div, article).shadow-sm {
-    box-shadow: var(--shadow-raised);
-  }
-
   .industrial-dark :is(section, div, article).border-dashed {
     background-color: color-mix(in srgb, var(--card) 78%, transparent);
     border-color: color-mix(in srgb, var(--border) 70%, transparent);

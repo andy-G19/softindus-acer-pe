@@ -153,7 +153,7 @@ export default async function WorkOrderProgressPage({
       </section>
 
       {sortedAdvances.length === 0 ? (
-        <section className="rounded-xl border border-border/80 bg-card p-6 shadow-sm">
+        <section className="rounded-xl border border-border/80 bg-card p-6 [box-shadow:var(--shadow-raised)]">
           <h2 className="text-lg font-semibold text-foreground">
             La orden todavía no tiene avances generados
           </h2>
