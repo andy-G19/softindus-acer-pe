@@ -9795,7 +9795,7 @@ Datos leídos de la API de GitHub el 2026-11-18 (UTC) y comparados con git:
 
 ### Sub-entrega 11.7b — Copias y estructura
 
-Fecha: 2026-11-17 (Lima). Estado: preparada en `staging`, sin publicar. Plan en
+Fecha: 2026-11-17 (Lima). Estado: verificada en staging (CI #206). Plan en
 `tmp/e11-diff/plan-11-7b.md`, aprobado el 2026-11-17 con las decisiones D87 a D92:
 - D87: `formatDecimal` con la forma de `formatMoney`: si el valor puede faltar, cada pantalla decide qué mostrar.
 - D88: el historial de exportaciones recorta sus filtros como las demás listas.
@@ -9814,7 +9814,8 @@ Fecha: 2026-11-17 (Lima). Estado: preparada en `staging`, sin publicar. Plan en
 | 876b3a1 | fix | El error de Producción reintenta con `unstable_retry` (D91). Rojo antes. |
 | 1e54709 | feat | `dashboard/error.tsx`: el error de cualquier página del panel se pinta dentro del shell (D90). Rojo antes. |
 | 3c5a4eb | chore | `schema.prisma` formateado (79 líneas, solo espacios) y el paso `db:format` en `npm run check` y el README (D92). |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 4f6be5a | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -9865,10 +9866,18 @@ Hallazgos:
 2. «Intentar nuevamente» del error de Producción usaba `reset`, que no vuelve a pedir los datos: con un error del servidor mostraba el mismo error. Corregido en `876b3a1`.
 3. Lección de pruebas: el primer `npm run check` del C6 falló porque la prueba importaba el componente con `await import()` dentro del caso, y ese tiempo contó para su límite de 5 s con la suite completa. Se cambió por un `import` estático, como en C5. No se tocó ninguna afirmación ni el límite.
 
-Verificación pendiente en staging (solo lectura, ADMIN):
-- en Caja chica, Cajas y Resumen mensual, un solo `main`;
-- el historial de exportaciones con `?module=%20<módulo>` muestra lo mismo que sin el espacio, y no exporta nada;
-- el error genérico, solo si hay una URL de solo lectura que falle hoy. Si no la hay, queda probado por jsdom.
+#### Publicación, CI y verificación en staging
+
+1. Push de los 9 commits (hasta `4f6be5a`): CI #206 en verde (de 02:38:44 a 02:42:08 UTC del 2026-11-18); Vercel desplegó staging (02:40:22 UTC). Sin migraciones.
+2. Todo se hizo con ADMIN y en solo lectura, con el origen comprobado en una llamada aparte. Caja chica, Cajas chicas y Resumen mensual financiero tienen un solo `main` en el documento, el del shell, con su `h1` adentro.
+3. Historial de exportaciones (73 filas sin filtro). Solo se cargó la página, sin pulsar nada que exporte:
+   - `?module=Reporte%20de%20mantenimiento` y `?module=%20Reporte%20de%20mantenimiento%20` muestran las mismas 5 filas (EXP00000073, 72, 11, 10 y 09) y el select marca el módulo.
+   - `?format=%20excel%20&dateFrom=%202026-01-01%20` muestra 46 filas, las mismas que el indicador de Excel, y el campo de fecha muestra `2026-01-01`.
+   - Antes del `fix` la lista con espacios salía vacía.
+   - Un primer intento con «Reporte financiero» en PDF dio 0 filas con y sin espacios. No hay exportaciones de ese tipo, así que no servía para comparar.
+4. El «no encontrado» de Producción (`/dashboard/production/work-orders/OTR99999999`) se pinta dentro del shell, con un solo `main` y su título «Registro de producción no encontrado».
+5. El `error.tsx` genérico no se pudo ver sin provocar un fallo. Un id con un carácter nulo (`%00`) lo rechaza Vercel con un 400 antes de llegar a la app, y no se buscaron otras formas de romper staging. Queda probado por sus 5 pruebas en jsdom y las 7 mutaciones.
+6. No se escribió nada en staging.
 
 ## Secuencia de próximas entregas
 
@@ -9895,7 +9904,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b preparada en `staging` (C0 a C8), por publicar |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b verificada en staging (CI #206) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
