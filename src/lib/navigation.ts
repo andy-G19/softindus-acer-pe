@@ -96,15 +96,30 @@ export function getSafeReturnTo(
   return `${url.pathname}${url.search}${url.hash}`;
 }
 
-// Parametros de un listado que no filtran: cambian la pagina, no los datos.
-const PAGINATION_PARAMS = new Set(["page", "pageSize"]);
+// Parametros de un listado que no filtran: la pagina, el origen al que volver y el aviso que llega
+// en la URL tras guardar (`?toast=`). Cambian lo que se ve, no los datos (C3 de la 11.7d2: antes
+// `toast` contaba como filtro).
+const NON_FILTER_PARAMS = new Set(["page", "pageSize", "returnTo", "toast"]);
+
+function isFilter(key: string, value: string) {
+  return value !== "" && !NON_FILTER_PARAMS.has(key);
+}
 
 // Indica si la URL de un listado (un returnTo ya validado) lleva filtros: un
 // registro recien guardado puede no aparecer al volver.
 export function hasListFilters(href: string) {
   const { searchParams } = new URL(href, RETURN_TO_ORIGIN);
 
-  return [...searchParams].some(([key, value]) => value !== "" && !PAGINATION_PARAMS.has(key));
+  return [...searchParams].some(([key, value]) => isFilter(key, value));
+}
+
+// Indica si un listado se pidio con filtros, a partir de sus searchParams (C3 de la 11.7d2, D112):
+// la misma regla que hasListFilters. Su vacio dice entonces «No se encontraron … con los filtros
+// aplicados» en lugar de «Todavia no hay … registrados».
+export function hasActiveFilters(params: SearchParamsInput) {
+  return Object.entries(params).some(([key, value]) =>
+    (Array.isArray(value) ? value : [value]).some((entry) => entry !== undefined && isFilter(key, entry)),
+  );
 }
 
 export function withReturnTo(href: string, returnTo?: string) {
