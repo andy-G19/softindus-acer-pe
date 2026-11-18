@@ -9699,7 +9699,7 @@ Datos leídos de la API de GitHub el 2026-11-17 (UTC) y comparados con git:
 
 ### Sub-entrega 11.7a — Retiro de lo que ya no se usa y el foco de las cabeceras
 
-Fecha: 2026-11-17 (Lima). Estado: preparada en `staging`, sin publicar. Plan en
+Fecha: 2026-11-17 (Lima). Estado: verificada en staging (CI #202). Plan en
 `tmp/e11-diff/plan-11-7.md`, aprobado el 2026-11-17 con las decisiones D84 a D86: partir la 11.7
 en cuatro (a retiro, b copias y estructura, c CSS heredado, d pendientes funcionales; D84); el foco
 va al título de la página cuando el botón de confirmación desaparece sin fila ni tabla (D85); la
@@ -9712,7 +9712,8 @@ galería pierde las demos de SweetAlert2 (D86).
 | abcaa4a | refactor | Sale SweetAlert2: `showConfirm`, `showDeleteConfirm`, `showLoading` y `closeModal` de la fachada, la demo de la galería (D86), `adapters/sweetalert2.css`, la dependencia (`npm uninstall` sin red), sus dobles y mocks de prueba y su mención en la CSP. La regla de ESLint queda como guardia. |
 | 90f454b | refactor | Sale `StatusBadge` (solo galería). `StateBadge` pasa a un solo mapa del estado a la variante de `Badge`, con el mismo HTML. |
 | 6f8597c | fix | Cuando el botón de `ConfirmActionButton` desaparece fuera de una tabla, el foco va al título de la página, el primer `h1` de su `main` (D85; hallazgos 10 de la 11.2a y 7 de la 11.6b y la 11.6c). Rojo antes. |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| fe47437 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -9752,17 +9753,31 @@ Métricas:
 | Componentes sin uso en páginas (`ConfirmDeleteButton`, `StatusBadge`, `RowToggleStatusButton`) | 3 | 0 |
 | Hojas de estilo que importa `globals.css` | 8 | 7 |
 | CSS compilado | 112.316 bytes, 1.217 reglas | 109.174 bytes, 1.190 reglas |
-| Botones de confirmación que dejan el foco en `body` al desaparecer (vistos en staging) | 3 | 0, por verificar en staging |
+| Botones de confirmación que dejan el foco en `body` al desaparecer (vistos en staging) | 3 | 0 |
 | Declaraciones JSX de formulario (inventario) | 9 | 8 |
 
 Hallazgos:
 
 1. Los hallazgos 10 de la 11.2a y 7 de la 11.6b y la 11.6c (el foco en `body` cuando desaparece un
-   botón de cabecera). Corregidos en `6f8597c`; falta verlo en staging.
+   botón de cabecera). Corregidos en `6f8597c` y verificados en staging (abajo, paso 3).
 
-Verificación pendiente en staging: la galería sin las demos de SweetAlert2; que ninguna pantalla
-cargue `sweetalert2` (red y CSS); y, con autorización por la escritura, una acción que haga
-desaparecer un botón de cabecera para ver el foco en el título.
+#### Publicación, CI y verificación en staging
+
+1. Push de los 6 commits (hasta `fe47437`): CI #202 en verde (de 00:26:42 a 00:33:00 UTC del
+   2026-11-18); Vercel desplegó staging (00:28:27 UTC). Sin migraciones.
+2. Con ADMIN, sin escribir (origen comprobado en llamada aparte): la galería muestra en «Avisos
+   temporales» solo los cuatro avisos y en «Confirmaciones accesibles» la demo de `ConfirmDialog`;
+   ningún botón ni texto de SweetAlert2 ni de `StatusBadge`; las etiquetas de estado solo con
+   `StateBadge`. En la página, ninguna regla `swal2` en las hojas de estilo y ninguno de sus 14
+   scripts contiene `sweetalert2`.
+3. Envío autorizado por el responsable: «Generar avances por etapa» en la OTR00000009 (Rastrillo
+   agrícola, pendiente y sin avances; la confirmación dice «Se crean 6 avances pendientes, uno por
+   cada etapa activa de la ruta «Ruta estándar para rastrillo».»). Un aviso «Avances de orden
+   generados correctamente»; AVN00000013 a AVN00000018; la orden sigue pendiente. El botón
+   desaparece con el repintado y el foco va al título de la página («Avances de producción», el
+   `h1` del `main`) con `tabindex="-1"`; con Tab pasa a «Volver a órdenes» y el título pierde el
+   `tabindex`. En la 11.6c, el mismo paso en la OTR00000010 dejó el foco en `body`.
+4. Datos de prueba que quedan en staging: la OTR00000009 con sus 6 avances pendientes.
 
 ## Secuencia de próximas entregas
 
@@ -9789,7 +9804,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a preparada en `staging` (C0 a C5), por publicar |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a verificada en staging (CI #202) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
