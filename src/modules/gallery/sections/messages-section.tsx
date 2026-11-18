@@ -1,5 +1,6 @@
 import { CircleCheck, Info, Package, TriangleAlert } from "lucide-react";
 
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -39,6 +40,26 @@ export function MessagesSection() {
           </GallerySample>
         ))}
       </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <GallerySample label="Error de formulario (FormErrorAlert)" className="block">
+          <FormErrorAlert state={{ status: "error", error: "No tienes permisos para registrar clientes." }} />
+        </GallerySample>
+        <GallerySample label="Error de formulario que repite un campo" className="block">
+          <FormErrorAlert
+            state={{
+              status: "error",
+              error: "Ya existe un cliente con ese documento.",
+              fieldErrors: { numero_documento: ["Ya existe un cliente con ese documento."] },
+            }}
+          />
+        </GallerySample>
+      </div>
+      <GalleryNote>
+        Los formularios muestran su error general con FormErrorAlert. Si el mensaje ya está bajo un
+        campo, la alerta dice «Revisa los campos marcados.» en lugar de repetirlo: el foco va a ese
+        campo y el lector de pantalla no lo lee dos veces.
+      </GalleryNote>
 
       <GallerySample label="Avisos temporales (fachada de notificaciones)">
         <FeedbackDemo />
