@@ -1,5 +1,6 @@
 /* Patrones compartidos: tonos de etiquetas y alertas por estado, enlaces
-   de la barra lateral y el contorno del foco de teclado. */
+   de la barra lateral, el contorno del foco de teclado, y los campos, las
+   tablas y los titulos de toda la app. */
 @layer utilities {
   .badge-state-success {
     border-color: color-mix(in srgb, var(--success) 32%, transparent);
@@ -185,5 +186,22 @@
 
   .industrial-dark td[colspan] {
     color: var(--muted-foreground);
+  }
+
+  /* Titulos de las paginas (11.7c; antes en el adaptador, movidos tal cual). El tema vive en
+     <html>, asi que sin el filtro alcanzarian el titulo del login, que tiene los suyos (su main
+     llevaba la clase y por eso quedaba fuera). El filtro va en :where para no subir la
+     especificidad. */
+  .industrial-dark main:where(:not(.login-industrial-bg)) h1 {
+    color: var(--foreground);
+    font-family: var(--font-heading);
+    font-weight: 650;
+    line-height: 1.15;
+  }
+
+  .industrial-dark main:where(:not(.login-industrial-bg)) h2,
+  .industrial-dark main:where(:not(.login-industrial-bg)) h3 {
+    color: var(--foreground);
+    font-family: var(--font-heading);
   }
 }

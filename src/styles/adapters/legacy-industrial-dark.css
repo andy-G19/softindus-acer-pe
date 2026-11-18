@@ -1,29 +1,14 @@
-/* Adaptador temporal de las pantallas antiguas al tema oscuro: estila
-   elementos (campos, tablas, titulos) y bloques con borde que no usan los
-   componentes compartidos. Sus reglas se retiran cuando migran sus
-   consumidores; legacy-industrial-dark.test.ts impide reglas sin consumidor
-   y que el adaptador crezca. */
+/* Adaptador temporal de las pantallas antiguas al tema oscuro: estila los
+   formularios y bloques con borde que no usan los componentes compartidos
+   (los campos, las tablas y los titulos pasaron a patterns.css en la 11.7c).
+   Sus reglas se retiran cuando migran sus consumidores;
+   legacy-industrial-dark.test.ts impide reglas sin consumidor y que el
+   adaptador crezca. */
 @layer utilities {
   .industrial-dark form.rounded-lg.border,
   .industrial-dark form.rounded-xl.border {
     background-color: var(--card);
     border-color: var(--border);
-  }
-
-  /* El tema vive en <html> (11.7c). Sin el filtro, estas dos reglas alcanzarian el titulo del
-     login, cuyo main llevaba la clase y por eso quedaba fuera. El filtro va en :where para no
-     subir la especificidad. Las dos reglas salen del adaptador en el commit de los titulos. */
-  .industrial-dark main:where(:not(.login-industrial-bg)) h1 {
-    color: var(--foreground);
-    font-family: var(--font-heading);
-    font-weight: 650;
-    line-height: 1.15;
-  }
-
-  .industrial-dark main:where(:not(.login-industrial-bg)) h2,
-  .industrial-dark main:where(:not(.login-industrial-bg)) h3 {
-    color: var(--foreground);
-    font-family: var(--font-heading);
   }
 
   .industrial-dark :is(section, div, article, form).rounded-lg.border,

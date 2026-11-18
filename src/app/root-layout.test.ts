@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { createElement as h, type ReactNode } from "react";
 import type { Session } from "next-auth";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -55,10 +55,14 @@ describe("C2 de la 11.7c: el tema vive en <html>", () => {
     expect(primerDiv).not.toContain("industrial-dark");
   });
 
-  // El main del login llevaba el tema, asi que las reglas «main hN» del adaptador no llegaban a
-  // su titulo. Con el tema en <html> si llegarian: se filtran hasta que salgan del adaptador.
-  it("las reglas de titulos del adaptador no alcanzan el titulo del login", () => {
-    const css = readFileSync("src/styles/adapters/legacy-industrial-dark.css", "utf8");
+  // El main del login llevaba el tema, asi que las reglas «main hN» no llegaban a su titulo. Con
+  // el tema en <html> si llegarian: se filtran. Se leen todas las hojas, porque las reglas
+  // salieron del adaptador a patterns.css (C6 de la 11.7c) y podrian volver a moverse.
+  it("las reglas de titulos no alcanzan el titulo del login", () => {
+    const hojas = readdirSync("src/styles", { recursive: true, encoding: "utf8" }).filter((f) =>
+      f.endsWith(".css"),
+    );
+    const css = hojas.map((f) => readFileSync(`src/styles/${f}`, "utf8")).join("\n");
     const selectores = [...css.matchAll(/\.industrial-dark main[^,{]*/g)].map((m) => m[0]);
 
     expect(selectores.length).toBeGreaterThan(0);
