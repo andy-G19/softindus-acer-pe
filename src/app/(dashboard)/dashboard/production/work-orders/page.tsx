@@ -24,6 +24,7 @@ import { formatDate, formatDecimal } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  getSearchParam,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -74,19 +75,6 @@ function getPriorityBadgeVariant(priority: string) {
   }
 
   return "secondary" as const;
-}
-
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0]?.trim() ?? "";
-  }
-
-  return value?.trim() ?? "";
 }
 
 export default async function WorkOrdersPage({

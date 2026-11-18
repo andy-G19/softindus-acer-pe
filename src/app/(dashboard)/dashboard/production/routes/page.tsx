@@ -19,6 +19,7 @@ import {
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  getSearchParam,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -30,19 +31,6 @@ import { RouteStatusButton } from "@/modules/production/routes/route-status-butt
 type FabricationRoutesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0]?.trim() ?? "";
-  }
-
-  return value?.trim() ?? "";
-}
 
 export default async function FabricationRoutesPage({
   searchParams,

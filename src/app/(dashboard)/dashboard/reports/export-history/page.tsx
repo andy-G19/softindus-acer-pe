@@ -64,6 +64,7 @@ type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
+// eslint-disable-next-line no-restricted-syntax -- no recorta; el commit siguiente la cambia por la compartida
 function getSearchParam(
   params: Record<string, string | string[] | undefined>,
   key: string,

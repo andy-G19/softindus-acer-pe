@@ -30,6 +30,7 @@ import { formatDate } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  getSearchParam,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -42,19 +43,6 @@ import { maintenanceNotifications } from "@/modules/maintenance/notifications";
 type MachinesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0]?.trim() ?? "";
-  }
-
-  return value?.trim() ?? "";
-}
 
 function getMachineStatusLabel(status: string) {
   const labels: Record<string, string> = {
