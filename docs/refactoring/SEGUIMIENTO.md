@@ -9895,8 +9895,7 @@ Datos leídos de la API de GitHub el 2026-11-18 (UTC) y comparados con git:
 
 ### Sub-entrega 11.7c1 — El tema en `<html>`, el menú lateral y los elementos fuera del adaptador
 
-Fecha: 2026-11-18 (Lima). Estado: preparada en `staging`, sin push; falta la verificación en
-staging. Plan en `tmp/e11-diff/plan-11-7c.md`, aprobado el 2026-11-17 con las decisiones D93 a
+Fecha: 2026-11-18 (Lima). Estado: verificada en staging (CI #210); falta el PR a `main`. Plan en `tmp/e11-diff/plan-11-7c.md`, aprobado el 2026-11-17 con las decisiones D93 a
 D97, más dos tomadas durante la implementación:
 - D93: la 11.7c se parte en dos. La 11.7c1 lleva el menú lateral, la medición del INP y los
   elementos (foco, campos, tablas y títulos). La 11.7c2 lleva los bloques y el borrado del
@@ -9922,7 +9921,8 @@ D97, más dos tomadas durante la implementación:
 | f896f1a | refactor | Las 6 reglas de campos (16 selectores) pasan tal cual a `patterns.css` (D99). |
 | 52f8083 | refactor | Las 10 reglas de tablas pasan tal cual a `patterns.css` (D99). |
 | 0cf8217 | refactor | Las 2 reglas de títulos pasan tal cual a `patterns.css`, con su filtro del login (D99). |
-| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 468ea56 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
 
 Diseño:
 
@@ -9996,7 +9996,7 @@ Métricas:
 | Reglas / selectores del adaptador | 25 / 40 | 6 / 10 |
 | Selectores con `:has()` en el adaptador | 5 | 4 (el del contenedor de tablas pasó a `patterns.css`: en la app siguen siendo 5) |
 | Portales (diálogos, paneles, toasts) dentro del tema | 0 | todos |
-| Menú lateral abierto sobre la página tras elegir una opción con clic | sí | no (por verificar en staging) |
+| Menú lateral abierto sobre la página tras elegir una opción con clic | sí | no (verificado en staging a 830 px) |
 | CSS compilado | 109.174 bytes | 109.366 bytes |
 
 Hallazgos:
@@ -10010,6 +10010,54 @@ Hallazgos:
    Destino: el mismo paso.
 5. Lección de verificación: el `localStorage` de staging no sirve como único sitio de una base.
    Desde el C2 las huellas también se guardan en disco.
+6. Visto en staging, sin cambiar en esta sub-entrega: al pasar el ratón por el menú estrecho
+   aparece su título «Navegación» y las opciones bajan lo que mide el título (un clic en la
+   altura de «Inventario» cayó en «Comercial»). Si el puntero llega y pulsa en
+   el mismo instante (así hace clic la herramienta del navegador), la opción bajo el cursor
+   cambia entre `mousedown` y `mouseup` y no se navega; un clic posterior puede caer en la
+   opción vecina. Viene de antes (el título ya salía con `group-hover`). Destino: un `fix`
+   propio, si se decide.
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 8 commits (de `f2fa71d` a `468ea56`): CI #210 en verde (de 14:49:51 a 14:53:35
+   UTC del 2026-11-18); Vercel desplegó staging (`success` a las 14:51:33 UTC). Sin migraciones.
+   El `<html>` servido lleva `dark industrial-dark`.
+2. Todo se hizo con ADMIN y en solo lectura, con el origen comprobado en una llamada aparte. Las
+   bases eran de `001aa91` (11:21 UTC), antes del push. Las huellas de después están en
+   `tmp/e11-diff/huellas-117c1-despues.txt`.
+3. Paridad de las 16 páginas a 1280 × 900: 0 diferencias en cada una y la misma huella que la
+   base (de `0eed85eb` en el inicio a `ab09d545` en la galería), 6.850 elementos en total.
+4. Los 4 portales, el cambio esperado por D98:
+   - Panel de cliente nuevo: 19 diferencias, todas dentro del portal. Los campos pasan de fondo
+     transparente y borde al 3 % a `var(--input)` y borde al 8 %, en reposo y con foco.
+     «Cancelar» toma `dark:bg-input/30`. Medido después elemento por elemento, el panel y la
+     página completa tienen el mismo estilo en campo, `select`, `textarea`, `label` y «Cancelar»:
+     el defecto que motivó D98 ya no existe.
+   - Confirmación de «Inactivar»: 2 diferencias, «Cancelar» y el botón destructivo (de 10 % a
+     20 % de `--destructive`), las variantes `dark:` de shadcn que las páginas ya tenían.
+   - Diálogo de tipo de proveedor: 7 diferencias, los mismos campos y «Cancelar». El campo con
+     foco pierde el brillo naranja de `input-forge-focus`, como ya pasaba en las páginas
+     (hallazgo 4).
+   - Toast: 0 diferencias, misma huella (`2fcbfce`).
+5. Menú lateral a 830 px:
+   - Con clic en «Comercial» y el ratón sobre el contenido: el foco queda en el enlace
+     (`:focus-within` verdadero), `:has(:focus-visible)` es falso, el menú mide 76 px, sus
+     etiquetas no se ven y el punto (150, 400) cae en el `main`. Antes del `fix` medía 256 px.
+   - Con Tab: el enlace tiene `:focus-visible`, el menú mide 256 px con sus etiquetas y el
+     enlace lleva el contorno naranja. Al salir del menú con Tab vuelve a 76 px y el contorno
+     aparece en el enlace de la miga de pan, dentro del `main`.
+6. INP, con las mismas interacciones de la base:
+   - Abrir la confirmación de «Inactivar»: 96 y 80 ms (base 104). Una primera medida dio
+     2.408 ms, con 65 ms de proceso y un `pointerdown` de 2.416 ms sin proceso: el retraso fue
+     del fotograma del panel del navegador, no de JavaScript.
+   - Cerrarla con Escape: 32 y 24 ms (base 32). Abrir el diálogo de tipo: 40 ms.
+   - Buscador de clientes del pedido nuevo y abrir el panel de cliente: menos de 16 ms (igual).
+   - Ninguna pasa de 200 ms. La confirmación se abrió y cerró tres veces sin aceptarla: ningún
+     POST en la red y siguen 8 botones «Inactivar».
+7. El login no se pudo ver sin cerrar la sesión. Queda para que Andy lo revise en una ventana
+   privada (su base de paridad se perdió).
+8. No se escribió nada en staging.
 
 ## Secuencia de próximas entregas
 
@@ -10036,7 +10084,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 preparada en `staging`, sin push |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 verificada en staging (CI #210) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
