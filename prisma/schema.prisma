@@ -464,27 +464,27 @@ model detalle_repuesto_reparacion {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model etapa_ruta {
-  id_etapa_ruta         String               @id @db.Char(11)
-  id_ruta               String               @db.Char(11)
-  nombre_etapa          String               @db.VarChar(100)
-  orden_secuencia       Int
-  descripcion           String?
+  id_etapa_ruta                  String               @id @db.Char(11)
+  id_ruta                        String               @db.Char(11)
+  nombre_etapa                   String               @db.VarChar(100)
+  orden_secuencia                Int
+  descripcion                    String?
   /// OBSOLETA: representaba horas de la etapa completa, no por unidad. Sustituida por
   /// tiempo_operario_minutos_unidad. Se elimina en una migracion posterior, una vez
   /// recapturados los tiempos de todas las etapas.
-  tiempo_estimado_horas Decimal?             @db.Decimal(10, 2)
+  tiempo_estimado_horas          Decimal?             @db.Decimal(10, 2)
   /// Minutos de trabajo del operario para producir UNA unidad en esta etapa.
-  tiempo_operario_minutos_unidad Decimal?    @db.Decimal(10, 2)
+  tiempo_operario_minutos_unidad Decimal?             @db.Decimal(10, 2)
   /// simultaneo | secuencial. Define como se combinan el tiempo de operario y el de
   /// maquina para obtener la duracion de la etapa. Se ignora si la etapa no tiene
   /// maquina asignada.
-  modo_tiempo           String               @default("simultaneo") @db.VarChar(20)
-  requiere_maquina      Boolean              @default(false)
-  estado                Boolean              @default(true)
-  avance_orden          avance_orden[]
-  ruta_fabricacion      ruta_fabricacion     @relation(fields: [id_ruta], references: [id_ruta], map: "fk_etapa_ruta")
-  etapa_ruta_maquina    etapa_ruta_maquina[]
-  tarea_operario        tarea_operario[]
+  modo_tiempo                    String               @default("simultaneo") @db.VarChar(20)
+  requiere_maquina               Boolean              @default(false)
+  estado                         Boolean              @default(true)
+  avance_orden                   avance_orden[]
+  ruta_fabricacion               ruta_fabricacion     @relation(fields: [id_ruta], references: [id_ruta], map: "fk_etapa_ruta")
+  etapa_ruta_maquina             etapa_ruta_maquina[]
+  tarea_operario                 tarea_operario[]
 
   @@unique([id_ruta, nombre_etapa], map: "uq_etapa_ruta_nombre")
   @@unique([id_ruta, orden_secuencia], map: "uq_etapa_ruta_orden")
@@ -496,16 +496,16 @@ model etapa_ruta {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model etapa_ruta_maquina {
-  id_etapa_ruta_maquina String     @id @db.Char(11)
-  id_etapa_ruta         String     @db.Char(11)
-  id_maquina            String     @db.Char(11)
+  id_etapa_ruta_maquina         String     @id @db.Char(11)
+  id_etapa_ruta                 String     @db.Char(11)
+  id_maquina                    String     @db.Char(11)
   /// Minutos de uso de ESTA maquina para producir UNA unidad en la etapa. El tiempo vive
   /// en el par etapa-maquina (y no en etapa_ruta) para que soportar varias maquinas por
   /// etapa en el futuro no requiera migracion.
-  tiempo_maquina_minutos_unidad Decimal? @db.Decimal(10, 2)
-  observaciones         String?
-  etapa_ruta            etapa_ruta @relation(fields: [id_etapa_ruta], references: [id_etapa_ruta], map: "fk_etapa_ruta_maquina_etapa")
-  maquina               maquina    @relation(fields: [id_maquina], references: [id_maquina], map: "fk_etapa_ruta_maquina_maquina")
+  tiempo_maquina_minutos_unidad Decimal?   @db.Decimal(10, 2)
+  observaciones                 String?
+  etapa_ruta                    etapa_ruta @relation(fields: [id_etapa_ruta], references: [id_etapa_ruta], map: "fk_etapa_ruta_maquina_etapa")
+  maquina                       maquina    @relation(fields: [id_maquina], references: [id_maquina], map: "fk_etapa_ruta_maquina_maquina")
 
   @@unique([id_etapa_ruta, id_maquina], map: "uq_etapa_ruta_maquina")
   @@index([id_etapa_ruta], map: "idx_etapa_ruta_maquina_etapa")
@@ -674,25 +674,25 @@ model margen_ganancia {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model material {
-  id_material                String                       @id @db.Char(11)
-  nombre_material            String                       @unique(map: "uq_material_nombre") @db.VarChar(100)
-  categoria                  String                       @db.VarChar(50)
-  unidad_medida              String                       @db.VarChar(20)
-  stock_actual               Decimal                      @default(0) @db.Decimal(10, 2)
-  stock_reservado            Decimal                      @default(0) @db.Decimal(10, 2)
-  stock_minimo               Decimal                      @default(0) @db.Decimal(10, 2)
-  costo_unitario_actual      Decimal                      @default(0) @db.Decimal(12, 2)
-  estado                     Boolean                      @default(true)
-  fecha_registro             DateTime                     @default(now()) @db.Timestamptz(6)
-  alerta_stock               alerta_stock[]
-  chatarra                   chatarra[]
-  detalle_compra             detalle_compra[]
-  detalle_receta             detalle_receta[]
-  historial_precio_proveedor historial_precio_proveedor[]
-  movimiento_inventario      movimiento_inventario[]
-  proveedor_material         proveedor_material[]
+  id_material                  String                         @id @db.Char(11)
+  nombre_material              String                         @unique(map: "uq_material_nombre") @db.VarChar(100)
+  categoria                    String                         @db.VarChar(50)
+  unidad_medida                String                         @db.VarChar(20)
+  stock_actual                 Decimal                        @default(0) @db.Decimal(10, 2)
+  stock_reservado              Decimal                        @default(0) @db.Decimal(10, 2)
+  stock_minimo                 Decimal                        @default(0) @db.Decimal(10, 2)
+  costo_unitario_actual        Decimal                        @default(0) @db.Decimal(12, 2)
+  estado                       Boolean                        @default(true)
+  fecha_registro               DateTime                       @default(now()) @db.Timestamptz(6)
+  alerta_stock                 alerta_stock[]
+  chatarra                     chatarra[]
+  detalle_compra               detalle_compra[]
+  detalle_receta               detalle_receta[]
+  historial_precio_proveedor   historial_precio_proveedor[]
+  movimiento_inventario        movimiento_inventario[]
+  proveedor_material           proveedor_material[]
   requerimiento_orden_material requerimiento_orden_material[]
-  retazo_reutilizable        retazo_reutilizable[]
+  retazo_reutilizable          retazo_reutilizable[]
 
   @@index([categoria], map: "idx_material_categoria")
   @@index([estado], map: "idx_material_estado")
@@ -801,44 +801,44 @@ model operario {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model orden_trabajo {
-  id_orden_trabajo       String                  @id @db.Char(11)
-  id_cliente             String?                 @db.Char(11)
-  id_producto            String                  @db.Char(11)
-  id_campania            String?                 @db.Char(11)
-  id_detalle_pedido      String?                 @db.Char(11)
-  id_ruta                String?                 @db.Char(11)
-  id_version_receta      String?                 @db.Char(11)
-  tipo_produccion        String                  @db.VarChar(30)
-  cantidad               Decimal                 @db.Decimal(10, 2)
-  fecha_inicio           DateTime                @db.Date
-  fecha_entrega_estimada DateTime?               @db.Date
-  fecha_entrega_real     DateTime?               @db.Date
+  id_orden_trabajo             String                         @id @db.Char(11)
+  id_cliente                   String?                        @db.Char(11)
+  id_producto                  String                         @db.Char(11)
+  id_campania                  String?                        @db.Char(11)
+  id_detalle_pedido            String?                        @db.Char(11)
+  id_ruta                      String?                        @db.Char(11)
+  id_version_receta            String?                        @db.Char(11)
+  tipo_produccion              String                         @db.VarChar(30)
+  cantidad                     Decimal                        @db.Decimal(10, 2)
+  fecha_inicio                 DateTime                       @db.Date
+  fecha_entrega_estimada       DateTime?                      @db.Date
+  fecha_entrega_real           DateTime?                      @db.Date
   /// Unidades realmente fabricadas, declaradas al cerrar los materiales de la orden.
   /// Sin este dato no existe comparacion posible entre lo planificado y lo producido.
-  cantidad_producida     Decimal?                @db.Decimal(10, 2)
+  cantidad_producida           Decimal?                       @db.Decimal(10, 2)
   /// Marca el cierre de materiales. Nula mientras la conciliacion siga abierta.
   /// No se usa cantidad_consumida > 0 para detectarlo: consumir cero es un cierre valido
   /// (se entrego material y volvio entero al almacen).
-  fecha_cierre_materiales DateTime?              @db.Timestamptz(6)
-  prioridad              String                  @default("media") @db.VarChar(20)
-  estado                 String                  @default("pendiente") @db.VarChar(30)
-  observaciones          String?
-  id_usuario_registro    String                  @db.Char(11)
-  fecha_registro         DateTime                @default(now()) @db.Timestamptz(6)
-  avance_orden           avance_orden[]
-  chatarra               chatarra[]
-  costeo                 costeo[]
-  movimiento_inventario  movimiento_inventario[]
-  campania_produccion    campania_produccion?    @relation(fields: [id_campania], references: [id_campania], onDelete: Restrict, map: "fk_orden_campania")
-  cliente                cliente?                @relation(fields: [id_cliente], references: [id_cliente], onDelete: Restrict, map: "fk_orden_cliente")
-  detalle_pedido         detalle_pedido?         @relation(fields: [id_detalle_pedido], references: [id_detalle_pedido], onDelete: Restrict, map: "fk_orden_detalle_pedido")
-  producto               producto                @relation(fields: [id_producto], references: [id_producto], map: "fk_orden_producto")
-  ruta_fabricacion       ruta_fabricacion?       @relation(fields: [id_ruta], references: [id_ruta], onDelete: Restrict, map: "fk_orden_ruta")
-  usuario                usuario                 @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_orden_usuario_registro")
-  version_receta         version_receta?         @relation(fields: [id_version_receta], references: [id_version_receta], onDelete: Restrict, map: "fk_orden_version_receta")
+  fecha_cierre_materiales      DateTime?                      @db.Timestamptz(6)
+  prioridad                    String                         @default("media") @db.VarChar(20)
+  estado                       String                         @default("pendiente") @db.VarChar(30)
+  observaciones                String?
+  id_usuario_registro          String                         @db.Char(11)
+  fecha_registro               DateTime                       @default(now()) @db.Timestamptz(6)
+  avance_orden                 avance_orden[]
+  chatarra                     chatarra[]
+  costeo                       costeo[]
+  movimiento_inventario        movimiento_inventario[]
+  campania_produccion          campania_produccion?           @relation(fields: [id_campania], references: [id_campania], onDelete: Restrict, map: "fk_orden_campania")
+  cliente                      cliente?                       @relation(fields: [id_cliente], references: [id_cliente], onDelete: Restrict, map: "fk_orden_cliente")
+  detalle_pedido               detalle_pedido?                @relation(fields: [id_detalle_pedido], references: [id_detalle_pedido], onDelete: Restrict, map: "fk_orden_detalle_pedido")
+  producto                     producto                       @relation(fields: [id_producto], references: [id_producto], map: "fk_orden_producto")
+  ruta_fabricacion             ruta_fabricacion?              @relation(fields: [id_ruta], references: [id_ruta], onDelete: Restrict, map: "fk_orden_ruta")
+  usuario                      usuario                        @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_orden_usuario_registro")
+  version_receta               version_receta?                @relation(fields: [id_version_receta], references: [id_version_receta], onDelete: Restrict, map: "fk_orden_version_receta")
   requerimiento_orden_material requerimiento_orden_material[]
-  retazo_reutilizable    retazo_reutilizable[]
-  tarea_operario         tarea_operario[]
+  retazo_reutilizable          retazo_reutilizable[]
+  tarea_operario               tarea_operario[]
 
   @@index([id_campania], map: "idx_orden_campania")
   @@index([id_cliente], map: "idx_orden_cliente")
@@ -1075,15 +1075,15 @@ model reasignacion_tarea {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model receta_tecnica {
-  id_receta           String          @id @db.Char(11)
-  id_producto         String          @db.Char(11)
-  nombre_receta       String          @db.VarChar(100)
+  id_receta           String           @id @db.Char(11)
+  id_producto         String           @db.Char(11)
+  nombre_receta       String           @db.VarChar(100)
   descripcion         String?
-  estado              String          @default("activa") @db.VarChar(20)
-  fecha_creacion      DateTime        @default(dbgenerated("CURRENT_DATE")) @db.Date
-  id_usuario_creacion String          @db.Char(11)
-  producto            producto        @relation(fields: [id_producto], references: [id_producto], map: "fk_receta_producto")
-  usuario             usuario         @relation(fields: [id_usuario_creacion], references: [id_usuario], map: "fk_receta_usuario_creacion")
+  estado              String           @default("activa") @db.VarChar(20)
+  fecha_creacion      DateTime         @default(dbgenerated("CURRENT_DATE")) @db.Date
+  id_usuario_creacion String           @db.Char(11)
+  producto            producto         @relation(fields: [id_producto], references: [id_producto], map: "fk_receta_producto")
+  usuario             usuario          @relation(fields: [id_usuario_creacion], references: [id_usuario], map: "fk_receta_usuario_creacion")
   version_receta      version_receta[]
 
   @@unique([id_producto, nombre_receta], map: "uq_receta_producto_nombre")

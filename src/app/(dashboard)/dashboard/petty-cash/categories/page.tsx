@@ -24,7 +24,11 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  dashboardBreadcrumbs,
+  getSearchParam,
+  navigationHrefs,
+} from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   createExpenseCategoryAction,
@@ -39,19 +43,6 @@ import { pettyCashNotifications } from "@/modules/petty-cash/notifications";
 type ExpenseCategoriesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0]?.trim() ?? "";
-  }
-
-  return value?.trim() ?? "";
-}
 
 export default async function ExpenseCategoriesPage({
   searchParams,

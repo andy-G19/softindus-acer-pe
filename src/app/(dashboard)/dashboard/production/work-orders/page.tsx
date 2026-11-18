@@ -20,10 +20,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDate } from "@/lib/formatters";
+import { formatDate, formatDecimal } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  getSearchParam,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -43,14 +44,6 @@ import {
 type WorkOrdersPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatDecimal(value: unknown) {
-  if (value === null || value === undefined) {
-    return "0.00";
-  }
-
-  return Number(value.toString()).toFixed(2);
-}
 
 function getOrderBadgeVariant(status: string) {
   if (status === "finalizada") {
@@ -82,19 +75,6 @@ function getPriorityBadgeVariant(priority: string) {
   }
 
   return "secondary" as const;
-}
-
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0]?.trim() ?? "";
-  }
-
-  return value?.trim() ?? "";
 }
 
 export default async function WorkOrdersPage({

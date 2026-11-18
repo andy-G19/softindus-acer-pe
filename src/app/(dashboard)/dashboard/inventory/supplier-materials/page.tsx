@@ -21,6 +21,7 @@ import { formatMoney } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  getSearchParam,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -32,19 +33,6 @@ import { SupplierMaterialStatusButton } from "@/modules/inventory/supplier-mater
 type SupplierMaterialsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0]?.trim() ?? "";
-  }
-
-  return value?.trim() ?? "";
-}
 
 function getAvailabilityLabel(value: string | null) {
   const labels: Record<string, string> = {

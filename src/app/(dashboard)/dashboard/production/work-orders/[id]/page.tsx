@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDate, formatMoney } from "@/lib/formatters";
+import { formatDate, formatDecimal, formatMoney } from "@/lib/formatters";
 import {
   calculatePendingDelivery,
   summarizeMaterialLine,
@@ -50,10 +50,6 @@ type WorkOrderDetailPageProps = {
   }>;
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatDecimal(value: unknown) {
-  return toNumber(value).toFixed(2);
-}
 
 /**
  * Disponible, faltante y si el stock alcanza, en centesimos como guardan sus columnas
@@ -585,7 +581,7 @@ export default async function WorkOrderDetailPage({
                     {formatDate(workOrder.fecha_cierre_materiales, { format: "d mmm yyyy" })}. Unidades
                     producidas:{" "}
                     <strong>
-                      {formatDecimal(workOrder.cantidad_producida)}{" "}
+                      {formatDecimal(workOrder.cantidad_producida ?? 0)}{" "}
                       {workOrder.producto.unidad_medida}
                     </strong>{" "}
                     de {formatDecimal(workOrder.cantidad)} planificadas.

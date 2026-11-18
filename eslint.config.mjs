@@ -58,17 +58,17 @@ const apiLinkMessage =
   "Un enlace a /api/ (por ejemplo, una exportacion) va en un <a>, no en <Link>: en produccion next/link hace prefetch con un GET que ejecuta la ruta.";
 
 const sharedHelperMessage =
-  "Importa toNumber y toNonNegativeNumber de @/lib/numbers, y formatMoney y formatDate de @/lib/formatters, en lugar de definir una copia local.";
+  "Importa toNumber y toNonNegativeNumber de @/lib/numbers, y formatMoney, formatDecimal y formatDate de @/lib/formatters, y getSearchParam de @/lib/navigation, en lugar de definir una copia local.";
 
 const sharedHelperSelectors = [
   {
     selector:
-      "FunctionDeclaration[id.name=/^(toNumber|toNonNegativeNumber|formatMoney|formatDate)$/]",
+      "FunctionDeclaration[id.name=/^(toNumber|toNonNegativeNumber|formatMoney|formatDecimal|formatDate|getSearchParam)$/]",
     message: sharedHelperMessage,
   },
   {
     selector:
-      "VariableDeclarator[id.name=/^(toNumber|toNonNegativeNumber|formatMoney|formatDate)$/]",
+      "VariableDeclarator[id.name=/^(toNumber|toNonNegativeNumber|formatMoney|formatDecimal|formatDate|getSearchParam)$/]",
     message: sharedHelperMessage,
   },
 ];
@@ -194,7 +194,7 @@ const eslintConfig = defineConfig([
   // no-restricted-syntax reemplazaria las opciones de este.
   {
     files: ["src/**/*.{ts,tsx}"],
-    ignores: ["src/lib/numbers.ts", "src/lib/formatters.ts"],
+    ignores: ["src/lib/numbers.ts", "src/lib/formatters.ts", "src/lib/navigation.ts"],
     rules: {
       "no-restricted-syntax": ["error", ...sharedHelperSelectors, ...apiLinkSelectors],
     },

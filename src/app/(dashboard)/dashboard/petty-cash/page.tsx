@@ -144,7 +144,7 @@ export default async function PettyCashDashboardPage() {
   ];
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Caja chica"
         description="Controla cajas chicas, ingresos menores, egresos, categorías de gasto y movimientos financieros menores del taller."
@@ -270,6 +270,6 @@ export default async function PettyCashDashboardPage() {
           />
         ))}
       </section>
-    </main>
+    </div>
   );
 }

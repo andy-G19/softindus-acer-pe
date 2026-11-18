@@ -9,22 +9,25 @@ type ProductionErrorPageProps = {
   error: Error & {
     digest?: string;
   };
-  reset: () => void;
+  // Vuelve a pedir los datos al servidor (router.refresh) y luego limpia el error.
+  // `reset` solo limpia el error: con un fallo del servidor mostraba el mismo error
+  // otra vez (11.7b).
+  unstable_retry: () => void;
 };
 
 export default function ProductionErrorPage({
   error,
-  reset,
+  unstable_retry,
 }: ProductionErrorPageProps) {
   return (
-    <main className="flex min-h-[60vh] items-center justify-center">
+    <div className="flex min-h-[60vh] items-center justify-center">
       <ErrorState
         title="Ocurrió un problema en Producción"
         description="El sistema no pudo completar la operación solicitada. Esto puede ocurrir por una validación, un dato relacionado que falta o una restricción del módulo."
         detail={error.message}
         actions={
           <>
-            <Button type="button" onClick={reset}>
+            <Button type="button" onClick={() => unstable_retry()}>
               Intentar nuevamente
             </Button>
             <Button variant="outline" asChild>
@@ -33,6 +36,6 @@ export default function ProductionErrorPage({
           </>
         }
       />
-    </main>
+    </div>
   );
 }

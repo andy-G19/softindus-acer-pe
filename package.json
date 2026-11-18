@@ -15,6 +15,7 @@
     "bootstrap:admin": "tsx scripts/bootstrap-admin.ts",
     "db:studio": "prisma studio",
     "db:validate": "prisma validate",
+    "db:format": "prisma format --check",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "postinstall": "prisma generate",

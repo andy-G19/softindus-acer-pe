@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getMaterialRequirementsVersion } from "@/modules/production/recipe-versions/queries";
-import { formatMoney } from "@/lib/formatters";
+import { formatDecimal, formatMoney } from "@/lib/formatters";
 import { applyWaste, roundQuantity } from "@/lib/recipe-quantities";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
@@ -32,10 +32,6 @@ type MaterialRequirementsPageProps = {
     quantity?: string;
   }>;
 };
-
-function formatDecimal(value: unknown) {
-  return toNumber(value).toFixed(2);
-}
 
 export default async function MaterialRequirementsPage({
   params,

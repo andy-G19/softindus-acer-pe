@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { KpiCard } from "@/components/ui/kpi-card";
 import { Label } from "@/components/ui/label";
-import { formatDateTime } from "@/lib/formatters";
+import { formatDateTime, formatDecimal } from "@/lib/formatters";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
@@ -31,10 +31,6 @@ type WorkOrderProgressPageProps = {
   }>;
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatDecimal(value: unknown) {
-  return toNumber(value).toFixed(2);
-}
 
 function getStageBadgeVariant(status: string) {
   if (status === "terminada") {

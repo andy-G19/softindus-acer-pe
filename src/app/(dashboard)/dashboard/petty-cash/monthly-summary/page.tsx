@@ -231,7 +231,7 @@ export default async function MonthlyFinancialSummaryPage({
     .sort((a, b) => b.amount - a.amount);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Resumen mensual financiero"
         description="Consulta ventas cobradas, saldos pendientes, costos de producción, movimientos de caja chica y utilidad estimada del mes seleccionado."
@@ -609,6 +609,6 @@ export default async function MonthlyFinancialSummaryPage({
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

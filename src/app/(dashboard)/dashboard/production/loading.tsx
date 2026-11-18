@@ -1,6 +1,6 @@
 export default function ProductionLoadingPage() {
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <section>
         <div className="h-4 w-48 animate-pulse rounded bg-muted" />
         <div className="mt-3 h-9 w-80 animate-pulse rounded bg-muted" />
@@ -31,6 +31,6 @@ export default function ProductionLoadingPage() {
           </div>
         ))}
       </section>
-    </main>
+    </div>
   );
 }

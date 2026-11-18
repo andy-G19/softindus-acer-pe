@@ -24,7 +24,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
-import { formatDate, formatMoney } from "@/lib/formatters";
+import { formatDate, formatDecimal, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
@@ -38,10 +38,6 @@ import { getCostingListData } from "@/modules/costs/costings/queries";
 type CostingsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
-
-function formatDecimal(value: unknown) {
-  return toNumber(value).toFixed(2);
-}
 
 function formatPercent(value: unknown) {
   if (value === null || value === undefined) {
@@ -250,7 +246,7 @@ export default async function CostingsPage({
                   </p>
                 </TableCell>
 
-                <TableCell>{formatDecimal(costing.cantidad_base)}</TableCell>
+                <TableCell>{formatDecimal(costing.cantidad_base ?? 0)}</TableCell>
 
                 <TableCell>{formatMoney(costing.costo_total)}</TableCell>
 
