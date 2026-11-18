@@ -22,7 +22,6 @@ const EXPECTED_IMPORTS = [
   "../styles/base.css",
   "../styles/brand.css",
   "../styles/adapters/toastify.css",
-  "../styles/adapters/sweetalert2.css",
   "../styles/patterns.css",
   "../styles/adapters/legacy-industrial-dark.css",
 ];

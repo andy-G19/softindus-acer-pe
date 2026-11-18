@@ -1,22 +1,15 @@
 "use client";
 
+// Fachada de los avisos: solo Toastify. SweetAlert2 (showConfirm, showDeleteConfirm, showLoading
+// y closeModal) se retiro en la 11.7a; las confirmaciones usan ConfirmDialog o
+// ConfirmActionButton.
 import { createElement } from "react";
-import Swal, { type SweetAlertIcon } from "sweetalert2";
 import { toast, type ToastOptions } from "react-toastify";
 
 import type {
   NotificationDefinition,
   NotificationSeverity,
 } from "@/lib/notification-catalog";
-
-type ConfirmOptions = {
-  title?: string;
-  text?: string;
-  confirmText?: string;
-  cancelText?: string;
-  icon?: SweetAlertIcon;
-  destructive?: boolean;
-};
 
 const toastTypeClassNames: Record<NotificationSeverity, string> = {
   success: "toast-industrial-success",
@@ -88,66 +81,4 @@ export function notify(definition: NotificationDefinition) {
   }
 
   showInfo(definition.message, definition.description);
-}
-
-export async function showConfirm(options: ConfirmOptions = {}) {
-  const result = await Swal.fire({
-    title: options.title ?? "Esta acción requiere confirmación",
-    text: options.text ?? "Verifique la información antes de continuar.",
-    icon: options.icon ?? "warning",
-    showCancelButton: true,
-    confirmButtonText: options.confirmText ?? "Confirmar",
-    cancelButtonText: options.cancelText ?? "Cancelar",
-    reverseButtons: true,
-    focusCancel: true,
-    buttonsStyling: false,
-    customClass: {
-      popup: "swal2-industrial-popup",
-      title: "swal2-industrial-title",
-      htmlContainer: "swal2-industrial-html",
-      confirmButton: options.destructive
-        ? "swal2-industrial-confirm swal2-industrial-confirm-destructive"
-        : "swal2-industrial-confirm",
-      cancelButton: "swal2-industrial-cancel",
-      icon: "swal2-industrial-icon",
-    },
-  });
-
-  return result.isConfirmed;
-}
-
-export function showDeleteConfirm(entityName = "registro") {
-  return showConfirm({
-    title: "¿Eliminar registro?",
-    text: `Esta acción no se puede deshacer. Verifique antes de eliminar ${entityName}.`,
-    confirmText: "Confirmar eliminación",
-    cancelText: "Cancelar",
-    icon: "warning",
-    destructive: true,
-  });
-}
-
-export function showLoading(
-  title = "Procesando solicitud",
-  text = "Espere un momento mientras se completa la operación.",
-) {
-  void Swal.fire({
-    title,
-    text,
-    allowOutsideClick: false,
-    allowEscapeKey: false,
-    showConfirmButton: false,
-    didOpen: () => {
-      Swal.showLoading();
-    },
-    customClass: {
-      popup: "swal2-industrial-popup",
-      title: "swal2-industrial-title",
-      htmlContainer: "swal2-industrial-html",
-    },
-  });
-}
-
-export function closeModal() {
-  Swal.close();
 }

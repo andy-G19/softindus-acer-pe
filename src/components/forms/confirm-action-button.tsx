@@ -58,15 +58,18 @@ type ConfirmActionButtonProps<Values, Data> = {
 
 const IDLE = { status: "idle" } as const;
 
-/** Fila y tabla del boton, guardadas mientras esta en la pagina. */
-type FocusAnchor = { row: HTMLElement | null; table: HTMLElement | null };
+/** Fila, tabla y titulo de la pagina del boton, guardados mientras esta en la pagina. */
+type FocusAnchor = { row: HTMLElement | null; table: HTMLElement | null; title: HTMLElement | null };
 
 // Destino del foco cuando el boton ya no esta (hallazgo 13 de la 10.3a): su
-// fila, si sigue en la pagina, o su tabla. Ninguna se enfoca por si sola, asi
-// que recibe tabindex -1 (enfocable desde el script, fuera del orden de Tab)
-// hasta que el foco sale de ella.
+// fila, si sigue en la pagina, o su tabla; y, para un boton que no esta en una
+// tabla (la cabecera de un detalle), el titulo de la pagina: el primer h1 del
+// main que lo contiene (C4 de la 11.7a, D85; antes el foco quedaba en body). El
+// h1 del shell esta fuera del main y no cuenta. Ninguno se enfoca por si solo,
+// asi que recibe tabindex -1 (enfocable desde el script, fuera del orden de
+// Tab) hasta que el foco sale de el.
 function fallbackFocusTarget(anchor: FocusAnchor) {
-  const target = [anchor.row, anchor.table].find((element) => element?.isConnected) ?? null;
+  const target = [anchor.row, anchor.table, anchor.title].find((element) => element?.isConnected) ?? null;
 
   if (target && !target.hasAttribute("tabindex")) {
     target.setAttribute("tabindex", "-1");
@@ -87,7 +90,8 @@ function fallbackFocusTarget(anchor: FocusAnchor) {
 // La lista se vuelve a pintar con los datos nuevos y el boton puede
 // desaparecer: atender una alerta deja la fila sin la accion, e inactivar con
 // el filtro «Activo» saca la fila. Entonces el foco va a la fila o a la tabla
-// en lugar de quedar en body, con la confirmacion todavia abierta (al cerrarse)
+// (o al titulo de la pagina, si el boton estaba en una cabecera) en lugar de
+// quedar en body, con la confirmacion todavia abierta (al cerrarse)
 // o despues (al desmontarse el boton enfocado). Si el boton sigue (Inactivar
 // pasa a Activar), el foco se queda en el.
 export function ConfirmActionButton<Values, Data>({
@@ -106,7 +110,7 @@ export function ConfirmActionButton<Values, Data>({
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const anchorRef = useRef<FocusAnchor>({ row: null, table: null });
+  const anchorRef = useRef<FocusAnchor>({ row: null, table: null, title: null });
 
   // La fila (con key) y la tabla del boton no cambian mientras esta montado; el
   // boton tampoco: al pasar de Inactivar a Activar React conserva su nodo.
@@ -115,7 +119,11 @@ export function ConfirmActionButton<Values, Data>({
   // tabla.
   useLayoutEffect(() => {
     const trigger = triggerRef.current;
-    anchorRef.current = { row: trigger?.closest("tr") ?? null, table: trigger?.closest("table") ?? null };
+    anchorRef.current = {
+      row: trigger?.closest("tr") ?? null,
+      table: trigger?.closest("table") ?? null,
+      title: trigger?.closest("main")?.querySelector<HTMLElement>("h1") ?? null,
+    };
 
     return () => {
       if (!trigger || document.activeElement !== trigger) {

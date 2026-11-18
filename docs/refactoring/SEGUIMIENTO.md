@@ -9553,7 +9553,7 @@ Datos leídos de la API de GitHub el 2026-11-17 (UTC) y comparados con git:
 
 ### Sub-entrega 11.6c — Órdenes de trabajo: avances de producción
 
-Fecha: 2026-11-17 (Lima). Estado: verificada en staging (CI #198). Plan en
+Fecha: 2026-11-17 (Lima). Estado: integrada en `main` (PR #51, merge `b42724c`). Plan en
 `tmp/e11-diff/plan-11-6c.md`, aprobado el 2026-11-17 con las decisiones D78 a D82 y D83 en la
 opción A: avances por caso de uso (D78); el porcentaje en centésimos con una sola regla (D79);
 generar con `ConfirmActionButton` (D80); actualizar una etapa con resultado en su tarjeta (D81);
@@ -9683,6 +9683,102 @@ Hallazgos:
    pausada al 50% y con OPE00000002), una reasignación y sus entradas en la bitácora. No se terminó
    ninguna etapa: terminar las 6 finalizaría la orden (D83).
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-17 (UTC) y comparados con git:
+
+- La verificación `8556842` se publicó en `staging`: CI #199 en verde (6m 36s).
+- PR #51, abierto a las 20:48:40 UTC y fusionado con merge commit a las 21:32:08 UTC del
+  2026-11-17: 8 commits, de `f012fbb` a `8556842`, y 25 archivos (+3.028 −796). Su CI, el #200,
+  sobre `8556842`, terminó en verde (4m 57s).
+- El merge commit `b42724c` tiene como padres `acac7db` (`main`) y `8556842` (`staging`), y su
+  árbol es el de `8556842` (`feceeecb`): `main` y `staging` tienen el mismo contenido. CI #201 en
+  verde (4m 25s).
+- Vercel desplegó `b42724c` en producción (`success` a las 21:33:56 UTC). La sub-entrega no trae
+  migraciones. Con ella la 11.6 queda completa.
+
+### Sub-entrega 11.7a — Retiro de lo que ya no se usa y el foco de las cabeceras
+
+Fecha: 2026-11-17 (Lima). Estado: verificada en staging (CI #202). Plan en
+`tmp/e11-diff/plan-11-7.md`, aprobado el 2026-11-17 con las decisiones D84 a D86: partir la 11.7
+en cuatro (a retiro, b copias y estructura, c CSS heredado, d pendientes funcionales; D84); el foco
+va al título de la página cuando el botón de confirmación desaparece sin fila ni tabla (D85); la
+galería pierde las demos de SweetAlert2 (D86).
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 65a4e90 | docs | Integración de la 11.6c en `main` (PR #51). |
+| 3e64332 | refactor | Salen `ConfirmDeleteButton` (sin páginas desde la 11.6b) y `RowToggleStatusButton` (sin usos, hallazgo 74 de la 10.8a), con su prueba y los casos de `primitives.test.ts` que existían solo para ellos. |
+| abcaa4a | refactor | Sale SweetAlert2: `showConfirm`, `showDeleteConfirm`, `showLoading` y `closeModal` de la fachada, la demo de la galería (D86), `adapters/sweetalert2.css`, la dependencia (`npm uninstall` sin red), sus dobles y mocks de prueba y su mención en la CSP. La regla de ESLint queda como guardia. |
+| 90f454b | refactor | Sale `StatusBadge` (solo galería). `StateBadge` pasa a un solo mapa del estado a la variante de `Badge`, con el mismo HTML. |
+| 6f8597c | fix | Cuando el botón de `ConfirmActionButton` desaparece fuera de una tabla, el foco va al título de la página, el primer `h1` de su `main` (D85; hallazgos 10 de la 11.2a y 7 de la 11.6b y la 11.6c). Rojo antes. |
+| fe47437 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
+
+Diseño:
+
+- Los tres `refactor` solo borran: cada prueba que se va probaba un componente o una función que
+  deja de existir, y ninguna regla de la app pierde cobertura. Las confirmaciones de la app las
+  cubren `ConfirmDialog` y `ConfirmActionButton`, que ya tenían sus pruebas con el Radix real.
+- `StateBadge` tomaba su variante de la clase de tono de `StatusBadge` (`badge-state-*`) por un
+  segundo mapa. Ahora va directo del estado a la variante; las clases `badge-state-*` siguen, porque
+  las ponen las variantes de `Badge`. Su snapshot pasó sin actualizar: el HTML es el mismo.
+- El foco: al montarse, el botón recuerda su fila, su tabla y el primer `h1` del `main` que lo
+  contiene, y si desaparece enfocado usa el primero que siga en la página, con `tabindex="-1"`
+  mientras tiene el foco. El `h1` del shell está fuera del `main` y no cuenta. En un listado el
+  orden deja a la fila antes que al título.
+
+Evidencia:
+
+1. Rojo antes del `fix`, en un mensaje aparte: 2 pruebas (el botón de cabecera que desaparece con
+   la confirmación abierta y después de cerrarla); una tercera, la página sin título, ya pasaba y
+   protege contra un arreglo que mande el foco a cualquier parte.
+2. Mutaciones del `fix`: 4 de 4. Dos sobrevivieron en la primera pasada («el título antes que la
+   fila» y «cualquier h1 del documento»), porque las pruebas de listado no tienen `main` ni `h1`; se
+   mataron con dos pruebas que fijan esas decisiones (un listado con título enfoca la fila; el `h1`
+   del shell no cuenta). Los `refactor` solo borran y los prueban los snapshots y el CSS.
+3. CSS compilado: C1 quita 5 reglas cuyas clases solo vivían en los archivos borrados (comprobado
+   con `git grep`), C2 quita las 22 reglas `.swal2-*` y C3 y C4 no lo cambian: de 112.316 a 109.174
+   bytes y de 1.217 a 1.190 reglas. Cada commit se comparó contra el CSS del anterior.
+4. `npm run check` terminó con código 0 antes de cada commit; las pruebas pasan de 333 / 5.517 a
+   332 / 5.499 (las que probaban lo retirado, más las 5 nuevas del foco). Las de Postgres no
+   cambian (16 / 95). Lint mantiene el aviso anterior (`_line` en `orders/actions.ts`).
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 333 / 5.517 | 332 / 5.499 |
+| Archivos que importan `sweetalert2` / dependencia instalada | 1 / sí | 0 / no |
+| Componentes sin uso en páginas (`ConfirmDeleteButton`, `StatusBadge`, `RowToggleStatusButton`) | 3 | 0 |
+| Hojas de estilo que importa `globals.css` | 8 | 7 |
+| CSS compilado | 112.316 bytes, 1.217 reglas | 109.174 bytes, 1.190 reglas |
+| Botones de confirmación que dejan el foco en `body` al desaparecer (vistos en staging) | 3 | 0 |
+| Declaraciones JSX de formulario (inventario) | 9 | 8 |
+
+Hallazgos:
+
+1. Los hallazgos 10 de la 11.2a y 7 de la 11.6b y la 11.6c (el foco en `body` cuando desaparece un
+   botón de cabecera). Corregidos en `6f8597c` y verificados en staging (abajo, paso 3).
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 6 commits (hasta `fe47437`): CI #202 en verde (de 00:26:42 a 00:33:00 UTC del
+   2026-11-18); Vercel desplegó staging (00:28:27 UTC). Sin migraciones.
+2. Con ADMIN, sin escribir (origen comprobado en llamada aparte): la galería muestra en «Avisos
+   temporales» solo los cuatro avisos y en «Confirmaciones accesibles» la demo de `ConfirmDialog`;
+   ningún botón ni texto de SweetAlert2 ni de `StatusBadge`; las etiquetas de estado solo con
+   `StateBadge`. En la página, ninguna regla `swal2` en las hojas de estilo y ninguno de sus 14
+   scripts contiene `sweetalert2`.
+3. Envío autorizado por el responsable: «Generar avances por etapa» en la OTR00000009 (Rastrillo
+   agrícola, pendiente y sin avances; la confirmación dice «Se crean 6 avances pendientes, uno por
+   cada etapa activa de la ruta «Ruta estándar para rastrillo».»). Un aviso «Avances de orden
+   generados correctamente»; AVN00000013 a AVN00000018; la orden sigue pendiente. El botón
+   desaparece con el repintado y el foco va al título de la página («Avances de producción», el
+   `h1` del `main`) con `tabindex="-1"`; con Tab pasa a «Volver a órdenes» y el título pierde el
+   `tabindex`. En la 11.6c, el mismo paso en la OTR00000010 dejó el foco en `body`.
+4. Datos de prueba que quedan en staging: la OTR00000009 con sus 6 avances pendientes.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -9708,7 +9804,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c verificada en staging (CI #198) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a verificada en staging (CI #202) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 

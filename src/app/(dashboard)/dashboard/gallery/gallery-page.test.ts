@@ -22,9 +22,6 @@ vi.mock("next/navigation", async (importOriginal) =>
 vi.mock("react-toastify", async () =>
   (await import("@/testing/notification-doubles")).toastifyModuleMock(),
 );
-vi.mock("sweetalert2", async () =>
-  (await import("@/testing/notification-doubles")).sweetAlertModuleMock(),
-);
 
 // Galeria de componentes (entrega 8). Ademas de fijar su estructura con el
 // arnes, exige el contrato que la hace segura en produccion: solo ADMIN, sin

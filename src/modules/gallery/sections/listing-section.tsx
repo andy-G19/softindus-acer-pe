@@ -1,4 +1,4 @@
-import { StateBadge, StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge } from "@/components/commercial/status-badge";
 import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
@@ -36,9 +36,8 @@ const ROWS = [
   { id: "CLI00000003", name: "Estructuras del Sur", type: "Empresa", phone: "054223344", active: false, rejects: false },
 ];
 
-// Mismos estados en las dos etiquetas. StateBadge toma de StatusBadge la
-// etiqueta y el tono, y pasa el tono a la variante de Badge (active es la
-// default; el estado desconocido usa outline, la mas parecida a su gris).
+// Estados de muestra de la etiqueta: cada uno con su variante de Badge (active
+// es la default; el estado desconocido usa outline).
 const STATUS_SAMPLES = [
   "pagada",
   "aprobado",
@@ -181,12 +180,11 @@ export function ListingSection() {
         </Table>
       </GallerySample>
 
-      <GallerySample label="Etiquetas de estado: StatusBadge y StateBadge (Badge), lado a lado" className="block">
+      <GallerySample label="Etiquetas de estado (StateBadge)" className="block">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Estado</TableHead>
-              <TableHead>StatusBadge</TableHead>
               <TableHead>StateBadge</TableHead>
             </TableRow>
           </TableHeader>
@@ -194,9 +192,6 @@ export function ListingSection() {
             {STATUS_SAMPLES.map((status) => (
               <TableRow key={status}>
                 <TableCell className="font-mono text-xs text-muted-foreground">{status}</TableCell>
-                <TableCell>
-                  <StatusBadge status={status} />
-                </TableCell>
                 <TableCell>
                   <StateBadge status={status} />
                 </TableCell>
@@ -206,12 +201,9 @@ export function ListingSection() {
         </Table>
       </GallerySample>
       <GalleryNote>
-        Las dos usan las mismas etiquetas y los mismos colores (las clases
-        badge-state-*); solo cambia la forma: StatusBadge es redondeada y en
-        minúsculas; StateBadge es un Badge, más compacto y en mayúsculas.
-        Comercial usa StateBadge desde la entrega 10.4b; Mantenimiento y Mermas
-        ya usaban Badge con sus propias variantes, y StatusBadge se retira en la
-        entrega 11.
+        StateBadge es un Badge con la etiqueta y la variante de cada estado
+        comercial; Comercial la usa desde la entrega 10.4b. Mantenimiento y
+        Mermas usan Badge con sus propias variantes.
       </GalleryNote>
 
       <GallerySample label="Tabla sin resultados" className="block">

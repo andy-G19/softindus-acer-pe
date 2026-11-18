@@ -33,7 +33,7 @@ const notificationFacadeFiles = [
 ];
 
 const notificationLibraryMessage =
-  "Usa la fachada @/lib/notifications (notify, showSuccess, showError, showConfirm...): solo ella y el proveedor de toasts importan SweetAlert2 y Toastify.";
+  "Usa la fachada @/lib/notifications (notify, showSuccess, showError...): solo ella y el proveedor de toasts importan Toastify. SweetAlert2 se retiro en la 11.7a: las confirmaciones usan ConfirmDialog o ConfirmActionButton.";
 
 const notificationLibraryRestrictions = [
   { name: "sweetalert2", message: notificationLibraryMessage },

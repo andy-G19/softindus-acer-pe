@@ -40,16 +40,16 @@ export function MessagesSection() {
         ))}
       </div>
 
-      <GallerySample label="Avisos temporales, confirmaciones y carga (fachada de notificaciones)">
+      <GallerySample label="Avisos temporales (fachada de notificaciones)">
         <FeedbackDemo />
       </GallerySample>
-      <GallerySample label="Confirmaciones accesibles (ConfirmDialog), para comparar">
+      <GallerySample label="Confirmaciones accesibles (ConfirmDialog)">
         <ConfirmDialogDemo />
       </GallerySample>
       <GalleryNote>
-        Los avisos usan Toastify y las confirmaciones de la fachada usan
-        SweetAlert2 hasta la entrega 11. ConfirmDialog, sobre el AlertDialog de
-        Radix, nombra la entidad, la consecuencia y el verbo de la acción.
+        Los avisos usan Toastify. Las confirmaciones usan ConfirmDialog, sobre
+        el AlertDialog de Radix, que nombra la entidad, la consecuencia y el
+        verbo de la acción.
         Teclado: al abrir, el foco va a Cancelar; Tab no sale de la ventana; Esc
         la cierra y el foco vuelve al botón que la abrió. Mientras confirma, la
         acción muestra su estado pendiente y no se puede cancelar.

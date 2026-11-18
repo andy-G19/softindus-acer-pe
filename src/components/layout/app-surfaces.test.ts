@@ -28,9 +28,6 @@ vi.mock("@/modules/auth/actions/login.action", () => ({ loginAction: vi.fn() }))
 vi.mock("react-toastify", async () =>
   (await import("@/testing/notification-doubles")).toastifyModuleMock(),
 );
-vi.mock("sweetalert2", async () =>
-  (await import("@/testing/notification-doubles")).sweetAlertModuleMock(),
-);
 
 // Una etiqueta por linea: el diff de un snapshot senala el elemento que cambio.
 function markup(node: ReactNode) {

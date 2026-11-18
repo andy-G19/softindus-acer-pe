@@ -10,6 +10,5 @@
 @import "../styles/base.css";
 @import "../styles/brand.css";
 @import "../styles/adapters/toastify.css";
-@import "../styles/adapters/sweetalert2.css";
 @import "../styles/patterns.css";
 @import "../styles/adapters/legacy-industrial-dark.css";

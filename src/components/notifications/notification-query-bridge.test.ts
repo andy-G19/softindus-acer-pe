@@ -63,9 +63,6 @@ vi.mock("next/navigation", () => ({
 vi.mock("react-toastify", async () =>
   (await import("@/testing/notification-doubles")).toastifyModuleMock(),
 );
-vi.mock("sweetalert2", async () =>
-  (await import("@/testing/notification-doubles")).sweetAlertModuleMock(),
-);
 
 // Monta el puente de nuevo: refs vacios, como al recargar la pagina.
 function mount() {

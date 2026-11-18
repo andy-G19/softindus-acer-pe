@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Info, Package, Plus, TriangleAlert, type LucideProps } from "lucide-react";
 import Link from "next/link";
 
-import { StateBadge, StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge } from "@/components/commercial/status-badge";
 import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field, FieldError, type FieldControlProps } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
@@ -17,7 +17,6 @@ import { PaginationControls } from "@/components/pagination-controls";
 import {
   RowActions,
   RowEditLink,
-  RowToggleStatusButton,
 } from "@/components/table/row-actions";
 import { TableLoadingRows } from "@/components/table/table-loading-rows";
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -297,12 +296,6 @@ describe("Presentacion", () => {
     ["tarjeta de modulo por defecto", h(ModuleAccessCard, { title: "Clientes", description: "Gestion de clientes", href: "/dashboard/commercial/clients" })],
     ["tarjeta de modulo con tono, indice e icono", h(ModuleAccessCard, { title: "Materiales", description: "Catalogo", href: "/dashboard/inventory/materials", icon: Package, tone: "chart-3", index: 3 })],
     [
-      "etiqueta de estado comercial",
-      ["pagada", "Pendiente", "anulado", "en_produccion", "sin proforma", "desconocido", null].map((status) =>
-        h(StatusBadge, { key: String(status), status }),
-      ),
-    ],
-    [
       "etiqueta de estado con Badge",
       ["pagada", "Pendiente", "anulado", "en_produccion", "sin proforma", "desconocido", null, "constructor"].map(
         (status) => h(StateBadge, { key: String(status), status }),
@@ -389,19 +382,9 @@ describe("Navegacion y listados", () => {
       h(
         RowActions,
         null,
+        // 11.7a: RowToggleStatusButton se retiro sin usos (hallazgo 74 de la 10.8a); activar e
+        // inactivar desde la fila usan ConfirmActionButton.
         h(RowEditLink, { href: "/dashboard/commercial/clients/CLI00000001/edit" }),
-        h(RowToggleStatusButton, { action: async () => {}, hiddenFieldName: "id_cliente", hiddenFieldValue: "CLI00000001", isActive: true }),
-        h(RowToggleStatusButton, { action: async () => {}, hiddenFieldName: "id_cliente", hiddenFieldValue: "CLI00000002", isActive: false }),
-      ),
-    ],
-    // Entrega 10: con sendsRequestedStatus envia tambien el estado pedido.
-    [
-      "acciones de fila con el estado pedido",
-      h(
-        RowActions,
-        null,
-        h(RowToggleStatusButton, { action: async () => {}, hiddenFieldName: "id_categoria_gasto", hiddenFieldValue: "CGA00000001", isActive: true, sendsRequestedStatus: true }),
-        h(RowToggleStatusButton, { action: async () => {}, hiddenFieldName: "id_categoria_gasto", hiddenFieldValue: "CGA00000002", isActive: false, sendsRequestedStatus: true }),
       ),
     ],
     ...([1, 2, 3] as const).map((page): Case => [

@@ -494,3 +494,169 @@ describe("ConfirmActionButton cuando su boton desaparece de la lista", () => {
     expect(table()!.hasAttribute("tabindex")).toBe(false);
   });
 });
+
+// C4 de la 11.7a (D85): un boton de cabecera, sin fila ni tabla, desaparece con el repintado
+// (entregar lo pendiente en el detalle de una orden, generar sus avances, anular una compra desde
+// su detalle). El foco quedaba en body (hallazgos 10 de la 11.2a y 7 de la 11.6b y la 11.6c): va al
+// titulo de la pagina, el h1 de su main, enfocable solo desde el script mientras tiene el foco. Una
+// tabla de otra parte de la pagina no cuenta: solo la fila y la tabla del propio boton.
+describe("ConfirmActionButton cuando su boton desaparece de una cabecera", () => {
+  const controls: { setVisible: (visible: boolean) => void } = { setVisible: () => {} };
+
+  function DetailPage({
+    action,
+    withTitle = true,
+  }: {
+    action: (prev: State, formData: FormData) => Promise<State>;
+    withTitle?: boolean;
+  }) {
+    const [visible, setVisible] = useState(true);
+    controls.setVisible = setVisible;
+
+    return h(
+      "main",
+      null,
+      h(
+        "header",
+        null,
+        withTitle ? h("h1", null, "Orden OTR00000010") : null,
+        visible
+          ? h(ConfirmActionButton<{ id: string }, { estado: boolean }>, {
+              action,
+              fields: { id_orden_trabajo: "OTR00000010" },
+              successNotification: DEACTIVATED,
+              confirm: { title: "¿Entregar los materiales?", description: "Salen del almacén.", confirmText: "Entregar", variant: "default" },
+              children: "Entregar materiales",
+            })
+          : null,
+      ),
+      h("table", { "data-testid": "otra-tabla" }, h("tbody", null, h("tr", null, h("td", null, "Material")))),
+    );
+  }
+
+  const title = () => document.querySelector<HTMLElement>("h1");
+  const otherTable = () => document.querySelector<HTMLElement>('[data-testid="otra-tabla"]');
+
+  async function confirmDelivery() {
+    const trigger = button("Entregar materiales");
+    trigger.focus();
+    await act(async () => trigger.click());
+    await act(async () => button("Entregar").click());
+    await settle();
+    await settle();
+  }
+
+  it("si el boton sale de la cabecera, el foco va al titulo de la pagina, no a body ni a otra tabla", async () => {
+    const action = vi.fn(async () => {
+      controls.setVisible(false);
+      return success();
+    });
+    await act(async () => root.render(h(DetailPage, { action })));
+
+    await confirmDelivery();
+
+    expect(confirmation()).toBeNull();
+    expect(document.querySelector("header button")).toBeNull();
+    expect(document.activeElement).toBe(title());
+    expect(title()!.getAttribute("tabindex")).toBe("-1");
+    expect(otherTable()!.hasAttribute("tabindex")).toBe(false);
+
+    // Cuando el foco sale del titulo, deja de ser enfocable desde el script.
+    title()!.blur();
+    expect(title()!.hasAttribute("tabindex")).toBe(false);
+  });
+
+  it("si la cabecera cambia despues de cerrar la confirmacion, el foco tambien va al titulo", async () => {
+    const action = vi.fn(async () => success());
+    await act(async () => root.render(h(DetailPage, { action })));
+
+    await confirmDelivery();
+    expect(document.activeElement).toBe(button("Entregar materiales"));
+
+    await act(async () => controls.setVisible(false));
+    await settle();
+
+    expect(document.activeElement).toBe(title());
+  });
+
+  // Las dos decisiones del arreglo, que las pruebas de listado no veian porque no tienen main ni h1.
+  it("el h1 del shell, fuera del main, no cuenta: el foco va al titulo de la pagina", async () => {
+    const action = vi.fn(async () => {
+      controls.setVisible(false);
+      return success();
+    });
+    await act(async () =>
+      root.render(h("div", null, h("h1", { "data-testid": "shell" }, "Industrias Aceros Perú"), h(DetailPage, { action }))),
+    );
+
+    await confirmDelivery();
+
+    expect(document.activeElement).toBe(document.querySelector("main h1"));
+    expect(document.querySelector('[data-testid="shell"]')!.hasAttribute("tabindex")).toBe(false);
+  });
+
+  it("en un listado con titulo, el foco sigue yendo a la fila, no al titulo", async () => {
+    function ListPage({ action }: { action: (prev: State, formData: FormData) => Promise<State> }) {
+      const [visible, setVisible] = useState(true);
+      controls.setVisible = setVisible;
+
+      return h(
+        "main",
+        null,
+        h("h1", null, "Alertas de stock"),
+        h(
+          "table",
+          null,
+          h(
+            "tbody",
+            null,
+            h(
+              "tr",
+              { "data-id": "ALE00000001" },
+              h("td", null, "ALE00000001"),
+              h(
+                "td",
+                null,
+                visible
+                  ? h(ConfirmActionButton<{ id: string }, { estado: boolean }>, {
+                      action,
+                      fields: { id_alerta: "ALE00000001" },
+                      successNotification: DEACTIVATED,
+                      confirm: { title: "¿Atender la alerta?", description: "Consecuencia.", confirmText: "Entregar", variant: "default" },
+                      children: "Entregar materiales",
+                    })
+                  : "-",
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    const action = vi.fn(async () => {
+      controls.setVisible(false);
+      return success();
+    });
+    await act(async () => root.render(h(ListPage, { action })));
+
+    await confirmDelivery();
+
+    const alertRow = document.querySelector<HTMLElement>('tr[data-id="ALE00000001"]');
+
+    expect(document.activeElement).toBe(alertRow);
+    expect(title()!.hasAttribute("tabindex")).toBe(false);
+  });
+
+  it("una pagina sin titulo deja el foco donde lo deja el navegador", async () => {
+    const action = vi.fn(async () => {
+      controls.setVisible(false);
+      return success();
+    });
+    await act(async () => root.render(h(DetailPage, { action, withTitle: false })));
+
+    await confirmDelivery();
+
+    expect(document.activeElement).toBe(document.body);
+    expect(otherTable()!.hasAttribute("tabindex")).toBe(false);
+  });
+});

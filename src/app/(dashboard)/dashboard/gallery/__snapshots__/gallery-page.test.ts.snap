@@ -912,21 +912,18 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </figure>
 </div>
 <figure>
-<figcaption>Avisos temporales, confirmaciones y carga (fachada de notificaciones)</figcaption>
+<figcaption>Avisos temporales (fachada de notificaciones)</figcaption>
 <div>
 <div>
 <button data-variant="outline" type="button">Aviso de éxito</button>
 <button data-variant="outline" type="button">Aviso de error</button>
 <button data-variant="outline" type="button">Aviso de advertencia</button>
 <button data-variant="outline" type="button">Aviso de información</button>
-<button data-variant="secondary" type="button">Confirmación</button>
-<button data-variant="destructive" type="button">Confirmación de eliminación</button>
-<button data-variant="secondary" type="button">Ventana de carga (1,5 s)</button>
 </div>
 </div>
 </figure>
 <figure>
-<figcaption>Confirmaciones accesibles (ConfirmDialog), para comparar</figcaption>
+<figcaption>Confirmaciones accesibles (ConfirmDialog)</figcaption>
 <div>
 <div>
 <button data-variant="secondary" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Confirmación accesible</button>
@@ -934,7 +931,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </div>
 </figure>
-<p>Los avisos usan Toastify y las confirmaciones de la fachada usan SweetAlert2 hasta la entrega 11. ConfirmDialog, sobre el AlertDialog de Radix, nombra la entidad, la consecuencia y el verbo de la acción. Teclado: al abrir, el foco va a Cancelar; Tab no sale de la ventana; Esc la cierra y el foco vuelve al botón que la abrió. Mientras confirma, la acción muestra su estado pendiente y no se puede cancelar.</p>
+<p>Los avisos usan Toastify. Las confirmaciones usan ConfirmDialog, sobre el AlertDialog de Radix, que nombra la entidad, la consecuencia y el verbo de la acción. Teclado: al abrir, el foco va a Cancelar; Tab no sale de la ventana; Esc la cierra y el foco vuelve al botón que la abrió. Mientras confirma, la acción muestra su estado pendiente y no se puede cancelar.</p>
 <div>
 <figure>
 <figcaption>Vacío</figcaption>
@@ -1076,21 +1073,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span data-variant="outline">desconocido</span>
 </div>
 </figure>
-<figure>
-<figcaption>Etiqueta de estado anterior (StatusBadge)</figcaption>
-<div>
-<span>Registrado</span>
-<span>Vigente</span>
-<span>Pagada</span>
-<span>Entregado</span>
-<span>Pendiente</span>
-<span>Parcial</span>
-<span>En producción</span>
-<span>Anulado</span>
-<span>desconocido</span>
-</div>
-</figure>
-<p>La etiqueta de estado es Badge: StateBadge le pone la etiqueta y el tono de cada estado, y Comercial la usa desde la entrega 10.4b. Mantenimiento y Mermas ya usaban Badge con sus propias variantes: StatusBadge solo queda en esta galería y se retira en la entrega 11.</p>
+<p>La etiqueta de estado es Badge: StateBadge le pone la etiqueta y el tono de cada estado, y Comercial la usa desde la entrega 10.4b. Mantenimiento y Mermas usan Badge con sus propias variantes.</p>
 <div>
 <figure>
 <figcaption>Tarjeta completa</figcaption>
@@ -1503,14 +1486,13 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </figure>
 <figure>
-<figcaption>Etiquetas de estado: StatusBadge y StateBadge (Badge), lado a lado</figcaption>
+<figcaption>Etiquetas de estado (StateBadge)</figcaption>
 <div>
 <div>
 <table>
 <thead>
 <tr>
 <th>Estado</th>
-<th>StatusBadge</th>
 <th>StateBadge</th>
 </tr>
 </thead>
@@ -1518,17 +1500,11 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <tr>
 <td>pagada</td>
 <td>
-<span>Pagada</span>
-</td>
-<td>
 <span data-variant="success">Pagada</span>
 </td>
 </tr>
 <tr>
 <td>aprobado</td>
-<td>
-<span>Aprobado</span>
-</td>
 <td>
 <span data-variant="info">Aprobado</span>
 </td>
@@ -1536,17 +1512,11 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <tr>
 <td>pendiente</td>
 <td>
-<span>Pendiente</span>
-</td>
-<td>
 <span data-variant="default">Pendiente</span>
 </td>
 </tr>
 <tr>
 <td>en_produccion</td>
-<td>
-<span>En producción</span>
-</td>
 <td>
 <span data-variant="default">En producción</span>
 </td>
@@ -1554,26 +1524,17 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <tr>
 <td>sin proforma</td>
 <td>
-<span>Sin proforma</span>
-</td>
-<td>
 <span data-variant="default">Sin proforma</span>
 </td>
 </tr>
 <tr>
 <td>anulado</td>
 <td>
-<span>Anulado</span>
-</td>
-<td>
 <span data-variant="destructive">Anulado</span>
 </td>
 </tr>
 <tr>
 <td>desconocido</td>
-<td>
-<span>desconocido</span>
-</td>
 <td>
 <span data-variant="outline">desconocido</span>
 </td>
@@ -1583,7 +1544,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </div>
 </figure>
-<p>Las dos usan las mismas etiquetas y los mismos colores (las clases badge-state-*); solo cambia la forma: StatusBadge es redondeada y en minúsculas; StateBadge es un Badge, más compacto y en mayúsculas. Comercial usa StateBadge desde la entrega 10.4b; Mantenimiento y Mermas ya usaban Badge con sus propias variantes, y StatusBadge se retira en la entrega 11.</p>
+<p>StateBadge es un Badge con la etiqueta y la variante de cada estado comercial; Comercial la usa desde la entrega 10.4b. Mantenimiento y Mermas usan Badge con sus propias variantes.</p>
 <figure>
 <figcaption>Tabla sin resultados</figcaption>
 <div>
