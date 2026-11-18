@@ -482,7 +482,7 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 <td colSpan="9">
 <div>
 <div>
-<p>Todavía no hay proformas registradas.</p>
+<p>No se encontraron proformas con los filtros aplicados.</p>
 </div>
 </div>
 </td>

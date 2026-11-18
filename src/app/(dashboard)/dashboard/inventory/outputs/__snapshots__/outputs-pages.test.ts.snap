@@ -388,7 +388,7 @@ exports[`/dashboard/inventory/outputs > rango invertido > resultado 1`] = `
 <td colSpan="8">
 <div>
 <div>
-<p>Todavía no hay salidas registradas.</p>
+<p>No se encontraron salidas con los filtros aplicados.</p>
 </div>
 </div>
 </td>

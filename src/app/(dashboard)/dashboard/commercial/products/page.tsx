@@ -24,6 +24,7 @@ import {
   createReturnToHref,
   dashboardBreadcrumbs,
   getSearchParam,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -43,6 +44,8 @@ export default async function ProductsPage({
   const session = await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = getSearchParam(params, "q");
   const category = getSearchParam(params, "category");
   const unit = getSearchParam(params, "unit");
@@ -198,7 +201,7 @@ export default async function ProductsPage({
               <TableCell colSpan={7} className="p-0">
                 <EmptyState
                   className="border-0"
-                  label="Todavía no hay productos registrados."
+                  label={filtered ? "No se encontraron productos con los filtros aplicados." : "Todavía no hay productos registrados."}
                 />
               </TableCell>
             </TableRow>

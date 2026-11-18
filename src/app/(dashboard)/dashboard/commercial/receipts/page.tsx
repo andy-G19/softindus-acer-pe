@@ -23,6 +23,7 @@ import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -46,6 +47,8 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
   await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   // C5 de la 11.3c: el detalle de la proforma vuelve a este listado con sus filtros y su pagina.
   const returnTo = createReturnToHref(navigationHrefs.salesReceipts, params);
   const q = parseStringParam(params, "q");
@@ -170,7 +173,7 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
               <TableCell colSpan={8} className="p-0">
                 <EmptyState
                   className="border-0"
-                  label="Todavía no hay comprobantes registrados."
+                  label={filtered ? "No se encontraron comprobantes con los filtros aplicados." : "Todavía no hay comprobantes registrados."}
                 />
               </TableCell>
             </TableRow>

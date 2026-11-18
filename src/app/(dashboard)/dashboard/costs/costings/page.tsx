@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatDecimal, formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, hasActiveFilters, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import {
@@ -69,6 +69,8 @@ export default async function CostingsPage({
   await requireRole([APP_ROLES.ADMIN]);
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = parseStringParam(params, "q");
   const pedido = parseStringParam(params, "pedido");
   const orden = parseStringParam(params, "orden");
@@ -300,7 +302,7 @@ export default async function CostingsPage({
               <TableCell colSpan={10} className="p-0">
                 <EmptyState
                   className="border-0"
-                  label="Todavía no hay costeos registrados. Puedes generar uno desde una orden de trabajo."
+                  label={filtered ? "No se encontraron costeos con los filtros aplicados." : "Todavía no hay costeos registrados. Puedes generar uno desde una orden de trabajo."}
                 />
               </TableCell>
             </TableRow>

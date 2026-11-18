@@ -24,6 +24,7 @@ import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -47,6 +48,8 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
   await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = parseStringParam(params, "q");
   const client = parseStringParam(params, "client");
   const product = parseStringParam(params, "product");
@@ -249,7 +252,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                 <TableCell colSpan={9} className="p-0">
                   <EmptyState
                     className="border-0"
-                    label="Todavía no hay pedidos registrados."
+                    label={filtered ? "No se encontraron pedidos con los filtros aplicados." : "Todavía no hay pedidos registrados."}
                   />
                 </TableCell>
               </TableRow>

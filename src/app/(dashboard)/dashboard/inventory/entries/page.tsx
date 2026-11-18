@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { formatDate } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, hasActiveFilters, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { APP_ROLES } from "@/lib/permissions";
 import {
@@ -43,6 +43,8 @@ export default async function InventoryEntriesPage({
   const canOpenPurchases = session.user.role === APP_ROLES.ADMIN;
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = parseStringParam(params, "q");
   const material = parseStringParam(params, "material");
   const supplier = parseStringParam(params, "supplier");
@@ -172,7 +174,7 @@ export default async function InventoryEntriesPage({
               <TableCell colSpan={8} className="p-0">
                 <EmptyState
                   className="border-0"
-                  label="Todavía no hay entradas registradas."
+                  label={filtered ? "No se encontraron entradas con los filtros aplicados." : "Todavía no hay entradas registradas."}
                 />
               </TableCell>
             </TableRow>

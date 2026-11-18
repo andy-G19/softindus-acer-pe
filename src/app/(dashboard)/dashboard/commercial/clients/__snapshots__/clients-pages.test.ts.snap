@@ -871,7 +871,7 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 <td colSpan="7">
 <div>
 <div>
-<p>No se encontraron clientes con los filtros aplicados.</p>
+<p>Todavía no hay clientes registrados.</p>
 </div>
 </div>
 </td>
