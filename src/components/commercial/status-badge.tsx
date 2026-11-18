@@ -2,26 +2,32 @@ import type { ComponentProps } from "react";
 
 import { Badge } from "@/components/ui/badge";
 
-type StatusBadgeProps = {
+type StateBadgeProps = {
   status: string | null | undefined;
 };
 
-const statusStyles: Record<string, string> = {
-  registrado: "badge-state-info",
-  aprobado: "badge-state-info",
-  vigente: "badge-state-info",
-  aceptada: "badge-state-info",
-  pagada: "badge-state-success",
-  emitido: "badge-state-success",
-  entregado: "badge-state-success",
-  pendiente: "badge-state-active",
-  parcial: "badge-state-active",
-  anulada: "badge-state-danger",
-  anulado: "badge-state-danger",
-  cancelado: "badge-state-danger",
-  "sin-proforma": "badge-state-active",
-  "sin-comprobante": "badge-state-active",
-  "en-produccion": "badge-state-active",
+type BadgeVariant = NonNullable<ComponentProps<typeof Badge>["variant"]>;
+
+// Variante de Badge de cada estado comercial: info para los vigentes, success para los cerrados
+// bien, default (activo) para los que esperan algo y destructive para los anulados. Hasta la 11.7a
+// pasaba por la clase de tono de StatusBadge (badge-state-*), que se retiro: la clase la pone ahora
+// cada variante de Badge.
+const statusVariants: Record<string, BadgeVariant> = {
+  registrado: "info",
+  aprobado: "info",
+  vigente: "info",
+  aceptada: "info",
+  pagada: "success",
+  emitido: "success",
+  entregado: "success",
+  pendiente: "default",
+  parcial: "default",
+  anulada: "destructive",
+  anulado: "destructive",
+  cancelado: "destructive",
+  "sin-proforma": "default",
+  "sin-comprobante": "default",
+  "en-produccion": "default",
 };
 
 const statusLabels: Record<string, string> = {
@@ -50,54 +56,20 @@ function normalizeStatus(status: string | null | undefined) {
     .replaceAll("_", "-");
 }
 
-export function StatusBadge({ status }: StatusBadgeProps) {
+// Etiqueta de estado con Badge (entrega 10.4b, D6 de la 10.4): Comercial la usa desde la 10.4b;
+// Mantenimiento y Mermas usan Badge con sus propias variantes. Un estado sin variante usa outline.
+// Solo cuentan los estados de las tablas (Object.hasOwn): "constructor" no toma una propiedad de
+// Object. StatusBadge, la etiqueta anterior, se retiro en la 11.7a (D8 de la 10.5).
+export function StateBadge({ status }: StateBadgeProps) {
   const normalizedStatus = normalizeStatus(status);
-  const style =
-    normalizedStatus && statusStyles[normalizedStatus]
-      ? statusStyles[normalizedStatus]
-      : "border-border bg-secondary text-muted-foreground";
-
-  const label =
-    normalizedStatus && statusLabels[normalizedStatus]
-      ? statusLabels[normalizedStatus]
-      : status ?? "-";
-
-  return (
-    <span
-      className={`rounded-full border px-2 py-1 font-mono text-xs font-medium ${style}`}
-    >
-      {label}
-    </span>
-  );
-}
-
-// Etiqueta de estado con Badge (entrega 10.4b, D6 de la 10.4): las mismas
-// etiquetas y los mismos tonos que StatusBadge, con la forma de Badge, mas
-// compacta y en mayusculas. Comercial la usa desde la 10.4b; Mantenimiento y
-// Mermas ya usaban Badge con sus propias variantes, asi que StatusBadge solo
-// queda en la galeria y se retira en la entrega 11 (D8 de la 10.5). Cada
-// clase de tono pasa a su variante, como en la galeria; un estado sin tono usa
-// outline, la mas parecida al gris de StatusBadge. Solo cuentan los estados de las tablas
-// (Object.hasOwn): "constructor" no toma una propiedad de Object.
-type BadgeVariant = NonNullable<ComponentProps<typeof Badge>["variant"]>;
-
-const variantByStyle: Record<string, BadgeVariant> = {
-  "badge-state-info": "info",
-  "badge-state-success": "success",
-  "badge-state-active": "default",
-  "badge-state-danger": "destructive",
-};
-
-export function StateBadge({ status }: StatusBadgeProps) {
-  const normalizedStatus = normalizeStatus(status);
-  const style =
-    normalizedStatus && Object.hasOwn(statusStyles, normalizedStatus)
-      ? statusStyles[normalizedStatus]
-      : undefined;
+  const variant =
+    normalizedStatus && Object.hasOwn(statusVariants, normalizedStatus)
+      ? statusVariants[normalizedStatus]
+      : "outline";
   const label =
     normalizedStatus && Object.hasOwn(statusLabels, normalizedStatus)
       ? statusLabels[normalizedStatus]
       : status ?? "-";
 
-  return <Badge variant={style ? variantByStyle[style] : "outline"}>{label}</Badge>;
+  return <Badge variant={variant}>{label}</Badge>;
 }

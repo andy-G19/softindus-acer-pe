@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Info, Package, Plus, TriangleAlert, type LucideProps } from "lucide-react";
 import Link from "next/link";
 
-import { StateBadge, StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge } from "@/components/commercial/status-badge";
 import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field, FieldError, type FieldControlProps } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
@@ -295,12 +295,6 @@ describe("Presentacion", () => {
     ["indicador con enlace e icono", h(KpiCard, { title: "Stock bajo", value: "3", description: "Materiales", href: "/dashboard/inventory/alerts", tone: "warning", icon: Package })],
     ["tarjeta de modulo por defecto", h(ModuleAccessCard, { title: "Clientes", description: "Gestion de clientes", href: "/dashboard/commercial/clients" })],
     ["tarjeta de modulo con tono, indice e icono", h(ModuleAccessCard, { title: "Materiales", description: "Catalogo", href: "/dashboard/inventory/materials", icon: Package, tone: "chart-3", index: 3 })],
-    [
-      "etiqueta de estado comercial",
-      ["pagada", "Pendiente", "anulado", "en_produccion", "sin proforma", "desconocido", null].map((status) =>
-        h(StatusBadge, { key: String(status), status }),
-      ),
-    ],
     [
       "etiqueta de estado con Badge",
       ["pagada", "Pendiente", "anulado", "en_produccion", "sin proforma", "desconocido", null, "constructor"].map(
