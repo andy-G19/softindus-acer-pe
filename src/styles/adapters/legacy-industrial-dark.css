@@ -15,14 +15,4 @@
   .industrial-dark :is(section, div, article, form).rounded-xl.border {
     border-color: var(--border);
   }
-
-  .industrial-dark :is(section, div, article).rounded-xl.border:has(> h2),
-  .industrial-dark :is(section, div, article).rounded-lg.border:has(> h2) {
-    background-color: var(--card);
-  }
-
-  .industrial-dark :is(section, div, article).rounded-xl.border:has(table),
-  .industrial-dark :is(section, div, article).rounded-lg.border:has(table) {
-    background-color: var(--card);
-  }
 }

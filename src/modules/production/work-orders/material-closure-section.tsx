@@ -106,7 +106,7 @@ export function MaterialClosureSection({
         {movementForm}
       </div>
 
-      <div className="rounded-lg border border-border/80 p-4">
+      <div className="rounded-lg border border-border/80 bg-card p-4">
         <h3 className="mb-3 font-semibold">Cerrar materiales</h3>
         <CloseMaterialsForm
           idOrdenTrabajo={idOrdenTrabajo}

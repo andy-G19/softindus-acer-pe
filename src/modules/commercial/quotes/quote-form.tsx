@@ -187,7 +187,7 @@ export function QuoteForm({ action, orders, defaultOrderId, successNotification,
         </Field>
 
         {selectedOrder && (
-          <div className="space-y-4 rounded-lg border border-border/80 bg-muted/30 p-4">
+          <div className="space-y-4 rounded-lg border border-border/80 bg-card p-4">
             <div>
               <h2 className="font-semibold">Resumen del pedido</h2>
               <p className="text-sm text-muted-foreground">Revisa los datos antes de generar la proforma.</p>
