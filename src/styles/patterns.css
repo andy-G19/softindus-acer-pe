@@ -1,5 +1,5 @@
-/* Patrones compartidos: tonos de etiquetas y alertas por estado, y enlaces
-   de la barra lateral. */
+/* Patrones compartidos: tonos de etiquetas y alertas por estado, enlaces
+   de la barra lateral y el contorno del foco de teclado. */
 @layer utilities {
   .badge-state-success {
     border-color: color-mix(in srgb, var(--success) 32%, transparent);
@@ -79,5 +79,14 @@
   .sidebar-nav-link-active:hover {
     background-color: color-mix(in srgb, var(--primary) 16%, transparent);
     color: var(--primary);
+  }
+
+  /* Contorno del foco de teclado en toda la app (11.7c; antes en el adaptador). Va en esta capa
+     y con .industrial-dark (en <html>) a proposito: con especificidad 0-2-0 y despues de las
+     utilidades de Tailwind gana a focus-visible:outline-none, como hasta ahora; en base.css
+     perderia contra cualquier utilidad. */
+  .industrial-dark :where(a, button, [role="button"], input, select, textarea):focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--ring) 72%, transparent);
+    outline-offset: 2px;
   }
 }
