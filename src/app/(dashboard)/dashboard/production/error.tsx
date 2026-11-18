@@ -9,12 +9,15 @@ type ProductionErrorPageProps = {
   error: Error & {
     digest?: string;
   };
-  reset: () => void;
+  // Vuelve a pedir los datos al servidor (router.refresh) y luego limpia el error.
+  // `reset` solo limpia el error: con un fallo del servidor mostraba el mismo error
+  // otra vez (11.7b).
+  unstable_retry: () => void;
 };
 
 export default function ProductionErrorPage({
   error,
-  reset,
+  unstable_retry,
 }: ProductionErrorPageProps) {
   return (
     <div className="flex min-h-[60vh] items-center justify-center">
@@ -24,7 +27,7 @@ export default function ProductionErrorPage({
         detail={error.message}
         actions={
           <>
-            <Button type="button" onClick={reset}>
+            <Button type="button" onClick={() => unstable_retry()}>
               Intentar nuevamente
             </Button>
             <Button variant="outline" asChild>
