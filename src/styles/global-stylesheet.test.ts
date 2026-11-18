@@ -23,7 +23,6 @@ const EXPECTED_IMPORTS = [
   "../styles/brand.css",
   "../styles/adapters/toastify.css",
   "../styles/patterns.css",
-  "../styles/adapters/legacy-industrial-dark.css",
 ];
 
 function withoutComments(css: string) {

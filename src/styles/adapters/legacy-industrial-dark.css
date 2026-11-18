@@ -1,8 +1,0 @@
-/* Adaptador temporal de las pantallas antiguas al tema oscuro: estila los
-   formularios y bloques con borde que no usan los componentes compartidos
-   (los campos, las tablas y los titulos pasaron a patterns.css en la 11.7c).
-   Sus reglas se retiran cuando migran sus consumidores;
-   legacy-industrial-dark.test.ts impide reglas sin consumidor y que el
-   adaptador crezca. */
-@layer utilities {
-}
