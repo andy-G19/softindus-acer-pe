@@ -12,7 +12,7 @@ export default async function LoginPage() {
   }
 
   return (
-    <main className="industrial-dark dark login-industrial-bg relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-8 text-foreground">
+    <main className="login-industrial-bg relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-8 text-foreground">
       <Image
         src="/images/login-image.webp"
         alt=""

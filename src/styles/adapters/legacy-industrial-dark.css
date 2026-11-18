@@ -106,15 +106,18 @@
     color: var(--muted-foreground);
   }
 
-  .industrial-dark main h1 {
+  /* El tema vive en <html> (11.7c). Sin el filtro, estas dos reglas alcanzarian el titulo del
+     login, cuyo main llevaba la clase y por eso quedaba fuera. El filtro va en :where para no
+     subir la especificidad. Las dos reglas salen del adaptador en el commit de los titulos. */
+  .industrial-dark main:where(:not(.login-industrial-bg)) h1 {
     color: var(--foreground);
     font-family: var(--font-heading);
     font-weight: 650;
     line-height: 1.15;
   }
 
-  .industrial-dark main h2,
-  .industrial-dark main h3 {
+  .industrial-dark main:where(:not(.login-industrial-bg)) h2,
+  .industrial-dark main:where(:not(.login-industrial-bg)) h3 {
     color: var(--foreground);
     font-family: var(--font-heading);
   }

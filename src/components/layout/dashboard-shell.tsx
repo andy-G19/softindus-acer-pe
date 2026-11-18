@@ -23,7 +23,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
   const menuItems = getMenuForRole(session.user.role);
 
   return (
-    <div className="industrial-dark dark min-h-screen bg-shell text-foreground">
+    <div className="min-h-screen bg-shell text-foreground">
       <SessionIdleGuard />
       <Suspense fallback={null}>
         <NotificationQueryBridge />
