@@ -195,3 +195,26 @@ describe("C4 de la 11.3c: proformas paginados", () => {
     expect(html).toMatch(/P[áa]gina 2/);
   });
 });
+
+// C3 de la 11.7d (D108, hallazgo 7 de la 11.3c): los historiales del detalle ordenaban solo por un
+// dia (`@db.Date`), y dos pagos o comprobantes del mismo dia salian en un orden arbitrario (en
+// staging, el adelanto y la cancelacion de PF-00000004, el mas antiguo primero). Desempatan por id,
+// en el mismo sentido que la fecha, como los listados de la 11.3c.
+describe("C3 de la 11.7d: los historiales del detalle desempatan por id", () => {
+  it("pagos y comprobantes ordenan por fecha y luego por id, los dos descendentes", async () => {
+    const { calls } = await characterizePage(
+      () => import("./[id]/page"),
+      { name: "detalle con historiales", params: { id: "PRF00000001" } },
+      "/dashboard/commercial/quotes/[id]",
+    );
+
+    const detail = calls.filter(isPrismaCall).find((call) => call.prisma === "proforma.findUnique");
+    const include = (detail?.args as { include?: Record<string, { orderBy?: unknown }> }).include;
+
+    expect(include?.pago_cliente?.orderBy).toEqual([{ fecha_pago: "desc" }, { id_pago_cliente: "desc" }]);
+    expect(include?.comprobante_venta?.orderBy).toEqual([
+      { fecha_emision: "desc" },
+      { id_comprobante: "desc" },
+    ]);
+  });
+});
