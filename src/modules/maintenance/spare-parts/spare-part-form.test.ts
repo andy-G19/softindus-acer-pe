@@ -292,6 +292,45 @@ describe("SparePartForm · alta rapida de proveedor (D3)", () => {
   });
 });
 
+// C2 de la 11.7d (D105, hallazgo 13 de la 10.6a): el tipo del alta rapida era un <select>
+// controlado dentro de ActionForm. React 19 reinicia el formulario al terminar la accion, y un
+// <select> controlado no tiene opcion por defecto: tras un error del repuesto volvia a la primera
+// opcion mientras el estado guardaba la elegida, y «Registrar y usar» enviaba un tipo distinto del
+// que se veia.
+describe("C2 de la 11.7d: el tipo del alta rapida tras un error del repuesto", () => {
+  it("sigue mostrando el tipo elegido y envia ese mismo", async () => {
+    suppliers.createQuickSupplierAction.mockResolvedValue({ ok: false, error: "No se pudo registrar el proveedor." });
+    await renderForm(
+      (values) => ({
+        status: "error",
+        error: "Ya existe un repuesto registrado con ese nombre.",
+        fieldErrors: { nombre_repuesto: ["Ya existe un repuesto registrado con ese nombre."] },
+        values,
+        operationId: "op-tipo",
+      }),
+      { supplierTypes: [...SUPPLIER_TYPES, { slug: "taller", nombre: "Taller" }] },
+    );
+    await act(async () => button("Registrar proveedor nuevo").click());
+    await typeInto(field<HTMLInputElement>("nuevo_proveedor_razon_social"), "Tornos Unidos");
+    await act(async () => {
+      const tipo = field<HTMLSelectElement>("nuevo_proveedor_tipo");
+      tipo.value = "taller";
+      tipo.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+    fillRequired();
+
+    await submit();
+
+    expect(field<HTMLSelectElement>("nuevo_proveedor_tipo").value).toBe("taller");
+
+    await act(async () => button("Registrar y usar").click());
+
+    expect(suppliers.createQuickSupplierAction).toHaveBeenCalledWith(
+      expect.objectContaining({ razon_social: "Tornos Unidos", tipo_proveedor: "taller" }),
+    );
+  });
+});
+
 // En el panel lateral (entrega 10.5a): el mismo formulario dentro de un RouteSheet.
 describe("SparePartForm en el panel lateral", () => {
   async function renderInPanel(respond: Respond) {
