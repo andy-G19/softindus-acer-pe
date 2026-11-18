@@ -9893,6 +9893,124 @@ Datos leídos de la API de GitHub el 2026-11-18 (UTC) y comparados con git:
 - Vercel desplegó `33a2f36` en producción (`success` a las 03:06:08 UTC). La sub-entrega no trae
   migraciones.
 
+### Sub-entrega 11.7c1 — El tema en `<html>`, el menú lateral y los elementos fuera del adaptador
+
+Fecha: 2026-11-18 (Lima). Estado: preparada en `staging`, sin push; falta la verificación en
+staging. Plan en `tmp/e11-diff/plan-11-7c.md`, aprobado el 2026-11-17 con las decisiones D93 a
+D97, más dos tomadas durante la implementación:
+- D93: la 11.7c se parte en dos. La 11.7c1 lleva el menú lateral, la medición del INP y los
+  elementos (foco, campos, tablas y títulos). La 11.7c2 lleva los bloques y el borrado del
+  adaptador.
+- D94: se conserva lo que la pantalla muestra hoy. D99 la sustituyó para esta sub-entrega.
+- D95: la verificación compara los estilos computados de 16 páginas y 4 portales en staging, antes
+  y después (`tmp/e11-diff/paridad-estilos.js`).
+- D96: el menú lateral se ensancha con el ratón encima o con el foco del teclado, no con el foco
+  que deja un clic.
+- D97: el INP se mide antes de tocar código por él.
+- D98 (opción B, «unificar primero»): `dark` e `industrial-dark` pasan a `<html>`, para que los
+  diálogos y paneles tomen el mismo tema que las páginas.
+- D99 (opción B, «mover tal cual»): las reglas de campos, tablas y títulos pasan con su mismo
+  selector a `patterns.css`. Las clases de componentes a las que esas reglas ganan quedan para un
+  paso propio.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| f2fa71d | docs | Integración de la 11.7b en `main` (PR #53). |
+| 5bc0f05 | fix | El menú lateral se ensancha con `has-[:focus-visible]` en lugar de `focus-within`, también en sus etiquetas (D96). Rojo antes. |
+| 033077a | fix | El tema pasa del `div` del shell y del `main` del login a `<html>` (D98). Las reglas de títulos del adaptador excluyen el `main` del login. Rojo antes. |
+| 14eda8d | refactor | El contorno del foco visible pasa tal cual a `patterns.css`. |
+| f896f1a | refactor | Las 6 reglas de campos (16 selectores) pasan tal cual a `patterns.css` (D99). |
+| 52f8083 | refactor | Las 10 reglas de tablas pasan tal cual a `patterns.css` (D99). |
+| 0cf8217 | refactor | Las 2 reglas de títulos pasan tal cual a `patterns.css`, con su filtro del login (D99). |
+| (este) | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Diseño:
+
+- **El menú lateral (hallazgo 7 de la 11.3b).** `focus-within` se cumple con cualquier foco. Un
+  clic en una opción deja el foco en ese enlace después de navegar, así que el menú quedaba en
+  256 px sobre un contenido que empieza en 108 px. Un clic en esa franja abría otra sección.
+  `:focus-visible` solo se cumple con el foco del teclado, y quien navega con Tab sigue viendo el
+  menú ancho. La alternativa, mover el foco al título después de cada navegación, cambia la
+  navegación de toda la app y queda para su propia decisión.
+- **El tema en `<html>` (D98).**
+  - Hallazgo antes del C2: Radix pinta los diálogos y paneles en un portal hijo de `body`, fuera
+    del `div` del shell, y no les llegaban ni el adaptador ni las variantes `dark:` de shadcn.
+  - En staging, el mismo formulario de cliente nuevo tenía el campo con fondo `var(--input)` en la
+    página completa y transparente en su panel.
+  - Con el tema en `<html>`, el login queda dentro del ámbito por herencia, como antes por su
+    propio `main`. Pero las reglas `main h1` y `main h2, h3` habrían empezado a alcanzar su
+    título, porque antes la clase estaba en ese mismo `main` y el selector pedía un ancestro.
+  - El filtro `main:where(:not(.login-industrial-bg))` deja fuera el login. `:where()` no suma
+    especificidad, así que la regla sigue ganando igual que antes en el panel.
+- **Por qué «tal cual» (D99).**
+  - El plan llevaba cada regla a su componente con el valor que se ve (D94). Al auditar los campos
+    aparecieron muchas clases de componente a las que el adaptador gana: `.industrial-dark input`
+    (0-1-1) supera a una clase (0-1-0) en fondo, borde, color, foco y estado deshabilitado.
+  - Ejemplos: `Input` declara `bg-transparent dark:bg-input/30` y se ve `var(--input)`;
+    `.login-field-input` y `input-forge-focus` de `brand.css` tampoco se aplican.
+  - Llevar todo eso a los componentes cruzaba muchos estados (error, solo lectura, `dark:`) que la
+    paridad no cubre. Moverlo tal cual da un CSS con las mismas reglas y riesgo cero. Las clases
+    muertas quedan señaladas en el comentario de los campos y de las tablas en `patterns.css`, y
+    su limpieza va aparte, un componente a la vez.
+  - El foco no pudo ir a `base.css` como decía el plan: en la capa `base` pierde contra cualquier
+    utilidad. Al quitarlo en vivo en staging, el enlace «Nuevo cliente» y los botones de fila se
+    quedaban sin contorno.
+- **El adaptador** queda con 6 reglas (10 selectores): el fondo de tarjeta de `form.rounded-*
+  border` y los 5 bloques. Son la 11.7c2.
+
+Evidencia:
+
+1. Rojo antes de cada `fix`, en un mensaje aparte:
+   - C1: 3 pruebas en `app-surfaces.test.ts` («menu lateral del shell») sobre las clases del
+     `aside` y sus etiquetas. jsdom no calcula `:focus-visible` ni el ancho, así que la prueba fija
+     la regla y la prueba real es el navegador.
+   - C2: 3 pruebas en `src/app/root-layout.test.ts`: `<html>` lleva `dark` e `industrial-dark`,
+     el shell ya no los declara, y las reglas `main hN` llevan el filtro del login. La última lee
+     todas las hojas de `src/styles` desde el C6, porque las reglas cambiaron de archivo.
+2. Mutaciones: 4 de 4 en C1, 5 de 5 en C2 y 2 de 2 en C6 (el filtro del login, ya en
+   `patterns.css`).
+3. CSS compilado:
+   - C1: de 109.174 a 109.264 bytes (las variantes `has-[:focus-visible]`).
+   - C2: 109.366 bytes (los tres filtros `:where(...)`).
+   - C3 y C4: iguales byte a byte al commit anterior.
+   - C5 y C6: los mismos 1.204 bloques. Solo cambia el orden de bloques que no comparten
+     elementos. En el C5, las reglas de campos quedan delante de `form.rounded-* border` del
+     adaptador; en el C6, los títulos también. El orden solo decide entre reglas que aplican al
+     mismo elemento con la misma especificidad, y aquí los elementos son distintos.
+4. `npm run check` terminó con código 0 antes de cada commit. Las pruebas pasan de 337 / 5.519 a
+   338 / 5.525. Lint mantiene el aviso anterior (`_line` en `orders/actions.ts`).
+5. Base en staging antes del push, sobre `001aa91`, con ADMIN y en solo lectura:
+   - Paridad de 16 páginas y 4 portales (panel de cliente, confirmación, diálogo de tipo de
+     proveedor y toast). Las huellas están en `tmp/e11-diff/huellas-117c1-base.txt`.
+   - El `localStorage` del origen apareció vacío tras volver a iniciar sesión, y se recapturó
+     todo. La base del login se perdió.
+   - INP con `PerformanceObserver` (`event`, umbral 16 ms): abrir la confirmación «Inactivar» de
+     clientes, 104 ms; cerrarla con Escape, 32 ms; los buscadores del pedido nuevo y abrir el panel
+     de cliente, menos de 16 ms. Ninguna pasa de 200 ms.
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 337 / 5.519 | 338 / 5.525 |
+| Reglas / selectores del adaptador | 25 / 40 | 6 / 10 |
+| Selectores con `:has()` en el adaptador | 5 | 4 (el del contenedor de tablas pasó a `patterns.css`: en la app siguen siendo 5) |
+| Portales (diálogos, paneles, toasts) dentro del tema | 0 | todos |
+| Menú lateral abierto sobre la página tras elegir una opción con clic | sí | no (por verificar en staging) |
+| CSS compilado | 109.174 bytes | 109.366 bytes |
+
+Hallazgos:
+
+1. Conteos: el adaptador tenía 25 reglas, no las 26 del plan de la 11.7, y 5 selectores con
+   `:has()`, no los 4 del plan de la 11.7c (faltaba el del contenedor de tablas).
+2. Los portales quedaban fuera del tema (D98). Corregido en `033077a`.
+3. Las clases muertas de campos, tablas y títulos: las reglas movidas siguen ganando a las clases
+   de los componentes donde chocan. Destino: un paso propio después de la 11.7c2 (D99).
+4. Los estilos `.login-field-input` y el foco `input-forge-focus` de `brand.css` no se aplican hoy.
+   Destino: el mismo paso.
+5. Lección de verificación: el `localStorage` de staging no sirve como único sitio de una base.
+   Desde el C2 las huellas también se guardan en disco.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -9918,7 +10036,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 preparada en `staging`, sin push |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
@@ -9972,7 +10090,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Enlaces a `/api/` con `next/link` (su prefetch ejecuta la ruta) | 6 | 0 | G4 |
 | Colores literales en los `.tsx` de la interfaz | 25 | 0 (regla de ESLint) | 8 |
 | Colores literales en las hojas, fuera de `tokens.css` | 27 | 0 (prueba) | 8 |
-| Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
+| Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 6 / 10 | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
 | Copias locales de `FieldError` | 16 | 1 | 9 y 10 |
