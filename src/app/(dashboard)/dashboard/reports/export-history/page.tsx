@@ -29,7 +29,11 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { formatDateTime } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  dashboardBreadcrumbs,
+  getSearchParam,
+  navigationHrefs,
+} from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { isReportDateRangeInverted } from "@/lib/reports/report-filters";
 import {
@@ -63,20 +67,6 @@ const STATUS_OPTIONS = [
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-// eslint-disable-next-line no-restricted-syntax -- no recorta; el commit siguiente la cambia por la compartida
-function getSearchParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string,
-) {
-  const value = params[key];
-
-  if (Array.isArray(value)) {
-    return value[0] ?? "";
-  }
-
-  return value ?? "";
-}
 
 function getFormatLabel(format: string) {
   return FORMAT_OPTIONS.find((option) => option.value === format)?.label ?? format;
@@ -221,7 +211,7 @@ export default async function ExportHistoryPage({ searchParams }: PageProps) {
   const format = getSearchParam(params, "format");
   const status = getSearchParam(params, "status");
   const userId = getSearchParam(params, "userId");
-  const searchText = getSearchParam(params, "searchText").trim();
+  const searchText = getSearchParam(params, "searchText");
 
   const filters = { dateFrom, dateTo, reportModule, format, status, userId, searchText };
   const pageHeader = {
