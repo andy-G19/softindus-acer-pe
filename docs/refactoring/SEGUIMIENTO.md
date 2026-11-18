@@ -9795,7 +9795,7 @@ Datos leídos de la API de GitHub el 2026-11-18 (UTC) y comparados con git:
 
 ### Sub-entrega 11.7b — Copias y estructura
 
-Fecha: 2026-11-17 (Lima). Estado: verificada en staging (CI #206). Plan en
+Fecha: 2026-11-17 (Lima). Estado: integrada en `main` (PR #53, merge `33a2f36`). Plan en
 `tmp/e11-diff/plan-11-7b.md`, aprobado el 2026-11-17 con las decisiones D87 a D92:
 - D87: `formatDecimal` con la forma de `formatMoney`: si el valor puede faltar, cada pantalla decide qué mostrar.
 - D88: el historial de exportaciones recorta sus filtros como las demás listas.
@@ -9879,6 +9879,20 @@ Hallazgos:
 5. El `error.tsx` genérico no se pudo ver sin provocar un fallo. Un id con un carácter nulo (`%00`) lo rechaza Vercel con un 400 antes de llegar a la app, y no se buscaron otras formas de romper staging. Queda probado por sus 5 pruebas en jsdom y las 7 mutaciones.
 6. No se escribió nada en staging.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-18 (UTC) y comparados con git:
+
+- La verificación `001aa91` se publicó en `staging`: CI #207 en verde (3m 47s).
+- PR #53, abierto a las 02:58:44 UTC y fusionado con merge commit a las 03:04:26 UTC del
+  2026-11-18: 10 commits, de `2391669` a `001aa91`, y 51 archivos (+702 −420). Su CI, el #208,
+  sobre `001aa91`, terminó en verde (3m 45s).
+- El merge commit `33a2f36` tiene como padres `a66a13f` (`main`) y `001aa91` (`staging`), y su
+  árbol es el de `001aa91` (`991f6c50`): `main` y `staging` tienen el mismo contenido. CI #209 en
+  verde (5m 37s).
+- Vercel desplegó `33a2f36` en producción (`success` a las 03:06:08 UTC). La sub-entrega no trae
+  migraciones.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -9904,7 +9918,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b verificada en staging (CI #206) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
