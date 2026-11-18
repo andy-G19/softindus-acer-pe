@@ -66,3 +66,42 @@ describe("superficies de la aplicacion", () => {
     expect(markup(h(LoginForm))).toMatchSnapshot();
   });
 });
+
+// C1 de la 11.7c (D96; hallazgo 7 de la 11.3b): el menu lateral se ensanchaba con
+// focus-within. Al elegir una opcion, el foco queda en ese enlace tras navegar, y el menu
+// seguia en 256 px sobre la pagina con el raton en otra parte (visto en staging a 830 px): un
+// clic en la franja izquierda del contenido abria otra seccion. Ahora se ensancha con el raton
+// encima o con el foco del teclado (:focus-visible dentro), no con el foco que deja un clic.
+// jsdom no calcula :focus-visible ni anchos, asi que esta prueba fija la regla en las clases;
+// la prueba de comportamiento es el navegador a 830 px.
+describe("menu lateral del shell", () => {
+  const shell = () =>
+    markup(h(DashboardShell, { session: session("ADMIN"), children: h("p", null, "Contenido") }));
+  const aside = () => {
+    const html = shell();
+    return html.slice(html.indexOf("<aside"), html.indexOf("</aside>"));
+  };
+  const asideClasses = () => /<aside class="([^"]*)"/.exec(aside())?.[1].split(" ") ?? [];
+
+  it("no se ensancha ni muestra sus etiquetas con cualquier foco dentro", () => {
+    expect(aside()).not.toContain("focus-within");
+  });
+
+  it("se ensancha con el raton encima o con el foco del teclado", () => {
+    expect(asideClasses()).toEqual(
+      expect.arrayContaining([
+        "md:hover:w-64",
+        "md:has-[:focus-visible]:w-64",
+        "md:has-[:focus-visible]:overflow-visible",
+      ]),
+    );
+  });
+
+  it("muestra sus etiquetas con el raton encima o con el foco del teclado", () => {
+    const html = aside();
+
+    expect(html).toContain("md:group-hover/sidebar:inline");
+    expect(html).toContain("md:group-has-[:focus-visible]/sidebar:inline");
+    expect(html).toContain("md:group-has-[:focus-visible]/sidebar:block");
+  });
+});

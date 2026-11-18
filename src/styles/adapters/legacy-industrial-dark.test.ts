@@ -18,8 +18,8 @@ import { describe, expect, it } from "vitest";
 
 const ADAPTER = "src/styles/adapters/legacy-industrial-dark.css";
 const PREFIX = ".industrial-dark";
-const RULES = 25;
-const SELECTORS = 40;
+const RULES = 6;
+const SELECTORS = 10;
 
 function sourceCorpus(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {

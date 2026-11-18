@@ -51,8 +51,11 @@ export default function RootLayout({
   return (
     <html
       lang="es"
+      // El tema vive aqui y no en el shell (11.7c): Radix pinta dialogos y paneles en un
+      // portal hijo de body, y solo <html> los contiene. `dark` activa las variantes dark:
+      // de shadcn; `industrial-dark` es el ambito de los estilos de la app.
       className={cn(
-        "font-sans",
+        "dark industrial-dark font-sans",
         geist.variable,
         oswald.variable,
         jetBrainsMono.variable,

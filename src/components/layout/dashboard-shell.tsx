@@ -23,7 +23,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
   const menuItems = getMenuForRole(session.user.role);
 
   return (
-    <div className="industrial-dark dark min-h-screen bg-shell text-foreground">
+    <div className="min-h-screen bg-shell text-foreground">
       <SessionIdleGuard />
       <Suspense fallback={null}>
         <NotificationQueryBridge />
@@ -82,7 +82,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
           "md:w-19 md:overflow-hidden md:border-r md:border-sidebar-border/80 md:bg-sidebar",
           "md:transition-[width] md:duration-200 md:ease-out",
           "md:hover:w-64 md:hover:overflow-visible md:hover:shadow-sidebar",
-          "md:focus-within:w-64 md:focus-within:overflow-visible",
+          "md:has-[:focus-visible]:w-64 md:has-[:focus-visible]:overflow-visible",
         )}
       >
         <div className="h-full overflow-y-auto pt-24">
@@ -90,7 +90,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
             <p
               className={cn(
                 "text-xs font-semibold uppercase text-muted-foreground",
-                "hidden md:group-hover/sidebar:block md:group-focus-within/sidebar:block",
+                "hidden md:group-hover/sidebar:block md:group-has-[:focus-visible]/sidebar:block",
               )}
             >
               Navegación

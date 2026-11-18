@@ -87,7 +87,7 @@ function NavLinks({ menuItems, pathname, collapsible = false }: NavLinksProps) {
             className={cn(
               "sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35",
               collapsible
-                ? "justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start"
+                ? "justify-center md:group-hover/sidebar:justify-start md:group-has-[:focus-visible]/sidebar:justify-start"
                 : "min-w-max",
               isActive && "sidebar-nav-link-active",
             )}
@@ -97,7 +97,7 @@ function NavLinks({ menuItems, pathname, collapsible = false }: NavLinksProps) {
               className={cn(
                 "truncate",
                 collapsible &&
-                  "hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline",
+                  "hidden md:group-hover/sidebar:inline md:group-has-[:focus-visible]/sidebar:inline",
               )}
             >
               {label}
