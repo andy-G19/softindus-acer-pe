@@ -10623,7 +10623,9 @@ pruebas, el más grande es `work-orders/actions.test.ts` (2.103).
 
 Todos los hallazgos de la entrega 11 que no están corregidos ni son de método, y los de la entrega
 10 que siguen abiertos. No hay una entrega 12 planificada: cada fila queda para que el responsable
-decida cuándo hacerla.
+decida cuándo hacerla. Las decisiones de negocio de esta tabla y de la de la entrega 10 están
+desarrolladas, con sus opciones y su prioridad, en [DECISIONES.md](DECISIONES.md) (N1 a N23,
+2026-11-19).
 
 | Origen | Hallazgo | Destino |
 |---|---|---|
