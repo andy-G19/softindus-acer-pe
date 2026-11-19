@@ -195,6 +195,16 @@ describe("foco del boton", () => {
     expect(selector).toContain(":where(a, button,");
     expect(selector).toContain(':not([data-slot="button"])');
   });
+
+  // Un :not() suma la especificidad de su argumento: con la exclusion suelta, la regla pasaba de
+  // 0-2-0 a 0-3-0 y ganaba al outline: none de los campos enfocados (0-2-1), que mostraban el
+  // contorno y su sombra a la vez (visto en staging). Dentro de :where() no suma nada.
+  it("la exclusion de los botones no sube la especificidad de la regla", () => {
+    const patterns = readFileSync("src/styles/patterns.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    const selector = /([^{}]*):focus-visible\s*\{\s*outline:\s*2px solid/.exec(patterns)?.[1].trim() ?? "";
+
+    expect(selector).toContain(':where(:not([data-slot="button"]))');
+  });
 });
 
 // Animacion de tacto (propuesta del responsable mas la opcion Tacto, 2026-11-19): transiciones

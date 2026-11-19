@@ -87,9 +87,10 @@
      utilidades de Tailwind gana a focus-visible:outline-none, como hasta ahora; en base.css
      perderia contra cualquier utilidad. Excluye a Button ([data-slot="button"], tambien como
      enlace): desde el diseno de los botones (2026-11-19) dibuja su propio anillo, y con esta
-     regla se verian los dos a la vez. */
+     regla se verian los dos a la vez. La exclusion va dentro de :where() para no sumar
+     especificidad: suelta subia la regla a 0-3-0 y ganaba al outline: none de los campos. */
   .industrial-dark
-    :where(a, button, [role="button"], input, select, textarea):not([data-slot="button"]):focus-visible {
+    :where(a, button, [role="button"], input, select, textarea):where(:not([data-slot="button"])):focus-visible {
     outline: 2px solid color-mix(in srgb, var(--ring) 72%, transparent);
     outline-offset: 2px;
   }
