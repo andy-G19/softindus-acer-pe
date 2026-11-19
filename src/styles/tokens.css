@@ -71,6 +71,7 @@
   --color-clear-border: var(--clear-border);
   --color-clear-foreground: var(--clear-foreground);
   --color-link-underline: var(--link-underline);
+  --color-placeholder: var(--placeholder);
   --shadow-button: var(--shadow-button);
   --shadow-raised: var(--shadow-raised);
   --shadow-raised-hover: var(--shadow-raised-hover);
@@ -155,6 +156,10 @@
   --clear-foreground: #e8b48a;
   --link-underline: color-mix(in srgb, var(--primary) 40%, transparent);
 
+  /* Texto de ejemplo de los campos: el que pintaba patterns.css hasta que sus reglas de
+     campos pasaron a los componentes (D99, diseno de los campos). */
+  --placeholder: color-mix(in srgb, var(--muted-foreground) 78%, transparent);
+
   /* Sombras: cada valor es el que ya usaba su componente. */
   /* Filo de luz arriba y apoyo abajo del boton principal; reemplaza su halo naranja. */
   --shadow-button: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -174,7 +179,6 @@
   --login-glow-amber: rgba(245, 158, 11, 0.08);
   --login-overlay-strong: rgba(15, 16, 17, 0.62);
   --login-overlay-soft: rgba(15, 16, 17, 0.34);
-  --login-field-border: rgb(255 255 255 / 0.1);
   --login-field-border-hover: rgb(255 255 255 / 0.2);
   --login-field-bg: rgb(255 255 255 / 0.05);
   --metal-brush: rgba(255, 255, 255, 0.015);

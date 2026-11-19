@@ -120,15 +120,18 @@
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent);
   }
 
+  /* El borde y el texto de ejemplo son los que se veian: hasta el diseno de los campos los
+     pintaba patterns.css, que ganaba a esta clase (D99); el borde y el ejemplo propios del
+     login no se llegaron a ver nunca. */
   .login-field-input {
     height: 2.75rem;
-    border-color: var(--login-field-border);
+    border-color: var(--border);
     background-color: var(--login-field-bg);
     color: var(--foreground);
   }
 
   .login-field-input::placeholder {
-    color: color-mix(in srgb, var(--muted-foreground) 70%, transparent);
+    color: var(--placeholder);
   }
 
   .login-field-input:hover {

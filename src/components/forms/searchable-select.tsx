@@ -247,7 +247,7 @@ export function SearchableSelect({
           onFocus={handleFocus}
           onKeyDown={handleKeyDown}
           className={cn(
-            "h-9 w-full min-w-0 rounded-lg border border-border bg-input px-3 py-2 pr-16 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/75 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/45 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100",
+            "input-forge-focus h-9 w-full min-w-0 rounded-lg border border-border bg-input px-3 py-2 pr-16 text-sm text-foreground outline-none transition-[color,background-color,border-color,box-shadow] duration-(--motion-fast) placeholder:text-placeholder disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100",
             required && !selectedValue
               ? "invalid:border-destructive invalid:ring-destructive/25"
               : "",
