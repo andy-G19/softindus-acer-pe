@@ -125,37 +125,49 @@ exports[`/dashboard/reports/suppliers-purchases > estados de pago y compra sin d
 </fieldset>
 <div>
 <label for="supplierId">Proveedor</label>
+<div>
 <select id="supplierId" name="supplierId">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchaseStatus">Estado compra</label>
+<div>
 <select id="purchaseStatus" name="purchaseStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="registrada">Registrada</option>
 <option value="confirmada">Confirmada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="paymentStatus">Estado pago</label>
+<div>
 <select id="paymentStatus" name="paymentStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="parcial">Parcial</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Compra o comprobante</label>
@@ -564,37 +576,49 @@ exports[`/dashboard/reports/suppliers-purchases > rango de mas de 366 dias > res
 </fieldset>
 <div>
 <label for="supplierId">Proveedor</label>
+<div>
 <select id="supplierId" name="supplierId">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchaseStatus">Estado compra</label>
+<div>
 <select id="purchaseStatus" name="purchaseStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="registrada">Registrada</option>
 <option value="confirmada">Confirmada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="paymentStatus">Estado pago</label>
+<div>
 <select id="paymentStatus" name="paymentStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="parcial">Parcial</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Compra o comprobante</label>
@@ -933,37 +957,49 @@ exports[`/dashboard/reports/suppliers-purchases > rango invertido > resultado 1`
 </fieldset>
 <div>
 <label for="supplierId">Proveedor</label>
+<div>
 <select id="supplierId" name="supplierId">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchaseStatus">Estado compra</label>
+<div>
 <select id="purchaseStatus" name="purchaseStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="registrada">Registrada</option>
 <option value="confirmada">Confirmada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="paymentStatus">Estado pago</label>
+<div>
 <select id="paymentStatus" name="paymentStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="parcial">Parcial</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Compra o comprobante</label>
@@ -1107,37 +1143,49 @@ exports[`/dashboard/reports/suppliers-purchases > sin filtros > resultado 1`] = 
 </fieldset>
 <div>
 <label for="supplierId">Proveedor</label>
+<div>
 <select id="supplierId" name="supplierId">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchaseStatus">Estado compra</label>
+<div>
 <select id="purchaseStatus" name="purchaseStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="registrada">Registrada</option>
 <option value="confirmada">Confirmada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="paymentStatus">Estado pago</label>
+<div>
 <select id="paymentStatus" name="paymentStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="parcial">Parcial</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Compra o comprobante</label>
@@ -1514,37 +1562,49 @@ exports[`/dashboard/reports/suppliers-purchases > sin resultados > resultado 1`]
 </fieldset>
 <div>
 <label for="supplierId">Proveedor</label>
+<div>
 <select id="supplierId" name="supplierId">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchaseStatus">Estado compra</label>
+<div>
 <select id="purchaseStatus" name="purchaseStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="registrada">Registrada</option>
 <option value="confirmada">Confirmada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="paymentStatus">Estado pago</label>
+<div>
 <select id="paymentStatus" name="paymentStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="parcial">Parcial</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Compra o comprobante</label>
@@ -1840,37 +1900,49 @@ exports[`/dashboard/reports/suppliers-purchases > todos los filtros > resultado 
 </fieldset>
 <div>
 <label for="supplierId">Proveedor</label>
+<div>
 <select id="supplierId" name="supplierId">
 <option value="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchaseStatus">Estado compra</label>
+<div>
 <select id="purchaseStatus" name="purchaseStatus">
 <option value="">Todos los estados</option>
 <option value="registrada">Registrada</option>
 <option value="confirmada" selected="">Confirmada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="paymentStatus">Estado pago</label>
+<div>
 <select id="paymentStatus" name="paymentStatus">
 <option value="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="parcial" selected="">Parcial</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Compra o comprobante</label>

@@ -130,11 +130,14 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active" selected="">Activa</option>
 <option value="inactive">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -322,11 +325,14 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active">Activa</option>
 <option value="inactive" selected="">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -508,11 +514,14 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="active">Activa</option>
 <option value="inactive">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>

@@ -148,20 +148,26 @@ exports[`/dashboard/petty-cash/expenses/new > formulario > resultado 1`] = `
 <div>
 <label for="id_caja_chica">Caja chica<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_caja_chica" required="" name="id_caja_chica">
 <option value="" selected="">Selecciona una caja</option>
 <option value="id_caja_chica-1">nombre_caja-1 · Saldo: S/ 11.50</option>
 <option value="id_caja_chica-2">nombre_caja-2 · Saldo: S/ 22.50</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="id_categoria_gasto">Categoría de gasto<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_categoria_gasto" required="" name="id_categoria_gasto">
 <option value="" selected="">Selecciona una categoría</option>
 <option value="id_categoria_gasto-1">nombre_categoria-1</option>
 <option value="id_categoria_gasto-2">nombre_categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="concepto">Concepto<span aria-hidden="true">*</span>

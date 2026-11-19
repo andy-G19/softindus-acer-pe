@@ -460,39 +460,52 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="campaign">Campaña</label>
+<div>
 <select id="campaign" name="campaign">
 <option value="" selected="">Todas las campañas</option>
 <option value="id_campania-1">nombre_campania-1</option>
 <option value="id_campania-2">nombre_campania-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="pedido">Pedido</option>
 <option value="campania">Campaña</option>
 <option value="reposicion_stock">Reposición de stock</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
@@ -501,15 +514,20 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 <option value="finalizada">Finalizada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="priority">Prioridad</label>
+<div>
 <select id="priority" name="priority">
 <option value="" selected="">Todas las prioridades</option>
 <option value="alta">Alta</option>
 <option value="media">Media</option>
 <option value="baja">Baja</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -884,39 +902,52 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="campaign">Campaña</label>
+<div>
 <select id="campaign" name="campaign">
 <option value="" selected="">Todas las campañas</option>
 <option value="id_campania-1">nombre_campania-1</option>
 <option value="id_campania-2">nombre_campania-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="pedido">Pedido</option>
 <option value="campania">Campaña</option>
 <option value="reposicion_stock">Reposición de stock</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
@@ -925,15 +956,20 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 <option value="finalizada">Finalizada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="priority">Prioridad</label>
+<div>
 <select id="priority" name="priority">
 <option value="" selected="">Todas las prioridades</option>
 <option value="alta">Alta</option>
 <option value="media">Media</option>
 <option value="baja">Baja</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1370,39 +1406,52 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="campaign">Campaña</label>
+<div>
 <select id="campaign" name="campaign">
 <option value="" selected="">Todas las campañas</option>
 <option value="id_campania-1">nombre_campania-1</option>
 <option value="id_campania-2">nombre_campania-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="pedido">Pedido</option>
 <option value="campania">Campaña</option>
 <option value="reposicion_stock">Reposición de stock</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
@@ -1411,15 +1460,20 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 <option value="finalizada">Finalizada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="priority">Prioridad</label>
+<div>
 <select id="priority" name="priority">
 <option value="" selected="">Todas las prioridades</option>
 <option value="alta">Alta</option>
 <option value="media">Media</option>
 <option value="baja">Baja</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1794,39 +1848,52 @@ exports[`/dashboard/production/work-orders > sin resultados > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="campaign">Campaña</label>
+<div>
 <select id="campaign" name="campaign">
 <option value="" selected="">Todas las campañas</option>
 <option value="id_campania-1">nombre_campania-1</option>
 <option value="id_campania-2">nombre_campania-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="pedido">Pedido</option>
 <option value="campania">Campaña</option>
 <option value="reposicion_stock">Reposición de stock</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
@@ -1835,15 +1902,20 @@ exports[`/dashboard/production/work-orders > sin resultados > resultado 1`] = `
 <option value="finalizada">Finalizada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="priority">Prioridad</label>
+<div>
 <select id="priority" name="priority">
 <option value="" selected="">Todas las prioridades</option>
 <option value="alta">Alta</option>
 <option value="media">Media</option>
 <option value="baja">Baja</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -2197,39 +2269,52 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="campaign">Campaña</label>
+<div>
 <select id="campaign" name="campaign">
 <option value="" selected="">Todas las campañas</option>
 <option value="id_campania-1">nombre_campania-1</option>
 <option value="id_campania-2">nombre_campania-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="pedido">Pedido</option>
 <option value="campania">Campaña</option>
 <option value="reposicion_stock">Reposición de stock</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
@@ -2238,15 +2323,20 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 <option value="finalizada">Finalizada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="priority">Prioridad</label>
+<div>
 <select id="priority" name="priority">
 <option value="" selected="">Todas las prioridades</option>
 <option value="alta">Alta</option>
 <option value="media">Media</option>
 <option value="baja">Baja</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -3001,39 +3091,52 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="campaign">Campaña</label>
+<div>
 <select id="campaign" name="campaign">
 <option value="">Todas las campañas</option>
 <option value="id_campania-1">nombre_campania-1</option>
 <option value="id_campania-2">nombre_campania-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="">Todos los tipos</option>
 <option value="pedido" selected="">Pedido</option>
 <option value="campania">Campaña</option>
 <option value="reposicion_stock">Reposición de stock</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
@@ -3042,15 +3145,20 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 <option value="finalizada">Finalizada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="priority">Prioridad</label>
+<div>
 <select id="priority" name="priority">
 <option value="">Todas las prioridades</option>
 <option value="alta" selected="">Alta</option>
 <option value="media">Media</option>
 <option value="baja">Baja</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -3496,18 +3604,24 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 <div>
 <div>
 <label for="movimiento_modo">Operación</label>
+<div>
 <select id="movimiento_modo">
 <option value="adicional" selected="">Entrega adicional</option>
 <option value="devolucion">Devolución al almacén</option>
 </select>
+<svg/>
+</div>
 <p>Material extra por encima de lo planificado.</p>
 </div>
 <div>
 <label for="id_requerimiento">Material</label>
+<div>
 <select id="id_requerimiento" required="" aria-describedby="id_requerimiento-ayuda" name="id_requerimiento">
 <option value="id_requerimiento-1" selected="">nombre_material-1</option>
 <option value="id_requerimiento-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 <p id="id_requerimiento-ayuda">Stock disponible en almacén: <span>11.50 unidad_medida-1</span>
 </p>
 </div>
@@ -5789,18 +5903,24 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 <div>
 <div>
 <label for="movimiento_modo">Operación</label>
+<div>
 <select id="movimiento_modo">
 <option value="adicional" selected="">Entrega adicional</option>
 <option value="devolucion">Devolución al almacén</option>
 </select>
+<svg/>
+</div>
 <p>Material extra por encima de lo planificado.</p>
 </div>
 <div>
 <label for="id_requerimiento">Material</label>
+<div>
 <select id="id_requerimiento" required="" aria-describedby="id_requerimiento-ayuda" name="id_requerimiento">
 <option value="id_requerimiento-1" selected="">nombre_material-1</option>
 <option value="id_requerimiento-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 <p id="id_requerimiento-ayuda">Stock disponible en almacén: <span>11.50 unidad_medida-1</span>
 </p>
 </div>
@@ -6078,12 +6198,15 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 <div>
 <label for="estado_etapa_id_avance-2">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado_etapa_id_avance-2" required="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada" selected="">Pausada</option>
 <option value="terminada">Terminada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="porcentaje_avance_id_avance-2">Porcentaje<span aria-hidden="true">*</span>
@@ -6161,12 +6284,15 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 <div>
 <label for="estado_etapa_id_avance-1">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado_etapa_id_avance-1" required="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
 <option value="terminada" selected="">Terminada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="porcentaje_avance_id_avance-1">Porcentaje<span aria-hidden="true">*</span>
@@ -6428,12 +6554,15 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 <div>
 <label for="estado_etapa_id_avance-1">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado_etapa_id_avance-1" required="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
 <option value="terminada">Terminada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="porcentaje_avance_id_avance-1">Porcentaje<span aria-hidden="true">*</span>
@@ -6509,12 +6638,15 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 <div>
 <label for="estado_etapa_id_avance-2">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado_etapa_id_avance-2" required="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
 <option value="terminada">Terminada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="porcentaje_avance_id_avance-2">Porcentaje<span aria-hidden="true">*</span>
@@ -6846,12 +6978,15 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 <div data-disabled="true">
 <label for="estado_etapa_id_avance-1">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado_etapa_id_avance-1" required="" disabled="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
 <option value="terminada">Terminada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="porcentaje_avance_id_avance-1">Porcentaje<span aria-hidden="true">*</span>
@@ -6926,12 +7061,15 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 <div data-disabled="true">
 <label for="estado_etapa_id_avance-2">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado_etapa_id_avance-2" required="" disabled="" name="estado_etapa">
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
 <option value="terminada">Terminada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="porcentaje_avance_id_avance-2">Porcentaje<span aria-hidden="true">*</span>
@@ -8561,21 +8699,27 @@ exports[`/dashboard/production/work-orders/new > con opciones > resultado 1`] = 
 <div>
 <label for="tipo_produccion">Tipo de producción<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_produccion" required="" aria-describedby="tipo_produccion-ayuda" name="tipo_produccion">
 <option value="pedido" selected="">Por pedido</option>
 <option value="campania">Por campaña</option>
 <option value="reposicion_stock">Reposición de stock</option>
 </select>
+<svg/>
+</div>
 <p id="tipo_produccion-ayuda">El producto controla las rutas y recetas disponibles.</p>
 </div>
 <div>
 <label for="prioridad">Prioridad<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="prioridad" required="" name="prioridad">
 <option value="alta">Alta</option>
 <option value="media" selected="">Media</option>
 <option value="baja">Baja</option>
 </select>
+<svg/>
+</div>
 </div>
 </section>
 <section>
@@ -8833,21 +8977,27 @@ exports[`/dashboard/production/work-orders/new > sin rutas: no permite crear > r
 <div data-disabled="true">
 <label for="tipo_produccion">Tipo de producción<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_produccion" required="" disabled="" aria-describedby="tipo_produccion-ayuda" name="tipo_produccion">
 <option value="pedido" selected="">Por pedido</option>
 <option value="campania">Por campaña</option>
 <option value="reposicion_stock">Reposición de stock</option>
 </select>
+<svg/>
+</div>
 <p id="tipo_produccion-ayuda">El producto controla las rutas y recetas disponibles.</p>
 </div>
 <div data-disabled="true">
 <label for="prioridad">Prioridad<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="prioridad" required="" disabled="" name="prioridad">
 <option value="alta">Alta</option>
 <option value="media" selected="">Media</option>
 <option value="baja">Baja</option>
 </select>
+<svg/>
+</div>
 </div>
 </section>
 <section>

@@ -72,6 +72,8 @@
   --color-clear-foreground: var(--clear-foreground);
   --color-link-underline: var(--link-underline);
   --color-placeholder: var(--placeholder);
+  --color-readonly-border: var(--readonly-border);
+  --color-accent-steel: var(--accent-steel);
   --shadow-button: var(--shadow-button);
   --shadow-raised: var(--shadow-raised);
   --shadow-raised-hover: var(--shadow-raised-hover);
@@ -156,9 +158,18 @@
   --clear-foreground: #e8b48a;
   --link-underline: color-mix(in srgb, var(--primary) 40%, transparent);
 
-  /* Texto de ejemplo de los campos: el que pintaba patterns.css hasta que sus reglas de
-     campos pasaron a los componentes (D99, diseno de los campos). */
-  --placeholder: color-mix(in srgb, var(--muted-foreground) 78%, transparent);
+  /* Campos (propuesta del responsable, 2026-11-19). Texto de ejemplo atenuado al 85 % (4,5:1
+     sobre la tarjeta); borde de solo lectura en acero al 45 %; textura de metal cepillado
+     del fondo, la misma linea de --metal-brush del login. */
+  --placeholder: color-mix(in srgb, var(--muted-foreground) 85%, transparent);
+  --readonly-border: color-mix(in srgb, var(--accent-steel) 45%, transparent);
+  --texture-metal: repeating-linear-gradient(
+    135deg,
+    var(--metal-brush) 0px,
+    var(--metal-brush) 1px,
+    transparent 1px,
+    transparent 3px
+  );
 
   /* Sombras: cada valor es el que ya usaba su componente. */
   /* Filo de luz arriba y apoyo abajo del boton principal; reemplaza su halo naranja. */

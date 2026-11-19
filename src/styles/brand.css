@@ -122,16 +122,18 @@
 
   /* El borde y el texto de ejemplo son los que se veian: hasta el diseno de los campos los
      pintaba patterns.css, que ganaba a esta clase (D99); el borde y el ejemplo propios del
-     login no se llegaron a ver nunca. */
+     login no se llegaron a ver nunca. El login conserva su aspecto mientras no se redisene:
+     sin la textura de los campos y con su texto de ejemplo al 78 %. */
   .login-field-input {
     height: 2.75rem;
     border-color: var(--border);
     background-color: var(--login-field-bg);
+    background-image: none;
     color: var(--foreground);
   }
 
   .login-field-input::placeholder {
-    color: var(--placeholder);
+    color: color-mix(in srgb, var(--muted-foreground) 78%, transparent);
   }
 
   .login-field-input:hover {

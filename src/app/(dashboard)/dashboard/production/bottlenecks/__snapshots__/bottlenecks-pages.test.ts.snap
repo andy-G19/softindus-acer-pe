@@ -134,28 +134,37 @@ exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="route">Ruta</label>
+<div>
 <select id="route" name="route">
 <option value="" selected="">Todas las rutas</option>
 <option value="id_ruta-1">nombre_ruta-1</option>
 <option value="id_ruta-2">nombre_ruta-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="stage">Etapa</label>
+<div>
 <select id="stage" name="stage">
 <option value="" selected="">Todas las etapas</option>
 <option value="id_etapa_ruta-1">nombre_etapa-1</option>
 <option value="id_etapa_ruta-2">nombre_etapa-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="orderStatus">Estado de orden</label>
+<div>
 <select id="orderStatus" name="orderStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -463,28 +472,37 @@ exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
 </div>
 <div>
 <label for="route">Ruta</label>
+<div>
 <select id="route" name="route">
 <option value="" selected="">Todas las rutas</option>
 <option value="id_ruta-1">nombre_ruta-1</option>
 <option value="id_ruta-2">nombre_ruta-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="stage">Etapa</label>
+<div>
 <select id="stage" name="stage">
 <option value="" selected="">Todas las etapas</option>
 <option value="id_etapa_ruta-1">nombre_etapa-1</option>
 <option value="id_etapa_ruta-2">nombre_etapa-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="orderStatus">Estado de orden</label>
+<div>
 <select id="orderStatus" name="orderStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso">En proceso</option>
 <option value="pausada">Pausada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -812,28 +830,37 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] =
 </div>
 <div>
 <label for="route">Ruta</label>
+<div>
 <select id="route" name="route">
 <option value="">Todas las rutas</option>
 <option value="id_ruta-1">nombre_ruta-1</option>
 <option value="id_ruta-2">nombre_ruta-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="stage">Etapa</label>
+<div>
 <select id="stage" name="stage">
 <option value="">Todas las etapas</option>
 <option value="id_etapa_ruta-1">nombre_etapa-1</option>
 <option value="id_etapa_ruta-2">nombre_etapa-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="orderStatus">Estado de orden</label>
+<div>
 <select id="orderStatus" name="orderStatus">
 <option value="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="en_proceso" selected="">En proceso</option>
 <option value="pausada">Pausada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>

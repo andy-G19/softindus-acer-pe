@@ -137,20 +137,26 @@ exports[`/dashboard/petty-cash/income-adjustments/new > formulario > resultado 1
 <div>
 <label for="id_caja_chica">Caja chica<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_caja_chica" required="" name="id_caja_chica">
 <option value="" selected="">Selecciona una caja</option>
 <option value="id_caja_chica-1">nombre_caja-1 · Saldo: S/ 11.50</option>
 <option value="id_caja_chica-2">nombre_caja-2 · Saldo: S/ 22.50</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tipo_operacion">Tipo de operación<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_operacion" required="" name="tipo_operacion">
 <option value="ingreso" selected="">Ingreso menor — aumenta saldo</option>
 <option value="ajuste_incremento">Ajuste positivo — aumenta saldo</option>
 <option value="ajuste_disminucion">Ajuste negativo — disminuye saldo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="concepto">Concepto<span aria-hidden="true">*</span>

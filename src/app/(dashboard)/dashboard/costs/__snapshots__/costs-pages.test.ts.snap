@@ -1268,12 +1268,15 @@ exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
 </fieldset>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="rentable">Rentable</option>
 <option value="margen_bajo" selected="">Margen bajo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -1554,12 +1557,15 @@ exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
 </fieldset>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="pendiente" selected="">Pendiente</option>
 <option value="rentable">Rentable</option>
 <option value="margen_bajo">Margen bajo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -1824,12 +1830,15 @@ exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
 </fieldset>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="rentable">Rentable</option>
 <option value="margen_bajo">Margen bajo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -2094,12 +2103,15 @@ exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 </fieldset>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="rentable">Rentable</option>
 <option value="margen_bajo">Margen bajo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -2503,12 +2515,15 @@ exports[`/dashboard/costs/costings > todos los filtros, estado rentable > result
 </fieldset>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="rentable" selected="">Rentable</option>
 <option value="margen_bajo">Margen bajo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -2773,12 +2788,15 @@ exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = 
 </fieldset>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="rentable">Rentable</option>
 <option value="margen_bajo">Margen bajo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -3296,6 +3314,7 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
@@ -3305,6 +3324,8 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <option value="mano_obra_indirecta">Mano de obra indirecta</option>
 <option value="otros">Otros</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="monto">Monto<span aria-hidden="true">*</span>
@@ -3410,6 +3431,7 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <div>
 <label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
@@ -3418,6 +3440,8 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <option value="19">19%</option>
 <option value="20">20%</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
@@ -3867,6 +3891,7 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
@@ -3876,6 +3901,8 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <option value="mano_obra_indirecta">Mano de obra indirecta</option>
 <option value="otros">Otros</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="monto">Monto<span aria-hidden="true">*</span>
@@ -3981,6 +4008,7 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <div>
 <label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
@@ -3989,6 +4017,8 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <option value="19">19%</option>
 <option value="20">20%</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
@@ -4559,6 +4589,7 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
@@ -4568,6 +4599,8 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <option value="mano_obra_indirecta">Mano de obra indirecta</option>
 <option value="otros">Otros</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="monto">Monto<span aria-hidden="true">*</span>
@@ -4673,6 +4706,7 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <div>
 <label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
@@ -4681,6 +4715,8 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <option value="19">19%</option>
 <option value="20">20%</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
@@ -5123,6 +5159,7 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
@@ -5132,6 +5169,8 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <option value="mano_obra_indirecta">Mano de obra indirecta</option>
 <option value="otros">Otros</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="monto">Monto<span aria-hidden="true">*</span>
@@ -5237,6 +5276,7 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <div>
 <label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
@@ -5245,6 +5285,8 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <option value="19">19%</option>
 <option value="20">20%</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
@@ -5733,6 +5775,7 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
@@ -5742,6 +5785,8 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <option value="mano_obra_indirecta">Mano de obra indirecta</option>
 <option value="otros">Otros</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="monto">Monto<span aria-hidden="true">*</span>
@@ -5847,6 +5892,7 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <div>
 <label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
@@ -5855,6 +5901,8 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <option value="19">19%</option>
 <option value="20">20%</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
@@ -6337,6 +6385,7 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
@@ -6346,6 +6395,8 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <option value="mano_obra_indirecta">Mano de obra indirecta</option>
 <option value="otros">Otros</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="monto">Monto<span aria-hidden="true">*</span>
@@ -6451,6 +6502,7 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <div>
 <label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
@@ -6459,6 +6511,8 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <option value="19">19%</option>
 <option value="20">20%</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
@@ -6922,6 +6976,7 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
@@ -6931,6 +6986,8 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 <option value="mano_obra_indirecta">Mano de obra indirecta</option>
 <option value="otros">Otros</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="monto">Monto<span aria-hidden="true">*</span>
@@ -7000,6 +7057,7 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 <div>
 <label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
@@ -7008,6 +7066,8 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 <option value="19">19%</option>
 <option value="20">20%</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>
@@ -7403,6 +7463,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="luz" selected="">Luz</option>
 <option value="desgaste_maquinaria">Desgaste de maquinaria</option>
@@ -7412,6 +7473,8 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <option value="mano_obra_indirecta">Mano de obra indirecta</option>
 <option value="otros">Otros</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="monto">Monto<span aria-hidden="true">*</span>
@@ -7517,6 +7580,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <div>
 <label for="porcentaje_margen">Margen de ganancia<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="porcentaje_margen" required="" name="porcentaje_margen">
 <option value="15" selected="">15%</option>
 <option value="16">16%</option>
@@ -7525,6 +7589,8 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <option value="19">19%</option>
 <option value="20">20%</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="precio_final">Precio final ajustado</label>

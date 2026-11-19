@@ -149,28 +149,37 @@ exports[`/dashboard/commercial/orders > fechas no validas > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="registrado">Registrado</option>
 <option value="aprobado">Aprobado</option>
 <option value="cancelado">Cancelado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -410,28 +419,37 @@ exports[`/dashboard/commercial/orders > rango invertido > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="registrado">Registrado</option>
 <option value="aprobado">Aprobado</option>
 <option value="cancelado">Cancelado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -623,28 +641,37 @@ exports[`/dashboard/commercial/orders > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="registrado">Registrado</option>
 <option value="aprobado">Aprobado</option>
 <option value="cancelado">Cancelado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -970,28 +997,37 @@ exports[`/dashboard/commercial/orders > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="registrado">Registrado</option>
 <option value="aprobado" selected="">Aprobado</option>
 <option value="cancelado">Cancelado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1213,28 +1249,37 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="registrado">Registrado</option>
 <option value="aprobado">Aprobado</option>
 <option value="cancelado">Cancelado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>

@@ -82,6 +82,7 @@ exports[`/dashboard/maintenance/repairs > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="programada">Programada</option>
@@ -89,6 +90,8 @@ exports[`/dashboard/maintenance/repairs > sin filtros > resultado 1`] = `
 <option value="observada">Observada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -218,12 +221,15 @@ exports[`/dashboard/maintenance/repairs > sin filtros > resultado 1`] = `
 <td>
 <div>
 <div>
+<div>
 <select id="estado-id_reparacion-1" aria-label="Estado de la reparación id_reparacion-1">
 <option value="programada">Programada</option>
 <option value="ejecutada">Ejecutada</option>
 <option value="observada">Observada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
@@ -248,12 +254,15 @@ exports[`/dashboard/maintenance/repairs > sin filtros > resultado 1`] = `
 <td>
 <div>
 <div>
+<div>
 <select id="estado-id_reparacion-2" aria-label="Estado de la reparación id_reparacion-2">
 <option value="programada">Programada</option>
 <option value="ejecutada">Ejecutada</option>
 <option value="observada">Observada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
@@ -413,6 +422,7 @@ exports[`/dashboard/maintenance/repairs > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="programada">Programada</option>
@@ -420,6 +430,8 @@ exports[`/dashboard/maintenance/repairs > todos los filtros > resultado 1`] = `
 <option value="observada">Observada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -549,12 +561,15 @@ exports[`/dashboard/maintenance/repairs > todos los filtros > resultado 1`] = `
 <td>
 <div>
 <div>
+<div>
 <select id="estado-id_reparacion-1" aria-label="Estado de la reparación id_reparacion-1">
 <option value="programada">Programada</option>
 <option value="ejecutada">Ejecutada</option>
 <option value="observada">Observada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
@@ -579,12 +594,15 @@ exports[`/dashboard/maintenance/repairs > todos los filtros > resultado 1`] = `
 <td>
 <div>
 <div>
+<div>
 <select id="estado-id_reparacion-2" aria-label="Estado de la reparación id_reparacion-2">
 <option value="programada">Programada</option>
 <option value="ejecutada">Ejecutada</option>
 <option value="observada">Observada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
@@ -682,6 +700,7 @@ exports[`/dashboard/maintenance/repairs > una reparacion en cada estado > result
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="programada">Programada</option>
@@ -689,6 +708,8 @@ exports[`/dashboard/maintenance/repairs > una reparacion en cada estado > result
 <option value="observada">Observada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -818,12 +839,15 @@ exports[`/dashboard/maintenance/repairs > una reparacion en cada estado > result
 <td>
 <div>
 <div>
+<div>
 <select id="estado-RPA00000001" aria-label="Estado de la reparación RPA00000001">
 <option value="programada" selected="">Programada</option>
 <option value="ejecutada">Ejecutada</option>
 <option value="observada">Observada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
@@ -860,12 +884,15 @@ exports[`/dashboard/maintenance/repairs > una reparacion en cada estado > result
 <td>
 <div>
 <div>
+<div>
 <select id="estado-RPA00000003" aria-label="Estado de la reparación RPA00000003">
 <option value="programada">Programada</option>
 <option value="ejecutada">Ejecutada</option>
 <option value="observada" selected="">Observada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
@@ -1007,12 +1034,15 @@ exports[`/dashboard/maintenance/repairs/new > con regreso al listado filtrado > 
 <div>
 <label for="estado_reparacion">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado_reparacion" required="" name="estado_reparacion">
 <option value="programada" selected="">Programada</option>
 <option value="ejecutada">Ejecutada</option>
 <option value="observada">Observada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="mano_obra">Mano de obra</label>
@@ -1185,12 +1215,15 @@ exports[`/dashboard/maintenance/repairs/new > formulario > resultado 1`] = `
 <div>
 <label for="estado_reparacion">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado_reparacion" required="" name="estado_reparacion">
 <option value="programada" selected="">Programada</option>
 <option value="ejecutada">Ejecutada</option>
 <option value="observada">Observada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="mano_obra">Mano de obra</label>

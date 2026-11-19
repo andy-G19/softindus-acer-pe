@@ -139,11 +139,15 @@ describe("estilos de solo lectura y error de las primitivas", () => {
     ] as const) {
       expect(classOf(node, tag)).not.toMatch(/(^|[\s:])read-only:/);
     }
-    expect(classOf(h(Input), "input")).toContain("dark:[&amp;[readonly]]:bg-muted");
-    expect(classOf(h(Textarea), "textarea")).toContain("dark:[&amp;[readonly]]:bg-muted");
+    // Diseno de los campos: solo lectura es borde de acero, no un fondo apagado.
+    expect(classOf(h(Input), "input")).toContain("[&amp;[readonly]]:border-readonly-border");
+    expect(classOf(h(Textarea), "textarea")).toContain("[&amp;[readonly]]:border-readonly-border");
   });
 
   it("la lista muestra el error como el campo de texto", () => {
-    expect(classOf(h(NativeSelect), "select")).toContain("aria-invalid:border-destructive aria-invalid:ring-3");
+    const errorClasses = (classes: string) => classes.split(" ").filter((name) => name.startsWith("aria-invalid:"));
+
+    expect(errorClasses(classOf(h(NativeSelect), "select"))).toEqual(errorClasses(classOf(h(Input), "input")));
+    expect(errorClasses(classOf(h(Input), "input"))).toContain("aria-invalid:border-destructive-outline");
   });
 });

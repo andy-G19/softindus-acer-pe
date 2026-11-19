@@ -110,31 +110,41 @@ exports[`/dashboard/inventory/purchases > con una compra anulable > resultado 1`
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado compra</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Estado compra</option>
 <option value="registrada">Registrada</option>
 <option value="confirmada">Confirmada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="payment">Estado pago</label>
+<div>
 <select id="payment" name="payment">
 <option value="" selected="">Estado pago</option>
 <option value="pendiente">Pendiente</option>
@@ -142,6 +152,8 @@ exports[`/dashboard/inventory/purchases > con una compra anulable > resultado 1`
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -352,31 +364,41 @@ exports[`/dashboard/inventory/purchases > fechas no validas > resultado 1`] = `
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado compra</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Estado compra</option>
 <option value="registrada">Registrada</option>
 <option value="confirmada">Confirmada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="payment">Estado pago</label>
+<div>
 <select id="payment" name="payment">
 <option value="" selected="">Estado pago</option>
 <option value="pendiente">Pendiente</option>
@@ -384,6 +406,8 @@ exports[`/dashboard/inventory/purchases > fechas no validas > resultado 1`] = `
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -595,31 +619,41 @@ exports[`/dashboard/inventory/purchases > rango invertido > resultado 1`] = `
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado compra</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Estado compra</option>
 <option value="registrada">Registrada</option>
 <option value="confirmada">Confirmada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="payment">Estado pago</label>
+<div>
 <select id="payment" name="payment">
 <option value="" selected="">Estado pago</option>
 <option value="pendiente">Pendiente</option>
@@ -627,6 +661,8 @@ exports[`/dashboard/inventory/purchases > rango invertido > resultado 1`] = `
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -794,31 +830,41 @@ exports[`/dashboard/inventory/purchases > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado compra</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Estado compra</option>
 <option value="registrada">Registrada</option>
 <option value="confirmada">Confirmada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="payment">Estado pago</label>
+<div>
 <select id="payment" name="payment">
 <option value="" selected="">Estado pago</option>
 <option value="pendiente">Pendiente</option>
@@ -826,6 +872,8 @@ exports[`/dashboard/inventory/purchases > sin filtros > resultado 1`] = `
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1117,31 +1165,41 @@ exports[`/dashboard/inventory/purchases > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado compra</label>
+<div>
 <select id="status" name="status">
 <option value="">Estado compra</option>
 <option value="registrada">Registrada</option>
 <option value="confirmada" selected="">Confirmada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="payment">Estado pago</label>
+<div>
 <select id="payment" name="payment">
 <option value="">Estado pago</option>
 <option value="pendiente" selected="">Pendiente</option>
@@ -1149,6 +1207,8 @@ exports[`/dashboard/inventory/purchases > todos los filtros > resultado 1`] = `
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1766,6 +1826,7 @@ exports[`/dashboard/inventory/purchases/[id] > pendiente y sin pagos > resultado
 <div>
 <label for="metodo_pago">Método de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="metodo_pago" required="" name="metodo_pago">
 <option value="" selected="">Seleccione método</option>
 <option value="efectivo">Efectivo</option>
@@ -1774,6 +1835,8 @@ exports[`/dashboard/inventory/purchases/[id] > pendiente y sin pagos > resultado
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1925,6 +1988,7 @@ exports[`/dashboard/inventory/purchases/new > formulario > resultado 1`] = `
 </div>
 <div>
 <label for="tipo_comprobante">Tipo comprobante</label>
+<div>
 <select id="tipo_comprobante" name="tipo_comprobante">
 <option value="" selected="">Sin comprobante</option>
 <option value="boleta">Boleta</option>
@@ -1932,6 +1996,8 @@ exports[`/dashboard/inventory/purchases/new > formulario > resultado 1`] = `
 <option value="recibo">Recibo</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_comprobante">Nro. comprobante</label>

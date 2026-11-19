@@ -116,22 +116,29 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > resultado 
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchase">Compra</label>
+<div>
 <select id="purchase" name="purchase">
 <option value="" selected="">Todas las compras</option>
 <option value="id_compra-1">id_compra-1</option>
 <option value="id_compra-2">id_compra-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="method">Método</label>
+<div>
 <select id="method" name="method">
 <option value="" selected="">Método</option>
 <option value="efectivo">Efectivo</option>
@@ -140,15 +147,20 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > resultado 
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Estado pago</option>
 <option value="pendiente">Pendiente</option>
 <option value="parcial">Parcial</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -342,22 +354,29 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > resultado 1`
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchase">Compra</label>
+<div>
 <select id="purchase" name="purchase">
 <option value="" selected="">Todas las compras</option>
 <option value="id_compra-1">id_compra-1</option>
 <option value="id_compra-2">id_compra-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="method">Método</label>
+<div>
 <select id="method" name="method">
 <option value="" selected="">Método</option>
 <option value="efectivo">Efectivo</option>
@@ -366,15 +385,20 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > resultado 1`
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Estado pago</option>
 <option value="pendiente">Pendiente</option>
 <option value="parcial">Parcial</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -532,22 +556,29 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > resultado 1`] = 
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchase">Compra</label>
+<div>
 <select id="purchase" name="purchase">
 <option value="" selected="">Todas las compras</option>
 <option value="id_compra-1">id_compra-1</option>
 <option value="id_compra-2">id_compra-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="method">Método</label>
+<div>
 <select id="method" name="method">
 <option value="" selected="">Método</option>
 <option value="efectivo">Efectivo</option>
@@ -556,15 +587,20 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > resultado 1`] = 
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Estado pago</option>
 <option value="pendiente">Pendiente</option>
 <option value="parcial">Parcial</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -838,22 +874,29 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > resultado 
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchase">Compra</label>
+<div>
 <select id="purchase" name="purchase">
 <option value="">Todas las compras</option>
 <option value="id_compra-1">id_compra-1</option>
 <option value="id_compra-2">id_compra-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="method">Método</label>
+<div>
 <select id="method" name="method">
 <option value="">Método</option>
 <option value="efectivo">Efectivo</option>
@@ -862,15 +905,20 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > resultado 
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Estado pago</option>
 <option value="pendiente">Pendiente</option>
 <option value="parcial">Parcial</option>
 <option value="pagado" selected="">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>

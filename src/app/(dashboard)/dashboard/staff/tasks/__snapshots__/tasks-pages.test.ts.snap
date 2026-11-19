@@ -606,11 +606,14 @@ exports[`/dashboard/staff/tasks/@panel/(.)new > maestro de taller > resultado 1`
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="registrada" selected="">Registrada</option>
 <option value="en_proceso">En proceso</option>
 <option value="terminada">Terminada</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -766,11 +769,14 @@ exports[`/dashboard/staff/tasks/@panel/(.)new > panel de alta > resultado 1`] = 
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="registrada" selected="">Registrada</option>
 <option value="en_proceso">En proceso</option>
 <option value="terminada">Terminada</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -960,11 +966,14 @@ exports[`/dashboard/staff/tasks/new > formulario > resultado 1`] = `
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="registrada" selected="">Registrada</option>
 <option value="en_proceso">En proceso</option>
 <option value="terminada">Terminada</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1154,11 +1163,14 @@ exports[`/dashboard/staff/tasks/new > un returnTo ajeno vuelve a la lista > resu
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="registrada" selected="">Registrada</option>
 <option value="en_proceso">En proceso</option>
 <option value="terminada">Terminada</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1348,11 +1360,14 @@ exports[`/dashboard/staff/tasks/new > vuelve al returnTo > resultado 1`] = `
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="registrada" selected="">Registrada</option>
 <option value="en_proceso">En proceso</option>
 <option value="terminada">Terminada</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>

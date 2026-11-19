@@ -538,11 +538,14 @@ exports[`/dashboard/staff/payment-history/new > formulario > resultado 1`] = `
 <div>
 <label for="id_planilla">Planilla pendiente<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_planilla" required="" aria-describedby="id_planilla-ayuda" name="id_planilla">
 <option value="" disabled="" selected="">Seleccione una planilla</option>
 <option value="id_planilla-1">id_planilla-1 · apellidos-1, nombres-1 · Neto: S/ 11.50</option>
 <option value="id_planilla-2">id_planilla-2 · apellidos-2, nombres-2 · Neto: S/ 22.50</option>
 </select>
+<svg/>
+</div>
 <p id="id_planilla-ayuda">Para esta versión, el monto pagado debe ser igual al monto neto de la planilla seleccionada.</p>
 </div>
 <div>
@@ -559,6 +562,7 @@ exports[`/dashboard/staff/payment-history/new > formulario > resultado 1`] = `
 <div>
 <label for="metodo_pago">Método de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="metodo_pago" required="" name="metodo_pago">
 <option value="efectivo" selected="">Efectivo</option>
 <option value="transferencia">Transferencia</option>
@@ -566,6 +570,8 @@ exports[`/dashboard/staff/payment-history/new > formulario > resultado 1`] = `
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>

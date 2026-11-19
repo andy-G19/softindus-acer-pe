@@ -106,6 +106,7 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="boleta">Boleta</option>
@@ -113,14 +114,19 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 <option value="recibo">Recibo</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="emitido">Emitido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -309,6 +315,7 @@ exports[`/dashboard/commercial/receipts > rango invertido > resultado 1`] = `
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="boleta">Boleta</option>
@@ -316,14 +323,19 @@ exports[`/dashboard/commercial/receipts > rango invertido > resultado 1`] = `
 <option value="recibo">Recibo</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="emitido">Emitido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -471,6 +483,7 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="boleta">Boleta</option>
@@ -478,14 +491,19 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 <option value="recibo">Recibo</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="emitido">Emitido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -738,6 +756,7 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="">Todos los tipos</option>
 <option value="boleta" selected="">Boleta</option>
@@ -745,14 +764,19 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 <option value="recibo">Recibo</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="emitido" selected="">Emitido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -923,6 +947,7 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="boleta">Boleta</option>
@@ -930,14 +955,19 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 <option value="recibo">Recibo</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="emitido">Emitido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>

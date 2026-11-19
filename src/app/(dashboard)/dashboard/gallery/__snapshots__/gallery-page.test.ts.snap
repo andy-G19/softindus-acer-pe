@@ -644,20 +644,26 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figcaption>Lista</figcaption>
 <div>
 <label for="galeria-tipo">Tipo</label>
+<div>
 <select id="galeria-tipo">
 <option value="" selected="">Todos los tipos</option>
 <option value="empresa">Empresa</option>
 <option value="persona">Persona natural</option>
 </select>
+<svg/>
+</div>
 </div>
 </figure>
 <figure>
 <figcaption>Lista deshabilitada</figcaption>
 <div>
 <label for="galeria-estado">Estado</label>
+<div>
 <select id="galeria-estado" disabled="">
 <option value="activo" selected="">Activo</option>
 </select>
+<svg/>
+</div>
 </div>
 </figure>
 <figure>
@@ -798,11 +804,14 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <div>
 <label for="galeria-field-tipo">Tipo de cliente<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="galeria-field-tipo" required="" aria-invalid="true" aria-describedby="galeria-field-tipo-error">
 <option value="" selected="">Seleccione</option>
 <option value="empresa">Empresa</option>
 <option value="persona">Persona natural</option>
 </select>
+<svg/>
+</div>
 <p id="galeria-field-tipo-error">Seleccione un tipo de cliente.</p>
 </div>
 </div>
@@ -1276,11 +1285,14 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 <div>
 <label for="galeria-listado-estado">Estado</label>
+<div>
 <select id="galeria-listado-estado" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="activo">Activo</option>
 <option value="inactivo">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1404,15 +1416,19 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <div>
 <div>
 <div>
+<div>
 <select id="estado-EJM00000001" aria-label="Estado del registro de ejemplo EJM00000001">
 <option value="pendiente" selected="">Pendiente</option>
 <option value="en_atencion">En atención</option>
 <option value="reparada">Reparada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
+<div>
 <div>
 <div>
 <select id="estado-EJM00000002" aria-label="Estado del registro de ejemplo EJM00000002">
@@ -1421,6 +1437,8 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <option value="reparada">Reparada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>

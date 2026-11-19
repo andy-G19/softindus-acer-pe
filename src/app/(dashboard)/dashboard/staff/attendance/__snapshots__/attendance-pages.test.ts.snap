@@ -135,12 +135,15 @@ exports[`/dashboard/staff/attendance > faltas > resultado 1`] = `
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="presente">Presente</option>
 <option value="tardanza">Tardanza</option>
 <option value="falta" selected="">Falta</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -396,12 +399,15 @@ exports[`/dashboard/staff/attendance > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="presente">Presente</option>
 <option value="tardanza">Tardanza</option>
 <option value="falta">Falta</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -671,12 +677,15 @@ exports[`/dashboard/staff/attendance > tardanzas > resultado 1`] = `
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="presente">Presente</option>
 <option value="tardanza" selected="">Tardanza</option>
 <option value="falta">Falta</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1022,12 +1031,15 @@ exports[`/dashboard/staff/attendance > todos los filtros con presentes > resulta
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="presente" selected="">Presente</option>
 <option value="tardanza">Tardanza</option>
 <option value="falta">Falta</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>

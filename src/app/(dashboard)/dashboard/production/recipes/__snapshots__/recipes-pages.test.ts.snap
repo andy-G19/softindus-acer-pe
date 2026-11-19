@@ -103,19 +103,25 @@ exports[`/dashboard/production/recipes > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="activa">Activa</option>
 <option value="inactiva">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -364,19 +370,25 @@ exports[`/dashboard/production/recipes > sin recetas > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="activa">Activa</option>
 <option value="inactiva">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -610,19 +622,25 @@ exports[`/dashboard/production/recipes > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="activa" selected="">Activa</option>
 <option value="inactiva">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -3250,12 +3268,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/[detail
 <div data-disabled="true">
 <label for="tipo_consumo">Tipo de consumo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo" required="" disabled="" name="tipo_consumo">
 <option value="">Seleccione el tipo</option>
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="observaciones">Observaciones</label>
@@ -3513,12 +3534,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > n
 <div data-disabled="true">
 <label for="tipo_consumo">Tipo de consumo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo" required="" disabled="" name="tipo_consumo">
 <option value="" selected="">Seleccione el tipo</option>
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="observaciones">Observaciones</label>
@@ -3676,12 +3700,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > r
 <div data-disabled="true">
 <label for="tipo_consumo">Tipo de consumo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo" required="" disabled="" name="tipo_consumo">
 <option value="" selected="">Seleccione el tipo</option>
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="observaciones">Observaciones</label>
@@ -3848,12 +3875,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > s
 <div data-disabled="true">
 <label for="tipo_consumo">Tipo de consumo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo" required="" disabled="" name="tipo_consumo">
 <option value="" selected="">Seleccione el tipo</option>
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="observaciones">Observaciones</label>
@@ -4008,12 +4038,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > v
 <div>
 <label for="tipo_consumo">Tipo de consumo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo" required="" name="tipo_consumo">
 <option value="" selected="">Seleccione el tipo</option>
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
@@ -4171,12 +4204,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > v
 <div data-disabled="true">
 <label for="tipo_consumo">Tipo de consumo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo" required="" disabled="" name="tipo_consumo">
 <option value="" selected="">Seleccione el tipo</option>
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="observaciones">Observaciones</label>
@@ -5536,11 +5572,14 @@ exports[`/dashboard/production/recipes/[id]/versions/new > nueva version > resul
 <div data-disabled="true">
 <label for="tipo_consumo-id_detalle_receta-1">Tipo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo-id_detalle_receta-1" required="" disabled="" name="tipo_consumo">
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="merma_estimada_porcentaje-id_detalle_receta-1">Merma %</label>
@@ -5576,11 +5615,14 @@ exports[`/dashboard/production/recipes/[id]/versions/new > nueva version > resul
 <div data-disabled="true">
 <label for="tipo_consumo-id_detalle_receta-2">Tipo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo-id_detalle_receta-2" required="" disabled="" name="tipo_consumo">
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="merma_estimada_porcentaje-id_detalle_receta-2">Merma %</label>
@@ -5746,11 +5788,14 @@ exports[`/dashboard/production/recipes/[id]/versions/new > receta inactiva > res
 <div data-disabled="true">
 <label for="tipo_consumo-row-1">Tipo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo-row-1" required="" disabled="" name="tipo_consumo">
 <option value="materia_prima" selected="">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="merma_estimada_porcentaje-row-1">Merma %</label>
@@ -5923,11 +5968,14 @@ exports[`/dashboard/production/recipes/[id]/versions/new > sin materiales activo
 <div data-disabled="true">
 <label for="tipo_consumo-id_detalle_receta-1">Tipo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo-id_detalle_receta-1" required="" disabled="" name="tipo_consumo">
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="merma_estimada_porcentaje-id_detalle_receta-1">Merma %</label>
@@ -5963,11 +6011,14 @@ exports[`/dashboard/production/recipes/[id]/versions/new > sin materiales activo
 <div data-disabled="true">
 <label for="tipo_consumo-id_detalle_receta-2">Tipo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo-id_detalle_receta-2" required="" disabled="" name="tipo_consumo">
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="merma_estimada_porcentaje-id_detalle_receta-2">Merma %</label>
@@ -6259,12 +6310,15 @@ exports[`panel lateral de los materiales de una version > el alta en panel consu
 <div data-disabled="true">
 <label for="tipo_consumo">Tipo de consumo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo" required="" disabled="" name="tipo_consumo">
 <option value="" selected="">Seleccione el tipo</option>
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="observaciones">Observaciones</label>
@@ -6341,12 +6395,15 @@ exports[`panel lateral de los materiales de una version > la edicion en panel co
 <div data-disabled="true">
 <label for="tipo_consumo">Tipo de consumo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_consumo" required="" disabled="" name="tipo_consumo">
 <option value="">Seleccione el tipo</option>
 <option value="materia_prima">Materia prima</option>
 <option value="consumible">Consumible</option>
 <option value="auxiliar">Auxiliar</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="observaciones">Observaciones</label>

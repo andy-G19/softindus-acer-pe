@@ -41,6 +41,7 @@ exports[`alta de cliente > muestra el formulario vacio sin consultar Prisma y vu
 <div>
 <label for="tipo_cliente">Tipo de cliente<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_cliente" required="" name="tipo_cliente">
 <option value="cliente_final" selected="">Cliente final</option>
 <option value="ferreteria">Ferretería</option>
@@ -48,6 +49,8 @@ exports[`alta de cliente > muestra el formulario vacio sin consultar Prisma y vu
 <option value="constructora">Constructora</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="nombre_razon_social">Nombre o razón social<span aria-hidden="true">*</span>
@@ -57,12 +60,15 @@ exports[`alta de cliente > muestra el formulario vacio sin consultar Prisma y vu
 <div>
 <div>
 <label for="tipo_documento">Tipo de documento</label>
+<div>
 <select id="tipo_documento" name="tipo_documento">
 <option value="" selected="">Sin documento</option>
 <option value="dni">DNI</option>
 <option value="ruc">RUC</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_documento">Número de documento</label>
@@ -143,6 +149,7 @@ exports[`edicion de cliente > consulta el cliente y muestra el formulario con el
 <div>
 <label for="tipo_cliente">Tipo de cliente<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_cliente" required="" name="tipo_cliente">
 <option value="cliente_final">Cliente final</option>
 <option value="ferreteria">Ferretería</option>
@@ -150,6 +157,8 @@ exports[`edicion de cliente > consulta el cliente y muestra el formulario con el
 <option value="constructora">Constructora</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="nombre_razon_social">Nombre o razón social<span aria-hidden="true">*</span>
@@ -159,12 +168,15 @@ exports[`edicion de cliente > consulta el cliente y muestra el formulario con el
 <div>
 <div>
 <label for="tipo_documento">Tipo de documento</label>
+<div>
 <select id="tipo_documento" name="tipo_documento">
 <option value="">Sin documento</option>
 <option value="dni">DNI</option>
 <option value="ruc">RUC</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_documento">Número de documento</label>
@@ -276,6 +288,7 @@ exports[`edicion de cliente > muestra vacios los campos opcionales ausentes e ig
 <div>
 <label for="tipo_cliente">Tipo de cliente<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_cliente" required="" name="tipo_cliente">
 <option value="cliente_final">Cliente final</option>
 <option value="ferreteria">Ferretería</option>
@@ -283,6 +296,8 @@ exports[`edicion de cliente > muestra vacios los campos opcionales ausentes e ig
 <option value="constructora">Constructora</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="nombre_razon_social">Nombre o razón social<span aria-hidden="true">*</span>
@@ -292,12 +307,15 @@ exports[`edicion de cliente > muestra vacios los campos opcionales ausentes e ig
 <div>
 <div>
 <label for="tipo_documento">Tipo de documento</label>
+<div>
 <select id="tipo_documento" name="tipo_documento">
 <option value="" selected="">Sin documento</option>
 <option value="dni">DNI</option>
 <option value="ruc">RUC</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_documento">Número de documento</label>
@@ -829,6 +847,7 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="cliente_final">Cliente final</option>
@@ -839,14 +858,19 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 <option value="empresa">empresa</option>
 <option value="persona">persona</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="activo">Activo</option>
 <option value="inactivo">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="origin">Origen</label>
@@ -940,6 +964,7 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="cliente_final">Cliente final</option>
@@ -950,14 +975,19 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 <option value="empresa">empresa</option>
 <option value="persona">persona</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="activo" selected="">Activo</option>
 <option value="inactivo">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="origin">Origen</label>
@@ -1041,6 +1071,7 @@ exports[`panel lateral de clientes > el alta en panel autoriza igual que la pagi
 <div>
 <label for="tipo_cliente">Tipo de cliente<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_cliente" required="" name="tipo_cliente">
 <option value="cliente_final" selected="">Cliente final</option>
 <option value="ferreteria">Ferretería</option>
@@ -1048,6 +1079,8 @@ exports[`panel lateral de clientes > el alta en panel autoriza igual que la pagi
 <option value="constructora">Constructora</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="nombre_razon_social">Nombre o razón social<span aria-hidden="true">*</span>
@@ -1057,12 +1090,15 @@ exports[`panel lateral de clientes > el alta en panel autoriza igual que la pagi
 <div>
 <div>
 <label for="tipo_documento">Tipo de documento</label>
+<div>
 <select id="tipo_documento" name="tipo_documento">
 <option value="" selected="">Sin documento</option>
 <option value="dni">DNI</option>
 <option value="ruc">RUC</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_documento">Número de documento</label>
@@ -1119,6 +1155,7 @@ exports[`panel lateral de clientes > la edicion en panel hace la misma consulta 
 <div>
 <label for="tipo_cliente">Tipo de cliente<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_cliente" required="" name="tipo_cliente">
 <option value="cliente_final">Cliente final</option>
 <option value="ferreteria">Ferretería</option>
@@ -1126,6 +1163,8 @@ exports[`panel lateral de clientes > la edicion en panel hace la misma consulta 
 <option value="constructora">Constructora</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="nombre_razon_social">Nombre o razón social<span aria-hidden="true">*</span>
@@ -1135,12 +1174,15 @@ exports[`panel lateral de clientes > la edicion en panel hace la misma consulta 
 <div>
 <div>
 <label for="tipo_documento">Tipo de documento</label>
+<div>
 <select id="tipo_documento" name="tipo_documento">
 <option value="">Sin documento</option>
 <option value="dni">DNI</option>
 <option value="ruc">RUC</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_documento">Número de documento</label>

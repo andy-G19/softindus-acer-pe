@@ -95,6 +95,7 @@ exports[`/dashboard/reports/export-history > parametros vacios, con filtros e il
 </fieldset>
 <div>
 <label for="module">Reporte</label>
+<div>
 <select id="module" name="module">
 <option value="" selected="">Todos los reportes</option>
 <option value="Reporte de producción">Reporte de producción</option>
@@ -107,30 +108,41 @@ exports[`/dashboard/reports/export-history > parametros vacios, con filtros e il
 <option value="Reporte de personal y planillas">Reporte de personal y planillas</option>
 <option value="Reporte de auditoria">Reporte de auditoria</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="format">Formato</label>
+<div>
 <select id="format" name="format">
 <option value="" selected="">Todos los formatos</option>
 <option value="excel">Excel</option>
 <option value="pdf">PDF</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="generada">Generada</option>
 <option value="fallida">Fallida</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="userId">Usuario</label>
+<div>
 <select id="userId" name="userId">
 <option value="" selected="">Todos los usuarios</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchText">Buscar</label>
@@ -415,6 +427,7 @@ exports[`/dashboard/reports/export-history > rango invertido > resultado 1`] = `
 </fieldset>
 <div>
 <label for="module">Reporte</label>
+<div>
 <select id="module" name="module">
 <option value="" selected="">Todos los reportes</option>
 <option value="Reporte de producción">Reporte de producción</option>
@@ -427,30 +440,41 @@ exports[`/dashboard/reports/export-history > rango invertido > resultado 1`] = `
 <option value="Reporte de personal y planillas">Reporte de personal y planillas</option>
 <option value="Reporte de auditoria">Reporte de auditoria</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="format">Formato</label>
+<div>
 <select id="format" name="format">
 <option value="" selected="">Todos los formatos</option>
 <option value="excel">Excel</option>
 <option value="pdf">PDF</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="generada">Generada</option>
 <option value="fallida">Fallida</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="userId">Usuario</label>
+<div>
 <select id="userId" name="userId">
 <option value="" selected="">Todos los usuarios</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchText">Buscar</label>
@@ -564,6 +588,7 @@ exports[`/dashboard/reports/export-history > sin filtros > resultado 1`] = `
 </fieldset>
 <div>
 <label for="module">Reporte</label>
+<div>
 <select id="module" name="module">
 <option value="" selected="">Todos los reportes</option>
 <option value="Reporte de producción">Reporte de producción</option>
@@ -576,30 +601,41 @@ exports[`/dashboard/reports/export-history > sin filtros > resultado 1`] = `
 <option value="Reporte de personal y planillas">Reporte de personal y planillas</option>
 <option value="Reporte de auditoria">Reporte de auditoria</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="format">Formato</label>
+<div>
 <select id="format" name="format">
 <option value="" selected="">Todos los formatos</option>
 <option value="excel">Excel</option>
 <option value="pdf">PDF</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="generada">Generada</option>
 <option value="fallida">Fallida</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="userId">Usuario</label>
+<div>
 <select id="userId" name="userId">
 <option value="" selected="">Todos los usuarios</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchText">Buscar</label>
@@ -885,6 +921,7 @@ exports[`/dashboard/reports/export-history > todos los filtros > resultado 1`] =
 </fieldset>
 <div>
 <label for="module">Reporte</label>
+<div>
 <select id="module" name="module">
 <option value="">Todos los reportes</option>
 <option value="Reporte de producción">Reporte de producción</option>
@@ -897,30 +934,41 @@ exports[`/dashboard/reports/export-history > todos los filtros > resultado 1`] =
 <option value="Reporte de personal y planillas">Reporte de personal y planillas</option>
 <option value="Reporte de auditoria">Reporte de auditoria</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="format">Formato</label>
+<div>
 <select id="format" name="format">
 <option value="">Todos los formatos</option>
 <option value="excel">Excel</option>
 <option value="pdf" selected="">PDF</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="generada" selected="">Generada</option>
 <option value="fallida">Fallida</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="userId">Usuario</label>
+<div>
 <select id="userId" name="userId">
 <option value="">Todos los usuarios</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchText">Buscar</label>

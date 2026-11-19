@@ -136,27 +136,36 @@ exports[`/dashboard/inventory/entries > fechas no validas > resultado 1`] = `
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchase">Compra</label>
+<div>
 <select id="purchase" name="purchase">
 <option value="" selected="">Todas las compras</option>
 <option value="id_compra-1">id_compra-1</option>
 <option value="id_compra-2">id_compra-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -352,27 +361,36 @@ exports[`/dashboard/inventory/entries > maestro de taller > resultado 1`] = `
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchase">Compra</label>
+<div>
 <select id="purchase" name="purchase">
 <option value="" selected="">Todas las compras</option>
 <option value="id_compra-1">id_compra-1</option>
 <option value="id_compra-2">id_compra-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -578,27 +596,36 @@ exports[`/dashboard/inventory/entries > rango invertido > resultado 1`] = `
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchase">Compra</label>
+<div>
 <select id="purchase" name="purchase">
 <option value="" selected="">Todas las compras</option>
 <option value="id_compra-1">id_compra-1</option>
 <option value="id_compra-2">id_compra-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -782,27 +809,36 @@ exports[`/dashboard/inventory/entries > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchase">Compra</label>
+<div>
 <select id="purchase" name="purchase">
 <option value="" selected="">Todas las compras</option>
 <option value="id_compra-1">id_compra-1</option>
 <option value="id_compra-2">id_compra-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1088,27 +1124,36 @@ exports[`/dashboard/inventory/entries > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="purchase">Compra</label>
+<div>
 <select id="purchase" name="purchase">
 <option value="">Todas las compras</option>
 <option value="id_compra-1">id_compra-1</option>
 <option value="id_compra-2">id_compra-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>

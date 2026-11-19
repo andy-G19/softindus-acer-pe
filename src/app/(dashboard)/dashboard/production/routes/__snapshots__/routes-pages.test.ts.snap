@@ -98,19 +98,25 @@ exports[`/dashboard/production/routes > inactivas > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active">Activas</option>
 <option value="inactive" selected="">Inactivas</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -273,19 +279,25 @@ exports[`/dashboard/production/routes > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="active">Activas</option>
 <option value="inactive">Inactivas</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -481,19 +493,25 @@ exports[`/dashboard/production/routes > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active" selected="">Activas</option>
 <option value="inactive">Inactivas</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -1067,19 +1085,25 @@ exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
 </div>
 <div>
 <label for="requiresMachine">Máquina</label>
+<div>
 <select id="requiresMachine" name="requiresMachine">
 <option value="" selected="">Máquina: todos</option>
 <option value="yes">Requiere máquina</option>
 <option value="no">No requiere máquina</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="active">Activas</option>
 <option value="inactive">Inactivas</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -1328,19 +1352,25 @@ exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activa
 </div>
 <div>
 <label for="requiresMachine">Máquina</label>
+<div>
 <select id="requiresMachine" name="requiresMachine">
 <option value="">Máquina: todos</option>
 <option value="yes" selected="">Requiere máquina</option>
 <option value="no">No requiere máquina</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active" selected="">Activas</option>
 <option value="inactive">Inactivas</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -1629,19 +1659,25 @@ exports[`/dashboard/production/routes/[id]/stages > ruta sin etapas > resultado 
 </div>
 <div>
 <label for="requiresMachine">Máquina</label>
+<div>
 <select id="requiresMachine" name="requiresMachine">
 <option value="" selected="">Máquina: todos</option>
 <option value="yes">Requiere máquina</option>
 <option value="no">No requiere máquina</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="active">Activas</option>
 <option value="inactive">Inactivas</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -1842,19 +1878,25 @@ exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > re
 </div>
 <div>
 <label for="requiresMachine">Máquina</label>
+<div>
 <select id="requiresMachine" name="requiresMachine">
 <option value="">Máquina: todos</option>
 <option value="yes">Requiere máquina</option>
 <option value="no" selected="">No requiere máquina</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active">Activas</option>
 <option value="inactive" selected="">Inactivas</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -2133,11 +2175,14 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con av
 <div>
 <div>
 <label for="id_maquina">Máquina utilizada</label>
+<div>
 <select id="id_maquina" name="id_maquina">
 <option value="" selected="">Sin máquina</option>
 <option value="id_maquina-1">nombre-1 · tipo-1</option>
 <option value="id_maquina-2">nombre-2 · tipo-2</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 </div>
@@ -2302,11 +2347,14 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con ma
 <div>
 <div>
 <label for="id_maquina">Máquina utilizada</label>
+<div>
 <select id="id_maquina" name="id_maquina">
 <option value="">Sin máquina</option>
 <option value="id_maquina-1" selected="">nombre-1 · tipo-1</option>
 <option value="id_maquina-2">nombre-2 · tipo-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tiempo_maquina_minutos_unidad">Minutos de máquina por unidad<span aria-hidden="true">*</span>
@@ -2497,11 +2545,14 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar sin ma
 <div>
 <div>
 <label for="id_maquina">Máquina utilizada</label>
+<div>
 <select id="id_maquina" name="id_maquina">
 <option value="" selected="">Sin máquina</option>
 <option value="id_maquina-1">nombre-1 · tipo-1</option>
 <option value="id_maquina-2">nombre-2 · tipo-2</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -2761,11 +2812,14 @@ exports[`/dashboard/production/routes/[id]/stages/new > nueva etapa > resultado 
 <div>
 <div>
 <label for="id_maquina">Máquina utilizada</label>
+<div>
 <select id="id_maquina" name="id_maquina">
 <option value="" selected="">Sin máquina</option>
 <option value="id_maquina-1">nombre-1 · tipo-1</option>
 <option value="id_maquina-2">nombre-2 · tipo-2</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 </div>
@@ -2915,11 +2969,14 @@ exports[`/dashboard/production/routes/[id]/stages/new > ruta inactiva > resultad
 <div>
 <div data-disabled="true">
 <label for="id_maquina">Máquina utilizada</label>
+<div>
 <select id="id_maquina" disabled="" name="id_maquina">
 <option value="" selected="">Sin máquina</option>
 <option value="id_maquina-1">nombre-1 · tipo-1</option>
 <option value="id_maquina-2">nombre-2 · tipo-2</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 </div>
@@ -3083,11 +3140,14 @@ exports[`panel lateral de etapas > el alta en panel autoriza y consulta igual qu
 <div>
 <div>
 <label for="id_maquina">Máquina utilizada</label>
+<div>
 <select id="id_maquina" name="id_maquina">
 <option value="" selected="">Sin máquina</option>
 <option value="id_maquina-1">nombre-1 · tipo-1</option>
 <option value="id_maquina-2">nombre-2 · tipo-2</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 </div>
@@ -3147,11 +3207,14 @@ exports[`panel lateral de etapas > la edicion en panel hace la misma consulta qu
 <div>
 <div>
 <label for="id_maquina">Máquina utilizada</label>
+<div>
 <select id="id_maquina" name="id_maquina">
 <option value="" selected="">Sin máquina</option>
 <option value="id_maquina-1">nombre-1 · tipo-1</option>
 <option value="id_maquina-2">nombre-2 · tipo-2</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 </div>

@@ -183,27 +183,36 @@ exports[`/dashboard/audit > rango de mas de 366 dias > resultado 1`] = `
 </div>
 <div>
 <label for="usuario">Usuario</label>
+<div>
 <select id="usuario" name="usuario">
 <option value="" selected="">Todos los usuarios</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="accion">Acción</label>
+<div>
 <select id="accion" name="accion">
 <option value="" selected="">Todas las acciones</option>
 <option value="accion-1">accion-1</option>
 <option value="accion-2">accion-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="entidad">Entidad</label>
+<div>
 <select id="entidad" name="entidad">
 <option value="" selected="">Todas las entidades</option>
 <option value="entidad_afectada-1">entidad_afectada-1</option>
 <option value="entidad_afectada-2">entidad_afectada-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -409,27 +418,36 @@ exports[`/dashboard/audit > rango invertido > resultado 1`] = `
 </div>
 <div>
 <label for="usuario">Usuario</label>
+<div>
 <select id="usuario" name="usuario">
 <option value="" selected="">Todos los usuarios</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="accion">Acción</label>
+<div>
 <select id="accion" name="accion">
 <option value="" selected="">Todas las acciones</option>
 <option value="accion-1">accion-1</option>
 <option value="accion-2">accion-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="entidad">Entidad</label>
+<div>
 <select id="entidad" name="entidad">
 <option value="" selected="">Todas las entidades</option>
 <option value="entidad_afectada-1">entidad_afectada-1</option>
 <option value="entidad_afectada-2">entidad_afectada-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -604,27 +622,36 @@ exports[`/dashboard/audit > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="usuario">Usuario</label>
+<div>
 <select id="usuario" name="usuario">
 <option value="" selected="">Todos los usuarios</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="accion">Acción</label>
+<div>
 <select id="accion" name="accion">
 <option value="" selected="">Todas las acciones</option>
 <option value="accion-1">accion-1</option>
 <option value="accion-2">accion-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="entidad">Entidad</label>
+<div>
 <select id="entidad" name="entidad">
 <option value="" selected="">Todas las entidades</option>
 <option value="entidad_afectada-1">entidad_afectada-1</option>
 <option value="entidad_afectada-2">entidad_afectada-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1072,27 +1099,36 @@ exports[`/dashboard/audit > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="usuario">Usuario</label>
+<div>
 <select id="usuario" name="usuario">
 <option value="">Todos los usuarios</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="accion">Acción</label>
+<div>
 <select id="accion" name="accion">
 <option value="">Todas las acciones</option>
 <option value="accion-1">accion-1</option>
 <option value="accion-2">accion-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="entidad">Entidad</label>
+<div>
 <select id="entidad" name="entidad">
 <option value="">Todas las entidades</option>
 <option value="entidad_afectada-1">entidad_afectada-1</option>
 <option value="entidad_afectada-2">entidad_afectada-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>

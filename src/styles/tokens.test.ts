@@ -110,6 +110,16 @@ describe("tokens", () => {
     expect([...root, ...theme].filter((name) => name.includes("cyan"))).toEqual([]);
   });
 
+  // Diseno de los campos: los colores que usan sus clases tienen que estar en @theme, o
+  // Tailwind no genera la utilidad y el campo se queda sin borde o sin anillo.
+  it("los colores y la textura de los campos existen", () => {
+    expect(root).toContain("--texture-metal");
+    expect(root).toContain("--readonly-border");
+    expect(theme).toContain("--color-readonly-border");
+    expect(theme).toContain("--color-accent-steel");
+    expect(theme).toContain("--color-placeholder");
+  });
+
   it("el giro del spinner tiene su duracion en :root", () => {
     expect(root).toContain("--motion-spin");
   });

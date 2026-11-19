@@ -177,21 +177,28 @@ exports[`/dashboard/maintenance/machines > filtros y maestro de taller > resulta
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="">Todos los tipos</option>
 <option value="tipo-1">tipo-1</option>
 <option value="tipo-2">tipo-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="location">Ubicación</label>
+<div>
 <select id="location" name="location">
 <option value="">Todas las ubicaciones</option>
 <option value="ubicacion-1">ubicacion-1</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="operativa" selected="">Operativa</option>
@@ -199,6 +206,8 @@ exports[`/dashboard/maintenance/machines > filtros y maestro de taller > resulta
 <option value="dada_de_baja">Fuera de servicio</option>
 <option value="inactiva">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -419,21 +428,28 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="tipo-1">tipo-1</option>
 <option value="tipo-2">tipo-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="location">Ubicación</label>
+<div>
 <select id="location" name="location">
 <option value="" selected="">Todas las ubicaciones</option>
 <option value="ubicacion-1">ubicacion-1</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="operativa">Operativa</option>
@@ -441,6 +457,8 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 <option value="dada_de_baja">Fuera de servicio</option>
 <option value="inactiva">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -674,21 +692,28 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="tipo-1">tipo-1</option>
 <option value="tipo-2">tipo-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="location">Ubicación</label>
+<div>
 <select id="location" name="location">
 <option value="" selected="">Todas las ubicaciones</option>
 <option value="ubicacion-1">ubicacion-1</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="operativa">Operativa</option>
@@ -696,6 +721,8 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 <option value="dada_de_baja">Fuera de servicio</option>
 <option value="inactiva">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -893,6 +920,7 @@ exports[`/dashboard/maintenance/machines/[id]/edit > editar con regreso al lista
 <div>
 <label for="tipo">Tipo de maquina<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo" required="" name="tipo">
 <option value="prensa">prensa</option>
 <option value="cortadora">cortadora</option>
@@ -903,6 +931,8 @@ exports[`/dashboard/maintenance/machines/[id]/edit > editar con regreso al lista
 <option value="dobladora">dobladora</option>
 <option value="otro">otro</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -918,12 +948,15 @@ exports[`/dashboard/maintenance/machines/[id]/edit > editar con regreso al lista
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="operativa">Operativa</option>
 <option value="en_reparacion">En mantenimiento</option>
 <option value="dada_de_baja">Fuera de servicio</option>
 <option value="inactiva">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
@@ -1033,6 +1066,7 @@ exports[`/dashboard/maintenance/machines/new > con regreso al listado filtrado >
 <div>
 <label for="tipo">Tipo de maquina<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo" required="" name="tipo">
 <option value="prensa" selected="">prensa</option>
 <option value="cortadora">cortadora</option>
@@ -1043,6 +1077,8 @@ exports[`/dashboard/maintenance/machines/new > con regreso al listado filtrado >
 <option value="dobladora">dobladora</option>
 <option value="otro">otro</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1058,12 +1094,15 @@ exports[`/dashboard/maintenance/machines/new > con regreso al listado filtrado >
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="operativa" selected="">Operativa</option>
 <option value="en_reparacion">En mantenimiento</option>
 <option value="dada_de_baja">Fuera de servicio</option>
 <option value="inactiva">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
@@ -1148,6 +1187,7 @@ exports[`/dashboard/maintenance/machines/new > formulario > resultado 1`] = `
 <div>
 <label for="tipo">Tipo de maquina<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo" required="" name="tipo">
 <option value="prensa" selected="">prensa</option>
 <option value="cortadora">cortadora</option>
@@ -1158,6 +1198,8 @@ exports[`/dashboard/maintenance/machines/new > formulario > resultado 1`] = `
 <option value="dobladora">dobladora</option>
 <option value="otro">otro</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1173,12 +1215,15 @@ exports[`/dashboard/maintenance/machines/new > formulario > resultado 1`] = `
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="operativa" selected="">Operativa</option>
 <option value="en_reparacion">En mantenimiento</option>
 <option value="dada_de_baja">Fuera de servicio</option>
 <option value="inactiva">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
@@ -1217,6 +1262,7 @@ exports[`panel lateral de maquinas > el alta en panel autoriza igual que la pagi
 <div>
 <label for="tipo">Tipo de maquina<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo" required="" name="tipo">
 <option value="prensa" selected="">prensa</option>
 <option value="cortadora">cortadora</option>
@@ -1227,6 +1273,8 @@ exports[`panel lateral de maquinas > el alta en panel autoriza igual que la pagi
 <option value="dobladora">dobladora</option>
 <option value="otro">otro</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1242,12 +1290,15 @@ exports[`panel lateral de maquinas > el alta en panel autoriza igual que la pagi
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="operativa" selected="">Operativa</option>
 <option value="en_reparacion">En mantenimiento</option>
 <option value="dada_de_baja">Fuera de servicio</option>
 <option value="inactiva">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
@@ -1287,6 +1338,7 @@ exports[`panel lateral de maquinas > la edicion en panel hace la misma consulta 
 <div>
 <label for="tipo">Tipo de maquina<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo" required="" name="tipo">
 <option value="prensa">prensa</option>
 <option value="cortadora">cortadora</option>
@@ -1297,6 +1349,8 @@ exports[`panel lateral de maquinas > la edicion en panel hace la misma consulta 
 <option value="dobladora">dobladora</option>
 <option value="otro">otro</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1312,12 +1366,15 @@ exports[`panel lateral de maquinas > la edicion en panel hace la misma consulta 
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="operativa">Operativa</option>
 <option value="en_reparacion">En mantenimiento</option>
 <option value="dada_de_baja">Fuera de servicio</option>
 <option value="inactiva">Inactiva</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>

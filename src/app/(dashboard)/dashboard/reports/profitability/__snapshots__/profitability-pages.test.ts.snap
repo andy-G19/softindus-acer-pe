@@ -98,17 +98,23 @@ exports[`/dashboard/reports/profitability > costeo sin pedido, orden, margen ni 
 </fieldset>
 <div>
 <label for="lowMargin">Margen</label>
+<div>
 <select id="lowMargin" name="lowMargin">
 <option value="" selected="">Todos los margenes</option>
 <option value="true">Solo margen bajo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="negativeProfit">Utilidad</label>
+<div>
 <select id="negativeProfit" name="negativeProfit">
 <option value="" selected="">Toda utilidad</option>
 <option value="true">Solo utilidad negativa</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -346,17 +352,23 @@ exports[`/dashboard/reports/profitability > rango de mas de 366 dias > resultado
 </fieldset>
 <div>
 <label for="lowMargin">Margen</label>
+<div>
 <select id="lowMargin" name="lowMargin">
 <option value="" selected="">Todos los margenes</option>
 <option value="true">Solo margen bajo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="negativeProfit">Utilidad</label>
+<div>
 <select id="negativeProfit" name="negativeProfit">
 <option value="" selected="">Toda utilidad</option>
 <option value="true">Solo utilidad negativa</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -548,17 +560,23 @@ exports[`/dashboard/reports/profitability > rango invertido > resultado 1`] = `
 </fieldset>
 <div>
 <label for="lowMargin">Margen</label>
+<div>
 <select id="lowMargin" name="lowMargin">
 <option value="" selected="">Todos los margenes</option>
 <option value="true">Solo margen bajo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="negativeProfit">Utilidad</label>
+<div>
 <select id="negativeProfit" name="negativeProfit">
 <option value="" selected="">Toda utilidad</option>
 <option value="true">Solo utilidad negativa</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -671,17 +689,23 @@ exports[`/dashboard/reports/profitability > sin filtros > resultado 1`] = `
 </fieldset>
 <div>
 <label for="lowMargin">Margen</label>
+<div>
 <select id="lowMargin" name="lowMargin">
 <option value="" selected="">Todos los margenes</option>
 <option value="true">Solo margen bajo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="negativeProfit">Utilidad</label>
+<div>
 <select id="negativeProfit" name="negativeProfit">
 <option value="" selected="">Toda utilidad</option>
 <option value="true">Solo utilidad negativa</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -911,17 +935,23 @@ exports[`/dashboard/reports/profitability > sin resultados > resultado 1`] = `
 </fieldset>
 <div>
 <label for="lowMargin">Margen</label>
+<div>
 <select id="lowMargin" name="lowMargin">
 <option value="" selected="">Todos los margenes</option>
 <option value="true">Solo margen bajo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="negativeProfit">Utilidad</label>
+<div>
 <select id="negativeProfit" name="negativeProfit">
 <option value="" selected="">Toda utilidad</option>
 <option value="true">Solo utilidad negativa</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -1182,17 +1212,23 @@ exports[`/dashboard/reports/profitability > todos los filtros > resultado 1`] = 
 </fieldset>
 <div>
 <label for="lowMargin">Margen</label>
+<div>
 <select id="lowMargin" name="lowMargin">
 <option value="">Todos los margenes</option>
 <option value="true" selected="">Solo margen bajo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="negativeProfit">Utilidad</label>
+<div>
 <select id="negativeProfit" name="negativeProfit">
 <option value="">Toda utilidad</option>
 <option value="true" selected="">Solo utilidad negativa</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>

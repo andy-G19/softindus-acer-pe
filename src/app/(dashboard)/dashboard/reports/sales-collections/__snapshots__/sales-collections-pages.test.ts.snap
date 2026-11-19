@@ -107,14 +107,18 @@ exports[`/dashboard/reports/sales-collections > filtro por estado de cobranza en
 </fieldset>
 <div>
 <label for="clientId">Cliente</label>
+<div>
 <select id="clientId" name="clientId">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="orderStatus">Estado del pedido</label>
+<div>
 <select id="orderStatus" name="orderStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="registrado">Registrado</option>
@@ -123,9 +127,12 @@ exports[`/dashboard/reports/sales-collections > filtro por estado de cobranza en
 <option value="entregado">Entregado</option>
 <option value="cancelado">Cancelado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="collectionStatus">Estado de cobranza</label>
+<div>
 <select id="collectionStatus" name="collectionStatus">
 <option value="">Todos los estados</option>
 <option value="sin_proforma">Sin proforma</option>
@@ -133,6 +140,8 @@ exports[`/dashboard/reports/sales-collections > filtro por estado de cobranza en
 <option value="con_saldo">Con saldo pendiente</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Pedido o proforma</label>
@@ -431,14 +440,18 @@ exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza >
 </fieldset>
 <div>
 <label for="clientId">Cliente</label>
+<div>
 <select id="clientId" name="clientId">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="orderStatus">Estado del pedido</label>
+<div>
 <select id="orderStatus" name="orderStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="registrado">Registrado</option>
@@ -447,9 +460,12 @@ exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza >
 <option value="entregado">Entregado</option>
 <option value="cancelado">Cancelado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="collectionStatus">Estado de cobranza</label>
+<div>
 <select id="collectionStatus" name="collectionStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="sin_proforma">Sin proforma</option>
@@ -457,6 +473,8 @@ exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza >
 <option value="con_saldo">Con saldo pendiente</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Pedido o proforma</label>
@@ -837,14 +855,18 @@ exports[`/dashboard/reports/sales-collections > rango de mas de 366 dias > resul
 </fieldset>
 <div>
 <label for="clientId">Cliente</label>
+<div>
 <select id="clientId" name="clientId">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="orderStatus">Estado del pedido</label>
+<div>
 <select id="orderStatus" name="orderStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="registrado">Registrado</option>
@@ -853,9 +875,12 @@ exports[`/dashboard/reports/sales-collections > rango de mas de 366 dias > resul
 <option value="entregado">Entregado</option>
 <option value="cancelado">Cancelado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="collectionStatus">Estado de cobranza</label>
+<div>
 <select id="collectionStatus" name="collectionStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="sin_proforma">Sin proforma</option>
@@ -863,6 +888,8 @@ exports[`/dashboard/reports/sales-collections > rango de mas de 366 dias > resul
 <option value="con_saldo">Con saldo pendiente</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Pedido o proforma</label>
@@ -1155,14 +1182,18 @@ exports[`/dashboard/reports/sales-collections > rango invertido > resultado 1`] 
 </fieldset>
 <div>
 <label for="clientId">Cliente</label>
+<div>
 <select id="clientId" name="clientId">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="orderStatus">Estado del pedido</label>
+<div>
 <select id="orderStatus" name="orderStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="registrado">Registrado</option>
@@ -1171,9 +1202,12 @@ exports[`/dashboard/reports/sales-collections > rango invertido > resultado 1`] 
 <option value="entregado">Entregado</option>
 <option value="cancelado">Cancelado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="collectionStatus">Estado de cobranza</label>
+<div>
 <select id="collectionStatus" name="collectionStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="sin_proforma">Sin proforma</option>
@@ -1181,6 +1215,8 @@ exports[`/dashboard/reports/sales-collections > rango invertido > resultado 1`] 
 <option value="con_saldo">Con saldo pendiente</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Pedido o proforma</label>
@@ -1306,14 +1342,18 @@ exports[`/dashboard/reports/sales-collections > sin filtros, vendedor > resultad
 </fieldset>
 <div>
 <label for="clientId">Cliente</label>
+<div>
 <select id="clientId" name="clientId">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="orderStatus">Estado del pedido</label>
+<div>
 <select id="orderStatus" name="orderStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="registrado">Registrado</option>
@@ -1322,9 +1362,12 @@ exports[`/dashboard/reports/sales-collections > sin filtros, vendedor > resultad
 <option value="entregado">Entregado</option>
 <option value="cancelado">Cancelado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="collectionStatus">Estado de cobranza</label>
+<div>
 <select id="collectionStatus" name="collectionStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="sin_proforma">Sin proforma</option>
@@ -1332,6 +1375,8 @@ exports[`/dashboard/reports/sales-collections > sin filtros, vendedor > resultad
 <option value="con_saldo">Con saldo pendiente</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Pedido o proforma</label>
@@ -1658,14 +1703,18 @@ exports[`/dashboard/reports/sales-collections > sin resultados > resultado 1`] =
 </fieldset>
 <div>
 <label for="clientId">Cliente</label>
+<div>
 <select id="clientId" name="clientId">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="orderStatus">Estado del pedido</label>
+<div>
 <select id="orderStatus" name="orderStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="registrado">Registrado</option>
@@ -1674,9 +1723,12 @@ exports[`/dashboard/reports/sales-collections > sin resultados > resultado 1`] =
 <option value="entregado">Entregado</option>
 <option value="cancelado">Cancelado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="collectionStatus">Estado de cobranza</label>
+<div>
 <select id="collectionStatus" name="collectionStatus">
 <option value="" selected="">Todos los estados</option>
 <option value="sin_proforma">Sin proforma</option>
@@ -1684,6 +1736,8 @@ exports[`/dashboard/reports/sales-collections > sin resultados > resultado 1`] =
 <option value="con_saldo">Con saldo pendiente</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Pedido o proforma</label>
@@ -1968,14 +2022,18 @@ exports[`/dashboard/reports/sales-collections > todos los filtros > resultado 1`
 </fieldset>
 <div>
 <label for="clientId">Cliente</label>
+<div>
 <select id="clientId" name="clientId">
 <option value="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="orderStatus">Estado del pedido</label>
+<div>
 <select id="orderStatus" name="orderStatus">
 <option value="">Todos los estados</option>
 <option value="registrado">Registrado</option>
@@ -1984,9 +2042,12 @@ exports[`/dashboard/reports/sales-collections > todos los filtros > resultado 1`
 <option value="entregado">Entregado</option>
 <option value="cancelado">Cancelado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="collectionStatus">Estado de cobranza</label>
+<div>
 <select id="collectionStatus" name="collectionStatus">
 <option value="">Todos los estados</option>
 <option value="sin_proforma">Sin proforma</option>
@@ -1994,6 +2055,8 @@ exports[`/dashboard/reports/sales-collections > todos los filtros > resultado 1`
 <option value="con_saldo" selected="">Con saldo pendiente</option>
 <option value="pagado">Pagado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchCode">Pedido o proforma</label>

@@ -98,22 +98,29 @@ exports[`/dashboard/inventory/supplier-materials > activos > resultado 1`] = `
 <form autoComplete="off" role="search" aria-label="Filtros de asociaciones proveedor-material" action="/dashboard/inventory/supplier-materials" method="GET">
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="availability">Disponibilidad</label>
+<div>
 <select id="availability" name="availability">
 <option value="" selected="">Disponibilidad</option>
 <option value="alta">Alta</option>
@@ -121,14 +128,19 @@ exports[`/dashboard/inventory/supplier-materials > activos > resultado 1`] = `
 <option value="baja">Baja</option>
 <option value="no_disponible">No disponible</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active" selected="">Activo</option>
 <option value="inactive">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -287,22 +299,29 @@ exports[`/dashboard/inventory/supplier-materials > sin filtros > resultado 1`] =
 <form autoComplete="off" role="search" aria-label="Filtros de asociaciones proveedor-material" action="/dashboard/inventory/supplier-materials" method="GET">
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="availability">Disponibilidad</label>
+<div>
 <select id="availability" name="availability">
 <option value="" selected="">Disponibilidad</option>
 <option value="alta">Alta</option>
@@ -310,14 +329,19 @@ exports[`/dashboard/inventory/supplier-materials > sin filtros > resultado 1`] =
 <option value="baja">Baja</option>
 <option value="no_disponible">No disponible</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="active">Activo</option>
 <option value="inactive">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -491,22 +515,29 @@ exports[`/dashboard/inventory/supplier-materials > todos los filtros > resultado
 <form autoComplete="off" role="search" aria-label="Filtros de asociaciones proveedor-material" action="/dashboard/inventory/supplier-materials" method="GET">
 <div>
 <label for="supplier">Proveedor</label>
+<div>
 <select id="supplier" name="supplier">
 <option value="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="availability">Disponibilidad</label>
+<div>
 <select id="availability" name="availability">
 <option value="">Disponibilidad</option>
 <option value="alta" selected="">Alta</option>
@@ -514,14 +545,19 @@ exports[`/dashboard/inventory/supplier-materials > todos los filtros > resultado
 <option value="baja">Baja</option>
 <option value="no_disponible">No disponible</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active">Activo</option>
 <option value="inactive" selected="">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -706,20 +742,26 @@ exports[`/dashboard/inventory/supplier-materials/[id]/edit > editar > resultado 
 <div>
 <label for="id_proveedor">Proveedor<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_proveedor" required="" name="id_proveedor">
 <option value="">Selecciona un proveedor</option>
 <option value="id_proveedor-1" selected="">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="id_material">Material<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_material" required="" name="id_material">
 <option value="">Selecciona un material</option>
 <option value="id_material-1" selected="">nombre_material-1 (unidad_medida-1)</option>
 <option value="id_material-2">nombre_material-2 (unidad_medida-2)</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -740,6 +782,7 @@ exports[`/dashboard/inventory/supplier-materials/[id]/edit > editar > resultado 
 </div>
 <div>
 <label for="disponibilidad">Disponibilidad</label>
+<div>
 <select id="disponibilidad" name="disponibilidad">
 <option value="">Sin definir</option>
 <option value="alta">Alta</option>
@@ -747,6 +790,8 @@ exports[`/dashboard/inventory/supplier-materials/[id]/edit > editar > resultado 
 <option value="baja">Baja</option>
 <option value="no_disponible">No disponible</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -880,20 +925,26 @@ exports[`/dashboard/inventory/supplier-materials/[id]/edit > editar con regreso 
 <div>
 <label for="id_proveedor">Proveedor<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_proveedor" required="" name="id_proveedor">
 <option value="">Selecciona un proveedor</option>
 <option value="id_proveedor-1" selected="">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="id_material">Material<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_material" required="" name="id_material">
 <option value="">Selecciona un material</option>
 <option value="id_material-1" selected="">nombre_material-1 (unidad_medida-1)</option>
 <option value="id_material-2">nombre_material-2 (unidad_medida-2)</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -914,6 +965,7 @@ exports[`/dashboard/inventory/supplier-materials/[id]/edit > editar con regreso 
 </div>
 <div>
 <label for="disponibilidad">Disponibilidad</label>
+<div>
 <select id="disponibilidad" name="disponibilidad">
 <option value="">Sin definir</option>
 <option value="alta">Alta</option>
@@ -921,6 +973,8 @@ exports[`/dashboard/inventory/supplier-materials/[id]/edit > editar con regreso 
 <option value="baja">Baja</option>
 <option value="no_disponible">No disponible</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1057,20 +1111,26 @@ exports[`/dashboard/inventory/supplier-materials/new > formulario > resultado 1`
 <div>
 <label for="id_proveedor">Proveedor<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_proveedor" required="" name="id_proveedor">
 <option value="" selected="">Selecciona un proveedor</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="id_material">Material<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_material" required="" name="id_material">
 <option value="" selected="">Selecciona un material</option>
 <option value="id_material-1">nombre_material-1 (unidad_medida-1)</option>
 <option value="id_material-2">nombre_material-2 (unidad_medida-2)</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1091,6 +1151,7 @@ exports[`/dashboard/inventory/supplier-materials/new > formulario > resultado 1`
 </div>
 <div>
 <label for="disponibilidad">Disponibilidad</label>
+<div>
 <select id="disponibilidad" name="disponibilidad">
 <option value="" selected="">Sin definir</option>
 <option value="alta">Alta</option>
@@ -1098,6 +1159,8 @@ exports[`/dashboard/inventory/supplier-materials/new > formulario > resultado 1`
 <option value="baja">Baja</option>
 <option value="no_disponible">No disponible</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1204,20 +1267,26 @@ exports[`/dashboard/inventory/supplier-materials/new > formulario con regreso al
 <div>
 <label for="id_proveedor">Proveedor<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_proveedor" required="" name="id_proveedor">
 <option value="" selected="">Selecciona un proveedor</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="id_material">Material<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_material" required="" name="id_material">
 <option value="" selected="">Selecciona un material</option>
 <option value="id_material-1">nombre_material-1 (unidad_medida-1)</option>
 <option value="id_material-2">nombre_material-2 (unidad_medida-2)</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1238,6 +1307,7 @@ exports[`/dashboard/inventory/supplier-materials/new > formulario con regreso al
 </div>
 <div>
 <label for="disponibilidad">Disponibilidad</label>
+<div>
 <select id="disponibilidad" name="disponibilidad">
 <option value="" selected="">Sin definir</option>
 <option value="alta">Alta</option>
@@ -1245,6 +1315,8 @@ exports[`/dashboard/inventory/supplier-materials/new > formulario con regreso al
 <option value="baja">Baja</option>
 <option value="no_disponible">No disponible</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1274,20 +1346,26 @@ exports[`panel lateral de asociaciones proveedor-material > el alta en panel aut
 <div>
 <label for="id_proveedor">Proveedor<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_proveedor" required="" name="id_proveedor">
 <option value="" selected="">Selecciona un proveedor</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="id_material">Material<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_material" required="" name="id_material">
 <option value="" selected="">Selecciona un material</option>
 <option value="id_material-1">nombre_material-1 (unidad_medida-1)</option>
 <option value="id_material-2">nombre_material-2 (unidad_medida-2)</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1308,6 +1386,7 @@ exports[`panel lateral de asociaciones proveedor-material > el alta en panel aut
 </div>
 <div>
 <label for="disponibilidad">Disponibilidad</label>
+<div>
 <select id="disponibilidad" name="disponibilidad">
 <option value="" selected="">Sin definir</option>
 <option value="alta">Alta</option>
@@ -1315,6 +1394,8 @@ exports[`panel lateral de asociaciones proveedor-material > el alta en panel aut
 <option value="baja">Baja</option>
 <option value="no_disponible">No disponible</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 </div>
@@ -1345,20 +1426,26 @@ exports[`panel lateral de asociaciones proveedor-material > la edicion en panel 
 <div>
 <label for="id_proveedor">Proveedor<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_proveedor" required="" name="id_proveedor">
 <option value="">Selecciona un proveedor</option>
 <option value="id_proveedor-1" selected="">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="id_material">Material<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_material" required="" name="id_material">
 <option value="">Selecciona un material</option>
 <option value="id_material-1" selected="">nombre_material-1 (unidad_medida-1)</option>
 <option value="id_material-2">nombre_material-2 (unidad_medida-2)</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1379,6 +1466,7 @@ exports[`panel lateral de asociaciones proveedor-material > la edicion en panel 
 </div>
 <div>
 <label for="disponibilidad">Disponibilidad</label>
+<div>
 <select id="disponibilidad" name="disponibilidad">
 <option value="">Sin definir</option>
 <option value="alta">Alta</option>
@@ -1386,6 +1474,8 @@ exports[`panel lateral de asociaciones proveedor-material > la edicion en panel 
 <option value="baja">Baja</option>
 <option value="no_disponible">No disponible</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 </div>

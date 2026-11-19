@@ -97,14 +97,18 @@ exports[`/dashboard/production/campaigns > acciones de cada estado > resultado 1
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="planificada">Planificada</option>
@@ -112,6 +116,8 @@ exports[`/dashboard/production/campaigns > acciones de cada estado > resultado 1
 <option value="finalizada">Finalizada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -407,14 +413,18 @@ exports[`/dashboard/production/campaigns > sin campanas > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="planificada">Planificada</option>
@@ -422,6 +432,8 @@ exports[`/dashboard/production/campaigns > sin campanas > resultado 1`] = `
 <option value="finalizada">Finalizada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -627,14 +639,18 @@ exports[`/dashboard/production/campaigns > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="planificada">Planificada</option>
@@ -642,6 +658,8 @@ exports[`/dashboard/production/campaigns > sin filtros > resultado 1`] = `
 <option value="finalizada">Finalizada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -893,14 +911,18 @@ exports[`/dashboard/production/campaigns > solo hasta > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="" selected="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="planificada">Planificada</option>
@@ -908,6 +930,8 @@ exports[`/dashboard/production/campaigns > solo hasta > resultado 1`] = `
 <option value="finalizada">Finalizada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1186,14 +1210,18 @@ exports[`/dashboard/production/campaigns > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="product">Producto</label>
+<div>
 <select id="product" name="product">
 <option value="">Todos los productos</option>
 <option value="id_producto-1">nombre_producto-1</option>
 <option value="id_producto-2">nombre_producto-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="planificada">Planificada</option>
@@ -1201,6 +1229,8 @@ exports[`/dashboard/production/campaigns > todos los filtros > resultado 1`] = `
 <option value="finalizada">Finalizada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1469,10 +1499,13 @@ exports[`/dashboard/production/campaigns/@panel/(.)new > panel de alta > resulta
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="planificada" selected="">Planificada</option>
 <option value="activa">Activa</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="objetivo_general">Objetivo general</label>
@@ -2603,10 +2636,13 @@ exports[`/dashboard/production/campaigns/new > formulario > resultado 1`] = `
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="planificada" selected="">Planificada</option>
 <option value="activa">Activa</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="objetivo_general">Objetivo general</label>
@@ -2694,10 +2730,13 @@ exports[`/dashboard/production/campaigns/new > un returnTo ajeno vuelve a la lis
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="planificada" selected="">Planificada</option>
 <option value="activa">Activa</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="objetivo_general">Objetivo general</label>
@@ -2785,10 +2824,13 @@ exports[`/dashboard/production/campaigns/new > vuelve al returnTo > resultado 1`
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="planificada" selected="">Planificada</option>
 <option value="activa">Activa</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="objetivo_general">Objetivo general</label>
