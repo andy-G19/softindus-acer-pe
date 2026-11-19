@@ -10787,6 +10787,20 @@ No se verificó en staging:
 
 Los cubren `authz.test.ts`, `error-boundary-contract.test.ts` y las pruebas de cada formulario.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-19 (UTC) y comparados con git:
+
+- El registro de la verificación se publicó en `staging` con `f9fa3c9`: CI #231 en verde (5m 35s).
+- PR #59, abierto a las 14:44:37 UTC y fusionado con merge commit a las 14:51:54 UTC del
+  2026-11-19: 9 commits, de `4ca14d9` a `f9fa3c9`, y 11 archivos (+2.336 −1.999). Su CI, el #232,
+  sobre `f9fa3c9`, terminó en verde (5m 48s).
+- El merge commit `f41ccb1` tiene como padres `38ddacf` (`main`) y `f9fa3c9` (`staging`), y su
+  árbol es el de `f9fa3c9` (`8347a13`): `main` y `staging` tienen el mismo contenido. CI #233 en
+  verde (5m 32s).
+- Vercel desplegó `f41ccb1` en producción (`success` a las 14:53:44 UTC). La revisión no trae
+  migraciones.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
