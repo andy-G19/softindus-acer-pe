@@ -139,7 +139,7 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proforma..." name="q" value=""/>
@@ -406,7 +406,7 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proforma..." name="q" value=""/>
@@ -637,7 +637,7 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proforma..." name="q" value=""/>
@@ -886,7 +886,7 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proforma..." name="q" value=""/>
@@ -1237,7 +1237,7 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proforma..." name="q" value="PRF"/>
@@ -1486,7 +1486,7 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proforma..." name="q" value=""/>

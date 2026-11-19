@@ -124,7 +124,7 @@ exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de cuellos de botella" action="/dashboard/production/bottlenecks" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de cuellos de botella" action="/dashboard/production/bottlenecks" method="GET">
 <div>
 <label for="product-_R_1a_">Producto</label>
 <input type="hidden" name="product" value=""/>
@@ -453,7 +453,7 @@ exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de cuellos de botella" action="/dashboard/production/bottlenecks" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de cuellos de botella" action="/dashboard/production/bottlenecks" method="GET">
 <div>
 <label for="product-_R_1a_">Producto</label>
 <input type="hidden" name="product" value=""/>
@@ -801,7 +801,7 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] =
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de cuellos de botella" action="/dashboard/production/bottlenecks" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de cuellos de botella" action="/dashboard/production/bottlenecks" method="GET">
 <div>
 <label for="product-_R_1a_">Producto</label>
 <input type="hidden" name="product" value="PRO00000001"/>

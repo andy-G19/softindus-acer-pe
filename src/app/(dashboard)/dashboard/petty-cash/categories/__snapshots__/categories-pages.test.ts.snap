@@ -123,7 +123,7 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de categorías de gasto" action="/dashboard/petty-cash/categories" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de categorías de gasto" action="/dashboard/petty-cash/categories" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar categoría..." name="q" value="transporte"/>
@@ -315,7 +315,7 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de categorías de gasto" action="/dashboard/petty-cash/categories" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de categorías de gasto" action="/dashboard/petty-cash/categories" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar categoría..." name="q" value=""/>
@@ -501,7 +501,7 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de categorías de gasto" action="/dashboard/petty-cash/categories" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de categorías de gasto" action="/dashboard/petty-cash/categories" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar categoría..." name="q" value=""/>

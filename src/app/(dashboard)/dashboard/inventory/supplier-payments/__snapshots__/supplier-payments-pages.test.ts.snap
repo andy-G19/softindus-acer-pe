@@ -109,7 +109,7 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > resultado 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pagos a proveedores" action="/dashboard/inventory/supplier-payments" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pagos a proveedores" action="/dashboard/inventory/supplier-payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -335,7 +335,7 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > resultado 1`
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pagos a proveedores" action="/dashboard/inventory/supplier-payments" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pagos a proveedores" action="/dashboard/inventory/supplier-payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -525,7 +525,7 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > resultado 1`] = 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pagos a proveedores" action="/dashboard/inventory/supplier-payments" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pagos a proveedores" action="/dashboard/inventory/supplier-payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -831,7 +831,7 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > resultado 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pagos a proveedores" action="/dashboard/inventory/supplier-payments" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pagos a proveedores" action="/dashboard/inventory/supplier-payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value="F001"/>

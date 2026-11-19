@@ -453,7 +453,7 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar orden, cliente o producto..." name="q" value="lote"/>
@@ -877,7 +877,7 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar orden, cliente o producto..." name="q" value=""/>
@@ -1363,7 +1363,7 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar orden, cliente o producto..." name="q" value=""/>
@@ -1787,7 +1787,7 @@ exports[`/dashboard/production/work-orders > sin resultados > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar orden, cliente o producto..." name="q" value=""/>
@@ -2190,7 +2190,7 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar orden, cliente o producto..." name="q" value=""/>
@@ -2994,7 +2994,7 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar orden, cliente o producto..." name="q" value="puerta"/>

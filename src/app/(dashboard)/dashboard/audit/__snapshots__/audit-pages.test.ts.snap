@@ -176,7 +176,7 @@ exports[`/dashboard/audit > rango de mas de 366 dias > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de la bitácora" action="/dashboard/audit" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de la bitácora" action="/dashboard/audit" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar detalle, entidad o accion" name="q" value=""/>
@@ -402,7 +402,7 @@ exports[`/dashboard/audit > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de la bitácora" action="/dashboard/audit" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de la bitácora" action="/dashboard/audit" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar detalle, entidad o accion" name="q" value=""/>
@@ -597,7 +597,7 @@ exports[`/dashboard/audit > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de la bitácora" action="/dashboard/audit" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de la bitácora" action="/dashboard/audit" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar detalle, entidad o accion" name="q" value=""/>
@@ -1065,7 +1065,7 @@ exports[`/dashboard/audit > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de la bitácora" action="/dashboard/audit" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de la bitácora" action="/dashboard/audit" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar detalle, entidad o accion" name="q" value="cliente"/>

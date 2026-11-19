@@ -111,7 +111,7 @@ exports[`/dashboard/reports/suppliers-purchases > estados de pago y compra sin d
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -550,7 +550,7 @@ exports[`/dashboard/reports/suppliers-purchases > rango de mas de 366 dias > res
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -918,7 +918,7 @@ exports[`/dashboard/reports/suppliers-purchases > rango invertido > resultado 1`
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1093,7 +1093,7 @@ exports[`/dashboard/reports/suppliers-purchases > sin filtros > resultado 1`] = 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1500,7 +1500,7 @@ exports[`/dashboard/reports/suppliers-purchases > sin resultados > resultado 1`]
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1826,7 +1826,7 @@ exports[`/dashboard/reports/suppliers-purchases > todos los filtros > resultado 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>

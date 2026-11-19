@@ -179,7 +179,7 @@ export default async function PettyCashMovementsPage({
         </CardHeader>
 
         <CardContent>
-          <form method="GET" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <form method="GET" autoComplete="off" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div className="space-y-2">
               <Label htmlFor="caja">Caja chica</Label>
               <NativeSelect id="caja" name="caja" defaultValue={selectedCashBox}>

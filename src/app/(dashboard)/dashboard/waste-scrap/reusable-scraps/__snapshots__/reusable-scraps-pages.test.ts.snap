@@ -173,7 +173,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > resu
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -476,7 +476,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > resultado 1`] = 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -753,7 +753,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin retazos > resultado 1`] = 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -1040,7 +1040,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps > todos los filtros > resultado 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">

@@ -91,7 +91,7 @@ exports[`/dashboard/production/routes > inactivas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de rutas" action="/dashboard/production/routes" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de rutas" action="/dashboard/production/routes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar ruta, código o producto..." name="q" value=""/>
@@ -266,7 +266,7 @@ exports[`/dashboard/production/routes > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de rutas" action="/dashboard/production/routes" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de rutas" action="/dashboard/production/routes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar ruta, código o producto..." name="q" value=""/>
@@ -474,7 +474,7 @@ exports[`/dashboard/production/routes > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de rutas" action="/dashboard/production/routes" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de rutas" action="/dashboard/production/routes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar ruta, código o producto..." name="q" value="corte"/>
@@ -1060,7 +1060,7 @@ exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de etapas" action="/dashboard/production/routes/id_ruta-1/stages" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de etapas" action="/dashboard/production/routes/id_ruta-1/stages" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar etapa..." name="q" value=""/>
@@ -1321,7 +1321,7 @@ exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activa
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de etapas" action="/dashboard/production/routes/id_ruta-1/stages" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de etapas" action="/dashboard/production/routes/id_ruta-1/stages" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar etapa..." name="q" value="soldadura"/>
@@ -1622,7 +1622,7 @@ exports[`/dashboard/production/routes/[id]/stages > ruta sin etapas > resultado 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de etapas" action="/dashboard/production/routes/id_ruta-1/stages" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de etapas" action="/dashboard/production/routes/id_ruta-1/stages" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar etapa..." name="q" value=""/>
@@ -1835,7 +1835,7 @@ exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > re
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de etapas" action="/dashboard/production/routes/id_ruta-1/stages" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de etapas" action="/dashboard/production/routes/id_ruta-1/stages" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar etapa..." name="q" value=""/>

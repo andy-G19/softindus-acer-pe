@@ -129,7 +129,7 @@ exports[`/dashboard/inventory/entries > fechas no validas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar entrada..." name="q" value=""/>
@@ -345,7 +345,7 @@ exports[`/dashboard/inventory/entries > maestro de taller > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar entrada..." name="q" value=""/>
@@ -571,7 +571,7 @@ exports[`/dashboard/inventory/entries > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar entrada..." name="q" value=""/>
@@ -775,7 +775,7 @@ exports[`/dashboard/inventory/entries > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar entrada..." name="q" value=""/>
@@ -1081,7 +1081,7 @@ exports[`/dashboard/inventory/entries > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar entrada..." name="q" value="COM"/>

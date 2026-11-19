@@ -250,7 +250,7 @@ export default async function MonthlyFinancialSummaryPage({
         </CardHeader>
 
         <CardContent>
-          <form method="GET" className="flex flex-col gap-3 md:flex-row">
+          <form method="GET" autoComplete="off" className="flex flex-col gap-3 md:flex-row">
             <div className="space-y-2">
               <Label htmlFor="month">Mes</Label>
               <Input

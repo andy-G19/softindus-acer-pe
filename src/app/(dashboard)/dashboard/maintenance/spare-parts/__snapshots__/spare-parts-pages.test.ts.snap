@@ -130,7 +130,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de repuestos" action="/dashboard/maintenance/spare-parts" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de repuestos" action="/dashboard/maintenance/spare-parts" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar repuesto..." name="q" value=""/>
@@ -343,7 +343,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de repuestos" action="/dashboard/maintenance/spare-parts" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de repuestos" action="/dashboard/maintenance/spare-parts" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar repuesto..." name="q" value=""/>
@@ -581,7 +581,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de repuestos" action="/dashboard/maintenance/spare-parts" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de repuestos" action="/dashboard/maintenance/spare-parts" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar repuesto..." name="q" value="rodamiento"/>

@@ -96,7 +96,7 @@ exports[`/dashboard/production/recipes > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de recetas" action="/dashboard/production/recipes" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de recetas" action="/dashboard/production/recipes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar receta, código o producto..." name="q" value=""/>
@@ -357,7 +357,7 @@ exports[`/dashboard/production/recipes > sin recetas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de recetas" action="/dashboard/production/recipes" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de recetas" action="/dashboard/production/recipes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar receta, código o producto..." name="q" value=""/>
@@ -603,7 +603,7 @@ exports[`/dashboard/production/recipes > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de recetas" action="/dashboard/production/recipes" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de recetas" action="/dashboard/production/recipes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar receta, código o producto..." name="q" value="reja"/>

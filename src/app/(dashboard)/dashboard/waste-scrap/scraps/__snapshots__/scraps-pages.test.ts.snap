@@ -252,7 +252,7 @@ exports[`/dashboard/waste-scrap/scraps > filtros y maestro de taller > resultado
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de chatarra" action="/dashboard/waste-scrap/scraps" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de chatarra" action="/dashboard/waste-scrap/scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">
@@ -553,7 +553,7 @@ exports[`/dashboard/waste-scrap/scraps > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de chatarra" action="/dashboard/waste-scrap/scraps" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de chatarra" action="/dashboard/waste-scrap/scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
 <select id="estado" name="estado">

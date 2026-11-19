@@ -170,7 +170,7 @@ exports[`/dashboard/maintenance/machines > filtros y maestro de taller > resulta
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de máquinas" action="/dashboard/maintenance/machines" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de máquinas" action="/dashboard/maintenance/machines" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar maquina..." name="q" value="torno"/>
@@ -412,7 +412,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de máquinas" action="/dashboard/maintenance/machines" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de máquinas" action="/dashboard/maintenance/machines" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar maquina..." name="q" value=""/>
@@ -667,7 +667,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de máquinas" action="/dashboard/maintenance/machines" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de máquinas" action="/dashboard/maintenance/machines" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar maquina..." name="q" value=""/>

@@ -102,7 +102,7 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar producto..." name="q" value=""/>
@@ -355,7 +355,7 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar producto..." name="q" value="lampa"/>
@@ -607,7 +607,7 @@ exports[`/dashboard/commercial/products > filtros y vendedor > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar producto..." name="q" value="reja"/>
@@ -810,7 +810,7 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar producto..." name="q" value=""/>
@@ -1007,7 +1007,7 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar producto..." name="q" value=""/>
@@ -1204,7 +1204,7 @@ exports[`/dashboard/commercial/products > sin productos registrados > resultado 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar producto..." name="q" value=""/>

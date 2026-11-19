@@ -142,7 +142,7 @@ exports[`/dashboard/commercial/orders > fechas no validas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pedidos" action="/dashboard/commercial/orders" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pedidos" action="/dashboard/commercial/orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pedido..." name="q" value=""/>
@@ -403,7 +403,7 @@ exports[`/dashboard/commercial/orders > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pedidos" action="/dashboard/commercial/orders" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pedidos" action="/dashboard/commercial/orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pedido..." name="q" value=""/>
@@ -616,7 +616,7 @@ exports[`/dashboard/commercial/orders > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pedidos" action="/dashboard/commercial/orders" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pedidos" action="/dashboard/commercial/orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pedido..." name="q" value=""/>
@@ -963,7 +963,7 @@ exports[`/dashboard/commercial/orders > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pedidos" action="/dashboard/commercial/orders" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pedidos" action="/dashboard/commercial/orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pedido..." name="q" value="PED"/>
@@ -1206,7 +1206,7 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pedidos" action="/dashboard/commercial/orders" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pedidos" action="/dashboard/commercial/orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pedido..." name="q" value=""/>

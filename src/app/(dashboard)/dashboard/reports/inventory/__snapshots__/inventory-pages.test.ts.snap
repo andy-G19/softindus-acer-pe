@@ -112,7 +112,7 @@ exports[`/dashboard/reports/inventory > maestro de taller > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -457,7 +457,7 @@ exports[`/dashboard/reports/inventory > rango de mas de 366 dias > resultado 1`]
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -765,7 +765,7 @@ exports[`/dashboard/reports/inventory > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -934,7 +934,7 @@ exports[`/dashboard/reports/inventory > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1275,7 +1275,7 @@ exports[`/dashboard/reports/inventory > sin resultados > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1542,7 +1542,7 @@ exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1941,7 +1941,7 @@ exports[`/dashboard/reports/inventory > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>

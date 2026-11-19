@@ -93,7 +93,7 @@ exports[`/dashboard/reports/sales-collections > filtro por estado de cobranza en
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -417,7 +417,7 @@ exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza >
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -823,7 +823,7 @@ exports[`/dashboard/reports/sales-collections > rango de mas de 366 dias > resul
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1140,7 +1140,7 @@ exports[`/dashboard/reports/sales-collections > rango invertido > resultado 1`] 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1292,7 +1292,7 @@ exports[`/dashboard/reports/sales-collections > sin filtros, vendedor > resultad
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1644,7 +1644,7 @@ exports[`/dashboard/reports/sales-collections > sin resultados > resultado 1`] =
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1954,7 +1954,7 @@ exports[`/dashboard/reports/sales-collections > todos los filtros > resultado 1`
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>

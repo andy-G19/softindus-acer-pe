@@ -117,7 +117,7 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > resultado 1`
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar planilla u operario" name="q" value=""/>
@@ -422,7 +422,7 @@ exports[`/dashboard/staff/payrolls > segunda pagina con un filtro > resultado 1`
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar planilla u operario" name="q" value=""/>
@@ -715,7 +715,7 @@ exports[`/dashboard/staff/payrolls > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar planilla u operario" name="q" value=""/>
@@ -1118,7 +1118,7 @@ exports[`/dashboard/staff/payrolls > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar planilla u operario" name="q" value="quispe"/>
@@ -1411,7 +1411,7 @@ exports[`/dashboard/staff/payrolls > una planilla pendiente sin pagos ofrece anu
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de planillas" action="/dashboard/staff/payrolls" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar planilla u operario" name="q" value=""/>

@@ -815,7 +815,7 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de clientes" action="/dashboard/commercial/clients" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de clientes" action="/dashboard/commercial/clients" method="GET">
 <div>
 <label for="client-_R_1a_">Cliente</label>
 <input type="hidden" name="client" value=""/>
@@ -926,7 +926,7 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de clientes" action="/dashboard/commercial/clients" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de clientes" action="/dashboard/commercial/clients" method="GET">
 <div>
 <label for="client-_R_1a_">Cliente</label>
 <input type="hidden" name="client" value=""/>
