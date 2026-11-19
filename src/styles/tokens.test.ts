@@ -120,6 +120,13 @@ describe("tokens", () => {
     expect(theme).toContain("--color-placeholder");
   });
 
+  it("el interruptor tiene su verde, su sombra y su curva", () => {
+    expect(theme).toContain("--color-accent-forge");
+    expect(root).toContain("--shadow-thumb");
+    expect(theme).toContain("--shadow-thumb");
+    expect(root).toContain("--ease-settle");
+  });
+
   it("los colores de la etiqueta, el obligatorio y el solo lectura existen", () => {
     expect(root).toContain("--readonly-foreground");
     expect(theme).toContain("--color-readonly-foreground");

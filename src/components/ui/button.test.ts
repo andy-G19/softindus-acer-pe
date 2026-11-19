@@ -193,7 +193,7 @@ describe("foco del boton", () => {
     const selector = /([^{}]*):focus-visible\s*\{\s*outline:\s*2px solid/.exec(patterns)?.[1].trim() ?? "";
 
     expect(selector).toContain(":where(a, button,");
-    expect(selector).toContain(':not([data-slot="button"])');
+    expect(selector).toMatch(/:not\([^)]*\[data-slot="button"\][^)]*\)/);
   });
 
   // Un :not() suma la especificidad de su argumento: con la exclusion suelta, la regla pasaba de
@@ -203,7 +203,8 @@ describe("foco del boton", () => {
     const patterns = readFileSync("src/styles/patterns.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
     const selector = /([^{}]*):focus-visible\s*\{\s*outline:\s*2px solid/.exec(patterns)?.[1].trim() ?? "";
 
-    expect(selector).toContain(':where(:not([data-slot="button"]))');
+    // Desde el diseno de los campos la lista tambien excluye el interruptor.
+    expect(selector).toMatch(/:where\(:not\([^)]*\[data-slot="button"\][^)]*\)\)/);
   });
 });
 

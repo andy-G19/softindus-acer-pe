@@ -90,8 +90,10 @@
      regla se verian los dos a la vez. La exclusion va dentro de :where() para no sumar
      especificidad. Los campos (input, select, textarea) no estan en la lista: nunca mostraron
      este contorno, porque su propia regla de foco lo quitaba, y desde el diseno de los campos
-     esa regla vive en cada componente. */
-  .industrial-dark :where(a, button, [role="button"]):where(:not([data-slot="button"])):focus-visible {
+     esa regla vive en cada componente. Excluye tambien a Switch ([data-slot="switch"], un
+     button con role switch), que desde el diseno de los campos dibuja el mismo anillo. */
+  .industrial-dark
+    :where(a, button, [role="button"]):where(:not([data-slot="button"], [data-slot="switch"])):focus-visible {
     outline: 2px solid color-mix(in srgb, var(--ring) 72%, transparent);
     outline-offset: 2px;
   }

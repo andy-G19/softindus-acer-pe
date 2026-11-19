@@ -75,6 +75,8 @@
   --color-readonly-border: var(--readonly-border);
   --color-accent-steel: var(--accent-steel);
   --color-accent-copper: var(--accent-copper);
+  --color-accent-forge: var(--accent-forge);
+  --shadow-thumb: var(--shadow-thumb);
   --color-readonly-foreground: var(--readonly-foreground);
   --shadow-button: var(--shadow-button);
   --shadow-raised: var(--shadow-raised);
@@ -178,6 +180,8 @@
   /* Sombras: cada valor es el que ya usaba su componente. */
   /* Filo de luz arriba y apoyo abajo del boton principal; reemplaza su halo naranja. */
   --shadow-button: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 1px 2px rgba(0, 0, 0, 0.5);
+  /* Pulgar del interruptor (propuesta de los campos): un apoyo de 1 px. */
+  --shadow-thumb: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-raised: 0 14px 35px rgba(0, 0, 0, 0.18);
   --shadow-raised-hover: 0 12px 24px -8px rgba(0, 0, 0, 0.4);
   --shadow-card-hover: 0 16px 34px rgba(0, 0, 0, 0.24);
@@ -212,6 +216,8 @@
   --motion-slow: 250ms;
   /* Una vuelta del spinner (propuesta de los botones, 2026-11-19; antes 1 s de animate-spin). */
   --motion-spin: 800ms;
+  /* Curva que frena al final, para que el interruptor se asiente (propuesta de los campos). */
+  --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
   --motion-temper: 6s;
 }
 
