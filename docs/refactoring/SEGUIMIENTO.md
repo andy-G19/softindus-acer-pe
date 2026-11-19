@@ -10929,6 +10929,94 @@ Los dos pendientes de diseño ya registrados, D99 (reglas de `patterns.css` que 
 componentes) y D101 (el borde de color de las alertas, confirmado en la galería: las cinco tienen el
 mismo borde gris), pasan a la sesión de diseño.
 
+## Diseño de los botones (2026-11-19)
+
+Primer paso de la sesión de diseño. El responsable pidió animar los botones y cambiar el cian de
+«Limpiar filtros», y trajo su propia propuesta: una maqueta exportada de una herramienta de diseño
+(`tmp/Diseño_propuesta/Main-html.zip`, fuera de git), con los colores de las siete variantes, los
+bordes, el foco, las transiciones y unas alturas nuevas. Se leyó entera y no se ejecutó su código.
+
+### Decisiones
+
+| # | Decisión | Motivo |
+|---|---|---|
+| D129 | Se conservan las alturas de los botones (24, 28, 32 y 36 px); la propuesta las subía a 24, 30, 36 y 44 | Cambiaban todas las pantallas a la vez, y los campos miden 32 px: «Filtrar» quedaba 4 px más alto que los campos de su barra. Las alturas nuevas, si se adoptan, van junto con las de los campos |
+| D130 | Animación: la de la propuesta (transiciones de 150 ms y 1 px al pulsar) más «Tacto» (sube 1 px al pasar el puntero, se encoge al 97 % al pulsar) | La propuesta casi no añadía movimiento y el pedido era animar. `link` no se mueve |
+| D131 | El anillo de foco de la propuesta solo en los botones; la regla global de `patterns.css` excluye `[data-slot="button"]` | Sin excluirlos se veían el contorno global y el anillo a la vez. Enlaces, campos y los `<button>` sueltos conservan su contorno. Toca una regla de D99, que sigue abierto para el resto |
+| D132 | «Limpiar filtros» en cobre quemado tintado, como en la propuesta | Elegido por el responsable sabiendo que comparte familia de tono con el naranja (28° frente a 33°) y con la brasa de las advertencias: pesa menos porque es un tinte con borde, no un relleno |
+
+De la propuesta no se tomaron los tokens de espacio, radio y altura (`--space-*`, `--radius-*`,
+`--control-*`): los radios son los que ya existían y los espacios, la escala de Tailwind. Tampoco
+`--focus-ring` ni `--focus-ring-destructive`: el anillo doble es exactamente lo que dibujan
+`ring-offset-2` y `ring-2` de Tailwind sobre los tokens existentes, que además lo suman a la sombra
+del botón principal en el mismo `box-shadow`.
+
+### Commits
+
+| Commit | Qué cambia |
+|---|---|
+| `315e9d6` C0 | Registro de la integración del PR #60 (CI #236 en verde al segundo intento) y corrección: el PR sí tuvo CI propio, el #237 |
+| `a740cbe` C1 `feat(botones): colores de la propuesta en las variantes` | 13 colores y `--shadow-button` en `:root` y `@theme`, `--accent-copper`; fuera los cuatro tokens cian y `.forge-button-gradient`. El principal es un degradado corto con filo de luz en lugar del halo; `outline`, `secondary`, `destructive` y `clear` tienen borde; `link` va siempre subrayado |
+| `b8ae1f7` C2 `feat(botones): anillo de foco propio` | 2 px del color de fondo y anillo de 2 px, naranja y rojo (`--destructive-outline`) en `destructive`; exclusión en `patterns.css` |
+| `36b075c` C3 `feat(botones): animacion de tacto` | `transition-all` pasa a una lista de propiedades en `--motion-fast` con `ease-out`, que nombra `translate` y `scale` (en Tailwind v4 no son `transform`); con reducir movimiento, sin transición ni desplazamiento, con `!` porque `hover:` y `active:` tienen más especificidad. El spinner gira en `--motion-spin` (800 ms, antes 1 s), también en `LoadingState` |
+
+Cada `feat` empezó por su prueba roja (`button.test.ts`, `tokens.test.ts`), que falló por la razón
+esperada antes del código. `npm run check` en verde antes de cada commit (5623, 5626 y 5630
+pruebas); el único aviso de lint es el que ya existía (`_line` en `orders/actions.ts`). CI #239 sobre
+`36b075c` en verde (4m 14s) y Vercel desplegó staging.
+
+### Contraste medido (sobre la tarjeta `#15181d`)
+
+| Variante | Texto (reposo / hover / pulsado) | Otros |
+|---|---|---|
+| default | 7,9 (abajo del degradado) / 9,2 / 6,6:1 | — |
+| secondary | 13,1 / 11,4:1 | — |
+| outline | 14,9:1 en hover | Borde 3,08:1 (mínimo 3:1), 4,59:1 en hover |
+| ghost | 13,8:1 en hover | — |
+| destructive | 11,1 / 9,5:1 | — |
+| clear (cobre) | 8,3 / 7,5:1 | El cian anterior caía a 4,4:1 en hover y 3,0:1 al pulsar |
+| link | 7,7:1 | — |
+| Anillo de foco | 8,5:1 contra el fondo | — |
+
+### CSS compilado e instantáneas
+
+Comparado regla por regla con el del commit anterior (`tmp/diseno-botones/comparar-css.py`):
+
+| Commit | Reglas quitadas / nuevas / cambiadas | Instantáneas (líneas) |
+|---|---|---|
+| C1 | 24 / 32 / 4 bloques de tokens | 39 (111), agrupadas por diferencia de clases: solo clases de las variantes y 4 textos de la paleta de la galería |
+| C2 | 7 / 6 / 0 | 38 (107): solo clases del foco |
+| C3 | 0 / 11 / 1 bloque de tokens | 42 (118): animación y spinner |
+
+La comparación atrapó dos veces utilidades fantasma que las pruebas no ven: en el C2, `.ring`,
+`.ring-2` y `.ring-offset-2`, de una variable llamada `ring` y un comentario de la prueba; en el C3,
+`.transform` con cinco `@property`, de un comentario que nombraba la propiedad. Se renombraron antes
+del commit y no llegaron a staging.
+
+### Verificación en staging
+
+Leída con los estilos calculados, no a ojo, después del despliegue de `36b075c`:
+
+- Las siete variantes tienen los colores, bordes y subrayado de la propuesta; el principal, la
+  sombra `inset 0 1px 0 rgba(255,255,255,.28), 0 1px 2px rgba(0,0,0,.5)`, sin el halo.
+- Hover sobre «Editar» (ghost) en Clientes: `translate: 0px -1px` y el fondo `--ghost-hover`.
+- Foco con teclado en «Filtrar»: `0 0 0 2px #0a0b0d, 0 0 0 4px #f2941f` más la sombra del botón,
+  `outline: none`; la sombra se anima en 150 ms. En «Inactivar» el anillo es rojo. El enlace
+  «Comercial» de las migas conserva el contorno global (naranja al 72 %, 2 px).
+- El spinner gira en 0,8 s.
+- En la confirmación destructiva, «Cancelar» (outline) ya tiene borde visible.
+
+Capturas del antes y el después (galería, barra de filtros y filas de Clientes, confirmación
+destructiva, foco) en `tmp/diseno-botones/capturas/`, fuera de git.
+
+### Pendientes que deja
+
+| Pendiente | Detalle |
+|---|---|
+| Los botones que no siguen el diseño solos | El login (sus clases propias ganan: `shadow-md`, `transition`, su color de anillo); el enlace rojo de Costos; los `<button>` que no son `Button`: la flecha de `BackButton`, el ojo de la contraseña y las opciones de `SearchableSelect` |
+| Alturas nuevas (D129) | Solo junto con las de los campos |
+| D99 y D101 | Siguen abiertos: D131 solo sacó a los botones de la regla de foco |
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
