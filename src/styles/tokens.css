@@ -74,6 +74,8 @@
   --color-placeholder: var(--placeholder);
   --color-readonly-border: var(--readonly-border);
   --color-accent-steel: var(--accent-steel);
+  --color-accent-copper: var(--accent-copper);
+  --color-readonly-foreground: var(--readonly-foreground);
   --shadow-button: var(--shadow-button);
   --shadow-raised: var(--shadow-raised);
   --shadow-raised-hover: var(--shadow-raised-hover);
@@ -163,6 +165,8 @@
      del fondo, la misma linea de --metal-brush del login. */
   --placeholder: color-mix(in srgb, var(--muted-foreground) 85%, transparent);
   --readonly-border: color-mix(in srgb, var(--accent-steel) 45%, transparent);
+  /* Chip «Solo lectura»: acero claro, 6,9:1 a 10 px (el acero de marca da 3,5:1). */
+  --readonly-foreground: #86a3cd;
   --texture-metal: repeating-linear-gradient(
     135deg,
     var(--metal-brush) 0px,

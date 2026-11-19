@@ -1041,7 +1041,10 @@ exports[`/dashboard/users/@panel/(.)[id]/edit > panel del propio usuario > resul
 <div>
 <label for="rol">Rol</label>
 <input id="rol" readOnly="" aria-describedby="rol-ayuda" value="nombre_rol-1"/>
-<p id="rol-ayuda">No puedes cambiar tu propio rol.</p>
+<p id="rol-ayuda">
+<span aria-hidden="true">
+<svg/>Solo lectura</span>
+<span aria-hidden="true"> · </span>No puedes cambiar tu propio rol.</p>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
@@ -1228,7 +1231,10 @@ exports[`/dashboard/users/[id]/edit > editar el propio usuario > resultado 1`] =
 <div>
 <label for="rol">Rol</label>
 <input id="rol" readOnly="" aria-describedby="rol-ayuda" value="nombre_rol-1"/>
-<p id="rol-ayuda">No puedes cambiar tu propio rol.</p>
+<p id="rol-ayuda">
+<span aria-hidden="true">
+<svg/>Solo lectura</span>
+<span aria-hidden="true"> · </span>No puedes cambiar tu propio rol.</p>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>

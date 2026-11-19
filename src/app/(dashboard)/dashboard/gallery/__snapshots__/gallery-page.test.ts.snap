@@ -759,7 +759,8 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <button type="button">Limpiar</button>
 </div>
 </div>
-<p id="galeria_cliente_error-error">El cliente seleccionado no existe o está inactivo.</p>
+<p id="galeria_cliente_error-error">
+<svg/>El cliente seleccionado no existe o está inactivo.</p>
 </div>
 </div>
 </figure>
@@ -794,7 +795,8 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </label>
 <input id="galeria-field-ruc" required="" aria-invalid="true" aria-describedby="galeria-field-ruc-ayuda galeria-field-ruc-error" inputMode="numeric" value="2012345"/>
 <p id="galeria-field-ruc-ayuda">11 dígitos.</p>
-<p id="galeria-field-ruc-error">El RUC debe tener 11 dígitos.</p>
+<p id="galeria-field-ruc-error">
+<svg/>El RUC debe tener 11 dígitos.</p>
 </div>
 </div>
 </figure>
@@ -812,7 +814,8 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </select>
 <svg/>
 </div>
-<p id="galeria-field-tipo-error">Seleccione un tipo de cliente.</p>
+<p id="galeria-field-tipo-error">
+<svg/>Seleccione un tipo de cliente.</p>
 </div>
 </div>
 </figure>
@@ -825,7 +828,8 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <textarea id="galeria-field-motivo" required="" aria-invalid="true" aria-describedby="galeria-field-motivo-ayuda galeria-field-motivo-error">
 </textarea>
 <p id="galeria-field-motivo-ayuda">Queda registrado en la bitácora.</p>
-<p id="galeria-field-motivo-error">El motivo es obligatorio.</p>
+<p id="galeria-field-motivo-error">
+<svg/>El motivo es obligatorio.</p>
 </div>
 </div>
 </figure>
@@ -845,7 +849,10 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <div>
 <label for="galeria-field-registro">Código de registro</label>
 <input id="galeria-field-registro" readOnly="" aria-describedby="galeria-field-registro-ayuda" value="CLI00000001"/>
-<p id="galeria-field-registro-ayuda">Lo asigna el sistema; se puede copiar y se envía.</p>
+<p id="galeria-field-registro-ayuda">
+<span aria-hidden="true">
+<svg/>Solo lectura</span>
+<span aria-hidden="true"> · </span>Lo asigna el sistema; se puede copiar y se envía.</p>
 </div>
 </div>
 </figure>
@@ -856,7 +863,10 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <label for="galeria-field-rol">Rol</label>
 <input id="galeria-field-rol" readOnly="" aria-describedby="galeria-field-rol-ayuda" value="Vendedor"/>
 <input type="hidden" name="galeria_rol" value="SELLER"/>
-<p id="galeria-field-rol-ayuda">No puedes cambiar tu propio rol.</p>
+<p id="galeria-field-rol-ayuda">
+<span aria-hidden="true">
+<svg/>Solo lectura</span>
+<span aria-hidden="true"> · </span>No puedes cambiar tu propio rol.</p>
 </div>
 </div>
 </figure>
@@ -1325,7 +1335,8 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <div>
 <label for="galeria-listado-invertido-hasta">Hasta</label>
 <input type="date" id="galeria-listado-invertido-hasta" aria-invalid="true" aria-describedby="galeria-listado-invertido-hasta-error" min="2026-10-13" name="dateTo" value="2026-10-01"/>
-<p id="galeria-listado-invertido-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
+<p id="galeria-listado-invertido-hasta-error">
+<svg/>La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
 </fieldset>
 <div>

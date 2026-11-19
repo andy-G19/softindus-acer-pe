@@ -231,9 +231,13 @@ describe("UserForm", () => {
     expect(rol.readOnly).toBe(true);
     expect(rol.name).toBe("");
     expect(label?.textContent).toContain("Rol");
-    expect(document.getElementById(rol.getAttribute("aria-describedby") ?? "")?.textContent).toBe(
-      "No puedes cambiar tu propio rol.",
-    );
+    // Lo que anuncia el lector: la descripcion accesible omite lo que lleva aria-hidden, como
+    // el chip «Solo lectura» del diseno de los campos (el readonly ya se anuncia por si solo).
+    const ayuda = document.getElementById(rol.getAttribute("aria-describedby") ?? "")?.cloneNode(true) as
+      | HTMLElement
+      | undefined;
+    ayuda?.querySelectorAll('[aria-hidden="true"]').forEach((node) => node.remove());
+    expect(ayuda?.textContent).toBe("No puedes cambiar tu propio rol.");
 
     await submit();
 

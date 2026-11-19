@@ -239,7 +239,6 @@ describe("Campo compartido", () => {
   characterize([
     ["error", h(FieldError, { messages: ["Ingrese un correo valido."] })],
     ["error con id", h(FieldError, { id: "correo-error", messages: ["Ingrese un correo valido."] })],
-    ["error pequeno", h(FieldError, { messages: ["Requerido"], size: "sm" })],
     [
       "campo completo con error",
       h(Field, {

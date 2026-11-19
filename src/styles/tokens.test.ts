@@ -120,6 +120,12 @@ describe("tokens", () => {
     expect(theme).toContain("--color-placeholder");
   });
 
+  it("los colores de la etiqueta, el obligatorio y el solo lectura existen", () => {
+    expect(root).toContain("--readonly-foreground");
+    expect(theme).toContain("--color-readonly-foreground");
+    expect(theme).toContain("--color-accent-copper");
+  });
+
   it("el giro del spinner tiene su duracion en :root", () => {
     expect(root).toContain("--motion-spin");
   });

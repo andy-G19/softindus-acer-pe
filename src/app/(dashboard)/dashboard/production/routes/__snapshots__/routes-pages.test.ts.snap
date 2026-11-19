@@ -796,7 +796,10 @@ exports[`/dashboard/production/routes/[id]/edit > con ordenes asociadas > result
 <div>
 <label for="producto_bloqueado">Producto</label>
 <input id="producto_bloqueado" readOnly="" aria-describedby="producto_bloqueado-ayuda" value="nombre_producto-1"/>
-<p id="producto_bloqueado-ayuda">Esta ruta tiene órdenes asociadas; el producto no se puede cambiar desde datos maestros productivos.</p>
+<p id="producto_bloqueado-ayuda">
+<span aria-hidden="true">
+<svg/>Solo lectura</span>
+<span aria-hidden="true"> · </span>Esta ruta tiene órdenes asociadas; el producto no se puede cambiar desde datos maestros productivos.</p>
 </div>
 <div>
 <label for="nombre_ruta">Nombre de la ruta<span aria-hidden="true">*</span>
@@ -912,7 +915,10 @@ exports[`/dashboard/production/routes/[id]/edit > editar > resultado 1`] = `
 <div>
 <label for="producto_bloqueado">Producto</label>
 <input id="producto_bloqueado" readOnly="" aria-describedby="producto_bloqueado-ayuda" value="nombre_producto-1"/>
-<p id="producto_bloqueado-ayuda">Esta ruta tiene órdenes asociadas; el producto no se puede cambiar desde datos maestros productivos.</p>
+<p id="producto_bloqueado-ayuda">
+<span aria-hidden="true">
+<svg/>Solo lectura</span>
+<span aria-hidden="true"> · </span>Esta ruta tiene órdenes asociadas; el producto no se puede cambiar desde datos maestros productivos.</p>
 </div>
 <div>
 <label for="nombre_ruta">Nombre de la ruta<span aria-hidden="true">*</span>
@@ -3284,7 +3290,10 @@ exports[`panel lateral de rutas > la edicion en panel hace la misma consulta que
 <div>
 <label for="producto_bloqueado">Producto</label>
 <input id="producto_bloqueado" readOnly="" aria-describedby="producto_bloqueado-ayuda" value="nombre_producto-1"/>
-<p id="producto_bloqueado-ayuda">Esta ruta tiene órdenes asociadas; el producto no se puede cambiar desde datos maestros productivos.</p>
+<p id="producto_bloqueado-ayuda">
+<span aria-hidden="true">
+<svg/>Solo lectura</span>
+<span aria-hidden="true"> · </span>Esta ruta tiene órdenes asociadas; el producto no se puede cambiar desde datos maestros productivos.</p>
 </div>
 <div>
 <label for="nombre_ruta">Nombre de la ruta<span aria-hidden="true">*</span>

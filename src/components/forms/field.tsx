@@ -1,4 +1,5 @@
 import { useId, type ReactNode } from "react";
+import { CircleAlert, Lock } from "lucide-react";
 
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
@@ -24,21 +25,35 @@ type FieldErrorProps = {
   id?: string;
   /** Mensajes de Zod del campo (state.fieldErrors?.campo); se muestra el primero. */
   messages?: string[];
-  /** "sm" es el tamano de los formularios en linea de los catalogos. */
-  size?: "default" | "sm";
 };
 
-// Mismo HTML que las copias locales de los formularios, mas el id que lo
-// asocia con su control.
-export function FieldError({ id, messages, size = "default" }: FieldErrorProps) {
+// Diseno de los campos (2026-11-19): 12 px en el rojo de los bordes de error,
+// medio peso y un icono de alerta que el lector no anuncia. El id lo asocia
+// con su control.
+export function FieldError({ id, messages }: FieldErrorProps) {
   if (!messages?.length) {
     return null;
   }
 
   return (
-    <p id={id} className={cn(size === "sm" ? "text-xs" : "text-sm", "text-destructive")}>
+    <p id={id} className="flex items-start gap-1.5 text-xs font-medium text-destructive-outline">
+      <CircleAlert aria-hidden="true" className="mt-px size-3.5 shrink-0" />
       {messages[0]}
     </p>
+  );
+}
+
+// Chip de solo lectura (diseno de los campos): visual, porque el lector ya
+// anuncia el readonly del control.
+function ReadOnlyChip() {
+  return (
+    <span
+      aria-hidden="true"
+      className="inline-flex items-center gap-1 font-mono text-[0.625rem] tracking-wider text-readonly-foreground uppercase"
+    >
+      <Lock className="size-3" />
+      Solo lectura
+    </span>
   );
 }
 
@@ -94,13 +109,14 @@ export function Field({
     <div
       data-slot="field"
       data-disabled={disabled ? "true" : undefined}
-      className={cn("group space-y-2", className)}
+      className={cn("group space-y-1.5", className)}
     >
-      <Label htmlFor={id} className="gap-1">
+      <Label htmlFor={id} className="gap-0.5 text-[0.8125rem]">
         {label}
-        {/* El asterisco es visual: el lector anuncia el required del control. */}
+        {/* El asterisco es visual: el lector anuncia el required del control. Cobre, no
+            rojo, para no parecer un error. */}
         {required ? (
-          <span aria-hidden="true" className="text-destructive">
+          <span aria-hidden="true" className="font-semibold text-accent-copper">
             *
           </span>
         ) : null}
@@ -108,7 +124,17 @@ export function Field({
       {children(control)}
       {description ? (
         <p id={descriptionId} className="text-xs text-muted-foreground">
+          {readOnly ? (
+            <>
+              <ReadOnlyChip />
+              <span aria-hidden="true"> · </span>
+            </>
+          ) : null}
           {description}
+        </p>
+      ) : readOnly ? (
+        <p className="text-xs">
+          <ReadOnlyChip />
         </p>
       ) : null}
       <FieldError id={errorId} messages={errors} />
