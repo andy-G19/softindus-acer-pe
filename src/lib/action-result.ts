@@ -12,8 +12,8 @@ import type { FieldErrors } from "@/lib/errors";
  *   con el, y sirve para dar un solo aviso por operacion sin ocultar dos
  *   operaciones iguales seguidas.
  *
- * Sucede a ActionErrorState (src/lib/errors.ts) en los formularios que se
- * migran a la pista B; los demas siguen con ActionErrorState.
+ * Es la unica forma de estado de formulario: sucedio a ActionErrorState, que
+ * se retiro al cerrar la entrega 11, cuando ya ningun formulario la usaba.
  */
 export type FormActionState<Values, Data> =
   | { status: "idle" }

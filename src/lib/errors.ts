@@ -136,29 +136,6 @@ function logCaughtError(error: unknown, context?: Record<string, unknown>) {
 export type FieldErrors = Partial<Record<string, string[]>>;
 
 /**
- * Estado que devuelven las Server Actions usadas con useActionState: un
- * mensaje general (cadena vacia si no hay error) y, opcionalmente, los
- * errores de cada campo. Es la forma que consumen hoy los formularios.
- */
-export type ActionErrorState = {
-  error: string;
-  fieldErrors?: FieldErrors;
-};
-
-/**
- * Convierte cualquier error capturado en un estado seguro para un
- * useActionState/Server Action, registrando el detalle real en el logger.
- */
-export function toActionError(
-  error: unknown,
-  context?: Record<string, unknown>,
-): ActionErrorState {
-  logCaughtError(error, context);
-
-  return { error: getErrorMessage(error) };
-}
-
-/**
  * Convierte cualquier error capturado en una respuesta JSON segura para una
  * ruta API, registrando el detalle real en el logger y preservando el
  * status code cuando el error es un AppError conocido.
