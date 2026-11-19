@@ -22,6 +22,7 @@ import {
 import { OperationKeyField } from "@/components/forms/operation-key-field";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { SubmitButton } from "@/components/forms/submit-button";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -404,11 +405,7 @@ export function WorkOrderForm({
           </Alert>
         ) : null}
 
-        {state.status === "error" ? (
-          <Alert variant="destructive" role="alert" aria-live="polite">
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        ) : null}
+        <FormErrorAlert state={state} />
 
         <section className="grid gap-5 md:grid-cols-2">
           <Field

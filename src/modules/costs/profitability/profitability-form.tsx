@@ -6,7 +6,7 @@ import { ActionForm } from "@/components/forms/action-form";
 import { Field } from "@/components/forms/field";
 import { useFormResult } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Textarea } from "@/components/ui/textarea";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
 import type { ProfitabilityFormState } from "@/modules/costs/profitability/actions";
@@ -37,11 +37,7 @@ export function ProfitabilityForm({ action, idCosteo, successNotification }: Pro
     <ActionForm action={formAction} pending={pending} resultKey={resultKey} className="mt-5 space-y-4">
       <input type="hidden" name="id_costeo" value={idCosteo} />
 
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       <Field id="observaciones_rentabilidad" label="Observaciones" errors={fieldErrors?.observaciones}>
         {(control) => (

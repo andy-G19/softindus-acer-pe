@@ -8,7 +8,7 @@ import { ActionForm } from "@/components/forms/action-form";
 import { Field } from "@/components/forms/field";
 import { useFormResult, useFormSurface } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -96,11 +96,7 @@ export function MachineForm({ action, defaultValues, submitLabel, successNotific
         <input type="hidden" name="id_maquina" value={defaultValues.id_maquina} />
       ) : null}
 
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       <div className="grid gap-4 @md:grid-cols-2">
         <Field id="nombre" label="Nombre de la maquina" required errors={fieldErrors?.nombre}>

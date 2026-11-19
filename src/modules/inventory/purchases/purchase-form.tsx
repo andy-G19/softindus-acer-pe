@@ -10,7 +10,7 @@ import { DiscardConfirmDialog, useDiscardGuard, useFormResult } from "@/componen
 import { OperationKeyField } from "@/components/forms/operation-key-field";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -228,11 +228,7 @@ export function PurchaseForm({
       >
         <OperationKeyField scope="compra:nueva" completedKey={completedKey} />
 
-        {state.status === "error" ? (
-          <Alert variant="destructive" role="alert" aria-live="polite">
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        ) : null}
+        <FormErrorAlert state={state} />
 
         <section className="space-y-5 rounded-xl border border-border bg-card p-6 [box-shadow:var(--shadow-raised)]">
           <div className="space-y-2">

@@ -361,7 +361,7 @@ exports[`/dashboard/commercial/receipts > rango invertido > resultado 1`] = `
 <td colSpan="8">
 <div>
 <div>
-<p>Todavía no hay comprobantes registrados.</p>
+<p>No se encontraron comprobantes con los filtros aplicados.</p>
 </div>
 </div>
 </td>

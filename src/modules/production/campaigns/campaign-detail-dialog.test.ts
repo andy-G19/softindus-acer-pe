@@ -178,7 +178,9 @@ describe("CampaignDetailDialog", () => {
     expect(field<HTMLInputElement>("cantidad_objetivo").value).toBe("25");
     expect(field<HTMLTextAreaElement>("observaciones").value).toBe("Primera semana");
     expect(document.activeElement).toBe(field("id_producto"));
-    expect(dialog()?.querySelector('[role="alert"]')?.textContent).toContain(message);
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(dialog()?.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain(message);
     expect(field("id_producto-error").textContent).toBe(message);
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(dialog()).not.toBeNull();

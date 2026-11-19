@@ -9,7 +9,7 @@ import { Field } from "@/components/forms/field";
 import { FormDialog } from "@/components/forms/form-dialog";
 import { useFormResult, useFormSurface } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { DialogBody, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -63,11 +63,7 @@ export function ExpenseCategoryForm({ action, category, submitLabel, successNoti
     <>
       {category ? <input type="hidden" name="id_categoria_gasto" value={category.id_categoria_gasto} /> : null}
 
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       <Field id="nombre_categoria" label="Nombre de categoría" required errors={fieldErrors?.nombre_categoria}>
         {(control) => <Input {...control} name="nombre_categoria" defaultValue={values.nombre_categoria} />}

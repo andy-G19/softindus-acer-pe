@@ -7,7 +7,7 @@ import { Field } from "@/components/forms/field";
 import { useFormResult } from "@/components/forms/form-surface";
 import { OperationKeyField } from "@/components/forms/operation-key-field";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -94,11 +94,7 @@ export function SupplierPaymentForm({
           <input type="hidden" name="id_compra" value={idCompra} />
           <OperationKeyField scope={`pago_proveedor:${idCompra}`} completedKey={completedKey} />
 
-          {state.status === "error" ? (
-            <Alert variant="destructive" role="alert" aria-live="polite">
-              <AlertDescription>{state.error}</AlertDescription>
-            </Alert>
-          ) : null}
+          <FormErrorAlert state={state} />
 
           <div className="grid gap-5 md:grid-cols-3">
             <Field id="fecha_pago" label="Fecha de pago" required errors={fieldErrors?.fecha_pago}>

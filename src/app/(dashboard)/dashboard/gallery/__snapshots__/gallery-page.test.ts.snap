@@ -911,6 +911,25 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </figure>
 </div>
+<div>
+<figure>
+<figcaption>Error de formulario (FormErrorAlert)</figcaption>
+<div>
+<div role="alert" aria-live="polite">
+<div>No tienes permisos para registrar clientes.</div>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Error de formulario que repite un campo</figcaption>
+<div>
+<div role="alert" aria-live="polite">
+<div>Revisa los campos marcados.</div>
+</div>
+</div>
+</figure>
+</div>
+<p>Los formularios muestran su error general con FormErrorAlert. Si el mensaje ya está bajo un campo, la alerta dice «Revisa los campos marcados.» en lugar de repetirlo: el foco va a ese campo y el lector de pantalla no lo lee dos veces.</p>
 <figure>
 <figcaption>Avisos temporales (fachada de notificaciones)</figcaption>
 <div>

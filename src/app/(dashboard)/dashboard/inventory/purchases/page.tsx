@@ -23,6 +23,7 @@ import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -45,6 +46,8 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
   await requireRole(["ADMIN"]);
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = parseStringParam(params, "q");
   const supplier = parseStringParam(params, "supplier");
   const material = parseStringParam(params, "material");
@@ -225,7 +228,7 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
               <TableCell colSpan={8} className="p-0">
                 <EmptyState
                   className="border-0"
-                  label="Todavía no hay compras registradas."
+                  label={filtered ? "No se encontraron compras con los filtros aplicados." : "Todavía no hay compras registradas."}
                 />
               </TableCell>
             </TableRow>

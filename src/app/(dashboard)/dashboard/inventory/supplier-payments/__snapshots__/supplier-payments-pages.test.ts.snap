@@ -412,7 +412,7 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > resultado 1`
 <td colSpan="8">
 <div>
 <div>
-<p>Todavía no hay pagos a proveedores.</p>
+<p>No se encontraron pagos a proveedores con los filtros aplicados.</p>
 </div>
 </div>
 </td>

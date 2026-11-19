@@ -238,7 +238,9 @@ describe("OrderForm con el resultado de la accion", () => {
     expect(byId("id_producto-row-2-error").textContent).toBe("No repitas el mismo producto dentro del pedido.");
     expect(byId("id_producto-row-1").hasAttribute("aria-invalid")).toBe(false);
     expect(document.activeElement).toBe(repeated);
-    expect(document.querySelector('[role="alert"]')?.textContent).toContain("No repitas el mismo producto dentro del pedido.");
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain("No repitas el mismo producto dentro del pedido.");
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(notifications.showError).not.toHaveBeenCalled();
     expect(navigation.push).not.toHaveBeenCalled();

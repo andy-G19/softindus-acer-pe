@@ -23,6 +23,7 @@ import { formatDate, formatDecimal } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -59,6 +60,8 @@ export default async function ProductionCampaignsPage({
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = parseStringParam(params, "q");
   const product = parseStringParam(params, "product");
   const status = parseStringParam(params, "status");
@@ -266,7 +269,7 @@ export default async function ProductionCampaignsPage({
               <TableCell colSpan={9} className="p-0">
                 <EmptyState
                   className="border-0"
-                  label="Todavía no hay campañas de producción registradas."
+                  label={filtered ? "No se encontraron campañas con los filtros aplicados." : "Todavía no hay campañas de producción registradas."}
                 />
               </TableCell>
             </TableRow>

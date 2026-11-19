@@ -30,6 +30,7 @@ import { formatDate } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -91,6 +92,8 @@ export default async function PreventiveMaintenancePage({
 
   const canManagePreventive = session.user.role === APP_ROLES.ADMIN;
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = parseStringParam(params, "q");
   const machine = parseStringParam(params, "machine");
   const responsible = parseStringParam(params, "responsible");
@@ -213,7 +216,7 @@ export default async function PreventiveMaintenancePage({
           {maintenances.length === 0 ? (
             <EmptyState
               className="mx-6 border-0"
-              label="Aún no hay mantenimientos preventivos registrados."
+              label={filtered ? "No se encontraron mantenimientos preventivos con los filtros aplicados." : "Aún no hay mantenimientos preventivos registrados."}
               description="Programa el primer mantenimiento preventivo para anticipar fallas y reducir paradas imprevistas."
               action={
                 canManagePreventive ? (

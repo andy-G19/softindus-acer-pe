@@ -6,7 +6,7 @@ import { ActionForm } from "@/components/forms/action-form";
 import { Field } from "@/components/forms/field";
 import { useFormResult } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
@@ -43,11 +43,7 @@ export function MarginForm({ action, idCosteo, successNotification }: MarginForm
     <ActionForm action={formAction} pending={pending} resultKey={resultKey} className="mt-5 space-y-4">
       <input type="hidden" name="id_costeo" value={idCosteo} />
 
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       <Field id="porcentaje_margen" label="Margen de ganancia" required errors={fieldErrors?.porcentaje_margen}>
         {(control) => (

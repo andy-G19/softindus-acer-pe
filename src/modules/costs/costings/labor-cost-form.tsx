@@ -6,7 +6,7 @@ import { ActionForm } from "@/components/forms/action-form";
 import { Field } from "@/components/forms/field";
 import { useFormResult } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Input } from "@/components/ui/input";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
 import type { LaborCostFormState } from "@/modules/costs/costings/actions";
@@ -39,11 +39,7 @@ export function LaborCostForm({ action, idCosteo, defaultValue, successNotificat
     <ActionForm action={formAction} pending={pending} resultKey={resultKey} className="mt-4 space-y-3">
       <input type="hidden" name="id_costeo" value={idCosteo} />
 
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       <div className="grid gap-3 md:grid-cols-[1fr_auto]">
         <Field id="costo_mano_obra" label="Costo de mano de obra" required errors={fieldErrors?.costo_mano_obra}>

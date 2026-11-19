@@ -24,6 +24,7 @@ import {
   createReturnToHref,
   dashboardBreadcrumbs,
   getSearchParam,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -41,6 +42,8 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
   await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const client = getSearchParam(params, "client");
   const q = getSearchParam(params, "q");
   const type = getSearchParam(params, "type");
@@ -197,7 +200,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
               <TableCell colSpan={7} className="p-0">
                 <EmptyState
                   className="border-0"
-                  label="No se encontraron clientes con los filtros aplicados."
+                  label={filtered ? "No se encontraron clientes con los filtros aplicados." : "Todavía no hay clientes registrados."}
                 />
               </TableCell>
             </TableRow>

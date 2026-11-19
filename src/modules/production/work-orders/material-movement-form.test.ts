@@ -181,7 +181,9 @@ describe("MaterialMovementForm (C1 de la 11.6b)", () => {
     expect(control<HTMLInputElement>('input[name="cantidad"]').value).toBe("2.5");
     expect(control<HTMLTextAreaElement>('textarea[name="motivo"]').value).toBe("Se rompio una pieza al soldar");
     expect(control('input[name="cantidad"]').getAttribute("aria-invalid")).toBe("true");
-    expect(control('[role="alert"]').textContent).toContain(message);
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(control('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain(message);
     expect(sessionStorage.getItem(ADDITIONAL_KEY)).toBe(String(received[0].formData.get("clave_operacion")));
     expect(notifications.notify).not.toHaveBeenCalled();
   });

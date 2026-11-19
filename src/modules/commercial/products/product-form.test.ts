@@ -142,7 +142,9 @@ describe("ProductForm", () => {
     expect(field<HTMLInputElement>("precio_referencial").value).toBe("35.50");
     expect(field<HTMLTextAreaElement>("descripcion").value).toBe("Mango de eucalipto.");
     expect(document.activeElement).toBe(field("nombre_producto"));
-    expect(document.querySelector('[role="alert"]')?.textContent).toContain("Ya existe un producto con ese nombre.");
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain("Ya existe un producto con ese nombre.");
     expect(field("nombre_producto-error").textContent).toBe("Ya existe un producto con ese nombre.");
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(notifications.showError).not.toHaveBeenCalled();

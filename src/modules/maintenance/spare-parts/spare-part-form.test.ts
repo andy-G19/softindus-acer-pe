@@ -160,7 +160,9 @@ describe("SparePartForm", () => {
     expect(field<HTMLTextAreaElement>("descripcion").value).toBe("Para la cizalla");
     expect(selectedProvider()).toBe("PVE00000003");
     expect(document.activeElement).toBe(field("nombre_repuesto"));
-    expect(document.querySelector('[role="alert"]')?.textContent).toContain("Ya existe un repuesto registrado con ese nombre.");
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain("Ya existe un repuesto registrado con ese nombre.");
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(notifications.showError).not.toHaveBeenCalled();
     expect(navigation.push).not.toHaveBeenCalled();

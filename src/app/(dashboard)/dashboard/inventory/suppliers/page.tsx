@@ -22,6 +22,7 @@ import {
   createReturnToHref,
   dashboardBreadcrumbs,
   getSearchParam,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -40,6 +41,8 @@ export default async function SuppliersPage({
   await requireRole(["ADMIN"]);
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = getSearchParam(params, "q");
   const type = getSearchParam(params, "type");
   const payment = getSearchParam(params, "payment");
@@ -194,7 +197,7 @@ export default async function SuppliersPage({
               <TableCell colSpan={8} className="p-0">
                 <EmptyState
                   className="border-0"
-                  label="Todavía no hay proveedores registrados."
+                  label={filtered ? "No se encontraron proveedores con los filtros aplicados." : "Todavía no hay proveedores registrados."}
                 />
               </TableCell>
             </TableRow>

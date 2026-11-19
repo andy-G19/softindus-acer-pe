@@ -7,6 +7,7 @@ import { Field } from "@/components/forms/field";
 import { useFormResult } from "@/components/forms/form-surface";
 import { OperationKeyField } from "@/components/forms/operation-key-field";
 import { SubmitButton } from "@/components/forms/submit-button";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -99,11 +100,7 @@ export function ReceiptForm({ action, quoteId, suggestedAmount, hasReceipt, succ
         </Alert>
       )}
 
-      {state.status === "error" ? (
-        <Alert variant="destructive" role="alert" aria-live="polite">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
+      <FormErrorAlert state={state} />
 
       <div className="grid gap-4 md:grid-cols-3">
         <Field id="tipo_comprobante" label="Tipo" required disabled={hasReceipt} errors={fieldErrors?.tipo_comprobante}>

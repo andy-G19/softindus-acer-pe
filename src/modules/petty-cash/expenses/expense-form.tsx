@@ -9,7 +9,7 @@ import { Field } from "@/components/forms/field";
 import { DiscardConfirmDialog, useDiscardGuard, useFormResult } from "@/components/forms/form-surface";
 import { OperationKeyField } from "@/components/forms/operation-key-field";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -107,11 +107,7 @@ export function PettyCashExpenseForm({
       >
         <OperationKeyField scope="egreso_caja:nuevo" completedKey={completedKey} />
 
-        {state.status === "error" ? (
-          <Alert variant="destructive" role="alert" aria-live="polite">
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        ) : null}
+        <FormErrorAlert state={state} />
 
         <Field id="id_caja_chica" label="Caja chica" required errors={fieldErrors?.id_caja_chica}>
           {(control) => (

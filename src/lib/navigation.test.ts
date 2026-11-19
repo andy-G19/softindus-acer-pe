@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { createReturnToHref, getSafeReturnTo, hasListFilters, withReturnTo } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  getSafeReturnTo,
+  hasActiveFilters,
+  hasListFilters,
+  withReturnTo,
+} from "@/lib/navigation";
 
 const CLIENTS = "/dashboard/commercial/clients";
 const FALLBACK = "/dashboard/fallback";
@@ -74,5 +80,29 @@ describe("hasListFilters", () => {
     expect(hasListFilters(`${CLIENTS}?page=2&pageSize=50`)).toBe(false);
     expect(hasListFilters(CLIENTS)).toBe(false);
     expect(hasListFilters(`${CLIENTS}?q=`)).toBe(false);
+  });
+});
+
+// C3 de la 11.7d2 (D112 y D114): un listado sabe si el usuario filtro para decir «No se encontraron
+// … con los filtros aplicados» o «Todavia no hay … registrados». No filtran la paginacion, el
+// `returnTo` ni el aviso `?toast=`, que llega en la URL tras guardar: volver a un listado con
+// `?toast=` no es volver a un listado filtrado.
+describe("C3 de la 11.7d2: que cuenta como filtro", () => {
+  it("hasActiveFilters ignora paginacion, returnTo, toast y los valores vacios", () => {
+    expect(hasActiveFilters({})).toBe(false);
+    expect(hasActiveFilters({ page: "2", pageSize: "50" })).toBe(false);
+    expect(hasActiveFilters({ returnTo: "/dashboard/commercial/orders" })).toBe(false);
+    expect(hasActiveFilters({ toast: "client-created" })).toBe(false);
+    expect(hasActiveFilters({ q: "", status: undefined, from: [""] })).toBe(false);
+  });
+
+  it("hasActiveFilters cuenta cualquier otro parametro con valor", () => {
+    expect(hasActiveFilters({ q: "andina" })).toBe(true);
+    expect(hasActiveFilters({ status: ["", "inactivo"], page: "3" })).toBe(true);
+  });
+
+  it("hasListFilters tampoco cuenta el aviso de la URL", () => {
+    expect(hasListFilters(`${CLIENTS}?toast=client-created`)).toBe(false);
+    expect(hasListFilters(`${CLIENTS}?toast=client-created&q=andina`)).toBe(true);
   });
 });

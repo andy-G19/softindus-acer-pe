@@ -22,6 +22,7 @@ import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -48,6 +49,8 @@ export default async function CustomerPaymentsPage({
   await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   // C5 de la 11.3c: el detalle de la proforma vuelve a este listado con sus filtros y su pagina.
   const returnTo = createReturnToHref(navigationHrefs.customerPayments, params);
   const q = parseStringParam(params, "q");
@@ -191,7 +194,7 @@ export default async function CustomerPaymentsPage({
               <TableCell colSpan={9} className="p-0">
                 <EmptyState
                   className="border-0"
-                  label="Todavía no hay pagos registrados."
+                  label={filtered ? "No se encontraron pagos con los filtros aplicados." : "Todavía no hay pagos registrados."}
                 />
               </TableCell>
             </TableRow>

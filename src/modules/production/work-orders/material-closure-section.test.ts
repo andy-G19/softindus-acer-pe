@@ -194,7 +194,9 @@ describe("MaterialClosureSection (C2 de la 11.6b)", () => {
     expect(consumedInputs().map((input) => input.value)).toEqual(["18.00", "50"]);
     expect(control<HTMLInputElement>('input[name="cantidad_producida"]').value).toBe("9");
     expect(consumedInputs().map((input) => input.getAttribute("aria-invalid"))).toEqual([null, "true"]);
-    expect(control('[role="alert"]').textContent).toContain(message);
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(control('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain(message);
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(router.push).not.toHaveBeenCalled();
   });

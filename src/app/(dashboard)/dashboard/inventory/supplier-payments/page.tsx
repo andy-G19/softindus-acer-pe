@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, hasActiveFilters, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   parseDateParam,
@@ -39,6 +39,8 @@ export default async function SupplierPaymentsPage({
   await requireRole(["ADMIN"]);
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = parseStringParam(params, "q");
   const supplier = parseStringParam(params, "supplier");
   const purchase = parseStringParam(params, "purchase");
@@ -178,7 +180,7 @@ export default async function SupplierPaymentsPage({
               <TableCell colSpan={8} className="p-0">
                 <EmptyState
                   className="border-0"
-                  label="Todavía no hay pagos a proveedores."
+                  label={filtered ? "No se encontraron pagos a proveedores con los filtros aplicados." : "Todavía no hay pagos a proveedores."}
                 />
               </TableCell>
             </TableRow>

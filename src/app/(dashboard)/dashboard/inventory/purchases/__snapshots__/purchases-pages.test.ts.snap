@@ -664,7 +664,7 @@ exports[`/dashboard/inventory/purchases > rango invertido > resultado 1`] = `
 <td colSpan="8">
 <div>
 <div>
-<p>Todavía no hay compras registradas.</p>
+<p>No se encontraron compras con los filtros aplicados.</p>
 </div>
 </div>
 </td>

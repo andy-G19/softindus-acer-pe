@@ -26,7 +26,7 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, hasActiveFilters, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { parseDateParam } from "@/lib/search-params";
@@ -102,6 +102,8 @@ export default async function PettyCashMovementsPage({
   await requireRole([APP_ROLES.ADMIN]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
 
   const selectedCashBox = normalizeParam(params.caja);
   const selectedType = normalizeParam(params.tipo);
@@ -257,7 +259,7 @@ export default async function PettyCashMovementsPage({
           {movements.length === 0 ? (
             <EmptyState
               className="mx-6 border-0"
-              label="No se encontraron movimientos."
+              label={filtered ? "No se encontraron movimientos con los filtros aplicados." : "Aún no hay movimientos de caja registrados."}
               description="Ajusta los filtros o registra nuevos ingresos, egresos o ajustes de caja chica."
             />
           ) : (

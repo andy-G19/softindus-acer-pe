@@ -28,7 +28,7 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
 import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, hasActiveFilters, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { APP_ROLES } from "@/lib/permissions";
 import {
@@ -81,6 +81,8 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
   await requireRole([APP_ROLES.ADMIN]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = parseStringParam(params, "q");
   const operario = parseStringParam(params, "operario");
   const periodo = parseStringParam(params, "periodo");
@@ -191,7 +193,7 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
           {latestPayrolls.length === 0 ? (
             <EmptyState
               className="mx-6 border-0"
-              label="Todavía no hay planillas generadas."
+              label={filtered ? "No se encontraron planillas con los filtros aplicados." : "Todavía no hay planillas generadas."}
               description="Genera la primera planilla usando asistencias válidas del periodo seleccionado."
               action={
                 <Button asChild>

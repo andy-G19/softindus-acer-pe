@@ -149,7 +149,9 @@ describe("ProductCategoryDialog", () => {
     expect(field<HTMLInputElement>("categoria-nombre").value).toBe("Herramientas");
     expect(field<HTMLTextAreaElement>("categoria-descripcion").value).toBe("Uso interno");
     expect(document.activeElement).toBe(field("categoria-nombre"));
-    expect(document.querySelector('[role="alert"]')?.textContent).toContain("Ya existe una categoría");
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain("Ya existe una categoría");
     expect(notifications.notify).not.toHaveBeenCalled();
   });
 

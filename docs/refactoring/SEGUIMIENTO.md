@@ -10226,7 +10226,7 @@ Datos leídos de la API de GitHub el 2026-11-18 (UTC) y comparados con git:
 
 ### Sub-entrega 11.7d1 — Arreglos de datos y navegación
 
-Fecha: 2026-11-18 (Lima). Estado: verificada en staging (CI #219); falta el PR a `main`. Plan en
+Fecha: 2026-11-18 (Lima). Estado: integrada en `main` (PR #56, merge `3f0340d`). Plan en
 `tmp/e11-diff/plan-11-7d.md`, aprobado el 2026-11-18 con las decisiones D104 a D110:
 - D104: la 11.7d se parte en dos. La 11.7d1 lleva los arreglos de datos y navegación (P1, P4, P5,
   P6 y P7) y el cierre de P8. La 11.7d2 lleva los textos que se repiten en toda la app: el mismo
@@ -10348,6 +10348,137 @@ Hallazgos:
    antes de la transacción. Las cubren la prueba en Postgres en memoria y la del esquema.
 7. No se escribió nada en staging.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-18 (UTC) y comparados con git:
+
+- La verificación `4701da7` se publicó en `staging`: CI #220 en verde (3m 42s).
+- PR #56, abierto a las 22:29:14 UTC y fusionado con merge commit a las 22:34:37 UTC del
+  2026-11-18: 9 commits, de `77f4868` a `4701da7`, y 29 archivos (+972 −175). Su CI, el #221,
+  sobre `4701da7`, terminó en verde (3m 57s).
+- El merge commit `3f0340d` tiene como padres `6f0b70f` (`main`) y `4701da7` (`staging`), y su
+  árbol es el de `4701da7` (`7d5b604`): `main` y `staging` tienen el mismo contenido. CI #222 en
+  verde (5m 24s).
+- Vercel desplegó `3f0340d` en producción (`success` a las 22:36:23 UTC). La sub-entrega no trae
+  migraciones.
+
+### Sub-entrega 11.7d2 — Los textos que se repiten
+
+Fecha: 2026-11-18 (Lima). Estado: verificada en staging (CI #223); falta el PR a `main`. Plan en
+`tmp/e11-diff/plan-11-7d2.md`, aprobado el 2026-11-18 con las decisiones D111 a D114:
+- D111: un componente compartido, `FormErrorAlert`, pinta el error general de los formularios. Si
+  el mensaje repite el de un campo, dice «Revisa los campos marcados.».
+- D112: el vacío de un listado depende de los filtros de la URL (`hasActiveFilters`).
+- D113: el alcance son los listados con filtros. Quedan fuera los detalles, los inicios, los
+  formularios y los 10 reportes, que ya dicen «con los filtros aplicados».
+- D114: `hasListFilters` deja de contar `toast` (y `returnTo`) como filtro.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 332332c | docs | Integración de la 11.7d1 en `main` (PR #56). |
+| 2636c64 | feat | `FormErrorAlert`, con 5 pruebas y su demo en la galería (D111). Rojo antes. |
+| f40e55b | fix | Los 50 formularios usan `FormErrorAlert`; una prueba rechaza una alerta propia con `state.error`; 19 pruebas pasan a la conducta nueva. Rojo antes. |
+| 88d8323 | fix | `hasActiveFilters` y `hasListFilters` comparten una regla: no filtran `page`, `pageSize`, `returnTo` ni `toast` (D112 y D114). Rojo antes. |
+| 1d7ae79 | fix | El vacío de 14 listados de Comercial, Inventario y Costos dice si hay filtros (D112). Rojo antes. |
+| 6fbd259 | fix | El vacío de 17 listados de Producción, Mantenimiento, Personal, Caja chica, Mermas, Usuarios y Auditoría (D112). Rojo antes. |
+| 417cb81 | docs | Registro de la sub-entrega y cierre del código de la 11.7, `CLAUDE.md` e inventario. |
+| (este) | docs | Verificación en staging. |
+
+Diseño:
+
+- **El mensaje repetido (P2).**
+  - Cuando falla una regla de negocio, las acciones mandan el mismo texto como mensaje general y como error del campo. Algunos casos: un documento repetido, un nombre que ya existe, un proveedor inactivo.
+  - Pintado tal cual, se veía dos veces. El lector de pantalla también lo leía dos veces: la alerta (`role="alert"`) y el campo que `ActionForm` enfoca.
+  - Ahora el componente compara el mensaje general con los de los campos:
+    - si coincide con alguno, dice «Revisa los campos marcados.»;
+    - si es distinto, lo muestra tal cual (permisos, stock, base de datos, «Revisa los datos del…»).
+  - La regla vive en el componente y no en cada acción. Así una acción nueva no puede volver a repetirlo, y la prueba de guardia impide una copia nueva del bloque de antes.
+- **Las 19 pruebas que cambiaron.** Esperaban el mensaje del campo dentro de la alerta. Ahora exigen dos cosas: que la alerta diga «Revisa los campos marcados.» y que el mensaje siga en la página, bajo su campo. La regla cambió a propósito, y el mensaje se sigue comprobando.
+- **El vacío con filtros (P3).**
+  - `hasActiveFilters(params)` lee los `searchParams` de la página y comparte su regla con `hasListFilters`, que usan los formularios al volver.
+  - El texto dice lo que el usuario pidió, y eso está en la URL. Ningún listado del alcance aplica un filtro por defecto cuando falta el parámetro: se revisaron las 31 páginas.
+  - Los textos sin filtro son los de siempre. Seis listados decían «No se encontraron…» siempre, y para ellos se escribió uno nuevo: clientes, movimientos, retazos, chatarra, usuarios y auditoría.
+  - Retazos y chatarra conservan su «con los filtros seleccionados», y máquinas y repuestos su «Aun no hay…» sin tilde, para cambiar lo mínimo.
+- **`toast` no es un filtro (D114).** Volver a un listado con `?toast=…` agregaba al aviso de guardado la nota «Puede no aparecer con los filtros activos del listado» sin ningún filtro.
+
+Evidencia:
+
+1. Rojo antes de cada `fix` y del `feat`, en un mensaje aparte:
+   - C1: el componente no existía.
+   - C2: la guardia encontró las 50 copias.
+   - C3: `hasActiveFilters` no existía y `hasListFilters` contaba `?toast=`.
+   - C4: los 14 listados fallaron.
+   - C5: los 17 listados fallaron.
+2. Mutaciones:
+   - C1: 3 de 4. La que sobrevive quita `role="alert"` y es equivalente, porque `Alert` ya lo pone.
+   - C3: 4 de 4.
+   - C4: el listado de pedidos con los parámetros ignorados hace fallar la prueba.
+3. `empty-list-filters.test.ts` pide cada listado vacío tres veces: sin filtros, con un filtro y con `?toast=` y `?page=2`. Son 31 listados.
+4. Snapshots revisados uno por uno:
+   - C1: la galería, con la demo nueva.
+   - C4: 10. Son los casos de rango invertido y el de «stock suficiente», que llevan filtros, y el vacío de clientes sin filtro.
+   - C5: 1, el vacío de retazos sin filtro.
+5. `npm run check` terminó con código 0 antes de cada commit. Las pruebas pasan de 339 / 5.548 a 341 / 5.588. Lint mantiene el aviso anterior. El CSS compilado quedó igual byte a byte en cada commit: 107.008 bytes.
+
+Métricas:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 339 / 5.548 | 341 / 5.588 |
+| Copias del bloque de error de formulario | 50 | 0 (lo vigila una prueba) |
+| Formularios que repiten en la alerta el mensaje de un campo | todos los de reglas de negocio | 0 |
+| Listados con filtros cuyo vacío no distingue si hay filtro | 31 | 0 |
+| Parámetros que cuentan como filtro sin serlo (`toast`, `returnTo`) | 2 | 0 |
+
+Hallazgos:
+
+1. Seis listados decían «No se encontraron… con los filtros» aunque no hubiera ninguno. Corregido en `1d7ae79` y `6fbd259`.
+2. `hasListFilters` contaba `?toast=` como filtro. Corregido en `88d8323`.
+3. Los 10 reportes siguen diciendo «con los filtros aplicados» sin mirar la URL (D113). Destino: un paso propio, si se decide.
+
+#### Publicación, CI y verificación en staging
+
+1. Push de los 7 commits (de `332332c` a `417cb81`): CI #223 en verde (de 00:10:34 a 00:14:58 UTC
+   del 2026-11-19); Vercel desplegó staging (`success` a las 00:12:12 UTC). Sin migraciones.
+2. Todo con ADMIN y el origen comprobado en una llamada aparte.
+3. Vacíos con filtro (D112), solo lectura:
+   - Los 30 listados con buscador, pedidos con `?q=zzzz`, respondieron 200 y dicen «No se
+     encontraron … con los filtros aplicados» («seleccionados» en retazos y chatarra).
+   - Asociaciones, que no tiene buscador, con un proveedor inexistente: lo mismo.
+   - Pedidos con solo `?toast=order-created` muestra sus 57 filas y no menciona filtros.
+4. Mensaje repetido (D111), un envío autorizado por Andy en ese turno:
+   - Antes, solo leyendo, se comprobó que `CLI00000007` tiene el DNI 71863599.
+   - «Nuevo cliente» con nombre «Prueba 11.7d2 duplicado», DNI 71863599. La acción lo rechazó
+     antes de la transacción.
+   - La alerta dice «Revisa los campos marcados.». «Ya existe un cliente con ese número de
+     documento.» aparece una sola vez, bajo su campo. El foco quedó en el número de documento y el
+     formulario conservó lo escrito.
+   - En la red hubo un solo POST. Buscar «Prueba 11.7d2» no encuentra ningún cliente, y el más
+     reciente sigue siendo `CLI00000010`: no se creó nada.
+5. Fuera de ese envío rechazado, no se escribió nada en staging.
+
+#### Cierre del código de la 11.7
+
+Con la 11.7d2 terminan las cuatro partes de la 11.7, cada una con su plan, su verificación en staging y su PR:
+
+| Sub-entrega | Qué cerró |
+|---|---|
+| 11.7a | SweetAlert2, `ConfirmDeleteButton`, `StatusBadge` y `RowToggleStatusButton` retirados; el foco al título cuando desaparece una confirmación sin fila ni tabla |
+| 11.7b | Las copias de `formatDecimal` y `getSearchParam`, los `<main>` anidados, el `error.tsx` del panel y `prisma format` |
+| 11.7c1 y 11.7c2 | El tema en `<html>`, el menú lateral a 830 px y el adaptador `legacy-industrial-dark.css`, retirado |
+| 11.7d1 y 11.7d2 | Los pendientes funcionales: el alta rápida, los historiales, la chatarra, volver a la proforma, las listas de pago, los mensajes repetidos y los vacíos con filtro |
+
+Lo que sigue abierto, con su destino:
+- D99: la limpieza de las clases de componentes que tapan las reglas de campos, tablas y títulos de `patterns.css`, con `.login-field-input` e `input-forge-focus`.
+- D101: el borde de color de las alertas y el hover de las tarjetas de módulo.
+- El hallazgo 6 de la 11.7c1: el desplazamiento del menú al pasar el ratón.
+- El hallazgo 6 de la 11.3c: la página posterior a la última de una lista paginada.
+- La lista de métodos de pago, copiada en Inventario y Personal.
+- Los vacíos de los reportes (hallazgo 3).
+- Las decisiones de negocio pendientes: 57, 36, los días de Lima, D57, D70, D71, D77 y D83.
+
+El cierre de la entrega 11 (balance, métricas contra la línea base y hallazgos que pasan a la siguiente) va en un paso propio, después de integrar la 11.7d2.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -10373,7 +10504,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 integrada en `main` (PR #54, CI #214); 11.7c2 integrada en `main` (PR #55, CI #217; adaptador retirado); 11.7d partida en d1 y d2: 11.7d1 verificada en staging (CI #219) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 integrada en `main` (PR #54, CI #214); 11.7c2 integrada en `main` (PR #55, CI #217; adaptador retirado); 11.7d partida en d1 y d2: 11.7d1 integrada en `main` (PR #56, CI #222); 11.7d2 verificada en staging (CI #223; cierra el código de la 11.7) |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 

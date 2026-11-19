@@ -9,6 +9,7 @@ import { Field } from "@/components/forms/field";
 import { DiscardConfirmDialog, useDiscardGuard, useFormResult } from "@/components/forms/form-surface";
 import { OperationKeyField } from "@/components/forms/operation-key-field";
 import { SubmitButton } from "@/components/forms/submit-button";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -154,11 +155,7 @@ export function QuoteForm({ action, orders, defaultOrderId, successNotification,
       >
         <OperationKeyField scope="proforma:nueva" completedKey={completedKey} />
 
-        {state.status === "error" ? (
-          <Alert variant="destructive" role="alert" aria-live="polite">
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        ) : null}
+        <FormErrorAlert state={state} />
 
         {!canCreateQuote && (
           <Alert variant="warning">

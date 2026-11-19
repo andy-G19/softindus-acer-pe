@@ -149,7 +149,9 @@ describe("SupplierMaterialForm", () => {
     expect(field<HTMLInputElement>("precio_referencial").value).toBe("185.50");
     expect(field<HTMLSelectElement>("disponibilidad").value).toBe("media");
     expect(document.activeElement).toBe(field("id_material"));
-    expect(document.querySelector('[role="alert"]')?.textContent).toContain("Este proveedor ya está asociado con el material seleccionado.");
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain("Este proveedor ya está asociado con el material seleccionado.");
     expect(field("id_material-error").textContent).toBe("Este proveedor ya está asociado con el material seleccionado.");
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(notifications.showError).not.toHaveBeenCalled();

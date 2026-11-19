@@ -10,7 +10,7 @@ import { DiscardConfirmDialog, useDiscardGuard, useFormResult } from "@/componen
 import { OperationKeyField } from "@/components/forms/operation-key-field";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormErrorAlert } from "@/components/forms/form-error-alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
@@ -101,11 +101,7 @@ export function PayrollForm({
       >
         <OperationKeyField scope="planilla:nueva" completedKey={completedKey} />
 
-        {state.status === "error" ? (
-          <Alert variant="destructive" role="alert" aria-live="polite">
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        ) : null}
+        <FormErrorAlert state={state} />
 
         <div className="space-y-2">
           <SearchableSelect

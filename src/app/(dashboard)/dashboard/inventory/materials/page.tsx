@@ -24,6 +24,7 @@ import {
   createReturnToHref,
   dashboardBreadcrumbs,
   getSearchParam,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -43,6 +44,8 @@ export default async function MaterialsPage({
   const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const params = (await searchParams) ?? {};
+  // C4 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = getSearchParam(params, "q");
   const category = getSearchParam(params, "category");
   const unit = getSearchParam(params, "unit");
@@ -238,7 +241,7 @@ export default async function MaterialsPage({
                 <TableCell colSpan={11} className="p-0">
                   <EmptyState
                     className="border-0"
-                    label="Todavía no hay materiales registrados."
+                    label={filtered ? "No se encontraron materiales con los filtros aplicados." : "Todavía no hay materiales registrados."}
                   />
                 </TableCell>
               </TableRow>

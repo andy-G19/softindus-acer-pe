@@ -25,6 +25,7 @@ import {
   createReturnToHref,
   dashboardBreadcrumbs,
   getSearchParam,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -83,6 +84,8 @@ export default async function WorkOrdersPage({
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = getSearchParam(params, "q");
   const product = getSearchParam(params, "product");
   const client = getSearchParam(params, "client");
@@ -382,7 +385,7 @@ export default async function WorkOrdersPage({
               <TableCell colSpan={10} className="p-0">
                 <EmptyState
                   className="border-0"
-                  label="Todavía no hay órdenes de trabajo registradas."
+                  label={filtered ? "No se encontraron órdenes de trabajo con los filtros aplicados." : "Todavía no hay órdenes de trabajo registradas."}
                 />
               </TableCell>
             </TableRow>

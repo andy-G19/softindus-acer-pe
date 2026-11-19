@@ -162,7 +162,9 @@ describe("ReassignProgressForm (C5 de la 11.6c)", () => {
     expect(control<HTMLInputElement>('input[name="id_operario_nuevo"]').value).toBe("OPE00000004");
     expect(control<HTMLTextAreaElement>('textarea[name="motivo"]').value).toBe("Cambio de turno");
     expect(control("#id_operario_nuevo").getAttribute("aria-invalid")).toBe("true");
-    expect(control('[role="alert"]').textContent).toContain(message);
+    // C2 de la 11.7d2 (D111): el mensaje queda bajo su campo y la alerta no lo repite.
+    expect(control('[role="alert"]')?.textContent).toBe("Revisa los campos marcados.");
+    expect(document.body.textContent).toContain(message);
     expect(notifications.notify).not.toHaveBeenCalled();
     expect(router.push).not.toHaveBeenCalled();
   });
