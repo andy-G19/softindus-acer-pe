@@ -97,5 +97,37 @@ no cambian. Una tarea anulada muestra «Sin acción» y no se puede reactivar.
 
 Solo el administrador las ve. La lista de planillas tiene la barra de filtros: búsqueda,
 operario, periodo, modalidad, estado y rango de fechas, que no acepta **Desde** y **Hasta** al
-revés. El historial de pagos no tiene filtros. Generar una planilla y registrar un pago todavía no
-se renovaron y funcionan como antes.
+revés. El historial de pagos no tiene filtros. Las dos listas van de 20 en 20.
+
+### Generar una planilla
+
+1. Pulsa **Generar planilla**.
+2. Busca y elige al **operario** (solo los activos).
+3. Elige el **inicio** y el **fin del periodo**, y escribe los **descuentos** si los hay.
+4. Pulsa **Generar planilla**.
+
+El monto bruto se calcula con las asistencias válidas del periodo (sin falta) y la tarifa del
+operario; el neto es el bruto menos los descuentos. La planilla nace **pendiente**.
+
+- No se genera si el operario no tiene una tarifa válida o si el periodo no tiene asistencias
+  válidas.
+- Los descuentos no pueden igualar ni superar el monto bruto.
+- El periodo no puede cruzarse con otra planilla no anulada del operario: basta un día en común.
+  Una planilla anulada sigue ocupando su mismo periodo exacto.
+- Una planilla enviada dos veces se genera una sola vez.
+
+### Anular una planilla
+
+**Anular** en la fila pide confirmar: la planilla queda anulada y ya no se puede pagar; sus días
+pueden entrar en otra planilla, pero no con el mismo periodo. No se puede deshacer. No se anula
+una planilla pagada o con un pago registrado.
+
+### Registrar un pago
+
+1. En **Historial de pagos**, pulsa **Registrar pago**.
+2. Elige la **planilla pendiente**, la **fecha de pago** y el **método**, y escribe el **monto
+   pagado**, que debe ser igual al neto de la planilla.
+3. Pulsa **Registrar pago**.
+
+La planilla queda **pagada**. No se paga una planilla anulada ni una ya pagada, y un pago enviado
+dos veces se registra una sola vez.
