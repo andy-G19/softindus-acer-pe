@@ -10755,9 +10755,37 @@ Pendiente:
   leer desde aquí. Es el riesgo real: si es 20.x, producción atiende peticiones con un Node sin
   parches.
 - **Activar las alertas de Dependabot** en el repositorio (D122).
-- **Verificar en staging** después del push: login y cierre de sesión (next-auth), una ruta sin
-  sesión, un rol sin permiso, el menú lateral al pasar el ratón y con Tab (selectores de Tailwind),
-  los logos (`/_next/image`) y un formulario con su error de campo (zod y Server Actions).
+
+#### Verificación en staging
+
+Push de 8 commits (`4ca14d9` a `e8184e2`): CI #230 en verde (4m 27s) y Vercel `success` a las
+14:22:23 UTC del 2026-11-19. Solo lecturas, con el responsable conectado como ADMIN:
+
+- **El build es el nuevo:** `window.next.version` es `16.4.6`. La hoja servida (107.873 bytes) trae
+  el radio `2147483647px`, los registros `--shimmer-*` y los selectores `group-*` reescritos, y
+  ningún selector con la forma anterior.
+- **Sesión (next-auth beta.32):** `GET /api/auth/session` responde 200 con `user` (id, rol ADMIN,
+  estado activo) y `expires`. Con la sesión válida, `/login` redirige (`opaqueredirect`) y
+  `/dashboard` responde 200: el proxy lee la sesión.
+- **Menú lateral (Tailwind 4.3.5):**
+  - con el ratón, pasa de 76 a 256 px y las etiquetas, de `display: none` a `block`, completas;
+  - con Tab, el foco en «Dashboard» y «Usuarios» lo abre a 256 px, y al salir con Mayús+Tab vuelve
+    a 76 px.
+- **Logo:** carga por `/_next/image` (Next 16.4.6 y `sharp` 0.35).
+- **Consola:** solo los avisos de la barra de `vercel.live` contra la CSP de solo informe (ya
+  estaban), y los de las propias pruebas.
+
+Un `fetch` a `/login` que seguía la redirección llegó al host de `AUTH_URL`, el de producción, como
+documenta la 10.3c. Fue un GET sin cookies y el navegador lo bloqueó por CORS: no tocó datos. Para
+leer una redirección del proxy desde staging se usa `redirect: "manual"`.
+
+No se verificó en staging:
+- una ruta sin sesión: habría que cerrar la sesión;
+- un rol sin permiso: ADMIN tiene todas las rutas;
+- «Intentar nuevamente» de una página de error: no hay forma de provocar un fallo sin escribir;
+- un error de campo de un formulario: el envío necesita autorización.
+
+Los cubren `authz.test.ts`, `error-boundary-contract.test.ts` y las pruebas de cada formulario.
 
 ## Secuencia de próximas entregas
 
