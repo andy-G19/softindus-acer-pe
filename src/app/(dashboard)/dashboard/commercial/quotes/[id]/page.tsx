@@ -20,6 +20,7 @@ import { createReceiptAction } from "@/modules/commercial/receipts/actions";
 import { ReceiptForm } from "@/modules/commercial/receipts/receipt-form";
 import { PaymentForm } from "@/modules/commercial/payments/payment-form";
 import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
+import { getClientTypeLabel, getDocumentTypeLabel } from "@/modules/commercial/client-labels";
 import { QuoteAnnulAction } from "@/modules/commercial/quotes/quote-annul-action";
 import { getQuoteDetail } from "@/modules/commercial/quotes/queries";
 
@@ -220,11 +221,13 @@ export default async function QuoteDetailPage({
                 </p>
                 <p>
                   <span className="font-medium">Tipo:</span>{" "}
-                  {quote.pedido.cliente.tipo_cliente}
+                  {getClientTypeLabel(quote.pedido.cliente.tipo_cliente)}
                 </p>
                 <p>
                   <span className="font-medium">Documento:</span>{" "}
-                  {quote.pedido.cliente.tipo_documento ?? "-"}{" "}
+                  {quote.pedido.cliente.tipo_documento
+                    ? getDocumentTypeLabel(quote.pedido.cliente.tipo_documento)
+                    : "-"}{" "}
                   {quote.pedido.cliente.numero_documento ?? ""}
                 </p>
                 <p>

@@ -16,6 +16,7 @@ import { SheetBody, SheetFooter } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { hasListFilters } from "@/lib/navigation";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
+import { CLIENT_TYPE_OPTIONS, DOCUMENT_TYPE_OPTIONS } from "@/modules/commercial/client-labels";
 import type { ClientFormState, ClientFormValues } from "@/modules/commercial/clients/actions";
 
 type ClientFormProps = {
@@ -37,19 +38,13 @@ const initialState: ClientFormState = { status: "idle" };
 
 const FILTER_HINT = "Puede no aparecer con los filtros activos del listado.";
 
-const clientTypeOptions = [
-  { value: "cliente_final", label: "Cliente final" },
-  { value: "ferreteria", label: "Ferretería" },
-  { value: "distribuidora", label: "Distribuidora" },
-  { value: "constructora", label: "Constructora" },
-  { value: "otro", label: "Otro" },
-];
+// Los textos salen de las listas de Comercial (C2 del grupo de fixes), las mismas que usan las
+// pantallas que muestran al cliente.
+const clientTypeOptions = CLIENT_TYPE_OPTIONS.map(([value, label]) => ({ value, label }));
 
 const documentTypeOptions = [
   { value: "", label: "Sin documento" },
-  { value: "dni", label: "DNI" },
-  { value: "ruc", label: "RUC" },
-  { value: "otro", label: "Otro" },
+  ...DOCUMENT_TYPE_OPTIONS.map(([value, label]) => ({ value, label })),
 ];
 
 const emptyValues: ClientFormValues = {

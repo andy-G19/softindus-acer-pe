@@ -184,13 +184,13 @@ describe("OrderForm en la edicion", () => {
     await renderForm(success);
 
     expect(combobox("id_cliente").value).toBe("Cliente dado de baja");
-    expect(await openOptions("id_cliente")).toContain("Cliente dado de bajacliente_final - Inactivo");
+    expect(await openOptions("id_cliente")).toContain("Cliente dado de bajaCliente final - Inactivo");
   });
 
   it("los activos no llevan la marca", async () => {
     await renderForm(success);
 
-    expect(await openOptions("id_cliente")).toContain("Ferretería El Pernoferreteria");
+    expect(await openOptions("id_cliente")).toContain("Ferretería El PernoFerretería");
   });
 
   it("muestra el producto actual inactivo y lo marca en la lista", async () => {

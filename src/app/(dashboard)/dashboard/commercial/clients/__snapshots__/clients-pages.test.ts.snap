@@ -831,6 +831,11 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 <label for="type">Tipo</label>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
+<option value="cliente_final">Cliente final</option>
+<option value="ferreteria">Ferretería</option>
+<option value="distribuidora">Distribuidora</option>
+<option value="constructora">Constructora</option>
+<option value="otro">Otro</option>
 <option value="empresa">empresa</option>
 <option value="persona">persona</option>
 </select>
@@ -937,6 +942,11 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 <label for="type">Tipo</label>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
+<option value="cliente_final">Cliente final</option>
+<option value="ferreteria">Ferretería</option>
+<option value="distribuidora">Distribuidora</option>
+<option value="constructora">Constructora</option>
+<option value="otro">Otro</option>
 <option value="empresa">empresa</option>
 <option value="persona">persona</option>
 </select>

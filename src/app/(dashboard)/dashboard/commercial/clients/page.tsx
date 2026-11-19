@@ -31,6 +31,7 @@ import {
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { toggleClientStatusAction } from "@/modules/commercial/clients/actions";
 import { ClientStatusButton } from "@/modules/commercial/clients/client-status-button";
+import { getClientTypeFilterOptions, getClientTypeLabel } from "@/modules/commercial/client-labels";
 import { commercialNotifications } from "@/modules/commercial/notifications";
 import { getClientListData } from "@/modules/commercial/clients/queries";
 
@@ -64,7 +65,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
     label: item.nombre_razon_social,
     description: [
       item.id_cliente,
-      item.tipo_cliente,
+      getClientTypeLabel(item.tipo_cliente),
       item.numero_documento,
       item.telefono,
       item.lugar_origen,
@@ -73,9 +74,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
       .join(" - "),
   }));
 
-  const clientTypes = Array.from(
-    new Set(clientOptions.map((item) => item.tipo_cliente).filter(Boolean)),
-  ).sort();
+  const clientTypes = getClientTypeFilterOptions(clientOptions.map((item) => item.tipo_cliente));
 
   return (
     <div className="space-y-6">
@@ -121,8 +120,8 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
             <NativeSelect {...control} name="type" defaultValue={type}>
               <option value="">Todos los tipos</option>
               {clientTypes.map((clientType) => (
-                <option key={clientType} value={clientType}>
-                  {clientType}
+                <option key={clientType.value} value={clientType.value}>
+                  {clientType.label}
                 </option>
               ))}
             </NativeSelect>
@@ -167,7 +166,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
               <TableCell className="font-medium">
                 {clientItem.nombre_razon_social}
               </TableCell>
-              <TableCell>{clientItem.tipo_cliente}</TableCell>
+              <TableCell>{getClientTypeLabel(clientItem.tipo_cliente)}</TableCell>
               <TableCell>{clientItem.telefono ?? "-"}</TableCell>
               <TableCell>{clientItem.lugar_origen ?? "-"}</TableCell>
               <TableCell>

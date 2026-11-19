@@ -19,6 +19,7 @@ import { formatMoney } from "@/lib/formatters";
 import { hasListFilters } from "@/lib/navigation";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
 import { calculateOrderAmounts } from "@/lib/order-amounts";
+import { getClientTypeLabel } from "@/modules/commercial/client-labels";
 import type {
   OrderFormState,
   OrderFormValues,
@@ -156,7 +157,9 @@ export function OrderForm({
     return clients.map((client) => ({
       id: client.id_cliente,
       label: client.nombre_razon_social,
-      description: client.inactivo ? `${client.tipo_cliente} - Inactivo` : client.tipo_cliente,
+      description: client.inactivo
+        ? `${getClientTypeLabel(client.tipo_cliente)} - Inactivo`
+        : getClientTypeLabel(client.tipo_cliente),
     }));
   }, [clients]);
 

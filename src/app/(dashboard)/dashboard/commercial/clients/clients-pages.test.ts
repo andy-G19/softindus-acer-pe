@@ -395,6 +395,69 @@ describe("panel lateral de clientes", () => {
 // Entrega 9: el listado adopta FilterBar y Field sin cambiar los nombres de la
 // URL, el alta lleva el regreso al listado filtrado (para el aviso y la pagina
 // completa) y ninguna pagina de Clientes anida un <main> dentro del del shell.
+// C2 del grupo de fixes (D124, hallazgo 5 de la 11.3c): la tabla, el filtro y el buscador mostraban
+// el tipo de cliente como se guarda («cliente_final»). Ahora muestran el texto de la lista
+// compartida, y el filtro la ofrece entera, en el orden del formulario. Un tipo guardado que la
+// lista no conoce (los «empresa» y «persona» de estas filas) se muestra y se ofrece tal cual.
+describe("C2 del grupo de fixes: el tipo de cliente con su texto", () => {
+  const LABELED_ROWS = [
+    { ...CLIENT_ROWS[0], id_cliente: "CLI00000011", tipo_cliente: "ferreteria" },
+    { ...CLIENT_ROWS[1], id_cliente: "CLI00000012", tipo_cliente: "cliente_final" },
+  ];
+  const LABELED_OPTIONS = [
+    { ...CLIENT_OPTIONS[0], tipo_cliente: "constructora" },
+    { ...CLIENT_OPTIONS[1], tipo_cliente: "empresa" },
+  ];
+
+  async function renderList() {
+    const result = await characterizePage(
+      loadList,
+      {
+        name: "tipos con texto",
+        data: {
+          "cliente.findMany": (args) =>
+            args && "take" in args ? projectRows(LABELED_ROWS, args) : LABELED_OPTIONS,
+          "cliente.count": 2,
+        },
+      },
+      LIST_ROUTE,
+    );
+
+    if (result.html === null) {
+      throw new Error("El listado no se pinto.");
+    }
+
+    return result.html;
+  }
+
+  it("la tabla muestra el texto del tipo", async () => {
+    const html = await renderList();
+
+    expect(html).toContain("<td>Ferretería</td>");
+    expect(html).toContain("<td>Cliente final</td>");
+    expect(html).not.toContain("<td>cliente_final</td>");
+  });
+
+  it("el filtro ofrece la lista entera con su texto y un tipo desconocido tal cual", async () => {
+    const html = await renderList();
+    const filter = html.slice(html.indexOf('name="type"'), html.indexOf("</select>", html.indexOf('name="type"')));
+
+    expect(filter).toContain('<option value="cliente_final">Cliente final</option>');
+    expect(filter).toContain('<option value="ferreteria">Ferretería</option>');
+    expect(filter).toContain('<option value="distribuidora">Distribuidora</option>');
+    expect(filter).toContain('<option value="constructora">Constructora</option>');
+    expect(filter).toContain('<option value="otro">Otro</option>');
+    expect(filter).toContain('<option value="empresa">empresa</option>');
+  });
+
+  it("el buscador describe al cliente con el texto del tipo", async () => {
+    const html = await renderList();
+
+    expect(html).toContain("Constructora");
+    expect(html).not.toContain(" - constructora - ");
+  });
+});
+
 describe("listado de clientes con la base visual", () => {
   const FILTERED = { q: "andina", status: "activo", page: "2" };
 

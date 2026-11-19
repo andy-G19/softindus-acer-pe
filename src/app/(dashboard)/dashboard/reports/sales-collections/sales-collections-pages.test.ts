@@ -1,6 +1,7 @@
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
+  characterizePage,
   definePageSuite,
   generatedResult,
   type PrismaArgs,
@@ -110,3 +111,31 @@ definePageSuite([
     ],
   },
 ]);
+
+// C2 del grupo de fixes (D124, hallazgo 5 de la 11.3c): la columna del cliente mostraba debajo del
+// nombre el tipo de cliente como se guarda («distribuidora» en minusculas, «cliente_final»).
+describe("C2 del grupo de fixes: el tipo de cliente del reporte con su texto", () => {
+  it("muestra el texto del tipo debajo del nombre", async () => {
+    const { html } = await characterizePage(
+      () => import("./page"),
+      {
+        name: "tipos con texto",
+        data: {
+          "pedido.findMany": (args) =>
+            (ordersWithCollectionStates(args) as Row[]).map((order, index) => ({
+              ...order,
+              cliente: {
+                ...(order.cliente as Row),
+                tipo_cliente: index === 0 ? "cliente_final" : "distribuidora",
+              },
+            })),
+        },
+      },
+      "/dashboard/reports/sales-collections",
+    );
+
+    expect(html).toContain(">Cliente final</p>");
+    expect(html).toContain(">Distribuidora</p>");
+    expect(html).not.toContain(">cliente_final</p>");
+  });
+});
