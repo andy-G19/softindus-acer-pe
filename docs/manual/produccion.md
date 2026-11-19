@@ -237,4 +237,97 @@ etapa, que incluye el último día completo.
 **Filtros:** buscar por orden, cliente o producto; producto; cliente; campaña; tipo;
 estado; prioridad y rango de fechas de inicio.
 
-El alta, el detalle y las acciones de cada orden se describirán cuando se renueven.
+**En cada fila:** **Ver detalle**, **Ver avances**, y **Anular** y **Finalizar** mientras la orden
+lo admita (ver abajo).
+
+## Crear una orden de trabajo
+
+**Quién:** el administrador y el maestro de taller.
+
+1. Pulsa **Nueva orden**.
+2. Elige el **tipo de producción**:
+   - **Por pedido:** elige el **detalle de pedido**; el producto sale de él. Solo se ofrecen los
+     pedidos registrados o aprobados.
+   - **Por campaña:** elige la **campaña** (activa o planificada) y uno de sus productos.
+   - **Reposición de stock:** elige el **producto**.
+3. Elige la **ruta de fabricación** y la **versión de receta**. Solo se ofrecen las del producto:
+   la ruta debe estar activa y tener etapas, y la versión debe estar vigente y tener materiales.
+4. Escribe la **cantidad**, la **prioridad** (alta, media o baja), la **fecha de inicio** y, si
+   quieres, la **entrega estimada** y las observaciones.
+5. Pulsa **Crear orden**.
+
+Al crearla, la orden guarda el **requerimiento de materiales** de la versión elegida («congelado»):
+aunque la receta cambie después, la orden conserva lo que se planificó. La orden nace
+**pendiente**, y al guardar se abre su detalle. Una orden enviada dos veces se crea una sola vez.
+
+## Detalle de una orden
+
+El detalle muestra el origen, las fechas, el costo estimado de material, la ruta, la receta y dos
+tablas:
+
+- **Requerimiento:** cada material con su cantidad por unidad, el total requerido, el stock
+  disponible, el faltante y el costo estimado.
+- **Materiales entregados:** por material, lo requerido, entregado, pendiente, devuelto,
+  consumido y la merma.
+
+### Entregar los materiales
+
+**Entregar materiales** (o **Entregar lo pendiente**, si ya hubo entregas) pide confirmar y dice
+cuánto de cada material sale del almacén. Se usa el botón normal, porque no anula nada. Si un
+material no tiene stock suficiente, no se entrega nada y el sistema dice cuál falta. Cuando ya no
+queda nada pendiente, el botón desaparece y el cursor pasa al título de la página.
+
+### Entrega adicional o devolución
+
+En la sección **Entrega adicional o devolución**, elige la **operación**:
+
+- **Entrega adicional:** material extra por encima de lo planificado. El **motivo** es
+  obligatorio, porque una salida fuera del plan sin explicación no se puede auditar después. La
+  cantidad no puede superar el stock disponible en el almacén.
+- **Devolución al almacén:** material entregado que vuelve sin usarse. El motivo es opcional. La
+  cantidad no puede superar lo entregado que todavía no se devolvió.
+
+Elige el **material** (solo los de la orden), escribe la **cantidad** y pulsa **Registrar entrega
+adicional** o **Registrar devolución**. Una operación enviada dos veces se registra una sola vez.
+
+### Cerrar y reabrir los materiales
+
+**Cerrar materiales** concilia lo entregado con lo usado: para cada material escribe lo
+**consumido** (la merma sale sola de lo entregado menos lo devuelto y lo consumido), y escribe
+las **unidades producidas**, que pueden ser cero si la orden falló por completo. Al cerrar ya no
+se puede entregar ni devolver material contra la orden.
+
+Si el cierre tenía un error, **Reabrir el cierre** lo deshace con un **motivo**. No revierte
+ningún movimiento de almacén: las entregas y devoluciones quedan como estaban, y queda registrado
+en la bitácora.
+
+### Anular y finalizar
+
+En la fila de la lista:
+
+- **Anular** pide confirmar con el botón rojo: la orden queda anulada, ya no recibe material ni
+  se puede finalizar. No se puede deshacer. No se anula una orden finalizada ni una con consumos
+  registrados.
+- **Finalizar** pide confirmar con el botón normal: la orden queda finalizada con la fecha de hoy
+  y ya no recibe material. Solo se finaliza cuando tiene avances y todas sus etapas están
+  terminadas. Si ya estaba finalizada, el sistema lo avisa y no cambia nada.
+
+## Avances de producción
+
+**Dónde:** **Ver avances**, en la lista o en el detalle de la orden.
+
+Arriba están los indicadores: etapas generadas, en proceso, pausadas, terminadas y el avance
+general.
+
+- **Generar avances:** si la orden todavía no tiene avances, el botón pide confirmar y dice
+  cuántas etapas de qué ruta reciben un avance **pendiente**. No se ofrece si la orden no tiene
+  ruta o su ruta no tiene etapas.
+- **Actualizar una etapa:** cada etapa tiene su propio formulario con el **estado** (pendiente,
+  en proceso, pausada o terminada), el **porcentaje** y las observaciones. Pendiente se guarda
+  como 0 % y terminada como 100 %; en proceso o pausada, el porcentaje debe ser mayor que 0 y
+  menor que 100.
+- **Reasignar:** en cada etapa, **Reasignar** abre una página para elegir el **nuevo operario**
+  (solo los activos) y escribir el **motivo de reasignación**. Al guardar vuelves a los avances.
+
+Al terminar la **última** etapa, la orden queda finalizada sola y los formularios de sus etapas
+se deshabilitan: ya no se pueden modificar los avances de una orden finalizada.
