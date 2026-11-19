@@ -31,6 +31,7 @@ import { formatDateTime } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -64,6 +65,8 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
   const session = await requireRole([APP_ROLES.ADMIN]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = parseStringParam(params, "q");
   const rol = parseStringParam(params, "rol");
   const estado = parseStringParam(params, "estado");
@@ -151,7 +154,7 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
           {users.length === 0 ? (
             <EmptyState
               className="mx-6 border-0"
-              label="No se encontraron usuarios con los filtros aplicados."
+              label={filtered ? "No se encontraron usuarios con los filtros aplicados." : "Todavía no hay usuarios registrados."}
             />
           ) : (
             <Table>

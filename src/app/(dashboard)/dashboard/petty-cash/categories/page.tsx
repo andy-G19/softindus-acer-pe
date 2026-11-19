@@ -27,6 +27,7 @@ import { requireRole } from "@/lib/authz";
 import {
   dashboardBreadcrumbs,
   getSearchParam,
+  hasActiveFilters,
   navigationHrefs,
 } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
@@ -50,6 +51,8 @@ export default async function ExpenseCategoriesPage({
   await requireRole([APP_ROLES.ADMIN]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = getSearchParam(params, "q");
   const status = getSearchParam(params, "status");
   const categories = await getExpenseCategoryList({ q, status });
@@ -174,7 +177,7 @@ export default async function ExpenseCategoriesPage({
                     <TableCell colSpan={5} className="p-0">
                       <EmptyState
                         className="border-0"
-                        label="Aún no hay categorías registradas."
+                        label={filtered ? "No se encontraron categorías con los filtros aplicados." : "Aún no hay categorías registradas."}
                       />
                     </TableCell>
                   </TableRow>

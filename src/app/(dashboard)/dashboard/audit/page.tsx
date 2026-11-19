@@ -25,7 +25,7 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
 import { requireRole } from "@/lib/authz";
 import { formatDateTime } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, hasActiveFilters, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
@@ -112,6 +112,8 @@ export default async function AuditPage({ searchParams }: PageProps) {
   await requireRole([APP_ROLES.ADMIN]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = parseStringParam(params, "q");
   const usuario = parseStringParam(params, "usuario");
   const accion = parseStringParam(params, "accion");
@@ -207,7 +209,7 @@ export default async function AuditPage({ searchParams }: PageProps) {
           {logs.length === 0 ? (
             <EmptyState
               className="mx-6 border-0"
-              label="No se encontraron operaciones con los filtros aplicados."
+              label={filtered ? "No se encontraron operaciones con los filtros aplicados." : "Todavía no hay operaciones registradas."}
             />
           ) : (
             <Table>

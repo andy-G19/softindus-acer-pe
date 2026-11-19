@@ -36,6 +36,7 @@ import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -85,6 +86,8 @@ export default async function RepairsPage({ searchParams }: RepairsPageProps) {
 
   const canManageRepairs = session.user.role === APP_ROLES.ADMIN;
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = parseStringParam(params, "q");
   const machine = parseStringParam(params, "machine");
   const failure = parseStringParam(params, "failure");
@@ -199,7 +202,7 @@ export default async function RepairsPage({ searchParams }: RepairsPageProps) {
           {repairs.length === 0 ? (
             <EmptyState
               className="mx-6 border-0"
-              label="Aún no hay reparaciones registradas."
+              label={filtered ? "No se encontraron reparaciones con los filtros aplicados." : "Aún no hay reparaciones registradas."}
               description="Registra una reparación para calcular mano de obra, repuestos y costo total de mantenimiento."
               action={
                 canManageRepairs ? (

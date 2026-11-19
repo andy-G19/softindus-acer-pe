@@ -31,6 +31,7 @@ import {
   createReturnToHref,
   dashboardBreadcrumbs,
   getSearchParam,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -77,6 +78,8 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
 
   const canManageMachines = session.user.role === APP_ROLES.ADMIN;
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = getSearchParam(params, "q");
   const type = getSearchParam(params, "type");
   const location = getSearchParam(params, "location");
@@ -181,7 +184,7 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
           {machines.length === 0 ? (
             <EmptyState
               className="mx-6 border-0"
-              label="Aun no hay maquinas registradas."
+              label={filtered ? "No se encontraron máquinas con los filtros aplicados." : "Aun no hay maquinas registradas."}
             />
           ) : (
             <Table>

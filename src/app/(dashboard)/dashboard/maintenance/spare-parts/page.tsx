@@ -31,6 +31,7 @@ import {
   createReturnToHref,
   dashboardBreadcrumbs,
   getSearchParam,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -50,6 +51,8 @@ export default async function SparePartsPage({
   await requireRole([APP_ROLES.ADMIN]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = getSearchParam(params, "q");
   const provider = getSearchParam(params, "provider");
   const status = getSearchParam(params, "status");
@@ -131,7 +134,7 @@ export default async function SparePartsPage({
           {spareParts.length === 0 ? (
             <EmptyState
               className="mx-6 border-0"
-              label="Aun no hay repuestos registrados."
+              label={filtered ? "No se encontraron repuestos con los filtros aplicados." : "Aun no hay repuestos registrados."}
             />
           ) : (
             <Table>

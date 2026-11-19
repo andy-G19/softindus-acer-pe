@@ -31,6 +31,7 @@ import {
   createReturnToHref,
   dashboardBreadcrumbs,
   getSearchParam,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -58,6 +59,8 @@ export default async function OperatorsPage({
 
   const canManageOperators = session.user.role === APP_ROLES.ADMIN;
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   // El panel de alta o edicion vuelve a la lista con sus filtros.
   const returnTo = createReturnToHref(navigationHrefs.operators, params);
   const q = getSearchParam(params, "q");
@@ -168,7 +171,7 @@ export default async function OperatorsPage({
           {operators.length === 0 ? (
             <EmptyState
               className="mx-6 border-0"
-              label="Todavía no hay operarios registrados."
+              label={filtered ? "No se encontraron operarios con los filtros aplicados." : "Todavía no hay operarios registrados."}
             />
           ) : (
             <Table>

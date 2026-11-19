@@ -20,6 +20,7 @@ import {
   createReturnToHref,
   dashboardBreadcrumbs,
   getSearchParam,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -38,6 +39,8 @@ export default async function FabricationRoutesPage({
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   const q = getSearchParam(params, "q");
   const product = getSearchParam(params, "product");
   const status = getSearchParam(params, "status");
@@ -177,7 +180,7 @@ export default async function FabricationRoutesPage({
               <TableCell colSpan={8} className="p-0">
                 <EmptyState
                   className="border-0"
-                  label="Todavía no hay rutas de fabricación registradas."
+                  label={filtered ? "No se encontraron rutas con los filtros aplicados." : "Todavía no hay rutas de fabricación registradas."}
                 />
               </TableCell>
             </TableRow>

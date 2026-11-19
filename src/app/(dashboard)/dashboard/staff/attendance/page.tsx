@@ -30,6 +30,7 @@ import { formatDate } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -103,6 +104,8 @@ export default async function AttendancePage({
   await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
   const params = (await searchParams) ?? {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
   // El panel de registro vuelve a la lista con sus filtros.
   const returnTo = createReturnToHref(navigationHrefs.attendance, params);
   const q = parseStringParam(params, "q");
@@ -185,7 +188,7 @@ export default async function AttendancePage({
           {latestAttendance.length === 0 ? (
             <EmptyState
               className="mx-6 border-0"
-              label="Todavía no hay asistencias registradas."
+              label={filtered ? "No se encontraron asistencias con los filtros aplicados." : "Todavía no hay asistencias registradas."}
               description="Registra la primera asistencia diaria para empezar a reemplazar el control manual en cuaderno."
               action={
                 <Button asChild>

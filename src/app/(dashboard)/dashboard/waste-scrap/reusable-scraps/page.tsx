@@ -33,6 +33,7 @@ import { formatDate } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
+  hasActiveFilters,
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
@@ -82,6 +83,8 @@ export default async function ReusableScrapsPage({
   await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
   const params = searchParams ? await searchParams : {};
+  // C5 de la 11.7d2 (D112): el vacio dice si el usuario filtro.
+  const filtered = hasActiveFilters(params);
 
   const estado = params.estado?.trim() ?? "";
   const material = params.material?.trim() ?? "";
@@ -177,7 +180,7 @@ export default async function ReusableScrapsPage({
           {retazos.length === 0 ? (
             <EmptyState
               className="mx-6 border-0"
-              label="No se encontraron retazos con los filtros seleccionados."
+              label={filtered ? "No se encontraron retazos con los filtros seleccionados." : "Aún no hay retazos registrados."}
             />
           ) : (
             <Table>
