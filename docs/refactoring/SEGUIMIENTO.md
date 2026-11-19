@@ -10887,6 +10887,44 @@ sobre producción: se volvió al login de staging y el responsable inició sesi�
 La apertura de caja no se verificó en staging: escribiría datos, y la carrera no se puede provocar
 de forma fiable. La cubren la prueba de orden y la de integración.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-19 (UTC) y comparados con git:
+
+- El registro de la verificación se publicó en `staging` con `f429ede`: CI #235 en verde (4m 15s).
+- PR #60, abierto a las 17:21:48 UTC y fusionado con merge commit a las 17:23:27 UTC: 9 commits, de
+  `0a3d703` a `f429ede`, y 99 archivos (+1.168 −376). **El PR no tuvo CI propio:** se fusionó antes
+  de que se lanzara su ejecución de `pull_request`. El mismo `f429ede` ya estaba en verde en el #235.
+- El merge commit `fdfbef9` tiene como padres `f41ccb1` (`main`) y `f429ede` (`staging`), y su
+  árbol es el de `f429ede` (`6639406`).
+- **CI #236 sobre `fdfbef9`: cancelado** a los 43 s, como el #217 de la 11.7c2. Falta relanzarlo.
+- Vercel desplegó `fdfbef9` en producción (`success` a las 17:24:13 UTC). Sin migraciones.
+
+## Pendientes al pasar al diseño
+
+Anotados el 2026-11-19, cuando el trabajo pasó a una sesión propia de diseño (empezando por los
+botones). Ningún pendiente bloquea el diseño, salvo los dos primeros, que son del responsable y
+rápidos.
+
+| # | Pendiente | Quién | Dónde está el detalle |
+|---|---|---|---|
+| 1 | Relanzar el CI #236 de `main` (cancelado) y comprobar que termina en verde | Responsable, desde Actions | «Integración en `main`» del grupo de fixes |
+| 2 | Publicar `68179d4` (la hoja de decisiones) con el próximo push | Responsable | — |
+| 3 | Registrar la integración del PR #60 con el resultado del CI relanzado | Próximo C0 | Esta sección |
+| 4 | Subir Node: el CI, `engines` y `@types/node` juntos (el C7 de la revisión de dependencias), después de instalar la misma versión en el equipo del responsable | Hacia el 2026-12-19 | «Revisión de dependencias», D121 |
+| 5 | Ver la versión de Node del proyecto en Vercel (Settings → Build and Deployment) | Responsable | D121 |
+| 6 | Activar las alertas de Dependabot en GitHub | Responsable | D122 |
+| 7 | Las 23 decisiones de negocio (5 de prioridad alta: N1 a N5) | Responsable y taller | [DECISIONES.md](DECISIONES.md) |
+| 8 | Los `fix` propios de la entrega 10 que siguen abiertos: errores de línea por posición, KPI «Total» de etapas y recetas, textos y copias, «La versión ya estaba vigente», el buscador de `SearchableSelect`, el enlace del maestro de taller a dos reportes y el tiempo límite de una prueba | `fix` propios | Tabla de la entrega 10 |
+| 9 | La lista de métodos de pago copiada en Inventario y Personal | Paso propio | Hallazgo 3 de la 11.7d1 |
+| 10 | Los vacíos de los 10 reportes | Paso propio | Hallazgo 3 de la 11.7d2 |
+| 11 | Los movimientos de caja chica: rango de fechas sin `DateRangeFields` y formulario GET sin `FilterBar` | Paso propio | Tabla de la entrega 11 |
+| 12 | Recorridos automáticos de punta a punta, la medición de accesibilidad y la línea base de rendimiento | Plan propio, si se decide | Criterios globales del cierre de la entrega 11 |
+
+Los dos pendientes de diseño ya registrados, D99 (reglas de `patterns.css` que ganan a clases de
+componentes) y D101 (el borde de color de las alertas, confirmado en la galería: las cinco tienen el
+mismo borde gris), pasan a la sesión de diseño.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
