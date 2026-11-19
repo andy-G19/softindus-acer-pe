@@ -5,6 +5,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
+import { readFileSync } from "node:fs";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { Plus } from "lucide-react";
@@ -154,6 +155,45 @@ describe("colores de las variantes", () => {
       // que la variante se definiria dos veces. Los de aria-invalid son de la base comun y quedan.
       expect(actual.filter((name) => name.startsWith("dark:") && !name.startsWith("dark:aria-invalid:"))).toEqual([]);
     }
+  });
+});
+
+// Foco de teclado del boton (propuesta del responsable, 2026-11-19): 2px del color de fondo y
+// 2px de anillo solido, naranja o rojo en destructive, para que se vea tambien sobre el boton
+// naranja. Las utilidades de anillo con separacion de Tailwind dibujan exactamente eso y se
+// suman a la sombra del boton en el mismo box-shadow. La regla global de patterns.css (contorno naranja en enlaces, botones y
+// campos) gana a las clases de Button (0-2-0 contra 0-1-0), asi que excluye los botones: si no,
+// se verian el contorno y el anillo a la vez.
+describe("foco del boton", () => {
+  // El nombre no es el de una utilidad: Tailwind genera una clase por cada palabra que lo parezca.
+  const anilloConHueco = [
+    "focus-visible:ring-2",
+    "focus-visible:ring-offset-2",
+    "focus-visible:ring-offset-background",
+  ];
+
+  it("cada variante dibuja el anillo con hueco del color de fondo", () => {
+    for (const variant of ["default", "secondary", "outline", "ghost", "destructive", "link", "clear"] as const) {
+      const actual = variantClasses(variant);
+
+      expect(anilloConHueco.filter((name) => !actual.includes(name))).toEqual([]);
+      expect(actual).not.toContain("focus-visible:ring-3");
+      expect(actual.filter((name) => name.startsWith("focus-visible:border-"))).toEqual([]);
+    }
+  });
+
+  it("el anillo es naranja, y rojo en destructive", () => {
+    expect(variantClasses("default")).toContain("focus-visible:ring-ring");
+    expect(variantClasses("destructive")).toContain("focus-visible:ring-destructive-outline");
+    expect(variantClasses("destructive")).not.toContain("focus-visible:ring-ring");
+  });
+
+  it("la regla global del contorno de foco no alcanza a los botones", () => {
+    const patterns = readFileSync("src/styles/patterns.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    const selector = /([^{}]*):focus-visible\s*\{\s*outline:\s*2px solid/.exec(patterns)?.[1].trim() ?? "";
+
+    expect(selector).toContain(":where(a, button,");
+    expect(selector).toContain(':not([data-slot="button"])');
   });
 });
 

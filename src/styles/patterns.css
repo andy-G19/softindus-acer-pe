@@ -85,8 +85,11 @@
   /* Contorno del foco de teclado en toda la app (11.7c; antes en el adaptador). Va en esta capa
      y con .industrial-dark (en <html>) a proposito: con especificidad 0-2-0 y despues de las
      utilidades de Tailwind gana a focus-visible:outline-none, como hasta ahora; en base.css
-     perderia contra cualquier utilidad. */
-  .industrial-dark :where(a, button, [role="button"], input, select, textarea):focus-visible {
+     perderia contra cualquier utilidad. Excluye a Button ([data-slot="button"], tambien como
+     enlace): desde el diseno de los botones (2026-11-19) dibuja su propio anillo, y con esta
+     regla se verian los dos a la vez. */
+  .industrial-dark
+    :where(a, button, [role="button"], input, select, textarea):not([data-slot="button"]):focus-visible {
     outline: 2px solid color-mix(in srgb, var(--ring) 72%, transparent);
     outline-offset: 2px;
   }
