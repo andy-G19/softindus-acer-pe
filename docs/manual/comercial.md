@@ -149,7 +149,7 @@ recientes van primero, de 20 en 20.
   - **Ver detalle**, siempre;
   - **Editar** y **Cancelar**, mientras el pedido no esté cancelado ni tenga una proforma activa, un comprobante o una orden de trabajo;
   - **Ver proforma**, si tiene una proforma activa;
-  - **Generar proforma**, si está registrado o aprobado y no tiene una proforma activa.
+  - **Generar proforma**, si está registrado o aprobado y no tiene una proforma activa. Abre la proforma nueva con el pedido ya elegido, y al guardar vuelves a la lista de pedidos.
 - **Filtros:**
   - búsqueda por código, cliente o producto;
   - cliente;
@@ -211,6 +211,19 @@ Al editar:
   apareciendo, con «Inactivo» en su descripción, y el pedido se puede
   guardar mientras no los cambies. Uno nuevo debe estar activo.
 
+### Cancelar un pedido
+
+**Cancelar** en la fila pide confirmar: el pedido queda cancelado, ya no se
+puede editar ni generar su proforma, y no se puede deshacer. Confirma con
+**Cancelar pedido** o vuelve con **Volver**. Se ofrece en los mismos pedidos
+que se pueden editar.
+
+### Detalle de un pedido
+
+**Ver detalle** muestra el cliente, las fechas, los productos y las
+proformas del pedido. Cada proforma abre su detalle, y su **Volver al
+pedido** regresa a este pedido.
+
 ## Proformas
 
 **Dónde:** Comercial → Proformas.
@@ -218,8 +231,7 @@ Al editar:
 
 La lista muestra, por proforma, el número, el pedido, el cliente, la fecha
 de emisión, el total, el saldo, el estado y el comprobante (su tipo y
-número, o «Sin comprobante»). Las más recientes van primero; la lista
-muestra todas, sin páginas.
+número, o «Sin comprobante»). Las más recientes van primero, de 20 en 20.
 
 - **En cada fila:**
   - **Ver detalle**, siempre;
@@ -233,6 +245,53 @@ muestra todas, sin páginas.
   - saldo: con saldo o sin saldo;
   - rango de fechas de emisión.
 
+### Crear una proforma
+
+1. Pulsa **Nueva proforma**, o **Generar proforma** en un pedido.
+2. Elige el **pedido**. Se ofrecen los registrados o aprobados que no tienen
+   una proforma activa. Aparece el resumen del pedido: cliente, fechas,
+   productos y **monto total**.
+3. Si el cliente deja un **adelanto inicial**, escríbelo y elige su **método
+   de pago**. El adelanto no puede ser mayor que el total, y queda
+   registrado como el primer pago de la proforma. El **saldo calculado** es
+   el total menos el adelanto.
+4. Si quieres, escribe la **validez en días** y las observaciones.
+5. Pulsa **Generar proforma**.
+
+Sin adelanto, la proforma nace **vigente**; con adelanto, **aceptada**, o
+**pagada** si el adelanto cubre el total. Si recargas o vuelves a enviar el
+mismo formulario, la proforma no se crea dos veces. La miga y **Volver** de
+la página nombran a dónde vuelves: proformas o pedidos.
+
+### Detalle de una proforma
+
+El detalle muestra la proforma lista para imprimir (o guardar como PDF con
+**Imprimir proforma**), su historial de pagos y su historial de comprobantes, los más
+recientes primero. Debajo están dos secciones:
+
+- **Registrar pago de cliente:** monto, método, tipo (adelanto, amortización,
+  que viene elegido, o cancelación) y observaciones. Muestra el saldo actual
+  y el saldo después del pago. El pago no puede ser mayor que el saldo («El
+  pago no puede ser mayor que el saldo pendiente: S/ …»). Al cubrir el saldo,
+  la proforma queda **pagada** y la sección muestra «Esta proforma ya está
+  pagada. No requiere nuevos pagos.». Un pago enviado dos veces se registra
+  una sola vez.
+- **Registrar comprobante de venta:** tipo (boleta, factura, recibo u otro),
+  número (se propone uno al elegir el tipo y puedes cambiarlo), monto total
+  (propone el de la proforma, y no puede superarlo) y observaciones. No puede
+  haber dos comprobantes con el mismo número. Una proforma tiene un solo
+  comprobante emitido; con él, la sección muestra «Esta proforma ya tiene un
+  comprobante emitido.».
+
+**Anular** (en la fila o en el detalle) pide confirmar: la proforma queda
+anulada y su pedido vuelve a admitir una proforma nueva. No se puede
+deshacer, y no se ofrece si la proforma tiene pagos o un comprobante emitido.
+
+La miga y **Volver** del detalle dicen de dónde llegaste: proformas, pagos de
+cliente, comprobantes, pedidos, el detalle de un pedido o el reporte de
+ventas y cobranzas, con sus filtros. Si abres el detalle por su dirección,
+vuelve a proformas.
+
 ## Pagos de cliente
 
 **Dónde:** Comercial → Pagos de cliente.
@@ -241,8 +300,8 @@ muestra todas, sin páginas.
 Los pagos se registran en el detalle de cada proforma; esta lista los
 consulta. Muestra, por pago, la fecha, el cliente, el pedido, la proforma,
 el tipo, el método, el monto y el saldo que quedó. Los más recientes van
-primero; la lista muestra todos, sin páginas. El tipo y el método se ven
-como se guardaron, por ejemplo «amortizacion» o «transferencia».
+primero, de 20 en 20. El tipo y el método se ven con su nombre, por
+ejemplo «Amortización» o «Yape», y la proforma con su número (PF-…).
 
 - **En cada fila:** **Ver proforma**.
 - **Filtros:**
@@ -261,11 +320,11 @@ como se guardaron, por ejemplo «amortizacion» o «transferencia».
 Los comprobantes se emiten en el detalle de cada proforma; esta lista los
 consulta. Muestra, por comprobante, el número, el cliente, el pedido, el
 tipo, la fecha de emisión, el total y el estado («Emitido» o «Anulado»). Los
-más recientes van primero; la lista muestra todos, sin páginas.
+más recientes van primero, de 20 en 20.
 
 - **En cada fila:**
   - **Ver proforma**, si el comprobante tiene una;
-  - **Anular**, mientras esté emitido; pide confirmación.
+  - **Anular**, mientras esté emitido; pide confirmación: el comprobante queda anulado y su proforma vuelve a admitir uno nuevo. No se puede deshacer.
 - **Filtros:**
   - búsqueda por número, pedido o cliente;
   - tipo: boleta, factura, recibo u otro;
