@@ -10850,12 +10850,40 @@ Detalles:
 (antes del grupo, 342 y 5.590). El CSS compilado pasa de 107.874 a 107.917 bytes, solo por el menú.
 Sin migraciones.
 
-Pendiente: verificar en staging después del push, solo con lecturas:
-- `?page=99` en dos listas;
-- el tipo de cliente en clientes, en el detalle de proforma y en el reporte;
-- los textos nuevos;
-- la primera opción del menú en 108 px, cerrado, con el ratón y con Tab;
-- Filtrar y Atrás en dos listas (el «después»).
+#### Verificación en staging
+
+Push de 8 commits (`0a3d703` a `a855b59`): CI #234 en verde (5m 49s) y Vercel `success` a las
+16:55:22 UTC del 2026-11-19. Solo lecturas, con el responsable conectado como ADMIN:
+
+- **Página fuera de rango:**
+  - `clients?status=activo&page=99` lleva a `?status=activo`: 8 filas, página 1 de 1;
+  - `audit?page=999` lleva a `?page=31`: filas 601-606 de 606, con «Anterior» activo.
+- **Tipo de cliente:**
+  - la tabla de clientes muestra «Cliente final», «Distribuidora» y «Ferretería»;
+  - el filtro ofrece la lista entera y ningún tipo desconocido, así que los datos reales están
+    dentro de la lista;
+  - el detalle de PRF00000005 muestra «Tipo: Ferretería» y «Documento: DNI 76441287»;
+  - el reporte de ventas muestra los tipos con su texto.
+- **Textos:** planillas («Según los filtros aplicados.», «Con su pago registrado.»), generar
+  planilla, registrar falla y el aviso de exportación del reporte de ventas. Ninguno dice «subfase».
+- **Menú:** la primera opción en 108 px con el menú cerrado, abierto con el ratón, cerrado otra vez y
+  abierto con Tab (foco en «Dashboard»). El título está siempre en 90 px y pasa de `hidden` a
+  `visible`.
+- **Filtrar y Atrás (el «después» del C6):**
+  - en clientes («zzz», «Inactivo») y en pedidos («zzz», «Cancelado»), la barra queda vacía tras
+    Atrás, como la URL;
+  - en las dos, el `<form>` lleva `autocomplete="off"`.
+- **Consola:** los avisos de `vercel.live` contra la CSP de solo informe, y un 404 y un `ERR_FAILED`
+  que no se pueden atribuir con certeza, porque la consola guarda toda la sesión de la pestaña.
+  Coinciden con los de las pruebas con `fetch` de la verificación anterior. Las peticiones de la
+  página verificada no tienen ningún 404.
+
+Antes de medir, la sesión de staging había vencido y la pestaña había quedado en producción. Al
+pedir staging, el proxy llevó al login de producción, el host de `AUTH_URL` (10.3c). No se actuó
+sobre producción: se volvió al login de staging y el responsable inició sesión.
+
+La apertura de caja no se verificó en staging: escribiría datos, y la carrera no se puede provocar
+de forma fiable. La cubren la prueba de orden y la de integración.
 
 ## Secuencia de próximas entregas
 
