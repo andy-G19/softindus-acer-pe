@@ -11,7 +11,7 @@ type DashboardErrorPageProps = {
   };
   // Vuelve a pedir los datos al servidor (router.refresh) y luego limpia el error;
   // `reset` solo limpiaria el error y mostraria el mismo fallo otra vez.
-  unstable_retry: () => void;
+  retry: () => void;
 };
 
 // Error de cualquier pagina del panel que no tenga uno propio (11.7b). Queda dentro
@@ -21,7 +21,7 @@ type DashboardErrorPageProps = {
 // desarrollo podria mostrar detalles internos.
 export default function DashboardErrorPage({
   error,
-  unstable_retry,
+  retry,
 }: DashboardErrorPageProps) {
   return (
     <div className="flex min-h-[60vh] items-center justify-center">
@@ -31,7 +31,7 @@ export default function DashboardErrorPage({
         detail={error.digest ? `Código de referencia: ${error.digest}` : undefined}
         actions={
           <>
-            <Button type="button" onClick={() => unstable_retry()}>
+            <Button type="button" onClick={() => retry()}>
               Intentar nuevamente
             </Button>
             <Button variant="outline" asChild>

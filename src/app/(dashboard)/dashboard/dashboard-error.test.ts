@@ -19,7 +19,7 @@ import DashboardErrorPage from "./error";
 type ErrorPageProps = {
   error: Error & { digest?: string };
   reset: () => void;
-  unstable_retry: () => void;
+  retry: () => void;
 };
 
 let host: HTMLDivElement;
@@ -37,7 +37,7 @@ afterEach(async () => {
 });
 
 async function renderError(error: Error & { digest?: string }) {
-  const props = { error, reset: vi.fn(), unstable_retry: vi.fn() };
+  const props = { error, reset: vi.fn(), retry: vi.fn() };
 
   await act(async () => {
     root.render(h(DashboardErrorPage as ComponentType<ErrorPageProps>, props));
@@ -71,7 +71,7 @@ describe("C6 de la 11.7b: pantalla de error del panel", () => {
     expect(host.querySelector("main")).toBeNull();
   });
 
-  it("«Intentar nuevamente» vuelve a pedir los datos con unstable_retry", async () => {
+  it("«Intentar nuevamente» vuelve a pedir los datos con retry", async () => {
     const props = await renderError(serverError());
     const retry = [...host.querySelectorAll("button")].find(
       (button) => button.textContent === "Intentar nuevamente",
@@ -81,7 +81,7 @@ describe("C6 de la 11.7b: pantalla de error del panel", () => {
       retry?.click();
     });
 
-    expect(props.unstable_retry).toHaveBeenCalledTimes(1);
+    expect(props.retry).toHaveBeenCalledTimes(1);
     expect(props.reset).not.toHaveBeenCalled();
   });
 
