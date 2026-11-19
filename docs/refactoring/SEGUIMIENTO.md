@@ -10667,6 +10667,20 @@ Lecciones de la entrega 11:
 - **Antes de registrar una integración, se lee el CI de `main`:** el #217 se canceló sin motivo y
   hubo que relanzarlo.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-19 (UTC) y comparados con git:
+
+- El cierre se publicó en `staging` con `b2c41f0`: CI #227 en verde (4m 23s).
+- PR #58, abierto a las 11:20:27 UTC y fusionado con merge commit a las 11:28:32 UTC del
+  2026-11-19: 7 commits, de `5b1c23e` a `b2c41f0`, y 12 archivos (+678 −123). Su CI, el #228,
+  sobre `b2c41f0`, terminó en verde (6m 42s).
+- El merge commit `38ddacf` tiene como padres `744b7c1` (`main`) y `b2c41f0` (`staging`), y su
+  árbol es el de `b2c41f0` (`00732fc`): `main` y `staging` tienen el mismo contenido. CI #229 en
+  verde (6m 51s).
+- Vercel desplegó `38ddacf` en producción (`success` a las 11:30:25 UTC). El cierre no trae
+  migraciones.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -10692,7 +10706,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Cerrada (CI #226 verde en main; 19 sub-entregas, de la 11.1 a la 11.7d2, integradas con los PR #39 a #57, cada una verificada en staging; 29 operaciones críticas con pruebas en Postgres, 14 con clave de idempotencia; balance, criterios globales y hallazgos abiertos en «Cierre de la entrega 11»). Con ella termina el orden vigente del plan |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Cerrada (CI #229 verde en main, PR #58 del cierre; 19 sub-entregas, de la 11.1 a la 11.7d2, integradas con los PR #39 a #57, cada una verificada en staging; 29 operaciones críticas con pruebas en Postgres, 14 con clave de idempotencia; balance, criterios globales y hallazgos abiertos en «Cierre de la entrega 11»). Con ella termina el orden vigente del plan |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
