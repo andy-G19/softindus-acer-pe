@@ -10636,17 +10636,18 @@ decida cuándo hacerla.
 | 11.6b | D77: anular la orden deja el pedido en «en producción» | Decisión de negocio, con un `fix` propio |
 | 11.6c | D83: «Finalizar» del listado nunca puede tener éxito | Decisión de negocio |
 | 11.2a | 2: compras «parcial» con saldo 0.00 guardadas antes del arreglo | Consultar los datos y decidir |
-| 11.4a | 7: dos aperturas simultáneas de una caja con el mismo nombre | Decisión, o un `fix` con el patrón del alta rápida (buscar el nombre después de reservar el correlativo) |
+| 11.4a | 7: dos aperturas simultáneas de una caja con el mismo nombre | Cerrado en el grupo de fixes (`7de01a2`) |
 | Entrega 10 | Las demás decisiones de negocio de su tabla (alertas, filtros de reportes, reparaciones, versiones, campañas, usuarios) | Decisión de negocio |
 | 11.7c1 | D99: clases de componentes a las que ganan las reglas de `patterns.css`, con `.login-field-input` e `input-forge-focus` | Paso propio, un componente a la vez y verificado con paridad |
 | 11.7c2 | D101: el borde de color de las alertas y el hover de las tarjetas de módulo | `fix` de diseño, con capturas |
-| 11.7c1 | 6: el título «Navegación» desplaza las opciones del menú al pasar el ratón | `fix` propio |
-| 11.3c | 6: la página posterior a la última de una lista paginada | `fix` propio |
-| 11.3c | 5: clientes y el detalle de proforma muestran `tipo_cliente` como se guarda | `fix` propio |
-| 11.5 | 11: textos de planillas que hablan de «la siguiente subfase» | `fix` propio (textos) |
+| 11.7c1 | 6: el título «Navegación» desplaza las opciones del menú al pasar el ratón | Cerrado en el grupo de fixes (`610bcdb`) |
+| 11.3c | 6: la página posterior a la última de una lista paginada | Cerrado en el grupo de fixes (`75b3cab`) |
+| 11.3c | 5: clientes y el detalle de proforma muestran `tipo_cliente` como se guarda | Cerrado en el grupo de fixes (`0d9ceb6`) |
+| 11.5 | 11: textos de planillas que hablan de «la siguiente subfase» | Cerrado en el grupo de fixes (`1b17dbe`) |
+| Grupo de fixes | 4: en la lista de planillas, «Planillas generadas» cuenta con los filtros y las otras tres tarjetas cuentan todas | Decisión de negocio |
 | 11.7d1 | 3: la lista de métodos de pago copiada en Inventario y Personal | Paso propio |
 | 11.7d2 | 3: los vacíos de los 10 reportes siguen diciendo «con los filtros aplicados» | Paso propio |
-| 10.7a | 36: Atrás restaura los filtros GET escritos | `fix` propio, verificado en un navegador |
+| 10.7a | 36: Atrás restaura los filtros GET escritos | Cerrado en el grupo de fixes (`39d2b8b`), medido en staging |
 | Entrega 10 | Los demás `fix` propios de su tabla (errores de línea por posición, KPI filtrados, textos, «La versión ya estaba vigente», buscador de `SearchableSelect`) | `fix` propio |
 | 11.1 | 7 y 8: Prisma pide Node 22; `npm audit` informa vulnerabilidades sin evaluar | 8 cerrado en la «Revisión de dependencias» (producción: de 35 avisos a 2 aceptados). 7 sigue abierto: subir Node, aplazado hacia el 2026-12-19 |
 | Movimientos de caja chica | El rango de fechas sin `DateRangeFields` y su formulario GET sin `FilterBar` | Paso propio |
@@ -10800,6 +10801,61 @@ Datos leídos de la API de GitHub el 2026-11-19 (UTC) y comparados con git:
   verde (5m 32s).
 - Vercel desplegó `f41ccb1` en producción (`success` a las 14:53:44 UTC). La revisión no trae
   migraciones.
+
+### Grupo de fixes pequeños (después de la entrega 11)
+
+Fecha: 2026-11-19 (Lima). Seis `fix` propios de la tabla «Hallazgos abiertos y su destino», cada uno
+con su prueba en rojo antes del código. Plan en `tmp/fixes/plan-fixes.md`, aprobado con D123 a
+D128.
+
+| Commit | Tipo | Hallazgo | Cambio |
+|---|---|---|---|
+| 0a3d703 | docs | — | Integración de la revisión de dependencias en `main` (PR #59). |
+| 7de01a2 | fix | 7 de la 11.4a | La apertura de caja busca el nombre después de reservar el correlativo de caja, y un nombre repetido se lanza para revertir (D123). Es el patrón del alta rápida de proveedor. Rojo antes: la búsqueda iba antes del correlativo. |
+| 0d9ceb6 | fix | 5 de la 11.3c | `client-labels.ts` da el texto del tipo de cliente y del tipo de documento (D124 y D125) en la tabla, el filtro y el buscador de clientes, el detalle de proforma, el formulario de pedido y el reporte de ventas y cobranzas. El filtro ofrece la lista entera y, tal cual, los tipos guardados que no conoce. Rojo antes: 7 casos. |
+| 75b3cab | fix | 6 de la 11.3c | `redirectBeyondLastPage` lleva a la última página, con los mismos filtros, cuando la pedida no existe; lo llaman las 17 listas paginadas, y una guardia lo exige (D126). Rojo antes. |
+| 1b17dbe | fix | 11 de la 11.5 | Nueve textos que prometían «la siguiente subfase» (planillas, alta de falla y 6 reportes) dicen lo que hay; los reportes, que el Excel trae hasta 1.000 filas. Sale el `phase` sin uso de las tarjetas de Mantenimiento. Una guardia rechaza la palabra en `src`. Rojo antes: 10 archivos. |
+| 610bcdb | fix | 6 de la 11.7c1 | El título «Navegación» del menú ocupa siempre el hueco de 20 px entre la cabecera y la primera opción, y solo cambia su visibilidad (D127). Rojo antes. |
+| 39d2b8b | fix | 36 de la 10.7a | `autoComplete="off"` en `FilterBar` y en los dos formularios GET de Caja chica: Atrás ya no restaura lo escrito (D128). Medido en staging antes de escribir el código. Rojo antes: la guardia encontró los 3 formularios. |
+| (este) | docs | — | Registro del grupo, CLAUDE.md y el manual. |
+
+Detalles:
+
+1. **La apertura de caja.** El rojo era el orden. Con el código anterior, un nombre repetido tampoco
+   avanzaba el contador, porque se buscaba antes de reservarlo. La prueba de integración
+   (`box-opening.integration.test.ts`) protege el arreglo: la mutación «devolver en lugar de lanzar»
+   la rompe, porque el contador quedaría avanzado. La espera del bloqueo no se prueba en PGlite.
+2. **El tipo de cliente.** Los datos de prueba de las páginas usaban «empresa» y «persona», que no
+   están en el esquema. El `z.enum` existe desde el primer commit del módulo, pero el filtro sigue
+   ofreciendo cualquier tipo guardado que no conozca, para no perder la posibilidad de filtrarlo.
+3. **La página posterior a la última.** `empty-list-filters.test.ts` pintaba cada lista vacía en
+   la página 2 para comprobar que `page` y `toast` no son filtros. Esa página ya no existe y
+   redirige; el caso pasó a la página 1, con la misma intención.
+4. **Los textos.** «Planillas generadas» cuenta con los filtros, pero «Pendientes», «Pagadas» y
+   «Anuladas» cuentan todas las planillas. Los textos nuevos describen cada tarjeta. Que unas
+   filtren y otras no queda como hallazgo abierto (decisión).
+5. **El menú.** La primera opción queda en 88 + 20 = 108 px, abierto o cerrado. El CSS cambia solo en
+   el título: `.invisible` y dos reglas de `display:block` que pasan a `visibility:visible`, y
+   `pt-22` en lugar de `pt-24`.
+6. **Los filtros GET.** Medido en staging, en la lista de clientes:
+   - **antes:** tras Filtrar («zzz», «Inactivo») y Atrás, la URL sin filtros y la barra con «zzz» e
+     «Inactivo»;
+   - **con el atributo puesto a mano en la pestaña:** la barra vacía.
+
+   El atributo del `<form>` lo heredan el campo de texto y el `<select>`. Cambian 189 snapshots en
+   44 archivos: un script comprobó que los 190 pares de líneas solo agregan
+   ` autoComplete="off"`.
+
+`npm run check` en verde antes de cada commit: al final, 348 archivos de prueba con 5.614 pruebas
+(antes del grupo, 342 y 5.590). El CSS compilado pasa de 107.874 a 107.917 bytes, solo por el menú.
+Sin migraciones.
+
+Pendiente: verificar en staging después del push, solo con lecturas:
+- `?page=99` en dos listas;
+- el tipo de cliente en clientes, en el detalle de proforma y en el reporte;
+- los textos nuevos;
+- la primera opción del menú en 108 px, cerrado, con el ratón y con Tab;
+- Filtrar y Atrás en dos listas (el «después»).
 
 ## Secuencia de próximas entregas
 

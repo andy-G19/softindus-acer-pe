@@ -166,12 +166,9 @@ de **Limpiar**, o al volver con **Atrás** o **Adelante** del navegador, sus
 campos y listas desplegables toman los valores de la dirección. Si cambiaste
 un campo y no pulsaste **Filtrar**, ese cambio se pierde en ese momento. En
 cambio, abrir y cerrar una ventana o un panel desde la lista no cambia lo
-que elegiste en la barra.
-
-Hay una excepción conocida: **Filtrar** vuelve a cargar la página, y si
-luego pulsas **Atrás** el navegador puede devolver a la barra lo que habías
-escrito, aunque la lista ya no lo esté aplicando. Si la barra y la lista no
-coinciden, pulsa **Filtrar** o **Limpiar**.
+que elegiste en la barra. Lo mismo al volver con **Atrás** después de
+**Filtrar**: la barra muestra los filtros de la lista a la que vuelves, no
+lo que habías escrito.
 
 Si la barra tiene un rango de fechas (**Desde** y **Hasta**), los dos días
 se incluyen completos. **Hasta** no ofrece días anteriores a **Desde**; si
@@ -180,9 +177,8 @@ final.» y la barra no se envía hasta corregirlo. Si llegas con un enlace que
 ya trae el rango al revés, **Hasta** muestra el mismo mensaje: los reportes
 no muestran datos y piden corregir el rango, y las listas salen vacías.
 
-Las fechas cuentan aunque las elijas mientras la página todavía carga, o
-aunque el navegador las recupere al volver con **Atrás**: si quedan al
-revés, el mensaje aparece igual y la barra no se envía.
+Las fechas cuentan aunque las elijas mientras la página todavía carga: si
+quedan al revés, el mensaje aparece igual y la barra no se envía.
 
 Cuando una lista no tiene filas, el mensaje dice por qué:
 
@@ -193,6 +189,11 @@ Cuando una lista no tiene filas, el mensaje dice por qué:
 
 Los reportes dicen siempre «con los filtros aplicados», porque muestran un
 periodo elegido.
+
+Las listas largas van de 20 en 20, con **Anterior** y **Siguiente**. Si
+llegas a una página que ya no existe (un enlace guardado, o anulaste la
+última fila de la última página), el sistema te lleva a la última página
+que existe, con los mismos filtros.
 
 ## El menú de la izquierda
 
