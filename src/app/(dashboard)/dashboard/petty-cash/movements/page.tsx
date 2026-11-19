@@ -28,6 +28,7 @@ import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, hasActiveFilters, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { parseDateParam } from "@/lib/search-params";
 import { toNumber } from "@/lib/numbers";
@@ -138,6 +139,7 @@ export default async function PettyCashMovementsPage({
   );
 
   const meta = getPaginationMeta({ totalItems: totalMatches, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: navigationHrefs.pettyCashMovements, searchParams: params as Record<string, string | string[] | undefined> });
 
   const totalIncome = toNumber(incomeSum._sum.monto);
   const totalExpenses = toNumber(expenseSum._sum.monto);
@@ -177,7 +179,7 @@ export default async function PettyCashMovementsPage({
         </CardHeader>
 
         <CardContent>
-          <form method="GET" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <form method="GET" autoComplete="off" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div className="space-y-2">
               <Label htmlFor="caja">Caja chica</Label>
               <NativeSelect id="caja" name="caja" defaultValue={selectedCashBox}>

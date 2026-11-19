@@ -22,6 +22,7 @@ import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, hasActiveFilters, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import {
   parseDateParam,
   parseStringParam,
@@ -56,6 +57,7 @@ export default async function SupplierPaymentsPage({
   );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: navigationHrefs.supplierPayments, searchParams: params });
 
   return (
     <div className="space-y-6">

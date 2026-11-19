@@ -127,7 +127,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -370,7 +370,7 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -579,7 +579,7 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -804,7 +804,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -1164,7 +1164,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value="PRO"/>

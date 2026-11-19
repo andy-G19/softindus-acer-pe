@@ -69,7 +69,7 @@ exports[`/dashboard/maintenance/preventive > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de preventivos" action="/dashboard/maintenance/preventive" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de preventivos" action="/dashboard/maintenance/preventive" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar mantenimiento o actividad" name="q" value=""/>
@@ -379,7 +379,7 @@ exports[`/dashboard/maintenance/preventive > todos los filtros > resultado 1`] =
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de preventivos" action="/dashboard/maintenance/preventive" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de preventivos" action="/dashboard/maintenance/preventive" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar mantenimiento o actividad" name="q" value="lubricacion"/>
@@ -633,7 +633,7 @@ exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > r
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de preventivos" action="/dashboard/maintenance/preventive" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de preventivos" action="/dashboard/maintenance/preventive" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar mantenimiento o actividad" name="q" value=""/>

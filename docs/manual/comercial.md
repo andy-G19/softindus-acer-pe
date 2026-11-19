@@ -30,8 +30,12 @@ se abren con los dos roles.
 **Quién:** el administrador (ADMIN) y el vendedor (SELLER) los crean,
 editan, inactivan y activan.
 
-La lista muestra, por cliente, el código, el nombre o razón social, el tipo,
-el teléfono, el origen y el estado. Los clientes más recientes van primero.
+La lista muestra, por cliente, el código, el nombre o razón social, el tipo
+(con su nombre: «Cliente final», «Ferretería»…), el teléfono, el origen y el
+estado. Los clientes más recientes van primero. El tipo se ve igual en el
+detalle de proforma, al elegir el cliente de un pedido y en el reporte de
+ventas y cobranzas; el detalle de proforma muestra también el tipo de
+documento («DNI», «RUC»).
 
 - **Crear:** pulsa **Nuevo cliente**. El panel pide el tipo de cliente
   (cliente final, ferretería, distribuidora, constructora u otro) y el
@@ -47,7 +51,8 @@ el teléfono, el origen y el estado. Los clientes más recientes van primero.
   «Inactivo».
 - **Activar:** pulsa **Activar**; se hace sin preguntar.
 - **Filtros:** cliente (se busca por nombre o código), búsqueda general (por
-  nombre, documento, teléfono o correo), tipo, estado y origen.
+  nombre, documento, teléfono o correo), tipo (los cinco tipos, y cualquier
+  otro que se haya guardado antes, tal cual), estado y origen.
 
 Reglas del formulario:
 

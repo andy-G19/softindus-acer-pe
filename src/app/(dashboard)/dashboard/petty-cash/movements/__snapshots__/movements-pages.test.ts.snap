@@ -260,7 +260,7 @@ exports[`/dashboard/petty-cash/movements > sin filtros > resultado 1`] = `
 <div>Filtros de búsqueda</div>
 </div>
 <div>
-<form method="GET">
+<form autoComplete="off" method="GET">
 <div>
 <label for="caja">Caja chica</label>
 <select id="caja" name="caja">
@@ -665,7 +665,7 @@ exports[`/dashboard/petty-cash/movements > solo desde > resultado 1`] = `
 <div>Filtros de búsqueda</div>
 </div>
 <div>
-<form method="GET">
+<form autoComplete="off" method="GET">
 <div>
 <label for="caja">Caja chica</label>
 <select id="caja" name="caja">
@@ -1070,7 +1070,7 @@ exports[`/dashboard/petty-cash/movements > solo hasta > resultado 1`] = `
 <div>Filtros de búsqueda</div>
 </div>
 <div>
-<form method="GET">
+<form autoComplete="off" method="GET">
 <div>
 <label for="caja">Caja chica</label>
 <select id="caja" name="caja">
@@ -1655,7 +1655,7 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > resultado 1`] = `
 <div>Filtros de búsqueda</div>
 </div>
 <div>
-<form method="GET">
+<form autoComplete="off" method="GET">
 <div>
 <label for="caja">Caja chica</label>
 <select id="caja" name="caja">

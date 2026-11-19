@@ -87,7 +87,7 @@ exports[`/dashboard/reports/production > maestro de taller > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -260,7 +260,7 @@ exports[`/dashboard/reports/production > maestro de taller > resultado 1`] = `
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 Órdenes para mantener una consulta rápida. En la siguiente subfase agregaremos exportación para generar archivos completos.</p>
+<p>Se muestran como máximo 100 órdenes para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -358,7 +358,7 @@ exports[`/dashboard/reports/production > orden retrasada sin cliente, ruta ni av
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -532,7 +532,7 @@ exports[`/dashboard/reports/production > orden retrasada sin cliente, ruta ni av
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 Órdenes para mantener una consulta rápida. En la siguiente subfase agregaremos exportación para generar archivos completos.</p>
+<p>Se muestran como máximo 100 órdenes para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -634,7 +634,7 @@ exports[`/dashboard/reports/production > rango de mas de 366 dias > resultado 1`
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -807,7 +807,7 @@ exports[`/dashboard/reports/production > rango de mas de 366 dias > resultado 1`
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 Órdenes para mantener una consulta rápida. En la siguiente subfase agregaremos exportación para generar archivos completos.</p>
+<p>Se muestran como máximo 100 órdenes para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -875,7 +875,7 @@ exports[`/dashboard/reports/production > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1011,7 +1011,7 @@ exports[`/dashboard/reports/production > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1184,7 +1184,7 @@ exports[`/dashboard/reports/production > sin filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 Órdenes para mantener una consulta rápida. En la siguiente subfase agregaremos exportación para generar archivos completos.</p>
+<p>Se muestran como máximo 100 órdenes para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -1282,7 +1282,7 @@ exports[`/dashboard/reports/production > sin resultados > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1404,7 +1404,7 @@ exports[`/dashboard/reports/production > sin resultados > resultado 1`] = `
 <p>No se encontraron Órdenes de trabajo con los filtros aplicados.</p>
 </div>
 </div>
-<p>Se muestran como máximo 100 Órdenes para mantener una consulta rápida. En la siguiente subfase agregaremos exportación para generar archivos completos.</p>
+<p>Se muestran como máximo 100 órdenes para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -1512,7 +1512,7 @@ exports[`/dashboard/reports/production > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1685,7 +1685,7 @@ exports[`/dashboard/reports/production > todos los filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 Órdenes para mantener una consulta rápida. En la siguiente subfase agregaremos exportación para generar archivos completos.</p>
+<p>Se muestran como máximo 100 órdenes para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>

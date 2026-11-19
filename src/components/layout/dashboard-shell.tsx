@@ -85,12 +85,15 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
           "md:has-[:focus-visible]:w-64 md:has-[:focus-visible]:overflow-visible",
         )}
       >
-        <div className="h-full overflow-y-auto pt-24">
-          <div className="px-3 pb-3">
+        {/* El titulo ocupa siempre el hueco de 20 px entre la cabecera (88 px) y la primera opcion
+            (108 px) y solo cambia su visibilidad: si apareciera con display, bajaria las opciones
+            al abrirse el menu y un clic caeria en la de abajo (C5 del grupo de fixes). */}
+        <div className="h-full overflow-y-auto pt-22">
+          <div className="flex h-5 items-center px-3">
             <p
               className={cn(
                 "text-xs font-semibold uppercase text-muted-foreground",
-                "hidden md:group-hover/sidebar:block md:group-has-[:focus-visible]/sidebar:block",
+                "invisible md:group-hover/sidebar:visible md:group-has-[:focus-visible]/sidebar:visible",
               )}
             >
               Navegación

@@ -46,6 +46,7 @@ import {
   matchesCollectionStatus,
 } from "@/modules/reports/sales-collections/collection-status";
 import { ExportRangeNotice } from "@/modules/reports/export-range-notice";
+import { getClientTypeLabel } from "@/modules/commercial/client-labels";
 import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
 const ORDER_STATUS_OPTIONS = [
@@ -383,7 +384,7 @@ export default async function SalesCollectionsReportPage({
                           {row.order.cliente.nombre_razon_social}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {row.order.cliente.tipo_cliente}
+                          {getClientTypeLabel(row.order.cliente.tipo_cliente)}
                         </p>
                       </div>
                     </TableCell>
@@ -442,8 +443,7 @@ export default async function SalesCollectionsReportPage({
 
           <p className="mt-3 px-6 text-xs text-muted-foreground">
             Se muestran como máximo 100 pedidos para mantener una consulta
-            rápida. En la subfase de exportación se generarán archivos completos
-            según los filtros aplicados.
+            rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.
           </p>
         </CardContent>
       </Card>

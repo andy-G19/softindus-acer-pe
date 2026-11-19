@@ -25,6 +25,7 @@ import { getOperatorPaymentHistoryData } from "@/modules/staff/payment-history/q
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import { APP_ROLES } from "@/lib/permissions";
 
 function getPaymentMethodLabel(method: string | null) {
@@ -64,6 +65,7 @@ export default async function PaymentHistoryPage({ searchParams }: PaymentHistor
 
   // El historial no tiene filtros: el total de pagos es el de la paginacion.
   const meta = getPaginationMeta({ totalItems: totalPayments, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: navigationHrefs.paymentHistory, searchParams: params });
 
   return (
     <div className="space-y-6">

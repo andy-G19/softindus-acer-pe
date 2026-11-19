@@ -1269,7 +1269,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figure>
 <figcaption>Barra de filtros (FilterBar) con rango de fechas</figcaption>
 <div>
-<form role="search" aria-label="Filtros de ejemplo" action="/dashboard/gallery#listados" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de ejemplo" action="/dashboard/gallery#listados" method="GET">
 <div>
 <label for="galeria-listado-q">Búsqueda general</label>
 <input id="galeria-listado-q" placeholder="Nombre, documento o teléfono" name="q"/>
@@ -1303,7 +1303,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figure>
 <figcaption>Rango invertido (llega así en la URL)</figcaption>
 <div>
-<form role="search" aria-label="Filtros con rango invertido" action="/dashboard/gallery#listados" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros con rango invertido" action="/dashboard/gallery#listados" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>

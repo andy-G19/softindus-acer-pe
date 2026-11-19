@@ -103,7 +103,7 @@ exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistenci
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar operario" name="q" value=""/>
@@ -398,7 +398,7 @@ exports[`/dashboard/reports/staff > rango de mas de 366 dias > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar operario" name="q" value=""/>
@@ -641,7 +641,7 @@ exports[`/dashboard/reports/staff > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar operario" name="q" value=""/>
@@ -800,7 +800,7 @@ exports[`/dashboard/reports/staff > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar operario" name="q" value=""/>
@@ -1135,7 +1135,7 @@ exports[`/dashboard/reports/staff > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar operario" name="q" value="Quispe"/>

@@ -88,8 +88,7 @@ export default async function NewFailurePage({ searchParams }: NewFailurePagePro
             </p>
 
             <p>
-              La reparacion y el costo economico se registraran en la siguiente
-              subfase, cuando implementemos reparaciones y repuestos.
+              La reparación y su costo se registran después, desde Reparaciones.
             </p>
           </CardContent>
         </Card>

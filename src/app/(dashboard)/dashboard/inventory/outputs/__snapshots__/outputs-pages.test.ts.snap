@@ -120,7 +120,7 @@ exports[`/dashboard/inventory/outputs > fechas no validas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de salidas" action="/dashboard/inventory/outputs" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de salidas" action="/dashboard/inventory/outputs" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar salida..." name="q" value=""/>
@@ -331,7 +331,7 @@ exports[`/dashboard/inventory/outputs > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de salidas" action="/dashboard/inventory/outputs" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de salidas" action="/dashboard/inventory/outputs" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar salida..." name="q" value=""/>
@@ -518,7 +518,7 @@ exports[`/dashboard/inventory/outputs > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de salidas" action="/dashboard/inventory/outputs" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de salidas" action="/dashboard/inventory/outputs" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar salida..." name="q" value=""/>
@@ -793,7 +793,7 @@ exports[`/dashboard/inventory/outputs > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de salidas" action="/dashboard/inventory/outputs" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de salidas" action="/dashboard/inventory/outputs" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar salida..." name="q" value="OT"/>

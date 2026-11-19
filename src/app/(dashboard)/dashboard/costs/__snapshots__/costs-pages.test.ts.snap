@@ -1238,7 +1238,7 @@ exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -1524,7 +1524,7 @@ exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -1794,7 +1794,7 @@ exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -2064,7 +2064,7 @@ exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
@@ -2473,7 +2473,7 @@ exports[`/dashboard/costs/costings > todos los filtros, estado rentable > result
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value="puerta"/>
@@ -2743,7 +2743,7 @@ exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de costeos" action="/dashboard/costs/costings" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>

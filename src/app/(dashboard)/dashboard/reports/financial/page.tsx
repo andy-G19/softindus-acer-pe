@@ -474,8 +474,7 @@ export default async function FinancialReportPage({
 
           <p className="mt-3 px-6 text-xs text-muted-foreground">
             Se muestran como máximo 100 movimientos de caja para mantener una
-            consulta rápida. En la subfase de exportación se generarán archivos
-            completos según los filtros aplicados.
+            consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.
           </p>
         </CardContent>
       </Card>

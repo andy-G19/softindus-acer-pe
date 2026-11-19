@@ -29,6 +29,7 @@ import {
   withReturnTo,
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import { toggleMaterialStatusAction } from "@/modules/inventory/materials/actions";
 import { MaterialStatusButton } from "@/modules/inventory/materials/material-status-button";
 import { getMaterialListData } from "@/modules/inventory/materials/queries";
@@ -59,6 +60,7 @@ export default async function MaterialsPage({
     { skip, take },
   );
   const meta = getPaginationMeta({ totalItems, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: navigationHrefs.materials, searchParams: params });
   const isAdmin = session.user.role === "ADMIN";
   const categoryLabels = new Map(
     categories.map((item) => [item.slug, item.nombre]),

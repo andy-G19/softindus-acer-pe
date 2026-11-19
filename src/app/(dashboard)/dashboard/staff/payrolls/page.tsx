@@ -30,6 +30,7 @@ import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, hasActiveFilters, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   parseDateParam,
@@ -114,6 +115,7 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
 
   // El conteo de la tarjeta «Planillas generadas» usa el mismo where que el listado.
   const meta = getPaginationMeta({ totalItems: totalPayrolls, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: navigationHrefs.payrolls, searchParams: params as Record<string, string | string[] | undefined> });
 
   return (
     <div className="space-y-6">
@@ -176,9 +178,9 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
       </FilterBar>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Planillas generadas" value={totalPayrolls.toString()} description="Total histórico registrado." tone="info" icon={FileSpreadsheet} />
+        <KpiCard title="Planillas generadas" value={totalPayrolls.toString()} description="Según los filtros aplicados." tone="info" icon={FileSpreadsheet} />
         <KpiCard title="Pendientes" value={pendingPayrolls.toString()} description={`Por pagar: ${formatMoney(pendingNetAmount._sum.monto_neto ?? 0)}`} tone={pendingPayrolls > 0 ? "warning" : "info"} icon={Clock} />
-        <KpiCard title="Pagadas" value={paidPayrolls.toString()} description="Se marcarán en la siguiente subfase." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Pagadas" value={paidPayrolls.toString()} description="Con su pago registrado." tone="success" icon={CheckCircle2} />
         <KpiCard title="Anuladas" value={canceledPayrolls.toString()} description="Registros descartados." tone="info" icon={Ban} />
       </section>
 

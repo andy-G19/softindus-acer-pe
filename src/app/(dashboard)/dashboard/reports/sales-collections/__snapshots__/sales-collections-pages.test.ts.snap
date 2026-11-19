@@ -93,7 +93,7 @@ exports[`/dashboard/reports/sales-collections > filtro por estado de cobranza en
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -313,7 +313,7 @@ exports[`/dashboard/reports/sales-collections > filtro por estado de cobranza en
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -417,7 +417,7 @@ exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza >
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -715,7 +715,7 @@ exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza >
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -823,7 +823,7 @@ exports[`/dashboard/reports/sales-collections > rango de mas de 366 dias > resul
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1071,7 +1071,7 @@ exports[`/dashboard/reports/sales-collections > rango de mas de 366 dias > resul
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -1140,7 +1140,7 @@ exports[`/dashboard/reports/sales-collections > rango invertido > resultado 1`] 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1292,7 +1292,7 @@ exports[`/dashboard/reports/sales-collections > sin filtros, vendedor > resultad
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1540,7 +1540,7 @@ exports[`/dashboard/reports/sales-collections > sin filtros, vendedor > resultad
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -1644,7 +1644,7 @@ exports[`/dashboard/reports/sales-collections > sin resultados > resultado 1`] =
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1818,7 +1818,7 @@ exports[`/dashboard/reports/sales-collections > sin resultados > resultado 1`] =
 <p>No se encontraron ventas o cobranzas con los filtros aplicados.</p>
 </div>
 </div>
-<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -1954,7 +1954,7 @@ exports[`/dashboard/reports/sales-collections > todos los filtros > resultado 1`
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/sales-collections" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -2202,7 +2202,7 @@ exports[`/dashboard/reports/sales-collections > todos los filtros > resultado 1`
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>

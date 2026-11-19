@@ -90,7 +90,7 @@ exports[`/dashboard/production/campaigns > acciones de cada estado > resultado 1
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de campañas" action="/dashboard/production/campaigns" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de campañas" action="/dashboard/production/campaigns" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar campaña..." name="q" value=""/>
@@ -400,7 +400,7 @@ exports[`/dashboard/production/campaigns > sin campanas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de campañas" action="/dashboard/production/campaigns" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de campañas" action="/dashboard/production/campaigns" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar campaña..." name="q" value=""/>
@@ -620,7 +620,7 @@ exports[`/dashboard/production/campaigns > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de campañas" action="/dashboard/production/campaigns" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de campañas" action="/dashboard/production/campaigns" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar campaña..." name="q" value=""/>
@@ -886,7 +886,7 @@ exports[`/dashboard/production/campaigns > solo hasta > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de campañas" action="/dashboard/production/campaigns" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de campañas" action="/dashboard/production/campaigns" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar campaña..." name="q" value=""/>
@@ -1179,7 +1179,7 @@ exports[`/dashboard/production/campaigns > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de campañas" action="/dashboard/production/campaigns" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de campañas" action="/dashboard/production/campaigns" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar campaña..." name="q" value="lote"/>

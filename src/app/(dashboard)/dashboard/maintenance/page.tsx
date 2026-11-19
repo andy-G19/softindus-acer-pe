@@ -40,7 +40,6 @@ function formatHours(value: unknown) {
 type MaintenanceSection = {
   title: string;
   description: string;
-  phase: string;
   access: string;
   href?: string;
   /** Los roles que admite el requireRole de la pantalla de destino. */
@@ -80,7 +79,6 @@ export default async function MaintenanceDashboardPage() {
       title: "Máquinas",
       description:
         "Registro y consulta de máquinas o equipos críticos del taller.",
-      phase: "Subfase 9.2",
       access: "ADMIN",
       href: "/dashboard/maintenance/machines",
       roles: ADMIN_AND_WORKSHOP,
@@ -91,7 +89,6 @@ export default async function MaintenanceDashboardPage() {
       title: "Fallas",
       description:
         "Registro de fallas, paradas, responsable e impacto productivo.",
-      phase: "Subfase 9.3",
       access: "ADMIN / Maestro de taller",
       href: "/dashboard/maintenance/failures",
       roles: ADMIN_AND_WORKSHOP,
@@ -102,7 +99,6 @@ export default async function MaintenanceDashboardPage() {
       title: "Repuestos",
       description:
         "Registro de repuestos utilizados en reparaciones de maquinaria.",
-      phase: "Subfase 9.4",
       access: "ADMIN",
       href: "/dashboard/maintenance/spare-parts",
       roles: ADMIN_ONLY,
@@ -113,7 +109,6 @@ export default async function MaintenanceDashboardPage() {
       title: "Reparaciones",
       description:
         "Registro de técnico, mano de obra, costo total y repuestos usados.",
-      phase: "Subfase 9.5",
       access: "ADMIN",
       href: "/dashboard/maintenance/repairs",
       roles: ADMIN_ONLY,
@@ -124,7 +119,6 @@ export default async function MaintenanceDashboardPage() {
       title: "Preventivos",
       description:
         "Programación y seguimiento de mantenimientos preventivos básicos.",
-      phase: "Subfase 9.6",
       access: "ADMIN",
       href: "/dashboard/maintenance/preventive",
       roles: ADMIN_ONLY,
@@ -135,7 +129,6 @@ export default async function MaintenanceDashboardPage() {
       title: "Reincidencias",
       description:
         "Consulta de máquinas con más fallas, tiempos perdidos y costos.",
-      phase: "Subfase 9.7",
       access: "ADMIN",
       href: "/dashboard/maintenance/recurrences",
       roles: ADMIN_ONLY,

@@ -196,6 +196,37 @@ describe("C4 de la 11.3c: proformas paginados", () => {
   });
 });
 
+// C2 del grupo de fixes (D124 y D125, hallazgo 5 de la 11.3c): la tarjeta del cliente del detalle
+// mostraba el tipo de cliente y el tipo de documento como se guardan («ferreteria», «ruc»).
+describe("C2 del grupo de fixes: el cliente del detalle con sus textos", () => {
+  it("muestra el texto del tipo de cliente y del tipo de documento", async () => {
+    const { html } = await characterizePage(
+      () => import("./[id]/page"),
+      {
+        name: "detalle con cliente",
+        params: { id: "PRF00000001" },
+        data: {
+          "proforma.findUnique": (args) => {
+            const row = generatedRow("proforma", "findUnique", args) as {
+              pedido: { cliente: Record<string, unknown> };
+            };
+
+            row.pedido.cliente.tipo_cliente = "ferreteria";
+            row.pedido.cliente.tipo_documento = "ruc";
+            row.pedido.cliente.numero_documento = "20123456789";
+
+            return row;
+          },
+        },
+      },
+      "/dashboard/commercial/quotes/[id]",
+    );
+
+    expect(html).toMatch(/Tipo:<\/span>(?:<!-- -->|\s)*Ferretería</);
+    expect(html).toMatch(/Documento:<\/span>(?:<!-- -->|\s)*RUC(?:<!-- -->|\s)*20123456789/);
+  });
+});
+
 // C3 de la 11.7d (D108, hallazgo 7 de la 11.3c): los historiales del detalle ordenaban solo por un
 // dia (`@db.Date`), y dos pagos o comprobantes del mismo dia salian en un orden arbitrario (en
 // staging, el adelanto y la cancelacion de PF-00000004, el mas antiguo primero). Desempatan por id,

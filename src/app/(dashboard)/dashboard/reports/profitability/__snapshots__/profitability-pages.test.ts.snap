@@ -80,7 +80,7 @@ exports[`/dashboard/reports/profitability > costeo sin pedido, orden, margen ni 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
@@ -328,7 +328,7 @@ exports[`/dashboard/reports/profitability > rango de mas de 366 dias > resultado
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
@@ -529,7 +529,7 @@ exports[`/dashboard/reports/profitability > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
@@ -653,7 +653,7 @@ exports[`/dashboard/reports/profitability > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
@@ -893,7 +893,7 @@ exports[`/dashboard/reports/profitability > sin resultados > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
@@ -1164,7 +1164,7 @@ exports[`/dashboard/reports/profitability > todos los filtros > resultado 1`] = 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value="Estructura"/>

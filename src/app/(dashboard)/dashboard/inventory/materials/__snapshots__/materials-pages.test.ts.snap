@@ -160,7 +160,7 @@ exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultad
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value="plancha"/>
@@ -390,7 +390,7 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value=""/>
@@ -614,7 +614,7 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value=""/>
@@ -830,7 +830,7 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value=""/>
@@ -1024,7 +1024,7 @@ exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value=""/>

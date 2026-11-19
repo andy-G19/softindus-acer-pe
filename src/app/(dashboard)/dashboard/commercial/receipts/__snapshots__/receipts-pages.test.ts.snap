@@ -99,7 +99,7 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de comprobantes de venta" action="/dashboard/commercial/receipts" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de comprobantes de venta" action="/dashboard/commercial/receipts" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar comprobante..." name="q" value=""/>
@@ -302,7 +302,7 @@ exports[`/dashboard/commercial/receipts > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de comprobantes de venta" action="/dashboard/commercial/receipts" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de comprobantes de venta" action="/dashboard/commercial/receipts" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar comprobante..." name="q" value=""/>
@@ -464,7 +464,7 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de comprobantes de venta" action="/dashboard/commercial/receipts" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de comprobantes de venta" action="/dashboard/commercial/receipts" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar comprobante..." name="q" value=""/>
@@ -731,7 +731,7 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de comprobantes de venta" action="/dashboard/commercial/receipts" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de comprobantes de venta" action="/dashboard/commercial/receipts" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar comprobante..." name="q" value="B001"/>
@@ -916,7 +916,7 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de comprobantes de venta" action="/dashboard/commercial/receipts" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de comprobantes de venta" action="/dashboard/commercial/receipts" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar comprobante..." name="q" value=""/>

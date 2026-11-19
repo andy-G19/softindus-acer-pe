@@ -1138,7 +1138,7 @@ exports[`/dashboard/maintenance/failures/new > con regreso al listado > resultad
 <div>
 <p>Registra la falla apenas ocurra para no perder trazabilidad del tiempo detenido y del impacto en produccion.</p>
 <p>Si la falla todavia no fue revisada, usa el estado <strong>Pendiente</strong>. Si ya esta siendo atendida, usa <strong>En atencion</strong>.</p>
-<p>La reparacion y el costo economico se registraran en la siguiente subfase, cuando implementemos reparaciones y repuestos.</p>
+<p>La reparación y su costo se registran después, desde Reparaciones.</p>
 </div>
 </div>
 </section>
@@ -1286,7 +1286,7 @@ exports[`/dashboard/maintenance/failures/new > formulario > resultado 1`] = `
 <div>
 <p>Registra la falla apenas ocurra para no perder trazabilidad del tiempo detenido y del impacto en produccion.</p>
 <p>Si la falla todavia no fue revisada, usa el estado <strong>Pendiente</strong>. Si ya esta siendo atendida, usa <strong>En atencion</strong>.</p>
-<p>La reparacion y el costo economico se registraran en la siguiente subfase, cuando implementemos reparaciones y repuestos.</p>
+<p>La reparación y su costo se registran después, desde Reparaciones.</p>
 </div>
 </div>
 </section>
@@ -1434,7 +1434,7 @@ exports[`/dashboard/maintenance/failures/new > formulario con el maestro de tall
 <div>
 <p>Registra la falla apenas ocurra para no perder trazabilidad del tiempo detenido y del impacto en produccion.</p>
 <p>Si la falla todavia no fue revisada, usa el estado <strong>Pendiente</strong>. Si ya esta siendo atendida, usa <strong>En atencion</strong>.</p>
-<p>La reparacion y el costo economico se registraran en la siguiente subfase, cuando implementemos reparaciones y repuestos.</p>
+<p>La reparación y su costo se registran después, desde Reparaciones.</p>
 </div>
 </div>
 </section>

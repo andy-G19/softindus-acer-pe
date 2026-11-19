@@ -164,3 +164,44 @@ describe("createPettyCashBoxAction", () => {
     });
   }
 });
+
+// Grupo de fixes, C1 (D123, hallazgo 7 de la 11.4a): la apertura buscaba el nombre antes de
+// reservar el correlativo de caja, sin nada que ordenara dos aperturas simultaneas con el mismo
+// nombre: podian pasar las dos. Ahora lo busca despues de la reserva, cuya fila queda bloqueada
+// (FOR UPDATE) hasta el final: la segunda apertura espera y ve la primera. Es el patron del alta
+// rapida de proveedor (C1 de la 11.7d). La espera en si no se puede probar aqui (ni en PGlite);
+// esto fija el orden.
+describe("C1 del grupo de fixes: la apertura busca el nombre con el correlativo reservado", () => {
+  function indexOf(calls: Awaited<ReturnType<typeof runAction>>["calls"], name: string) {
+    return calls.findIndex((call) => JSON.stringify(call).includes(name));
+  }
+
+  it("con un nombre nuevo, la busqueda va dentro de la transaccion y despues del correlativo", async () => {
+    const { calls } = await runAction({ name: "orden", form: form() });
+
+    const transaccion = indexOf(calls, "prisma.$transaction");
+    const correlativo = indexOf(calls, "getNextCorrelativeId");
+    const busqueda = indexOf(calls, "caja_chica.findFirst");
+
+    expect(transaccion).toBeGreaterThanOrEqual(0);
+    expect(correlativo, "el correlativo se reserva dentro de la transaccion").toBeGreaterThan(transaccion);
+    expect(busqueda, "la busqueda del nombre va despues de reservar el correlativo").toBeGreaterThan(correlativo);
+    expect(indexOf(calls, "caja_chica.create")).toBeGreaterThan(busqueda);
+  });
+
+  it("con un nombre repetido, revierte la transaccion y responde en el campo del nombre", async () => {
+    const { calls, outcome } = await runAction({
+      name: "repetido",
+      form: form(),
+      data: { "caja_chica.findFirst": { id_caja_chica: "CAJ00000001" } },
+    });
+
+    expect(indexOf(calls, "getNextCorrelativeId")).toBeGreaterThanOrEqual(0);
+    expect(indexOf(calls, "caja_chica.create")).toBe(-1);
+    expect(indexOf(calls, "prisma.$transaction:rollback"), "la transaccion se revierte").toBeGreaterThanOrEqual(0);
+    expect(outcome).toMatchObject({
+      status: "error",
+      fieldErrors: { nombre_caja: ["Ya existe una caja chica con ese nombre."] },
+    });
+  });
+});

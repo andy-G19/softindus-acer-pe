@@ -21,6 +21,7 @@ import { requireRole } from "@/lib/authz";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, hasActiveFilters, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   parseDateParam,
@@ -60,6 +61,7 @@ export default async function InventoryEntriesPage({
     );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: navigationHrefs.inventoryEntries, searchParams: params });
 
   return (
     <div className="space-y-6">

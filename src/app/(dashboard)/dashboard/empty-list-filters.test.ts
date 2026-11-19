@@ -334,7 +334,9 @@ describe("el vacio de un listado dice si hay filtros", () => {
   it.each(CASES.map((item) => [item.name, item] as const))("%s", async (_name, item) => {
     const sinFiltros = await emptyPage(item, {});
     const conFiltro = await emptyPage(item, item.filter);
-    const conAviso = await emptyPage(item, { toast: "guardado", page: "2" });
+    // Pagina 1: con la lista vacia, una pagina posterior redirige a la primera (C3 del grupo de
+    // fixes, pagination-beyond-last.test.ts) y ya no se pinta vacia.
+    const conAviso = await emptyPage(item, { toast: "guardado", page: "1" });
 
     expect(sinFiltros).toContain(item.plain);
     expect(sinFiltros).not.toContain(item.filtered);

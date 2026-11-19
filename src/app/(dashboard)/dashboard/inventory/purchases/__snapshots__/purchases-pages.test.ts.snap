@@ -103,7 +103,7 @@ exports[`/dashboard/inventory/purchases > con una compra anulable > resultado 1`
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de compras" action="/dashboard/inventory/purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de compras" action="/dashboard/inventory/purchases" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar compra..." name="q" value=""/>
@@ -345,7 +345,7 @@ exports[`/dashboard/inventory/purchases > fechas no validas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de compras" action="/dashboard/inventory/purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de compras" action="/dashboard/inventory/purchases" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar compra..." name="q" value=""/>
@@ -588,7 +588,7 @@ exports[`/dashboard/inventory/purchases > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de compras" action="/dashboard/inventory/purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de compras" action="/dashboard/inventory/purchases" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar compra..." name="q" value=""/>
@@ -787,7 +787,7 @@ exports[`/dashboard/inventory/purchases > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de compras" action="/dashboard/inventory/purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de compras" action="/dashboard/inventory/purchases" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar compra..." name="q" value=""/>
@@ -1110,7 +1110,7 @@ exports[`/dashboard/inventory/purchases > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de compras" action="/dashboard/inventory/purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de compras" action="/dashboard/inventory/purchases" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar compra..." name="q" value="F001"/>

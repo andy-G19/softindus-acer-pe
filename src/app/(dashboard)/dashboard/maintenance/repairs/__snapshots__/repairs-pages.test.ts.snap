@@ -67,7 +67,7 @@ exports[`/dashboard/maintenance/repairs > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de reparaciones" action="/dashboard/maintenance/repairs" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de reparaciones" action="/dashboard/maintenance/repairs" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar reparacion, falla o tecnico" name="q" value=""/>
@@ -398,7 +398,7 @@ exports[`/dashboard/maintenance/repairs > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de reparaciones" action="/dashboard/maintenance/repairs" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de reparaciones" action="/dashboard/maintenance/repairs" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar reparacion, falla o tecnico" name="q" value="rodamiento"/>
@@ -667,7 +667,7 @@ exports[`/dashboard/maintenance/repairs > una reparacion en cada estado > result
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de reparaciones" action="/dashboard/maintenance/repairs" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de reparaciones" action="/dashboard/maintenance/repairs" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar reparacion, falla o tecnico" name="q" value=""/>

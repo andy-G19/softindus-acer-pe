@@ -81,7 +81,7 @@ exports[`/dashboard/reports/export-history > parametros vacios, con filtros e il
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del historial" action="/dashboard/reports/export-history" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del historial" action="/dashboard/reports/export-history" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -400,7 +400,7 @@ exports[`/dashboard/reports/export-history > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del historial" action="/dashboard/reports/export-history" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del historial" action="/dashboard/reports/export-history" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -550,7 +550,7 @@ exports[`/dashboard/reports/export-history > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del historial" action="/dashboard/reports/export-history" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del historial" action="/dashboard/reports/export-history" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -871,7 +871,7 @@ exports[`/dashboard/reports/export-history > todos los filtros > resultado 1`] =
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del historial" action="/dashboard/reports/export-history" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del historial" action="/dashboard/reports/export-history" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>

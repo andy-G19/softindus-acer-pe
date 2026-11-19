@@ -26,6 +26,12 @@ type FilterBarProps = {
 // campos se vuelven a montar cuando el servidor los pinta para otra URL
 // (FilterBarFields), asi que «Limpiar», Atras y Adelante muestran los filtros
 // que aplica la pagina.
+//
+// «Filtrar» carga el documento, y al volver con Atras el navegador restauraba
+// en los campos lo que se habia escrito aunque la lista ya no lo aplicara: eso
+// no lo evita una key, porque lo hace el navegador. autoComplete="off" en el
+// formulario, que heredan sus campos, se lo impide (C6 del grupo de fixes,
+// hallazgo 36 de la 10.7a; medido en staging).
 export function FilterBar({
   action,
   label,
@@ -38,6 +44,7 @@ export function FilterBar({
   return (
     <form
       method="GET"
+      autoComplete="off"
       action={action}
       role="search"
       aria-label={label}

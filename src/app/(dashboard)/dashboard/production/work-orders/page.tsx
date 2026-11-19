@@ -30,6 +30,7 @@ import {
   withReturnTo,
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import { parseDateParam } from "@/lib/search-params";
 import { productionNotifications } from "@/modules/production/notifications";
 import { getWorkOrderListData } from "@/modules/production/work-orders/queries";
@@ -123,6 +124,7 @@ export default async function WorkOrdersPage({
   );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: navigationHrefs.workOrders, searchParams: params });
 
   return (
     <div className="space-y-6">

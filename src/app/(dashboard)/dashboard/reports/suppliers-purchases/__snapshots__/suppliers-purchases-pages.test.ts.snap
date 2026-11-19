@@ -111,7 +111,7 @@ exports[`/dashboard/reports/suppliers-purchases > estados de pago y compra sin d
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -424,7 +424,7 @@ exports[`/dashboard/reports/suppliers-purchases > estados de pago y compra sin d
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 compras para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 compras para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -550,7 +550,7 @@ exports[`/dashboard/reports/suppliers-purchases > rango de mas de 366 dias > res
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -835,7 +835,7 @@ exports[`/dashboard/reports/suppliers-purchases > rango de mas de 366 dias > res
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 compras para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 compras para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -918,7 +918,7 @@ exports[`/dashboard/reports/suppliers-purchases > rango invertido > resultado 1`
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1093,7 +1093,7 @@ exports[`/dashboard/reports/suppliers-purchases > sin filtros > resultado 1`] = 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1378,7 +1378,7 @@ exports[`/dashboard/reports/suppliers-purchases > sin filtros > resultado 1`] = 
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 compras para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 compras para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -1500,7 +1500,7 @@ exports[`/dashboard/reports/suppliers-purchases > sin resultados > resultado 1`]
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1679,7 +1679,7 @@ exports[`/dashboard/reports/suppliers-purchases > sin resultados > resultado 1`]
 <p>No se encontraron compras con los filtros aplicados.</p>
 </div>
 </div>
-<p>Se muestran como máximo 100 compras para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 compras para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -1826,7 +1826,7 @@ exports[`/dashboard/reports/suppliers-purchases > todos los filtros > resultado 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/suppliers-purchases" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -2111,7 +2111,7 @@ exports[`/dashboard/reports/suppliers-purchases > todos los filtros > resultado 
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 compras para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 compras para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>

@@ -95,7 +95,7 @@ exports[`/dashboard/inventory/supplier-materials > activos > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de asociaciones proveedor-material" action="/dashboard/inventory/supplier-materials" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de asociaciones proveedor-material" action="/dashboard/inventory/supplier-materials" method="GET">
 <div>
 <label for="supplier">Proveedor</label>
 <select id="supplier" name="supplier">
@@ -284,7 +284,7 @@ exports[`/dashboard/inventory/supplier-materials > sin filtros > resultado 1`] =
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de asociaciones proveedor-material" action="/dashboard/inventory/supplier-materials" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de asociaciones proveedor-material" action="/dashboard/inventory/supplier-materials" method="GET">
 <div>
 <label for="supplier">Proveedor</label>
 <select id="supplier" name="supplier">
@@ -488,7 +488,7 @@ exports[`/dashboard/inventory/supplier-materials > todos los filtros > resultado
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de asociaciones proveedor-material" action="/dashboard/inventory/supplier-materials" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de asociaciones proveedor-material" action="/dashboard/inventory/supplier-materials" method="GET">
 <div>
 <label for="supplier">Proveedor</label>
 <select id="supplier" name="supplier">

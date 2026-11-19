@@ -288,7 +288,7 @@ exports[`/dashboard/reports/financial > rango de mas de 366 dias > resultado 1`]
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/financial" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/financial" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -610,7 +610,7 @@ exports[`/dashboard/reports/financial > rango de mas de 366 dias > resultado 1`]
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 movimientos de caja para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 movimientos de caja para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -689,7 +689,7 @@ exports[`/dashboard/reports/financial > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/financial" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/financial" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -986,7 +986,7 @@ exports[`/dashboard/reports/financial > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/financial" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/financial" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1308,7 +1308,7 @@ exports[`/dashboard/reports/financial > sin filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 movimientos de caja para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 movimientos de caja para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -1677,7 +1677,7 @@ exports[`/dashboard/reports/financial > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/financial" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/financial" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -1999,7 +1999,7 @@ exports[`/dashboard/reports/financial > todos los filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 movimientos de caja para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 movimientos de caja para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -2253,7 +2253,7 @@ exports[`/dashboard/reports/financial > totales vacios y movimientos por tipo > 
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/financial" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros del reporte" action="/dashboard/reports/financial" method="GET">
 <fieldset>
 <legend>Rango de fechas</legend>
 <div>
@@ -2556,7 +2556,7 @@ exports[`/dashboard/reports/financial > totales vacios y movimientos por tipo > 
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 movimientos de caja para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 movimientos de caja para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>

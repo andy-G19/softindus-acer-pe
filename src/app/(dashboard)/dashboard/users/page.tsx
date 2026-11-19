@@ -36,6 +36,7 @@ import {
   withReturnTo,
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import {
   APP_ROLES,
   getRoleLabel,
@@ -76,6 +77,7 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
     await getUserListData({ q, rol, estado }, { skip, take });
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: navigationHrefs.users, searchParams: params });
   // El panel de alta o edicion vuelve a la lista con sus filtros y su pagina.
   const returnTo = createReturnToHref(navigationHrefs.users, params);
 

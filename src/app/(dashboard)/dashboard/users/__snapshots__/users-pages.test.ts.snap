@@ -141,7 +141,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de usuarios" action="/dashboard/users" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de usuarios" action="/dashboard/users" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Nombre, usuario o correo" name="q" value=""/>
@@ -392,7 +392,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de usuarios" action="/dashboard/users" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de usuarios" action="/dashboard/users" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Nombre, usuario o correo" name="q" value=""/>
@@ -721,7 +721,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de usuarios" action="/dashboard/users" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de usuarios" action="/dashboard/users" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Nombre, usuario o correo" name="q" value="ana"/>

@@ -140,8 +140,8 @@ export default async function NewPayrollPage({ searchParams }: NewPayrollPagePro
             </p>
 
             <p>
-              La planilla se crea con estado pendiente. En la siguiente subfase
-              registraremos el pago real.
+              La planilla se crea con estado pendiente. El pago se registra
+              después, desde el historial de pagos.
             </p>
           </CardContent>
         </Card>

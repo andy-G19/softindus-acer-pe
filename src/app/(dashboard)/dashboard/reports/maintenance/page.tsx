@@ -716,9 +716,8 @@ export default async function MaintenanceReportPage({
 
           <p className="mt-3 px-6 text-xs text-muted-foreground">
             Se muestran como máximo 100 fallas, 100 reparaciones y 100
-            mantenimientos preventivos para mantener una consulta rápida. En la
-            subfase de exportación se generarán archivos completos según los
-            filtros aplicados.
+            mantenimientos preventivos para mantener una consulta rápida.
+            La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.
           </p>
         </CardContent>
       </Card>

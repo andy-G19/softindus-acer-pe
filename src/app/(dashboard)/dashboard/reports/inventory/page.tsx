@@ -416,8 +416,7 @@ export default async function InventoryReportPage({
 
           <p className="mt-3 px-6 text-xs text-muted-foreground">
             Se muestran como máximo 100 movimientos para mantener una consulta
-            rápida. En la subfase de exportación se generarán archivos completos
-            según los filtros aplicados.
+            rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.
           </p>
         </CardContent>
       </Card>

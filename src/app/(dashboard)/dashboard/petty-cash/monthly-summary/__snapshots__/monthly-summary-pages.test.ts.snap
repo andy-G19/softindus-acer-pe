@@ -222,7 +222,7 @@ exports[`/dashboard/petty-cash/monthly-summary > mes actual > resultado 1`] = `
 <div>Periodo de análisis</div>
 </div>
 <div>
-<form method="GET">
+<form autoComplete="off" method="GET">
 <div>
 <label for="month">Mes</label>
 <input type="month" id="month" name="month" value="2026-07"/>
@@ -782,7 +782,7 @@ exports[`/dashboard/petty-cash/monthly-summary > mes elegido > resultado 1`] = `
 <div>Periodo de análisis</div>
 </div>
 <div>
-<form method="GET">
+<form autoComplete="off" method="GET">
 <div>
 <label for="month">Mes</label>
 <input type="month" id="month" name="month" value="2026-05"/>
@@ -1342,7 +1342,7 @@ exports[`/dashboard/petty-cash/monthly-summary > mes invalido usa el actual > re
 <div>Periodo de análisis</div>
 </div>
 <div>
-<form method="GET">
+<form autoComplete="off" method="GET">
 <div>
 <label for="month">Mes</label>
 <input type="month" id="month" name="month" value="2026-07"/>

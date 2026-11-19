@@ -207,7 +207,7 @@ exports[`/dashboard/staff/operators > filtros y maestro de taller > resultado 1`
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de operarios" action="/dashboard/staff/operators" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de operarios" action="/dashboard/staff/operators" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar operario..." name="q" value="juan"/>
@@ -476,7 +476,7 @@ exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form role="search" aria-label="Filtros de operarios" action="/dashboard/staff/operators" method="GET">
+<form autoComplete="off" role="search" aria-label="Filtros de operarios" action="/dashboard/staff/operators" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar operario..." name="q" value=""/>
