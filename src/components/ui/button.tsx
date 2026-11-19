@@ -6,6 +6,9 @@
  * "clear" (limpiar filtros) es un tinte cobre con borde, en lugar del cian.
  * El foco de teclado es un anillo de 2px separado por 2px del color de fondo,
  * rojo en destructive; la regla global de patterns.css no alcanza al boton.
+ * Animacion de tacto: sube 1px al pasar el puntero y al pulsarlo baja 1px y se
+ * encoge al 97 %, en --motion-fast; link no se mueve. Con reducir movimiento
+ * no hay transicion ni desplazamiento.
  *
  * Entrega 8: estado pendiente (pending) y tipos que exigen aria-label en los
  * tamanos de solo icono. Sin pending, el HTML es el mismo de antes.
@@ -24,7 +27,7 @@ import { Spinner } from "@/components/ui/spinner"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-[color,background-color,border-color,text-decoration-color,box-shadow,translate,scale,opacity] duration-(--motion-fast) ease-out outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:-translate-y-px active:not-aria-[haspopup]:translate-y-px active:not-aria-[haspopup]:scale-97 motion-reduce:transition-none motion-reduce:translate-none! motion-reduce:scale-none! disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -38,7 +41,7 @@ const buttonVariants = cva(
           "bg-transparent text-foreground hover:bg-ghost-hover aria-expanded:bg-ghost-hover",
         destructive:
           "border-destructive-border bg-destructive-surface text-destructive-foreground hover:border-destructive-outline hover:bg-destructive-surface-hover focus-visible:ring-destructive-outline",
-        link: "text-primary underline decoration-link-underline decoration-1 underline-offset-4 hover:decoration-primary",
+        link: "text-primary underline decoration-link-underline decoration-1 underline-offset-4 hover:translate-y-0 hover:decoration-primary active:not-aria-[haspopup]:translate-y-0 active:not-aria-[haspopup]:scale-100",
         clear:
           "border-clear-border bg-clear-surface text-clear-foreground hover:bg-clear-surface-hover",
       },

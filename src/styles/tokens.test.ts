@@ -110,6 +110,10 @@ describe("tokens", () => {
     expect([...root, ...theme].filter((name) => name.includes("cyan"))).toEqual([]);
   });
 
+  it("el giro del spinner tiene su duracion en :root", () => {
+    expect(root).toContain("--motion-spin");
+  });
+
   it("cada var() de las hojas apunta a un token definido", () => {
     const known = new Set([...root, ...theme, ...fontVariables]);
     const undefinedVars = cssFiles(STYLES_DIR).flatMap((file) =>

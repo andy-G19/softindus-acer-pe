@@ -191,6 +191,8 @@
   --motion-fast: 150ms;
   --motion-base: 200ms;
   --motion-slow: 250ms;
+  /* Una vuelta del spinner (propuesta de los botones, 2026-11-19; antes 1 s de animate-spin). */
+  --motion-spin: 800ms;
   --motion-temper: 6s;
 }
 

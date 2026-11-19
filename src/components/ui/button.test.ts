@@ -197,6 +197,51 @@ describe("foco del boton", () => {
   });
 });
 
+// Animacion de tacto (propuesta del responsable mas la opcion Tacto, 2026-11-19): transiciones
+// de 150 ms (--motion-fast) en las propiedades que cambian, el boton sube 1px al pasar el
+// puntero y al pulsarlo baja 1px y se encoge al 97 %. En Tailwind v4 el desplazamiento y la
+// escala son propiedades CSS propias, no la de transformacion: la transicion las nombra.
+// Con prefers-reduced-motion no hay transicion ni movimiento; el important gana a las clases
+// de hover y active, que tienen mas especificidad que la de la media query.
+describe("animacion del boton", () => {
+  const tacto = [
+    "transition-[color,background-color,border-color,text-decoration-color,box-shadow,translate,scale,opacity]",
+    "duration-(--motion-fast)",
+    "ease-out",
+    "hover:-translate-y-px",
+    "active:not-aria-[haspopup]:translate-y-px",
+    "active:not-aria-[haspopup]:scale-97",
+    "motion-reduce:transition-none",
+    "motion-reduce:translate-none!",
+    "motion-reduce:scale-none!",
+  ];
+
+  it("cada variante salvo link sube al pasar el puntero y se hunde al pulsar", () => {
+    for (const variant of ["default", "secondary", "outline", "ghost", "destructive", "clear"] as const) {
+      const actual = variantClasses(variant);
+
+      expect(tacto.filter((name) => !actual.includes(name))).toEqual([]);
+      expect(actual).not.toContain("transition-all");
+    }
+  });
+
+  it("link no se mueve: es texto subrayado, no un bloque", () => {
+    const actual = variantClasses("link");
+
+    expect(actual).toContain("hover:translate-y-0");
+    expect(actual).toContain("active:not-aria-[haspopup]:translate-y-0");
+    expect(actual).toContain("active:not-aria-[haspopup]:scale-100");
+    expect(actual).not.toContain("hover:-translate-y-px");
+    expect(actual).toContain("motion-reduce:transition-none");
+  });
+
+  it("el spinner gira con la duracion del token", () => {
+    const spinner = render(h(Button, { pending: true }, "Guardar")).match(SPINNER)?.[0] ?? "";
+
+    expect(spinner).toContain("[animation-duration:var(--motion-spin)]");
+  });
+});
+
 // Verificacion del piloto en staging (entrega 9): la galeria pinta
 // <Button pending> desde un componente de servidor, y React Server Components
 // no admite funciones en un elemento que llega del servidor (la pagina daba
