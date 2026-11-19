@@ -281,6 +281,42 @@ describe("requireApiAuth", () => {
   });
 });
 
+describe("el cuerpo de error de Auth.js no cuenta como sesion", () => {
+  // Hasta next-auth 5.0.0-beta.31, si @auth/core respondia con error (por ejemplo, una
+  // configuracion invalida), auth() devolvia ese cuerpo como si fuera la sesion, y un
+  // `if (session)` lo daba por bueno (GHSA-8fpg-xm3f-6cx3). beta.32 devuelve null. Estos
+  // helpers nunca miraron solo la sesion: exigen user.id y estado activo, asi que ya
+  // fallaban cerrados con beta.31. La prueba fija esa defensa propia; pasa con las dos
+  // versiones, porque caracteriza, no reproduce un fallo.
+  const AUTH_ERROR_BODY = {
+    message: "There was a problem with the server configuration. Check the server logs for more information.",
+  };
+
+  beforeEach(() => {
+    mocks.auth.mockResolvedValue(AUTH_ERROR_BODY);
+  });
+
+  it("getActiveUserSession y getAuthorizedSession devuelven null", async () => {
+    await expect(getActiveUserSession()).resolves.toBeNull();
+    await expect(getAuthorizedSession(["ADMIN"])).resolves.toBeNull();
+    expect(mocks.logger.warn).not.toHaveBeenCalled();
+  });
+
+  it("requireAuth y requireRole redirigen a /login", async () => {
+    await expect(redirectTarget(() => requireAuth())).resolves.toBe("/login");
+    await expect(redirectTarget(() => requireRole(["ADMIN"]))).resolves.toBe("/login");
+  });
+
+  it("requireApiAuth y requireApiRole responden 401", async () => {
+    const unauthorized = { status: 401, body: { error: "No autorizado." } };
+
+    await expect(rejectedResponse(await requireApiAuth())).resolves.toEqual(unauthorized);
+    await expect(rejectedResponse(await requireApiRole(["ADMIN"]))).resolves.toEqual(
+      unauthorized,
+    );
+  });
+});
+
 describe("requireApiRole", () => {
   it("responde 401 sin sesion, antes de mirar el rol", async () => {
     await expect(rejectedResponse(await requireApiRole(["ADMIN"]))).resolves.toEqual({
