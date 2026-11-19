@@ -134,6 +134,30 @@ describe("Field", () => {
     expect(ayuda).toContain("Lo asigna el sistema.");
   });
 
+  // Diseno de los campos: «Validado» es una confirmacion real (por ejemplo, el RUC en SUNAT),
+  // no el reposo de ningun campo. Marca el control con data-valid, que sus clases pintan en
+  // verde forja, y muestra el mensaje con un icono de check, asociado como la ayuda.
+  it("validado: marca el control y anuncia el mensaje asociado", () => {
+    const html = render(
+      h(Field, { id: "ruc", label: "RUC", success: "Validado en SUNAT.", children: input }),
+    );
+
+    expect(attr(html, "input", "data-valid")).toBe("true");
+    expect(attr(html, "input", "aria-describedby")).toBe("ruc-validado");
+    expect(html).toMatch(/<p id="ruc-validado" class="[^"]*text-success[^"]*">[\s\S]*Validado en SUNAT\.<\/p>/);
+    expect(html).toMatch(/<svg[^>]*class="[^"]*lucide-circle-check[^"]*"[^>]*aria-hidden="true"/);
+  });
+
+  it("con error no se muestra como validado", () => {
+    const html = render(
+      h(Field, { id: "ruc", label: "RUC", success: "Validado en SUNAT.", errors: ["El RUC no existe."], children: input }),
+    );
+
+    expect(attr(html, "input", "data-valid")).toBeUndefined();
+    expect(html).not.toContain("Validado en SUNAT.");
+    expect(attr(html, "input", "aria-describedby")).toBe("ruc-error");
+  });
+
   it("solo lectura sin ayuda: el chip igual aparece; sin readOnly no hay chip", () => {
     expect(render(h(Field, { id: "codigo", label: "Codigo", readOnly: true, children: input }))).toContain(
       "Solo lectura",

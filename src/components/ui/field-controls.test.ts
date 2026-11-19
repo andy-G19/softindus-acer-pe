@@ -61,6 +61,10 @@ describe("diseno de los campos", () => {
     "aria-invalid:border-destructive-outline",
     "aria-invalid:focus-visible:border-destructive-outline",
     "aria-invalid:focus-visible:ring-destructive-outline",
+    // Validado: borde y anillo verde forja, cuando Field confirma el dato.
+    "data-[valid=true]:border-accent-forge",
+    "data-[valid=true]:focus-visible:border-accent-forge",
+    "data-[valid=true]:focus-visible:ring-accent-forge",
     // Deshabilitado: sin textura, apagado y atenuado.
     "disabled:bg-muted",
     "disabled:bg-none",

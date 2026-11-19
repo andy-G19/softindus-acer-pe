@@ -1,5 +1,5 @@
 import { useId, type ReactNode } from "react";
-import { CircleAlert, Lock } from "lucide-react";
+import { CircleAlert, CircleCheck, Lock } from "lucide-react";
 
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
@@ -19,6 +19,8 @@ export type FieldControlProps = {
   readOnly?: boolean;
   "aria-invalid"?: true;
   "aria-describedby"?: string;
+  /** El dato se confirmo (success de Field, sin error): las clases del campo lo pintan en verde. */
+  "data-valid"?: "true";
 };
 
 type FieldErrorProps = {
@@ -65,6 +67,11 @@ type FieldProps = {
   description?: ReactNode;
   /** Mensajes de error del campo (state.fieldErrors?.campo). */
   errors?: string[];
+  /**
+   * Confirmacion real del dato (por ejemplo, «Validado en SUNAT.»): borde verde y mensaje con
+   * check. No es el reposo de ningun campo, y un error la oculta.
+   */
+  success?: ReactNode;
   required?: boolean;
   disabled?: boolean;
   /** Para listas no sirve: HTML ignora readonly en un select (ver la galeria). */
@@ -78,6 +85,7 @@ export function Field({
   label,
   description,
   errors,
+  success,
   required,
   disabled,
   readOnly,
@@ -88,11 +96,17 @@ export function Field({
   const id = idProp ?? generatedId;
   const descriptionId = `${id}-ayuda`;
   const errorId = `${id}-error`;
+  const successId = `${id}-validado`;
   const hasError = Boolean(errors?.length);
+  const isValid = Boolean(success) && !hasError;
 
   // Solo se nombran los elementos que existen: un id sin elemento confunde al
   // lector de pantalla.
-  const describedBy = [description ? descriptionId : null, hasError ? errorId : null]
+  const describedBy = [
+    description ? descriptionId : null,
+    hasError ? errorId : null,
+    isValid ? successId : null,
+  ]
     .filter(Boolean)
     .join(" ");
 
@@ -103,6 +117,7 @@ export function Field({
     readOnly,
     "aria-invalid": hasError ? true : undefined,
     "aria-describedby": describedBy || undefined,
+    "data-valid": isValid ? "true" : undefined,
   };
 
   return (
@@ -138,6 +153,12 @@ export function Field({
         </p>
       ) : null}
       <FieldError id={errorId} messages={errors} />
+      {isValid ? (
+        <p id={successId} className="flex items-start gap-1.5 text-xs font-medium text-success">
+          <CircleCheck aria-hidden="true" className="mt-px size-3.5 shrink-0" />
+          {success}
+        </p>
+      ) : null}
     </div>
   );
 }

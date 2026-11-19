@@ -669,8 +669,17 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figure>
 <figcaption>Archivo</figcaption>
 <div>
+<div>
 <label for="galeria-archivo">Adjunto</label>
-<input type="file" id="galeria-archivo"/>
+<div>
+<input id="galeria-archivo" type="file" aria-describedby="galeria-archivo-ayuda" accept="application/pdf,image/*" name="adjunto"/>
+<label for="galeria-archivo">
+<svg/>
+<span>Ningún archivo seleccionado</span>
+</label>
+</div>
+<p id="galeria-archivo-ayuda">PDF o imagen, máx. 10 MB.</p>
+</div>
 </div>
 </figure>
 <figure>
@@ -794,6 +803,17 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <label for="galeria-field-nombre">Nombre o razón social<span aria-hidden="true">*</span>
 </label>
 <input id="galeria-field-nombre" required="" placeholder="Ej.: Metalmecánica Lima S.A.C."/>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Campo validado</figcaption>
+<div>
+<div>
+<label for="galeria-field-ruc-validado">RUC</label>
+<input id="galeria-field-ruc-validado" aria-describedby="galeria-field-ruc-validado-validado" data-valid="true" inputMode="numeric" value="20123456789"/>
+<p id="galeria-field-ruc-validado-validado">
+<svg/>Validado en SUNAT.</p>
 </div>
 </div>
 </figure>

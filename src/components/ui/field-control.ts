@@ -16,6 +16,8 @@ export const fieldControlClassName = [
   "hover:border-control-border-hover",
   "focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
   "aria-invalid:border-destructive-outline aria-invalid:focus-visible:border-destructive-outline aria-invalid:focus-visible:ring-destructive-outline",
+  // Validado: lo marca Field (data-valid) cuando confirma el dato; nunca es el reposo.
+  "data-[valid=true]:border-accent-forge data-[valid=true]:focus-visible:border-accent-forge data-[valid=true]:focus-visible:ring-accent-forge",
   "disabled:cursor-not-allowed disabled:border-border disabled:bg-muted disabled:bg-none disabled:text-muted-foreground disabled:opacity-65",
 ].join(" ");
 
