@@ -330,7 +330,7 @@ exports[`/dashboard/reports/inventory > maestro de taller > resultado 1`] = `
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -675,7 +675,7 @@ exports[`/dashboard/reports/inventory > rango de mas de 366 dias > resultado 1`]
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -1152,7 +1152,7 @@ exports[`/dashboard/reports/inventory > sin filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -1419,7 +1419,7 @@ exports[`/dashboard/reports/inventory > sin resultados > resultado 1`] = `
 <p>No se encontraron movimientos de inventario con los filtros aplicados.</p>
 </div>
 </div>
-<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -1807,7 +1807,7 @@ exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>
@@ -2159,7 +2159,7 @@ exports[`/dashboard/reports/inventory > todos los filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
-<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
 </div>
 <section>

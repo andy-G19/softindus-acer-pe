@@ -176,7 +176,7 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > resultado 1`
 </div>
 <div>
 <p>42</p>
-<p>Total histórico registrado.</p>
+<p>Según los filtros aplicados.</p>
 </div>
 </div>
 <div>
@@ -204,7 +204,7 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > resultado 1`
 </div>
 <div>
 <p>42</p>
-<p>Se marcarán en la siguiente subfase.</p>
+<p>Con su pago registrado.</p>
 </div>
 </div>
 <div>
@@ -481,7 +481,7 @@ exports[`/dashboard/staff/payrolls > segunda pagina con un filtro > resultado 1`
 </div>
 <div>
 <p>45</p>
-<p>Total histórico registrado.</p>
+<p>Según los filtros aplicados.</p>
 </div>
 </div>
 <div>
@@ -509,7 +509,7 @@ exports[`/dashboard/staff/payrolls > segunda pagina con un filtro > resultado 1`
 </div>
 <div>
 <p>7</p>
-<p>Se marcarán en la siguiente subfase.</p>
+<p>Con su pago registrado.</p>
 </div>
 </div>
 <div>
@@ -774,7 +774,7 @@ exports[`/dashboard/staff/payrolls > sin filtros > resultado 1`] = `
 </div>
 <div>
 <p>42</p>
-<p>Total histórico registrado.</p>
+<p>Según los filtros aplicados.</p>
 </div>
 </div>
 <div>
@@ -802,7 +802,7 @@ exports[`/dashboard/staff/payrolls > sin filtros > resultado 1`] = `
 </div>
 <div>
 <p>42</p>
-<p>Se marcarán en la siguiente subfase.</p>
+<p>Con su pago registrado.</p>
 </div>
 </div>
 <div>
@@ -1177,7 +1177,7 @@ exports[`/dashboard/staff/payrolls > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <p>42</p>
-<p>Total histórico registrado.</p>
+<p>Según los filtros aplicados.</p>
 </div>
 </div>
 <div>
@@ -1205,7 +1205,7 @@ exports[`/dashboard/staff/payrolls > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <p>42</p>
-<p>Se marcarán en la siguiente subfase.</p>
+<p>Con su pago registrado.</p>
 </div>
 </div>
 <div>
@@ -1470,7 +1470,7 @@ exports[`/dashboard/staff/payrolls > una planilla pendiente sin pagos ofrece anu
 </div>
 <div>
 <p>42</p>
-<p>Total histórico registrado.</p>
+<p>Según los filtros aplicados.</p>
 </div>
 </div>
 <div>
@@ -1498,7 +1498,7 @@ exports[`/dashboard/staff/payrolls > una planilla pendiente sin pagos ofrece anu
 </div>
 <div>
 <p>42</p>
-<p>Se marcarán en la siguiente subfase.</p>
+<p>Con su pago registrado.</p>
 </div>
 </div>
 <div>
@@ -1711,7 +1711,7 @@ exports[`/dashboard/staff/payrolls/new > formulario > resultado 1`] = `
 <p>Solo se consideran asistencias donde el operario no tenga falta.</p>
 <p>El monto bruto se calcula multiplicando asistencias válidas por la tarifa registrada del operario.</p>
 <p>Los descuentos se restan del monto bruto para obtener el monto neto.</p>
-<p>La planilla se crea con estado pendiente. En la siguiente subfase registraremos el pago real.</p>
+<p>La planilla se crea con estado pendiente. El pago se registra después, desde el historial de pagos.</p>
 </div>
 </div>
 </section>

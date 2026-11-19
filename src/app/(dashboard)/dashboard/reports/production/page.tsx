@@ -387,9 +387,8 @@ export default async function ProductionReportPage({
           )}
 
           <p className="mt-3 px-6 text-xs text-muted-foreground">
-            Se muestran como máximo 100 Órdenes para mantener una consulta
-            rápida. En la siguiente subfase agregaremos exportación para generar
-            archivos completos.
+            Se muestran como máximo 100 órdenes para mantener una consulta
+            rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.
           </p>
         </CardContent>
       </Card>
