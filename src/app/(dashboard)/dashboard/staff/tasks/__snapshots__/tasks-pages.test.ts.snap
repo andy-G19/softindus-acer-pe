@@ -565,18 +565,22 @@ exports[`/dashboard/staff/tasks/@panel/(.)new > maestro de taller > resultado 1`
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_operario">Operario *</label>
+<label for="id_operario">Operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
+<svg/>
 <input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo *</label>
+<label for="id_orden_trabajo">Orden de trabajo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" aria-describedby="id_orden_trabajo-ayuda" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -587,6 +591,7 @@ exports[`/dashboard/staff/tasks/@panel/(.)new > maestro de taller > resultado 1`
 <label for="id_etapa_ruta">Etapa de producción</label>
 <input type="hidden" name="id_etapa_ruta" value=""/>
 <div>
+<svg/>
 <input id="id_etapa_ruta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_etapa_ruta-listbox" aria-expanded="false" aria-describedby="id_etapa_ruta-ayuda" placeholder="Buscar etapa..." value=""/>
 </div>
 </div>
@@ -728,18 +733,22 @@ exports[`/dashboard/staff/tasks/@panel/(.)new > panel de alta > resultado 1`] = 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_operario">Operario *</label>
+<label for="id_operario">Operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
+<svg/>
 <input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo *</label>
+<label for="id_orden_trabajo">Orden de trabajo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" aria-describedby="id_orden_trabajo-ayuda" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -750,6 +759,7 @@ exports[`/dashboard/staff/tasks/@panel/(.)new > panel de alta > resultado 1`] = 
 <label for="id_etapa_ruta">Etapa de producción</label>
 <input type="hidden" name="id_etapa_ruta" value=""/>
 <div>
+<svg/>
 <input id="id_etapa_ruta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_etapa_ruta-listbox" aria-expanded="false" aria-describedby="id_etapa_ruta-ayuda" placeholder="Buscar etapa..." value=""/>
 </div>
 </div>
@@ -925,18 +935,22 @@ exports[`/dashboard/staff/tasks/new > formulario > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_operario">Operario *</label>
+<label for="id_operario">Operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
+<svg/>
 <input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo *</label>
+<label for="id_orden_trabajo">Orden de trabajo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" aria-describedby="id_orden_trabajo-ayuda" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -947,6 +961,7 @@ exports[`/dashboard/staff/tasks/new > formulario > resultado 1`] = `
 <label for="id_etapa_ruta">Etapa de producción</label>
 <input type="hidden" name="id_etapa_ruta" value=""/>
 <div>
+<svg/>
 <input id="id_etapa_ruta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_etapa_ruta-listbox" aria-expanded="false" aria-describedby="id_etapa_ruta-ayuda" placeholder="Buscar etapa..." value=""/>
 </div>
 </div>
@@ -1122,18 +1137,22 @@ exports[`/dashboard/staff/tasks/new > un returnTo ajeno vuelve a la lista > resu
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_operario">Operario *</label>
+<label for="id_operario">Operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
+<svg/>
 <input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo *</label>
+<label for="id_orden_trabajo">Orden de trabajo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" aria-describedby="id_orden_trabajo-ayuda" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1144,6 +1163,7 @@ exports[`/dashboard/staff/tasks/new > un returnTo ajeno vuelve a la lista > resu
 <label for="id_etapa_ruta">Etapa de producción</label>
 <input type="hidden" name="id_etapa_ruta" value=""/>
 <div>
+<svg/>
 <input id="id_etapa_ruta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_etapa_ruta-listbox" aria-expanded="false" aria-describedby="id_etapa_ruta-ayuda" placeholder="Buscar etapa..." value=""/>
 </div>
 </div>
@@ -1319,18 +1339,22 @@ exports[`/dashboard/staff/tasks/new > vuelve al returnTo > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_operario">Operario *</label>
+<label for="id_operario">Operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
+<svg/>
 <input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo *</label>
+<label for="id_orden_trabajo">Orden de trabajo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" aria-describedby="id_orden_trabajo-ayuda" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1341,6 +1365,7 @@ exports[`/dashboard/staff/tasks/new > vuelve al returnTo > resultado 1`] = `
 <label for="id_etapa_ruta">Etapa de producción</label>
 <input type="hidden" name="id_etapa_ruta" value=""/>
 <div>
+<svg/>
 <input id="id_etapa_ruta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_etapa_ruta-listbox" aria-expanded="false" aria-describedby="id_etapa_ruta-ayuda" placeholder="Buscar etapa..." value=""/>
 </div>
 </div>

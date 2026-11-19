@@ -129,6 +129,7 @@ exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
 <label for="product-_R_1a_">Producto</label>
 <input type="hidden" name="product" value=""/>
 <div>
+<svg/>
 <input id="product-_R_1a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="product-_R_1a_-listbox" aria-expanded="false" placeholder="Todos los productos" value=""/>
 </div>
 </div>
@@ -467,6 +468,7 @@ exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
 <label for="product-_R_1a_">Producto</label>
 <input type="hidden" name="product" value=""/>
 <div>
+<svg/>
 <input id="product-_R_1a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="product-_R_1a_-listbox" aria-expanded="false" placeholder="Todos los productos" value=""/>
 </div>
 </div>
@@ -824,8 +826,11 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] =
 <label for="product-_R_1a_">Producto</label>
 <input type="hidden" name="product" value="PRO00000001"/>
 <div>
+<svg/>
 <input id="product-_R_1a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="product-_R_1a_-listbox" aria-expanded="false" placeholder="Todos los productos" value=""/>
-<button type="button">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button">Limpiar</button>
+</div>
 </div>
 </div>
 <div>

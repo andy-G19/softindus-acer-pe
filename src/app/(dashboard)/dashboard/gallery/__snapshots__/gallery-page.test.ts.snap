@@ -717,6 +717,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <label for="galeria_cliente-_R_16j6_">Cliente</label>
 <input type="hidden" name="galeria_cliente" value=""/>
 <div>
+<svg/>
 <input id="galeria_cliente-_R_16j6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente-_R_16j6_-listbox" aria-expanded="false" placeholder="Buscar cliente por nombre o código" value=""/>
 </div>
 </div>
@@ -726,11 +727,15 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figcaption>Búsqueda con valor y obligatoria</figcaption>
 <div>
 <div>
-<label for="galeria_cliente_obligatorio-_R_1736_">Cliente *</label>
+<label for="galeria_cliente_obligatorio-_R_1736_">Cliente<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="galeria_cliente_obligatorio" value="CLI00000002"/>
 <div>
+<svg/>
 <input id="galeria_cliente_obligatorio-_R_1736_" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente_obligatorio-_R_1736_-listbox" aria-expanded="false" required="" placeholder="Buscar..." value="Taller Arequipa"/>
-<button type="button">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button">Limpiar</button>
+</div>
 </div>
 </div>
 </div>
@@ -742,6 +747,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <label for="galeria_cliente_bloqueado-_R_17j6_">Cliente</label>
 <input type="hidden" name="galeria_cliente_bloqueado" value=""/>
 <div>
+<svg/>
 <input id="galeria_cliente_bloqueado-_R_17j6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente_bloqueado-_R_17j6_-listbox" aria-expanded="false" disabled="" placeholder="Buscar..." value=""/>
 </div>
 </div>
@@ -752,11 +758,15 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <div>
 <div>
 <div>
-<label for="galeria_cliente_error">Cliente *</label>
+<label for="galeria_cliente_error">Cliente<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="galeria_cliente_error" value="CLI00000003"/>
 <div>
+<svg/>
 <input id="galeria_cliente_error" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente_error-listbox" aria-expanded="false" aria-invalid="true" aria-describedby="galeria_cliente_error-error" required="" placeholder="Buscar..." value="Estructuras del Sur"/>
-<button type="button">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button">Limpiar</button>
+</div>
 </div>
 </div>
 <p id="galeria_cliente_error-error">

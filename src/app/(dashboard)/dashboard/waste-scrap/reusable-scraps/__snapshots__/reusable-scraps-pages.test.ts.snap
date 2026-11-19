@@ -1224,9 +1224,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > maestro de talle
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_material">Material de origen *</label>
+<label for="id_material">Material de origen<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1234,9 +1236,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > maestro de talle
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1343,9 +1347,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > panel de alta > 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_material">Material de origen *</label>
+<label for="id_material">Material de origen<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1353,9 +1359,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > panel de alta > 
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1495,9 +1503,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > formulario > resultado 1`]
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_material">Material de origen *</label>
+<label for="id_material">Material de origen<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1505,9 +1515,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > formulario > resultado 1`]
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1650,9 +1662,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > sin materiales > resultado
 </div>
 <div>
 <div>
-<label for="id_material">Material de origen *</label>
+<label for="id_material">Material de origen<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1660,9 +1674,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > sin materiales > resultado
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1802,9 +1818,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > un returnTo ajeno vuelve a
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_material">Material de origen *</label>
+<label for="id_material">Material de origen<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1812,9 +1830,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > un returnTo ajeno vuelve a
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1954,9 +1974,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > vuelve al returnTo > resul
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_material">Material de origen *</label>
+<label for="id_material">Material de origen<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1964,9 +1986,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > vuelve al returnTo > resul
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>

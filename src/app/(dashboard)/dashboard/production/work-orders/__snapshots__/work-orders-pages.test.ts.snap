@@ -7905,9 +7905,11 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <input type="hidden" name="id_avance" value="id_avance-1"/>
 <div>
 <div>
-<label for="id_operario_nuevo">Nuevo operario *</label>
+<label for="id_operario_nuevo">Nuevo operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario_nuevo" value=""/>
 <div>
+<svg/>
 <input id="id_operario_nuevo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-listbox" aria-expanded="false" required="" placeholder="Buscar operario activo..." value=""/>
 </div>
 </div>
@@ -8087,9 +8089,11 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <input type="hidden" name="id_avance" value="id_avance-1"/>
 <div>
 <div>
-<label for="id_operario_nuevo">Nuevo operario *</label>
+<label for="id_operario_nuevo">Nuevo operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario_nuevo" value=""/>
 <div>
+<svg/>
 <input id="id_operario_nuevo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar operario activo..." value=""/>
 </div>
 </div>
@@ -8277,9 +8281,11 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <input type="hidden" name="id_avance" value="id_avance-1"/>
 <div>
 <div>
-<label for="id_operario_nuevo">Nuevo operario *</label>
+<label for="id_operario_nuevo">Nuevo operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario_nuevo" value=""/>
 <div>
+<svg/>
 <input id="id_operario_nuevo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-listbox" aria-expanded="false" required="" placeholder="Buscar operario activo..." value=""/>
 </div>
 </div>
@@ -8470,9 +8476,11 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <input type="hidden" name="id_avance" value="id_avance-1"/>
 <div>
 <div>
-<label for="id_operario_nuevo">Nuevo operario *</label>
+<label for="id_operario_nuevo">Nuevo operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario_nuevo" value=""/>
 <div>
+<svg/>
 <input id="id_operario_nuevo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario_nuevo-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar operario activo..." value=""/>
 </div>
 </div>
@@ -8724,9 +8732,11 @@ exports[`/dashboard/production/work-orders/new > con opciones > resultado 1`] = 
 </section>
 <section>
 <div>
-<label for="id_detalle_pedido">Detalle de pedido *</label>
+<label for="id_detalle_pedido">Detalle de pedido<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_detalle_pedido" value=""/>
 <div>
+<svg/>
 <input id="id_detalle_pedido" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_detalle_pedido-listbox" aria-expanded="false" required="" placeholder="Buscar por cliente, producto o pedido..." value=""/>
 </div>
 </div>
@@ -8740,18 +8750,22 @@ exports[`/dashboard/production/work-orders/new > con opciones > resultado 1`] = 
 <section>
 <div>
 <div>
-<label for="id_ruta">Ruta de fabricación *</label>
+<label for="id_ruta">Ruta de fabricación<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_ruta" value=""/>
 <div>
+<svg/>
 <input id="id_ruta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_ruta-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar ruta del producto..." value=""/>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label for="id_version_receta">Versión de receta *</label>
+<label for="id_version_receta">Versión de receta<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_version_receta" value=""/>
 <div>
+<svg/>
 <input id="id_version_receta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_version_receta-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar receta del producto..." value=""/>
 </div>
 </div>
@@ -9002,9 +9016,11 @@ exports[`/dashboard/production/work-orders/new > sin rutas: no permite crear > r
 </section>
 <section>
 <div>
-<label for="id_detalle_pedido">Detalle de pedido *</label>
+<label for="id_detalle_pedido">Detalle de pedido<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_detalle_pedido" value=""/>
 <div>
+<svg/>
 <input id="id_detalle_pedido" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_detalle_pedido-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar por cliente, producto o pedido..." value=""/>
 </div>
 </div>
@@ -9018,18 +9034,22 @@ exports[`/dashboard/production/work-orders/new > sin rutas: no permite crear > r
 <section>
 <div>
 <div>
-<label for="id_ruta">Ruta de fabricación *</label>
+<label for="id_ruta">Ruta de fabricación<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_ruta" value=""/>
 <div>
+<svg/>
 <input id="id_ruta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_ruta-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar ruta del producto..." value=""/>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label for="id_version_receta">Versión de receta *</label>
+<label for="id_version_receta">Versión de receta<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_version_receta" value=""/>
 <div>
+<svg/>
 <input id="id_version_receta" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_version_receta-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar receta del producto..." value=""/>
 </div>
 </div>

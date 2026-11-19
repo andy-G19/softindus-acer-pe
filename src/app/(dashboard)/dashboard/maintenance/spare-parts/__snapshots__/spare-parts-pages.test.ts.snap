@@ -802,8 +802,11 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > r
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="razon_social-1"/>
-<button type="button">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button">Limpiar</button>
+</div>
 </div>
 </div>
 <button data-variant="outline" type="button">Registrar proveedor nuevo</button>
@@ -956,8 +959,11 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con su proveedor 
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value="PVE00000009"/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="Ferreteria El Perno"/>
-<button type="button">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button">Limpiar</button>
+</div>
 </div>
 </div>
 <button data-variant="outline" type="button">Registrar proveedor nuevo</button>
@@ -1107,6 +1113,7 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar sin proveedor > r
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value=""/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
 </div>
 </div>
@@ -1269,6 +1276,7 @@ exports[`/dashboard/maintenance/spare-parts/new > con regreso al listado filtrad
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value=""/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
 </div>
 </div>
@@ -1406,6 +1414,7 @@ exports[`/dashboard/maintenance/spare-parts/new > formulario > resultado 1`] = `
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value=""/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
 </div>
 </div>
@@ -1467,6 +1476,7 @@ exports[`panel lateral de repuestos > el alta en panel autoriza y consulta igual
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value=""/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
 </div>
 </div>
@@ -1529,8 +1539,11 @@ exports[`panel lateral de repuestos > la edicion en panel hace la misma consulta
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value="PVE00000009"/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="Ferreteria El Perno"/>
-<button type="button">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button">Limpiar</button>
+</div>
 </div>
 </div>
 <button data-variant="outline" type="button">Registrar proveedor nuevo</button>

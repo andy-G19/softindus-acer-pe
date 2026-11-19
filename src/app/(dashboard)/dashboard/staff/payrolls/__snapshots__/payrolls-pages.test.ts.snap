@@ -1701,9 +1701,11 @@ exports[`/dashboard/staff/payrolls/new > formulario > resultado 1`] = `
 <input type="hidden" name="clave_operacion"/>
 <div>
 <div>
-<label for="id_operario">Operario *</label>
+<label for="id_operario">Operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
+<svg/>
 <input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>

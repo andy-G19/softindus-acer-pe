@@ -1974,9 +1974,11 @@ exports[`/dashboard/inventory/purchases/new > formulario > resultado 1`] = `
 <section>
 <div>
 <div>
-<label for="id_proveedor">Proveedor *</label>
+<label for="id_proveedor">Proveedor<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_proveedor" value=""/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" required="" placeholder="Buscar proveedor..." value=""/>
 </div>
 </div>
@@ -2041,9 +2043,11 @@ exports[`/dashboard/inventory/purchases/new > formulario > resultado 1`] = `
 <div>
 <div>
 <div>
-<label for="id_material-row-1">Material *</label>
+<label for="id_material-row-1">Material<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-row-1-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>

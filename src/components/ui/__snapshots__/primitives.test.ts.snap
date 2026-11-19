@@ -538,32 +538,53 @@ exports[`Campo compartido > lista con error 1`] = `
 `;
 
 exports[`Campos > busqueda con lista 1`] = `
-"<div class="space-y-2">
-<label for="client-_R_0_" class="text-sm font-medium text-foreground">Cliente</label>
+"<div class="space-y-1.5">
+<label for="client-_R_0_" class="flex items-center gap-0.5 text-[0.8125rem] leading-none font-medium text-foreground">Cliente</label>
 <input type="hidden" name="client" value=""/>
 <div class="relative">
-<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" placeholder="Buscar cliente" class="border border-control-border bg-card bg-(image:--texture-metal) text-foreground outline-none transition-[color,background-color,border-color,box-shadow] duration-(--motion-base) ease-out motion-reduce:transition-none hover:border-control-border-hover focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive-outline aria-invalid:focus-visible:border-destructive-outline aria-invalid:focus-visible:ring-destructive-outline disabled:cursor-not-allowed disabled:border-border disabled:bg-muted disabled:bg-none disabled:text-muted-foreground disabled:opacity-65 h-9 w-full min-w-0 rounded-lg px-3 py-2 pr-16 text-sm placeholder:text-placeholder disabled:pointer-events-none" value=""/>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true">
+<path d="m21 21-4.34-4.34">
+</path>
+<circle cx="11" cy="11" r="8">
+</circle>
+</svg>
+<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" placeholder="Buscar cliente" class="border border-control-border bg-card bg-(image:--texture-metal) text-foreground outline-none transition-[color,background-color,border-color,box-shadow] duration-(--motion-base) ease-out motion-reduce:transition-none hover:border-control-border-hover focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive-outline aria-invalid:focus-visible:border-destructive-outline aria-invalid:focus-visible:ring-destructive-outline disabled:cursor-not-allowed disabled:border-border disabled:bg-muted disabled:bg-none disabled:text-muted-foreground disabled:opacity-65 h-9 w-full min-w-0 rounded-lg py-2 pr-20 pl-9 text-sm placeholder:text-placeholder disabled:pointer-events-none" value=""/>
 </div>
 </div>"
 `;
 
 exports[`Campos > busqueda con valor y obligatoria 1`] = `
-"<div class="space-y-2">
-<label for="client-_R_0_" class="text-sm font-medium text-foreground">Cliente *</label>
+"<div class="space-y-1.5">
+<label for="client-_R_0_" class="flex items-center gap-0.5 text-[0.8125rem] leading-none font-medium text-foreground">Cliente<span aria-hidden="true" class="font-semibold text-accent-copper">*</span>
+</label>
 <input type="hidden" name="client" value="CLI00000001"/>
 <div class="relative">
-<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" required="" placeholder="Buscar..." class="border border-control-border bg-card bg-(image:--texture-metal) text-foreground outline-none transition-[color,background-color,border-color,box-shadow] duration-(--motion-base) ease-out motion-reduce:transition-none hover:border-control-border-hover focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive-outline aria-invalid:focus-visible:border-destructive-outline aria-invalid:focus-visible:ring-destructive-outline disabled:cursor-not-allowed disabled:border-border disabled:bg-muted disabled:bg-none disabled:text-muted-foreground disabled:opacity-65 h-9 w-full min-w-0 rounded-lg px-3 py-2 pr-16 text-sm placeholder:text-placeholder disabled:pointer-events-none" value="Metalmecanica Lima"/>
-<button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-transparent px-2 py-1 text-xs font-medium text-muted-foreground transition hover:border-border hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/35 disabled:pointer-events-none disabled:opacity-50">Limpiar</button>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true">
+<path d="m21 21-4.34-4.34">
+</path>
+<circle cx="11" cy="11" r="8">
+</circle>
+</svg>
+<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" required="" placeholder="Buscar..." class="border border-control-border bg-card bg-(image:--texture-metal) text-foreground outline-none transition-[color,background-color,border-color,box-shadow] duration-(--motion-base) ease-out motion-reduce:transition-none hover:border-control-border-hover focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive-outline aria-invalid:focus-visible:border-destructive-outline aria-invalid:focus-visible:ring-destructive-outline disabled:cursor-not-allowed disabled:border-border disabled:bg-muted disabled:bg-none disabled:text-muted-foreground disabled:opacity-65 h-9 w-full min-w-0 rounded-lg py-2 pr-20 pl-9 text-sm placeholder:text-placeholder disabled:pointer-events-none" value="Metalmecanica Lima"/>
+<div class="absolute inset-y-0 right-1.5 flex items-center">
+<button data-slot="button" data-variant="ghost" data-size="xs" class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-[color,background-color,border-color,text-decoration-color,box-shadow,translate,scale,opacity] duration-(--motion-fast) ease-out outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:-translate-y-px active:not-aria-[haspopup]:translate-y-px active:not-aria-[haspopup]:scale-97 motion-reduce:transition-none motion-reduce:translate-none! motion-reduce:scale-none! disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 bg-transparent text-foreground hover:bg-ghost-hover aria-expanded:bg-ghost-hover h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-3" type="button">Limpiar</button>
+</div>
 </div>
 </div>"
 `;
 
 exports[`Campos > busqueda deshabilitada 1`] = `
-"<div class="space-y-2">
-<label for="client-_R_0_" class="text-sm font-medium text-foreground">Cliente</label>
+"<div class="space-y-1.5">
+<label for="client-_R_0_" class="flex items-center gap-0.5 text-[0.8125rem] leading-none font-medium text-foreground">Cliente</label>
 <input type="hidden" name="client" value=""/>
 <div class="relative">
-<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" disabled="" placeholder="Buscar..." class="border border-control-border bg-card bg-(image:--texture-metal) text-foreground outline-none transition-[color,background-color,border-color,box-shadow] duration-(--motion-base) ease-out motion-reduce:transition-none hover:border-control-border-hover focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive-outline aria-invalid:focus-visible:border-destructive-outline aria-invalid:focus-visible:ring-destructive-outline disabled:cursor-not-allowed disabled:border-border disabled:bg-muted disabled:bg-none disabled:text-muted-foreground disabled:opacity-65 h-9 w-full min-w-0 rounded-lg px-3 py-2 pr-16 text-sm placeholder:text-placeholder disabled:pointer-events-none" value=""/>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true">
+<path d="m21 21-4.34-4.34">
+</path>
+<circle cx="11" cy="11" r="8">
+</circle>
+</svg>
+<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" disabled="" placeholder="Buscar..." class="border border-control-border bg-card bg-(image:--texture-metal) text-foreground outline-none transition-[color,background-color,border-color,box-shadow] duration-(--motion-base) ease-out motion-reduce:transition-none hover:border-control-border-hover focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive-outline aria-invalid:focus-visible:border-destructive-outline aria-invalid:focus-visible:ring-destructive-outline disabled:cursor-not-allowed disabled:border-border disabled:bg-muted disabled:bg-none disabled:text-muted-foreground disabled:opacity-65 h-9 w-full min-w-0 rounded-lg py-2 pr-20 pl-9 text-sm placeholder:text-placeholder disabled:pointer-events-none" value=""/>
 </div>
 </div>"
 `;
@@ -571,12 +592,20 @@ exports[`Campos > busqueda deshabilitada 1`] = `
 exports[`Campos > etiqueta 1`] = `"<label data-slot="label" class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50" for="nombre">Nombre</label>"`;
 
 exports[`Campos > filtro de busqueda 1`] = `
-"<div class="space-y-2">
-<label for="client-_R_0_" class="text-sm font-medium text-foreground">Cliente</label>
+"<div class="space-y-1.5">
+<label for="client-_R_0_" class="flex items-center gap-0.5 text-[0.8125rem] leading-none font-medium text-foreground">Cliente</label>
 <input type="hidden" name="client" value="CLI00000001"/>
 <div class="relative">
-<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" placeholder="Buscar..." class="border border-control-border bg-card bg-(image:--texture-metal) text-foreground outline-none transition-[color,background-color,border-color,box-shadow] duration-(--motion-base) ease-out motion-reduce:transition-none hover:border-control-border-hover focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive-outline aria-invalid:focus-visible:border-destructive-outline aria-invalid:focus-visible:ring-destructive-outline disabled:cursor-not-allowed disabled:border-border disabled:bg-muted disabled:bg-none disabled:text-muted-foreground disabled:opacity-65 h-9 w-full min-w-0 rounded-lg px-3 py-2 pr-16 text-sm placeholder:text-placeholder disabled:pointer-events-none" value="Metalmecanica Lima"/>
-<button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-transparent px-2 py-1 text-xs font-medium text-muted-foreground transition hover:border-border hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/35 disabled:pointer-events-none disabled:opacity-50">Limpiar</button>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true">
+<path d="m21 21-4.34-4.34">
+</path>
+<circle cx="11" cy="11" r="8">
+</circle>
+</svg>
+<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" placeholder="Buscar..." class="border border-control-border bg-card bg-(image:--texture-metal) text-foreground outline-none transition-[color,background-color,border-color,box-shadow] duration-(--motion-base) ease-out motion-reduce:transition-none hover:border-control-border-hover focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive-outline aria-invalid:focus-visible:border-destructive-outline aria-invalid:focus-visible:ring-destructive-outline disabled:cursor-not-allowed disabled:border-border disabled:bg-muted disabled:bg-none disabled:text-muted-foreground disabled:opacity-65 h-9 w-full min-w-0 rounded-lg py-2 pr-20 pl-9 text-sm placeholder:text-placeholder disabled:pointer-events-none" value="Metalmecanica Lima"/>
+<div class="absolute inset-y-0 right-1.5 flex items-center">
+<button data-slot="button" data-variant="ghost" data-size="xs" class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-[color,background-color,border-color,text-decoration-color,box-shadow,translate,scale,opacity] duration-(--motion-fast) ease-out outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:-translate-y-px active:not-aria-[haspopup]:translate-y-px active:not-aria-[haspopup]:scale-97 motion-reduce:transition-none motion-reduce:translate-none! motion-reduce:scale-none! disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 bg-transparent text-foreground hover:bg-ghost-hover aria-expanded:bg-ghost-hover h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-3" type="button">Limpiar</button>
+</div>
 </div>
 </div>"
 `;

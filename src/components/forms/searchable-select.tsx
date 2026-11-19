@@ -10,7 +10,9 @@ import {
   useRef,
   useState,
 } from "react";
+import { Search } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { fieldControlClassName } from "@/components/ui/field-control";
 import { cn } from "@/lib/utils";
 
@@ -217,15 +219,24 @@ export function SearchableSelect({
   const displayValue = !isOpen ? selectedItem?.label ?? "" : query;
 
   return (
-    <div className="space-y-2" onBlur={handleBlur}>
-      <label htmlFor={inputId} className="text-sm font-medium text-foreground">
+    <div className="space-y-1.5" onBlur={handleBlur}>
+      {/* La etiqueta y el asterisco de Field: el lector anuncia el required del campo. */}
+      <label htmlFor={inputId} className="flex items-center gap-0.5 text-[0.8125rem] leading-none font-medium text-foreground">
         {label}
-        {required ? " *" : ""}
+        {required ? (
+          <span aria-hidden="true" className="font-semibold text-accent-copper">
+            *
+          </span>
+        ) : null}
       </label>
 
       <input ref={hiddenRef} type="hidden" name={name} value={selectedValue} />
 
       <div className="relative">
+        <Search
+          aria-hidden="true"
+          className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+        />
         <input
           ref={inputRef}
           id={inputId}
@@ -251,7 +262,7 @@ export function SearchableSelect({
           className={cn(
             // El mismo aspecto que Input, con la altura y el relleno de siempre.
             fieldControlClassName,
-            "h-9 w-full min-w-0 rounded-lg px-3 py-2 pr-16 text-sm placeholder:text-placeholder disabled:pointer-events-none",
+            "h-9 w-full min-w-0 rounded-lg py-2 pr-20 pl-9 text-sm placeholder:text-placeholder disabled:pointer-events-none",
             required && !selectedValue
               ? "invalid:border-destructive invalid:ring-destructive/25"
               : "",
@@ -259,15 +270,20 @@ export function SearchableSelect({
         />
 
         {selectedValue ? (
-          <button
-            type="button"
-            disabled={disabled}
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={clearSelection}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-transparent px-2 py-1 text-xs font-medium text-muted-foreground transition hover:border-border hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/35 disabled:pointer-events-none disabled:opacity-50"
-          >
-            Limpiar
-          </button>
+          // El contenedor centra el boton sin translate: Button se mueve con translate al
+          // pasar el puntero y saltaria.
+          <div className="absolute inset-y-0 right-1.5 flex items-center">
+            <Button
+              type="button"
+              variant="ghost"
+              size="xs"
+              disabled={disabled}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={clearSelection}
+            >
+              Limpiar
+            </Button>
+          </div>
         ) : null}
 
         {showSuggestions ? (

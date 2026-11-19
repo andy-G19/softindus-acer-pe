@@ -838,6 +838,7 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 <label for="client-_R_1a_">Cliente</label>
 <input type="hidden" name="client" value=""/>
 <div>
+<svg/>
 <input id="client-_R_1a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_1a_-listbox" aria-expanded="false" placeholder="Buscar cliente por nombre o código" value=""/>
 </div>
 </div>
@@ -955,6 +956,7 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 <label for="client-_R_1a_">Cliente</label>
 <input type="hidden" name="client" value=""/>
 <div>
+<svg/>
 <input id="client-_R_1a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_1a_-listbox" aria-expanded="false" placeholder="Buscar cliente por nombre o código" value=""/>
 </div>
 </div>

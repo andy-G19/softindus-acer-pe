@@ -3225,11 +3225,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/[detail
 </div>
 <div>
 <div>
-<label for="id_material">Material o insumo *</label>
+<label for="id_material">Material o insumo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value="id_material-1"/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value="nombre_material-1"/>
-<button type="button" disabled="">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button" disabled="">Limpiar</button>
+</div>
 </div>
 </div>
 <p>La unidad de medida se toma automáticamente desde el material registrado en inventario.</p>
@@ -3510,9 +3514,11 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > n
 </div>
 <div>
 <div>
-<label for="id_material">Material o insumo *</label>
+<label for="id_material">Material o insumo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -3676,9 +3682,11 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > r
 </div>
 <div>
 <div>
-<label for="id_material">Material o insumo *</label>
+<label for="id_material">Material o insumo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -3851,9 +3859,11 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > s
 </div>
 <div>
 <div>
-<label for="id_material">Material o insumo *</label>
+<label for="id_material">Material o insumo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -4014,9 +4024,11 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > v
 </div>
 <div>
 <div>
-<label for="id_material">Material o insumo *</label>
+<label for="id_material">Material o insumo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -4180,9 +4192,11 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > v
 </div>
 <div>
 <div>
-<label for="id_material">Material o insumo *</label>
+<label for="id_material">Material o insumo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -5559,8 +5573,11 @@ exports[`/dashboard/production/recipes/[id]/versions/new > nueva version > resul
 <label for="id_material-id_detalle_receta-1">Material *</label>
 <input type="hidden" name="id_material" value="id_material-1"/>
 <div>
+<svg/>
 <input id="id_material-id_detalle_receta-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-id_detalle_receta-1-listbox" aria-expanded="false" disabled="" placeholder="Buscar material..." value="nombre_material-1"/>
-<button type="button" disabled="">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button" disabled="">Limpiar</button>
+</div>
 </div>
 </div>
 </div>
@@ -5602,8 +5619,11 @@ exports[`/dashboard/production/recipes/[id]/versions/new > nueva version > resul
 <label for="id_material-id_detalle_receta-2">Material *</label>
 <input type="hidden" name="id_material" value="id_material-2"/>
 <div>
+<svg/>
 <input id="id_material-id_detalle_receta-2" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-id_detalle_receta-2-listbox" aria-expanded="false" disabled="" placeholder="Buscar material..." value="nombre_material-2"/>
-<button type="button" disabled="">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button" disabled="">Limpiar</button>
+</div>
 </div>
 </div>
 </div>
@@ -5776,6 +5796,7 @@ exports[`/dashboard/production/recipes/[id]/versions/new > receta inactiva > res
 <label for="id_material-row-1">Material *</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-row-1-listbox" aria-expanded="false" disabled="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -5955,8 +5976,11 @@ exports[`/dashboard/production/recipes/[id]/versions/new > sin materiales activo
 <label for="id_material-id_detalle_receta-1">Material *</label>
 <input type="hidden" name="id_material" value="id_material-1"/>
 <div>
+<svg/>
 <input id="id_material-id_detalle_receta-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-id_detalle_receta-1-listbox" aria-expanded="false" disabled="" placeholder="Buscar material..." value=""/>
-<button type="button" disabled="">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button" disabled="">Limpiar</button>
+</div>
 </div>
 </div>
 </div>
@@ -5998,8 +6022,11 @@ exports[`/dashboard/production/recipes/[id]/versions/new > sin materiales activo
 <label for="id_material-id_detalle_receta-2">Material *</label>
 <input type="hidden" name="id_material" value="id_material-2"/>
 <div>
+<svg/>
 <input id="id_material-id_detalle_receta-2" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-id_detalle_receta-2-listbox" aria-expanded="false" disabled="" placeholder="Buscar material..." value=""/>
-<button type="button" disabled="">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button" disabled="">Limpiar</button>
+</div>
 </div>
 </div>
 </div>
@@ -6121,9 +6148,11 @@ exports[`/dashboard/production/recipes/new > formulario > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_producto">Producto *</label>
+<label for="id_producto">Producto<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_producto" value=""/>
 <div>
+<svg/>
 <input id="id_producto" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value=""/>
 </div>
 </div>
@@ -6234,9 +6263,11 @@ exports[`/dashboard/production/recipes/new > sin productos activos > resultado 1
 </div>
 <div>
 <div>
-<label for="id_producto">Producto *</label>
+<label for="id_producto">Producto<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_producto" value=""/>
 <div>
+<svg/>
 <input id="id_producto" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar producto..." value=""/>
 </div>
 </div>
@@ -6286,9 +6317,11 @@ exports[`panel lateral de los materiales de una version > el alta en panel consu
 </div>
 <div>
 <div>
-<label for="id_material">Material o insumo *</label>
+<label for="id_material">Material o insumo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -6352,11 +6385,15 @@ exports[`panel lateral de los materiales de una version > la edicion en panel co
 </div>
 <div>
 <div>
-<label for="id_material">Material o insumo *</label>
+<label for="id_material">Material o insumo<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value="id_material-1"/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value="nombre_material-1"/>
-<button type="button" disabled="">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button" disabled="">Limpiar</button>
+</div>
 </div>
 </div>
 <p>La unidad de medida se toma automáticamente desde el material registrado en inventario.</p>
@@ -6425,9 +6462,11 @@ exports[`panel lateral de recetas > el alta en panel autoriza y consulta igual q
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_producto">Producto *</label>
+<label for="id_producto">Producto<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_producto" value=""/>
 <div>
+<svg/>
 <input id="id_producto" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value=""/>
 </div>
 </div>

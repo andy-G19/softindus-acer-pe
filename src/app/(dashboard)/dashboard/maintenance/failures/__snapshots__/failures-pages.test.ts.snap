@@ -1103,9 +1103,11 @@ exports[`/dashboard/maintenance/failures/new > con regreso al listado > resultad
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_maquina">Maquina *</label>
+<label for="id_maquina">Maquina<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_maquina" value=""/>
 <div>
+<svg/>
 <input id="id_maquina" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_maquina-listbox" aria-expanded="false" required="" placeholder="Buscar maquina..." value=""/>
 </div>
 </div>
@@ -1254,9 +1256,11 @@ exports[`/dashboard/maintenance/failures/new > formulario > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_maquina">Maquina *</label>
+<label for="id_maquina">Maquina<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_maquina" value=""/>
 <div>
+<svg/>
 <input id="id_maquina" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_maquina-listbox" aria-expanded="false" required="" placeholder="Buscar maquina..." value=""/>
 </div>
 </div>
@@ -1405,9 +1409,11 @@ exports[`/dashboard/maintenance/failures/new > formulario con el maestro de tall
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_maquina">Maquina *</label>
+<label for="id_maquina">Maquina<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_maquina" value=""/>
 <div>
+<svg/>
 <input id="id_maquina" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_maquina-listbox" aria-expanded="false" required="" placeholder="Buscar maquina..." value=""/>
 </div>
 </div>
@@ -1489,9 +1495,11 @@ exports[`panel lateral de fallas > muestra el formulario en el panel 1`] = `
 <div>
 <div>
 <div>
-<label for="id_maquina">Maquina *</label>
+<label for="id_maquina">Maquina<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_maquina" value=""/>
 <div>
+<svg/>
 <input id="id_maquina" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_maquina-listbox" aria-expanded="false" required="" placeholder="Buscar maquina..." value=""/>
 </div>
 </div>

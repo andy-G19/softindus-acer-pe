@@ -105,6 +105,42 @@ describe("diseno de los campos", () => {
     expect(controles.Input).toContain("[&[type=number]]:tabular-nums");
   });
 
+  // Busqueda (propuesta de los campos): lupa fija a la izquierda, «Limpiar» como Button ghost xs
+  // solo con un valor elegido, y la etiqueta y el asterisco de Field. «Limpiar» va en un
+  // contenedor que lo centra: Button se mueve con translate al pasar el puntero, y centrarlo
+  // con translate lo haria saltar.
+  it("la busqueda lleva la lupa a la izquierda, oculta al lector", () => {
+    const html = renderToStaticMarkup(h(SearchableSelect, { name: "cliente", label: "Cliente", items: [] }));
+
+    expect(html).toMatch(/<svg[^>]*class="[^"]*lucide-search[^"]*"[^>]*aria-hidden="true"/);
+    expect(controles.SearchableSelect).toContain("pl-9");
+  });
+
+  it("con un valor, Limpiar es un Button ghost xs; sin valor no aparece", () => {
+    const items = [{ id: "CLI00000001", label: "Taller Arequipa" }];
+    const conValor = renderToStaticMarkup(
+      h(SearchableSelect, { name: "cliente", label: "Cliente", items, value: "CLI00000001" }),
+    );
+    const limpiar = /<button[^>]*>Limpiar<\/button>/.exec(conValor)?.[0] ?? "";
+
+    expect(limpiar).toContain('data-slot="button"');
+    expect(limpiar).toContain('data-variant="ghost"');
+    expect(limpiar).toContain('data-size="xs"');
+    expect(renderToStaticMarkup(h(SearchableSelect, { name: "cliente", label: "Cliente", items }))).not.toContain(
+      "Limpiar",
+    );
+  });
+
+  it("la etiqueta de la busqueda es la de Field: 13 px y asterisco cobre oculto al lector", () => {
+    const html = renderToStaticMarkup(
+      h(SearchableSelect, { name: "cliente", label: "Cliente", items: [], required: true }),
+    );
+    const etiqueta = /<label[^>]*>[\s\S]*?<\/label>/.exec(html)?.[0] ?? "";
+
+    expect(etiqueta).toContain("text-[0.8125rem]");
+    expect(etiqueta).toContain('<span aria-hidden="true" class="font-semibold text-accent-copper">*</span>');
+  });
+
   it("NativeSelect usa su propia flecha, sus opciones y su fondo deshabilitado", () => {
     expect(controles.NativeSelect).toContain("appearance-none");
     expect(controles.NativeSelect).toContain("[&_option]:bg-popover");
