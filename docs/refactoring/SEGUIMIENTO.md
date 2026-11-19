@@ -10648,7 +10648,7 @@ decida cuándo hacerla.
 | 11.7d2 | 3: los vacíos de los 10 reportes siguen diciendo «con los filtros aplicados» | Paso propio |
 | 10.7a | 36: Atrás restaura los filtros GET escritos | `fix` propio, verificado en un navegador |
 | Entrega 10 | Los demás `fix` propios de su tabla (errores de línea por posición, KPI filtrados, textos, «La versión ya estaba vigente», buscador de `SearchableSelect`) | `fix` propio |
-| 11.1 | 7 y 8: Prisma pide Node 22; `npm audit` informa vulnerabilidades sin evaluar | Tarea de mantenimiento |
+| 11.1 | 7 y 8: Prisma pide Node 22; `npm audit` informa vulnerabilidades sin evaluar | 8 cerrado en la «Revisión de dependencias» (producción: de 35 avisos a 2 aceptados). 7 sigue abierto: subir Node, aplazado hacia el 2026-12-19 |
 | Movimientos de caja chica | El rango de fechas sin `DateRangeFields` y su formulario GET sin `FilterBar` | Paso propio |
 | Criterios globales | Recorridos automáticos de punta a punta, la medición de accesibilidad y la línea base de rendimiento | Plan propio, si se decide |
 
@@ -10680,6 +10680,84 @@ Datos leídos de la API de GitHub el 2026-11-19 (UTC) y comparados con git:
   verde (6m 51s).
 - Vercel desplegó `38ddacf` en producción (`success` a las 11:30:25 UTC). El cierre no trae
   migraciones.
+
+### Revisión de dependencias (hallazgos 7 y 8 de la 11.1)
+
+Fecha: 2026-11-19 (Lima). Primer trabajo después del cierre de la entrega 11, tomado de «Hallazgos
+abiertos y su destino». Plan en `tmp/deps/plan-dependencias.md`, aprobado con D118 a D122; los
+informes de `npm audit` de cada paso están en `tmp/deps/`.
+
+- D118: solo subidas dentro de la misma versión mayor. Prisma 8 no, porque su `latest` es una RC.
+- D119: `shadcn` pasa a `devDependencies`. La app solo usa su hoja `shadcn/tailwind.css`, que se
+  resuelve en el build; su CLI arrastraba express, hono, undici y el SDK de MCP a producción.
+- D120: `exceljs` → `uuid` es un riesgo aceptado. El aviso afecta a `v3`, `v5` y `v6` con `buf`;
+  exceljs solo llama `uuidv4()` sin `buf` (`cf-rule-ext-xform.js`). El único arreglo que ofrece npm
+  es bajar a exceljs 3.4.0, una versión mayor anterior. exceljs no publica desde diciembre de 2024.
+- D121: Node 24 en el CI y en `engines`. **Aplazada:** el responsable instalará Node en su equipo
+  hacia el 2026-12-19, y el CI y Vercel cambiarán con él (ver «Pendiente»).
+- D122: vigilancia con las alertas de Dependabot de GitHub, un ajuste del repositorio. `npm audit`
+  no entra en `npm run check`: depende de la red, y un aviso nuevo bloquearía cualquier commit.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 4ca14d9 | docs | Integración del cierre de la entrega 11 en `main` (PR #58). |
+| e3b480b | fix | `next` y `eslint-config-next` 16.4.6. Next 16.3 estabilizó `retry` y quitó `unstable_retry` de `error.tsx`: las dos páginas de error pasan a `retry`, con una prueba de contrato contra el `ErrorBoundaryHandler` real de Next. Rojo antes. |
+| 592da4a | fix | `next-auth` 5.0.0-beta.32 (`@auth/core` 0.41.3). Una caracterización fija que `authz` no acepta como sesión el cuerpo de error que beta.31 devolvía. |
+| 8baa8c8 | fix | `prisma`, `@prisma/client` y `@prisma/adapter-pg` 7.10.1, juntos. |
+| 86f5336 | fix | `zod` 4.6.7. |
+| 9b86bf6 | fix | `shadcn` a `devDependencies`, en 4.23.0 (D119). |
+| 3e319b2 | chore | `npm audit fix` sin `--force`; `vitest` y `@vitest/coverage-v8` 4.1.12 juntos. |
+| (este) | docs | Registro de la revisión. |
+
+| Árbol (`npm audit`) | Antes (`b2c41f0`) | Después (`3e319b2`) |
+|---|---|---|
+| Producción (`--omit=dev`) | 35: 4 críticas, 19 altas, 12 moderadas | 2 moderadas: `exceljs` → `uuid` (D120) |
+| Completo | 46: 4 críticas, 20 altas, 22 moderadas | 6 moderadas: las 2 anteriores y `shadcn` → `ts-morph` → `minimatch` |
+
+Paso a paso en producción: 35 (4 críticas) → 32 (3) con `next` → 30 (1) con `next-auth` → 24 (1)
+con Prisma → 24 (1) con `zod`, cuyo aviso pasa a ser la copia 3.x de `shadcn` → 4 (0) con `shadcn` en
+desarrollo → 2 (0) con `npm audit fix`.
+
+Hallazgos de la revisión:
+
+1. **`unstable_retry` desapareció en Next 16.3** (corregido en e3b480b). Con la subida, «Intentar
+   nuevamente» habría lanzado `TypeError`. `npm run check` no lo veía, porque las pruebas de cada
+   `error.tsx` le pasaban las props a mano. `error-boundary-contract.test.ts` monta cada página bajo
+   el límite real de Next y falló en rojo con `unstable_retry is not a function`.
+2. **El fallo «abierto» de next-auth beta.31 no nos alcanzaba.** `proxy.ts` y `authz.ts` exigen
+   `user.id` y estado activo, nunca solo `!!session`. No había un rojo que reproducir; la
+   caracterización fija la defensa propia, y una mutación (`getActiveUserSession` con `if (!session)`)
+   la rompe.
+3. **El CSS compilado cambió sin cambios de diseño:**
+   - Next 16.4 escribe `.rounded-full` como `2147483647px` en lugar de `3.40282e38px`, y acorta los
+     nombres internos de las clases de `next/font`;
+   - shadcn 4.23 registra 8 `@property` (`--scroll-fade-*`, `--shimmer-*`) y una regla `.shimmer`
+     que la app no usa;
+   - Tailwind 4.3.5 reescribe los selectores `group-*` y `peer-*`
+     (`.x:is(:where(.group):hover *)` → `:is(:where(.group):hover .x)`), con los mismos elementos y la
+     misma especificidad (0,2,0), y escribe `var(--x, )` en lugar de `var(--x,)`.
+
+   Cada diferencia se comparó parte por parte contra el build anterior (`tmp/deps/diff_css.py`; para
+   Next, con un worktree temporal del commit anterior). El CSS pasa de 107.008 a 107.874 bytes.
+4. **`shadcn` → `ts-morph` → `minimatch` queda abierto, solo en desarrollo.** npm propone bajar a
+   shadcn 1.0.0. Es la CLI que el responsable ejecuta a mano con sus propios patrones: riesgo aceptado.
+
+`npm run check` en verde antes de cada commit; al final, 342 archivos de prueba con 5.590 pruebas
+(antes 341 y 5.585: +1 archivo y +5 pruebas). Sin migraciones.
+
+Pendiente:
+- **Node.** Node 20 no recibe parches de seguridad desde el 2026-04-30, y el aviso `EBADENGINE` de
+  `@prisma/streams-local` (de `prisma dev`, que la app no usa) sigue en cada instalación. A la fecha,
+  Node 26 es el LTS activo y Node 24 está en mantenimiento hasta el 2028-04-30. El paso aplazado
+  cambia juntos el CI (`node-version`), `engines` y `@types/node`, después de instalar la misma
+  versión en el equipo del responsable.
+- **La versión de Node de Vercel** (Settings → Build and Deployment → Node.js Version) no se pudo
+  leer desde aquí. Es el riesgo real: si es 20.x, producción atiende peticiones con un Node sin
+  parches.
+- **Activar las alertas de Dependabot** en el repositorio (D122).
+- **Verificar en staging** después del push: login y cierre de sesión (next-auth), una ruta sin
+  sesión, un rol sin permiso, el menú lateral al pasar el ratón y con Tab (selectores de Tailwind),
+  los logos (`/_next/image`) y un formulario con su error de campo (zod y Server Actions).
 
 ## Secuencia de próximas entregas
 
