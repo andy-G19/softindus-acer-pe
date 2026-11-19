@@ -29,6 +29,7 @@ import {
   withReturnTo,
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import { commercialNotifications } from "@/modules/commercial/notifications";
 import { toggleProductStatusAction } from "@/modules/commercial/products/actions";
 import { ProductStatusButton } from "@/modules/commercial/products/product-status-button";
@@ -59,6 +60,7 @@ export default async function ProductsPage({
   );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: "/dashboard/commercial/products", searchParams: params });
   const canManageProduct = session.user.role === "ADMIN";
   const categoryLabels = new Map(
     categories.map((item) => [item.slug, item.nombre]),

@@ -30,6 +30,7 @@ import { requireRole } from "@/lib/authz";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, hasActiveFilters, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   parseDateParam,
@@ -114,6 +115,7 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
 
   // El conteo de la tarjeta «Planillas generadas» usa el mismo where que el listado.
   const meta = getPaginationMeta({ totalItems: totalPayrolls, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: navigationHrefs.payrolls, searchParams: params as Record<string, string | string[] | undefined> });
 
   return (
     <div className="space-y-6">

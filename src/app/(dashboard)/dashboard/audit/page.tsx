@@ -27,6 +27,7 @@ import { requireRole } from "@/lib/authz";
 import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, hasActiveFilters, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import {
@@ -157,6 +158,7 @@ export default async function AuditPage({ searchParams }: PageProps) {
   );
 
   const meta = getPaginationMeta({ totalItems: totalLogs, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: navigationHrefs.audit, searchParams: params });
 
   const exportParams = {
     q,

@@ -27,6 +27,7 @@ import {
   withReturnTo,
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import {
   parseDateParam,
   parseStringParam,
@@ -61,6 +62,7 @@ export default async function InventoryOutputsPage({
     );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: navigationHrefs.inventoryOutputs, searchParams: params });
 
   return (
     <div className="space-y-6">

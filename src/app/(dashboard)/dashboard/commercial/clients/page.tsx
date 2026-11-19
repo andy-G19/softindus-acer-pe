@@ -29,6 +29,7 @@ import {
   withReturnTo,
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { redirectBeyondLastPage } from "@/lib/pagination-redirect";
 import { toggleClientStatusAction } from "@/modules/commercial/clients/actions";
 import { ClientStatusButton } from "@/modules/commercial/clients/client-status-button";
 import { getClientTypeFilterOptions, getClientTypeLabel } from "@/modules/commercial/client-labels";
@@ -59,6 +60,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
   );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
+  redirectBeyondLastPage({ page, meta, basePath: navigationHrefs.clients, searchParams: params });
 
   const clientItems = clientOptions.map((item) => ({
     id: item.id_cliente,
