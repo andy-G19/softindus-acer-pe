@@ -14,6 +14,13 @@ exports[`createPettyCashBoxAction > caja valida: la abre con su saldo inicial co
   },
   {
     "args": {
+      "codigoEntidad": "caja_chica",
+      "prefijo": "CAJ",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
       "select": {
         "id_caja_chica": true,
       },
@@ -25,13 +32,6 @@ exports[`createPettyCashBoxAction > caja valida: la abre con su saldo inicial co
       },
     },
     "prisma": "caja_chica.findFirst",
-  },
-  {
-    "args": {
-      "codigoEntidad": "caja_chica",
-      "prefijo": "CAJ",
-    },
-    "effect": "getNextCorrelativeId",
   },
   {
     "args": {
@@ -128,6 +128,13 @@ exports[`createPettyCashBoxAction > nombre repetido > llamadas 1`] = `
   },
   {
     "args": {
+      "codigoEntidad": "caja_chica",
+      "prefijo": "CAJ",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
       "select": {
         "id_caja_chica": true,
       },
@@ -141,8 +148,8 @@ exports[`createPettyCashBoxAction > nombre repetido > llamadas 1`] = `
     "prisma": "caja_chica.findFirst",
   },
   {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
+    "args": "Ya existe una caja chica con ese nombre.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -181,6 +188,13 @@ exports[`createPettyCashBoxAction > saldo inicial cero, con responsable y observ
   },
   {
     "args": {
+      "codigoEntidad": "caja_chica",
+      "prefijo": "CAJ",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
       "select": {
         "id_caja_chica": true,
       },
@@ -192,13 +206,6 @@ exports[`createPettyCashBoxAction > saldo inicial cero, con responsable y observ
       },
     },
     "prisma": "caja_chica.findFirst",
-  },
-  {
-    "args": {
-      "codigoEntidad": "caja_chica",
-      "prefijo": "CAJ",
-    },
-    "effect": "getNextCorrelativeId",
   },
   {
     "args": {
