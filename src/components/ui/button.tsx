@@ -1,7 +1,9 @@
 /**
- * Boton compartido (shadcn) con las variantes de la marca. La variante "clear"
- * (limpiar filtros) usa los tokens --accent-cyan, --accent-cyan-hover y
- * --accent-cyan-active; su tamano se pasa como className en cada pantalla.
+ * Boton compartido (shadcn) con las variantes de la marca. Desde el diseno de
+ * los botones (propuesta del responsable, 2026-11-19) cada estado de cada
+ * variante usa un token de tokens.css: la accion principal es un degradado
+ * corto con filo de luz, outline tiene un borde que se ve (3:1) y la variante
+ * "clear" (limpiar filtros) es un tinte cobre con borde, en lugar del cian.
  *
  * Entrega 8: estado pendiente (pending) y tipos que exigen aria-label en los
  * tamanos de solo icono. Sin pending, el HTML es el mismo de antes.
@@ -25,18 +27,18 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "forge-button-gradient text-primary-foreground hover:bg-primary",
+          "bg-primary bg-linear-to-b from-primary-hover to-primary text-primary-foreground shadow-button hover:bg-none hover:bg-primary-hover active:bg-none active:bg-primary-active active:shadow-none",
         outline:
-          "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+          "border-control-border bg-transparent text-foreground hover:border-control-border-hover hover:bg-muted aria-expanded:border-control-border-hover aria-expanded:bg-muted",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+          "border-border bg-accent text-foreground hover:bg-secondary-hover aria-expanded:bg-secondary-hover",
         ghost:
-          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
+          "bg-transparent text-foreground hover:bg-ghost-hover aria-expanded:bg-ghost-hover",
         destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-        link: "text-primary underline-offset-4 hover:underline",
+          "border-destructive-border bg-destructive-surface text-destructive-foreground hover:border-destructive-outline hover:bg-destructive-surface-hover focus-visible:border-destructive/40 focus-visible:ring-destructive/40",
+        link: "text-primary underline decoration-link-underline decoration-1 underline-offset-4 hover:decoration-primary",
         clear:
-          "bg-[var(--accent-cyan)] text-accent-cyan-foreground hover:bg-[var(--accent-cyan-hover)] active:bg-[var(--accent-cyan-active)]",
+          "border-clear-border bg-clear-surface text-clear-foreground hover:bg-clear-surface-hover",
       },
       size: {
         default:

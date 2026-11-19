@@ -231,16 +231,16 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span aria-hidden="true">
 </span>
 <span>
-<span>Limpiar (cian)</span>
-<span>--accent-cyan</span>
+<span>Cobre (limpiar)</span>
+<span>--accent-copper</span>
 </span>
 </div>
 <div>
 <span aria-hidden="true">
 </span>
 <span>
-<span>Texto sobre cian</span>
-<span>--accent-cyan-foreground</span>
+<span>Texto sobre cobre</span>
+<span>--clear-foreground</span>
 </span>
 </div>
 <div>

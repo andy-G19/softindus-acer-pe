@@ -1,5 +1,6 @@
 /* Identidad de Aceros Peru: login, barra termica, progreso de navegacion,
-   riel templado, boton de forja y foco de los campos. */
+   riel templado y foco de los campos. El boton principal toma sus colores de
+   tokens.css en src/components/ui/button.tsx. */
 @layer utilities {
   .login-industrial-bg {
     background:
@@ -112,19 +113,6 @@
     .login-ember {
       animation: none;
     }
-  }
-
-  .forge-button-gradient {
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--primary) 85%, white 15%),
-      var(--primary)
-    );
-    box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--primary) 50%, transparent);
-  }
-
-  .forge-button-gradient:hover {
-    filter: brightness(1.06);
   }
 
   .input-forge-focus:focus-visible {

@@ -58,7 +58,20 @@
   --color-destructive-surface: var(--destructive-surface);
   --color-shell: var(--shell);
   --color-surface-dashed: var(--surface-dashed);
-  --color-accent-cyan-foreground: var(--accent-cyan-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-control-border: var(--control-border);
+  --color-control-border-hover: var(--control-border-hover);
+  --color-ghost-hover: var(--ghost-hover);
+  --color-destructive-surface-hover: var(--destructive-surface-hover);
+  --color-destructive-border: var(--destructive-border);
+  --color-clear-surface: var(--clear-surface);
+  --color-clear-surface-hover: var(--clear-surface-hover);
+  --color-clear-border: var(--clear-border);
+  --color-clear-foreground: var(--clear-foreground);
+  --color-link-underline: var(--link-underline);
+  --shadow-button: var(--shadow-button);
   --shadow-raised: var(--shadow-raised);
   --shadow-raised-hover: var(--shadow-raised-hover);
   --shadow-card-hover: var(--shadow-card-hover);
@@ -92,9 +105,7 @@
   --accent-steel: #4a6fa5;
   --accent-ember: #ff7a1a;
   --accent-forge: #4f9142;
-  --accent-cyan: #06b6d4;
-  --accent-cyan-hover: #0891b2;
-  --accent-cyan-active: #0e7490;
+  --accent-copper: #b5651d;
   --chart-1: #f2941f;
   --chart-2: #4a6fa5;
   --chart-3: #4f9142;
@@ -125,9 +136,28 @@
   /* Fondo de los bloques punteados (EmptyState, LoadingState): la tarjeta al 78 %,
      mezclada en sRGB como la regla del adaptador a la que reemplaza (11.7c2). */
   --surface-dashed: color-mix(in srgb, var(--card) 78%, transparent);
-  --accent-cyan-foreground: #04252b;
+
+  /* Botones (propuesta del responsable, 2026-11-19). Cada estado de cada variante tiene su
+     token; los valores son los de la propuesta. El cobre de la variante clear reemplaza al
+     cian: es un tinte con borde, por debajo del relleno naranja de la accion principal. */
+  --primary-hover: #f6a64a;
+  --primary-active: #e08414;
+  --secondary-hover: #2f343c;
+  /* Borde de outline: 3,08:1 contra la tarjeta, el minimo de un control es 3:1. */
+  --control-border: #5f6672;
+  --control-border-hover: #7a828f;
+  --ghost-hover: rgba(255, 255, 255, 0.06);
+  --destructive-surface-hover: oklch(31% 0.11 25);
+  --destructive-border: color-mix(in srgb, var(--destructive-outline) 45%, transparent);
+  --clear-surface: color-mix(in srgb, var(--accent-copper) 14%, transparent);
+  --clear-surface-hover: color-mix(in srgb, var(--accent-copper) 22%, transparent);
+  --clear-border: color-mix(in srgb, var(--accent-copper) 45%, transparent);
+  --clear-foreground: #e8b48a;
+  --link-underline: color-mix(in srgb, var(--primary) 40%, transparent);
 
   /* Sombras: cada valor es el que ya usaba su componente. */
+  /* Filo de luz arriba y apoyo abajo del boton principal; reemplaza su halo naranja. */
+  --shadow-button: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-raised: 0 14px 35px rgba(0, 0, 0, 0.18);
   --shadow-raised-hover: 0 12px 24px -8px rgba(0, 0, 0, 0.4);
   --shadow-card-hover: 0 16px 34px rgba(0, 0, 0, 0.24);

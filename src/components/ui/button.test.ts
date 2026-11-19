@@ -91,6 +91,72 @@ describe("Button pendiente", () => {
   });
 });
 
+// Diseno de los botones (propuesta del responsable, 2026-11-19): cada variante toma sus
+// colores de los tokens de tokens.css, no de mezclas sueltas. El HTML completo esta en
+// primitives.test.ts; aqui se exige, por variante, la clase de cada estado que pide la
+// propuesta, para que un snapshot aceptado sin mirar no pueda esconder su perdida.
+function variantClasses(variant: NonNullable<ComponentProps<typeof Button>["variant"]>) {
+  return (render(h(Button, { variant }, "Guardar")).match(/^<button [^>]*class="([^"]*)"/)?.[1] ?? "").split(" ");
+}
+
+describe("colores de las variantes", () => {
+  const expected = {
+    default: [
+      "bg-primary",
+      "bg-linear-to-b",
+      "from-primary-hover",
+      "to-primary",
+      "shadow-button",
+      "text-primary-foreground",
+      "hover:bg-none",
+      "hover:bg-primary-hover",
+      "active:bg-none",
+      "active:bg-primary-active",
+      "active:shadow-none",
+    ],
+    secondary: ["bg-accent", "border-border", "text-foreground", "hover:bg-secondary-hover", "aria-expanded:bg-secondary-hover"],
+    outline: [
+      "bg-transparent",
+      "border-control-border",
+      "text-foreground",
+      "hover:bg-muted",
+      "hover:border-control-border-hover",
+      "aria-expanded:bg-muted",
+      "aria-expanded:border-control-border-hover",
+    ],
+    ghost: ["bg-transparent", "text-foreground", "hover:bg-ghost-hover", "aria-expanded:bg-ghost-hover"],
+    destructive: [
+      "bg-destructive-surface",
+      "border-destructive-border",
+      "text-destructive-foreground",
+      "hover:bg-destructive-surface-hover",
+      "hover:border-destructive-outline",
+    ],
+    link: ["text-primary", "underline", "decoration-link-underline", "underline-offset-4", "hover:decoration-primary"],
+    clear: ["bg-clear-surface", "border-clear-border", "text-clear-foreground", "hover:bg-clear-surface-hover"],
+  } as const;
+
+  for (const [variant, classes] of Object.entries(expected)) {
+    it(`${variant} usa los tokens de la propuesta`, () => {
+      const actual = variantClasses(variant as keyof typeof expected);
+
+      expect(classes.filter((name) => !actual.includes(name))).toEqual([]);
+    });
+  }
+
+  it("ninguna variante usa el cian, el degradado de brand.css ni variantes dark:", () => {
+    for (const variant of Object.keys(expected)) {
+      const actual = variantClasses(variant as keyof typeof expected);
+
+      expect(actual.filter((name) => name.includes("cyan"))).toEqual([]);
+      expect(actual).not.toContain("forge-button-gradient");
+      // La app es solo oscura y .dark esta en <html>: un dark: siempre gana a la clase base, asi
+      // que la variante se definiria dos veces. Los de aria-invalid son de la base comun y quedan.
+      expect(actual.filter((name) => name.startsWith("dark:") && !name.startsWith("dark:aria-invalid:"))).toEqual([]);
+    }
+  });
+});
+
 // Verificacion del piloto en staging (entrega 9): la galeria pinta
 // <Button pending> desde un componente de servidor, y React Server Components
 // no admite funciones en un elemento que llega del servidor (la pagina daba

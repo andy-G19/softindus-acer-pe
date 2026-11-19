@@ -81,6 +81,35 @@ describe("tokens", () => {
     expect(REQUIRED.filter((name) => !root.includes(name))).toEqual([]);
   });
 
+  // Diseno de los botones (propuesta del responsable, 2026-11-19). Tailwind no avisa de una
+  // utilidad sin color en @theme: bg-x no genera nada y el boton queda sin fondo. Por eso cada
+  // color que usa Button se exige en :root y en @theme. El cian de la variante clear se quita:
+  // lo reemplaza el cobre.
+  it("los colores de los botones existen en :root y en @theme, y el cian ya no", () => {
+    const buttonColors = [
+      "primary-hover",
+      "primary-active",
+      "secondary-hover",
+      "control-border",
+      "control-border-hover",
+      "ghost-hover",
+      "destructive-surface-hover",
+      "destructive-border",
+      "clear-surface",
+      "clear-surface-hover",
+      "clear-border",
+      "clear-foreground",
+      "link-underline",
+    ];
+
+    expect(buttonColors.filter((name) => !root.includes(`--${name}`))).toEqual([]);
+    expect(buttonColors.filter((name) => !theme.includes(`--color-${name}`))).toEqual([]);
+    expect(root).toContain("--accent-copper");
+    expect(root).toContain("--shadow-button");
+    expect(theme).toContain("--shadow-button");
+    expect([...root, ...theme].filter((name) => name.includes("cyan"))).toEqual([]);
+  });
+
   it("cada var() de las hojas apunta a un token definido", () => {
     const known = new Set([...root, ...theme, ...fontVariables]);
     const undefinedVars = cssFiles(STYLES_DIR).flatMap((file) =>
