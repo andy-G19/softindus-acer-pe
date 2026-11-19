@@ -102,6 +102,33 @@ describe("menu lateral del shell", () => {
 
     expect(html).toContain("md:group-hover/sidebar:inline");
     expect(html).toContain("md:group-has-[:focus-visible]/sidebar:inline");
-    expect(html).toContain("md:group-has-[:focus-visible]/sidebar:block");
+    // El titulo: con `visible` desde el C5 del grupo de fixes (antes, `block`).
+    expect(html).toContain("md:group-has-[:focus-visible]/sidebar:visible");
+  });
+
+  // C5 del grupo de fixes (D127, hallazgo 6 de la 11.7c1): el titulo «Navegacion» pasaba de
+  // `display: none` a `block` al abrirse el menu y bajaba las opciones 16 px; un clic que llegaba
+  // mientras se abria caia en la opcion de abajo. Ahora ocupa siempre el hueco de 20 px que ya
+  // habia entre la cabecera y la primera opcion, y solo cambia su visibilidad. En staging, la
+  // primera opcion empieza en 108 px con el menu cerrado, abierto con el raton y con Tab.
+  it("el titulo aparece sin cambiar de tamano, asi que las opciones no se mueven", () => {
+    const html = aside();
+    const title = /<div class="([^"]*)">\s*<p class="([^"]*)">Navegación<\/p>/.exec(html);
+
+    expect(title, "el titulo va en su propio contenedor").not.toBeNull();
+
+    const containerClasses = title?.[1].split(" ") ?? [];
+    const titleClasses = title?.[2].split(" ") ?? [];
+
+    expect(containerClasses, "el contenedor tiene alto fijo").toContain("h-5");
+    expect(titleClasses).not.toContain("hidden");
+    expect(titleClasses.filter((name) => name.endsWith(":block"))).toEqual([]);
+    expect(titleClasses).toEqual(
+      expect.arrayContaining([
+        "invisible",
+        "md:group-hover/sidebar:visible",
+        "md:group-has-[:focus-visible]/sidebar:visible",
+      ]),
+    );
   });
 });
