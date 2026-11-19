@@ -147,7 +147,7 @@ Built in delivery 8; screens adopt it in deliveries 9 and 10. Details and eviden
 
 ## Active refactor — rules (read before changing code)
 
-The project is under a planned refactor. Master plan: [PLAN_REFACTORIZACION_INTEGRAL.md](PLAN_REFACTORIZACION_INTEGRAL.md) (section 16 has the current order). Progress, baseline metrics and next deliveries: [docs/refactoring/SEGUIMIENTO.md](docs/refactoring/SEGUIMIENTO.md).
+The planned refactor is complete: entrega 11, the last of the current order, closed on 2026-11-19 (master plan: [PLAN_REFACTORIZACION_INTEGRAL.md](PLAN_REFACTORIZACION_INTEGRAL.md), section 16). The rules below still apply to every change. Progress, the final metrics, the global criteria and every open finding with its destination (business decisions, `fix` commits, D99, D101) are in [docs/refactoring/SEGUIMIENTO.md](docs/refactoring/SEGUIMIENTO.md), «Cierre de la entrega 11»; there is no entrega 12 planned, so new work starts from that table.
 
 1. **Refactor = change structure, never behavior.** Same inputs → same outputs, same UI copy, same toasts, same redirects, same permissions. If a behavior change is needed (bug fix, business rule), it goes in a **separate commit** with a `fix:`/`feat:` prefix and is explicitly called out.
 2. **One delivery at a time, small steps.** Only touch the files the current delivery needs. Do not "improve" unrelated code on the way; list it as a follow-up instead.
