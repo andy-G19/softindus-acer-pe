@@ -10648,7 +10648,7 @@ decida cuándo hacerla.
 | 11.7d2 | 3: los vacíos de los 10 reportes siguen diciendo «con los filtros aplicados» | Paso propio |
 | 10.7a | 36: Atrás restaura los filtros GET escritos | `fix` propio, verificado en un navegador |
 | Entrega 10 | Los demás `fix` propios de su tabla (errores de línea por posición, KPI filtrados, textos, «La versión ya estaba vigente», buscador de `SearchableSelect`) | `fix` propio |
-| 11.1 | 7 y 8: Prisma pide Node 22; `npm audit` informa vulnerabilidades sin evaluar | Tarea de mantenimiento |
+| 11.1 | 7 y 8: Prisma pide Node 22; `npm audit` informa vulnerabilidades sin evaluar | 8 cerrado en la «Revisión de dependencias» (producción: de 35 avisos a 2 aceptados). 7 sigue abierto: subir Node, aplazado hacia el 2026-12-19 |
 | Movimientos de caja chica | El rango de fechas sin `DateRangeFields` y su formulario GET sin `FilterBar` | Paso propio |
 | Criterios globales | Recorridos automáticos de punta a punta, la medición de accesibilidad y la línea base de rendimiento | Plan propio, si se decide |
 
@@ -10666,6 +10666,126 @@ Lecciones de la entrega 11:
   encabezado.
 - **Antes de registrar una integración, se lee el CI de `main`:** el #217 se canceló sin motivo y
   hubo que relanzarlo.
+
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-19 (UTC) y comparados con git:
+
+- El cierre se publicó en `staging` con `b2c41f0`: CI #227 en verde (4m 23s).
+- PR #58, abierto a las 11:20:27 UTC y fusionado con merge commit a las 11:28:32 UTC del
+  2026-11-19: 7 commits, de `5b1c23e` a `b2c41f0`, y 12 archivos (+678 −123). Su CI, el #228,
+  sobre `b2c41f0`, terminó en verde (6m 42s).
+- El merge commit `38ddacf` tiene como padres `744b7c1` (`main`) y `b2c41f0` (`staging`), y su
+  árbol es el de `b2c41f0` (`00732fc`): `main` y `staging` tienen el mismo contenido. CI #229 en
+  verde (6m 51s).
+- Vercel desplegó `38ddacf` en producción (`success` a las 11:30:25 UTC). El cierre no trae
+  migraciones.
+
+### Revisión de dependencias (hallazgos 7 y 8 de la 11.1)
+
+Fecha: 2026-11-19 (Lima). Primer trabajo después del cierre de la entrega 11, tomado de «Hallazgos
+abiertos y su destino». Plan en `tmp/deps/plan-dependencias.md`, aprobado con D118 a D122; los
+informes de `npm audit` de cada paso están en `tmp/deps/`.
+
+- D118: solo subidas dentro de la misma versión mayor. Prisma 8 no, porque su `latest` es una RC.
+- D119: `shadcn` pasa a `devDependencies`. La app solo usa su hoja `shadcn/tailwind.css`, que se
+  resuelve en el build; su CLI arrastraba express, hono, undici y el SDK de MCP a producción.
+- D120: `exceljs` → `uuid` es un riesgo aceptado. El aviso afecta a `v3`, `v5` y `v6` con `buf`;
+  exceljs solo llama `uuidv4()` sin `buf` (`cf-rule-ext-xform.js`). El único arreglo que ofrece npm
+  es bajar a exceljs 3.4.0, una versión mayor anterior. exceljs no publica desde diciembre de 2024.
+- D121: Node 24 en el CI y en `engines`. **Aplazada:** el responsable instalará Node en su equipo
+  hacia el 2026-12-19, y el CI y Vercel cambiarán con él (ver «Pendiente»).
+- D122: vigilancia con las alertas de Dependabot de GitHub, un ajuste del repositorio. `npm audit`
+  no entra en `npm run check`: depende de la red, y un aviso nuevo bloquearía cualquier commit.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 4ca14d9 | docs | Integración del cierre de la entrega 11 en `main` (PR #58). |
+| e3b480b | fix | `next` y `eslint-config-next` 16.4.6. Next 16.3 estabilizó `retry` y quitó `unstable_retry` de `error.tsx`: las dos páginas de error pasan a `retry`, con una prueba de contrato contra el `ErrorBoundaryHandler` real de Next. Rojo antes. |
+| 592da4a | fix | `next-auth` 5.0.0-beta.32 (`@auth/core` 0.41.3). Una caracterización fija que `authz` no acepta como sesión el cuerpo de error que beta.31 devolvía. |
+| 8baa8c8 | fix | `prisma`, `@prisma/client` y `@prisma/adapter-pg` 7.10.1, juntos. |
+| 86f5336 | fix | `zod` 4.6.7. |
+| 9b86bf6 | fix | `shadcn` a `devDependencies`, en 4.23.0 (D119). |
+| 3e319b2 | chore | `npm audit fix` sin `--force`; `vitest` y `@vitest/coverage-v8` 4.1.12 juntos. |
+| (este) | docs | Registro de la revisión. |
+
+| Árbol (`npm audit`) | Antes (`b2c41f0`) | Después (`3e319b2`) |
+|---|---|---|
+| Producción (`--omit=dev`) | 35: 4 críticas, 19 altas, 12 moderadas | 2 moderadas: `exceljs` → `uuid` (D120) |
+| Completo | 46: 4 críticas, 20 altas, 22 moderadas | 6 moderadas: las 2 anteriores y `shadcn` → `ts-morph` → `minimatch` |
+
+Paso a paso en producción: 35 (4 críticas) → 32 (3) con `next` → 30 (1) con `next-auth` → 24 (1)
+con Prisma → 24 (1) con `zod`, cuyo aviso pasa a ser la copia 3.x de `shadcn` → 4 (0) con `shadcn` en
+desarrollo → 2 (0) con `npm audit fix`.
+
+Hallazgos de la revisión:
+
+1. **`unstable_retry` desapareció en Next 16.3** (corregido en e3b480b). Con la subida, «Intentar
+   nuevamente» habría lanzado `TypeError`. `npm run check` no lo veía, porque las pruebas de cada
+   `error.tsx` le pasaban las props a mano. `error-boundary-contract.test.ts` monta cada página bajo
+   el límite real de Next y falló en rojo con `unstable_retry is not a function`.
+2. **El fallo «abierto» de next-auth beta.31 no nos alcanzaba.** `proxy.ts` y `authz.ts` exigen
+   `user.id` y estado activo, nunca solo `!!session`. No había un rojo que reproducir; la
+   caracterización fija la defensa propia, y una mutación (`getActiveUserSession` con `if (!session)`)
+   la rompe.
+3. **El CSS compilado cambió sin cambios de diseño:**
+   - Next 16.4 escribe `.rounded-full` como `2147483647px` en lugar de `3.40282e38px`, y acorta los
+     nombres internos de las clases de `next/font`;
+   - shadcn 4.23 registra 8 `@property` (`--scroll-fade-*`, `--shimmer-*`) y una regla `.shimmer`
+     que la app no usa;
+   - Tailwind 4.3.5 reescribe los selectores `group-*` y `peer-*`
+     (`.x:is(:where(.group):hover *)` → `:is(:where(.group):hover .x)`), con los mismos elementos y la
+     misma especificidad (0,2,0), y escribe `var(--x, )` en lugar de `var(--x,)`.
+
+   Cada diferencia se comparó parte por parte contra el build anterior (`tmp/deps/diff_css.py`; para
+   Next, con un worktree temporal del commit anterior). El CSS pasa de 107.008 a 107.874 bytes.
+4. **`shadcn` → `ts-morph` → `minimatch` queda abierto, solo en desarrollo.** npm propone bajar a
+   shadcn 1.0.0. Es la CLI que el responsable ejecuta a mano con sus propios patrones: riesgo aceptado.
+
+`npm run check` en verde antes de cada commit; al final, 342 archivos de prueba con 5.590 pruebas
+(antes 341 y 5.585: +1 archivo y +5 pruebas). Sin migraciones.
+
+Pendiente:
+- **Node.** Node 20 no recibe parches de seguridad desde el 2026-04-30, y el aviso `EBADENGINE` de
+  `@prisma/streams-local` (de `prisma dev`, que la app no usa) sigue en cada instalación. A la fecha,
+  Node 26 es el LTS activo y Node 24 está en mantenimiento hasta el 2028-04-30. El paso aplazado
+  cambia juntos el CI (`node-version`), `engines` y `@types/node`, después de instalar la misma
+  versión en el equipo del responsable.
+- **La versión de Node de Vercel** (Settings → Build and Deployment → Node.js Version) no se pudo
+  leer desde aquí. Es el riesgo real: si es 20.x, producción atiende peticiones con un Node sin
+  parches.
+- **Activar las alertas de Dependabot** en el repositorio (D122).
+
+#### Verificación en staging
+
+Push de 8 commits (`4ca14d9` a `e8184e2`): CI #230 en verde (4m 27s) y Vercel `success` a las
+14:22:23 UTC del 2026-11-19. Solo lecturas, con el responsable conectado como ADMIN:
+
+- **El build es el nuevo:** `window.next.version` es `16.4.6`. La hoja servida (107.873 bytes) trae
+  el radio `2147483647px`, los registros `--shimmer-*` y los selectores `group-*` reescritos, y
+  ningún selector con la forma anterior.
+- **Sesión (next-auth beta.32):** `GET /api/auth/session` responde 200 con `user` (id, rol ADMIN,
+  estado activo) y `expires`. Con la sesión válida, `/login` redirige (`opaqueredirect`) y
+  `/dashboard` responde 200: el proxy lee la sesión.
+- **Menú lateral (Tailwind 4.3.5):**
+  - con el ratón, pasa de 76 a 256 px y las etiquetas, de `display: none` a `block`, completas;
+  - con Tab, el foco en «Dashboard» y «Usuarios» lo abre a 256 px, y al salir con Mayús+Tab vuelve
+    a 76 px.
+- **Logo:** carga por `/_next/image` (Next 16.4.6 y `sharp` 0.35).
+- **Consola:** solo los avisos de la barra de `vercel.live` contra la CSP de solo informe (ya
+  estaban), y los de las propias pruebas.
+
+Un `fetch` a `/login` que seguía la redirección llegó al host de `AUTH_URL`, el de producción, como
+documenta la 10.3c. Fue un GET sin cookies y el navegador lo bloqueó por CORS: no tocó datos. Para
+leer una redirección del proxy desde staging se usa `redirect: "manual"`.
+
+No se verificó en staging:
+- una ruta sin sesión: habría que cerrar la sesión;
+- un rol sin permiso: ADMIN tiene todas las rutas;
+- «Intentar nuevamente» de una página de error: no hay forma de provocar un fallo sin escribir;
+- un error de campo de un formulario: el envío necesita autorización.
+
+Los cubren `authz.test.ts`, `error-boundary-contract.test.ts` y las pruebas de cada formulario.
 
 ## Secuencia de próximas entregas
 
@@ -10692,7 +10812,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Cerrada (CI #226 verde en main; 19 sub-entregas, de la 11.1 a la 11.7d2, integradas con los PR #39 a #57, cada una verificada en staging; 29 operaciones críticas con pruebas en Postgres, 14 con clave de idempotencia; balance, criterios globales y hallazgos abiertos en «Cierre de la entrega 11»). Con ella termina el orden vigente del plan |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Cerrada (CI #229 verde en main, PR #58 del cierre; 19 sub-entregas, de la 11.1 a la 11.7d2, integradas con los PR #39 a #57, cada una verificada en staging; 29 operaciones críticas con pruebas en Postgres, 14 con clave de idempotencia; balance, criterios globales y hallazgos abiertos en «Cierre de la entrega 11»). Con ella termina el orden vigente del plan |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 

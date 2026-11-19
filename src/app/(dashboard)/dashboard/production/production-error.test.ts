@@ -8,15 +8,16 @@ import ProductionErrorPage from "./error";
 // C5 de la 11.7b (D91): «Intentar nuevamente» llamaba a `reset`, que en Next 16 solo
 // limpia el estado del error y vuelve a pintar lo que ya tenia el cliente, sin pedir
 // los datos otra vez (node_modules/next/dist/client/components/error-boundary.js).
-// Con un error del servidor, el boton volvia a mostrar el mismo error. `unstable_retry`
-// hace router.refresh() y luego reset: es lo que recomienda la guia de error.js.
+// Con un error del servidor, el boton volvia a mostrar el mismo error. `retry`
+// (`unstable_retry` hasta Next 16.2) hace router.refresh() y luego reset: es lo que
+// recomienda la guia de error.js.
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
 type ErrorPageProps = {
   error: Error & { digest?: string };
   reset: () => void;
-  unstable_retry: () => void;
+  retry: () => void;
 };
 
 const ErrorPage = ProductionErrorPage as ComponentType<ErrorPageProps>;
@@ -48,7 +49,7 @@ function button(text: string) {
 }
 
 describe("C5 de la 11.7b: reintentar el error de Produccion", () => {
-  it("«Intentar nuevamente» vuelve a pedir los datos con unstable_retry, no con reset", async () => {
+  it("«Intentar nuevamente» vuelve a pedir los datos con retry, no con reset", async () => {
     const reset = vi.fn();
     const retry = vi.fn();
 
@@ -57,7 +58,7 @@ describe("C5 de la 11.7b: reintentar el error de Produccion", () => {
         h(ErrorPage, {
           error: Object.assign(new Error("fallo"), { digest: "123" }),
           reset,
-          unstable_retry: retry,
+          retry,
         }),
       );
     });

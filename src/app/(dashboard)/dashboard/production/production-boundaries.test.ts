@@ -20,7 +20,7 @@ const boundaries: [string, () => string, string][] = [
         createElement(ProductionErrorPage as ComponentType<Record<string, unknown>>, {
           error,
           reset: () => {},
-          unstable_retry: () => {},
+          retry: () => {},
         }),
       ),
     "Ocurrió un problema en Producción",
