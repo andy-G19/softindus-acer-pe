@@ -1,9 +1,8 @@
 # Manual de usuario — Mermas y chatarra
 
-Este capítulo describe las pantallas de Mermas que ya se renovaron: el inicio, la chatarra y
-los retazos reutilizables. La venta de chatarra todavía no se renovó. Las reglas comunes
-(paneles, guardar, cancelar, confirmar y filtros) están en
-[Cómo funcionan las pantallas](00-patrones.md).
+Este capítulo describe las pantallas de Mermas: el inicio, la chatarra, la venta de chatarra y
+los retazos reutilizables. Las reglas comunes (paneles, guardar, cancelar, confirmar y
+filtros) están en [Cómo funcionan las pantallas](00-patrones.md).
 
 ## Inicio de Mermas
 
@@ -40,6 +39,27 @@ material inactivo o una orden anulada marcan su propio campo. Al guardar, vuelve
 con sus filtros y aparece un solo aviso.
 
 Solo el administrador ve **Vender** en cada fila.
+
+### Vender chatarra
+
+**Quién:** solo el administrador.
+
+**Vender** en una fila abre el formulario con esa chatarra elegida; **Registrar venta** (en el
+inicio o en la lista) lo abre para elegirla.
+
+1. Elige la **chatarra a vender**. Solo se ofrecen las acumuladas o disponibles.
+2. Escribe la **fecha de venta** y el **monto recibido**.
+3. Si quieres, escribe el **peso vendido en kg** (vacío, se usa el peso registrado) y la
+   **cantidad vendida** (útil si se vende por bolsa, piezas o lote). No pueden superar lo
+   registrado en la chatarra, y un valor menor que 0.005 se rechaza con «El valor debe ser mayor
+   que cero.», porque se guardaría como 0.00.
+4. Si el dinero entra a una caja chica, elígela en **Registrar ingreso en caja chica** (solo las
+   abiertas) y escribe el **destino del dinero**. Si no, deja **No registrar en caja chica**.
+5. Pulsa **Registrar venta**.
+
+Al registrar la venta, la chatarra pasa a **vendida** y, si elegiste una caja, su saldo sube con
+el monto recibido, con un movimiento de ingreso. Una chatarra se vende una sola vez, y una venta
+enviada dos veces se registra una sola vez.
 
 ## Retazos reutilizables
 

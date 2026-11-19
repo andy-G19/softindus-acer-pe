@@ -10364,7 +10364,7 @@ Datos leídos de la API de GitHub el 2026-11-18 (UTC) y comparados con git:
 
 ### Sub-entrega 11.7d2 — Los textos que se repiten
 
-Fecha: 2026-11-18 (Lima). Estado: verificada en staging (CI #223); falta el PR a `main`. Plan en
+Fecha: 2026-11-18 (Lima). Estado: integrada en `main` (PR #57, merge `744b7c1`). Plan en
 `tmp/e11-diff/plan-11-7d2.md`, aprobado el 2026-11-18 con las decisiones D111 a D114:
 - D111: un componente compartido, `FormErrorAlert`, pinta el error general de los formularios. Si
   el mensaje repite el de un campo, dice «Revisa los campos marcados.».
@@ -10457,6 +10457,20 @@ Hallazgos:
      reciente sigue siendo `CLI00000010`: no se creó nada.
 5. Fuera de ese envío rechazado, no se escribió nada en staging.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-19 (UTC) y comparados con git:
+
+- La verificación `d826160` se publicó en `staging`: CI #224 en verde (5m 36s).
+- PR #57, abierto a las 02:47:04 UTC y fusionado con merge commit a las 02:52:05 UTC del
+  2026-11-19: 8 commits, de `332332c` a `d826160`, y 121 archivos (+991 −363). Su CI, el #225,
+  sobre `d826160`, terminó en verde (4m 35s).
+- El merge commit `744b7c1` tiene como padres `3f0340d` (`main`) y `d826160` (`staging`), y su
+  árbol es el de `d826160` (`4f02939`): `main` y `staging` tienen el mismo contenido. CI #226 en
+  verde (4m 29s).
+- Vercel desplegó `744b7c1` en producción (`success` a las 02:53:38 UTC). La sub-entrega no trae
+  migraciones.
+
 #### Cierre del código de la 11.7
 
 Con la 11.7d2 terminan las cuatro partes de la 11.7, cada una con su plan, su verificación en staging y su PR:
@@ -10478,6 +10492,180 @@ Lo que sigue abierto, con su destino:
 - Las decisiones de negocio pendientes: 57, 36, los días de Lima, D57, D70, D71, D77 y D83.
 
 El cierre de la entrega 11 (balance, métricas contra la línea base y hallazgos que pasan a la siguiente) va en un paso propio, después de integrar la 11.7d2.
+
+### Cierre de la entrega 11
+
+Cerrada el 2026-11-19, con la 11.7d2 integrada en `main` (CI #226). Es la última entrega del orden
+vigente (sección 16.2 del plan), así que este cierre también cierra el refactor planificado. La
+entrega se partió en 19 sub-entregas, y cada una se publicó, se verificó en staging y se integró
+por separado.
+
+Pasos del cierre (plan en `tmp/e11-diff/plan-cierre-e11.md`, aprobado con D115 a D117):
+- C0 (`5b1c23e`): registró la integración de la 11.7d2.
+- C1 (`451813b`): retiró `ActionErrorState` y `toActionError`, que ya no tenían consumidores (D115).
+- Este paso (C2) y los dos siguientes solo cambian documentación.
+
+| Sub-entrega | Tema | PR | Merge commit | Fecha del merge (UTC) | CI en `main` |
+|---|---|---|---|---|---|
+| 11.1 | Base de integración, paridad de reportes e idempotencia | #39 | `26e8a9b` | 2026-11-10 | #150 |
+| 11.2a | Pago a proveedor y anulación de compra | #40 | `469feb2` | 2026-11-10 | #155 |
+| 11.2b | Crear compra | #41 | `7cdf6e2` | 2026-11-10 | #159 |
+| 11.2c | Salida de inventario | #42 | `2af80c6` | 2026-11-10 | #163 |
+| 11.3a | Proformas y pagos de cliente | #43 | `157534f` | 2026-11-11 | #167 |
+| 11.3b | Comprobantes y pedido | #44 | `0261c7a` | 2026-11-12 | #171 |
+| 11.3c | Listados de Comercial | #45 | `5b23ec7` | 2026-11-13 | #175 |
+| 11.4a | Caja chica | #46 | `729229a` | 2026-11-13 | #179 |
+| 11.4b | Venta de chatarra, filtro de movimientos y totales del reporte financiero | #47 | `4991a0d` | 2026-11-14 | #184 |
+| 11.5 | Planillas y su pago | #48 | `4721e02` | 2026-11-16 | #188 |
+| 11.6a | Órdenes de trabajo: cantidades, crear y alerta de stock | #49 | `0958f81` | 2026-11-16 | #192 |
+| 11.6b | Órdenes de trabajo: movimientos de material, cierre, anular y finalizar | #50 | `acac7db` | 2026-11-17 | #197 |
+| 11.6c | Órdenes de trabajo: avances de producción | #51 | `b42724c` | 2026-11-17 | #201 |
+| 11.7a | Retiro de lo que ya no se usa y el foco de las cabeceras | #52 | `a66a13f` | 2026-11-18 | #205 |
+| 11.7b | Copias y estructura | #53 | `33a2f36` | 2026-11-18 | #209 |
+| 11.7c1 | El tema en `<html>`, el menú lateral y los elementos fuera del adaptador | #54 | `d0f9f7e` | 2026-11-18 | #214 |
+| 11.7c2 | Los bloques con borde y el retiro del adaptador | #55 | `6f0b70f` | 2026-11-18 | #217 (segundo intento) |
+| 11.7d1 | Arreglos de datos y navegación | #56 | `3f0340d` | 2026-11-18 | #222 |
+| 11.7d2 | Los textos que se repiten | #57 | `744b7c1` | 2026-11-19 | #226 |
+
+La fecha es la del commit de merge en UTC (`TZ=UTC git log --date=format-local`). El CI es la
+ejecución en verde sobre ese commit, leída de la API de GitHub. El estado de cada despliegue de
+producción está en la «Integración en `main`» de cada sub-entrega.
+
+#### Cobertura del plan contra lo hecho
+
+- **Las 29 operaciones que la entrega 10 dejó para la 11 están migradas:**
+
+  | Área | Operaciones | Sub-entrega | Pruebas en Postgres (PGlite) |
+  |---|---|---|---|
+  | Inventario | Crear y anular compra, pago a proveedor y salida de inventario | 11.2a a 11.2c | `create-purchase`, `supplier-payment`, `inventory-output` |
+  | Comercial | Crear y anular proforma, emitir y anular comprobante, pago de cliente y cancelar pedido | 11.3a y 11.3b | `create-quote`, `client-payment`, `receipt`, `cancel-order` |
+  | Caja chica | Apertura, gasto, ingreso o ajuste y anulación de movimiento | 11.4a | `petty-cash` |
+  | Mermas | Venta de chatarra | 11.4b | `scrap-sale` |
+  | Personal | Generar y anular planilla, y pagarla | 11.5 | `payroll` |
+  | Producción | Crear orden y sus 7 operaciones; los 3 de avances | 11.6a a 11.6c | `create-work-order`, `work-order-materials`, `work-order-progress` |
+
+  Todas tienen además su caracterización con el arnés. Cada una devuelve un resultado y ninguna
+  redirige al negar el permiso: la desviación conocida terminó en 0 en la 11.2c.
+- **Idempotencia:** `operacion_idempotente` (D2) la usan 14 operaciones. La primera pasada de un
+  formulario reclama la clave y una repetición devuelve lo que ya se guardó. Las que no la llevan
+  (entregar lo pendiente, cerrar, reabrir y cambios de estado) son idempotentes por lo que leen
+  con la fila bloqueada o por su `compare-and-set`.
+- **Bloqueos de fila:** `row-locks.ts` pasa de 12 a 19 ayudantes, con un orden fijo por área
+  (CLAUDE.md). El alta rápida de proveedor usa el bloqueo del correlativo (11.7d1).
+- **Consolidación (11.7):**
+  - se retiraron SweetAlert2, `ConfirmDeleteButton`, `StatusBadge`, `RowToggleStatusButton`, el
+    adaptador `legacy-industrial-dark.css`, las copias de `formatDecimal` y de `getSearchParam`, y
+    `ActionErrorState` con `toActionError`;
+  - hay un `error.tsx` para todo el panel;
+  - no queda ningún `<main>` anidado;
+  - `prisma format` corre en el check.
+- **El cierre de la entrega 10** dejó 18 hallazgos con destino en la entrega 11 (filas «E11» de su
+  tabla). Están todos cerrados, salvo el 15 de la 10.6a, que se cerró sin código porque ya no
+  aplicaba (D110).
+
+#### Criterios globales (sección 12 del plan)
+
+| Criterio | Estado | Evidencia |
+|---|---|---|
+| Pruebas unitarias de reglas, validadores, filtros, fechas, dinero, transiciones y contratos | Cumplido | 324 archivos de prueba unitarios; funciones puras de montos en `src/lib` (`order-amounts`, `client-payment-amounts`, `petty-cash-amounts`, `payroll-amounts`, `material-quantities`…) |
+| Integración con Postgres aislado | Cumplido, con un límite | 17 archivos y 98 pruebas en PGlite: transacciones, rollback, correlativos, stock, saldos, restricciones e idempotencia. Límite: PGlite atiende una transacción a la vez, así que la espera de un bloqueo no se prueba (cada prueba lo dice) |
+| Componentes: apertura, foco, pendientes, errores, cambios sin guardar y cierre | Cumplido | Pruebas en jsdom con Radix real: `ActionForm`, `FormDialog`, `RouteSheet`, `ConfirmActionButton`, `useDiscardGuard`, el foco tras repintar y los formularios de cada área |
+| Recorridos completos | Parcial | Se recorrieron en staging en cada sub-entrega (login y roles, cliente en panel, categoría en modal, compra, pagos, entrega, devolución y cierre de una orden, exportación), pero no hay pruebas automáticas de punta a punta |
+| Visual y accesibilidad | Parcial | Galería de estados, foco visible, paridad de estilos computados (11.7c), atributos ARIA y anuncio de errores probados. No se midieron formalmente: contraste, móvil, zoom, impresión ni un lector de pantalla real |
+| Rendimiento | No cumplido | No hay línea base de rendimiento ni umbrales acordados. Solo se midió el INP de algunas interacciones en la 11.7c1 (ninguna pasa de 200 ms) |
+| Cada formulario inventariado tiene propietario, presentación y estado de migración | Cumplido | Los 31 de la entrega 10, los 2 de la 9 y los de las operaciones críticas, todos con su presentación y su resultado |
+| Los módulos usan componentes, tokens y fachada compartidos | Cumplido, con D99 abierto | Reglas de ESLint (colores, notificaciones, fuentes), pruebas de tokens y de hojas, y el adaptador retirado. Las reglas de campos, tablas y títulos de `patterns.css` todavía ganan a algunas clases de componentes (D99) |
+| Un éxito da como máximo un aviso; un error de campo no da un segundo mensaje genérico | Cumplido | `useFormResult` (un aviso por operación) y `FormErrorAlert` (11.7d2), con su prueba de guardia |
+| Guardar conserva filtros y contexto; Cancelar no escribe; un error conserva lo escrito; un guardado confirmado no se reenvía | Cumplido | `returnTo` validado, `useDiscardGuard`, `ActionForm` con los valores devueltos y las 14 claves de operación |
+| Acceso directo, recarga, Atrás y Adelante tienen pruebas en el patrón de ventanas | Parcial | `RouteSheet` y `FormDialog` las tienen. Atrás todavía restaura los filtros GET escritos en las listas con `FilterBar` (hallazgo 36 de la 10.7a, abierto) |
+| Un usuario sin permisos no ejecuta una acción por petición directa | Cumplido | `action-access.test.ts`, la caracterización por rol de cada acción y `requireApiRole` en las rutas |
+| Los flujos críticos mantienen sus invariantes bajo concurrencia y fallos intermedios | Parcial | Bloqueos de fila, `compare-and-set`, escrituras atómicas de stock y saldo, idempotencia y rollback probados en Postgres. Abierto: dos aperturas simultáneas de una caja con el mismo nombre (hallazgo 7 de la 11.4a) |
+| Las páginas no contienen mutaciones ni consultas Prisma | Cumplido | 0 páginas con Prisma, bajo una regla de ESLint |
+| Línea base de rendimiento y umbrales acordados | No cumplido | Igual que «Rendimiento» |
+| El cierre conserva las pruebas existentes y añade pruebas útiles de los riesgos migrados | Cumplido | De 18 archivos y 203 pruebas en la línea base a 341 y 5.585; en esta entrega, de 249 y 4.586 |
+
+#### Métricas al inicio y al final
+
+El inicio es `82b6335`, el final de la entrega 10, con las cifras medidas en su cierre y contadas
+en el árbol de git donde faltaban. El final es `451813b`, igual a `main` en `744b7c1` más el C1.
+`npm run check` terminó con código 0 sobre `451813b`: lint sin errores (el aviso anterior de
+`_line` sigue), 341 archivos de prueba con 5.585 pruebas y el build. El CSS compilado mide
+107.008 bytes.
+
+| Métrica | Inicio (`82b6335`) | Final (`451813b`) |
+|---|---|---|
+| Archivos de prueba / pruebas aprobadas | 249 / 4.586 | 341 / 5.585 |
+| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 17 / 98 |
+| Operaciones con clave de idempotencia | 0 | 14 |
+| Ayudantes de bloqueo de fila | 12 | 19 |
+| Funciones de `useActionState` que redirigen al negar el permiso | 1 | 0 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 9 | 0 |
+| Copias locales de `FieldError` | 1 | 0 |
+| Páginas con `ConfirmDeleteButton` / usos de `showConfirm` | 9 / 2 | 0 / 0 |
+| Archivos con `StatusBadge` / con `RowToggleStatusButton` | 3 / 1 | 0 / 0 |
+| Definiciones locales de `formatDecimal` / `getSearchParam` | 15 / 15 | 0 / 0 |
+| Formas de estado de formulario | 2 | 1 (`FormActionState`) |
+| Reglas del adaptador `legacy-industrial-dark.css` | 25 | el archivo no existe |
+| Áreas con `error.tsx` | Producción | el panel entero y Producción |
+| Listados que cortan el último día con `lte` | 1 | 0 |
+| Pantallas con rango de fechas sin `DateRangeFields` | 1 | 1 (movimientos de caja chica) |
+| Formularios GET sin `FilterBar` | 3 | 2 (movimientos y resumen mensual de caja chica) |
+| Claves `?toast=` caracterizadas | 130 / 130 | 130 / 130 |
+| Páginas `page.tsx` | 179 | 179 |
+| Páginas con Prisma directo / `auth()` en `src/modules` / copias de `toNumber`, `formatMoney` y `formatDate` | 0 / 0 / 0 | 0 / 0 / 0 |
+| Archivos más grandes de producción | 748 / 696 / 643 | 736 / 696 / 685 |
+
+Los tres archivos de producción más grandes son el reporte de mantenimiento (736 líneas),
+`commercial/products/actions.ts` (696) y el formulario de orden de trabajo (685). Entre las
+pruebas, el más grande es `work-orders/actions.test.ts` (2.103).
+
+#### Hallazgos abiertos y su destino
+
+Todos los hallazgos de la entrega 11 que no están corregidos ni son de método, y los de la entrega
+10 que siguen abiertos. No hay una entrega 12 planificada: cada fila queda para que el responsable
+decida cuándo hacerla.
+
+| Origen | Hallazgo | Destino |
+|---|---|---|
+| 10.8a (D8) | 57: tarifa diaria en la planilla y por hora en el costeo | Decisión de negocio |
+| 10.3c y siguientes | Días UTC en filtros y valores por defecto; una fecha inexistente en la URL se corre en todos los listados | Decisión de negocio |
+| 11.5 | D57: una planilla anulada bloquea su mismo periodo exacto | Decisión de negocio |
+| 11.6a | 7: un pedido con varios detalles solo recibe una orden | Decisión de negocio |
+| 11.6a | D70: nadie escribe la cantidad producida de las campañas | Decisión de negocio |
+| 11.6a | D71: el requerimiento congelado redondea con `toFixed` | Decisión de negocio |
+| 11.6b | D77: anular la orden deja el pedido en «en producción» | Decisión de negocio, con un `fix` propio |
+| 11.6c | D83: «Finalizar» del listado nunca puede tener éxito | Decisión de negocio |
+| 11.2a | 2: compras «parcial» con saldo 0.00 guardadas antes del arreglo | Consultar los datos y decidir |
+| 11.4a | 7: dos aperturas simultáneas de una caja con el mismo nombre | Decisión, o un `fix` con el patrón del alta rápida (buscar el nombre después de reservar el correlativo) |
+| Entrega 10 | Las demás decisiones de negocio de su tabla (alertas, filtros de reportes, reparaciones, versiones, campañas, usuarios) | Decisión de negocio |
+| 11.7c1 | D99: clases de componentes a las que ganan las reglas de `patterns.css`, con `.login-field-input` e `input-forge-focus` | Paso propio, un componente a la vez y verificado con paridad |
+| 11.7c2 | D101: el borde de color de las alertas y el hover de las tarjetas de módulo | `fix` de diseño, con capturas |
+| 11.7c1 | 6: el título «Navegación» desplaza las opciones del menú al pasar el ratón | `fix` propio |
+| 11.3c | 6: la página posterior a la última de una lista paginada | `fix` propio |
+| 11.3c | 5: clientes y el detalle de proforma muestran `tipo_cliente` como se guarda | `fix` propio |
+| 11.5 | 11: textos de planillas que hablan de «la siguiente subfase» | `fix` propio (textos) |
+| 11.7d1 | 3: la lista de métodos de pago copiada en Inventario y Personal | Paso propio |
+| 11.7d2 | 3: los vacíos de los 10 reportes siguen diciendo «con los filtros aplicados» | Paso propio |
+| 10.7a | 36: Atrás restaura los filtros GET escritos | `fix` propio, verificado en un navegador |
+| Entrega 10 | Los demás `fix` propios de su tabla (errores de línea por posición, KPI filtrados, textos, «La versión ya estaba vigente», buscador de `SearchableSelect`) | `fix` propio |
+| 11.1 | 7 y 8: Prisma pide Node 22; `npm audit` informa vulnerabilidades sin evaluar | Tarea de mantenimiento |
+| Movimientos de caja chica | El rango de fechas sin `DateRangeFields` y su formulario GET sin `FilterBar` | Paso propio |
+| Criterios globales | Recorridos automáticos de punta a punta, la medición de accesibilidad y la línea base de rendimiento | Plan propio, si se decide |
+
+Lecciones de la entrega 11:
+
+- **Una regla que se repite vive en un solo lugar.** Ejemplos: el mensaje de error general
+  (`FormErrorAlert`), qué cuenta como filtro (`hasActiveFilters`) y los montos (`src/lib/*-amounts`).
+  Una prueba de guardia impide que vuelva la copia.
+- **Antes de mover CSS, se mide qué decide cada regla.** Se quita del CSSOM de la pestaña y se
+  comparan los estilos computados en staging. El análisis estático no ve las clases que llegan
+  por componentes.
+- **Una comprobación sin restricción en la base** va dentro de la transacción y después de un
+  bloqueo. Si encuentra el duplicado, se lanza para revertir.
+- **PGlite prueba el SQL y el rollback, no la espera de un bloqueo.** Cada prueba lo dice en su
+  encabezado.
+- **Antes de registrar una integración, se lee el CI de `main`:** el #217 se canceló sin motivo y
+  hubo que relanzarlo.
 
 ## Secuencia de próximas entregas
 
@@ -10504,7 +10692,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Cerrada (CI #146 verde en main; 16 sub-entregas, de la 10.1 a la 10.8b, integradas con los PR #23 a #38, cada una verificada en staging con su huella; 31 formularios y 32 acciones de fila migrados; balance y hallazgos abiertos en «Cierre de la entrega 10») |
-| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | En curso: 11.1 integrada en `main` (PR #39, CI #150; migración aplicada en staging y producción); 11.2a integrada en `main` (PR #40, CI #155); 11.2b integrada en `main` (PR #41, CI #159); 11.2c integrada en `main` (PR #42, CI #163; se retira la desviación conocida); 11.3a integrada en `main` (PR #43, CI #167); 11.3b integrada en `main` (PR #44, CI #171); 11.3c integrada en `main` (PR #45, CI #175); 11.4a integrada en `main` (PR #46, CI #179); 11.4b integrada en `main` (PR #47, CI #184); 11.5 integrada en `main` (PR #48, CI #188); 11.6a integrada en `main` (PR #49, CI #192); 11.6b integrada en `main` (PR #50, CI #197); 11.6c integrada en `main` (PR #51, CI #201); 11.7 partida en a, b, c y d: 11.7a integrada en `main` (PR #52, CI #205); 11.7b integrada en `main` (PR #53, CI #209); 11.7c partida en c1 y c2: 11.7c1 integrada en `main` (PR #54, CI #214); 11.7c2 integrada en `main` (PR #55, CI #217; adaptador retirado); 11.7d partida en d1 y d2: 11.7d1 integrada en `main` (PR #56, CI #222); 11.7d2 verificada en staging (CI #223; cierra el código de la 11.7) |
+| 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Cerrada (CI #226 verde en main; 19 sub-entregas, de la 11.1 a la 11.7d2, integradas con los PR #39 a #57, cada una verificada en staging; 29 operaciones críticas con pruebas en Postgres, 14 con clave de idempotencia; balance, criterios globales y hallazgos abiertos en «Cierre de la entrega 11»). Con ella termina el orden vigente del plan |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
 
@@ -10519,15 +10707,15 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Páginas con Prisma directo | 117 | 0 | 4, 5 y 6 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
-| Definiciones de la forma de estado de formulario | 18 | 2 (`ActionErrorState` y `FormActionState`, el contrato de la pista B) | 2 y 9 |
+| Definiciones de la forma de estado de formulario | 18 | 1 (`FormActionState`; `ActionErrorState` se retiró al cerrar la 11) | 2, 9 y 11 |
 | Definiciones locales de `toNumber` | 52 | 1 | 3 |
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
-| Archivos que importan `sweetalert2` o `react-toastify` | 2 | 2, solo la fachada y el proveedor (regla de ESLint) | 7 |
+| Archivos que importan `sweetalert2` o `react-toastify` | 2 | 2, solo la fachada y el proveedor, y solo `react-toastify` (SweetAlert2 retirado en la 11.7a; regla de ESLint) | 7 y 11 |
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
-| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
+| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 130 / 130 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 298 / 5.114 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 341 / 5.585 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -10542,18 +10730,23 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reportes con la paridad de filtro probada en `screen-parity.test.ts` | 0 de 9 | 9 de 9 | G4 y 11 |
 | Páginas de reporte que leen sus filtros distinto que su exportación (medido en la 11.1) | 6 | 0 | 11 |
 | Cálculos del estado de cobranza (pantalla y exportación) | 2 | 1 | 11 |
-| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 11 / 57 | 11 |
-| Acciones con clave de operación (`operacion_idempotente`) | 0 | 8 | 11 |
+| Pruebas contra Postgres real (archivos / pruebas) | 0 / 0 | 17 / 98 | 11 |
+| Acciones con clave de operación (`operacion_idempotente`) | 0 | 14 | 11 |
 | Cálculos de montos de cliente con `number` (acciones, página y vistas previas de proforma y pago) | 5 | 0 | 11 |
 | Operaciones de Comercial que deciden fuera de la transacción o sin bloquear su fila | 7 | 0 | 11 |
 | Reglas distintas para «¿se puede cambiar el pedido?» (listado, edición, acción) | 3 | 1 | 11 |
 | Listados de Comercial sin paginar (proformas, comprobantes, pagos de cliente) | 3 | 0 | 11 |
 | Celdas de Comercial que muestran método, tipo de pago o tipo de comprobante como se guardan | 7 | 0 | 11 |
-| Operaciones de caja chica y chatarra que deciden fuera de la transacción o sin bloquear su fila | 5 | 1 | 11 |
+| Operaciones de caja chica y chatarra que deciden fuera de la transacción o sin bloquear su fila | 5 | 0 | 11 |
 | Movimientos de stock que no actualizan la alerta de stock (la salida) | 1 | 0 | 11 |
 | Cálculos del IGV con `number` (acción y formulario de compra) | 2 | 0 | 11 |
 | Operaciones que deciden sobre una compra sin bloquearla (pago y anulación) | 2 | 0 | 11 |
 | Saldos de pago a proveedor calculados con `number` (acción y detalle) | 2 | 0 | 11 |
+| Ayudantes de bloqueo de fila (`row-locks.ts`) | 0 | 19 | G1 a 11 |
+| Páginas con `ConfirmDeleteButton` / archivos que usan `showConfirm` fuera de la fachada | 15 / 1 | 0 / 0 | 10 y 11 |
+| Definiciones locales de `formatDecimal` / `getSearchParam` | 17 / 22 | 0 / 0 (regla de ESLint) | 10 y 11 |
+| Copias del bloque de error de formulario / formularios que repiten en la alerta el mensaje de un campo | 50 / todos los de reglas de negocio | 0 / 0 (`FormErrorAlert` y una prueba de guardia) | 11 |
+| Listados con filtros cuyo vacío no distingue si hay filtro | 31 | 0 | 11 |
 | Nombres de parámetro que la exportación acepta sin que ninguna pantalla los genere | 17 | 0 | G4 |
 | Enlaces a `/api/` con `next/link` (su prefetch ejecuta la ruta) | 6 | 0 | G4 |
 | Colores literales en los `.tsx` de la interfaz | 25 | 0 (regla de ESLint) | 8 |
@@ -10561,9 +10754,9 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 0 / 0 (adaptador retirado) | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
-| Copias locales de `FieldError` | 16 | 1 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 3 | 9, 10 y 11 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 3 (3 formularios) | 9 y 10 |
+| Copias locales de `FieldError` | 16 | 0 | 9, 10 y 11 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 0 | 9, 10 y 11 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 2 (2 formularios de caja chica) | 9, 10 y 11 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
 | Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 0 | 10 y 11 |
 | Acciones de activar e inactivar que leen el estado y escriben el contrario | 12 | 0 | 10 |
@@ -10572,7 +10765,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Pantallas con rango de fechas sin `DateRangeFields` | 27 | 1 | 10 |
 | Archivos de acciones de inventario sin caracterizar (materiales, alertas, proveedores y materiales de proveedor) | 4 | 0 | 10 |
 | Altas que deciden el kárdex o la alerta con los números del formulario y no con la fila escrita | 1 | 0 | 10 |
-| Listados que cortan el último día con `lte` (con `buildDateRangeFilter` o con una copia local) | 17 | 1 (copia local) | 10 |
+| Listados que cortan el último día con `lte` (con `buildDateRangeFilter` o con una copia local) | 17 | 0 | 10 y 11 |
 | Enlaces de Inventario que un rol ve y su pantalla rechaza / pantallas de Inventario sin ningún enlace en la app | 4 / 3 | 0 / 0 | 10 |
 | Acciones de Comercial sin caracterizar: el cambio de estado de clientes; el alta, la edición y el cambio de estado de productos; el de categorías | 5 | 0 | 10 |
 | Listas de Comercial sin tarjeta en su inicio (el vendedor no llegaba a ellas) / enlaces de Comercial que un rol ve y su pantalla rechaza | 2 / 0 | 0 / 0 | 10 |

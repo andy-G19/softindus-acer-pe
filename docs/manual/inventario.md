@@ -241,14 +241,34 @@ primero, de 20 en 20. Cada fila muestra el código, la fecha, el material, la
 orden de trabajo, quién registró la salida, la cantidad y el stock que dejó.
 
 - **Ver orden:** abre la orden de trabajo de la salida.
-- **Registrar salida:** abre el formulario de salida a página completa. Ese
-  formulario todavía no se renovó: **Volver a salidas** te lleva a la página
-  anterior (a la lista sin filtros si abriste el formulario por su
-  dirección), y **Cancelar** regresa a la lista sin sus filtros.
+- **Registrar salida:** abre el formulario de salida a página completa (ver
+  abajo).
 - **Filtros:** búsqueda por orden, material o usuario que registró la
   salida; material, orden y el rango de fechas **Desde** y **Hasta**.
 
 Como en las entradas, la fecha y el rango usan el día UTC.
+
+### Registrar una salida
+
+1. Pulsa **Registrar salida**.
+2. Elige el **material** y, si la salida es para producción, la **orden de
+   trabajo**. Sin orden, queda como **Sin orden asociada**.
+3. Escribe la **cantidad** y el **motivo** (obligatorio, hasta 300
+   caracteres).
+4. Pulsa **Registrar salida**.
+
+- La cantidad no puede ser mayor que el stock del material: si no alcanza,
+  el sistema responde «No hay stock suficiente para registrar la salida.» y
+  no descuenta nada.
+- No se puede sacar material para una orden anulada, finalizada o con los
+  materiales ya cerrados, ni de un material inactivo.
+- Si el stock que queda llega al mínimo del material, se abre (o se
+  actualiza) su alerta de stock crítico; si queda por encima, la alerta se
+  da por atendida.
+- Si recargas o vuelves a enviar el mismo formulario, la salida no se
+  descuenta dos veces.
+- Al guardar, vuelves a la lista con los filtros que tenías; **Cancelar**
+  también, y pregunta antes si escribiste algo.
 
 ## Compras
 
@@ -263,12 +283,60 @@ comprobante, el total, el estado del pago y el estado de la compra.
   pagado y saldo pendiente), sus datos, los materiales comprados y el
   historial de pagos. **Volver a compras** y la miga **Compras** regresan a
   la lista con los filtros que tenía.
-- **Nueva compra**, **Anular** (en la lista y en el detalle) y **Registrar
-  pago** todavía no se renovaron y se describirán cuando se renueven.
+- **Nueva compra:** abre el formulario de compra a página completa (ver
+  abajo).
+- **Anular:** en la fila (mientras la compra no esté anulada, no tenga
+  pagos y haya ingresado al almacén) y en el detalle (**Anular compra**).
+- **Registrar pago:** en el detalle, mientras la compra tenga saldo.
 - **Filtros:** búsqueda por código de compra, número de comprobante o
   proveedor; proveedor, material (las compras que lo incluyen), estado de la
   compra, estado del pago y el rango de fechas **Desde** y **Hasta** (la
   fecha de la compra).
+
+### Registrar una compra
+
+1. Pulsa **Nueva compra**.
+2. Elige el **proveedor** (solo los activos) y la **fecha de compra**.
+3. Si hay comprobante, elige su **tipo** (boleta, factura, recibo u otro) y
+   escribe su **número**. No puede haber dos compras con el mismo tipo y
+   número de comprobante.
+4. **IGV:** al elegir factura se activa solo; puedes cambiarlo. Con IGV, el
+   total suma el 18 % sobre el subtotal.
+5. En **Materiales comprados**, agrega una fila por material, con su
+   **cantidad**, su **unidad** y su **costo unitario**. Cada fila muestra su
+   subtotal, y abajo se ven el subtotal calculado y el **total de la
+   compra**. Un material va en una sola fila: si se repite, el sistema lo
+   marca y pide ajustar la cantidad en una fila.
+6. Pulsa **Registrar compra y entrada**.
+
+Al registrar la compra, sus materiales **ingresan al stock** en ese momento,
+con su entrada en el kárdex y su precio en el historial del proveedor. Si
+recargas o vuelves a enviar el mismo formulario, la compra no se registra
+dos veces.
+
+### Registrar un pago
+
+En el detalle de la compra, la sección **Registrar pago** pide la **fecha de
+pago**, el **monto**, el **método** (efectivo, transferencia, Yape, Plin u
+otro) y, si quieres, observaciones. Pulsa **Guardar pago**.
+
+- El pago no puede superar el saldo: el sistema responde «El pago no puede
+  superar el saldo pendiente. Saldo actual: S/ …».
+- Al pagar el saldo completo, la compra queda **pagada** y la sección deja de
+  mostrarse. Con un pago menor, queda **parcial**.
+- Un pago enviado dos veces se registra una sola vez.
+
+### Anular una compra
+
+**Anular** pide confirmar y explica la consecuencia: se revierte del stock lo
+que ingresó con la compra, con su salida en el kárdex, y la compra queda
+anulada. No se puede deshacer.
+
+- No se puede anular una compra con pagos registrados.
+- Si parte de lo que ingresó ya salió del almacén, no alcanza el stock para
+  revertirla y el sistema lo dice dentro de la confirmación.
+- Si anulas desde el detalle, al terminar el cursor pasa al título de la
+  página.
 
 ## Pagos a proveedores
 

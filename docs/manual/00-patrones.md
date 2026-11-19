@@ -1,32 +1,13 @@
 # Manual de usuario — Cómo funcionan las pantallas
 
 Este manual explica cómo se usa el sistema de Aceros Perú. Este capítulo
-describe lo que es igual en todas las pantallas que ya se renovaron; cada
-área tiene después su propio capítulo.
+describe lo que es igual en todas las pantallas; cada área tiene después su
+propio capítulo.
 
-Pantallas renovadas hasta ahora:
-
-- Comercial: el inicio, clientes, productos, categorías de producto, las
-  listas de pedidos, proformas, pagos de cliente y comprobantes de venta, y
-  el alta y la edición de pedidos.
-- Inventario: el inicio, tipos de proveedor, proveedores, materiales de
-  proveedor, categorías de materiales, materiales e insumos, alertas y stock
-  crítico, entradas, salidas, compras (la lista) y pagos a proveedores.
-- Caja chica: categorías de gasto.
-- Mantenimiento: todas sus pantallas.
-- Producción: el inicio, rutas de fabricación, etapas, recetas, las versiones
-  de una receta y sus materiales, calcular materiales, campañas, cuellos de
-  botella y la lista de órdenes de trabajo.
-- Mermas y chatarra: el inicio, la chatarra y los retazos reutilizables.
-- Usuarios: toda la pantalla.
-- Personal: el inicio, operarios, asistencia diaria, tareas diarias y la
-  lista de planillas.
-- Costos: toda el área (inicio, generar costeo, la lista y el detalle de
-  costeos).
-- Reportes: los ocho reportes con filtros, el historial de exportaciones y
-  la bitácora de auditoría.
-
-Las demás pantallas se irán sumando a este manual a medida que se renueven.
+Desde noviembre de 2026 todas las pantallas del sistema están renovadas y
+siguen estas reglas: Comercial, Inventario, Caja chica, Mantenimiento,
+Producción, Mermas y chatarra, Personal, Costos, Usuarios y Reportes. Las
+excepciones, cuando las hay, se explican en el capítulo de su área.
 
 ## Crear y editar en una ventana
 
@@ -64,8 +45,29 @@ vez, así que no se crean registros repetidos por un doble clic.
 - **Si todo está bien:** aparece un solo aviso en la esquina, la ventana se
   cierra y la lista ya muestra el cambio.
 - **Si algo está mal:** la ventana sigue abierta, con un mensaje rojo arriba
-  que explica el problema y el campo a corregir marcado. **Lo que escribiste
-  se conserva** y el cursor queda en el primer campo a corregir.
+  y el campo a corregir marcado. **Lo que escribiste se conserva** y el
+  cursor queda en el primer campo a corregir.
+  - Si el problema es de un campo (por ejemplo, «Ya existe un cliente con
+    ese número de documento.»), el mensaje aparece debajo de ese campo, y el
+    de arriba dice «Revisa los campos marcados.», para no repetirlo.
+  - Si el problema no es de un campo (un permiso, el stock, una falla del
+    sistema), el mensaje de arriba lo explica.
+
+### Lo que mueve dinero o stock no se registra dos veces
+
+Los formularios que registran dinero o stock recuerdan cada envío: pagos de
+clientes y a proveedores, compras, salidas de inventario, proformas,
+comprobantes de venta, egresos, ingresos y ajustes de caja chica, ventas de
+chatarra, generar y pagar planillas, crear órdenes de trabajo, y las
+entregas adicionales y devoluciones de material de una orden.
+
+- Si la conexión se corta mientras guardas, o recargas la página y vuelves a
+  enviar el mismo formulario, el sistema reconoce que ya lo había registrado
+  y no crea otro: te muestra el que ya existe.
+- Después de un registro correcto, el formulario queda listo para uno nuevo.
+- Entregar lo pendiente, cerrar y reabrir los materiales de una orden, anular
+  y finalizar tampoco se hacen dos veces: un segundo intento no cambia nada y,
+  cuando corresponde, te avisa de que ya estaba hecho.
 
 ## Cancelar sin perder trabajo por accidente
 
@@ -130,14 +132,26 @@ las reparaciones, tienen en su fila una lista de estados y el botón **Guardar**
 - Si otra persona ya había hecho el cambio, el sistema te avisa de que «ya
   estaba en ese estado» y no escribe nada.
 
-Otros cambios tienen su propio botón, sin lista de estados: en la fila, marcar
-vigente y anular una versión de receta; activar, finalizar y anular una
-campaña; reutilizar y descartar un retazo; anular una tarea diaria o un costo
-indirecto, y en el detalle de un costeo, recalcularlo. Siguen las mismas
-reglas: lo que no se
-puede deshacer pide confirmar, con el botón rojo para anular y descartar, y
-con el normal para marcar vigente, finalizar, reutilizar y recalcular.
-Activar una campaña se aplica al pulsar.
+Otros cambios tienen su propio botón, sin lista de estados:
+
+- en Producción: marcar vigente y anular una versión de receta; activar,
+  finalizar y anular una campaña; anular y finalizar una orden de trabajo;
+  entregar lo pendiente y generar los avances de una orden;
+- en Comercial: anular una proforma o un comprobante y cancelar un pedido;
+- en Inventario: anular una compra;
+- en Caja chica: anular un movimiento;
+- en Personal: anular una planilla o una tarea diaria;
+- en Mermas: reutilizar y descartar un retazo;
+- en Costos: anular un costo indirecto y recalcular un costeo.
+
+Siguen las mismas reglas: lo que no se puede deshacer pide confirmar, con el
+botón rojo para anular, cancelar y descartar, y con el normal para lo demás
+(por ejemplo, finalizar o entregar lo pendiente, que no anulan nada). La
+pregunta dice qué pasa: cuánto material sale del almacén, a dónde va el
+dinero o qué días quedan libres. Activar una campaña se aplica al pulsar.
+
+Si el botón desaparece al terminar (por ejemplo, **Entregar lo pendiente**
+cuando ya no queda nada por entregar), el cursor pasa al título de la página.
 
 ## Filtrar las listas
 
@@ -169,6 +183,31 @@ no muestran datos y piden corregir el rango, y las listas salen vacías.
 Las fechas cuentan aunque las elijas mientras la página todavía carga, o
 aunque el navegador las recupere al volver con **Atrás**: si quedan al
 revés, el mensaje aparece igual y la barra no se envía.
+
+Cuando una lista no tiene filas, el mensaje dice por qué:
+
+- sin filtros, que todavía no hay registros, por ejemplo «Todavía no hay
+  pedidos registrados.»;
+- con filtros, que no se encontró nada, por ejemplo «No se encontraron
+  pedidos con los filtros aplicados.». Pulsa **Limpiar** para ver todo.
+
+Los reportes dicen siempre «con los filtros aplicados», porque muestran un
+periodo elegido.
+
+## El menú de la izquierda
+
+En una pantalla mediana o grande, el menú de la izquierda muestra solo los
+íconos de cada área. Se abre con sus nombres al pasar el ratón por encima o
+al llegar a él con **Tab**, y vuelve a cerrarse al elegir una opción con el
+ratón o al salir de él. En el teléfono, el menú está arriba de la página.
+
+## Si una pantalla no carga
+
+Si una pantalla falla al cargar, aparece el mensaje «Ocurrió un problema»
+con dos botones: **Intentar nuevamente** vuelve a pedir la pantalla, y
+**Volver al inicio** lleva al inicio del sistema. Si el problema sigue,
+comunica el **Código de referencia** que aparece debajo: con él se encuentra
+el error en el registro del sistema.
 
 ## Usar el teclado
 

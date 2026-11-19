@@ -1,7 +1,6 @@
-import { afterEach, describe, expect, expectTypeOf, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
-  type ActionErrorState,
   AppError,
   AuthorizationError,
   ConflictError,
@@ -10,7 +9,6 @@ import {
   RateLimitError,
   getErrorMessage,
   isAppError,
-  toActionError,
   toApiErrorResponse,
 } from "@/lib/errors";
 
@@ -98,29 +96,6 @@ describe("getErrorMessage", () => {
     expect(getErrorMessage("cualquier cosa")).toBe(
       "Ocurrió un error inesperado. Intente nuevamente.",
     );
-  });
-});
-
-describe("toActionError", () => {
-  it("devuelve un estado seguro con el mensaje operacional", () => {
-    const state = toActionError(new ConflictError("Ya existe un registro igual."));
-
-    expect(state).toEqual({ error: "Ya existe un registro igual." });
-  });
-
-  it("no filtra el mensaje real de un error no operacional", () => {
-    const state = toActionError(new Error("stack trace interno"));
-
-    expect(state.error).toBe("Ocurrió un error inesperado. Intente nuevamente.");
-  });
-
-  it("conserva la forma de estado que consumen los formularios", () => {
-    // Comprobacion de tipos: la verifica typecheck, no la ejecucion.
-    expectTypeOf<ActionErrorState>().toEqualTypeOf<{
-      error: string;
-      fieldErrors?: Partial<Record<string, string[]>>;
-    }>();
-    expectTypeOf(toActionError(new Error("x"))).toEqualTypeOf<ActionErrorState>();
   });
 });
 
