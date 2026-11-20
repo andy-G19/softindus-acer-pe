@@ -110,29 +110,38 @@ exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistenci
 </div>
 <div>
 <label for="operario">Operario</label>
+<div>
 <select id="operario" name="operario">
 <option value="" selected="">Todos los operarios</option>
 <option value="id_operario-1">apellidos-1, nombres-1</option>
 <option value="id_operario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="modalidad">Modalidad</label>
+<div>
 <select id="modalidad" name="modalidad">
 <option value="" selected="">Todas las modalidades</option>
 <option value="semanal">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -405,29 +414,38 @@ exports[`/dashboard/reports/staff > rango de mas de 366 dias > resultado 1`] = `
 </div>
 <div>
 <label for="operario">Operario</label>
+<div>
 <select id="operario" name="operario">
 <option value="" selected="">Todos los operarios</option>
 <option value="id_operario-1">apellidos-1, nombres-1</option>
 <option value="id_operario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="modalidad">Modalidad</label>
+<div>
 <select id="modalidad" name="modalidad">
 <option value="" selected="">Todas las modalidades</option>
 <option value="semanal">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -648,29 +666,38 @@ exports[`/dashboard/reports/staff > rango invertido > resultado 1`] = `
 </div>
 <div>
 <label for="operario">Operario</label>
+<div>
 <select id="operario" name="operario">
 <option value="" selected="">Todos los operarios</option>
 <option value="id_operario-1">apellidos-1, nombres-1</option>
 <option value="id_operario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="modalidad">Modalidad</label>
+<div>
 <select id="modalidad" name="modalidad">
 <option value="" selected="">Todas las modalidades</option>
 <option value="semanal">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -681,7 +708,8 @@ exports[`/dashboard/reports/staff > rango invertido > resultado 1`] = `
 <div>
 <label for="fecha-hasta">Hasta</label>
 <input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="to" value="2026-07-01"/>
-<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
+<p id="fecha-hasta-error">
+<svg/>La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
 </fieldset>
 <div>
@@ -807,29 +835,38 @@ exports[`/dashboard/reports/staff > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="operario">Operario</label>
+<div>
 <select id="operario" name="operario">
 <option value="" selected="">Todos los operarios</option>
 <option value="id_operario-1">apellidos-1, nombres-1</option>
 <option value="id_operario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="modalidad">Modalidad</label>
+<div>
 <select id="modalidad" name="modalidad">
 <option value="" selected="">Todas las modalidades</option>
 <option value="semanal">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1142,29 +1179,38 @@ exports[`/dashboard/reports/staff > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="operario">Operario</label>
+<div>
 <select id="operario" name="operario">
 <option value="">Todos los operarios</option>
 <option value="id_operario-1">apellidos-1, nombres-1</option>
 <option value="id_operario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="modalidad">Modalidad</label>
+<div>
 <select id="modalidad" name="modalidad">
 <option value="">Todas las modalidades</option>
 <option value="semanal" selected="">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="pagado" selected="">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>

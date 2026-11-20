@@ -1,23 +1,36 @@
 import * as React from "react"
+import { ChevronDown } from "lucide-react"
 
+import { fieldControlClassName } from "@/components/ui/field-control"
 import { cn } from "@/lib/utils"
 
+// La flecha es un icono propio sobre el select (appearance-none): la del
+// navegador no sigue el diseno, y una imagen de fondo no puede tomar el color
+// de un token. Ninguna pantalla pasa className, asi que el contenedor ocupa el
+// ancho que antes ocupaba el select.
 function NativeSelect({
   className,
   children,
   ...props
 }: React.ComponentProps<"select">) {
   return (
-    <select
-      data-slot="native-select"
-      className={cn(
-        "input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 md:text-sm dark:bg-input/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </select>
+    <div data-slot="native-select-wrapper" className="relative w-full min-w-0">
+      <select
+        data-slot="native-select"
+        className={cn(
+          fieldControlClassName,
+          "h-8 w-full min-w-0 appearance-none rounded-lg py-1 pr-8 pl-2.5 text-base disabled:pointer-events-none md:text-sm [&_option]:bg-popover [&_option]:text-popover-foreground",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </select>
+      <ChevronDown
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 right-2.5 size-4 -translate-y-1/2 text-muted-foreground"
+      />
+    </div>
   )
 }
 

@@ -176,20 +176,26 @@ exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > resu
 <form autoComplete="off" role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos</option>
 <option value="disponible">Disponible</option>
 <option value="reutilizado">Reutilizado</option>
 <option value="descartado">Descartado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos</option>
 <option value="id_material-1">nombre_material-1 · categoria-1</option>
 <option value="id_material-2">nombre_material-2 · categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="q">Buscar</label>
@@ -479,20 +485,26 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > resultado 1`] = 
 <form autoComplete="off" role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos</option>
 <option value="disponible">Disponible</option>
 <option value="reutilizado">Reutilizado</option>
 <option value="descartado">Descartado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos</option>
 <option value="id_material-1">nombre_material-1 · categoria-1</option>
 <option value="id_material-2">nombre_material-2 · categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="q">Buscar</label>
@@ -756,20 +768,26 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin retazos > resultado 1`] = 
 <form autoComplete="off" role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos</option>
 <option value="disponible">Disponible</option>
 <option value="reutilizado">Reutilizado</option>
 <option value="descartado">Descartado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos</option>
 <option value="id_material-1">nombre_material-1 · categoria-1</option>
 <option value="id_material-2">nombre_material-2 · categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="q">Buscar</label>
@@ -1043,20 +1061,26 @@ exports[`/dashboard/waste-scrap/reusable-scraps > todos los filtros > resultado 
 <form autoComplete="off" role="search" aria-label="Filtros de retazos" action="/dashboard/waste-scrap/reusable-scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos</option>
 <option value="disponible" selected="">Disponible</option>
 <option value="reutilizado">Reutilizado</option>
 <option value="descartado">Descartado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="">Todos</option>
 <option value="id_material-1">nombre_material-1 · categoria-1</option>
 <option value="id_material-2">nombre_material-2 · categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="q">Buscar</label>
@@ -1200,9 +1224,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > maestro de talle
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_material">Material de origen *</label>
+<label for="id_material">Material de origen<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1210,9 +1236,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > maestro de talle
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1235,6 +1263,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > maestro de talle
 <div>
 <label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="unidad_medida" required="" name="unidad_medida">
 <option value="" disabled="" selected="">Selecciona una unidad</option>
 <option value="unidad">Unidad</option>
@@ -1243,6 +1272,8 @@ exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > maestro de talle
 <option value="plancha">Plancha</option>
 <option value="pieza">Pieza</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1316,9 +1347,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > panel de alta > 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_material">Material de origen *</label>
+<label for="id_material">Material de origen<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1326,9 +1359,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > panel de alta > 
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1351,6 +1386,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > panel de alta > 
 <div>
 <label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="unidad_medida" required="" name="unidad_medida">
 <option value="" disabled="" selected="">Selecciona una unidad</option>
 <option value="unidad">Unidad</option>
@@ -1359,6 +1395,8 @@ exports[`/dashboard/waste-scrap/reusable-scraps/@panel/(.)new > panel de alta > 
 <option value="plancha">Plancha</option>
 <option value="pieza">Pieza</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1465,9 +1503,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > formulario > resultado 1`]
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_material">Material de origen *</label>
+<label for="id_material">Material de origen<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1475,9 +1515,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > formulario > resultado 1`]
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1500,6 +1542,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > formulario > resultado 1`]
 <div>
 <label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="unidad_medida" required="" name="unidad_medida">
 <option value="" disabled="" selected="">Selecciona una unidad</option>
 <option value="unidad">Unidad</option>
@@ -1508,6 +1551,8 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > formulario > resultado 1`]
 <option value="plancha">Plancha</option>
 <option value="pieza">Pieza</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1617,9 +1662,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > sin materiales > resultado
 </div>
 <div>
 <div>
-<label for="id_material">Material de origen *</label>
+<label for="id_material">Material de origen<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1627,9 +1674,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > sin materiales > resultado
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1652,6 +1701,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > sin materiales > resultado
 <div>
 <label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="unidad_medida" required="" name="unidad_medida">
 <option value="" disabled="" selected="">Selecciona una unidad</option>
 <option value="unidad">Unidad</option>
@@ -1660,6 +1710,8 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > sin materiales > resultado
 <option value="plancha">Plancha</option>
 <option value="pieza">Pieza</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1766,9 +1818,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > un returnTo ajeno vuelve a
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_material">Material de origen *</label>
+<label for="id_material">Material de origen<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1776,9 +1830,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > un returnTo ajeno vuelve a
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1801,6 +1857,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > un returnTo ajeno vuelve a
 <div>
 <label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="unidad_medida" required="" name="unidad_medida">
 <option value="" disabled="" selected="">Selecciona una unidad</option>
 <option value="unidad">Unidad</option>
@@ -1809,6 +1866,8 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > un returnTo ajeno vuelve a
 <option value="plancha">Plancha</option>
 <option value="pieza">Pieza</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1915,9 +1974,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > vuelve al returnTo > resul
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_material">Material de origen *</label>
+<label for="id_material">Material de origen<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" required="" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1925,9 +1986,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > vuelve al returnTo > resul
 </div>
 <div>
 <div>
-<label for="id_orden_trabajo">Orden de trabajo relacionada *</label>
+<label for="id_orden_trabajo">Orden de trabajo relacionada<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1950,6 +2013,7 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > vuelve al returnTo > resul
 <div>
 <label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="unidad_medida" required="" name="unidad_medida">
 <option value="" disabled="" selected="">Selecciona una unidad</option>
 <option value="unidad">Unidad</option>
@@ -1958,6 +2022,8 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > vuelve al returnTo > resul
 <option value="plancha">Plancha</option>
 <option value="pieza">Pieza</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>

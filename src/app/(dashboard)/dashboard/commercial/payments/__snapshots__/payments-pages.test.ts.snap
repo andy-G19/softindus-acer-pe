@@ -134,22 +134,29 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="order">Pedido</label>
+<div>
 <select id="order" name="order">
 <option value="" selected="">Todos los pedidos</option>
 <option value="id_pedido-1">id_pedido-1</option>
 <option value="id_pedido-2">id_pedido-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="method">Método</label>
+<div>
 <select id="method" name="method">
 <option value="" selected="">Todos los métodos</option>
 <option value="efectivo">Efectivo</option>
@@ -158,15 +165,20 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="type">Tipo de pago</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -377,22 +389,29 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="order">Pedido</label>
+<div>
 <select id="order" name="order">
 <option value="" selected="">Todos los pedidos</option>
 <option value="id_pedido-1">id_pedido-1</option>
 <option value="id_pedido-2">id_pedido-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="method">Método</label>
+<div>
 <select id="method" name="method">
 <option value="" selected="">Todos los métodos</option>
 <option value="efectivo">Efectivo</option>
@@ -401,15 +420,20 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="type">Tipo de pago</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -420,7 +444,8 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 <div>
 <label for="fecha-hasta">Hasta</label>
 <input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="to" value="2026-07-01"/>
-<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
+<p id="fecha-hasta-error">
+<svg/>La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
 </fieldset>
 <div>
@@ -586,22 +611,29 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="order">Pedido</label>
+<div>
 <select id="order" name="order">
 <option value="" selected="">Todos los pedidos</option>
 <option value="id_pedido-1">id_pedido-1</option>
 <option value="id_pedido-2">id_pedido-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="method">Método</label>
+<div>
 <select id="method" name="method">
 <option value="" selected="">Todos los métodos</option>
 <option value="efectivo">Efectivo</option>
@@ -610,15 +642,20 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="type">Tipo de pago</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -811,22 +848,29 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="order">Pedido</label>
+<div>
 <select id="order" name="order">
 <option value="" selected="">Todos los pedidos</option>
 <option value="id_pedido-1">id_pedido-1</option>
 <option value="id_pedido-2">id_pedido-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="method">Método</label>
+<div>
 <select id="method" name="method">
 <option value="" selected="">Todos los métodos</option>
 <option value="efectivo">Efectivo</option>
@@ -835,15 +879,20 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="type">Tipo de pago</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1171,22 +1220,29 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="order">Pedido</label>
+<div>
 <select id="order" name="order">
 <option value="">Todos los pedidos</option>
 <option value="id_pedido-1">id_pedido-1</option>
 <option value="id_pedido-2">id_pedido-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="method">Método</label>
+<div>
 <select id="method" name="method">
 <option value="">Todos los métodos</option>
 <option value="efectivo" selected="">Efectivo</option>
@@ -1195,15 +1251,20 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="type">Tipo de pago</label>
+<div>
 <select id="type" name="type">
 <option value="">Todos los tipos</option>
 <option value="adelanto" selected="">Adelanto</option>
 <option value="amortizacion">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>

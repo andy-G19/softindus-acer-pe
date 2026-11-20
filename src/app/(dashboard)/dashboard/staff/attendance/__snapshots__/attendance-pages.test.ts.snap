@@ -135,12 +135,15 @@ exports[`/dashboard/staff/attendance > faltas > resultado 1`] = `
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="presente">Presente</option>
 <option value="tardanza">Tardanza</option>
 <option value="falta" selected="">Falta</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -396,12 +399,15 @@ exports[`/dashboard/staff/attendance > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="presente">Presente</option>
 <option value="tardanza">Tardanza</option>
 <option value="falta">Falta</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -671,12 +677,15 @@ exports[`/dashboard/staff/attendance > tardanzas > resultado 1`] = `
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="presente">Presente</option>
 <option value="tardanza" selected="">Tardanza</option>
 <option value="falta">Falta</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1022,12 +1031,15 @@ exports[`/dashboard/staff/attendance > todos los filtros con presentes > resulta
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="presente" selected="">Presente</option>
 <option value="tardanza">Tardanza</option>
 <option value="falta">Falta</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1203,9 +1215,11 @@ exports[`/dashboard/staff/attendance/@panel/(.)new > maestro de taller > resulta
 <p>Las asistencias sin falta cuentan en la planilla del operario.</p>
 <div>
 <div>
-<label for="id_operario">Operario *</label>
+<label for="id_operario">Operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
+<svg/>
 <input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" aria-describedby="id_operario-ayuda" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>
@@ -1304,9 +1318,11 @@ exports[`/dashboard/staff/attendance/@panel/(.)new > panel de alta > resultado 1
 <p>Las asistencias sin falta cuentan en la planilla del operario.</p>
 <div>
 <div>
-<label for="id_operario">Operario *</label>
+<label for="id_operario">Operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
+<svg/>
 <input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" aria-describedby="id_operario-ayuda" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>
@@ -1439,9 +1455,11 @@ exports[`/dashboard/staff/attendance/new > formulario > resultado 1`] = `
 <p>Las asistencias sin falta cuentan en la planilla del operario.</p>
 <div>
 <div>
-<label for="id_operario">Operario *</label>
+<label for="id_operario">Operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
+<svg/>
 <input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" aria-describedby="id_operario-ayuda" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>
@@ -1659,9 +1677,11 @@ exports[`/dashboard/staff/attendance/new > un returnTo ajeno vuelve a la lista >
 <p>Las asistencias sin falta cuentan en la planilla del operario.</p>
 <div>
 <div>
-<label for="id_operario">Operario *</label>
+<label for="id_operario">Operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
+<svg/>
 <input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" aria-describedby="id_operario-ayuda" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>
@@ -1794,9 +1814,11 @@ exports[`/dashboard/staff/attendance/new > vuelve al returnTo > resultado 1`] = 
 <p>Las asistencias sin falta cuentan en la planilla del operario.</p>
 <div>
 <div>
-<label for="id_operario">Operario *</label>
+<label for="id_operario">Operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
+<svg/>
 <input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" aria-describedby="id_operario-ayuda" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>

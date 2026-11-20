@@ -13,7 +13,7 @@ function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
     <LoaderCircle
       data-slot="spinner"
       aria-hidden="true"
-      className={cn("animate-spin motion-reduce:animate-none", className)}
+      className={cn("animate-spin [animation-duration:var(--motion-spin)] motion-reduce:animate-none", className)}
       {...props}
     />
   )

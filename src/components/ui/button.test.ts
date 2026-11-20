@@ -5,6 +5,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
+import { readFileSync } from "node:fs";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { Plus } from "lucide-react";
@@ -88,6 +89,167 @@ describe("Button pendiente", () => {
     const props = { asChild: true, pending: true } as unknown as ComponentProps<typeof Button>;
 
     expect(render(h(Button, props, link))).toBe(render(h(Button, { asChild: true }, link)));
+  });
+});
+
+// Diseno de los botones (propuesta del responsable, 2026-11-19): cada variante toma sus
+// colores de los tokens de tokens.css, no de mezclas sueltas. El HTML completo esta en
+// primitives.test.ts; aqui se exige, por variante, la clase de cada estado que pide la
+// propuesta, para que un snapshot aceptado sin mirar no pueda esconder su perdida.
+function variantClasses(variant: NonNullable<ComponentProps<typeof Button>["variant"]>) {
+  return (render(h(Button, { variant }, "Guardar")).match(/^<button [^>]*class="([^"]*)"/)?.[1] ?? "").split(" ");
+}
+
+describe("colores de las variantes", () => {
+  const expected = {
+    default: [
+      "bg-primary",
+      "bg-linear-to-b",
+      "from-primary-hover",
+      "to-primary",
+      "shadow-button",
+      "text-primary-foreground",
+      "hover:bg-none",
+      "hover:bg-primary-hover",
+      "active:bg-none",
+      "active:bg-primary-active",
+      "active:shadow-none",
+    ],
+    secondary: ["bg-accent", "border-border", "text-foreground", "hover:bg-secondary-hover", "aria-expanded:bg-secondary-hover"],
+    outline: [
+      "bg-transparent",
+      "border-control-border",
+      "text-foreground",
+      "hover:bg-muted",
+      "hover:border-control-border-hover",
+      "aria-expanded:bg-muted",
+      "aria-expanded:border-control-border-hover",
+    ],
+    ghost: ["bg-transparent", "text-foreground", "hover:bg-ghost-hover", "aria-expanded:bg-ghost-hover"],
+    destructive: [
+      "bg-destructive-surface",
+      "border-destructive-border",
+      "text-destructive-foreground",
+      "hover:bg-destructive-surface-hover",
+      "hover:border-destructive-outline",
+    ],
+    link: ["text-primary", "underline", "decoration-link-underline", "underline-offset-4", "hover:decoration-primary"],
+    clear: ["bg-clear-surface", "border-clear-border", "text-clear-foreground", "hover:bg-clear-surface-hover"],
+  } as const;
+
+  for (const [variant, classes] of Object.entries(expected)) {
+    it(`${variant} usa los tokens de la propuesta`, () => {
+      const actual = variantClasses(variant as keyof typeof expected);
+
+      expect(classes.filter((name) => !actual.includes(name))).toEqual([]);
+    });
+  }
+
+  it("ninguna variante usa el cian, el degradado de brand.css ni variantes dark:", () => {
+    for (const variant of Object.keys(expected)) {
+      const actual = variantClasses(variant as keyof typeof expected);
+
+      expect(actual.filter((name) => name.includes("cyan"))).toEqual([]);
+      expect(actual).not.toContain("forge-button-gradient");
+      // La app es solo oscura y .dark esta en <html>: un dark: siempre gana a la clase base, asi
+      // que la variante se definiria dos veces. Los de aria-invalid son de la base comun y quedan.
+      expect(actual.filter((name) => name.startsWith("dark:") && !name.startsWith("dark:aria-invalid:"))).toEqual([]);
+    }
+  });
+});
+
+// Foco de teclado del boton (propuesta del responsable, 2026-11-19): 2px del color de fondo y
+// 2px de anillo solido, naranja o rojo en destructive, para que se vea tambien sobre el boton
+// naranja. Las utilidades de anillo con separacion de Tailwind dibujan exactamente eso y se
+// suman a la sombra del boton en el mismo box-shadow. La regla global de patterns.css (contorno naranja en enlaces, botones y
+// campos) gana a las clases de Button (0-2-0 contra 0-1-0), asi que excluye los botones: si no,
+// se verian el contorno y el anillo a la vez.
+describe("foco del boton", () => {
+  // El nombre no es el de una utilidad: Tailwind genera una clase por cada palabra que lo parezca.
+  const anilloConHueco = [
+    "focus-visible:ring-2",
+    "focus-visible:ring-offset-2",
+    "focus-visible:ring-offset-background",
+  ];
+
+  it("cada variante dibuja el anillo con hueco del color de fondo", () => {
+    for (const variant of ["default", "secondary", "outline", "ghost", "destructive", "link", "clear"] as const) {
+      const actual = variantClasses(variant);
+
+      expect(anilloConHueco.filter((name) => !actual.includes(name))).toEqual([]);
+      expect(actual).not.toContain("focus-visible:ring-3");
+      expect(actual.filter((name) => name.startsWith("focus-visible:border-"))).toEqual([]);
+    }
+  });
+
+  it("el anillo es naranja, y rojo en destructive", () => {
+    expect(variantClasses("default")).toContain("focus-visible:ring-ring");
+    expect(variantClasses("destructive")).toContain("focus-visible:ring-destructive-outline");
+    expect(variantClasses("destructive")).not.toContain("focus-visible:ring-ring");
+  });
+
+  it("la regla global del contorno de foco no alcanza a los botones", () => {
+    const patterns = readFileSync("src/styles/patterns.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    const selector = /([^{}]*):focus-visible\s*\{\s*outline:\s*2px solid/.exec(patterns)?.[1].trim() ?? "";
+
+    expect(selector).toContain(":where(a, button,");
+    expect(selector).toMatch(/:not\([^)]*\[data-slot="button"\][^)]*\)/);
+  });
+
+  // Un :not() suma la especificidad de su argumento: con la exclusion suelta, la regla pasaba de
+  // 0-2-0 a 0-3-0 y ganaba al outline: none de los campos enfocados (0-2-1), que mostraban el
+  // contorno y su sombra a la vez (visto en staging). Dentro de :where() no suma nada.
+  it("la exclusion de los botones no sube la especificidad de la regla", () => {
+    const patterns = readFileSync("src/styles/patterns.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    const selector = /([^{}]*):focus-visible\s*\{\s*outline:\s*2px solid/.exec(patterns)?.[1].trim() ?? "";
+
+    // Desde el diseno de los campos la lista tambien excluye el interruptor.
+    expect(selector).toMatch(/:where\(:not\([^)]*\[data-slot="button"\][^)]*\)\)/);
+  });
+});
+
+// Animacion de tacto (propuesta del responsable mas la opcion Tacto, 2026-11-19): transiciones
+// de 150 ms (--motion-fast) en las propiedades que cambian, el boton sube 1px al pasar el
+// puntero y al pulsarlo baja 1px y se encoge al 97 %. En Tailwind v4 el desplazamiento y la
+// escala son propiedades CSS propias, no la de transformacion: la transicion las nombra.
+// Con prefers-reduced-motion no hay transicion ni movimiento; el important gana a las clases
+// de hover y active, que tienen mas especificidad que la de la media query.
+describe("animacion del boton", () => {
+  const tacto = [
+    "transition-[color,background-color,border-color,text-decoration-color,box-shadow,translate,scale,opacity]",
+    "duration-(--motion-fast)",
+    "ease-out",
+    "hover:-translate-y-px",
+    "active:not-aria-[haspopup]:translate-y-px",
+    "active:not-aria-[haspopup]:scale-97",
+    "motion-reduce:transition-none",
+    "motion-reduce:translate-none!",
+    "motion-reduce:scale-none!",
+  ];
+
+  it("cada variante salvo link sube al pasar el puntero y se hunde al pulsar", () => {
+    for (const variant of ["default", "secondary", "outline", "ghost", "destructive", "clear"] as const) {
+      const actual = variantClasses(variant);
+
+      expect(tacto.filter((name) => !actual.includes(name))).toEqual([]);
+      expect(actual).not.toContain("transition-all");
+    }
+  });
+
+  it("link no se mueve: es texto subrayado, no un bloque", () => {
+    const actual = variantClasses("link");
+
+    expect(actual).toContain("hover:translate-y-0");
+    expect(actual).toContain("active:not-aria-[haspopup]:translate-y-0");
+    expect(actual).toContain("active:not-aria-[haspopup]:scale-100");
+    expect(actual).not.toContain("hover:-translate-y-px");
+    expect(actual).toContain("motion-reduce:transition-none");
+  });
+
+  it("el spinner gira con la duracion del token", () => {
+    const spinner = render(h(Button, { pending: true }, "Guardar")).match(SPINNER)?.[0] ?? "";
+
+    expect(spinner).toContain("[animation-duration:var(--motion-spin)]");
   });
 });
 

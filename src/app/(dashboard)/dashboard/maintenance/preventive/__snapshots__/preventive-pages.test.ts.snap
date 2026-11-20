@@ -84,6 +84,7 @@ exports[`/dashboard/maintenance/preventive > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
@@ -91,6 +92,8 @@ exports[`/dashboard/maintenance/preventive > sin filtros > resultado 1`] = `
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -205,12 +208,15 @@ exports[`/dashboard/maintenance/preventive > sin filtros > resultado 1`] = `
 <td>
 <div>
 <div>
+<div>
 <select id="estado-id_mantenimiento-1" aria-label="Estado del mantenimiento id_mantenimiento-1">
 <option value="pendiente">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
@@ -233,12 +239,15 @@ exports[`/dashboard/maintenance/preventive > sin filtros > resultado 1`] = `
 <td>
 <div>
 <div>
+<div>
 <select id="estado-id_mantenimiento-2" aria-label="Estado del mantenimiento id_mantenimiento-2">
 <option value="pendiente">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
@@ -394,6 +403,7 @@ exports[`/dashboard/maintenance/preventive > todos los filtros > resultado 1`] =
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="pendiente" selected="">Pendiente</option>
@@ -401,6 +411,8 @@ exports[`/dashboard/maintenance/preventive > todos los filtros > resultado 1`] =
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -515,12 +527,15 @@ exports[`/dashboard/maintenance/preventive > todos los filtros > resultado 1`] =
 <td>
 <div>
 <div>
+<div>
 <select id="estado-id_mantenimiento-1" aria-label="Estado del mantenimiento id_mantenimiento-1">
 <option value="pendiente">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
@@ -543,12 +558,15 @@ exports[`/dashboard/maintenance/preventive > todos los filtros > resultado 1`] =
 <td>
 <div>
 <div>
+<div>
 <select id="estado-id_mantenimiento-2" aria-label="Estado del mantenimiento id_mantenimiento-2">
 <option value="pendiente">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
@@ -648,6 +666,7 @@ exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > r
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
@@ -655,6 +674,8 @@ exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > r
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -769,12 +790,15 @@ exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > r
 <td>
 <div>
 <div>
+<div>
 <select id="estado-MTP00000001" aria-label="Estado del mantenimiento MTP00000001">
 <option value="pendiente" selected="">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
@@ -799,12 +823,15 @@ exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > r
 <td>
 <div>
 <div>
+<div>
 <select id="estado-MTP00000002" aria-label="Estado del mantenimiento MTP00000002">
 <option value="pendiente">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido" selected="">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button">Guardar</button>
 </div>
 </div>
@@ -828,12 +855,15 @@ exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > r
 <td>
 <div>
 <div>
+<div>
 <select id="estado-MTP00000003" aria-label="Estado del mantenimiento MTP00000003">
 <option value="pendiente">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido" selected="">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 <button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
 </div>
 </div>
@@ -965,9 +995,11 @@ exports[`/dashboard/maintenance/preventive/new > con regreso al listado filtrado
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_maquina">Maquina *</label>
+<label for="id_maquina">Maquina<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_maquina" value=""/>
 <div>
+<svg/>
 <input id="id_maquina" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_maquina-listbox" aria-expanded="false" required="" placeholder="Buscar maquina..." value=""/>
 </div>
 </div>
@@ -981,12 +1013,15 @@ exports[`/dashboard/maintenance/preventive/new > con regreso al listado filtrado
 <div>
 <label for="estado">Estado inicial<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="pendiente" selected="">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="responsable">Responsable</label>
@@ -1105,9 +1140,11 @@ exports[`/dashboard/maintenance/preventive/new > formulario > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_maquina">Maquina *</label>
+<label for="id_maquina">Maquina<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_maquina" value=""/>
 <div>
+<svg/>
 <input id="id_maquina" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_maquina-listbox" aria-expanded="false" required="" placeholder="Buscar maquina..." value=""/>
 </div>
 </div>
@@ -1121,12 +1158,15 @@ exports[`/dashboard/maintenance/preventive/new > formulario > resultado 1`] = `
 <div>
 <label for="estado">Estado inicial<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="pendiente" selected="">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="responsable">Responsable</label>
@@ -1179,9 +1219,11 @@ exports[`panel lateral de preventivos > el alta en panel autoriza y consulta igu
 <div>
 <div>
 <div>
-<label for="id_maquina">Maquina *</label>
+<label for="id_maquina">Maquina<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_maquina" value=""/>
 <div>
+<svg/>
 <input id="id_maquina" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_maquina-listbox" aria-expanded="false" required="" placeholder="Buscar maquina..." value=""/>
 </div>
 </div>
@@ -1195,12 +1237,15 @@ exports[`panel lateral de preventivos > el alta en panel autoriza y consulta igu
 <div>
 <label for="estado">Estado inicial<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="pendiente" selected="">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="responsable">Responsable</label>

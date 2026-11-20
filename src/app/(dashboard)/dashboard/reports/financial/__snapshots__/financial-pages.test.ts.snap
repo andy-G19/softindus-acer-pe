@@ -302,27 +302,36 @@ exports[`/dashboard/reports/financial > rango de mas de 366 dias > resultado 1`]
 </fieldset>
 <div>
 <label for="cashBoxId">Caja chica</label>
+<div>
 <select id="cashBoxId" name="cashBoxId">
 <option value="" selected="">Todas las cajas</option>
 <option value="id_caja_chica-1">nombre_caja-1</option>
 <option value="id_caja_chica-2">nombre_caja-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="movementType">Tipo movimiento</label>
+<div>
 <select id="movementType" name="movementType">
 <option value="" selected="">Todos los tipos</option>
 <option value="ingreso">Ingreso</option>
 <option value="egreso">Egreso</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="categoryId">Categoría</label>
+<div>
 <select id="categoryId" name="categoryId">
 <option value="" selected="">Todas las categorías</option>
 <option value="id_categoria_gasto-1">nombre_categoria-1</option>
 <option value="id_categoria_gasto-2">nombre_categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchText">Concepto / responsable</label>
@@ -699,32 +708,42 @@ exports[`/dashboard/reports/financial > rango invertido > resultado 1`] = `
 <div>
 <label for="fecha-hasta">Fecha hasta</label>
 <input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="dateTo" value="2026-07-01"/>
-<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
+<p id="fecha-hasta-error">
+<svg/>La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
 </fieldset>
 <div>
 <label for="cashBoxId">Caja chica</label>
+<div>
 <select id="cashBoxId" name="cashBoxId">
 <option value="" selected="">Todas las cajas</option>
 <option value="id_caja_chica-1">nombre_caja-1</option>
 <option value="id_caja_chica-2">nombre_caja-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="movementType">Tipo movimiento</label>
+<div>
 <select id="movementType" name="movementType">
 <option value="" selected="">Todos los tipos</option>
 <option value="ingreso">Ingreso</option>
 <option value="egreso">Egreso</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="categoryId">Categoría</label>
+<div>
 <select id="categoryId" name="categoryId">
 <option value="" selected="">Todas las categorías</option>
 <option value="id_categoria_gasto-1">nombre_categoria-1</option>
 <option value="id_categoria_gasto-2">nombre_categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchText">Concepto / responsable</label>
@@ -1000,27 +1019,36 @@ exports[`/dashboard/reports/financial > sin filtros > resultado 1`] = `
 </fieldset>
 <div>
 <label for="cashBoxId">Caja chica</label>
+<div>
 <select id="cashBoxId" name="cashBoxId">
 <option value="" selected="">Todas las cajas</option>
 <option value="id_caja_chica-1">nombre_caja-1</option>
 <option value="id_caja_chica-2">nombre_caja-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="movementType">Tipo movimiento</label>
+<div>
 <select id="movementType" name="movementType">
 <option value="" selected="">Todos los tipos</option>
 <option value="ingreso">Ingreso</option>
 <option value="egreso">Egreso</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="categoryId">Categoría</label>
+<div>
 <select id="categoryId" name="categoryId">
 <option value="" selected="">Todas las categorías</option>
 <option value="id_categoria_gasto-1">nombre_categoria-1</option>
 <option value="id_categoria_gasto-2">nombre_categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchText">Concepto / responsable</label>
@@ -1691,27 +1719,36 @@ exports[`/dashboard/reports/financial > todos los filtros > resultado 1`] = `
 </fieldset>
 <div>
 <label for="cashBoxId">Caja chica</label>
+<div>
 <select id="cashBoxId" name="cashBoxId">
 <option value="">Todas las cajas</option>
 <option value="id_caja_chica-1">nombre_caja-1</option>
 <option value="id_caja_chica-2">nombre_caja-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="movementType">Tipo movimiento</label>
+<div>
 <select id="movementType" name="movementType">
 <option value="">Todos los tipos</option>
 <option value="ingreso">Ingreso</option>
 <option value="egreso" selected="">Egreso</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="categoryId">Categoría</label>
+<div>
 <select id="categoryId" name="categoryId">
 <option value="">Todas las categorías</option>
 <option value="id_categoria_gasto-1">nombre_categoria-1</option>
 <option value="id_categoria_gasto-2">nombre_categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchText">Concepto / responsable</label>
@@ -2267,27 +2304,36 @@ exports[`/dashboard/reports/financial > totales vacios y movimientos por tipo > 
 </fieldset>
 <div>
 <label for="cashBoxId">Caja chica</label>
+<div>
 <select id="cashBoxId" name="cashBoxId">
 <option value="" selected="">Todas las cajas</option>
 <option value="id_caja_chica-1">nombre_caja-1</option>
 <option value="id_caja_chica-2">nombre_caja-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="movementType">Tipo movimiento</label>
+<div>
 <select id="movementType" name="movementType">
 <option value="" selected="">Todos los tipos</option>
 <option value="ingreso">Ingreso</option>
 <option value="egreso">Egreso</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="categoryId">Categoría</label>
+<div>
 <select id="categoryId" name="categoryId">
 <option value="" selected="">Todas las categorías</option>
 <option value="id_categoria_gasto-1">nombre_categoria-1</option>
 <option value="id_categoria_gasto-2">nombre_categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="searchText">Concepto / responsable</label>

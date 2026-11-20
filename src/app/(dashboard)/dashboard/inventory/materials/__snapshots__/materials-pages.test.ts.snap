@@ -167,35 +167,47 @@ exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultad
 </div>
 <div>
 <label for="category">Categoría</label>
+<div>
 <select id="category" name="category">
 <option value="">Todas las categorías</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="unit">Unidad</label>
+<div>
 <select id="unit" name="unit">
 <option value="">Todas las unidades</option>
 <option value="unidad_medida-1">unidad_medida-1</option>
 <option value="unidad_medida-2">unidad_medida-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active" selected="">Activo</option>
 <option value="inactive">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="stock">Stock</label>
+<div>
 <select id="stock" name="stock">
 <option value="" selected="">Todo el stock</option>
 <option value="critical">Críticos</option>
 <option value="ok">No críticos</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -397,35 +409,47 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 </div>
 <div>
 <label for="category">Categoría</label>
+<div>
 <select id="category" name="category">
 <option value="" selected="">Todas las categorías</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="unit">Unidad</label>
+<div>
 <select id="unit" name="unit">
 <option value="" selected="">Todas las unidades</option>
 <option value="unidad_medida-1">unidad_medida-1</option>
 <option value="unidad_medida-2">unidad_medida-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active">Activo</option>
 <option value="inactive" selected="">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="stock">Stock</label>
+<div>
 <select id="stock" name="stock">
 <option value="" selected="">Todo el stock</option>
 <option value="critical">Críticos</option>
 <option value="ok">No críticos</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -621,35 +645,47 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="category">Categoría</label>
+<div>
 <select id="category" name="category">
 <option value="" selected="">Todas las categorías</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="unit">Unidad</label>
+<div>
 <select id="unit" name="unit">
 <option value="" selected="">Todas las unidades</option>
 <option value="unidad_medida-1">unidad_medida-1</option>
 <option value="unidad_medida-2">unidad_medida-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="active">Activo</option>
 <option value="inactive">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="stock">Stock</label>
+<div>
 <select id="stock" name="stock">
 <option value="" selected="">Todo el stock</option>
 <option value="critical">Críticos</option>
 <option value="ok">No críticos</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -837,35 +873,47 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 </div>
 <div>
 <label for="category">Categoría</label>
+<div>
 <select id="category" name="category">
 <option value="" selected="">Todas las categorías</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="unit">Unidad</label>
+<div>
 <select id="unit" name="unit">
 <option value="" selected="">Todas las unidades</option>
 <option value="unidad_medida-1">unidad_medida-1</option>
 <option value="unidad_medida-2">unidad_medida-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="active">Activo</option>
 <option value="inactive">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="stock">Stock</label>
+<div>
 <select id="stock" name="stock">
 <option value="">Todo el stock</option>
 <option value="critical" selected="">Críticos</option>
 <option value="ok">No críticos</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -1031,35 +1079,47 @@ exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 </div>
 <div>
 <label for="category">Categoría</label>
+<div>
 <select id="category" name="category">
 <option value="" selected="">Todas las categorías</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="unit">Unidad</label>
+<div>
 <select id="unit" name="unit">
 <option value="" selected="">Todas las unidades</option>
 <option value="unidad_medida-1">unidad_medida-1</option>
 <option value="unidad_medida-2">unidad_medida-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="active">Activo</option>
 <option value="inactive">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="stock">Stock</label>
+<div>
 <select id="stock" name="stock">
 <option value="">Todo el stock</option>
 <option value="critical">Críticos</option>
 <option value="ok" selected="">No críticos</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -1198,11 +1258,14 @@ exports[`/dashboard/inventory/materials/[id]/edit > editar con regreso al listad
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="">Selecciona una categoría</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
@@ -1343,11 +1406,14 @@ exports[`/dashboard/inventory/materials/new > formulario > resultado 1`] = `
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="" selected="">Selecciona una categoría</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
@@ -1464,11 +1530,14 @@ exports[`/dashboard/inventory/materials/new > formulario con regreso al listado 
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="" selected="">Selecciona una categoría</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
@@ -1530,11 +1599,14 @@ exports[`panel lateral de materiales > el alta en panel autoriza y consulta igua
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="" selected="">Selecciona una categoría</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
@@ -1599,11 +1671,14 @@ exports[`panel lateral de materiales > la edicion en panel hace la misma consult
 <div>
 <label for="categoria">Categoría<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="categoria" required="" name="categoria">
 <option value="">Selecciona una categoría</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>

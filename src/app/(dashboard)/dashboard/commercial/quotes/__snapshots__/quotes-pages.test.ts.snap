@@ -146,22 +146,29 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="order">Pedido</label>
+<div>
 <select id="order" name="order">
 <option value="" selected="">Todos los pedidos</option>
 <option value="id_pedido-1">id_pedido-1</option>
 <option value="id_pedido-2">id_pedido-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="vigente">Vigente</option>
@@ -169,14 +176,19 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 <option value="pagada">Pagada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="balance">Saldo</label>
+<div>
 <select id="balance" name="balance">
 <option value="" selected="">Todos los saldos</option>
 <option value="pending">Con saldo</option>
 <option value="paid">Sin saldo</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -413,22 +425,29 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="order">Pedido</label>
+<div>
 <select id="order" name="order">
 <option value="" selected="">Todos los pedidos</option>
 <option value="id_pedido-1">id_pedido-1</option>
 <option value="id_pedido-2">id_pedido-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="vigente">Vigente</option>
@@ -436,14 +455,19 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 <option value="pagada">Pagada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="balance">Saldo</label>
+<div>
 <select id="balance" name="balance">
 <option value="" selected="">Todos los saldos</option>
 <option value="pending">Con saldo</option>
 <option value="paid">Sin saldo</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -454,7 +478,8 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 <div>
 <label for="fecha-hasta">Hasta</label>
 <input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="to" value="2026-07-01"/>
-<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
+<p id="fecha-hasta-error">
+<svg/>La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
 </fieldset>
 <div>
@@ -644,22 +669,29 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="order">Pedido</label>
+<div>
 <select id="order" name="order">
 <option value="" selected="">Todos los pedidos</option>
 <option value="id_pedido-1">id_pedido-1</option>
 <option value="id_pedido-2">id_pedido-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="vigente">Vigente</option>
@@ -667,14 +699,19 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 <option value="pagada">Pagada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="balance">Saldo</label>
+<div>
 <select id="balance" name="balance">
 <option value="">Todos los saldos</option>
 <option value="pending">Con saldo</option>
 <option value="paid" selected="">Sin saldo</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -893,22 +930,29 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="order">Pedido</label>
+<div>
 <select id="order" name="order">
 <option value="" selected="">Todos los pedidos</option>
 <option value="id_pedido-1">id_pedido-1</option>
 <option value="id_pedido-2">id_pedido-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="vigente">Vigente</option>
@@ -916,14 +960,19 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 <option value="pagada">Pagada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="balance">Saldo</label>
+<div>
 <select id="balance" name="balance">
 <option value="" selected="">Todos los saldos</option>
 <option value="pending">Con saldo</option>
 <option value="paid">Sin saldo</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1244,22 +1293,29 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="order">Pedido</label>
+<div>
 <select id="order" name="order">
 <option value="">Todos los pedidos</option>
 <option value="id_pedido-1">id_pedido-1</option>
 <option value="id_pedido-2">id_pedido-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="vigente" selected="">Vigente</option>
@@ -1267,14 +1323,19 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 <option value="pagada">Pagada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="balance">Saldo</label>
+<div>
 <select id="balance" name="balance">
 <option value="">Todos los saldos</option>
 <option value="pending" selected="">Con saldo</option>
 <option value="paid">Sin saldo</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1493,22 +1554,29 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </div>
 <div>
 <label for="client">Cliente</label>
+<div>
 <select id="client" name="client">
 <option value="" selected="">Todos los clientes</option>
 <option value="id_cliente-1">nombre_razon_social-1</option>
 <option value="id_cliente-2">nombre_razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="order">Pedido</label>
+<div>
 <select id="order" name="order">
 <option value="" selected="">Todos los pedidos</option>
 <option value="id_pedido-1">id_pedido-1</option>
 <option value="id_pedido-2">id_pedido-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="vigente">Vigente</option>
@@ -1516,14 +1584,19 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 <option value="pagada">Pagada</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="balance">Saldo</label>
+<div>
 <select id="balance" name="balance">
 <option value="" selected="">Todos los saldos</option>
 <option value="pending">Con saldo</option>
 <option value="paid">Sin saldo</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1880,6 +1953,7 @@ exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite 
 <div data-disabled="true">
 <label for="metodo_pago">Método de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="metodo_pago" required="" disabled="" name="metodo_pago">
 <option value="efectivo" selected="">Efectivo</option>
 <option value="transferencia">Transferencia</option>
@@ -1887,15 +1961,20 @@ exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite 
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="tipo_pago">Tipo de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_pago" required="" disabled="" name="tipo_pago">
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion" selected="">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -1950,12 +2029,15 @@ exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite 
 <div>
 <label for="tipo_comprobante">Tipo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_comprobante" required="" name="tipo_comprobante">
 <option value="boleta" selected="">Boleta</option>
 <option value="factura">Factura</option>
 <option value="recibo">Recibo</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_comprobante">Número<span aria-hidden="true">*</span>
@@ -2241,6 +2323,7 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 <div>
 <label for="metodo_pago">Método de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="metodo_pago" required="" name="metodo_pago">
 <option value="efectivo" selected="">Efectivo</option>
 <option value="transferencia">Transferencia</option>
@@ -2248,15 +2331,20 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tipo_pago">Tipo de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_pago" required="" name="tipo_pago">
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion" selected="">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -2311,12 +2399,15 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 <div>
 <label for="tipo_comprobante">Tipo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_comprobante" required="" name="tipo_comprobante">
 <option value="boleta" selected="">Boleta</option>
 <option value="factura">Factura</option>
 <option value="recibo">Recibo</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_comprobante">Número<span aria-hidden="true">*</span>
@@ -2601,6 +2692,7 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 <div>
 <label for="metodo_pago">Método de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="metodo_pago" required="" name="metodo_pago">
 <option value="efectivo" selected="">Efectivo</option>
 <option value="transferencia">Transferencia</option>
@@ -2608,15 +2700,20 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tipo_pago">Tipo de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_pago" required="" name="tipo_pago">
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion" selected="">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -2682,12 +2779,15 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 <div>
 <label for="tipo_comprobante">Tipo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_comprobante" required="" name="tipo_comprobante">
 <option value="boleta" selected="">Boleta</option>
 <option value="factura">Factura</option>
 <option value="recibo">Recibo</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_comprobante">Número<span aria-hidden="true">*</span>
@@ -3049,6 +3149,7 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 <div data-disabled="true">
 <label for="metodo_pago">Método de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="metodo_pago" required="" disabled="" name="metodo_pago">
 <option value="efectivo" selected="">Efectivo</option>
 <option value="transferencia">Transferencia</option>
@@ -3056,15 +3157,20 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div data-disabled="true">
 <label for="tipo_pago">Tipo de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_pago" required="" disabled="" name="tipo_pago">
 <option value="adelanto">Adelanto</option>
 <option value="amortizacion" selected="">Amortización</option>
 <option value="cancelacion">Cancelación</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
@@ -3130,12 +3236,15 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 <div>
 <label for="tipo_comprobante">Tipo<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_comprobante" required="" name="tipo_comprobante">
 <option value="boleta" selected="">Boleta</option>
 <option value="factura">Factura</option>
 <option value="recibo">Recibo</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_comprobante">Número<span aria-hidden="true">*</span>
@@ -3294,11 +3403,14 @@ exports[`/dashboard/commercial/quotes/new > desde el listado filtrado: vuelve a 
 <div>
 <label for="id_pedido">Pedido<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_pedido" required="" name="id_pedido">
 <option value="" selected="">Selecciona un pedido</option>
 <option value="id_pedido-1">id_pedido-1 — nombre_razon_social-1 — S/ 34.00</option>
 <option value="id_pedido-2">id_pedido-2 — nombre_razon_social-2 — S/ 34.00</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <div>
@@ -3308,6 +3420,7 @@ exports[`/dashboard/commercial/quotes/new > desde el listado filtrado: vuelve a 
 </div>
 <div data-disabled="true">
 <label for="metodo_pago_adelanto">Método de pago del adelanto</label>
+<div>
 <select id="metodo_pago_adelanto" disabled="" aria-describedby="metodo_pago_adelanto-ayuda" name="metodo_pago_adelanto">
 <option value="" selected="">Seleccione...</option>
 <option value="efectivo">Efectivo</option>
@@ -3316,6 +3429,8 @@ exports[`/dashboard/commercial/quotes/new > desde el listado filtrado: vuelve a 
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 <p id="metodo_pago_adelanto-ayuda">Se habilita al ingresar un adelanto.</p>
 </div>
 <div>
@@ -3438,11 +3553,14 @@ exports[`/dashboard/commercial/quotes/new > formulario > resultado 1`] = `
 <div>
 <label for="id_pedido">Pedido<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_pedido" required="" name="id_pedido">
 <option value="" selected="">Selecciona un pedido</option>
 <option value="id_pedido-1">id_pedido-1 — nombre_razon_social-1 — S/ 34.00</option>
 <option value="id_pedido-2">id_pedido-2 — nombre_razon_social-2 — S/ 34.00</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <div>
@@ -3452,6 +3570,7 @@ exports[`/dashboard/commercial/quotes/new > formulario > resultado 1`] = `
 </div>
 <div data-disabled="true">
 <label for="metodo_pago_adelanto">Método de pago del adelanto</label>
+<div>
 <select id="metodo_pago_adelanto" disabled="" aria-describedby="metodo_pago_adelanto-ayuda" name="metodo_pago_adelanto">
 <option value="" selected="">Seleccione...</option>
 <option value="efectivo">Efectivo</option>
@@ -3460,6 +3579,8 @@ exports[`/dashboard/commercial/quotes/new > formulario > resultado 1`] = `
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 <p id="metodo_pago_adelanto-ayuda">Se habilita al ingresar un adelanto.</p>
 </div>
 <div>
@@ -3585,11 +3706,14 @@ exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > resultado 1
 <div>
 <label for="id_pedido">Pedido<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_pedido" required="" name="id_pedido">
 <option value="">Selecciona un pedido</option>
 <option value="id_pedido-1" selected="">id_pedido-1 — nombre_razon_social-1 — S/ 34.00</option>
 <option value="id_pedido-2">id_pedido-2 — nombre_razon_social-2 — S/ 34.00</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <div>
@@ -3651,6 +3775,7 @@ exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > resultado 1
 </div>
 <div data-disabled="true">
 <label for="metodo_pago_adelanto">Método de pago del adelanto</label>
+<div>
 <select id="metodo_pago_adelanto" disabled="" aria-describedby="metodo_pago_adelanto-ayuda" name="metodo_pago_adelanto">
 <option value="" selected="">Seleccione...</option>
 <option value="efectivo">Efectivo</option>
@@ -3659,6 +3784,8 @@ exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > resultado 1
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 <p id="metodo_pago_adelanto-ayuda">Se habilita al ingresar un adelanto.</p>
 </div>
 <div>
@@ -3781,11 +3908,14 @@ exports[`/dashboard/commercial/quotes/new > un returnTo externo se ignora > resu
 <div>
 <label for="id_pedido">Pedido<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_pedido" required="" name="id_pedido">
 <option value="" selected="">Selecciona un pedido</option>
 <option value="id_pedido-1">id_pedido-1 — nombre_razon_social-1 — S/ 34.00</option>
 <option value="id_pedido-2">id_pedido-2 — nombre_razon_social-2 — S/ 34.00</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <div>
@@ -3795,6 +3925,7 @@ exports[`/dashboard/commercial/quotes/new > un returnTo externo se ignora > resu
 </div>
 <div data-disabled="true">
 <label for="metodo_pago_adelanto">Método de pago del adelanto</label>
+<div>
 <select id="metodo_pago_adelanto" disabled="" aria-describedby="metodo_pago_adelanto-ayuda" name="metodo_pago_adelanto">
 <option value="" selected="">Seleccione...</option>
 <option value="efectivo">Efectivo</option>
@@ -3803,6 +3934,8 @@ exports[`/dashboard/commercial/quotes/new > un returnTo externo se ignora > resu
 <option value="plin">Plin</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 <p id="metodo_pago_adelanto-ayuda">Se habilita al ingresar un adelanto.</p>
 </div>
 <div>

@@ -85,22 +85,29 @@
   /* Contorno del foco de teclado en toda la app (11.7c; antes en el adaptador). Va en esta capa
      y con .industrial-dark (en <html>) a proposito: con especificidad 0-2-0 y despues de las
      utilidades de Tailwind gana a focus-visible:outline-none, como hasta ahora; en base.css
-     perderia contra cualquier utilidad. */
-  .industrial-dark :where(a, button, [role="button"], input, select, textarea):focus-visible {
+     perderia contra cualquier utilidad. Excluye a Button ([data-slot="button"], tambien como
+     enlace): desde el diseno de los botones (2026-11-19) dibuja su propio anillo, y con esta
+     regla se verian los dos a la vez. La exclusion va dentro de :where() para no sumar
+     especificidad. Los campos (input, select, textarea) no estan en la lista: nunca mostraron
+     este contorno, porque su propia regla de foco lo quitaba, y desde el diseno de los campos
+     esa regla vive en cada componente. Excluye tambien a Switch ([data-slot="switch"], un
+     button con role switch), que desde el diseno de los campos dibuja el mismo anillo. */
+  .industrial-dark
+    :where(a, button, [role="button"]):where(:not([data-slot="button"], [data-slot="switch"])):focus-visible {
     outline: 2px solid color-mix(in srgb, var(--ring) 72%, transparent);
     outline-offset: 2px;
   }
 
-  /* Campos nativos en toda la app (11.7c; antes en el adaptador, movidos tal cual). Ganan a
-     las clases de Input, NativeSelect y Textarea (0-1-1 contra 0-1-0): varias de esas clases
-     no se ven, y su limpieza va aparte (D99). */
+  /* Etiquetas en toda la app (11.7c; antes en el adaptador, movida tal cual). */
   .industrial-dark label {
     color: var(--foreground);
   }
 
-  .industrial-dark input,
-  .industrial-dark select,
-  .industrial-dark textarea {
+  /* Las reglas de campos que estaban aqui (fondo, borde, foco, deshabilitado, texto de
+     ejemplo y opciones de las listas) ganaban a las clases de Input, NativeSelect y Textarea
+     (D99). Desde el diseno de los campos cada componente declara lo que se veia; solo queda
+     la de las casillas sueltas (input type checkbox), que no son un componente. */
+  .industrial-dark input[type="checkbox"] {
     background-color: var(--input);
     border-color: var(--border);
     color: var(--foreground);
@@ -108,33 +115,17 @@
     transition-duration: var(--motion-fast);
   }
 
-  .industrial-dark input:focus,
-  .industrial-dark select:focus,
-  .industrial-dark textarea:focus,
-  .industrial-dark input:focus-visible,
-  .industrial-dark select:focus-visible,
-  .industrial-dark textarea:focus-visible {
+  .industrial-dark input[type="checkbox"]:focus,
+  .industrial-dark input[type="checkbox"]:focus-visible {
     border-color: var(--ring);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 18%, transparent);
     outline: none;
   }
 
-  .industrial-dark input:disabled,
-  .industrial-dark select:disabled,
-  .industrial-dark textarea:disabled {
+  .industrial-dark input[type="checkbox"]:disabled {
     background-color: var(--muted);
     color: var(--muted-foreground);
     opacity: 1;
-  }
-
-  .industrial-dark input::placeholder,
-  .industrial-dark textarea::placeholder {
-    color: color-mix(in srgb, var(--muted-foreground) 78%, transparent);
-  }
-
-  .industrial-dark select option {
-    background-color: var(--popover);
-    color: var(--popover-foreground);
   }
 
   /* Tablas en toda la app (11.7c; antes en el adaptador, movidas tal cual). Ganan a las clases

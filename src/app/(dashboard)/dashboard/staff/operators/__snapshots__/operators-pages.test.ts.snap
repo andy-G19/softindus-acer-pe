@@ -214,33 +214,45 @@ exports[`/dashboard/staff/operators > filtros y maestro de taller > resultado 1`
 </div>
 <div>
 <label for="cargo">Cargo</label>
+<div>
 <select id="cargo" name="cargo">
 <option value="">Todos los cargos</option>
 <option value="cargo-1">cargo-1</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="especialidad">Especialidad</label>
+<div>
 <select id="especialidad" name="especialidad">
 <option value="">Especialidad</option>
 <option value="especialidad-1">especialidad-1</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="modalidad">Modalidad</label>
+<div>
 <select id="modalidad" name="modalidad">
 <option value="">Modalidad</option>
 <option value="modalidad_pago-1">modalidad_pago-1</option>
 <option value="modalidad_pago-2">modalidad_pago-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="activo" selected="">Activo</option>
 <option value="inactivo">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -483,33 +495,45 @@ exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="cargo">Cargo</label>
+<div>
 <select id="cargo" name="cargo">
 <option value="" selected="">Todos los cargos</option>
 <option value="cargo-1">cargo-1</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="especialidad">Especialidad</label>
+<div>
 <select id="especialidad" name="especialidad">
 <option value="" selected="">Especialidad</option>
 <option value="especialidad-1">especialidad-1</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="modalidad">Modalidad</label>
+<div>
 <select id="modalidad" name="modalidad">
 <option value="" selected="">Modalidad</option>
 <option value="modalidad_pago-1">modalidad_pago-1</option>
 <option value="modalidad_pago-2">modalidad_pago-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="activo">Activo</option>
 <option value="inactivo">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -683,11 +707,14 @@ exports[`/dashboard/staff/operators/@panel/(.)[id]/edit > panel de edicion > res
 <div>
 <label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="modalidad_pago" required="" name="modalidad_pago">
 <option value="semanal">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tarifa">Tarifa</label>
@@ -766,11 +793,14 @@ exports[`/dashboard/staff/operators/@panel/(.)new > panel de alta > resultado 1`
 <div>
 <label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="modalidad_pago" required="" name="modalidad_pago">
 <option value="semanal" selected="">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tarifa">Tarifa</label>
@@ -893,11 +923,14 @@ exports[`/dashboard/staff/operators/[id]/edit > editar > resultado 1`] = `
 <div>
 <label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="modalidad_pago" required="" name="modalidad_pago">
 <option value="semanal">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tarifa">Tarifa</label>
@@ -1045,11 +1078,14 @@ exports[`/dashboard/staff/operators/[id]/edit > vuelve al returnTo > resultado 1
 <div>
 <label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="modalidad_pago" required="" name="modalidad_pago">
 <option value="semanal">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tarifa">Tarifa</label>
@@ -1162,11 +1198,14 @@ exports[`/dashboard/staff/operators/new > formulario > resultado 1`] = `
 <div>
 <label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="modalidad_pago" required="" name="modalidad_pago">
 <option value="semanal" selected="">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tarifa">Tarifa</label>
@@ -1280,11 +1319,14 @@ exports[`/dashboard/staff/operators/new > un returnTo ajeno vuelve a la lista > 
 <div>
 <label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="modalidad_pago" required="" name="modalidad_pago">
 <option value="semanal" selected="">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tarifa">Tarifa</label>
@@ -1398,11 +1440,14 @@ exports[`/dashboard/staff/operators/new > vuelve al returnTo > resultado 1`] = `
 <div>
 <label for="modalidad_pago">Modalidad de pago<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="modalidad_pago" required="" name="modalidad_pago">
 <option value="semanal" selected="">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tarifa">Tarifa</label>

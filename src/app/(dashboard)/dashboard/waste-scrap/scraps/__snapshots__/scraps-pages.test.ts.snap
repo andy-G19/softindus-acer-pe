@@ -255,20 +255,26 @@ exports[`/dashboard/waste-scrap/scraps > filtros y maestro de taller > resultado
 <form autoComplete="off" role="search" aria-label="Filtros de chatarra" action="/dashboard/waste-scrap/scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos</option>
 <option value="acumulada" selected="">Acumulada</option>
 <option value="disponible">Disponible</option>
 <option value="vendida">Vendida</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="">Todos</option>
 <option value="id_material-1">nombre_material-1 | categoria-1</option>
 <option value="id_material-2">nombre_material-2 | categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="q">Buscar</label>
@@ -556,20 +562,26 @@ exports[`/dashboard/waste-scrap/scraps > sin filtros > resultado 1`] = `
 <form autoComplete="off" role="search" aria-label="Filtros de chatarra" action="/dashboard/waste-scrap/scraps" method="GET">
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos</option>
 <option value="acumulada">Acumulada</option>
 <option value="disponible">Disponible</option>
 <option value="vendida">Vendida</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="material">Material</label>
+<div>
 <select id="material" name="material">
 <option value="" selected="">Todos</option>
 <option value="id_material-1">nombre_material-1 | categoria-1</option>
 <option value="id_material-2">nombre_material-2 | categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="q">Buscar</label>
@@ -729,6 +741,7 @@ exports[`/dashboard/waste-scrap/scraps/@panel/(.)new > maestro de taller > resul
 <label for="id_material">Material de origen</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -739,6 +752,7 @@ exports[`/dashboard/waste-scrap/scraps/@panel/(.)new > maestro de taller > resul
 <label for="id_orden_trabajo">Orden de trabajo relacionada</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -841,6 +855,7 @@ exports[`/dashboard/waste-scrap/scraps/@panel/(.)new > panel de alta > resultado
 <label for="id_material">Material de origen</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -851,6 +866,7 @@ exports[`/dashboard/waste-scrap/scraps/@panel/(.)new > panel de alta > resultado
 <label for="id_orden_trabajo">Orden de trabajo relacionada</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -986,6 +1002,7 @@ exports[`/dashboard/waste-scrap/scraps/new > formulario > resultado 1`] = `
 <label for="id_material">Material de origen</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -996,6 +1013,7 @@ exports[`/dashboard/waste-scrap/scraps/new > formulario > resultado 1`] = `
 <label for="id_orden_trabajo">Orden de trabajo relacionada</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1131,6 +1149,7 @@ exports[`/dashboard/waste-scrap/scraps/new > un returnTo ajeno vuelve a la lista
 <label for="id_material">Material de origen</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1141,6 +1160,7 @@ exports[`/dashboard/waste-scrap/scraps/new > un returnTo ajeno vuelve a la lista
 <label for="id_orden_trabajo">Orden de trabajo relacionada</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" placeholder="Buscar orden..." value=""/>
 </div>
 </div>
@@ -1276,6 +1296,7 @@ exports[`/dashboard/waste-scrap/scraps/new > vuelve al returnTo > resultado 1`] 
 <label for="id_material">Material de origen</label>
 <input type="hidden" name="id_material" value=""/>
 <div>
+<svg/>
 <input id="id_material" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-listbox" aria-expanded="false" placeholder="Buscar material..." value=""/>
 </div>
 </div>
@@ -1286,6 +1307,7 @@ exports[`/dashboard/waste-scrap/scraps/new > vuelve al returnTo > resultado 1`] 
 <label for="id_orden_trabajo">Orden de trabajo relacionada</label>
 <input type="hidden" name="id_orden_trabajo" value=""/>
 <div>
+<svg/>
 <input id="id_orden_trabajo" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-listbox" aria-expanded="false" placeholder="Buscar orden..." value=""/>
 </div>
 </div>

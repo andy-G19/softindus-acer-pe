@@ -1,5 +1,6 @@
 import { Field, FieldError } from "@/components/forms/field";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { FileInput } from "@/components/ui/file-input";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -71,9 +72,10 @@ export function FieldsSection() {
           </NativeSelect>
         </GallerySample>
 
-        <GallerySample label="Archivo" className="block space-y-2">
-          <Label htmlFor="galeria-archivo">Adjunto</Label>
-          <Input id="galeria-archivo" type="file" />
+        <GallerySample label="Archivo" className="block">
+          <Field id="galeria-archivo" label="Adjunto" description="PDF o imagen, máx. 10 MB.">
+            {(control) => <FileInput {...control} name="adjunto" accept="application/pdf,image/*" />}
+          </Field>
         </GallerySample>
 
         <GallerySample label="Área de texto" className="block space-y-2">
@@ -158,6 +160,12 @@ export function FieldsSection() {
         <GallerySample label="Campo obligatorio" className="block">
           <Field id="galeria-field-nombre" label="Nombre o razón social" required>
             {(control) => <Input {...control} placeholder="Ej.: Metalmecánica Lima S.A.C." />}
+          </Field>
+        </GallerySample>
+
+        <GallerySample label="Campo validado" className="block">
+          <Field id="galeria-field-ruc-validado" label="RUC" success="Validado en SUNAT.">
+            {(control) => <Input {...control} defaultValue="20123456789" inputMode="numeric" />}
           </Field>
         </GallerySample>
 

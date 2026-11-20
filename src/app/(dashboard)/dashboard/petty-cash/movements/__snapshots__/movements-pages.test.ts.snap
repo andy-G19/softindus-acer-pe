@@ -263,28 +263,37 @@ exports[`/dashboard/petty-cash/movements > sin filtros > resultado 1`] = `
 <form autoComplete="off" method="GET">
 <div>
 <label for="caja">Caja chica</label>
+<div>
 <select id="caja" name="caja">
 <option value="" selected="">Todas las cajas</option>
 <option value="id_caja_chica-1">nombre_caja-1</option>
 <option value="id_caja_chica-2">nombre_caja-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tipo">Tipo de movimiento</label>
+<div>
 <select id="tipo" name="tipo">
 <option value="" selected="">Todos</option>
 <option value="ingreso">Ingresos</option>
 <option value="egreso">Egresos</option>
 <option value="ajuste">Ajustes</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="categoria">Categoría</label>
+<div>
 <select id="categoria" name="categoria">
 <option value="" selected="">Todas las categorías</option>
 <option value="id_categoria_gasto-1">nombre_categoria-1</option>
 <option value="id_categoria_gasto-2">nombre_categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="desde">Desde</label>
@@ -668,28 +677,37 @@ exports[`/dashboard/petty-cash/movements > solo desde > resultado 1`] = `
 <form autoComplete="off" method="GET">
 <div>
 <label for="caja">Caja chica</label>
+<div>
 <select id="caja" name="caja">
 <option value="" selected="">Todas las cajas</option>
 <option value="id_caja_chica-1">nombre_caja-1</option>
 <option value="id_caja_chica-2">nombre_caja-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tipo">Tipo de movimiento</label>
+<div>
 <select id="tipo" name="tipo">
 <option value="" selected="">Todos</option>
 <option value="ingreso">Ingresos</option>
 <option value="egreso">Egresos</option>
 <option value="ajuste">Ajustes</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="categoria">Categoría</label>
+<div>
 <select id="categoria" name="categoria">
 <option value="" selected="">Todas las categorías</option>
 <option value="id_categoria_gasto-1">nombre_categoria-1</option>
 <option value="id_categoria_gasto-2">nombre_categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="desde">Desde</label>
@@ -1073,28 +1091,37 @@ exports[`/dashboard/petty-cash/movements > solo hasta > resultado 1`] = `
 <form autoComplete="off" method="GET">
 <div>
 <label for="caja">Caja chica</label>
+<div>
 <select id="caja" name="caja">
 <option value="" selected="">Todas las cajas</option>
 <option value="id_caja_chica-1">nombre_caja-1</option>
 <option value="id_caja_chica-2">nombre_caja-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tipo">Tipo de movimiento</label>
+<div>
 <select id="tipo" name="tipo">
 <option value="" selected="">Todos</option>
 <option value="ingreso">Ingresos</option>
 <option value="egreso">Egresos</option>
 <option value="ajuste">Ajustes</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="categoria">Categoría</label>
+<div>
 <select id="categoria" name="categoria">
 <option value="" selected="">Todas las categorías</option>
 <option value="id_categoria_gasto-1">nombre_categoria-1</option>
 <option value="id_categoria_gasto-2">nombre_categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="desde">Desde</label>
@@ -1658,28 +1685,37 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > resultado 1`] = `
 <form autoComplete="off" method="GET">
 <div>
 <label for="caja">Caja chica</label>
+<div>
 <select id="caja" name="caja">
 <option value="">Todas las cajas</option>
 <option value="id_caja_chica-1">nombre_caja-1</option>
 <option value="id_caja_chica-2">nombre_caja-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="tipo">Tipo de movimiento</label>
+<div>
 <select id="tipo" name="tipo">
 <option value="">Todos</option>
 <option value="ingreso">Ingresos</option>
 <option value="egreso" selected="">Egresos</option>
 <option value="ajuste">Ajustes</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="categoria">Categoría</label>
+<div>
 <select id="categoria" name="categoria">
 <option value="">Todas las categorías</option>
 <option value="id_categoria_gasto-1">nombre_categoria-1</option>
 <option value="id_categoria_gasto-2">nombre_categoria-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="desde">Desde</label>

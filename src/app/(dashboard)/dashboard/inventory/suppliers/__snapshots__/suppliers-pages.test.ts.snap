@@ -108,26 +108,35 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="payment">Condición de pago</label>
+<div>
 <select id="payment" name="payment">
 <option value="" selected="">Todas las condiciones</option>
 <option value="condicion_pago-1">condicion_pago-1</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active">Activo</option>
 <option value="inactive" selected="">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -293,26 +302,35 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="" selected="">Todos los tipos</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="payment">Condición de pago</label>
+<div>
 <select id="payment" name="payment">
 <option value="" selected="">Todas las condiciones</option>
 <option value="condicion_pago-1">condicion_pago-1</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="active">Activo</option>
 <option value="inactive">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -518,26 +536,35 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="type">Tipo</label>
+<div>
 <select id="type" name="type">
 <option value="">Todos los tipos</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="payment">Condición de pago</label>
+<div>
 <select id="payment" name="payment">
 <option value="">Todas las condiciones</option>
 <option value="condicion_pago-1">condicion_pago-1</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active" selected="">Activo</option>
 <option value="inactive">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -690,12 +717,15 @@ exports[`/dashboard/inventory/suppliers/[id]/edit > editar > resultado 1`] = `
 <div>
 <div>
 <label for="tipo_documento">Tipo de documento</label>
+<div>
 <select id="tipo_documento" name="tipo_documento">
 <option value="">Sin documento</option>
 <option value="ruc">RUC</option>
 <option value="dni">DNI</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_documento">Número de documento</label>
@@ -724,15 +754,19 @@ exports[`/dashboard/inventory/suppliers/[id]/edit > editar > resultado 1`] = `
 <div>
 <label for="tipo_proveedor">Tipo de proveedor<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_proveedor" required="" name="tipo_proveedor">
 <option value="">Selecciona un tipo</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
 <label for="condicion_pago">Condición de pago</label>
+<div>
 <select id="condicion_pago" name="condicion_pago">
 <option value="">No especificado</option>
 <option value="contado">Contado</option>
@@ -740,6 +774,8 @@ exports[`/dashboard/inventory/suppliers/[id]/edit > editar > resultado 1`] = `
 <option value="parcial">Parcial</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
@@ -845,12 +881,15 @@ exports[`/dashboard/inventory/suppliers/[id]/edit > editar con regreso al listad
 <div>
 <div>
 <label for="tipo_documento">Tipo de documento</label>
+<div>
 <select id="tipo_documento" name="tipo_documento">
 <option value="">Sin documento</option>
 <option value="ruc">RUC</option>
 <option value="dni">DNI</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_documento">Número de documento</label>
@@ -879,15 +918,19 @@ exports[`/dashboard/inventory/suppliers/[id]/edit > editar con regreso al listad
 <div>
 <label for="tipo_proveedor">Tipo de proveedor<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_proveedor" required="" name="tipo_proveedor">
 <option value="">Selecciona un tipo</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
 <label for="condicion_pago">Condición de pago</label>
+<div>
 <select id="condicion_pago" name="condicion_pago">
 <option value="">No especificado</option>
 <option value="contado">Contado</option>
@@ -895,6 +938,8 @@ exports[`/dashboard/inventory/suppliers/[id]/edit > editar con regreso al listad
 <option value="parcial">Parcial</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
@@ -1010,12 +1055,15 @@ exports[`/dashboard/inventory/suppliers/new > formulario > resultado 1`] = `
 <div>
 <div>
 <label for="tipo_documento">Tipo de documento</label>
+<div>
 <select id="tipo_documento" name="tipo_documento">
 <option value="" selected="">Sin documento</option>
 <option value="ruc">RUC</option>
 <option value="dni">DNI</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_documento">Número de documento</label>
@@ -1044,15 +1092,19 @@ exports[`/dashboard/inventory/suppliers/new > formulario > resultado 1`] = `
 <div>
 <label for="tipo_proveedor">Tipo de proveedor<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_proveedor" required="" name="tipo_proveedor">
 <option value="" selected="">Selecciona un tipo</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
 <label for="condicion_pago">Condición de pago</label>
+<div>
 <select id="condicion_pago" name="condicion_pago">
 <option value="" selected="">No especificado</option>
 <option value="contado">Contado</option>
@@ -1060,6 +1112,8 @@ exports[`/dashboard/inventory/suppliers/new > formulario > resultado 1`] = `
 <option value="parcial">Parcial</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
@@ -1150,12 +1204,15 @@ exports[`/dashboard/inventory/suppliers/new > formulario con regreso al listado 
 <div>
 <div>
 <label for="tipo_documento">Tipo de documento</label>
+<div>
 <select id="tipo_documento" name="tipo_documento">
 <option value="" selected="">Sin documento</option>
 <option value="ruc">RUC</option>
 <option value="dni">DNI</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_documento">Número de documento</label>
@@ -1184,15 +1241,19 @@ exports[`/dashboard/inventory/suppliers/new > formulario con regreso al listado 
 <div>
 <label for="tipo_proveedor">Tipo de proveedor<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_proveedor" required="" name="tipo_proveedor">
 <option value="" selected="">Selecciona un tipo</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
 <label for="condicion_pago">Condición de pago</label>
+<div>
 <select id="condicion_pago" name="condicion_pago">
 <option value="" selected="">No especificado</option>
 <option value="contado">Contado</option>
@@ -1200,6 +1261,8 @@ exports[`/dashboard/inventory/suppliers/new > formulario con regreso al listado 
 <option value="parcial">Parcial</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
@@ -1235,12 +1298,15 @@ exports[`panel lateral de proveedores > el alta en panel autoriza y consulta igu
 <div>
 <div>
 <label for="tipo_documento">Tipo de documento</label>
+<div>
 <select id="tipo_documento" name="tipo_documento">
 <option value="" selected="">Sin documento</option>
 <option value="ruc">RUC</option>
 <option value="dni">DNI</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_documento">Número de documento</label>
@@ -1269,15 +1335,19 @@ exports[`panel lateral de proveedores > el alta en panel autoriza y consulta igu
 <div>
 <label for="tipo_proveedor">Tipo de proveedor<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_proveedor" required="" name="tipo_proveedor">
 <option value="" selected="">Selecciona un tipo</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
 <label for="condicion_pago">Condición de pago</label>
+<div>
 <select id="condicion_pago" name="condicion_pago">
 <option value="" selected="">No especificado</option>
 <option value="contado">Contado</option>
@@ -1285,6 +1355,8 @@ exports[`panel lateral de proveedores > el alta en panel autoriza y consulta igu
 <option value="parcial">Parcial</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>
@@ -1323,12 +1395,15 @@ exports[`panel lateral de proveedores > la edicion en panel hace la misma consul
 <div>
 <div>
 <label for="tipo_documento">Tipo de documento</label>
+<div>
 <select id="tipo_documento" name="tipo_documento">
 <option value="">Sin documento</option>
 <option value="ruc">RUC</option>
 <option value="dni">DNI</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="numero_documento">Número de documento</label>
@@ -1357,15 +1432,19 @@ exports[`panel lateral de proveedores > la edicion en panel hace la misma consul
 <div>
 <label for="tipo_proveedor">Tipo de proveedor<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="tipo_proveedor" required="" name="tipo_proveedor">
 <option value="">Selecciona un tipo</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
+<svg/>
+</div>
 </div>
 </div>
 <div>
 <label for="condicion_pago">Condición de pago</label>
+<div>
 <select id="condicion_pago" name="condicion_pago">
 <option value="">No especificado</option>
 <option value="contado">Contado</option>
@@ -1373,6 +1452,8 @@ exports[`panel lateral de proveedores > la edicion en panel hace la misma consul
 <option value="parcial">Parcial</option>
 <option value="otro">Otro</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="observaciones">Observaciones</label>

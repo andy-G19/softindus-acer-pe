@@ -132,21 +132,27 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > resultado 1`
 </div>
 <div>
 <label for="modalidad">Modalidad</label>
+<div>
 <select id="modalidad" name="modalidad">
 <option value="" selected="">Todas las modalidades</option>
 <option value="semanal">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -437,21 +443,27 @@ exports[`/dashboard/staff/payrolls > segunda pagina con un filtro > resultado 1`
 </div>
 <div>
 <label for="modalidad">Modalidad</label>
+<div>
 <select id="modalidad" name="modalidad">
 <option value="" selected="">Todas las modalidades</option>
 <option value="semanal">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="pendiente" selected="">Pendiente</option>
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -730,21 +742,27 @@ exports[`/dashboard/staff/payrolls > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="modalidad">Modalidad</label>
+<div>
 <select id="modalidad" name="modalidad">
 <option value="" selected="">Todas las modalidades</option>
 <option value="semanal">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1133,21 +1151,27 @@ exports[`/dashboard/staff/payrolls > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="modalidad">Modalidad</label>
+<div>
 <select id="modalidad" name="modalidad">
 <option value="">Todas las modalidades</option>
 <option value="semanal" selected="">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="pendiente" selected="">Pendiente</option>
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1426,21 +1450,27 @@ exports[`/dashboard/staff/payrolls > una planilla pendiente sin pagos ofrece anu
 </div>
 <div>
 <label for="modalidad">Modalidad</label>
+<div>
 <select id="modalidad" name="modalidad">
 <option value="" selected="">Todas las modalidades</option>
 <option value="semanal">Semanal</option>
 <option value="quincenal">Quincenal</option>
 <option value="mensual">Mensual</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="pendiente">Pendiente</option>
 <option value="pagado">Pagado</option>
 <option value="anulada">Anulada</option>
 </select>
+<svg/>
+</div>
 </div>
 <fieldset>
 <legend>Rango de fechas</legend>
@@ -1671,9 +1701,11 @@ exports[`/dashboard/staff/payrolls/new > formulario > resultado 1`] = `
 <input type="hidden" name="clave_operacion"/>
 <div>
 <div>
-<label for="id_operario">Operario *</label>
+<label for="id_operario">Operario<span aria-hidden="true">*</span>
+</label>
 <input type="hidden" name="id_operario" value=""/>
 <div>
+<svg/>
 <input id="id_operario" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-listbox" aria-expanded="false" required="" placeholder="Buscar operario..." value=""/>
 </div>
 </div>

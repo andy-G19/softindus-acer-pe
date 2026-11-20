@@ -88,7 +88,7 @@ describe("DateRangeFields", () => {
 
     expect(to).toContain('aria-invalid="true"');
     expect(to).toContain('aria-describedby="rango-hasta-error"');
-    expect(html).toContain(`<p id="rango-hasta-error" class="text-sm text-destructive">${DATE_RANGE_INVERTED_MESSAGE}</p>`);
+    expect(html).toMatch(new RegExp(`<p id="rango-hasta-error"[^>]*>[\\s\\S]*${DATE_RANGE_INVERTED_MESSAGE}</p>`));
     expect(input(html, "from")).not.toContain('aria-invalid="');
   });
 

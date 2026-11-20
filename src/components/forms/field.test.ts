@@ -21,23 +21,26 @@ function attr(html: string, tag: string, name: string) {
 
 const input = (control: FieldControlProps) => h(Input, { ...control, name: "correo" });
 
+// Diseno de los campos (propuesta del responsable, 2026-11-19): el error es un texto de 12 px
+// en el rojo de los bordes de error (6,2:1 sobre la tarjeta), en medio peso y con un icono de
+// alerta que el lector no anuncia. Un solo tamano: el sm de los catalogos ya no tenia uso.
 describe("FieldError", () => {
-  it("tiene el mismo HTML que las 14 copias locales", () => {
-    expect(render(h(FieldError, { messages: ["Ingrese un correo valido.", "Otro"] }))).toBe(
-      '<p class="text-sm text-destructive">Ingrese un correo valido.</p>',
-    );
+  it("muestra el primer mensaje con su icono de alerta, oculto al lector", () => {
+    const html = render(h(FieldError, { messages: ["Ingrese un correo valido.", "Otro"] }));
+
+    expect(html).toContain("Ingrese un correo valido.");
+    expect(html).not.toContain("Otro");
+    expect(html).toMatch(/<svg[^>]*class="[^"]*lucide-circle-alert[^"]*"[^>]*aria-hidden="true"/);
   });
 
-  it("en tamano sm tiene el mismo HTML que las 2 copias de los catalogos", () => {
-    expect(render(h(FieldError, { messages: ["Requerido"], size: "sm" }))).toBe(
-      '<p class="text-xs text-destructive">Requerido</p>',
-    );
+  it("usa el rojo de los bordes de error, a 12 px y en medio peso", () => {
+    const classes = attr(render(h(FieldError, { messages: ["x"] })), "p", "class")?.split(" ") ?? [];
+
+    expect(classes).toEqual(expect.arrayContaining(["text-xs", "font-medium", "text-destructive-outline"]));
   });
 
   it("con id lo asocia y sin mensajes no muestra nada", () => {
-    expect(render(h(FieldError, { id: "correo-error", messages: ["x"] }))).toBe(
-      '<p id="correo-error" class="text-sm text-destructive">x</p>',
-    );
+    expect(attr(render(h(FieldError, { id: "correo-error", messages: ["x"] })), "p", "id")).toBe("correo-error");
     expect(render(h(FieldError, { messages: [] }))).toBe("");
     expect(render(h(FieldError, {}))).toBe("");
   });
@@ -64,7 +67,7 @@ describe("Field", () => {
 
     expect(attr(html, "input", "aria-invalid")).toBe("true");
     expect(attr(html, "input", "aria-describedby")).toBe("correo-error");
-    expect(html).toContain('<p id="correo-error" class="text-sm text-destructive">Ingrese un correo valido.</p>');
+    expect(html).toMatch(/<p id="correo-error"[^>]*>[\s\S]*Ingrese un correo valido\.<\/p>/);
   });
 
   it("describe con la ayuda y el error, en ese orden", () => {
@@ -90,8 +93,16 @@ describe("Field", () => {
     const html = render(h(Field, { id: "correo", label: "Correo", required: true, children: input }));
 
     expect(html).toMatch(/<input\b[^>]*\srequired=""/);
-    expect(html).toContain('<span aria-hidden="true" class="text-destructive">*</span>');
+    // Diseno de los campos: el asterisco es cobre, no rojo, para no parecer un error.
+    expect(html).toContain('<span aria-hidden="true" class="font-semibold text-accent-copper">*</span>');
     expect(render(h(Field, { id: "correo", label: "Correo", children: input }))).not.toContain("*");
+  });
+
+  it("etiqueta de 13 px y separacion de 6 px entre etiqueta, control y ayuda", () => {
+    const html = render(h(Field, { id: "correo", label: "Correo", children: input }));
+
+    expect(attr(html, "label", "class")?.split(" ")).toContain("text-[0.8125rem]");
+    expect(attr(html, "div", "class")?.split(" ")).toContain("space-y-1.5");
   });
 
   it("deshabilitado: llega al control y atenua la etiqueta", () => {
@@ -107,6 +118,53 @@ describe("Field", () => {
     // React escribe readOnly=""; el parser HTML pasa el nombre a minusculas y
     // el selector [readonly] de los estilos lo encuentra.
     expect(html).toMatch(/<input\b[^>]*\sreadonly=""/i);
+  });
+
+  // Diseno de los campos: un chip «Solo lectura» en acero claro (6,9:1) antes de la ayuda. Es
+  // visual: el lector ya anuncia el readonly del control, asi que el chip va oculto para el.
+  it("solo lectura: muestra el chip antes de la ayuda, oculto al lector", () => {
+    const html = render(
+      h(Field, { id: "codigo", label: "Codigo", readOnly: true, description: "Lo asigna el sistema.", children: input }),
+    );
+    const ayuda = /<p id="codigo-ayuda"[^>]*>([\s\S]*?)<\/p>/.exec(html)?.[1] ?? "";
+
+    expect(ayuda).toMatch(/<span aria-hidden="true" class="[^"]*text-readonly-foreground[^"]*">/);
+    expect(ayuda).toContain("Solo lectura");
+    expect(ayuda).toMatch(/lucide-lock/);
+    expect(ayuda).toContain("Lo asigna el sistema.");
+  });
+
+  // Diseno de los campos: «Validado» es una confirmacion real (por ejemplo, el RUC en SUNAT),
+  // no el reposo de ningun campo. Marca el control con data-valid, que sus clases pintan en
+  // verde forja, y muestra el mensaje con un icono de check, asociado como la ayuda.
+  it("validado: marca el control y anuncia el mensaje asociado", () => {
+    const html = render(
+      h(Field, { id: "ruc", label: "RUC", success: "Validado en SUNAT.", children: input }),
+    );
+
+    expect(attr(html, "input", "data-valid")).toBe("true");
+    expect(attr(html, "input", "aria-describedby")).toBe("ruc-validado");
+    expect(html).toMatch(/<p id="ruc-validado" class="[^"]*text-success[^"]*">[\s\S]*Validado en SUNAT\.<\/p>/);
+    expect(html).toMatch(/<svg[^>]*class="[^"]*lucide-circle-check[^"]*"[^>]*aria-hidden="true"/);
+  });
+
+  it("con error no se muestra como validado", () => {
+    const html = render(
+      h(Field, { id: "ruc", label: "RUC", success: "Validado en SUNAT.", errors: ["El RUC no existe."], children: input }),
+    );
+
+    expect(attr(html, "input", "data-valid")).toBeUndefined();
+    expect(html).not.toContain("Validado en SUNAT.");
+    expect(attr(html, "input", "aria-describedby")).toBe("ruc-error");
+  });
+
+  it("solo lectura sin ayuda: el chip igual aparece; sin readOnly no hay chip", () => {
+    expect(render(h(Field, { id: "codigo", label: "Codigo", readOnly: true, children: input }))).toContain(
+      "Solo lectura",
+    );
+    expect(
+      render(h(Field, { id: "codigo", label: "Codigo", description: "Ayuda.", children: input })),
+    ).not.toContain("Solo lectura");
   });
 
   it("funciona igual con lista y area de texto", () => {
@@ -139,11 +197,15 @@ describe("estilos de solo lectura y error de las primitivas", () => {
     ] as const) {
       expect(classOf(node, tag)).not.toMatch(/(^|[\s:])read-only:/);
     }
-    expect(classOf(h(Input), "input")).toContain("dark:[&amp;[readonly]]:bg-muted");
-    expect(classOf(h(Textarea), "textarea")).toContain("dark:[&amp;[readonly]]:bg-muted");
+    // Diseno de los campos: solo lectura es borde de acero, no un fondo apagado.
+    expect(classOf(h(Input), "input")).toContain("[&amp;[readonly]]:border-readonly-border");
+    expect(classOf(h(Textarea), "textarea")).toContain("[&amp;[readonly]]:border-readonly-border");
   });
 
   it("la lista muestra el error como el campo de texto", () => {
-    expect(classOf(h(NativeSelect), "select")).toContain("aria-invalid:border-destructive aria-invalid:ring-3");
+    const errorClasses = (classes: string) => classes.split(" ").filter((name) => name.startsWith("aria-invalid:"));
+
+    expect(errorClasses(classOf(h(NativeSelect), "select"))).toEqual(errorClasses(classOf(h(Input), "input")));
+    expect(errorClasses(classOf(h(Input), "input"))).toContain("aria-invalid:border-destructive-outline");
   });
 });

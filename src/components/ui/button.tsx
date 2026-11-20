@@ -1,7 +1,14 @@
 /**
- * Boton compartido (shadcn) con las variantes de la marca. La variante "clear"
- * (limpiar filtros) usa los tokens --accent-cyan, --accent-cyan-hover y
- * --accent-cyan-active; su tamano se pasa como className en cada pantalla.
+ * Boton compartido (shadcn) con las variantes de la marca. Desde el diseno de
+ * los botones (propuesta del responsable, 2026-11-19) cada estado de cada
+ * variante usa un token de tokens.css: la accion principal es un degradado
+ * corto con filo de luz, outline tiene un borde que se ve (3:1) y la variante
+ * "clear" (limpiar filtros) es un tinte cobre con borde, en lugar del cian.
+ * El foco de teclado es un anillo de 2px separado por 2px del color de fondo,
+ * rojo en destructive; la regla global de patterns.css no alcanza al boton.
+ * Animacion de tacto: sube 1px al pasar el puntero y al pulsarlo baja 1px y se
+ * encoge al 97 %, en --motion-fast; link no se mueve. Con reducir movimiento
+ * no hay transicion ni desplazamiento.
  *
  * Entrega 8: estado pendiente (pending) y tipos que exigen aria-label en los
  * tamanos de solo icono. Sin pending, el HTML es el mismo de antes.
@@ -20,23 +27,23 @@ import { Spinner } from "@/components/ui/spinner"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-[color,background-color,border-color,text-decoration-color,box-shadow,translate,scale,opacity] duration-(--motion-fast) ease-out outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:-translate-y-px active:not-aria-[haspopup]:translate-y-px active:not-aria-[haspopup]:scale-97 motion-reduce:transition-none motion-reduce:translate-none! motion-reduce:scale-none! disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
         default:
-          "forge-button-gradient text-primary-foreground hover:bg-primary",
+          "bg-primary bg-linear-to-b from-primary-hover to-primary text-primary-foreground shadow-button hover:bg-none hover:bg-primary-hover active:bg-none active:bg-primary-active active:shadow-none",
         outline:
-          "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+          "border-control-border bg-transparent text-foreground hover:border-control-border-hover hover:bg-muted aria-expanded:border-control-border-hover aria-expanded:bg-muted",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+          "border-border bg-accent text-foreground hover:bg-secondary-hover aria-expanded:bg-secondary-hover",
         ghost:
-          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
+          "bg-transparent text-foreground hover:bg-ghost-hover aria-expanded:bg-ghost-hover",
         destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-        link: "text-primary underline-offset-4 hover:underline",
+          "border-destructive-border bg-destructive-surface text-destructive-foreground hover:border-destructive-outline hover:bg-destructive-surface-hover focus-visible:ring-destructive-outline",
+        link: "text-primary underline decoration-link-underline decoration-1 underline-offset-4 hover:translate-y-0 hover:decoration-primary active:not-aria-[haspopup]:translate-y-0 active:not-aria-[haspopup]:scale-100",
         clear:
-          "bg-[var(--accent-cyan)] text-accent-cyan-foreground hover:bg-[var(--accent-cyan-hover)] active:bg-[var(--accent-cyan-active)]",
+          "border-clear-border bg-clear-surface text-clear-foreground hover:bg-clear-surface-hover",
       },
       size: {
         default:

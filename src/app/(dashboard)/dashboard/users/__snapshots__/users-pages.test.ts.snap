@@ -148,20 +148,26 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 </div>
 <div>
 <label for="rol">Rol</label>
+<div>
 <select id="rol" name="rol">
 <option value="" selected="">Todos los roles</option>
 <option value="ADMIN">Administrador</option>
 <option value="SELLER">Vendedor</option>
 <option value="WORKSHOP_MASTER">Maestro de taller</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="activo">Activo</option>
 <option value="inactivo">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -399,20 +405,26 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="rol">Rol</label>
+<div>
 <select id="rol" name="rol">
 <option value="" selected="">Todos los roles</option>
 <option value="ADMIN">Administrador</option>
 <option value="SELLER">Vendedor</option>
 <option value="WORKSHOP_MASTER">Maestro de taller</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="" selected="">Todos los estados</option>
 <option value="activo">Activo</option>
 <option value="inactivo">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -728,20 +740,26 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <label for="rol">Rol</label>
+<div>
 <select id="rol" name="rol">
 <option value="">Todos los roles</option>
 <option value="ADMIN">Administrador</option>
 <option value="SELLER" selected="">Vendedor</option>
 <option value="WORKSHOP_MASTER">Maestro de taller</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="estado">Estado</label>
+<div>
 <select id="estado" name="estado">
 <option value="">Todos los estados</option>
 <option value="activo" selected="">Activo</option>
 <option value="inactivo">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -936,11 +954,14 @@ exports[`/dashboard/users/@panel/(.)[id]/edit > panel de edicion > resultado 1`]
 <div>
 <label for="rol">Rol<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="rol" required="" name="rol">
 <option value="ADMIN">Administrador</option>
 <option value="SELLER">Vendedor</option>
 <option value="WORKSHOP_MASTER">Maestro de taller</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
@@ -1020,7 +1041,10 @@ exports[`/dashboard/users/@panel/(.)[id]/edit > panel del propio usuario > resul
 <div>
 <label for="rol">Rol</label>
 <input id="rol" readOnly="" aria-describedby="rol-ayuda" value="nombre_rol-1"/>
-<p id="rol-ayuda">No puedes cambiar tu propio rol.</p>
+<p id="rol-ayuda">
+<span aria-hidden="true">
+<svg/>Solo lectura</span>
+<span aria-hidden="true"> · </span>No puedes cambiar tu propio rol.</p>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
@@ -1077,11 +1101,14 @@ exports[`/dashboard/users/@panel/(.)new > panel de alta > resultado 1`] = `
 <div>
 <label for="rol">Rol<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="rol" required="" name="rol">
 <option value="ADMIN">Administrador</option>
 <option value="SELLER" selected="">Vendedor</option>
 <option value="WORKSHOP_MASTER">Maestro de taller</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <div>
@@ -1204,7 +1231,10 @@ exports[`/dashboard/users/[id]/edit > editar el propio usuario > resultado 1`] =
 <div>
 <label for="rol">Rol</label>
 <input id="rol" readOnly="" aria-describedby="rol-ayuda" value="nombre_rol-1"/>
-<p id="rol-ayuda">No puedes cambiar tu propio rol.</p>
+<p id="rol-ayuda">
+<span aria-hidden="true">
+<svg/>Solo lectura</span>
+<span aria-hidden="true"> · </span>No puedes cambiar tu propio rol.</p>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
@@ -1313,11 +1343,14 @@ exports[`/dashboard/users/[id]/edit > editar otro usuario > resultado 1`] = `
 <div>
 <label for="rol">Rol<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="rol" required="" name="rol">
 <option value="ADMIN">Administrador</option>
 <option value="SELLER">Vendedor</option>
 <option value="WORKSHOP_MASTER">Maestro de taller</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
@@ -1465,11 +1498,14 @@ exports[`/dashboard/users/[id]/edit > vuelve al returnTo > resultado 1`] = `
 <div>
 <label for="rol">Rol<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="rol" required="" name="rol">
 <option value="ADMIN">Administrador</option>
 <option value="SELLER">Vendedor</option>
 <option value="WORKSHOP_MASTER">Maestro de taller</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
@@ -1556,11 +1592,14 @@ exports[`/dashboard/users/new > formulario > resultado 1`] = `
 <div>
 <label for="rol">Rol<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="rol" required="" name="rol">
 <option value="ADMIN">Administrador</option>
 <option value="SELLER" selected="">Vendedor</option>
 <option value="WORKSHOP_MASTER">Maestro de taller</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <div>
@@ -1660,11 +1699,14 @@ exports[`/dashboard/users/new > un returnTo ajeno vuelve a la lista > resultado 
 <div>
 <label for="rol">Rol<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="rol" required="" name="rol">
 <option value="ADMIN">Administrador</option>
 <option value="SELLER" selected="">Vendedor</option>
 <option value="WORKSHOP_MASTER">Maestro de taller</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <div>
@@ -1764,11 +1806,14 @@ exports[`/dashboard/users/new > vuelve al returnTo > resultado 1`] = `
 <div>
 <label for="rol">Rol<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="rol" required="" name="rol">
 <option value="ADMIN">Administrador</option>
 <option value="SELLER" selected="">Vendedor</option>
 <option value="WORKSHOP_MASTER">Maestro de taller</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <div>

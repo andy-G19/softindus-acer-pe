@@ -97,11 +97,14 @@ exports[`/dashboard/waste-scrap/scrap-sales/new > chatarra preseleccionada > res
 <div>
 <label for="id_chatarra">Chatarra a vender<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_chatarra" required="" aria-describedby="id_chatarra-ayuda" name="id_chatarra">
 <option value="" disabled="">Selecciona un registro de chatarra</option>
 <option value="id_chatarra-1" selected="">id_chatarra-1 | tipo_material-1 | Peso: 11.5 kg | Cantidad: 11.5</option>
 <option value="id_chatarra-2">id_chatarra-2 | tipo_material-2 | Peso: - | Cantidad: -</option>
 </select>
+<svg/>
+</div>
 <p id="id_chatarra-ayuda">Solo se muestran registros con estado acumulada o disponible.</p>
 </div>
 </div>
@@ -135,11 +138,14 @@ exports[`/dashboard/waste-scrap/scrap-sales/new > chatarra preseleccionada > res
 </div>
 <div>
 <label for="id_caja_chica">Registrar ingreso en caja chica</label>
+<div>
 <select id="id_caja_chica" aria-describedby="id_caja_chica-ayuda" name="id_caja_chica">
 <option value="" selected="">No registrar en caja chica</option>
 <option value="id_caja_chica-1">nombre_caja-1 | Saldo: S/ 11.50</option>
 <option value="id_caja_chica-2">nombre_caja-2 | Saldo: S/ 22.50</option>
 </select>
+<svg/>
+</div>
 <p id="id_caja_chica-ayuda">Opcional. Si seleccionas una caja, se generará un movimiento de ingreso.</p>
 </div>
 <div>
@@ -268,11 +274,14 @@ exports[`/dashboard/waste-scrap/scrap-sales/new > formulario > resultado 1`] = `
 <div>
 <label for="id_chatarra">Chatarra a vender<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="id_chatarra" required="" aria-describedby="id_chatarra-ayuda" name="id_chatarra">
 <option value="" disabled="" selected="">Selecciona un registro de chatarra</option>
 <option value="id_chatarra-1">id_chatarra-1 | tipo_material-1 | Peso: 11.5 kg | Cantidad: 11.5</option>
 <option value="id_chatarra-2">id_chatarra-2 | tipo_material-2 | Peso: - | Cantidad: -</option>
 </select>
+<svg/>
+</div>
 <p id="id_chatarra-ayuda">Solo se muestran registros con estado acumulada o disponible.</p>
 </div>
 </div>
@@ -298,11 +307,14 @@ exports[`/dashboard/waste-scrap/scrap-sales/new > formulario > resultado 1`] = `
 </div>
 <div>
 <label for="id_caja_chica">Registrar ingreso en caja chica</label>
+<div>
 <select id="id_caja_chica" aria-describedby="id_caja_chica-ayuda" name="id_caja_chica">
 <option value="" selected="">No registrar en caja chica</option>
 <option value="id_caja_chica-1">nombre_caja-1 | Saldo: S/ 11.50</option>
 <option value="id_caja_chica-2">nombre_caja-2 | Saldo: S/ 22.50</option>
 </select>
+<svg/>
+</div>
 <p id="id_caja_chica-ayuda">Opcional. Si seleccionas una caja, se generará un movimiento de ingreso.</p>
 </div>
 <div>

@@ -81,6 +81,62 @@ describe("tokens", () => {
     expect(REQUIRED.filter((name) => !root.includes(name))).toEqual([]);
   });
 
+  // Diseno de los botones (propuesta del responsable, 2026-11-19). Tailwind no avisa de una
+  // utilidad sin color en @theme: bg-x no genera nada y el boton queda sin fondo. Por eso cada
+  // color que usa Button se exige en :root y en @theme. El cian de la variante clear se quita:
+  // lo reemplaza el cobre.
+  it("los colores de los botones existen en :root y en @theme, y el cian ya no", () => {
+    const buttonColors = [
+      "primary-hover",
+      "primary-active",
+      "secondary-hover",
+      "control-border",
+      "control-border-hover",
+      "ghost-hover",
+      "destructive-surface-hover",
+      "destructive-border",
+      "clear-surface",
+      "clear-surface-hover",
+      "clear-border",
+      "clear-foreground",
+      "link-underline",
+    ];
+
+    expect(buttonColors.filter((name) => !root.includes(`--${name}`))).toEqual([]);
+    expect(buttonColors.filter((name) => !theme.includes(`--color-${name}`))).toEqual([]);
+    expect(root).toContain("--accent-copper");
+    expect(root).toContain("--shadow-button");
+    expect(theme).toContain("--shadow-button");
+    expect([...root, ...theme].filter((name) => name.includes("cyan"))).toEqual([]);
+  });
+
+  // Diseno de los campos: los colores que usan sus clases tienen que estar en @theme, o
+  // Tailwind no genera la utilidad y el campo se queda sin borde o sin anillo.
+  it("los colores y la textura de los campos existen", () => {
+    expect(root).toContain("--texture-metal");
+    expect(root).toContain("--readonly-border");
+    expect(theme).toContain("--color-readonly-border");
+    expect(theme).toContain("--color-accent-steel");
+    expect(theme).toContain("--color-placeholder");
+  });
+
+  it("el interruptor tiene su verde, su sombra y su curva", () => {
+    expect(theme).toContain("--color-accent-forge");
+    expect(root).toContain("--shadow-thumb");
+    expect(theme).toContain("--shadow-thumb");
+    expect(root).toContain("--ease-settle");
+  });
+
+  it("los colores de la etiqueta, el obligatorio y el solo lectura existen", () => {
+    expect(root).toContain("--readonly-foreground");
+    expect(theme).toContain("--color-readonly-foreground");
+    expect(theme).toContain("--color-accent-copper");
+  });
+
+  it("el giro del spinner tiene su duracion en :root", () => {
+    expect(root).toContain("--motion-spin");
+  });
+
   it("cada var() de las hojas apunta a un token definido", () => {
     const known = new Set([...root, ...theme, ...fontVariables]);
     const undefinedVars = cssFiles(STYLES_DIR).flatMap((file) =>

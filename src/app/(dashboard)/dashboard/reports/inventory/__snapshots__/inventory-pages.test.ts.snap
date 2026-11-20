@@ -126,14 +126,18 @@ exports[`/dashboard/reports/inventory > maestro de taller > resultado 1`] = `
 </fieldset>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="movementType">Tipo</label>
+<div>
 <select id="movementType" name="movementType">
 <option value="" selected="">Todos los tipos</option>
 <option value="entrada">Entrada</option>
@@ -142,14 +146,19 @@ exports[`/dashboard/reports/inventory > maestro de taller > resultado 1`] = `
 <option value="reserva">Reserva</option>
 <option value="devolucion">Devolución</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="userId">Responsable</label>
+<div>
 <select id="userId" name="userId">
 <option value="" selected="">Todos los responsables</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="workOrderId">Orden de trabajo</label>
@@ -471,14 +480,18 @@ exports[`/dashboard/reports/inventory > rango de mas de 366 dias > resultado 1`]
 </fieldset>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="movementType">Tipo</label>
+<div>
 <select id="movementType" name="movementType">
 <option value="" selected="">Todos los tipos</option>
 <option value="entrada">Entrada</option>
@@ -487,14 +500,19 @@ exports[`/dashboard/reports/inventory > rango de mas de 366 dias > resultado 1`]
 <option value="reserva">Reserva</option>
 <option value="devolucion">Devolución</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="userId">Responsable</label>
+<div>
 <select id="userId" name="userId">
 <option value="" selected="">Todos los responsables</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="workOrderId">Orden de trabajo</label>
@@ -775,19 +793,24 @@ exports[`/dashboard/reports/inventory > rango invertido > resultado 1`] = `
 <div>
 <label for="fecha-hasta">Fecha hasta</label>
 <input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="dateTo" value="2026-07-01"/>
-<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
+<p id="fecha-hasta-error">
+<svg/>La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
 </fieldset>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="movementType">Tipo</label>
+<div>
 <select id="movementType" name="movementType">
 <option value="" selected="">Todos los tipos</option>
 <option value="entrada">Entrada</option>
@@ -796,14 +819,19 @@ exports[`/dashboard/reports/inventory > rango invertido > resultado 1`] = `
 <option value="reserva">Reserva</option>
 <option value="devolucion">Devolución</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="userId">Responsable</label>
+<div>
 <select id="userId" name="userId">
 <option value="" selected="">Todos los responsables</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="workOrderId">Orden de trabajo</label>
@@ -948,14 +976,18 @@ exports[`/dashboard/reports/inventory > sin filtros > resultado 1`] = `
 </fieldset>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="movementType">Tipo</label>
+<div>
 <select id="movementType" name="movementType">
 <option value="" selected="">Todos los tipos</option>
 <option value="entrada">Entrada</option>
@@ -964,14 +996,19 @@ exports[`/dashboard/reports/inventory > sin filtros > resultado 1`] = `
 <option value="reserva">Reserva</option>
 <option value="devolucion">Devolución</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="userId">Responsable</label>
+<div>
 <select id="userId" name="userId">
 <option value="" selected="">Todos los responsables</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="workOrderId">Orden de trabajo</label>
@@ -1289,14 +1326,18 @@ exports[`/dashboard/reports/inventory > sin resultados > resultado 1`] = `
 </fieldset>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="movementType">Tipo</label>
+<div>
 <select id="movementType" name="movementType">
 <option value="" selected="">Todos los tipos</option>
 <option value="entrada">Entrada</option>
@@ -1305,14 +1346,19 @@ exports[`/dashboard/reports/inventory > sin resultados > resultado 1`] = `
 <option value="reserva">Reserva</option>
 <option value="devolucion">Devolución</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="userId">Responsable</label>
+<div>
 <select id="userId" name="userId">
 <option value="" selected="">Todos los responsables</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="workOrderId">Orden de trabajo</label>
@@ -1556,14 +1602,18 @@ exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra
 </fieldset>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="" selected="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="movementType">Tipo</label>
+<div>
 <select id="movementType" name="movementType">
 <option value="" selected="">Todos los tipos</option>
 <option value="entrada">Entrada</option>
@@ -1572,14 +1622,19 @@ exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra
 <option value="reserva">Reserva</option>
 <option value="devolucion">Devolución</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="userId">Responsable</label>
+<div>
 <select id="userId" name="userId">
 <option value="" selected="">Todos los responsables</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="workOrderId">Orden de trabajo</label>
@@ -1955,14 +2010,18 @@ exports[`/dashboard/reports/inventory > todos los filtros > resultado 1`] = `
 </fieldset>
 <div>
 <label for="materialId">Material</label>
+<div>
 <select id="materialId" name="materialId">
 <option value="">Todos los materiales</option>
 <option value="id_material-1">nombre_material-1</option>
 <option value="id_material-2">nombre_material-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="movementType">Tipo</label>
+<div>
 <select id="movementType" name="movementType">
 <option value="">Todos los tipos</option>
 <option value="entrada">Entrada</option>
@@ -1971,14 +2030,19 @@ exports[`/dashboard/reports/inventory > todos los filtros > resultado 1`] = `
 <option value="reserva">Reserva</option>
 <option value="devolucion">Devolución</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="userId">Responsable</label>
+<div>
 <select id="userId" name="userId">
 <option value="">Todos los responsables</option>
 <option value="id_usuario-1">apellidos-1, nombres-1</option>
 <option value="id_usuario-2">apellidos-2, nombres-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="workOrderId">Orden de trabajo</label>

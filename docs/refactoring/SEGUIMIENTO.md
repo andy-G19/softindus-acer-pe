@@ -10623,7 +10623,9 @@ pruebas, el más grande es `work-orders/actions.test.ts` (2.103).
 
 Todos los hallazgos de la entrega 11 que no están corregidos ni son de método, y los de la entrega
 10 que siguen abiertos. No hay una entrega 12 planificada: cada fila queda para que el responsable
-decida cuándo hacerla.
+decida cuándo hacerla. Las decisiones de negocio de esta tabla y de la de la entrega 10 están
+desarrolladas, con sus opciones y su prioridad, en [DECISIONES.md](DECISIONES.md) (N1 a N23,
+2026-11-19).
 
 | Origen | Hallazgo | Destino |
 |---|---|---|
@@ -10884,6 +10886,242 @@ sobre producción: se volvió al login de staging y el responsable inició sesi�
 
 La apertura de caja no se verificó en staging: escribiría datos, y la carrera no se puede provocar
 de forma fiable. La cubren la prueba de orden y la de integración.
+
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-11-19 (UTC) y comparados con git:
+
+- El registro de la verificación se publicó en `staging` con `f429ede`: CI #235 en verde (4m 15s).
+- PR #60, abierto a las 17:21:48 UTC y fusionado con merge commit a las 17:23:27 UTC: 9 commits, de
+  `0a3d703` a `f429ede`, y 99 archivos (+1.168 −376). Su CI, el #237, sobre `f429ede`, empezó 30 s
+  después del merge y terminó en verde (5m 57s). Cuando se escribió esta sección todavía no había
+  empezado, y se anotó por error que el PR no tenía CI propio (corregido en el C0 del diseño de
+  los botones).
+- El merge commit `fdfbef9` tiene como padres `f41ccb1` (`main`) y `f429ede` (`staging`), y su
+  árbol es el de `f429ede` (`6639406`).
+- **CI #236 sobre `fdfbef9`:** el primer intento se canceló a los 43 s, como el #217 de la 11.7c2.
+  El responsable lo relanzó desde Actions y el segundo intento terminó en verde (18:54:43 a
+  18:58:31 UTC, 3m 48s). **El grupo de fixes queda integrado.**
+- Vercel desplegó `fdfbef9` en producción (`success` a las 17:24:13 UTC). Sin migraciones.
+
+## Pendientes al pasar al diseño
+
+Anotados el 2026-11-19, cuando el trabajo pasó a una sesión propia de diseño (empezando por los
+botones). Ningún pendiente bloquea el diseño, salvo los dos primeros, que son del responsable y
+rápidos.
+
+| # | Pendiente | Quién | Dónde está el detalle |
+|---|---|---|---|
+| 1 | ~~Relanzar el CI #236 de `main` (cancelado) y comprobar que termina en verde~~ Hecho: segundo intento en verde | Responsable, desde Actions | «Integración en `main`» del grupo de fixes |
+| 2 | ~~Publicar `68179d4` (la hoja de decisiones) con el próximo push~~ Hecho: publicado con `4d89cea` | Responsable | — |
+| 3 | ~~Registrar la integración del PR #60 con el resultado del CI relanzado~~ Hecho en el C0 del diseño de los botones | Próximo C0 | Esta sección |
+| 4 | Subir Node: el CI, `engines` y `@types/node` juntos (el C7 de la revisión de dependencias), después de instalar la misma versión en el equipo del responsable | Hacia el 2026-12-19 | «Revisión de dependencias», D121 |
+| 5 | Ver la versión de Node del proyecto en Vercel (Settings → Build and Deployment) | Responsable | D121 |
+| 6 | Activar las alertas de Dependabot en GitHub | Responsable | D122 |
+| 7 | Las 23 decisiones de negocio (5 de prioridad alta: N1 a N5) | Responsable y taller | [DECISIONES.md](DECISIONES.md) |
+| 8 | Los `fix` propios de la entrega 10 que siguen abiertos: errores de línea por posición, KPI «Total» de etapas y recetas, textos y copias, «La versión ya estaba vigente», el buscador de `SearchableSelect`, el enlace del maestro de taller a dos reportes y el tiempo límite de una prueba | `fix` propios | Tabla de la entrega 10 |
+| 9 | La lista de métodos de pago copiada en Inventario y Personal | Paso propio | Hallazgo 3 de la 11.7d1 |
+| 10 | Los vacíos de los 10 reportes | Paso propio | Hallazgo 3 de la 11.7d2 |
+| 11 | Los movimientos de caja chica: rango de fechas sin `DateRangeFields` y formulario GET sin `FilterBar` | Paso propio | Tabla de la entrega 11 |
+| 12 | Recorridos automáticos de punta a punta, la medición de accesibilidad y la línea base de rendimiento | Plan propio, si se decide | Criterios globales del cierre de la entrega 11 |
+
+Los dos pendientes de diseño ya registrados, D99 (reglas de `patterns.css` que ganan a clases de
+componentes) y D101 (el borde de color de las alertas, confirmado en la galería: las cinco tienen el
+mismo borde gris), pasan a la sesión de diseño.
+
+## Diseño de los botones (2026-11-19)
+
+Primer paso de la sesión de diseño. El responsable pidió animar los botones y cambiar el cian de
+«Limpiar filtros», y trajo su propia propuesta: una maqueta exportada de una herramienta de diseño
+(`tmp/Diseño_propuesta/Main-html.zip`, fuera de git), con los colores de las siete variantes, los
+bordes, el foco, las transiciones y unas alturas nuevas. Se leyó entera y no se ejecutó su código.
+
+### Decisiones
+
+| # | Decisión | Motivo |
+|---|---|---|
+| D129 | Se conservan las alturas de los botones (24, 28, 32 y 36 px); la propuesta las subía a 24, 30, 36 y 44 | Cambiaban todas las pantallas a la vez, y los campos miden 32 px: «Filtrar» quedaba 4 px más alto que los campos de su barra. Las alturas nuevas, si se adoptan, van junto con las de los campos |
+| D130 | Animación: la de la propuesta (transiciones de 150 ms y 1 px al pulsar) más «Tacto» (sube 1 px al pasar el puntero, se encoge al 97 % al pulsar) | La propuesta casi no añadía movimiento y el pedido era animar. `link` no se mueve |
+| D131 | El anillo de foco de la propuesta solo en los botones; la regla global de `patterns.css` excluye `[data-slot="button"]` | Sin excluirlos se veían el contorno global y el anillo a la vez. Enlaces, campos y los `<button>` sueltos conservan su contorno. Toca una regla de D99, que sigue abierto para el resto |
+| D132 | «Limpiar filtros» en cobre quemado tintado, como en la propuesta | Elegido por el responsable sabiendo que comparte familia de tono con el naranja (28° frente a 33°) y con la brasa de las advertencias: pesa menos porque es un tinte con borde, no un relleno |
+
+De la propuesta no se tomaron los tokens de espacio, radio y altura (`--space-*`, `--radius-*`,
+`--control-*`): los radios son los que ya existían y los espacios, la escala de Tailwind. Tampoco
+`--focus-ring` ni `--focus-ring-destructive`: el anillo doble es exactamente lo que dibujan
+`ring-offset-2` y `ring-2` de Tailwind sobre los tokens existentes, que además lo suman a la sombra
+del botón principal en el mismo `box-shadow`.
+
+### Commits
+
+| Commit | Qué cambia |
+|---|---|
+| `315e9d6` C0 | Registro de la integración del PR #60 (CI #236 en verde al segundo intento) y corrección: el PR sí tuvo CI propio, el #237 |
+| `a740cbe` C1 `feat(botones): colores de la propuesta en las variantes` | 13 colores y `--shadow-button` en `:root` y `@theme`, `--accent-copper`; fuera los cuatro tokens cian y `.forge-button-gradient`. El principal es un degradado corto con filo de luz en lugar del halo; `outline`, `secondary`, `destructive` y `clear` tienen borde; `link` va siempre subrayado |
+| `b8ae1f7` C2 `feat(botones): anillo de foco propio` | 2 px del color de fondo y anillo de 2 px, naranja y rojo (`--destructive-outline`) en `destructive`; exclusión en `patterns.css` |
+| `36b075c` C3 `feat(botones): animacion de tacto` | `transition-all` pasa a una lista de propiedades en `--motion-fast` con `ease-out`, que nombra `translate` y `scale` (en Tailwind v4 no son `transform`); con reducir movimiento, sin transición ni desplazamiento, con `!` porque `hover:` y `active:` tienen más especificidad. El spinner gira en `--motion-spin` (800 ms, antes 1 s), también en `LoadingState` |
+
+Cada `feat` empezó por su prueba roja (`button.test.ts`, `tokens.test.ts`), que falló por la razón
+esperada antes del código. `npm run check` en verde antes de cada commit (5623, 5626 y 5630
+pruebas); el único aviso de lint es el que ya existía (`_line` en `orders/actions.ts`). CI #239 sobre
+`36b075c` en verde (4m 14s) y Vercel desplegó staging.
+
+### Contraste medido (sobre la tarjeta `#15181d`)
+
+| Variante | Texto (reposo / hover / pulsado) | Otros |
+|---|---|---|
+| default | 7,9 (abajo del degradado) / 9,2 / 6,6:1 | — |
+| secondary | 13,1 / 11,4:1 | — |
+| outline | 14,9:1 en hover | Borde 3,08:1 (mínimo 3:1), 4,59:1 en hover |
+| ghost | 13,8:1 en hover | — |
+| destructive | 11,1 / 9,5:1 | — |
+| clear (cobre) | 8,3 / 7,5:1 | El cian anterior caía a 4,4:1 en hover y 3,0:1 al pulsar |
+| link | 7,7:1 | — |
+| Anillo de foco | 8,5:1 contra el fondo | — |
+
+### CSS compilado e instantáneas
+
+Comparado regla por regla con el del commit anterior (`tmp/diseno-botones/comparar-css.py`):
+
+| Commit | Reglas quitadas / nuevas / cambiadas | Instantáneas (líneas) |
+|---|---|---|
+| C1 | 24 / 32 / 4 bloques de tokens | 39 (111), agrupadas por diferencia de clases: solo clases de las variantes y 4 textos de la paleta de la galería |
+| C2 | 7 / 6 / 0 | 38 (107): solo clases del foco |
+| C3 | 0 / 11 / 1 bloque de tokens | 42 (118): animación y spinner |
+
+La comparación atrapó dos veces utilidades fantasma que las pruebas no ven: en el C2, `.ring`,
+`.ring-2` y `.ring-offset-2`, de una variable llamada `ring` y un comentario de la prueba; en el C3,
+`.transform` con cinco `@property`, de un comentario que nombraba la propiedad. Se renombraron antes
+del commit y no llegaron a staging.
+
+### Verificación en staging
+
+Leída con los estilos calculados, no a ojo, después del despliegue de `36b075c`:
+
+- Las siete variantes tienen los colores, bordes y subrayado de la propuesta; el principal, la
+  sombra `inset 0 1px 0 rgba(255,255,255,.28), 0 1px 2px rgba(0,0,0,.5)`, sin el halo.
+- Hover sobre «Editar» (ghost) en Clientes: `translate: 0px -1px` y el fondo `--ghost-hover`.
+- Foco con teclado en «Filtrar»: `0 0 0 2px #0a0b0d, 0 0 0 4px #f2941f` más la sombra del botón,
+  `outline: none`; la sombra se anima en 150 ms. En «Inactivar» el anillo es rojo. El enlace
+  «Comercial» de las migas conserva el contorno global (naranja al 72 %, 2 px).
+- El spinner gira en 0,8 s.
+- En la confirmación destructiva, «Cancelar» (outline) ya tiene borde visible.
+
+Capturas del antes y el después (galería, barra de filtros y filas de Clientes, confirmación
+destructiva, foco) en `tmp/diseno-botones/capturas/`, fuera de git.
+
+### Pendientes que deja
+
+| Pendiente | Detalle |
+|---|---|
+| Los botones que no siguen el diseño solos | El login (sus clases propias ganan: `shadow-md`, `transition`, su color de anillo); el enlace rojo de Costos; los `<button>` que no son `Button`: la flecha de `BackButton`, el ojo de la contraseña y las opciones de `SearchableSelect` |
+| Alturas nuevas (D129) | Solo junto con las de los campos |
+| D99 y D101 | Siguen abiertos: D131 solo sacó a los botones de la regla de foco |
+
+## Diseño de los campos (2026-11-19)
+
+Segundo paso de la sesión de diseño, en el mismo PR que los botones. El responsable trajo su
+propuesta como otra maqueta (`tmp/Diseño_propuesta/Campos-html.zip`, fuera de git), sobre los
+mismos tokens que la de los botones: borde de acero, textura de metal cepillado, foco con el
+anillo de los botones, error en rojo, solo lectura en acero, interruptor verde, búsqueda con
+lupa, campo de archivo y un estado «Validado». Se leyó entera y no se ejecutó su código.
+
+### Decisiones
+
+| # | Decisión | Motivo |
+|---|---|---|
+| D133 | Los campos conservan sus 32 px (la búsqueda, 36); la propuesta los llevaba a 42 | Con 42, ningún botón coincidía y las barras de filtros quedaban desalineadas; los botones también conservan sus alturas (D129) |
+| D134 | Primero un refactor que pasa a los componentes las reglas de campos de `patterns.css` (la parte de campos de D99), verificado en staging, y después el diseño | Si algo cambiaba, había que distinguir el traslado del diseño |
+| D135 | «Validado» y el campo de archivo se construyen aunque hoy no los use ninguna pantalla | Pedido del responsable, para usarlos después; quedan en la galería |
+| D136 | El chip «Solo lectura» en acero claro `#86a3cd` (6,9:1) | El acero de marca de la propuesta daba 3,48:1 a 10 px, bajo el 4,5:1 del texto pequeño |
+
+Detalles decididos al implementar, dentro del plan aprobado: el radio de los campos queda en 10 px,
+como los botones (la maqueta usaba 8); la separación etiqueta–control–ayuda es de 6 px (la maqueta,
+7, fuera de la escala); la flecha de las listas es un icono `ChevronDown` (la de la maqueta era un
+SVG con el color escrito dentro, y aquí los colores son tokens); el login no se rediseña en este
+PR (anula la textura, conserva su texto de ejemplo y su hover, y solo hereda una transición de
+200 ms en lugar de 150).
+
+### Commits
+
+| Commit | Qué cambia |
+|---|---|
+| `128d7ce` `fix(foco)` | La exclusión de los botones del contorno global (C2 de los botones) iba suelta, `:not(...)`, y subía la regla de 0-2-0 a 0-3-0: ganaba al `outline: none` de los campos, que en staging mostraban el contorno y su sombra a la vez (solo staging; producción no lo tuvo). Va dentro de `:where()` y la prueba lo fija |
+| `949016e` F1 `refactor(campos)` | Salen de `patterns.css` las reglas de fondo, borde, foco, deshabilitado, texto de ejemplo y opciones de todos los campos; cada componente (`Input`, `NativeSelect`, `Textarea`, la búsqueda de `SearchableSelect`) declara lo que se medía. Queda solo la regla de las tres casillas sueltas, y los campos salen de la lista del contorno global, que nunca mostraron. Token `--placeholder`; fuera `--login-field-border`, que nunca se vio |
+| `c052857` F2 `feat(campos)` | `field-control.ts` reúne el aspecto común: tarjeta con textura (`--texture-metal`), borde de acero 3,08:1 que se aclara en hover, foco con borde naranja y anillo con hueco, error rojo sin halo, deshabilitado sin textura al 0,65, solo lectura en acero, 200 ms y nada con reducir movimiento. `NativeSelect` lleva su propia flecha en un contenedor (ninguna de sus 173 llamadas pasa `className`) |
+| `449078d` F3 `feat(campos)` | `Field`: etiqueta de 13 px, separación de 6, asterisco cobre, error de 12 px en `--destructive-outline` (6,2:1; antes 4,6) con icono, y el chip «Solo lectura» oculto al lector. `FieldError` pierde `size`, sin uso |
+| `964768d` F4 `feat(campos)` | `Switch`: 44 × 24 px, verde forja encendido, pulgar claro de 18 px con sombra, anillo con hueco; la regla global de contorno también excluye `[data-slot="switch"]` |
+| `562accd` F5 `feat(campos)` | Búsqueda: lupa a la izquierda; «Limpiar» como `Button` ghost xs, centrado con flex porque `Button` se mueve con `translate`; etiqueta y asterisco de `Field` (el lector ya no lee «Cliente asterisco») |
+| `73c57bb` F6 `feat(campos)` | `Field` con `success`: `data-valid` pinta el control en verde y el mensaje lleva un check; un error lo oculta. `FileInput`: el input real oculto a la vista pero no al teclado ni al lector, y la fila visible es su etiqueta, con el foco, el error y el deshabilitado del input por `peer-*` |
+
+Cada `feat` empezó por su prueba roja; `npm run check` en verde antes de cada commit (de 5638 a
+5664 pruebas, 351 archivos; el único aviso de lint es el que ya existía). CI #241 (F1) y #242
+(F6, sobre `73c57bb`) en verde.
+
+### Paridad del F1
+
+Antes del F1 se midieron en la galería de staging los estilos calculados de los 31 campos en
+reposo (15 estilos distintos, 19 propiedades) y, con clic real, el foco de seis tipos (normal, con
+error, área de texto, solo lectura, búsqueda y lista). Después del despliegue, 0 diferencias en
+todo. La medición mostró que las reglas engañaban: el fondo visible era `dark:bg-input/30` del
+componente, no el de `patterns.css`; el deshabilitado de `NativeSelect` tomaba el de
+`patterns.css` y el de `Input` no; un campo con error y con foco tenía borde rojo y sombra naranja.
+Dos trampas de la medición, ya resueltas: el foco por JavaScript no aplica `:focus` si la ventana
+no tiene el foco (hace falta un clic real), y leer antes de que termine la transición da valores
+intermedios (`oklab(0 0 0 / 0)`).
+
+### Contraste medido (sobre la tarjeta `#15181d`)
+
+| Pieza | Contraste |
+|---|---|
+| Borde en reposo / en hover | 3,08 / 4,59:1 (antes 1,24:1, bajo el 3:1 de un control) |
+| Texto del campo / etiqueta | 16,2:1 |
+| Texto de ejemplo (85 %) | 4,52:1 |
+| Ayuda (12 px) | 5,74:1 |
+| Error (12 px) | 6,16:1 (antes 4,55:1) |
+| Validado (12 px) | 4,63:1 |
+| Chip «Solo lectura» (10 px) | 6,89:1 |
+| Asterisco cobre | 4,10:1 (decorativo: el lector anuncia el `required`) |
+| Interruptor encendido | 4,63:1 |
+
+### CSS compilado e instantáneas
+
+| Commit | Reglas quitadas / nuevas | Instantáneas |
+|---|---|---|
+| `128d7ce` | 2 / 2 (solo el selector) | 0 |
+| F1 | 12 / 11 | 26 (clases) |
+| F2 | 11 / 17 | 345 en 50 archivos: 757 listas con contenedor y flecha, el resto clases |
+| F3 | 0 / 8 | 35 (30 errores con icono, 7 chips) |
+| F4 | 7 / 11 | 3 |
+| F5 | 4 / 4 | 82 (123 lupas, 89 etiquetas, 29 «Limpiar») |
+| F6 | 0 / 15 | 27 |
+
+La comparación atrapó una tercera utilidad fantasma (`.border-primary`, de un texto de la prueba
+del interruptor) antes del commit. Desde el F6 el build parte el CSS en dos archivos: el nuevo, de
+14 KB, es el propio de `react-toastify`. Next los enlaza en el mismo orden relativo que tenían
+dentro del archivo único (el adaptador de los avisos antes que la base de toastify), así que su
+prioridad no cambia; para comparar se unen en ese orden.
+
+### Verificación en staging
+
+Con estilos calculados después del despliegue de `73c57bb`: cada estado de la galería (reposo,
+error, deshabilitado, solo lectura, validado, lista, texto de ejemplo, etiqueta, asterisco, error,
+chip, interruptor encendido y apagado, búsqueda y archivo) tiene los valores de la propuesta. Con
+clic real, el foco es borde y anillo con hueco de 2 px `#0a0b0d` en naranja, rojo (error), acero
+(solo lectura) y verde (validado), sin contorno; el hover aclara el borde a `#7a828f`. En la
+barra de filtros de Clientes, la lista, el campo y los dos botones miden 32 px y terminan en la
+misma línea. Capturas del antes (staging en el F1) y del después en `tmp/diseno-campos/capturas/`,
+fuera de git. Dos capturas salieron sin pintar parte de la página; se comprobó en el DOM (tamaño,
+visibilidad y el elemento en ese punto) que era el pintado del panel y se repitieron.
+
+### Pendientes que deja
+
+| Pendiente | Detalle |
+|---|---|
+| La búsqueda mide 36 px y los campos 32 | En la barra de filtros su borde inferior queda 2 px más arriba que el de los demás; ya era así antes |
+| `.input-forge-focus` sin uso | La regla de `brand.css` quedó sin consumidores desde el F2; se puede quitar en un paso propio |
+| Las muestras de la galería sin `Field` | «Con error» y «Área de texto con error» pintan su mensaje con un `<p>` propio, con el estilo anterior; las de `Field` ya usan `FieldError` |
+| El login | Conserva su aspecto (sus reglas de `brand.css` ganan por orden); se rediseña con los botones que no siguen el diseño solos |
+| D99 | La parte de los campos se cerró en el F1; siguen las reglas de tablas y etiquetas de `patterns.css` |
 
 ## Secuencia de próximas entregas
 

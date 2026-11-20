@@ -137,19 +137,25 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 </div>
 <div>
 <label for="provider">Proveedor</label>
+<div>
 <select id="provider" name="provider">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active">Activo</option>
 <option value="inactive" selected="">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -350,19 +356,25 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 </div>
 <div>
 <label for="provider">Proveedor</label>
+<div>
 <select id="provider" name="provider">
 <option value="" selected="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="" selected="">Todos los estados</option>
 <option value="active">Activo</option>
 <option value="inactive">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -588,19 +600,25 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 </div>
 <div>
 <label for="provider">Proveedor</label>
+<div>
 <select id="provider" name="provider">
 <option value="">Todos los proveedores</option>
 <option value="id_proveedor-1">razon_social-1</option>
 <option value="id_proveedor-2">razon_social-2</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="status">Estado</label>
+<div>
 <select id="status" name="status">
 <option value="">Todos los estados</option>
 <option value="active" selected="">Activo</option>
 <option value="inactive">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
@@ -784,8 +802,11 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > r
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="razon_social-1"/>
-<button type="button">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button">Limpiar</button>
+</div>
 </div>
 </div>
 <button data-variant="outline" type="button">Registrar proveedor nuevo</button>
@@ -799,10 +820,13 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > r
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="true" selected="">Activo</option>
 <option value="false">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="descripcion">Descripcion</label>
@@ -935,8 +959,11 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con su proveedor 
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value="PVE00000009"/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="Ferreteria El Perno"/>
-<button type="button">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button">Limpiar</button>
+</div>
 </div>
 </div>
 <button data-variant="outline" type="button">Registrar proveedor nuevo</button>
@@ -950,10 +977,13 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con su proveedor 
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="true" selected="">Activo</option>
 <option value="false">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="descripcion">Descripcion</label>
@@ -1083,6 +1113,7 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar sin proveedor > r
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value=""/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
 </div>
 </div>
@@ -1097,10 +1128,13 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar sin proveedor > r
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="true" selected="">Activo</option>
 <option value="false">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="descripcion">Descripcion</label>
@@ -1242,6 +1276,7 @@ exports[`/dashboard/maintenance/spare-parts/new > con regreso al listado filtrad
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value=""/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
 </div>
 </div>
@@ -1256,10 +1291,13 @@ exports[`/dashboard/maintenance/spare-parts/new > con regreso al listado filtrad
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="true" selected="">Activo</option>
 <option value="false">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="descripcion">Descripcion</label>
@@ -1376,6 +1414,7 @@ exports[`/dashboard/maintenance/spare-parts/new > formulario > resultado 1`] = `
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value=""/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
 </div>
 </div>
@@ -1390,10 +1429,13 @@ exports[`/dashboard/maintenance/spare-parts/new > formulario > resultado 1`] = `
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="true" selected="">Activo</option>
 <option value="false">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="descripcion">Descripcion</label>
@@ -1434,6 +1476,7 @@ exports[`panel lateral de repuestos > el alta en panel autoriza y consulta igual
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value=""/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
 </div>
 </div>
@@ -1448,10 +1491,13 @@ exports[`panel lateral de repuestos > el alta en panel autoriza y consulta igual
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="true" selected="">Activo</option>
 <option value="false">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="descripcion">Descripcion</label>
@@ -1493,8 +1539,11 @@ exports[`panel lateral de repuestos > la edicion en panel hace la misma consulta
 <label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value="PVE00000009"/>
 <div>
+<svg/>
 <input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="Ferreteria El Perno"/>
-<button type="button">Limpiar</button>
+<div>
+<button data-variant="ghost" type="button">Limpiar</button>
+</div>
 </div>
 </div>
 <button data-variant="outline" type="button">Registrar proveedor nuevo</button>
@@ -1508,10 +1557,13 @@ exports[`panel lateral de repuestos > la edicion en panel hace la misma consulta
 <div>
 <label for="estado">Estado<span aria-hidden="true">*</span>
 </label>
+<div>
 <select id="estado" required="" name="estado">
 <option value="true" selected="">Activo</option>
 <option value="false">Inactivo</option>
 </select>
+<svg/>
+</div>
 </div>
 <div>
 <label for="descripcion">Descripcion</label>

@@ -1,5 +1,6 @@
 /* Identidad de Aceros Peru: login, barra termica, progreso de navegacion,
-   riel templado, boton de forja y foco de los campos. */
+   riel templado y foco de los campos. El boton principal toma sus colores de
+   tokens.css en src/components/ui/button.tsx. */
 @layer utilities {
   .login-industrial-bg {
     background:
@@ -114,33 +115,25 @@
     }
   }
 
-  .forge-button-gradient {
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--primary) 85%, white 15%),
-      var(--primary)
-    );
-    box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--primary) 50%, transparent);
-  }
-
-  .forge-button-gradient:hover {
-    filter: brightness(1.06);
-  }
-
   .input-forge-focus:focus-visible {
     border-color: var(--primary);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent);
   }
 
+  /* El borde y el texto de ejemplo son los que se veian: hasta el diseno de los campos los
+     pintaba patterns.css, que ganaba a esta clase (D99); el borde y el ejemplo propios del
+     login no se llegaron a ver nunca. El login conserva su aspecto mientras no se redisene:
+     sin la textura de los campos y con su texto de ejemplo al 78 %. */
   .login-field-input {
     height: 2.75rem;
-    border-color: var(--login-field-border);
+    border-color: var(--border);
     background-color: var(--login-field-bg);
+    background-image: none;
     color: var(--foreground);
   }
 
   .login-field-input::placeholder {
-    color: color-mix(in srgb, var(--muted-foreground) 70%, transparent);
+    color: color-mix(in srgb, var(--muted-foreground) 78%, transparent);
   }
 
   .login-field-input:hover {
