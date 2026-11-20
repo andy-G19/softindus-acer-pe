@@ -1015,9 +1015,41 @@ exports[`Navegacion y listados > tabla completa 1`] = `
 `;
 
 exports[`Presentacion > estado de error 1`] = `
-"<section class="mx-auto flex max-w-2xl flex-col items-center gap-4 rounded-2xl border border-border bg-card p-8 text-center shadow-panel">
-<span class="flex size-14 items-center justify-center rounded-full bg-destructive/10 text-destructive">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert size-6" aria-hidden="true">
+"<section class="mx-auto flex max-w-2xl flex-col items-center gap-2 rounded-xl border border-border bg-card px-8 py-10 text-center">
+<div data-slot="error-scene" aria-hidden="true" class="error-scene">
+<div class="error-scene-float">
+<img alt="" loading="lazy" width="1671" height="941" decoding="async" data-nimg="1" class="error-scene-art" style="color:transparent" sizes="(max-width: 640px) 100vw, 560px" srcSet="/_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=640&amp;q=75 640w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=750&amp;q=75 750w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=828&amp;q=75 828w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=3840&amp;q=75 3840w" src="/_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=3840&amp;q=75"/>
+<div class="error-scene-screen">
+<div class="error-scene-scan">
+</div>
+<div class="error-scene-flicker">
+</div>
+</div>
+<div class="error-scene-alert">
+</div>
+<div class="error-scene-led">
+</div>
+<div class="error-scene-visor">
+</div>
+<div class="error-scene-smoke error-scene-smoke-monitor">
+</div>
+<div class="error-scene-smoke error-scene-smoke-torch">
+</div>
+<div class="error-scene-glow">
+</div>
+<svg class="error-scene-spark" viewBox="0 0 24 24" fill="none">
+<path d="M12 2v5M12 17v5M2 12h5M17 12h5M5 5l3.5 3.5M15.5 15.5 19 19M19 5l-3.5 3.5M8.5 15.5 5 19">
+</path>
+</svg>
+<span class="error-scene-particle">
+</span>
+<span class="error-scene-particle">
+</span>
+<span class="error-scene-particle">
+</span>
+</div>
+<span data-slot="error-scene-icon" class="absolute right-[15%] bottom-2 z-10 flex size-[38px] items-center justify-center rounded-full border-4 border-card bg-destructive-surface text-destructive-foreground">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert size-[18px]" aria-hidden="true">
 <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3">
 </path>
 <path d="M12 9v4">
@@ -1026,16 +1058,47 @@ exports[`Presentacion > estado de error 1`] = `
 </path>
 </svg>
 </span>
-<div class="space-y-2">
-<h1 class="font-heading text-2xl font-semibold text-foreground">No se pudo cargar</h1>
 </div>
+<h1 class="text-lg font-semibold text-foreground">No se pudo cargar</h1>
 </section>"
 `;
 
 exports[`Presentacion > estado de error completo 1`] = `
-"<section class="mx-auto flex max-w-2xl flex-col items-center gap-4 rounded-2xl border border-border bg-card p-8 text-center shadow-panel">
-<span class="flex size-14 items-center justify-center rounded-full bg-destructive/10 text-destructive">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert size-6" aria-hidden="true">
+"<section class="mx-auto flex max-w-2xl flex-col items-center gap-2 rounded-xl border border-border bg-card px-8 py-10 text-center">
+<div data-slot="error-scene" aria-hidden="true" class="error-scene">
+<div class="error-scene-float">
+<img alt="" loading="lazy" width="1671" height="941" decoding="async" data-nimg="1" class="error-scene-art" style="color:transparent" sizes="(max-width: 640px) 100vw, 560px" srcSet="/_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=640&amp;q=75 640w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=750&amp;q=75 750w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=828&amp;q=75 828w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=3840&amp;q=75 3840w" src="/_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=3840&amp;q=75"/>
+<div class="error-scene-screen">
+<div class="error-scene-scan">
+</div>
+<div class="error-scene-flicker">
+</div>
+</div>
+<div class="error-scene-alert">
+</div>
+<div class="error-scene-led">
+</div>
+<div class="error-scene-visor">
+</div>
+<div class="error-scene-smoke error-scene-smoke-monitor">
+</div>
+<div class="error-scene-smoke error-scene-smoke-torch">
+</div>
+<div class="error-scene-glow">
+</div>
+<svg class="error-scene-spark" viewBox="0 0 24 24" fill="none">
+<path d="M12 2v5M12 17v5M2 12h5M17 12h5M5 5l3.5 3.5M15.5 15.5 19 19M19 5l-3.5 3.5M8.5 15.5 5 19">
+</path>
+</svg>
+<span class="error-scene-particle">
+</span>
+<span class="error-scene-particle">
+</span>
+<span class="error-scene-particle">
+</span>
+</div>
+<span data-slot="error-scene-icon" class="absolute right-[15%] bottom-2 z-10 flex size-[38px] items-center justify-center rounded-full border-4 border-card bg-destructive-surface text-destructive-foreground">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert size-[18px]" aria-hidden="true">
 <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3">
 </path>
 <path d="M12 9v4">
@@ -1044,15 +1107,14 @@ exports[`Presentacion > estado de error completo 1`] = `
 </path>
 </svg>
 </span>
-<div class="space-y-2">
-<h1 class="font-heading text-2xl font-semibold text-foreground">No se pudo cargar</h1>
-<p class="text-sm text-muted-foreground">Intenta de nuevo.</p>
 </div>
-<div class="w-full rounded-xl border border-border bg-secondary/60 p-4 text-left text-sm text-muted-foreground">
-<p class="font-medium text-foreground">Detalle técnico:</p>
-<p class="mt-1 break-words">Tiempo de espera agotado</p>
-</div>
-<div class="flex flex-col gap-3 sm:flex-row">
+<h1 class="text-lg font-semibold text-foreground">No se pudo cargar</h1>
+<p class="max-w-[420px] text-[0.8125rem] leading-5 text-muted-foreground">Intenta de nuevo.</p>
+<details class="group mt-2.5 w-full max-w-[460px] rounded-md border border-border bg-background text-left">
+<summary class="cursor-pointer list-none px-3.5 py-2.5 text-xs font-semibold text-foreground group-open:border-b group-open:border-border [&amp;::-webkit-details-marker]:hidden">Detalle técnico</summary>
+<p class="px-3.5 py-2.5 font-mono text-xs leading-[18px] break-words text-muted-foreground">Tiempo de espera agotado</p>
+</details>
+<div class="mt-3.5 flex flex-col gap-3 sm:flex-row">
 <button data-slot="button" data-variant="default" data-size="default" class="group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-[color,background-color,border-color,text-decoration-color,box-shadow,translate,scale,opacity] duration-(--motion-fast) ease-out outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:-translate-y-px active:not-aria-[haspopup]:translate-y-px active:not-aria-[haspopup]:scale-97 motion-reduce:transition-none motion-reduce:translate-none! motion-reduce:scale-none! disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 bg-primary bg-linear-to-b from-primary-hover to-primary text-primary-foreground shadow-button hover:bg-none hover:bg-primary-hover active:bg-none active:bg-primary-active active:shadow-none h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2">Reintentar</button>
 </div>
 </section>"

@@ -239,5 +239,10 @@
   /* Curva que frena al final, para que el interruptor se asiente (propuesta de los campos). */
   --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
   --motion-temper: 6s;
+  /* Escena de la pantalla de error (D137): barrido y humo, destellos de la antorcha y el
+     parpadeo del LED (un ciclo por segundo: nada parpadea mas de 3 veces por segundo). */
+  --motion-scene: 4s;
+  --motion-spark: 3s;
+  --motion-blink: 1s;
 }
 
