@@ -11153,7 +11153,7 @@ código. La ilustración definitiva la entregó aparte (`Robot_tec_error.webp`).
 | D137 | La pantalla de error usa la ilustración del responsable (WebP sin pérdida, 1671 × 941, 1 MB) con capas CSS animadas **en bucle y sin botón de pausa** | Decisión del responsable («es un mensaje de advertencia»). **Riesgo anotado:** no cumple WCAG 2.2.2 (nivel A), porque la animación es decorativa (el aviso lo dan el título y el texto). Mitigado: con reducir movimiento todo queda quieto, y nada parpadea más de 3 veces por segundo (2.3.1). Añadir el botón después es un cambio pequeño |
 | D138 | La imagen conserva «SYSTEM ERROR» y «CAUTION» en inglés | Aceptado por el responsable: decorativos y genéricos; el título y el texto en español dicen qué pasó. La primera versión decía «503» y se descartó, porque `ErrorState` sirve a cualquier error y a «no encontrado» |
 | D139 | El archivo de 1 MB se sirve tal cual con `next/image` | En staging el navegador descarga una variante de 750 px en calidad 75: **22 KB** |
-| D140 | Los avisos siguen arriba a la derecha, 4 s y con barra de progreso; cambia su aspecto | La propuesta los ponía abajo y sin barra |
+| D140 | Los avisos siguen arriba a la derecha, 4 s y con barra de progreso; cambia su aspecto | La propuesta los ponía abajo y sin barra. **Sustituida por D144** (posición y aspecto de la segunda propuesta) |
 | D141 | El título de la pantalla de error queda en Oswald 650 a 18 px | Una regla global de `patterns.css` (D99) da a todo `<h1>` la letra de títulos; así coincide con los demás títulos del ERP. Se revisa al limpiar D99 |
 
 Además: las confirmaciones conservan el `AlertDialog` de Radix (la maqueta usaba `<dialog>` nativo; su
@@ -11231,6 +11231,122 @@ el DOM y no se tomó por un fallo de la página.
 | `--shadow-panel` | Ya no lo usa ningún componente; solo la paleta de la galería |
 | Título de la pantalla de error (D141) | Con la limpieza de D99 |
 | `Skeleton` | Si se quiere la medida de la propuesta, junto con `production/loading.tsx` |
+
+### Integración en `main` (mensajes y estados)
+
+Datos leídos de la API de GitHub el 2026-11-20 (UTC) y comparados con git:
+
+- El registro de mensajes y estados se publicó en `staging` con `b05441e`: CI #247 en verde.
+- PR #62 «Diseño de mensajes y estados», abierto a las 03:16:39 y fusionado con merge commit a las
+  03:24:56: 7 commits, de `13ef39f` a `b05441e`, y 56 archivos (+1.587 −1.088). Su CI, el #248, sobre
+  `b05441e`, terminó en verde antes del merge.
+- El merge commit `3b27170` tiene como padres `1a46255` (`main`) y `b05441e` (`staging`), y su
+  árbol es el de `b05441e` (`77b4582`).
+- CI #249 sobre `3b27170` en verde al primer intento (03:24:59 a 03:30:35).
+- Vercel desplegó `3b27170` en producción (`success` a las 03:25:48). Sin migraciones.
+
+**El diseño de mensajes y estados queda integrado.**
+
+## Diseño de ventanas y corrección de los avisos (2026-11-20)
+
+Cuarto paso de la sesión de diseño. El responsable trajo dos maquetas, fuera de git y leídas
+enteras sin ejecutar su código:
+
+- `tmp/Diseño_propuesta/Ventanas-html.zip`: ventana y panel lateral;
+- `Estados(MensajesTemporales)-html.zip`: una segunda versión de los avisos, después de verlos en
+  staging («los iconos no se ven centrados»).
+
+### Decisiones
+
+| # | Decisión | Motivo |
+|---|---|---|
+| D142 | El velo bajo ventanas, paneles y confirmaciones pasa a `rgba(10, 11, 13, 0.6)` | Lo eligió el responsable («más oscuro»). El anterior, negro al 40 %, venía de SweetAlert2 |
+| D143 | La confirmación de descarte dice «Seguir editando» en lugar de «Cancelar» | Decisión del responsable: decía lo mismo que el «Cancelar» del formulario que la abre. Cambia un texto de la interfaz, así que va en su propio `feat`. `ConfirmDialog` sigue diciendo «Cancelar» por defecto en las demás confirmaciones |
+| D144 | Los avisos van abajo a la derecha, a 24 px de los bordes y 10 px entre sí, con el más nuevo junto a la esquina; insignia redonda de 28 px con el color del tipo; barra de 3 px sobre un riel gris | Segunda propuesta del responsable. Sustituye a D140. Arriba tapaban «Cerrar sesión» |
+| D145 | Los símbolos de la insignia son los de la propuesta, no los de lucide | La «i» de lucide trae su propio círculo, y dentro de la insignia se vería un círculo dentro de otro. Viven en `ToastIcon` |
+| D146 | La duración de los avisos sigue en 4 s | La propuesta usa 4,2 s; se mantiene la decisión de E2 |
+
+### Commits
+
+| Commit | Qué cambia |
+|---|---|
+| `a94cf16` V1 `feat(ventanas): ventana y panel con el diseno de la propuesta` | Ventana de 480 px y alto máximo `min(640px, 86vh)` (antes 512 px); panel de 380 px (antes 448). Tarjeta con textura y borde de acero en lugar del degradado; encabezado, cuerpo y pie con 22 px a los lados; título de 17 px en seminegrita con la letra normal (antes Oswald 18) y subtítulo de 12,5 px; la X atenuada. La ventana aparece subiendo 8 px desde el 98 %; el panel entra en `--motion-slow`; las dos con `--ease-settle`. Velo de D142 |
+| `ad4053b` V2 `feat(ventanas): seguir editando en la confirmacion de descarte` | D143: `DiscardConfirmDialog` pasa `cancelText` a `ConfirmDialog` |
+| `7ea2995` A1 `feat(avisos): avisos con el diseno de la propuesta` | **Arreglo además de diseño:** las reglas del cuerpo del aviso no se aplicaban (ver abajo). El aviso es una fila alineada arriba, con 12 px entre insignia, texto y X; 360 px de ancho y relleno 14 · 16 · 17; título de 13,5 px en seminegrita y descripción gris de 12 px; la X es parte de la fila; barra opaca, la de error en `--destructive-outline` |
+| `9657ba0` A2 `feat(avisos): avisos abajo a la derecha` | `position="bottom-right"` y `newestOnTop={false}`; 10 px entre avisos, como margen superior de cada uno, para que toastify lo anime a 0 al retirarlos |
+| `fb4c089` `fix(avisos): separar los avisos 24 px de los bordes` | A2 los dejó a 16 px (ver abajo) |
+
+Cada `feat` y el `fix` empezaron por su prueba roja; `npm run check` en verde antes de cada commit (de
+5703 a 5715 pruebas, 356 archivos). CI #250 sobre `9657ba0` (V1 a A2, publicados juntos) y CI #251
+sobre `fb4c089`, los dos en verde.
+
+### Dos reglas de los avisos que no hacían nada
+
+- **El cuerpo del aviso.** E2 puso la alineación, la separación del icono y el interlineado en
+  `.Toastify__toast-body`, que `react-toastify` 11 ya no crea: el icono, el contenido y la X son
+  hijos directos de `.Toastify__toast`. En staging el icono quedaba centrado contra el bloque de texto
+  (su centro caía en el hueco entre el título y la descripción), pegado al texto (0 px), con
+  interlineado de 19,5 px, y la X iba posicionada encima del aviso sin espacio reservado. A1 aplica
+  esas reglas al aviso mismo.
+- **La distancia a los bordes.** A2 cambió `--toastify-toast-offset` a 24 px en `.Toastify`, pero
+  toastify declara en `:root` `--toastify-toast-bottom: max(var(--toastify-toast-offset), env(...))`.
+  Una variable que usa a otra se resuelve donde se declara, así que llega al contenedor ya calculada
+  con 16 px. El `fix` declara `--toastify-toast-right` y `--toastify-toast-bottom` en `.Toastify`.
+
+La prueba de A2 solo leía el texto del CSS y pasó: jsdom no calcula la herencia de variables. Lo
+encontró la medición en staging.
+
+### Contraste medido
+
+| Pieza | Contraste |
+|---|---|
+| Borde de acero de la ventana sobre el fondo velado / sobre la tarjeta | 3,40 / 3,08:1 |
+| Aviso: título / descripción sobre la tarjeta | 16,19 / 5,74:1 |
+| Insignia del aviso sobre la tarjeta | 3,48 (información) a 6,82:1 (advertencia) |
+| Símbolo blanco dentro de la insignia | 4,65 (información), 3,50 (éxito), 2,63 (error), 2,37:1 (advertencia) |
+
+El símbolo de error y el de advertencia quedan por debajo de 3:1 (WCAG 1.4.11). Se acepta, como en la
+propuesta: la insignia se distingue de la tarjeta y el título del aviso dice qué pasó.
+
+### CSS compilado e instantáneas
+
+| Commit | Reglas quitadas / nuevas / cambiadas | Instantáneas |
+|---|---|---|
+| V1 | 9 / 13 / 2 | 3 (ventana y los dos paneles de `dialog.test.ts`) |
+| V2 | 0 / 0 / 0 | 0 |
+| A1 | 1 / 12 / 4 | 144 (10 de la fachada y 134 del puente `?toast=`: solo las clases del contenido) |
+| A2 | 0 / 0 / 2 | 0 |
+| `fix` | 0 / 0 / 1 | 0 |
+
+Sin utilidades fantasma. Las 3 utilidades nuevas de A1 (`pt-px`, `leading-[17px]` y
+`text-[0.84375rem]`) las usa el contenido del aviso.
+
+### Verificación en staging
+
+Con estilos calculados en la galería:
+
+- **Ventana:** 480 px, alto máximo 637 px (86 % de 741), borde de acero, textura, velo `rgba(10, 11,
+  13, 0.6)`, 22 px a los lados, título de 17 px en Geist 600.
+- **Panel:** 380 px, borde de acero, 0,25 s con `cubic-bezier(0.22, 1, 0.36, 1)`.
+- **Descarte:** con un monto escrito en «Ventana con formulario», la confirmación ofrece «Seguir
+  editando» (outline) y «Descartar cambios» (destructivo); seguir conserva el monto y descartar
+  cierra todo. Sin envío.
+- **Avisos en escritorio:** los cuatro tipos con su insignia, título, descripción, X en la fila y
+  barra de 3 px; el contenedor abajo a la derecha a 24 px de los dos bordes, 10 px entre avisos y el
+  más nuevo abajo.
+- **Avisos a 375 px:** todo el ancho y pegados al borde inferior con radio 0, como hace toastify en
+  pantallas pequeñas.
+
+El panel del navegador estaba oculto (`document.hidden`), así que las animaciones quedaban en su
+primer cuadro; se midió el estado sin transformar y no se tomó por un fallo.
+
+### Pendientes que deja
+
+| Pendiente | Detalle |
+|---|---|
+| Contraste del símbolo de error y de advertencia | 2,63 y 2,37:1; si se exige 1.4.11 al símbolo, oscurecerlo o cambiar el color del trazo |
+| Avisos en móvil | Radio 0 y pegados al borde, lo que decide toastify; la propuesta no define el móvil |
+| Zoom del icono al entrar | Toastify anima la insignia con su propio zoom; la propuesta no lo tiene |
 
 ## Secuencia de próximas entregas
 

@@ -129,6 +129,12 @@ describe("tokens", () => {
     }
   });
 
+  // Diseno de ventanas: el velo es casi negro azulado al 60 % (antes el negro al 40 % que vino
+  // de SweetAlert2), para ventanas, paneles y confirmaciones.
+  it("el velo bajo las ventanas es el de la propuesta", () => {
+    expect(tokens).toMatch(/--overlay:\s*rgba\(10, 11, 13, 0\.6\)/);
+  });
+
   it("el interruptor tiene su verde, su sombra y su curva", () => {
     expect(theme).toContain("--color-accent-forge");
     expect(root).toContain("--shadow-thumb");

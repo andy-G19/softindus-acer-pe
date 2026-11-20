@@ -9,47 +9,80 @@
      contenedor): los avisos las heredan de el y ganan a las que toastify declara en :root;
    - lo que toastify pinta como propiedad directa se sobrescribe con selectores prefijados por
      .Toastify (0-2-0 contra su 0-1-0).
-   Posicion, duracion y barra de progreso se conservan (decision del responsable). */
+   Posicion, duracion y barra de progreso se conservan (decision del responsable).
+
+   Avisos con la propuesta «Estados (mensajes temporales)» (2026-11-20): el aviso mismo es la fila
+   (toastify 11 no crea .Toastify__toast-body): insignia de 28 px con el color del tipo, texto y X,
+   alineados arriba y a 12 px; barra de 3 px sobre un riel gris. Los simbolos de la insignia los
+   pone ToastIcon (src/components/notifications/toast-icon.tsx). */
 
 .Toastify {
   --toastify-color-dark: var(--texture-metal), var(--card);
   --toastify-text-color-dark: var(--foreground);
   --toastify-toast-bd-radius: var(--radius-lg);
   --toastify-toast-shadow: var(--shadow-toast);
-  --toastify-toast-padding: 13px 14px;
+  --toastify-toast-padding: 14px 16px 17px;
   --toastify-toast-min-height: 0px;
-  --toastify-toast-width: 340px;
+  --toastify-toast-width: 360px;
+  /* 24 px de los bordes. No sirve --toastify-toast-offset: toastify calcula estas dos en :root con
+     su offset de 16 px y llegan aqui ya resueltas. */
+  --toastify-toast-right: max(24px, env(safe-area-inset-right));
+  --toastify-toast-bottom: max(24px, env(safe-area-inset-bottom));
   --toastify-font-family: var(--font-sans);
-  --toastify-icon-color-success: var(--success-foreground);
-  --toastify-icon-color-error: var(--destructive-foreground);
-  --toastify-icon-color-warning: var(--warning-foreground);
-  --toastify-icon-color-info: var(--info-foreground);
   --toastify-color-progress-success: var(--success);
-  --toastify-color-progress-error: var(--destructive);
+  --toastify-color-progress-error: var(--destructive-outline);
   --toastify-color-progress-warning: var(--warning);
   --toastify-color-progress-info: var(--info);
 }
 
+/* 10 px entre avisos, arriba de cada uno: el mas nuevo queda a los 24 px de la esquina y, al
+   retirarse, toastify anima este margen a 0. */
 .Toastify .Toastify__toast {
+  margin-top: 10px;
+  margin-bottom: 0;
+  overflow: hidden;
+  align-items: flex-start;
+  gap: 12px;
   border: 1px solid var(--control-border);
 }
 
-.Toastify .Toastify__toast-body {
-  align-items: flex-start;
-  gap: 0.625rem;
-  margin: 0;
-  padding: 0;
-  font-size: 0.8125rem;
-  line-height: 1.125rem;
-}
-
 .Toastify .Toastify__toast-icon {
-  width: 18px;
-  margin-top: 1px;
-  margin-inline-end: 0;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--foreground);
 }
 
+.Toastify .Toastify__toast-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.Toastify .Toastify__toast--success .Toastify__toast-icon {
+  background-color: var(--success);
+}
+
+.Toastify .Toastify__toast--error .Toastify__toast-icon {
+  background-color: var(--destructive-outline);
+}
+
+.Toastify .Toastify__toast--warning .Toastify__toast-icon {
+  background-color: var(--warning);
+}
+
+.Toastify .Toastify__toast--info .Toastify__toast-icon {
+  background-color: var(--info);
+}
+
+/* La X es la ultima pieza de la fila: toastify la posiciona encima del aviso y el texto no le
+   dejaba sitio. */
 .Toastify .Toastify__close-button {
+  position: static;
+  flex-shrink: 0;
+  align-self: flex-start;
   display: inline-flex;
   width: 20px;
   height: 20px;
@@ -66,6 +99,26 @@
 .Toastify .Toastify__close-button:hover {
   background-color: var(--ghost-hover);
   color: var(--foreground);
+}
+
+.Toastify .Toastify__close-button > svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* Cuenta regresiva: 3 px con el color del tipo sobre un riel gris; toastify la pinta al 70 % sobre
+   un riel del mismo color al 20 %. */
+.Toastify .Toastify__progress-bar--wrp {
+  height: 3px;
+}
+
+.Toastify .Toastify__progress-bar {
+  opacity: 1;
+}
+
+.Toastify .Toastify__progress-bar--bg {
+  background: var(--border);
+  opacity: 1;
 }
 
 /* Entrada: aparece y sube 10 px; salida: se desvanece bajando un poco. La transicion la arma

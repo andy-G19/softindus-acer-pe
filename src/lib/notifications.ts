@@ -13,16 +13,17 @@ import type {
 
 // Diseno de mensajes y estados (2026-11-19): el color de cada tipo (icono y barra) lo ponen las
 // variables de toastify en src/styles/adapters/toastify.css, asi que el aviso ya no lleva clases
-// por tipo. El mensaje va a 13 px en medio peso.
+// por tipo. Con la propuesta de mensajes temporales (2026-11-20) el texto ocupa el ancho que dejan
+// la insignia y la X: titulo de 13,5 px en seminegrita y descripcion gris de 12 px, a 2 px.
 function notificationContent(message: string, description?: string) {
   return createElement(
     "div",
-    { className: "space-y-1" },
-    createElement("p", { className: "text-[0.8125rem] font-medium" }, message),
+    { className: "flex min-w-0 flex-1 flex-col gap-0.5 pt-px" },
+    createElement("p", { className: "text-[0.84375rem] leading-[18px] font-semibold" }, message),
     description
       ? createElement(
           "p",
-          { className: "text-xs leading-relaxed text-muted-foreground" },
+          { className: "text-xs leading-[17px] text-muted-foreground" },
           description,
         )
       : null,
