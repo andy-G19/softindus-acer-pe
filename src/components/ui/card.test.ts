@@ -6,10 +6,14 @@ import { describe, expect, it } from "vitest";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 
 // Diseno de la presentacion (propuesta del responsable, 2026-11-20; D156). La tarjeta es una placa
-// de acero cepillado: fondo del color de la pagina con la textura de metal a 135 grados, borde
+// de acero cepillado: la superficie elevada (--card) con la textura de metal a 135 grados, borde
 // comun y radio de 10 px. La textura se desplaza muy despacio (18 s por vuelta), una excepcion
-// elegida a D153, y se detiene con reducir movimiento. Al pasar el puntero sube 2 px, aclara el
-// borde y proyecta sombra. La barra termica es el barrido de .heat-sweep, a 3 px y sin redondeo.
+// elegida a D153, y se detiene con reducir movimiento. Al pasar el puntero solo aclara el borde.
+// La barra termica es el barrido de .heat-sweep, a 3 px y sin redondeo.
+// Verificacion en staging (D159 y D160): con el fondo de la pagina (--background) 117 de las 122
+// tarjetas quedaban hundidas bajo el shell (--shell), y al subir 2 px un formulario entero saltaba
+// cada vez que el puntero entraba o salia. Solo el indicador y el acceso a modulo, que se pulsan,
+// suben (patterns.css).
 
 function classesOf(html: string, slot: string) {
   return (html.match(new RegExp(`<div [^>]*data-slot="${slot}"[^>]*class="([^"]*)"`))?.[1] ?? "").split(" ");
@@ -27,14 +31,15 @@ function rule(css: string, selector: string) {
 const card = renderToStaticMarkup(h(Card, null, h(CardHeader, null, "Titulo"), h(CardContent, null, "Contenido")));
 
 describe("placa de la tarjeta", () => {
-  it("acero cepillado sobre el fondo de la pagina, con borde comun y radio de 10 px", () => {
+  it("acero cepillado sobre la superficie elevada, con borde comun y radio de 10 px", () => {
     const actual = classesOf(card, "card");
 
+    expect(actual).not.toContain("bg-background");
     for (const name of [
       "rounded-lg",
       "border",
       "border-border",
-      "bg-background",
+      "bg-card",
       "bg-(image:--texture-metal)",
       "bg-[length:180px_180px]",
       "card-brushed",
@@ -45,15 +50,19 @@ describe("placa de la tarjeta", () => {
     expect(actual).not.toContain("rounded-xl");
   });
 
-  it("al pasar el puntero sube 2 px, aclara el borde y proyecta sombra; con reducir movimiento no sube", () => {
+  it("al pasar el puntero solo aclara el borde: no sube ni proyecta sombra", () => {
+    const actual = classesOf(card, "card");
+
+    expect(actual).toContain("hover:border-control-border-hover");
+    expect(actual.filter((name) => name.startsWith("hover:") && name !== "hover:border-control-border-hover")).toEqual([]);
+  });
+
+  it("la transicion y el freno de reducir movimiento quedan para el indicador, que sube desde patterns.css", () => {
     const actual = classesOf(card, "card");
 
     for (const name of [
       "transition-[border-color,translate,box-shadow]",
       "duration-(--motion-base)",
-      "hover:-translate-y-0.5",
-      "hover:border-control-border-hover",
-      "hover:shadow-card-lift",
       "motion-reduce:transition-none",
       "motion-reduce:translate-none!",
     ]) {
@@ -107,11 +116,10 @@ describe("desplazamiento del cepillado", () => {
     expect(reducido).toMatch(/\.card-brushed\s*\{\s*animation:\s*none/);
   });
 
-  it("la duracion y la sombra viven en tokens.css", () => {
+  it("la duracion vive en tokens.css, y la sombra al subir, que ya no tiene uso, no existe", () => {
     const tokens = withoutComments(readFileSync("src/styles/tokens.css", "utf8"));
 
     expect(tokens).toMatch(/^\s*--motion-brush:\s*18s;/m);
-    expect(tokens).toMatch(/^\s*--shadow-card-lift:\s*0 10px 22px rgba\(0, 0, 0, 0\.3\);/m);
-    expect(tokens).toMatch(/^\s*--shadow-card-lift:\s*var\(--shadow-card-lift\);/m);
+    expect(tokens).not.toContain("--shadow-card-lift");
   });
 });

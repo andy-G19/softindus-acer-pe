@@ -150,7 +150,8 @@ export function PresentationSection() {
       </div>
       <GalleryNote>
         Placa de acero cepillado cuya textura se desplaza en un ciclo de 18 s, casi imperceptible.
-        Al pasar el puntero sube y aclara el borde. La barra térmica es el barrido de la marca.
+        Al pasar el puntero solo aclara el borde: una tarjeta con un formulario no se mueve. La
+        barra térmica es el barrido de la marca.
       </GalleryNote>
 
       <GallerySample label="Indicadores (KpiCard)" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

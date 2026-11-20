@@ -1,11 +1,13 @@
 /**
  * Tarjeta compartida (shadcn). Desde el diseno de la presentacion (propuesta del responsable,
- * 2026-11-20; D156) es una placa de acero cepillado: fondo del color de la pagina con la textura
- * de metal (--texture-metal) en mosaicos de 180 px que se desplazan una vuelta cada 18 s
+ * 2026-11-20; D156) es una placa de acero cepillado: la superficie elevada (--card) con la
+ * textura de metal (--texture-metal) en mosaicos de 180 px que se desplazan una vuelta cada 18 s
  * (.card-brushed de brand.css, la excepcion elegida a la quietud en reposo de D153), borde comun
- * y radio de 10 px. Al pasar el puntero sube 2 px, aclara el borde y proyecta sombra; con reducir
- * movimiento no sube ni se desplaza. La barra termica es el barrido de .heat-sweep en su riel
- * fino de 3 px (.heat-sweep-thin), que ya no usa la barra .heat-bar.
+ * y radio de 10 px. Al pasar el puntero solo aclara el borde (D160): una tarjeta con un
+ * formulario no debe saltar. La transicion de translate y sombra, y el freno de reducir
+ * movimiento, sirven al indicador (KpiCard), que sube desde patterns.css; sobre el fondo de la
+ * pagina quedaba hundida bajo el shell (D159). La barra termica es el barrido de .heat-sweep en
+ * su riel fino de 3 px (.heat-sweep-thin), que ya no usa la barra .heat-bar.
  */
 import * as React from "react"
 
@@ -26,7 +28,7 @@ function Card({
       data-slot="card"
       data-size={size}
       className={cn(
-        "group/card card-brushed flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg border border-border bg-background bg-(image:--texture-metal) bg-[length:180px_180px] py-(--card-spacing) text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:-translate-y-0.5 hover:border-control-border-hover hover:shadow-card-lift motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg",
+        "group/card card-brushed flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg border border-border bg-card bg-(image:--texture-metal) bg-[length:180px_180px] py-(--card-spacing) text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:border-control-border-hover motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg",
         heatBar && "pt-0",
         className
       )}

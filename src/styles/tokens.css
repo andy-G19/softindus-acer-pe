@@ -100,7 +100,6 @@
   --color-badge-default-border: var(--badge-default-border);
   --shadow-badge-default: var(--shadow-badge-default);
   --shadow-badge-secondary: var(--shadow-badge-secondary);
-  --shadow-card-lift: var(--shadow-card-lift);
 }
 
 :root {
@@ -259,9 +258,7 @@
   --shadow-badge-default: 0 2px 12px color-mix(in oklch, var(--primary) 35%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
   --shadow-badge-secondary: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  /* Tarjeta al pasar el puntero (propuesta de la presentacion, D156): se separa de la pagina. */
-  --shadow-card-lift: 0 10px 22px rgba(0, 0, 0, 0.3);
-  /* Indicador al pasar el puntero (D157): mas hondo que la tarjeta; el resplandor de su tono se
+  /* Indicador al pasar el puntero (D157): se separa de la pagina; el resplandor de su tono se
      suma en patterns.css. */
   --shadow-kpi-hover: 0 18px 38px rgba(0, 0, 0, 0.45);
   /* Acceso a modulo con la intencion (D158): filo de luz y sombra honda; el resplandor de su

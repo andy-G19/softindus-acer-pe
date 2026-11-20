@@ -1324,7 +1324,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </figure>
 </div>
-<p>Placa de acero cepillado cuya textura se desplaza en un ciclo de 18 s, casi imperceptible. Al pasar el puntero sube y aclara el borde. La barra térmica es el barrido de la marca.</p>
+<p>Placa de acero cepillado cuya textura se desplaza en un ciclo de 18 s, casi imperceptible. Al pasar el puntero solo aclara el borde: una tarjeta con un formulario no se mueve. La barra térmica es el barrido de la marca.</p>
 <figure>
 <figcaption>Indicadores (KpiCard)</figcaption>
 <div>
