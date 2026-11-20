@@ -100,6 +100,7 @@
   --color-badge-default-border: var(--badge-default-border);
   --shadow-badge-default: var(--shadow-badge-default);
   --shadow-badge-secondary: var(--shadow-badge-secondary);
+  --shadow-card-lift: var(--shadow-card-lift);
 }
 
 :root {
@@ -236,6 +237,8 @@
   --shadow-badge-default: 0 2px 12px color-mix(in oklch, var(--primary) 35%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
   --shadow-badge-secondary: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  /* Tarjeta al pasar el puntero (propuesta de la presentacion, D156): se separa de la pagina. */
+  --shadow-card-lift: 0 10px 22px rgba(0, 0, 0, 0.3);
   --shadow-raised: 0 14px 35px rgba(0, 0, 0, 0.18);
   --shadow-raised-hover: 0 12px 24px -8px rgba(0, 0, 0, 0.4);
   --shadow-card-hover: 0 16px 34px rgba(0, 0, 0, 0.24);
@@ -279,6 +282,9 @@
      la presentacion, 2026-11-20). */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --motion-temper: 6s;
+  /* Una vuelta del cepillado de la tarjeta (propuesta de la presentacion, D156): tan lenta que
+     solo se nota si uno se queda mirando, como metal bajo una luz que se mueve. */
+  --motion-brush: 18s;
   /* Escena de la pantalla de error (D137): barrido y humo, destellos de la antorcha y el
      parpadeo del LED (un ciclo por segundo: nada parpadea mas de 3 veces por segundo). */
   --motion-scene: 4s;
