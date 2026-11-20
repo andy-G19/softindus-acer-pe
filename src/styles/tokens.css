@@ -227,8 +227,9 @@
   --z-sidebar: 30;
   --z-header: 40;
   --z-overlay: 50;
-  /* Velo bajo las ventanas: el mismo que pone hoy SweetAlert2. */
-  --overlay: rgba(0, 0, 0, 0.4);
+  /* Velo bajo ventanas, paneles y confirmaciones (diseno de ventanas, 2026-11-20): casi negro
+     azulado al 60 %; antes el negro al 40 % que venia de SweetAlert2. */
+  --overlay: rgba(10, 11, 13, 0.6);
 
   /* Movimiento. Las animaciones se detienen con prefers-reduced-motion. */
   --motion-fast: 150ms;

@@ -11,7 +11,9 @@ import { cn } from "@/lib/utils"
 // primer elemento enfocable al abrir, cierra con Esc o con el velo y lo
 // devuelve al boton que la abrio. Encabezado y pie fijos; solo el cuerpo se
 // desplaza. En movil ocupa la pantalla completa; desde sm es una ventana
-// centrada con el aspecto de las confirmaciones (AlertDialog).
+// centrada de 480 px. Diseno de ventanas (2026-11-20): tarjeta con textura y
+// borde de acero; aparece subiendo 8 px desde el 98 % con la curva que se
+// asienta; titulo de 17 px en la letra normal.
 //
 // Un formulario en la ventana envuelve el cuerpo y el pie:
 //   <form className="flex min-h-0 flex-1 flex-col"><DialogBody/><DialogFooter/></form>
@@ -22,11 +24,11 @@ import { cn } from "@/lib/utils"
 // variantes data-open/data-closed van despues de motion-reduce en el CSS: por
 // eso motion-reduce:animate-none lleva !important (igual que en AlertDialog).
 
-const motionClasses = "duration-(--motion-base) motion-reduce:animate-none!"
+const motionClasses = "duration-(--motion-base) ease-(--ease-settle) motion-reduce:animate-none!"
 
 // Comun a Dialog y Sheet: columna con encabezado, cuerpo y pie.
 const surfaceClasses =
-  "fixed z-(--z-overlay) flex flex-col bg-linear-to-b from-card to-popover text-foreground outline-none"
+  "fixed z-(--z-overlay) flex flex-col bg-card bg-(image:--texture-metal) text-foreground outline-none"
 
 function Dialog(props: React.ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
@@ -59,7 +61,7 @@ function DialogOverlay({ className, ...props }: React.ComponentProps<typeof Dial
 function DialogCloseButton() {
   return (
     <DialogPrimitive.Close asChild>
-      <Button type="button" variant="ghost" size="icon-sm" aria-label="Cerrar" className="absolute top-3 right-3">
+      <Button type="button" variant="ghost" size="icon-sm" aria-label="Cerrar" className="absolute top-4 right-4 text-muted-foreground">
         <XIcon />
       </Button>
     </DialogPrimitive.Close>
@@ -78,7 +80,7 @@ function DialogContent({ className, children, showCloseButton = true, ...props }
         data-slot="dialog-content"
         className={cn(
           surfaceClasses,
-          "inset-0 h-dvh w-full sm:inset-auto sm:top-1/2 sm:left-1/2 sm:h-auto sm:max-h-[calc(100dvh-4rem)] sm:max-w-lg sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-xl sm:border sm:border-border sm:shadow-dialog data-open:animate-in data-open:fade-in-0 sm:data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 sm:data-closed:zoom-out-95",
+          "inset-0 h-dvh w-full sm:inset-auto sm:top-1/2 sm:left-1/2 sm:h-auto sm:max-h-[min(640px,86vh)] sm:max-w-[480px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-xl sm:border sm:border-control-border sm:shadow-dialog data-open:animate-in data-open:fade-in-0 data-open:slide-in-from-bottom-2 sm:data-open:zoom-in-98 data-closed:animate-out data-closed:fade-out-0 sm:data-closed:zoom-out-98",
           motionClasses,
           className
         )}
@@ -95,7 +97,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex shrink-0 flex-col gap-1.5 border-b border-border/80 px-6 py-4 pr-14 text-left", className)}
+      className={cn("flex shrink-0 flex-col gap-1 border-b border-border px-[22px] py-5 pr-14 text-left", className)}
       {...props}
     />
   )
@@ -190,7 +192,7 @@ function DialogBody({ className, ...props }: Omit<React.ComponentProps<"div">, "
       ref={ref}
       data-slot="dialog-body"
       className={cn(
-        "min-h-0 flex-1 overflow-y-auto px-6 py-4 outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/50",
+        "min-h-0 flex-1 overflow-y-auto px-[22px] py-5 outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/50",
         className
       )}
       {...props}
@@ -205,7 +207,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="dialog-footer"
       className={cn(
-        "flex shrink-0 flex-col-reverse gap-2 border-t border-border/80 px-6 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:flex-row sm:justify-end sm:pb-4",
+        "flex shrink-0 flex-col-reverse gap-2.5 border-t border-border px-[22px] pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:flex-row sm:justify-end sm:pb-4",
         className
       )}
       {...props}
@@ -217,7 +219,7 @@ function DialogTitle({ className, ...props }: React.ComponentProps<typeof Dialog
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("font-heading text-lg font-semibold text-foreground", className)}
+      className={cn("text-[1.0625rem] font-semibold text-foreground", className)}
       {...props}
     />
   )
@@ -227,7 +229,7 @@ function DialogDescription({ className, ...props }: React.ComponentProps<typeof 
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn("text-[0.78125rem] text-muted-foreground", className)}
       {...props}
     />
   )

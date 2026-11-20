@@ -137,8 +137,9 @@ describe("Dialog", () => {
     expect(content).toMatch(/(^|\s)inset-0(\s|$)/);
     expect(content).toMatch(/(^|\s)h-dvh(\s|$)/);
     expect(content).toContain("sm:inset-auto");
-    expect(content).toContain("sm:max-w-lg");
-    expect(content).toContain("sm:max-h-[calc(100dvh-4rem)]");
+    // Diseno de ventanas (2026-11-20): 480 px desde sm (antes max-w-lg).
+    expect(content).toContain("sm:max-w-[480px]");
+    expect(content).toContain("sm:max-h-[min(640px,86vh)]");
   });
 
   it("el velo usa su token y las animaciones se detienen con reduced motion", () => {
@@ -178,11 +179,82 @@ describe("Sheet", () => {
     for (const slot of ["dialog-header", "dialog-body", "dialog-footer"]) {
       expect(html).toContain(`data-slot="${slot}"`);
     }
-    expect(classOf(html, "sheet-content")).toMatch(/\bw-full\b.*\bsm:max-w-md\b/);
+    // Diseno de ventanas (2026-11-20): 380 px desde sm (antes max-w-md).
+    expect(classOf(html, "sheet-content")).toMatch(/\bw-full\b.*\bsm:max-w-\[380px\]/);
     expect(classOf(html, "sheet-content")).toContain("motion-reduce:animate-none!");
   });
 
   it.each(["right", "left"] as const)("HTML del panel abierto: %s", (side) => {
     expect(markup(sheet(side))).toMatchSnapshot();
+  });
+});
+
+// Diseno de ventanas (propuesta del responsable, 2026-11-20): panel de tarjeta con textura y
+// borde de acero, ventana de 480 px y alto maximo min(640px, 86vh), panel lateral de 380 px,
+// encabezado y pie con 22 px de relleno lateral, titulo de 17 px en la letra normal y subtitulo
+// de 12,5 px. La ventana aparece y sube 8 px desde el 98 %; el panel entra desde su lado en
+// --motion-slow; las dos con la curva que se asienta.
+function clases(html: string, slot: string) {
+  return classOf(html, slot).replaceAll("&amp;", "&").split(" ");
+}
+
+describe("ventanas con el diseno de la propuesta", () => {
+  const ventana = render(
+    h(Dialog, null, trigger, h(DialogContent, null,
+      h(DialogHeader, null, h(DialogTitle, null, "Registrar pago"), h(DialogDescription, null, "Pedido PED00000099")),
+      h(DialogBody, null, "Cuerpo"),
+      h(DialogFooter, null, h(Button, { type: "button" }, "Registrar pago")),
+    )),
+  );
+  const panel = render(
+    h(Sheet, null, h(SheetTrigger, null, "Filtros"), h(SheetContent, { "aria-describedby": undefined },
+      h(SheetHeader, null, h(SheetTitle, null, "Filtros")),
+      h(SheetBody, null, "Cuerpo"),
+      h(SheetFooter, null, h(Button, { type: "button" }, "Aplicar")),
+    )),
+  );
+
+  it("la ventana es una tarjeta con textura, borde de acero, 480 px y alto de min(640px, 86vh)", () => {
+    const contenido = clases(ventana, "dialog-content");
+
+    expect(contenido).toEqual(
+      expect.arrayContaining([
+        "bg-card",
+        "bg-(image:--texture-metal)",
+        "sm:border-control-border",
+        "sm:max-w-[480px]",
+        "sm:max-h-[min(640px,86vh)]",
+      ]),
+    );
+    expect(contenido.filter((name) => name.startsWith("bg-linear") || name.startsWith("from-"))).toEqual([]);
+  });
+
+  it("la ventana aparece subiendo 8 px desde el 98 % con la curva que se asienta", () => {
+    expect(clases(ventana, "dialog-content")).toEqual(
+      expect.arrayContaining(["data-open:slide-in-from-bottom-2", "sm:data-open:zoom-in-98", "ease-(--ease-settle)"]),
+    );
+  });
+
+  it("encabezado, cuerpo y pie con 22 px de relleno lateral y el borde comun", () => {
+    expect(clases(ventana, "dialog-header")).toEqual(expect.arrayContaining(["px-[22px]", "py-5", "border-border"]));
+    expect(clases(ventana, "dialog-body")).toEqual(expect.arrayContaining(["px-[22px]", "py-5"]));
+    expect(clases(ventana, "dialog-footer")).toEqual(expect.arrayContaining(["px-[22px]", "gap-2.5", "border-border"]));
+    expect(clases(ventana, "dialog-header")).not.toContain("border-border/80");
+  });
+
+  it("titulo de 17 px en seminegrita con la letra normal, subtitulo de 12,5 px", () => {
+    expect(clases(ventana, "dialog-title")).toEqual(expect.arrayContaining(["text-[1.0625rem]", "font-semibold"]));
+    expect(clases(ventana, "dialog-title")).not.toContain("font-heading");
+    expect(clases(ventana, "dialog-description")).toContain("text-[0.78125rem]");
+  });
+
+  it("la X es un boton ghost atenuado", () => {
+    expect(tag(ventana, /<button [^>]*aria-label="Cerrar"[^>]*>/)).toMatch(/class="[^"]*\btext-muted-foreground\b/);
+  });
+
+  it("el panel lateral mide 380 px, lleva el borde de acero y entra en --motion-slow", () => {
+    expect(clases(panel, "sheet-content")).toEqual(
+      expect.arrayContaining(["sm:max-w-[380px]", "sm:border-control-border", "duration-(--motion-slow)", "ease-(--ease-settle)"]),
+    );
   });
 });

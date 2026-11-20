@@ -21,7 +21,8 @@ import { cn } from "@/lib/utils"
 // Panel lateral (entrega 8): el mismo Dialog de Radix anclado a un lado. Solo
 // cambian la raiz y el contenido; encabezado, cuerpo, pie, titulo, descripcion
 // y cierre son las piezas de Dialog, con nombre Sheet*. En movil ocupa la
-// pantalla completa; desde sm mide max-w-md y entra desde su lado.
+// pantalla completa; desde sm mide 380 px y entra desde su lado en
+// --motion-slow (diseno de ventanas, 2026-11-20).
 
 const sideClasses = {
   right:
@@ -47,9 +48,10 @@ function SheetContent({ className, children, side = "right", showCloseButton = t
         data-side={side}
         className={cn(
           dialogSurfaceClasses,
-          "inset-y-0 h-dvh w-full sm:max-w-md sm:border-border sm:shadow-dialog data-open:animate-in data-closed:animate-out",
+          "inset-y-0 h-dvh w-full sm:max-w-[380px] sm:border-control-border sm:shadow-dialog data-open:animate-in data-closed:animate-out",
           sideClasses[side],
           dialogMotionClasses,
+          "duration-(--motion-slow)",
           className
         )}
         {...props}
