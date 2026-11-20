@@ -187,6 +187,7 @@ export function DiscardConfirmDialog({
       title={title}
       description={description}
       confirmText="Descartar cambios"
+      cancelText="Seguir editando"
       onConfirm={onConfirm}
     />
   );

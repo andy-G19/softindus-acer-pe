@@ -173,7 +173,7 @@ describe("RouteSheet", () => {
     expect(document.activeElement).toBe(byText("Nuevo cliente"));
   });
 
-  it("con cambios, cerrar pide confirmar: Cancelar sigue en el panel y Descartar vuelve atras", async () => {
+  it("con cambios, cerrar pide confirmar: Seguir editando sigue en el panel y Descartar vuelve atras", async () => {
     await openFrom("Nuevo cliente");
     const input = document.querySelector<HTMLInputElement>("#nombre")!;
     input.value = "Andina";
@@ -183,7 +183,7 @@ describe("RouteSheet", () => {
     expect(confirmation()?.textContent).toContain("¿Descartar el cliente nuevo?");
     expect(router.back).not.toHaveBeenCalled();
 
-    await act(async () => byText("Cancelar").click());
+    await act(async () => byText("Seguir editando").click());
     await settle();
     expect(confirmation()).toBeNull();
     expect(document.querySelector('[role="dialog"]')).not.toBeNull();
@@ -196,7 +196,7 @@ describe("RouteSheet", () => {
   });
 
   // Hallazgo 8 de la 10.1: tras un clic fuera, Cancelar dejaba el foco en body.
-  it("tras un clic fuera con cambios, Cancelar devuelve el foco al ultimo campo enfocado", async () => {
+  it("tras un clic fuera con cambios, Seguir editando devuelve el foco al ultimo campo enfocado", async () => {
     await openFrom("Nuevo cliente");
     const ruc = document.querySelector<HTMLInputElement>("#ruc")!;
     ruc.focus();
@@ -205,7 +205,7 @@ describe("RouteSheet", () => {
 
     await clickOutside();
     expect(confirmation()?.textContent).toContain("¿Descartar el cliente nuevo?");
-    await act(async () => byText("Cancelar").click());
+    await act(async () => byText("Seguir editando").click());
     await settle();
 
     expect(confirmation()).toBeNull();
@@ -230,7 +230,7 @@ describe("RouteSheet", () => {
   // Hallazgo 11 de la 10.2: el clic con el raton en Cancelar cerraba la
   // confirmacion, y el panel, que recibia ese click como un clic fuera, pedia
   // cerrar otra vez y la volvia a abrir.
-  it("con el raton, Cancelar cierra la confirmacion; el panel sigue con lo escrito y el foco en el ultimo campo", async () => {
+  it("con el raton, Seguir editando cierra la confirmacion; el panel sigue con lo escrito y el foco en el ultimo campo", async () => {
     await openFrom("Nuevo cliente");
     const ruc = document.querySelector<HTMLInputElement>("#ruc")!;
     ruc.focus();
@@ -239,7 +239,7 @@ describe("RouteSheet", () => {
 
     await act(async () => byText("Cancelar formulario").click());
     expect(confirmation()?.textContent).toContain("¿Descartar el cliente nuevo?");
-    await mouseClick(byText("Cancelar"));
+    await mouseClick(byText("Seguir editando"));
 
     expect(confirmation()).toBeNull();
     expect(document.querySelector('[role="dialog"]')).not.toBeNull();

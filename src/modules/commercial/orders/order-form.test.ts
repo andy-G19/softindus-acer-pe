@@ -396,7 +396,7 @@ describe("OrderForm al cancelar", () => {
     expect(dialog()?.textContent).toContain("Se perderán los cambios que hiciste en este formulario.");
     expect(navigation.push).not.toHaveBeenCalled();
 
-    await act(async () => button("Cancelar").click());
+    await act(async () => button("Seguir editando").click());
 
     expect(dialog()).toBeNull();
     expect(navigation.push).not.toHaveBeenCalled();

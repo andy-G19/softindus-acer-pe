@@ -222,7 +222,7 @@ describe("FormDialog", () => {
     expect(document.activeElement).toBe(trigger);
   });
 
-  it("con cambios, cerrar pide confirmar: Cancelar sigue en la ventana y Descartar la cierra", async () => {
+  it("con cambios, cerrar pide confirmar: Seguir editando sigue en la ventana y Descartar la cierra", async () => {
     await renderDialog();
     await open();
     await type("Distribuidor");
@@ -230,7 +230,7 @@ describe("FormDialog", () => {
     await act(async () => button("Cancelar formulario").click());
     expect(confirmation()?.textContent).toContain("¿Descartar el tipo de proveedor?");
 
-    await act(async () => button("Cancelar").click());
+    await act(async () => button("Seguir editando").click());
     await settle();
     expect(confirmation()).toBeNull();
     expect(dialog()).not.toBeNull();
@@ -240,6 +240,20 @@ describe("FormDialog", () => {
     await act(async () => button("Descartar cambios").click());
     await settle();
     expect(dialog()).toBeNull();
+  });
+
+  // Diseno de ventanas (propuesta del responsable, 2026-11-20): la confirmacion de descarte
+  // dice que hace cada boton; «Cancelar» se confundia con el Cancelar del formulario.
+  it("la confirmacion de descarte ofrece «Seguir editando» y «Descartar cambios»", async () => {
+    await renderDialog();
+    await open();
+    await type("Distribuidor");
+
+    await act(async () => button("Cancelar formulario").click());
+    const textos = [...confirmation()!.querySelectorAll("button")].map((item) => item.textContent?.trim());
+
+    expect(textos).toEqual(expect.arrayContaining(["Seguir editando", "Descartar cambios"]));
+    expect(textos).not.toContain("Cancelar");
   });
 
   it("al reabrirla empieza sin cambios pendientes", async () => {
@@ -324,7 +338,7 @@ describe("FormDialog", () => {
 // elemento que lo tenia al abrirse, y tras un clic fuera ese elemento es body.
 // Ahora lo devuelve al ultimo elemento que tuvo el foco dentro de la ventana.
 describe("FormDialog: el foco al cancelar el descarte", () => {
-  it("tras un clic fuera con cambios, Cancelar devuelve el foco al ultimo campo enfocado", async () => {
+  it("tras un clic fuera con cambios, Seguir editando devuelve el foco al ultimo campo enfocado", async () => {
     await renderDialog();
     await open();
     const slug = document.querySelector<HTMLInputElement>("#slug")!;
@@ -333,9 +347,9 @@ describe("FormDialog: el foco al cancelar el descarte", () => {
 
     await clickOutside();
     expect(confirmation()?.textContent).toContain("¿Descartar el tipo de proveedor?");
-    expect(document.activeElement).toBe(button("Cancelar"));
+    expect(document.activeElement).toBe(button("Seguir editando"));
 
-    await act(async () => button("Cancelar").click());
+    await act(async () => button("Seguir editando").click());
     await settle();
 
     expect(confirmation()).toBeNull();
@@ -352,7 +366,7 @@ describe("FormDialog: el foco al cancelar el descarte", () => {
 
     loseFocus();
     await act(async () => button("Cancelar formulario").click());
-    await act(async () => button("Cancelar").click());
+    await act(async () => button("Seguir editando").click());
     await settle();
 
     expect(document.activeElement).toBe(slug);
@@ -368,7 +382,7 @@ describe("FormDialog: el foco al cancelar el descarte", () => {
     await clickOutside();
     await act(async () => removeSlug());
     expect(document.querySelector("#slug")).toBeNull();
-    await act(async () => button("Cancelar").click());
+    await act(async () => button("Seguir editando").click());
     await settle();
 
     expect(document.activeElement).toBe(dialog());
@@ -393,7 +407,7 @@ describe("FormDialog: el foco al cancelar el descarte", () => {
 // confirmacion, y la ventana, que recibia ese click como un clic fuera, pedia
 // cerrar otra vez y la volvia a abrir.
 describe("FormDialog: la confirmacion de descarte con el raton", () => {
-  it("Cancelar la cierra; la ventana sigue con lo escrito y el foco vuelve al ultimo campo", async () => {
+  it("Seguir editando la cierra; la ventana sigue con lo escrito y el foco vuelve al ultimo campo", async () => {
     await renderDialog();
     await open();
     const slug = document.querySelector<HTMLInputElement>("#slug")!;
@@ -402,7 +416,7 @@ describe("FormDialog: la confirmacion de descarte con el raton", () => {
 
     await act(async () => button("Cancelar formulario").click());
     expect(confirmation()?.textContent).toContain("¿Descartar el tipo de proveedor?");
-    await mouseClick(button("Cancelar"));
+    await mouseClick(button("Seguir editando"));
 
     expect(confirmation()).toBeNull();
     expect(dialog()).not.toBeNull();
