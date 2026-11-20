@@ -149,7 +149,9 @@ export function FoundationsSection() {
       </FoundationFamily>
 
       <FoundationFamily title="Tipografía" description="Geist para texto, Oswald para títulos, JetBrains Mono para códigos y cifras.">
-        <GallerySample label="Texto (Geist)" className="flex-col items-stretch gap-2.5">
+        {/* flex-nowrap: con el flex-wrap de GallerySample cada fila media lo que su texto y el
+            truncate no recortaba (en movil la pagina se desbordaba). */}
+        <GallerySample label="Texto (Geist)" className="flex-col flex-nowrap items-stretch gap-2.5">
           {GEIST_SIZES.map(({ size, className }) => (
             <div key={size} className="flex min-w-0 items-baseline gap-3">
               <span className="w-11 shrink-0 font-mono text-[11px] text-muted-foreground">{size}</span>
@@ -159,7 +161,7 @@ export function FoundationsSection() {
         </GallerySample>
 
         <div className="space-y-2.5">
-          <GallerySample label="Títulos (Oswald 500, 600 y 700)" className="flex-col items-stretch gap-2.5">
+          <GallerySample label="Títulos (Oswald 500, 600 y 700)" className="flex-col flex-nowrap items-stretch gap-2.5">
             {OSWALD_WEIGHTS.map(({ weight, className }) => (
               <div key={weight} className="flex min-w-0 items-baseline gap-3">
                 <span className="w-11 shrink-0 font-mono text-[11px] text-muted-foreground">{weight}</span>

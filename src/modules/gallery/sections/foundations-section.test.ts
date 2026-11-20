@@ -61,6 +61,18 @@ describe("Fundamentos", () => {
     expect(html).not.toContain("650");
   });
 
+  // GallerySample trae flex-wrap. En un flex que puede envolver, cada linea mide lo que su elemento
+  // mas ancho y no lo que el contenedor, asi que items-stretch estiraba cada fila al ancho del texto
+  // de ejemplo y el truncate no recortaba: a 375 px la pagina media 750 de ancho (visto en staging;
+  // aqui no hay navegador que calcule el diseno, por eso se fija la clase).
+  it.each(["Texto (Geist)", "Títulos (Oswald 500, 600 y 700)"])("las filas de %s caben en el ancho: una sola linea", (label) => {
+    const start = html.indexOf(`>${label}</figcaption>`);
+    const contenedor = html.slice(start).match(/<div class="([^"]*)"/)?.[1].split(" ") ?? [];
+
+    expect(contenedor).toContain("flex-nowrap");
+    expect(contenedor).not.toContain("flex-wrap");
+  });
+
   it("las sombras son las reales, una tarjeta por token", () => {
     const sombras = [...html.matchAll(/box-shadow:var\((--shadow-[\w-]+)\)/g)].map((match) => match[1]);
 
