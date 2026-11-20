@@ -1206,6 +1206,8 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figure>
 <figcaption>Etiqueta (Badge) en cada variante</figcaption>
 <div>
+<div>
+<div>
 <span data-variant="default">default</span>
 <span data-variant="success">success</span>
 <span data-variant="warning">warning</span>
@@ -1216,13 +1218,26 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span data-variant="ghost">ghost</span>
 <span data-variant="link">link</span>
 </div>
+<button data-variant="outline" type="button">
+<svg/>Repetir gestos</button>
+</div>
+</div>
 </figure>
+<p>Nueve variantes con el mismo significado que Button: default (lingote cobre) y secondary (acero cepillado) son rellenos; success, warning, info y destructive son las superficies de las alertas; outline, ghost y link acompañan texto sin competir con él. Al pasar el puntero suben y se aclaran. En reposo no se mueven: success se asienta con un sello al aparecer y destructive sacude una vez.</p>
 <figure>
 <figcaption>Etiqueta de estado (StateBadge)</figcaption>
+<div>
+<div>
 <div>
 <span data-variant="info" data-tone="info">
 <span aria-hidden="true">
 </span>Registrado</span>
+<span data-variant="info" data-tone="info">
+<span aria-hidden="true">
+</span>Aprobado</span>
+<span data-variant="info" data-tone="info">
+<span aria-hidden="true">
+</span>Aceptada</span>
 <span data-variant="outline" data-tone="neutral">
 <span aria-hidden="true">
 </span>Vigente</span>
@@ -1231,10 +1246,19 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </span>Pagada</span>
 <span data-variant="success" data-tone="success">
 <span aria-hidden="true">
+</span>Emitido</span>
+<span data-variant="success" data-tone="success">
+<span aria-hidden="true">
 </span>Entregado</span>
 <span data-variant="warning" data-tone="warning">
 <span aria-hidden="true">
 </span>Pendiente</span>
+<span data-variant="warning" data-tone="warning">
+<span aria-hidden="true">
+</span>Sin proforma</span>
+<span data-variant="warning" data-tone="warning">
+<span aria-hidden="true">
+</span>Sin comprobante</span>
 <span data-variant="warning" data-tone="warning">
 <span aria-hidden="true">
 </span>Parcial</span>
@@ -1244,10 +1268,20 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span data-variant="destructive" data-tone="destructive">
 <span aria-hidden="true">
 </span>Anulado</span>
+<span data-variant="destructive" data-tone="destructive">
+<span aria-hidden="true">
+</span>Anulada</span>
+<span data-variant="destructive" data-tone="destructive">
+<span aria-hidden="true">
+</span>Cancelado</span>
 <span data-variant="outline" data-tone="unknown">desconocido</span>
 </div>
+<button data-variant="outline" type="button">
+<svg/>Repetir gestos</button>
+</div>
+</div>
 </figure>
-<p>La etiqueta de estado es Badge: StateBadge le pone la etiqueta y el tono de cada estado, y Comercial la usa desde la entrega 10.4b. Mantenimiento y Mermas usan Badge con sus propias variantes.</p>
+<p>StateBadge es Badge con el tono, el gesto y el punto de cada estado comercial: el punto deja ver, sin leer, qué tan avanzado va. Registrado se sella, vigente brilla fijo, pagada y entregado cierran en verde, pendiente y parcial esperan en ámbar (parcial a medio rellenar), en producción emite un doble pulso de radar, el único movimiento continuo, y anulado entra con un golpe de sello. Un estado desconocido se muestra tal cual, con borde discontinuo. Comercial la usa desde la entrega 10.4b; Mantenimiento y Mermas usan Badge con sus propias variantes.</p>
 <div>
 <figure>
 <figcaption>Tarjeta completa</figcaption>
@@ -1290,6 +1324,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </figure>
 </div>
+<p>Placa de acero cepillado cuya textura se desplaza en un ciclo de 18 s, casi imperceptible. Al pasar el puntero sube y aclara el borde. La barra térmica es el barrido de la marca.</p>
 <figure>
 <figcaption>Indicadores (KpiCard)</figcaption>
 <div>
@@ -1303,12 +1338,35 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <div>
 <div>
 <span>Pedidos</span>
+<span>
+<span>6D</span>
+</span>
 </div>
 <div>
 <div>
 <p>12</p>
 <p>Pendientes de entrega</p>
 </div>
+<div role="img" aria-label="Pedidos de los últimos 6 días: Día 1 7, Día 2 9, Día 3 11, Día 4 10, Día 5 11, Hoy 12">
+<span data-tooltip="Día 1: 7">
+</span>
+<span data-tooltip="Día 2: 9">
+</span>
+<span data-tooltip="Día 3: 11">
+</span>
+<span data-tooltip="Día 4: 10">
+</span>
+<span data-tooltip="Día 5: 11">
+</span>
+<span data-current="true" data-tooltip="Hoy: 12">
+</span>
+</div>
+</div>
+<div>
+<span>
+<span aria-hidden="true">
+</span>Despacho activo</span>
+<span data-positive="true">+1 vs ayer</span>
 </div>
 </div>
 </div>
@@ -1322,12 +1380,35 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <div>
 <div>
 <span>Cobranzas</span>
+<span>
+<span>Mes</span>
+</span>
 </div>
 <div>
 <div>
 <p>S/ 8 300</p>
 <p>Cobradas este mes</p>
 </div>
+<div role="img" aria-label="Cobranzas acumuladas por semana: Sem 1 S/ 2 100, Sem 2 S/ 3 400, Sem 3 S/ 4 600, Sem 4 S/ 5 800, Sem 5 S/ 7 100, Actual S/ 8 300">
+<span data-tooltip="Sem 1: S/ 2 100">
+</span>
+<span data-tooltip="Sem 2: S/ 3 400">
+</span>
+<span data-tooltip="Sem 3: S/ 4 600">
+</span>
+<span data-tooltip="Sem 4: S/ 5 800">
+</span>
+<span data-tooltip="Sem 5: S/ 7 100">
+</span>
+<span data-current="true" data-tooltip="Actual: S/ 8 300">
+</span>
+</div>
+</div>
+<div>
+<span>
+<span aria-hidden="true">
+</span>Meta mensual 83 %</span>
+<span data-positive="true">+16,9 %</span>
 </div>
 </div>
 </div>
@@ -1339,14 +1420,16 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span aria-hidden="true">
 </span>
 <div>
-<div>
+<div data-align="center">
 <span>Stock bajo</span>
 </div>
 <div>
 <div>
-<p>3</p>
-<p>Materiales bajo el mínimo</p>
+<svg/>
+<div>38<span>%</span>
 </div>
+</div>
+<p>3 de 8 materiales por debajo del mínimo</p>
 </div>
 </div>
 </div>
@@ -1372,6 +1455,22 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <p>5</p>
 <p>Con enlace e icono</p>
 </div>
+<div role="img" aria-label="Órdenes por periodo: P 1 4, P 2 3, P 3 5, P 4 4, P 5 5, Actual 5">
+<span data-tooltip="P 1: 4">
+</span>
+<span data-tooltip="P 2: 3">
+</span>
+<span data-tooltip="P 3: 5">
+</span>
+<span>
+</span>
+<span data-tooltip="P 4: 4">
+</span>
+<span data-tooltip="P 5: 5">
+</span>
+<span data-current="true" data-tooltip="Actual: 5">
+</span>
+</div>
 </div>
 <div>
 <span>
@@ -1383,6 +1482,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </a>
 </div>
 </figure>
+<p>Franja LED, halo del tono y un resplandor que sigue el puntero. Periodo, minigráfico, estado, variación y dial son opcionales: hoy solo los llena esta galería y serán la guía cuando las consultas los calculen. La barra más brillante es la del dato actual; el minigráfico se lee entero con un lector de pantalla. Sin enlace, el indicador no toma el foco.</p>
 <figure>
 <figcaption>Acceso a módulo (ModuleAccessCard)</figcaption>
 <div>
@@ -1441,6 +1541,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <div>
 <span aria-hidden="true">
 </span>
+<span aria-hidden="true">04</span>
 <span aria-hidden="true">
 <svg/>
 </span>
@@ -1455,6 +1556,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </a>
 </div>
 </figure>
+<p>En reposo el número y el icono respiran despacio. Con el puntero o el foco la placa sube, el borde toma el color del módulo, el icono crece, el número se desplaza y aparece la flecha.</p>
 <figure>
 <figcaption>Separadores</figcaption>
 <div>
@@ -1466,6 +1568,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span>Vertical</span>
 </div>
 </figure>
+<p>Un destello de acero recorre la línea horizontal y la vertical late entre el borde y el acero claro. Todo el movimiento de esta sección se detiene con reducir movimiento.</p>
 </section>
 <section id="listados" aria-labelledby="listados-titulo">
 <header>
