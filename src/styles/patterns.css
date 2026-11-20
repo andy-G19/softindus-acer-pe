@@ -141,6 +141,35 @@
     }
   }
 
+  /* Resplandor que sigue el puntero (propuesta de la presentacion, 2026-11-20; D157 y D158):
+     PointerSpotlight escribe --spotlight-x y --spotlight-y en la capa; el anfitrion
+     (.spotlight-host) puede redefinir color, tamano, intensidad y desvanecido, que heredan de los
+     valores por defecto de tokens.css. Se ve solo con el anfitrion bajo el puntero o con foco de
+     teclado. */
+  .pointer-spotlight {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 320ms ease;
+    background: radial-gradient(
+      var(--spotlight-size) circle at var(--spotlight-x) var(--spotlight-y),
+      color-mix(in oklch, var(--spotlight-color) var(--spotlight-strength), transparent),
+      transparent var(--spotlight-fade)
+    );
+  }
+
+  .spotlight-host:hover .pointer-spotlight,
+  .spotlight-host:focus-visible .pointer-spotlight {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pointer-spotlight {
+      transition: none;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .badge-settle,
     .badge-shake,

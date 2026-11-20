@@ -227,6 +227,17 @@
     transparent 3px
   );
 
+  /* Resplandor que sigue el puntero (propuesta de la presentacion, 2026-11-20; D157 y D158):
+     valores por defecto, los del indicador. Cada tarjeta que lo usa redefine el color (su tono) y,
+     si quiere, el tamano, la intensidad y el desvanecido; PointerSpotlight escribe la posicion
+     del puntero en --spotlight-x y --spotlight-y. Sin movimiento, el centro de arriba. */
+  --spotlight-color: var(--muted-foreground);
+  --spotlight-size: 340px;
+  --spotlight-strength: 13%;
+  --spotlight-fade: 70%;
+  --spotlight-x: 50%;
+  --spotlight-y: 0%;
+
   /* Sombras: cada valor es el que ya usaba su componente. */
   /* Filo de luz arriba y apoyo abajo del boton principal; reemplaza su halo naranja. */
   --shadow-button: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 1px 2px rgba(0, 0, 0, 0.5);
