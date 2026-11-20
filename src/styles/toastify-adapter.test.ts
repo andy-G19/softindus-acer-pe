@@ -132,9 +132,17 @@ describe("avisos con la propuesta de mensajes temporales", () => {
 // Posicion de la propuesta: abajo a la derecha, a 24 px de los bordes y 10 px entre avisos
 // (toastify usa 16 px y 1rem). El margen va arriba de cada aviso: el mas nuevo queda pegado a los
 // 24 px de la esquina, y al retirarse toastify anima ese margen a 0 sin saltos.
+//
+// Los 24 px van en --toastify-toast-right y --toastify-toast-bottom, no en --toastify-toast-offset:
+// toastify declara en :root bottom: max(var(--toastify-toast-offset), env(...)), y una variable que
+// usa a otra se resuelve donde se declara, asi que llega al contenedor ya calculada con 16 px.
+// Cambiar el offset en .Toastify no la recalcula (en staging el contenedor quedo a 16 px).
 describe("avisos abajo a la derecha", () => {
   it("se separan 24 px de los bordes y 10 px entre si", () => {
-    expect(declaracionesDe(".Toastify")).toMatch(/--toastify-toast-offset:\s*24px/);
+    const variables = declaracionesDe(".Toastify");
+    expect(variables).toMatch(/--toastify-toast-right:\s*max\(24px, env\(safe-area-inset-right\)\)/);
+    expect(variables).toMatch(/--toastify-toast-bottom:\s*max\(24px, env\(safe-area-inset-bottom\)\)/);
+    expect(variables).not.toContain("--toastify-toast-offset");
     const aviso = declaracionesDe(".Toastify .Toastify__toast");
     expect(aviso).toMatch(/margin-top:\s*10px/);
     expect(aviso).toMatch(/margin-bottom:\s*0/);

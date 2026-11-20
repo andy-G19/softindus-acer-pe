@@ -24,7 +24,10 @@
   --toastify-toast-padding: 14px 16px 17px;
   --toastify-toast-min-height: 0px;
   --toastify-toast-width: 360px;
-  --toastify-toast-offset: 24px;
+  /* 24 px de los bordes. No sirve --toastify-toast-offset: toastify calcula estas dos en :root con
+     su offset de 16 px y llegan aqui ya resueltas. */
+  --toastify-toast-right: max(24px, env(safe-area-inset-right));
+  --toastify-toast-bottom: max(24px, env(safe-area-inset-bottom));
   --toastify-font-family: var(--font-sans);
   --toastify-color-progress-success: var(--success);
   --toastify-color-progress-error: var(--destructive-outline);
