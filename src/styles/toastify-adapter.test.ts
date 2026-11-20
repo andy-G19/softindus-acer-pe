@@ -128,3 +128,15 @@ describe("avisos con la propuesta de mensajes temporales", () => {
     expect(riel).toMatch(/opacity:\s*1/);
   });
 });
+
+// Posicion de la propuesta: abajo a la derecha, a 24 px de los bordes y 10 px entre avisos
+// (toastify usa 16 px y 1rem). El margen va arriba de cada aviso: el mas nuevo queda pegado a los
+// 24 px de la esquina, y al retirarse toastify anima ese margen a 0 sin saltos.
+describe("avisos abajo a la derecha", () => {
+  it("se separan 24 px de los bordes y 10 px entre si", () => {
+    expect(declaracionesDe(".Toastify")).toMatch(/--toastify-toast-offset:\s*24px/);
+    const aviso = declaracionesDe(".Toastify .Toastify__toast");
+    expect(aviso).toMatch(/margin-top:\s*10px/);
+    expect(aviso).toMatch(/margin-bottom:\s*0/);
+  });
+});

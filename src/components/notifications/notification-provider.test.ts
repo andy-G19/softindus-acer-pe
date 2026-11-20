@@ -46,4 +46,22 @@ describe("NotificationProvider", () => {
     expect(icono?.getAttribute("aria-hidden")).toBe("true");
     expect(icono?.getAttribute("stroke-width")).toBe("2.4");
   });
+
+  // Propuesta de mensajes temporales: abajo a la derecha (arriba tapaban «Cerrar sesion»), con el
+  // mas nuevo junto a la esquina.
+  it("los avisos salen abajo a la derecha y el mas nuevo queda abajo, junto a la esquina", async () => {
+    await act(async () => {
+      showSuccess("Primero");
+    });
+    await act(async () => {
+      showInfo("Segundo");
+    });
+
+    const contenedor = host.querySelector(".Toastify__toast-container");
+    expect(contenedor?.classList.contains("Toastify__toast-container--bottom-right")).toBe(true);
+    expect([...host.querySelectorAll(".Toastify__toast p")].map((parrafo) => parrafo.textContent)).toEqual([
+      "Primero",
+      "Segundo",
+    ]);
+  });
 });

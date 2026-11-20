@@ -24,6 +24,7 @@
   --toastify-toast-padding: 14px 16px 17px;
   --toastify-toast-min-height: 0px;
   --toastify-toast-width: 360px;
+  --toastify-toast-offset: 24px;
   --toastify-font-family: var(--font-sans);
   --toastify-color-progress-success: var(--success);
   --toastify-color-progress-error: var(--destructive-outline);
@@ -31,7 +32,11 @@
   --toastify-color-progress-info: var(--info);
 }
 
+/* 10 px entre avisos, arriba de cada uno: el mas nuevo queda a los 24 px de la esquina y, al
+   retirarse, toastify anima este margen a 0. */
 .Toastify .Toastify__toast {
+  margin-top: 10px;
+  margin-bottom: 0;
   overflow: hidden;
   align-items: flex-start;
   gap: 12px;

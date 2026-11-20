@@ -12,13 +12,15 @@ const toastTransition = cssTransition({
   exit: "toast-industrial-exit",
 });
 
+// Abajo a la derecha, con el mas nuevo junto a la esquina (propuesta de mensajes temporales,
+// 2026-11-20): arriba tapaban «Cerrar sesion».
 export function NotificationProvider() {
   return (
     <ToastContainer
-      position="top-right"
+      position="bottom-right"
       autoClose={4000}
       hideProgressBar={false}
-      newestOnTop
+      newestOnTop={false}
       closeOnClick={false}
       pauseOnHover
       draggable
