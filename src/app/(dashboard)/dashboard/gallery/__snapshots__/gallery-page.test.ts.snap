@@ -1220,15 +1220,31 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figure>
 <figcaption>Etiqueta de estado (StateBadge)</figcaption>
 <div>
-<span data-variant="info">Registrado</span>
-<span data-variant="info">Vigente</span>
-<span data-variant="success">Pagada</span>
-<span data-variant="success">Entregado</span>
-<span data-variant="default">Pendiente</span>
-<span data-variant="default">Parcial</span>
-<span data-variant="default">En producción</span>
-<span data-variant="destructive">Anulado</span>
-<span data-variant="outline">desconocido</span>
+<span data-variant="info" data-tone="info">
+<span aria-hidden="true">
+</span>Registrado</span>
+<span data-variant="outline" data-tone="neutral">
+<span aria-hidden="true">
+</span>Vigente</span>
+<span data-variant="success" data-tone="success">
+<span aria-hidden="true">
+</span>Pagada</span>
+<span data-variant="success" data-tone="success">
+<span aria-hidden="true">
+</span>Entregado</span>
+<span data-variant="warning" data-tone="warning">
+<span aria-hidden="true">
+</span>Pendiente</span>
+<span data-variant="warning" data-tone="warning">
+<span aria-hidden="true">
+</span>Parcial</span>
+<span data-variant="info" data-tone="info">
+<span aria-hidden="true">
+</span>En producción</span>
+<span data-variant="destructive" data-tone="destructive">
+<span aria-hidden="true">
+</span>Anulado</span>
+<span data-variant="outline" data-tone="unknown">desconocido</span>
 </div>
 </figure>
 <p>La etiqueta de estado es Badge: StateBadge le pone la etiqueta y el tono de cada estado, y Comercial la usa desde la entrega 10.4b. Mantenimiento y Mermas usan Badge con sus propias variantes.</p>
@@ -1668,43 +1684,55 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <tr>
 <td>pagada</td>
 <td>
-<span data-variant="success">Pagada</span>
+<span data-variant="success" data-tone="success">
+<span aria-hidden="true">
+</span>Pagada</span>
 </td>
 </tr>
 <tr>
 <td>aprobado</td>
 <td>
-<span data-variant="info">Aprobado</span>
+<span data-variant="info" data-tone="info">
+<span aria-hidden="true">
+</span>Aprobado</span>
 </td>
 </tr>
 <tr>
 <td>pendiente</td>
 <td>
-<span data-variant="default">Pendiente</span>
+<span data-variant="warning" data-tone="warning">
+<span aria-hidden="true">
+</span>Pendiente</span>
 </td>
 </tr>
 <tr>
 <td>en_produccion</td>
 <td>
-<span data-variant="default">En producción</span>
+<span data-variant="info" data-tone="info">
+<span aria-hidden="true">
+</span>En producción</span>
 </td>
 </tr>
 <tr>
 <td>sin proforma</td>
 <td>
-<span data-variant="default">Sin proforma</span>
+<span data-variant="warning" data-tone="warning">
+<span aria-hidden="true">
+</span>Sin proforma</span>
 </td>
 </tr>
 <tr>
 <td>anulado</td>
 <td>
-<span data-variant="destructive">Anulado</span>
+<span data-variant="destructive" data-tone="destructive">
+<span aria-hidden="true">
+</span>Anulado</span>
 </td>
 </tr>
 <tr>
 <td>desconocido</td>
 <td>
-<span data-variant="outline">desconocido</span>
+<span data-variant="outline" data-tone="unknown">desconocido</span>
 </td>
 </tr>
 </tbody>

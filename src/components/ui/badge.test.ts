@@ -135,6 +135,23 @@ describe("movimiento de la etiqueta", () => {
     }
   });
 
+  // StateBadge elige el gesto de cada estado (D155): entregado solo se asienta, anulado entra con
+  // un golpe de sello y registrado se sella aunque sea info.
+  it("gesture reemplaza el gesto de la variante, y none lo quita", () => {
+    function gestures(variant: Variant, gesture: "settle" | "pop" | "shake" | "stamp" | "none") {
+      return (
+        renderToStaticMarkup(h(Badge, { variant, gesture }, "Etiqueta")).match(/^<span [^>]*class="([^"]*)"/)?.[1] ?? ""
+      )
+        .split(" ")
+        .filter((name) => ["badge-settle", "badge-pop", "badge-shake", "badge-stamp"].includes(name));
+    }
+
+    expect(gestures("info", "settle")).toEqual(["badge-settle"]);
+    expect(gestures("success", "pop")).toEqual(["badge-pop"]);
+    expect(gestures("destructive", "stamp")).toEqual(["badge-stamp"]);
+    expect(gestures("success", "none")).toEqual([]);
+  });
+
   it("los gestos no se repiten y se apagan con reducir movimiento", () => {
     const patterns = withoutComments(readFileSync("src/styles/patterns.css", "utf8"));
     const settle = patterns.match(/\.badge-settle\s*\{([^}]*)\}/)?.[1] ?? "";
@@ -144,7 +161,7 @@ describe("movimiento de la etiqueta", () => {
     expect(shake).toMatch(/animation:\s*badge-shake\b/);
     expect(`${settle}${shake}`).not.toContain("infinite");
     expect(patterns).toMatch(
-      /@media \(prefers-reduced-motion: reduce\)\s*\{[^}]*\.badge-settle,\s*\.badge-shake\s*\{\s*animation:\s*none;/,
+      /@media \(prefers-reduced-motion: reduce\)\s*\{[^}]*\.badge-settle,\s*\.badge-shake[^{]*\{\s*animation:\s*none;/,
     );
   });
 });

@@ -6,8 +6,8 @@
  * info y destructive las superficies de las alertas, y outline, ghost y link acompanan texto
  * sin competir con el. Al pasar el puntero sube 3 px, crece al 105 % y se aclara (D154). En
  * reposo no se mueve (D153): success se asienta con un sello al montar y destructive sacude una
- * vez (.badge-settle y .badge-shake de patterns.css). Con reducir movimiento no hay transicion,
- * desplazamiento ni gesto.
+ * vez (.badge-settle y .badge-shake de patterns.css), salvo que gesture pida otro. Con reducir
+ * movimiento no hay transicion, desplazamiento ni gesto.
  */
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -22,14 +22,13 @@ const badgeVariants = cva(
       variant: {
         default:
           "border-badge-default-border bg-(image:--badge-default-surface) text-primary-foreground shadow-badge-default",
-        success:
-          "badge-settle border-success-border bg-success-surface text-success-foreground",
+        success: "border-success-border bg-success-surface text-success-foreground",
         warning: "border-warning-border bg-warning-surface text-warning-foreground",
         info: "border-info-border bg-info-surface text-info-foreground",
         secondary:
           "bg-muted bg-(image:--texture-brush) text-foreground shadow-badge-secondary",
         destructive:
-          "badge-shake border-destructive-border bg-destructive-surface text-destructive-foreground focus-visible:ring-destructive/20",
+          "border-destructive-border bg-destructive-surface text-destructive-foreground focus-visible:ring-destructive/20",
         outline:
           "border-control-border bg-transparent text-foreground hover:border-control-border-hover",
         ghost:
@@ -43,23 +42,49 @@ const badgeVariants = cva(
   }
 )
 
+// Gesto al montar, una sola vez (patterns.css). Cada variante trae el suyo y gesture lo reemplaza:
+// StateBadge sella un registro aunque sea info, deja que entregado solo se asiente y hace entrar
+// a un anulado con un golpe de sello en lugar de la sacudida (D155).
+const badgeGestures = {
+  settle: "badge-settle",
+  pop: "badge-pop",
+  shake: "badge-shake",
+  stamp: "badge-stamp",
+  none: null,
+} as const
+
+type BadgeGesture = keyof typeof badgeGestures
+
+const defaultGestures: Partial<
+  Record<NonNullable<VariantProps<typeof badgeVariants>["variant"]>, BadgeGesture>
+> = {
+  success: "settle",
+  destructive: "shake",
+}
+
 function Badge({
   className,
   variant = "default",
+  gesture,
   asChild = false,
   ...props
 }: React.ComponentProps<"span"> &
-  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
+  VariantProps<typeof badgeVariants> & {
+    asChild?: boolean
+    gesture?: BadgeGesture
+  }) {
   const Comp = asChild ? Slot.Root : "span"
+  const gestureClass =
+    badgeGestures[gesture ?? (variant ? defaultGestures[variant] : undefined) ?? "none"]
 
   return (
     <Comp
       data-slot="badge"
       data-variant={variant}
-      className={cn(badgeVariants({ variant }), className)}
+      className={cn(badgeVariants({ variant }), gestureClass, className)}
       {...props}
     />
   )
 }
 
-export { Badge, badgeVariants }
+export { Badge, badgeVariants, type BadgeGesture }
