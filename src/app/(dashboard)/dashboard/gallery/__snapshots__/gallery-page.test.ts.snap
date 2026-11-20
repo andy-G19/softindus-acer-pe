@@ -56,268 +56,275 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <h2 id="fundamentos-titulo">Fundamentos</h2>
 <p>Tokens de la identidad actual (src/styles/tokens.css): colores, tipografía, radios, sombras, capas y movimiento. Cada componente de la galería se construye con ellos.</p>
 </header>
+<div>
+<div>
+<h3>Colores</h3>
+<p>Un color por significado. Donde dos significados compartían el mismo matiz, se separan.</p>
+</div>
+<div>
 <figure>
-<figcaption>Colores</figcaption>
+<figcaption>Acción y estado</figcaption>
 <div>
 <div>
-<span aria-hidden="true">
+<span aria-hidden="true" data-token="--primary">
 </span>
-<span>
-<span>Fondo</span>
-<span>--background</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Fondo del panel</span>
-<span>--shell</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Texto</span>
-<span>--foreground</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Superficie</span>
-<span>--card</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Superficie elevada</span>
-<span>--popover</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Secundario</span>
-<span>--secondary</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Atenuado</span>
-<span>--muted</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Texto atenuado</span>
-<span>--muted-foreground</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Acento</span>
-<span>--accent</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Borde</span>
-<span>--border</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Campo</span>
-<span>--input</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
 <span>Primario</span>
 <span>--primary</span>
-</span>
 </div>
 <div>
-<span aria-hidden="true">
+<span aria-hidden="true" data-token="--ring">
 </span>
-<span>
 <span>Foco</span>
 <span>--ring</span>
-</span>
 </div>
 <div>
-<span aria-hidden="true">
+<span aria-hidden="true" data-token="--success">
 </span>
-<span>
 <span>Éxito</span>
 <span>--success</span>
-</span>
 </div>
 <div>
-<span aria-hidden="true">
+<span aria-hidden="true" data-token="--warning">
 </span>
-<span>
 <span>Advertencia</span>
 <span>--warning</span>
-</span>
 </div>
 <div>
-<span aria-hidden="true">
+<span aria-hidden="true" data-token="--info">
 </span>
-<span>
 <span>Información</span>
 <span>--info</span>
-</span>
 </div>
 <div>
-<span aria-hidden="true">
+<span aria-hidden="true" data-token="--destructive">
 </span>
-<span>
 <span>Peligro</span>
 <span>--destructive</span>
-</span>
 </div>
 <div>
-<span aria-hidden="true">
+<span aria-hidden="true" data-token="--destructive-foreground">
 </span>
-<span>
 <span>Texto sobre peligro</span>
 <span>--destructive-foreground</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Forja (marca)</span>
-<span>--accent-forge</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Brasa (marca)</span>
-<span>--accent-ember</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Acero (marca)</span>
-<span>--accent-steel</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Cobre (limpiar)</span>
-<span>--accent-copper</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Texto sobre cobre</span>
-<span>--clear-foreground</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Barra lateral</span>
-<span>--sidebar</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Gráfico 1</span>
-<span>--chart-1</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Gráfico 2</span>
-<span>--chart-2</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Gráfico 3</span>
-<span>--chart-3</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Gráfico 4</span>
-<span>--chart-4</span>
-</span>
-</div>
-<div>
-<span aria-hidden="true">
-</span>
-<span>
-<span>Gráfico 5</span>
-<span>--chart-5</span>
-</span>
 </div>
 </div>
 </figure>
+<p>Advertencia usa la brasa (--accent-ember), no el naranja de Primario: un aviso de stock bajo no se confunde con el botón «Guardar».</p>
+</div>
+<div>
+<figure>
+<figcaption>Marca</figcaption>
+<div>
+<div>
+<span aria-hidden="true" data-token="--accent-forge">
+</span>
+<span>Forja</span>
+<span>--accent-forge</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--accent-ember">
+</span>
+<span>Brasa</span>
+<span>--accent-ember</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--accent-steel">
+</span>
+<span>Acero</span>
+<span>--accent-steel</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--accent-copper">
+</span>
+<span>Cobre (limpiar)</span>
+<span>--accent-copper</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--clear-foreground">
+</span>
+<span>Texto sobre cobre</span>
+<span>--clear-foreground</span>
+</div>
+</div>
+</figure>
+</div>
+<div>
+<figure>
+<figcaption>Superficies y neutros</figcaption>
+<div>
+<div>
+<span aria-hidden="true" data-token="--background">
+</span>
+<span>Fondo</span>
+<span>--background</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--shell">
+</span>
+<span>Fondo del panel</span>
+<span>--shell</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--foreground">
+</span>
+<span>Texto</span>
+<span>--foreground</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--card">
+</span>
+<span>Superficie</span>
+<span>--card</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--popover">
+</span>
+<span>Superficie elevada</span>
+<span>--popover</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--secondary">
+</span>
+<span>Secundario</span>
+<span>--secondary</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--muted">
+</span>
+<span>Atenuado</span>
+<span>--muted</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--muted-foreground">
+</span>
+<span>Texto atenuado</span>
+<span>--muted-foreground</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--accent">
+</span>
+<span>Acento</span>
+<span>--accent</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--border">
+</span>
+<span>Borde</span>
+<span>--border</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--input">
+</span>
+<span>Campo</span>
+<span>--input</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--sidebar">
+</span>
+<span>Barra lateral</span>
+<span>--sidebar</span>
+</div>
+</div>
+</figure>
+<p>Los grises marcan escalones de elevación (fondo, panel, superficie, superficie elevada). En un chip aislado se parecen; uno sobre otro, como en Ventanas o en Mensajes y estados, se nota el paso.</p>
+</div>
+<div>
+<figure>
+<figcaption>Gráficos</figcaption>
+<div>
+<div>
+<span aria-hidden="true" data-token="--chart-1">
+</span>
+<span>Gráfico 1</span>
+<span>--chart-1</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--chart-2">
+</span>
+<span>Gráfico 2</span>
+<span>--chart-2</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--chart-3">
+</span>
+<span>Gráfico 3</span>
+<span>--chart-3</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--chart-4">
+</span>
+<span>Gráfico 4</span>
+<span>--chart-4</span>
+</div>
+<div>
+<span aria-hidden="true" data-token="--chart-5">
+</span>
+<span>Gráfico 5</span>
+<span>--chart-5</span>
+</div>
+</div>
+</figure>
+<p>Gráfico 4 es el cobre (--accent-copper): era la brasa, y junto al naranja de Gráfico 1 dos series se confundían.</p>
+</div>
+</div>
+<div>
+<div>
+<h3>Tipografía</h3>
+<p>Geist para texto, Oswald para títulos, JetBrains Mono para códigos y cifras.</p>
+</div>
 <figure>
 <figcaption>Texto (Geist)</figcaption>
 <div>
-<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
-<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
-<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
-<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
-</div>
-</figure>
-<figure>
-<figcaption>Títulos (Oswald 500, 600, 650 y 700)</figcaption>
 <div>
-<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
-<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
-<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
-<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
+<span>13px</span>
+<span>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</span>
+</div>
+<div>
+<span>14px</span>
+<span>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</span>
+</div>
+<div>
+<span>16px</span>
+<span>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</span>
+</div>
+<div>
+<span>18px</span>
+<span>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</span>
+</div>
 </div>
 </figure>
-<p>Oswald se declara con los pesos 500, 600 y 700: el 650 de los títulos de página se resuelve en 700, como cuando la fuente venía de Google.</p>
+<div>
+<figure>
+<figcaption>Títulos (Oswald 500, 600 y 700)</figcaption>
+<div>
+<div>
+<span>500</span>
+<span>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</span>
+</div>
+<div>
+<span>600</span>
+<span>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</span>
+</div>
+<div>
+<span>700</span>
+<span>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</span>
+</div>
+</div>
+</figure>
+<p>Oswald se declara con los pesos 500, 600 y 700. Un peso intermedio se dibuja como el siguiente declarado, así que los títulos piden 700, el peso que de verdad se ve.</p>
+</div>
 <figure>
 <figcaption>Códigos y cifras (JetBrains Mono 500)</figcaption>
 <div>
 <p>CLI00000001 · OTR00000006 · 1 234,50</p>
 </div>
 </figure>
+</div>
+<div>
+<div>
+<h3>Radios</h3>
+<p>La escala de Tailwind sobre --radius (10 px): de sm a 2xl.</p>
+</div>
 <figure>
 <figcaption>Radios</figcaption>
 <div>
@@ -328,6 +335,12 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span>rounded-2xl</span>
 </div>
 </figure>
+</div>
+<div>
+<div>
+<h3>Sombras</h3>
+<p>Nueve sombras con nombre de uso, no de tamaño.</p>
+</div>
 <figure>
 <figcaption>Sombras</figcaption>
 <div>
@@ -369,7 +382,58 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </div>
 </figure>
-<p>Capas (--z-*): barra lateral 30, cabecera 40 y ventanas 50. Movimiento (--motion-*): 150, 200 y 250 ms para transiciones y 6 s para la barra térmica, que se detiene con la preferencia de movimiento reducido. El espaciado y la escala tipográfica son los de Tailwind.</p>
+</div>
+<div>
+<div>
+<h3>Capas y movimiento</h3>
+<p>El orden en que se apilan los paneles, y cuánto tardan en moverse.</p>
+</div>
+<div>
+<figure>
+<figcaption>Capas (--z-*)</figcaption>
+<div>
+<div>
+<div data-layer="--z-sidebar">
+<span>Barra lateral</span>
+<span>30</span>
+</div>
+</div>
+<div>
+<span aria-hidden="true">→</span>
+<div data-layer="--z-header">
+<span>Cabecera</span>
+<span>40</span>
+</div>
+</div>
+<div>
+<span aria-hidden="true">→</span>
+<div data-layer="--z-overlay">
+<span>Ventanas</span>
+<span>50</span>
+</div>
+</div>
+</div>
+</figure>
+<p>Ventanas y paneles laterales se abren en un portal con su propia capa, no en un dialog nativo: el 50 está en uso.</p>
+</div>
+<div>
+<figure>
+<figcaption>Barra térmica (.heat-bar)</figcaption>
+<div>
+<div aria-hidden="true">
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Barrido térmico (.heat-sweep), para integrar más adelante</figcaption>
+<div>
+<div aria-hidden="true">
+</div>
+</div>
+</figure>
+<p>150, 200 y 250 ms (--motion-fast, --motion-base y --motion-slow) para las transiciones comunes, y 6 s (--motion-temper) para las dos barras, que se detienen con movimiento reducido. El espaciado y la escala tipográfica son los de Tailwind.</p>
+</div>
+</div>
 </section>
 <section id="botones" aria-labelledby="botones-titulo">
 <header>

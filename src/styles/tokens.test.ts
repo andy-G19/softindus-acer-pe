@@ -135,6 +135,23 @@ describe("tokens", () => {
     expect(tokens).toMatch(/--overlay:\s*rgba\(10, 11, 13, 0\.6\)/);
   });
 
+  // Diseno de fundamentos (propuesta del responsable, 2026-11-20): Grafico 4 era la brasa
+  // (#ff7a1a), casi igual al naranja de Grafico 1 (1,12:1 entre ellos); pasa al cobre de la marca.
+  // Tine el icono de las tarjetas de modulo con tone="chart-4".
+  it("el grafico 4 es el cobre, no otro naranja", () => {
+    expect(tokens).toMatch(/--chart-4:\s*var\(--accent-copper\)/);
+  });
+
+  // Oswald se declara con los pesos 500, 600 y 700 (src/app/layout.tsx): un 650 se dibuja como 700.
+  // Los titulos piden 700, el peso que de verdad se ve (diseno de fundamentos, 2026-11-20).
+  it("ninguna hoja pide el peso 650, que se dibuja como 700", () => {
+    const pesos650 = cssFiles(STYLES_DIR).filter((file) =>
+      /font-weight:\s*650\b/.test(withoutComments(readFileSync(file, "utf8"))),
+    );
+
+    expect(pesos650).toEqual([]);
+  });
+
   it("el interruptor tiene su verde, su sombra y su curva", () => {
     expect(theme).toContain("--color-accent-forge");
     expect(root).toContain("--shadow-thumb");

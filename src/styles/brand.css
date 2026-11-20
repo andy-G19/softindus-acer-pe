@@ -1,4 +1,4 @@
-/* Identidad de Aceros Peru: login, barra termica, progreso de navegacion,
+/* Identidad de Aceros Peru: login, barra termica, barrido termico, progreso de navegacion,
    riel templado y foco de los campos. El boton principal toma sus colores de
    tokens.css en src/components/ui/button.tsx. */
 @layer utilities {
@@ -65,6 +65,27 @@
     animation: temper var(--motion-temper) ease-in-out infinite;
   }
 
+  /* Barrido termico (propuesta de fundamentos, 2026-11-20): un brillo de brasa a primario cruza un
+     riel atenuado cada 6 s. Patron para integrar mas adelante; hoy solo lo muestra la galeria. Es
+     decorativo: quien lo use lo marca aria-hidden. */
+  .heat-sweep {
+    position: relative;
+    height: 6px;
+    overflow: hidden;
+    border-radius: 9999px;
+    background-color: var(--muted);
+  }
+
+  .heat-sweep::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 38%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, transparent, var(--accent-ember) 45%, var(--primary) 55%, transparent);
+    animation: heat-sweep var(--motion-temper) linear infinite;
+  }
+
   .login-ember {
     position: absolute;
     bottom: -10px;
@@ -86,6 +107,15 @@
     }
     50% {
       background-position: 100% 50%;
+    }
+  }
+
+  @keyframes heat-sweep {
+    from {
+      transform: translateX(-120%);
+    }
+    to {
+      transform: translateX(380%);
     }
   }
 
@@ -111,6 +141,10 @@
     .login-heat-bar,
     .tempered-rail,
     .login-ember {
+      animation: none;
+    }
+
+    .heat-sweep::before {
       animation: none;
     }
   }
