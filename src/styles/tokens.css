@@ -77,6 +77,15 @@
   --color-accent-copper: var(--accent-copper);
   --color-accent-forge: var(--accent-forge);
   --shadow-thumb: var(--shadow-thumb);
+  --color-info-surface: var(--info-surface);
+  --color-info-border: var(--info-border);
+  --color-info-foreground: var(--info-foreground);
+  --color-success-surface: var(--success-surface);
+  --color-success-border: var(--success-border);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning-surface: var(--warning-surface);
+  --color-warning-border: var(--warning-border);
+  --color-warning-foreground: var(--warning-foreground);
   --color-readonly-foreground: var(--readonly-foreground);
   --shadow-button: var(--shadow-button);
   --shadow-raised: var(--shadow-raised);
@@ -169,6 +178,19 @@
   --readonly-border: color-mix(in srgb, var(--accent-steel) 45%, transparent);
   /* Chip «Solo lectura»: acero claro, 6,9:1 a 10 px (el acero de marca da 3,5:1). */
   --readonly-foreground: #86a3cd;
+
+  /* Alertas y avisos (propuesta de mensajes y estados, 2026-11-19): superficie al 14 % y borde
+     al 40 % del color de su significado, y un texto mas claro que el tono base para 4,5:1 sobre
+     esa superficie (titulo e icono). La advertencia usa la brasa tal cual (5,6:1). */
+  --info-surface: color-mix(in srgb, var(--info) 14%, transparent);
+  --info-border: color-mix(in srgb, var(--info) 40%, transparent);
+  --info-foreground: #a9c4ec;
+  --success-surface: color-mix(in srgb, var(--success) 14%, transparent);
+  --success-border: color-mix(in srgb, var(--success) 40%, transparent);
+  --success-foreground: #7fd99a;
+  --warning-surface: color-mix(in srgb, var(--warning) 14%, transparent);
+  --warning-border: color-mix(in srgb, var(--warning) 40%, transparent);
+  --warning-foreground: var(--warning);
   --texture-metal: repeating-linear-gradient(
     135deg,
     var(--metal-brush) 0px,
