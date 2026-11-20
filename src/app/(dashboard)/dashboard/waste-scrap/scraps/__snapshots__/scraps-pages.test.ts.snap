@@ -195,60 +195,100 @@ exports[`/dashboard/waste-scrap/scraps > filtros y maestro de taller > resultado
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total registros</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total registros</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 según filtros</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Acumulada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Acumulada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pendiente de venta</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Vendida</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Vendida</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Ya generó ingreso menor</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Peso filtrado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Peso filtrado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1,234.50 kg</p>
 <p>Cantidad: 1,234.50</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -502,60 +542,100 @@ exports[`/dashboard/waste-scrap/scraps > sin filtros > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total registros</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total registros</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 según filtros</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Acumulada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Acumulada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pendiente de venta</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Vendida</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Vendida</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Ya generó ingreso menor</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Peso filtrado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Peso filtrado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1,234.50 kg</p>
 <p>Cantidad: 1,234.50</p>
+</div>
+</div>
 </div>
 </div>
 </section>

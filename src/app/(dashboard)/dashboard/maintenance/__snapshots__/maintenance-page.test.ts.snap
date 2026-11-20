@@ -132,60 +132,100 @@ exports[`/dashboard/maintenance > indicadores del mes > resultado 1`] = `
 </div>
 </section>
 <div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Máquinas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Máquinas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total de equipos críticos registrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Máquinas operativas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Máquinas operativas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>No operativas o inactivas: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Fallas abiertas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Fallas abiertas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Fallas registradas este mes: 42</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Preventivos pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Preventivos pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Vencidos: 42</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -465,60 +505,100 @@ exports[`/dashboard/maintenance > maestro de taller > resultado 1`] = `
 </div>
 </section>
 <div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Máquinas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Máquinas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total de equipos críticos registrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Máquinas operativas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Máquinas operativas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>No operativas o inactivas: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Fallas abiertas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Fallas abiertas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Fallas registradas este mes: 42</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Preventivos pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Preventivos pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Vencidos: 42</p>
+</div>
+</div>
 </div>
 </div>
 </div>

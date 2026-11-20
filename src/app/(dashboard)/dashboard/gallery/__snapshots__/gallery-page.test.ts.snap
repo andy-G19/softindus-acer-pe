@@ -1293,52 +1293,91 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figure>
 <figcaption>Indicadores (KpiCard)</figcaption>
 <div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
-<div>Pedidos</div>
+<span>Pedidos</span>
 </div>
-</div>
+<div>
 <div>
 <p>12</p>
 <p>Pendientes de entrega</p>
 </div>
 </div>
-<div>
-<div>
-<div>
-<div>Cobranzas</div>
 </div>
 </div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Cobranzas</span>
+</div>
+<div>
 <div>
 <p>S/ 8 300</p>
 <p>Cobradas este mes</p>
 </div>
 </div>
-<div>
-<div>
-<div>
-<div>Stock bajo</div>
 </div>
 </div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Stock bajo</span>
+</div>
+<div>
 <div>
 <p>3</p>
 <p>Materiales bajo el mínimo</p>
 </div>
 </div>
+</div>
+</div>
 <a href="#presentacion">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>5</p>
 <p>Con enlace e icono</p>
+</div>
+</div>
+<div>
+<span>
+</span>
+<span>Abrir →</span>
+</div>
 </div>
 </div>
 </a>

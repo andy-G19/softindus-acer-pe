@@ -160,88 +160,148 @@ exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistenci
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operarios activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operarios activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Operarios habilitados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Asistencias</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Asistencias</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Registros en el periodo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Faltas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Faltas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Ausencias registradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tardanzas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tardanzas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Marcaciones tardias.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planillas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planillas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Pendientes: 1</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Neto: S/ 11.50</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -464,88 +524,148 @@ exports[`/dashboard/reports/staff > rango de mas de 366 dias > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operarios activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operarios activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Operarios habilitados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Asistencias</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Asistencias</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros en el periodo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Faltas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Faltas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Ausencias registradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tardanzas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tardanzas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Marcaciones tardias.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planillas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planillas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Pendientes: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 68.00</p>
 <p>Neto: S/ 34.00</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -885,88 +1005,148 @@ exports[`/dashboard/reports/staff > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operarios activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operarios activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Operarios habilitados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Asistencias</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Asistencias</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros en el periodo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Faltas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Faltas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Ausencias registradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tardanzas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tardanzas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Marcaciones tardias.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planillas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planillas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Pendientes: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 68.00</p>
 <p>Neto: S/ 34.00</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1229,88 +1409,148 @@ exports[`/dashboard/reports/staff > todos los filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operarios activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operarios activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Operarios habilitados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Asistencias</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Asistencias</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros en el periodo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Faltas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Faltas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Ausencias registradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tardanzas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tardanzas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Marcaciones tardias.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planillas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planillas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Pendientes: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 68.00</p>
 <p>Neto: S/ 34.00</p>
+</div>
+</div>
 </div>
 </div>
 </section>

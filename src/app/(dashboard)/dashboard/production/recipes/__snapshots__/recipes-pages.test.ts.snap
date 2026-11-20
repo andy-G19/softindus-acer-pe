@@ -129,60 +129,100 @@ exports[`/dashboard/production/recipes > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Recetas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Recetas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en el sistema.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Recetas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Recetas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Disponibles para uso.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Con versión vigente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Con versión vigente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Listas para producir.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Sin versión vigente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Sin versión vigente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Requieren atención.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -396,60 +436,100 @@ exports[`/dashboard/production/recipes > sin recetas > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Recetas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Recetas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Total en el sistema.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Recetas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Recetas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Disponibles para uso.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Con versión vigente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Con versión vigente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Listas para producir.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Sin versión vigente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Sin versión vigente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Requieren atención.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -646,60 +726,100 @@ exports[`/dashboard/production/recipes > todos los filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Recetas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Recetas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en el sistema.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Recetas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Recetas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Disponibles para uso.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Con versión vigente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Con versión vigente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Listas para producir.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Sin versión vigente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Sin versión vigente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Requieren atención.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -879,60 +999,100 @@ exports[`/dashboard/production/recipes/[id]/versions > historial con cada estado
 </div>
 </section>
 <section>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Estado de receta</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Estado de receta</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>activa</p>
 <p>Estado maestro de la receta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Versión vigente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Versión vigente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>14</p>
 <p>Versión usada actualmente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Historial</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Historial</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>4</p>
 <p>Versiones registradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes asociadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes asociadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>3</p>
 <p>Usando alguna versión.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1205,60 +1365,100 @@ exports[`/dashboard/production/recipes/[id]/versions > receta inactiva con histo
 </div>
 </section>
 <section>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Estado de receta</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Estado de receta</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>inactiva</p>
 <p>Estado maestro de la receta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Versión vigente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Versión vigente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>14</p>
 <p>Versión usada actualmente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Historial</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Historial</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>4</p>
 <p>Versiones registradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes asociadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes asociadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>3</p>
 <p>Usando alguna versión.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1468,60 +1668,100 @@ exports[`/dashboard/production/recipes/[id]/versions > sin versiones > resultado
 </div>
 </section>
 <section>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Estado de receta</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Estado de receta</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>activa</p>
 <p>Estado maestro de la receta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Versión vigente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Versión vigente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>Sin versión</p>
 <p>Versión usada actualmente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Historial</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Historial</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Versiones registradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes asociadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes asociadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Usando alguna versión.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1653,60 +1893,100 @@ exports[`/dashboard/production/recipes/[id]/versions > versiones > resultado 1`]
 </div>
 </section>
 <section>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Estado de receta</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Estado de receta</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>estado-1</p>
 <p>Estado maestro de la receta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Versión vigente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Versión vigente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>Sin versión</p>
 <p>Versión usada actualmente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Historial</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Historial</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Versiones registradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes asociadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes asociadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>4</p>
 <p>Usando alguna versión.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1866,60 +2146,100 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > detal
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en esta versión.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materia prima</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materia prima</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Tipo de consumo principal.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Tipo de consumo secundario.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado por unidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado por unidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 653.71</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2112,60 +2432,100 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > unida
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en esta versión.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materia prima</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materia prima</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Tipo de consumo principal.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Tipo de consumo secundario.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado por unidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado por unidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 653.71</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2325,60 +2685,100 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > versi
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en esta versión.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materia prima</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materia prima</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Tipo de consumo principal.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Tipo de consumo secundario.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado por unidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado por unidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 653.71</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2532,60 +2932,100 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > versi
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en esta versión.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materia prima</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materia prima</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Tipo de consumo principal.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Tipo de consumo secundario.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado por unidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado por unidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 653.71</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2729,60 +3169,100 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > versi
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en esta versión.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materia prima</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materia prima</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Tipo de consumo principal.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Tipo de consumo secundario.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado por unidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado por unidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 653.71</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2926,60 +3406,100 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > versi
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en esta versión.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materia prima</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materia prima</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Tipo de consumo principal.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Tipo de consumo secundario.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado por unidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado por unidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 653.71</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -4332,60 +4852,100 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </form>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad a fabricar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad a fabricar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>25.00</p>
 <p>Unidades objetivo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales evaluados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales evaluados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Del detalle de receta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Con stock suficiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Con stock suficiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Listos para producir.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 16342.69</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -4552,60 +5112,100 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </form>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad a fabricar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad a fabricar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1.00</p>
 <p>Unidades objetivo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales evaluados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales evaluados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Del detalle de receta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Con stock suficiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Con stock suficiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Listos para producir.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 653.68</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -4812,60 +5412,100 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </form>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad a fabricar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad a fabricar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1.00</p>
 <p>Unidades objetivo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales evaluados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales evaluados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Del detalle de receta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Con stock suficiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Con stock suficiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Listos para producir.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 6.80</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -5026,60 +5666,100 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </form>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad a fabricar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad a fabricar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1.00</p>
 <p>Unidades objetivo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales evaluados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales evaluados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Del detalle de receta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Con stock suficiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Con stock suficiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Listos para producir.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 653.68</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -5243,60 +5923,100 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </form>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad a fabricar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad a fabricar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1.00</p>
 <p>Unidades objetivo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales evaluados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales evaluados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Del detalle de receta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Con stock suficiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Con stock suficiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Listos para producir.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 653.68</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

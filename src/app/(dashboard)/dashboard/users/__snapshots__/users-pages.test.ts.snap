@@ -98,46 +98,76 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Usuarios registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Usuarios registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total de cuentas en el sistema.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pueden iniciar sesión.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Sin acceso al sistema.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -355,46 +385,76 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Usuarios registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Usuarios registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total de cuentas en el sistema.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pueden iniciar sesión.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Sin acceso al sistema.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -690,46 +750,76 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Usuarios registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Usuarios registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total de cuentas en el sistema.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pueden iniciar sesión.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Sin acceso al sistema.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

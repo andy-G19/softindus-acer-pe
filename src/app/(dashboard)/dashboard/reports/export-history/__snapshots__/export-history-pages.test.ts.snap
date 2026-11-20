@@ -154,88 +154,148 @@ exports[`/dashboard/reports/export-history > parametros vacios, con filtros e il
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Exportaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Exportaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>5</p>
 <p>Registros encontrados según filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Excel</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Excel</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Exportaciones registradas como Excel.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>PDF</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>PDF</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Exportaciones PDF registradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Exportaciones completadas correctamente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Usuarios</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Usuarios</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Usuarios que exportaron reportes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Módulos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Módulos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Tipos de reporte exportados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -648,88 +708,148 @@ exports[`/dashboard/reports/export-history > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Exportaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Exportaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Registros encontrados según filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Excel</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Excel</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Exportaciones registradas como Excel.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>PDF</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>PDF</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Exportaciones PDF registradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Exportaciones completadas correctamente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Usuarios</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Usuarios</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Usuarios que exportaron reportes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Módulos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Módulos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Tipos de reporte exportados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -981,88 +1101,148 @@ exports[`/dashboard/reports/export-history > todos los filtros > resultado 1`] =
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Exportaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Exportaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Registros encontrados según filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Excel</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Excel</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Exportaciones registradas como Excel.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>PDF</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>PDF</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Exportaciones PDF registradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Exportaciones completadas correctamente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Usuarios</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Usuarios</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Usuarios que exportaron reportes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Módulos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Módulos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Tipos de reporte exportados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

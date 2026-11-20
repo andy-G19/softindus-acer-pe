@@ -1533,32 +1533,52 @@ exports[`/dashboard/commercial/orders/[id] > detalle > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cliente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cliente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>nombre_razon_social-1</p>
 <p>Cliente asociado al pedido.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Suma referencial del detalle del pedido.</p>
+</div>
+</div>
 </div>
 </div>
 <div>
@@ -1718,32 +1738,52 @@ exports[`/dashboard/commercial/orders/[id] > en produccion > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cliente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cliente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>nombre_razon_social-1</p>
 <p>Cliente asociado al pedido.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Suma referencial del detalle del pedido.</p>
+</div>
+</div>
 </div>
 </div>
 <div>
@@ -1961,32 +2001,52 @@ exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > resul
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cliente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cliente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>nombre_razon_social-1</p>
 <p>Cliente asociado al pedido.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Suma referencial del detalle del pedido.</p>
+</div>
+</div>
 </div>
 </div>
 <div>

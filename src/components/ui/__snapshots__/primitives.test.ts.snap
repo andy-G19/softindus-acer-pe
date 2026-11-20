@@ -1170,12 +1170,20 @@ exports[`Presentacion > etiqueta de estado con Badge 1`] = `
 `;
 
 exports[`Presentacion > indicador con enlace e icono 1`] = `
-"<a class="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45" href="/dashboard/inventory/alerts">
-<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg bg-(image:--texture-metal) bg-[length:180px_180px] py-(--card-spacing) text-sm text-card-foreground motion-reduce:transition-none motion-reduce:translate-none! has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg relative h-full border border-border bg-card shadow-raised transition duration-150 ease-out [--card-spacing:20px] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[var(--kpi-tone)] hover:-translate-y-[2px] hover:border-border hover:bg-secondary hover:shadow-raised-hover" style="--kpi-tone:var(--warning)">
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-lg px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-1">
-<div class="flex items-center gap-2">
-<span class="flex size-7 shrink-0 items-center justify-center rounded-lg" style="background-color:color-mix(in srgb, var(--kpi-tone) 18%, transparent);color:var(--kpi-tone)">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package size-4" aria-hidden="true">
+"<a class="spotlight-host block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45" href="/dashboard/inventory/alerts">
+<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col overflow-hidden rounded-lg border border-border bg-background bg-(image:--texture-metal) bg-[length:180px_180px] text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:-translate-y-0.5 hover:border-control-border-hover hover:shadow-card-lift motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg kpi-card h-full gap-0 py-0" data-tone="warning" style="--kpi-tone:var(--warning)">
+<span data-slot="kpi-led" aria-hidden="true" class="kpi-led">
+</span>
+<span data-slot="kpi-halo" aria-hidden="true" class="kpi-halo">
+</span>
+<span data-slot="pointer-spotlight" aria-hidden="true" class="pointer-spotlight">
+</span>
+<div class="relative z-[1] flex h-full flex-col gap-2.5 px-[18px] pt-[18px] pb-3.5">
+<div class="kpi-head">
+<span data-slot="kpi-label" class="kpi-label">Stock bajo</span>
+<span class="flex items-center gap-2">
+<span data-slot="kpi-icon" aria-hidden="true" class="kpi-icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package" aria-hidden="true">
 <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z">
 </path>
 <path d="M12 22V12">
@@ -1186,55 +1194,86 @@ exports[`Presentacion > indicador con enlace e icono 1`] = `
 </path>
 </svg>
 </span>
-<div data-slot="card-title" class="group-data-[size=sm]/card:text-sm font-mono text-[11px] font-medium uppercase tracking-[0.07em] text-muted-foreground">Stock bajo</div>
+</span>
+</div>
+<div class="kpi-body">
+<div class="flex min-w-0 flex-col gap-1.5">
+<p data-slot="kpi-value" class="kpi-value">3</p>
+<p class="kpi-caption">Materiales</p>
 </div>
 </div>
-<div data-slot="card-content" class="px-(--card-spacing) space-y-2">
-<p class="font-mono text-3xl font-bold text-[var(--kpi-tone)]">3</p>
-<p class="text-sm leading-relaxed text-muted-foreground">Materiales</p>
+<div data-slot="kpi-footer" class="kpi-footer">
+<span class="kpi-status">
+</span>
+<span data-slot="kpi-open" class="kpi-open">Abrir →</span>
+</div>
 </div>
 </div>
 </a>"
 `;
 
 exports[`Presentacion > indicador info 1`] = `
-"<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg bg-(image:--texture-metal) bg-[length:180px_180px] py-(--card-spacing) text-sm text-card-foreground hover:-translate-y-0.5 hover:border-control-border-hover hover:shadow-card-lift motion-reduce:transition-none motion-reduce:translate-none! has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg relative h-full border border-border bg-card shadow-raised transition duration-150 ease-out [--card-spacing:20px] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[var(--kpi-tone)]" style="--kpi-tone:var(--info)">
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-lg px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-1">
-<div class="flex items-center gap-2">
-<div data-slot="card-title" class="group-data-[size=sm]/card:text-sm font-mono text-[11px] font-medium uppercase tracking-[0.07em] text-muted-foreground">Pedidos</div>
+"<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col overflow-hidden rounded-lg border border-border bg-background bg-(image:--texture-metal) bg-[length:180px_180px] text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:-translate-y-0.5 hover:border-control-border-hover hover:shadow-card-lift motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg kpi-card h-full gap-0 py-0 spotlight-host" data-tone="info" style="--kpi-tone:var(--info)">
+<span data-slot="kpi-led" aria-hidden="true" class="kpi-led">
+</span>
+<span data-slot="kpi-halo" aria-hidden="true" class="kpi-halo">
+</span>
+<span data-slot="pointer-spotlight" aria-hidden="true" class="pointer-spotlight">
+</span>
+<div class="relative z-[1] flex h-full flex-col gap-2.5 px-[18px] pt-[18px] pb-3.5">
+<div class="kpi-head">
+<span data-slot="kpi-label" class="kpi-label">Pedidos</span>
+</div>
+<div class="kpi-body">
+<div class="flex min-w-0 flex-col gap-1.5">
+<p data-slot="kpi-value" class="kpi-value">12</p>
+<p class="kpi-caption">Pendientes de entrega</p>
 </div>
 </div>
-<div data-slot="card-content" class="px-(--card-spacing) space-y-2">
-<p class="font-mono text-3xl font-bold text-[var(--kpi-tone)]">12</p>
-<p class="text-sm leading-relaxed text-muted-foreground">Pendientes de entrega</p>
 </div>
 </div>"
 `;
 
 exports[`Presentacion > indicador success 1`] = `
-"<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg bg-(image:--texture-metal) bg-[length:180px_180px] py-(--card-spacing) text-sm text-card-foreground hover:-translate-y-0.5 hover:border-control-border-hover hover:shadow-card-lift motion-reduce:transition-none motion-reduce:translate-none! has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg relative h-full border border-border bg-card shadow-raised transition duration-150 ease-out [--card-spacing:20px] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[var(--kpi-tone)]" style="--kpi-tone:var(--success)">
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-lg px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-1">
-<div class="flex items-center gap-2">
-<div data-slot="card-title" class="group-data-[size=sm]/card:text-sm font-mono text-[11px] font-medium uppercase tracking-[0.07em] text-muted-foreground">Pedidos</div>
+"<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col overflow-hidden rounded-lg border border-border bg-background bg-(image:--texture-metal) bg-[length:180px_180px] text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:-translate-y-0.5 hover:border-control-border-hover hover:shadow-card-lift motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg kpi-card h-full gap-0 py-0 spotlight-host" data-tone="success" style="--kpi-tone:var(--success)">
+<span data-slot="kpi-led" aria-hidden="true" class="kpi-led">
+</span>
+<span data-slot="kpi-halo" aria-hidden="true" class="kpi-halo">
+</span>
+<span data-slot="pointer-spotlight" aria-hidden="true" class="pointer-spotlight">
+</span>
+<div class="relative z-[1] flex h-full flex-col gap-2.5 px-[18px] pt-[18px] pb-3.5">
+<div class="kpi-head">
+<span data-slot="kpi-label" class="kpi-label">Pedidos</span>
+</div>
+<div class="kpi-body">
+<div class="flex min-w-0 flex-col gap-1.5">
+<p data-slot="kpi-value" class="kpi-value">12</p>
+<p class="kpi-caption">Pendientes de entrega</p>
 </div>
 </div>
-<div data-slot="card-content" class="px-(--card-spacing) space-y-2">
-<p class="font-mono text-3xl font-bold text-[var(--kpi-tone)]">12</p>
-<p class="text-sm leading-relaxed text-muted-foreground">Pendientes de entrega</p>
 </div>
 </div>"
 `;
 
 exports[`Presentacion > indicador warning 1`] = `
-"<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg bg-(image:--texture-metal) bg-[length:180px_180px] py-(--card-spacing) text-sm text-card-foreground hover:-translate-y-0.5 hover:border-control-border-hover hover:shadow-card-lift motion-reduce:transition-none motion-reduce:translate-none! has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg relative h-full border border-border bg-card shadow-raised transition duration-150 ease-out [--card-spacing:20px] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[var(--kpi-tone)]" style="--kpi-tone:var(--warning)">
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-lg px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-1">
-<div class="flex items-center gap-2">
-<div data-slot="card-title" class="group-data-[size=sm]/card:text-sm font-mono text-[11px] font-medium uppercase tracking-[0.07em] text-muted-foreground">Pedidos</div>
+"<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col overflow-hidden rounded-lg border border-border bg-background bg-(image:--texture-metal) bg-[length:180px_180px] text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:-translate-y-0.5 hover:border-control-border-hover hover:shadow-card-lift motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg kpi-card h-full gap-0 py-0 spotlight-host" data-tone="warning" style="--kpi-tone:var(--warning)">
+<span data-slot="kpi-led" aria-hidden="true" class="kpi-led">
+</span>
+<span data-slot="kpi-halo" aria-hidden="true" class="kpi-halo">
+</span>
+<span data-slot="pointer-spotlight" aria-hidden="true" class="pointer-spotlight">
+</span>
+<div class="relative z-[1] flex h-full flex-col gap-2.5 px-[18px] pt-[18px] pb-3.5">
+<div class="kpi-head">
+<span data-slot="kpi-label" class="kpi-label">Pedidos</span>
+</div>
+<div class="kpi-body">
+<div class="flex min-w-0 flex-col gap-1.5">
+<p data-slot="kpi-value" class="kpi-value">12</p>
+<p class="kpi-caption">Pendientes de entrega</p>
 </div>
 </div>
-<div data-slot="card-content" class="px-(--card-spacing) space-y-2">
-<p class="font-mono text-3xl font-bold text-[var(--kpi-tone)]">12</p>
-<p class="text-sm leading-relaxed text-muted-foreground">Pendientes de entrega</p>
 </div>
 </div>"
 `;

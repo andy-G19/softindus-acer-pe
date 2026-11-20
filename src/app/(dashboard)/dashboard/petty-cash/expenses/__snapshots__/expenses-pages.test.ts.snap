@@ -94,46 +94,76 @@ exports[`/dashboard/petty-cash/expenses/new > formulario > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cajas abiertas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cajas abiertas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Disponibles para registrar egresos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo disponible</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo disponible</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma de saldos actuales de cajas abiertas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Categorías activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Categorías activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Disponibles para clasificar gastos.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

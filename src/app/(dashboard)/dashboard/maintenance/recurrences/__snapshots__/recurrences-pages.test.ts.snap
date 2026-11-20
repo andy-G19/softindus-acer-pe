@@ -113,74 +113,124 @@ exports[`/dashboard/maintenance/recurrences > reporte del mes > resultado 1`] = 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Fallas totales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Fallas totales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>4</p>
 <p>Este mes: 42</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Fallas abiertas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Fallas abiertas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pendientes o en atención.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Horas perdidas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Horas perdidas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>23.00 h</p>
 <p>Acumuladas por fallas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo acumulado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo acumulado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 136.00</p>
 <p>Este mes: S/ 1234.50</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Preventivos vencidos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Preventivos vencidos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Requieren atención.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -305,32 +355,52 @@ exports[`/dashboard/maintenance/recurrences > reporte del mes > resultado 1`] = 
 </div>
 </div>
 <section>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Máquinas críticas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Máquinas críticas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Riesgo alto por fallas, horas perdidas o costo acumulado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Máquinas reincidentes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Máquinas reincidentes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Máquinas con 3 o más fallas registradas.</p>
+</div>
+</div>
 </div>
 </div>
 <div>

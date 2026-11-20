@@ -1392,60 +1392,100 @@ exports[`/dashboard/inventory/purchases/[id] > detalle con regreso al listado > 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Proveedor</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Proveedor</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>razon_social-1</p>
 <p>Proveedor de la compra.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total compra</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total compra</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Monto total registrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma de pagos registrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ -22.50</p>
 <p>Monto restante por pagar.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1683,60 +1723,100 @@ exports[`/dashboard/inventory/purchases/[id] > pendiente y sin pagos > resultado
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Proveedor</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Proveedor</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>razon_social-1</p>
 <p>Proveedor de la compra.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total compra</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total compra</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Monto total registrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Suma de pagos registrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Monto restante por pagar.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

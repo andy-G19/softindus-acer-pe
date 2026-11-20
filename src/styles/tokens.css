@@ -238,6 +238,13 @@
   --spotlight-x: 50%;
   --spotlight-y: 0%;
 
+  /* Indicador (propuesta de la presentacion, D157). --kpi-tone es el tono por defecto; cada
+     KpiCard lo redefine con el suyo (info, success o warning). La rejilla de puntos de la placa y
+     el destello que cruza la franja LED son blancos translucidos. */
+  --kpi-tone: var(--info);
+  --kpi-grid-dot: rgba(255, 255, 255, 0.05);
+  --kpi-led-gleam: rgba(255, 255, 255, 0.95);
+
   /* Sombras: cada valor es el que ya usaba su componente. */
   /* Filo de luz arriba y apoyo abajo del boton principal; reemplaza su halo naranja. */
   --shadow-button: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -250,6 +257,9 @@
   --shadow-badge-secondary: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   /* Tarjeta al pasar el puntero (propuesta de la presentacion, D156): se separa de la pagina. */
   --shadow-card-lift: 0 10px 22px rgba(0, 0, 0, 0.3);
+  /* Indicador al pasar el puntero (D157): mas hondo que la tarjeta; el resplandor de su tono se
+     suma en patterns.css. */
+  --shadow-kpi-hover: 0 18px 38px rgba(0, 0, 0, 0.45);
   --shadow-raised: 0 14px 35px rgba(0, 0, 0, 0.18);
   --shadow-raised-hover: 0 12px 24px -8px rgba(0, 0, 0, 0.4);
   --shadow-card-hover: 0 16px 34px rgba(0, 0, 0, 0.24);

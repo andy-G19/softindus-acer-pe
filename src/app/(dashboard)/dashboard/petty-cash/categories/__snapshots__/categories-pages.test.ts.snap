@@ -80,46 +80,76 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Categorías registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Categorías registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Disponibles para clasificar egresos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Ya no disponibles.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -275,46 +305,76 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Categorías registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Categorías registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Disponibles para clasificar egresos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Ya no disponibles.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -464,46 +524,76 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Categorías registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Categorías registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Disponibles para clasificar egresos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Ya no disponibles.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

@@ -231,46 +231,76 @@ exports[`/dashboard/audit > rango de mas de 366 dias > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Coincidencias segun filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Usuarios</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Usuarios</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Usuarios distintos según filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entidades</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entidades</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Entidades afectadas según filtros.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -671,46 +701,76 @@ exports[`/dashboard/audit > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Coincidencias segun filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Usuarios</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Usuarios</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Usuarios distintos según filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entidades</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entidades</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Entidades afectadas según filtros.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1148,46 +1208,76 @@ exports[`/dashboard/audit > todos los filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Coincidencias segun filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Usuarios</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Usuarios</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Usuarios distintos según filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entidades</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entidades</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Entidades afectadas según filtros.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

@@ -171,60 +171,100 @@ exports[`/dashboard/waste-scrap > administrador > resultado 1`] = `
 <div>El módulo ya permite registrar, consultar y controlar retazos, chatarra y ventas de chatarra.</div>
 </div>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Retazos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Retazos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 disponibles</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Retazos reutilizados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Retazos reutilizados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 descartados</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Chatarra pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Chatarra pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 registros vendidos</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos por chatarra</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos por chatarra</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1,234.50</p>
 <p>42 venta(s) registradas</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -541,60 +581,100 @@ exports[`/dashboard/waste-scrap > maestro de taller > resultado 1`] = `
 <div>El módulo ya permite registrar, consultar y controlar retazos, chatarra y ventas de chatarra.</div>
 </div>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Retazos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Retazos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 disponibles</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Retazos reutilizados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Retazos reutilizados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 descartados</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Chatarra pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Chatarra pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 registros vendidos</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos por chatarra</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos por chatarra</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1,234.50</p>
 <p>42 venta(s) registradas</p>
+</div>
+</div>
 </div>
 </div>
 </section>

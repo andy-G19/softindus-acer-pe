@@ -62,74 +62,124 @@ exports[`/dashboard/maintenance/failures > administrador > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Fallas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Fallas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico de fallas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Aún no atendidas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En atención</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En atención</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Requieren seguimiento.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reparadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reparadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Anuladas: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tiempo perdido</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tiempo perdido</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>11.50 h</p>
 <p>Acumulado por fallas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -289,74 +339,124 @@ exports[`/dashboard/maintenance/failures > maestro de taller > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Fallas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Fallas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico de fallas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Aún no atendidas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En atención</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En atención</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Requieren seguimiento.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reparadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reparadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Anuladas: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tiempo perdido</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tiempo perdido</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>11.50 h</p>
 <p>Acumulado por fallas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -516,74 +616,124 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado > resultado 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Fallas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Fallas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>5</p>
 <p>Total histórico de fallas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Aún no atendidas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En atención</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En atención</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Requieren seguimiento.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reparadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reparadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Anuladas: 1</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tiempo perdido</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tiempo perdido</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>57.50 h</p>
 <p>Acumulado por fallas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -801,74 +951,124 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado con el maest
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Fallas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Fallas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>5</p>
 <p>Total histórico de fallas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Aún no atendidas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En atención</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En atención</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Requieren seguimiento.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reparadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reparadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Anuladas: 1</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tiempo perdido</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tiempo perdido</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>57.50 h</p>
 <p>Acumulado por fallas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

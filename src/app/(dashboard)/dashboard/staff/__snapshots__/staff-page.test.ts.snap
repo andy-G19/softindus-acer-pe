@@ -137,60 +137,100 @@ exports[`/dashboard/staff > indicadores del dia y del mes > resultado 1`] = `
 </div>
 </section>
 <div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operarios registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operarios registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total de trabajadores registrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operarios activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operarios activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Inactivos o retirados: 42</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Asistencias de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Asistencias de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Faltas registradas hoy: 42</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planillas pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planillas pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Tareas registradas este mes: 42</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -464,60 +504,100 @@ exports[`/dashboard/staff > maestro de taller > resultado 1`] = `
 </div>
 </section>
 <div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operarios registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operarios registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total de trabajadores registrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operarios activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operarios activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Inactivos o retirados: 42</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Asistencias de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Asistencias de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Faltas registradas hoy: 42</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planillas pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planillas pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Tareas registradas este mes: 42</p>
+</div>
+</div>
 </div>
 </div>
 </div>

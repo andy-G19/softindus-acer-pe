@@ -67,60 +67,100 @@ exports[`/dashboard/inventory > indicadores > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Materiales disponibles para uso.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Proveedores activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Proveedores activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Proveedores habilitados para compras.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Alertas de stock sin atender.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Entradas y salidas acumuladas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -310,60 +350,100 @@ exports[`/dashboard/inventory > maestro de taller > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Materiales disponibles para uso.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Proveedores activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Proveedores activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Proveedores habilitados para compras.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Alertas de stock sin atender.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Entradas y salidas acumuladas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

@@ -96,88 +96,148 @@ exports[`/dashboard/commercial > indicadores > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Clientes activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Clientes activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Clientes disponibles para pedidos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Productos activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Productos activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Productos disponibles para venta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pedidos comerciales acumulados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Proformas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Proformas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Proformas vigentes o aceptadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo por cobrar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo por cobrar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Saldo pendiente en proformas activas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Comprobantes emitidos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Comprobantes emitidos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Comprobantes internos registrados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -374,88 +434,148 @@ exports[`/dashboard/commercial > vendedor > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Clientes activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Clientes activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Clientes disponibles para pedidos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Productos activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Productos activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Productos disponibles para venta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pedidos comerciales acumulados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Proformas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Proformas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Proformas vigentes o aceptadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo por cobrar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo por cobrar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Saldo pendiente en proformas activas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Comprobantes emitidos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Comprobantes emitidos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Comprobantes internos registrados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

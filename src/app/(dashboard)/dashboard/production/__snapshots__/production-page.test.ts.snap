@@ -174,118 +174,198 @@ exports[`/dashboard/production > indicadores > resultado 1`] = `
 </div>
 </div>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En proceso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En proceso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Con avance operativo actual.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Órdenes completadas.</p>
 </div>
 </div>
+</div>
+</div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Productos activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Productos activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Disponibles para producción.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Rutas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Rutas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Rutas de fabricación habilitadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Etapas dentro de rutas activas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales en recetas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales en recetas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registrados en versión vigente.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -598,118 +678,198 @@ exports[`/dashboard/production > maestro de taller > resultado 1`] = `
 </div>
 </div>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En proceso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En proceso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Con avance operativo actual.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Órdenes completadas.</p>
 </div>
 </div>
+</div>
+</div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Productos activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Productos activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Disponibles para producción.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Rutas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Rutas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Rutas de fabricación habilitadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Etapas dentro de rutas activas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales en recetas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales en recetas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registrados en versión vigente.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

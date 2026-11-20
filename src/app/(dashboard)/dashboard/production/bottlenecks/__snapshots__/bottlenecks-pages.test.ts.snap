@@ -184,60 +184,100 @@ exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Avances en proceso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Avances en proceso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Etapas activas monitoreadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Atrasados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Atrasados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Superan el tiempo estimado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En riesgo</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En riesgo</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cerca de vencer.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas saturadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas saturadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Más de una orden simultánea.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -523,60 +563,100 @@ exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Avances en proceso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Avances en proceso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Etapas activas monitoreadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Atrasados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Atrasados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Superan el tiempo estimado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En riesgo</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En riesgo</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cerca de vencer.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas saturadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas saturadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Más de una orden simultánea.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -884,60 +964,100 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] =
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Avances en proceso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Avances en proceso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Etapas activas monitoreadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Atrasados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Atrasados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Superan el tiempo estimado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En riesgo</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En riesgo</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cerca de vencer.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas saturadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas saturadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Más de una orden simultánea.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

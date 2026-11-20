@@ -112,60 +112,100 @@ exports[`/dashboard/staff/payment-history > pagos del mes > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total histórico de pagos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagos del mes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagos del mes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros del periodo actual.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Acumulado histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagado este mes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagado este mes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Total mensual registrado.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -341,60 +381,100 @@ exports[`/dashboard/staff/payment-history > segunda pagina > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total histórico de pagos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagos del mes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagos del mes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros del periodo actual.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Acumulado histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagado este mes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagado este mes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Total mensual registrado.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

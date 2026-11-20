@@ -153,116 +153,196 @@ exports[`/dashboard/reports/sales-collections > filtro por estado de cobranza en
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos encontrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos encontrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Pedidos según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Suma del monto estimado de pedidos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto proformado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto proformado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Suma de proformas emitidas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total cobrado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total cobrado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Adelantos iniciales, adelantos, amortizaciones y cancelaciones.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Pedidos con saldo: 0.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos pagados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos pagados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Pedidos con proforma sin saldo pendiente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Adelantos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Adelantos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Adelantos iniciales y pagos tipo adelanto.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Amortizaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Amortizaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Cancelaciones: S/ 0.00.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -486,116 +566,196 @@ exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza >
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos encontrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos encontrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>4</p>
 <p>Pedidos según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Suma del monto estimado de pedidos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto proformado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto proformado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.50</p>
 <p>Suma de proformas emitidas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total cobrado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total cobrado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 57.50</p>
 <p>Adelantos iniciales, adelantos, amortizaciones y cancelaciones.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Pedidos con saldo: 1.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos pagados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos pagados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Pedidos con proforma sin saldo pendiente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Adelantos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Adelantos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.50</p>
 <p>Adelantos iniciales y pagos tipo adelanto.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Amortizaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Amortizaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Cancelaciones: S/ 11.50.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -901,116 +1061,196 @@ exports[`/dashboard/reports/sales-collections > rango de mas de 366 dias > resul
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos encontrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos encontrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Pedidos según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Suma del monto estimado de pedidos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto proformado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto proformado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Suma de proformas emitidas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total cobrado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total cobrado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Adelantos iniciales, adelantos, amortizaciones y cancelaciones.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Pedidos con saldo: 2.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos pagados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos pagados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Pedidos con proforma sin saldo pendiente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Adelantos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Adelantos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Adelantos iniciales y pagos tipo adelanto.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Amortizaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Amortizaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Cancelaciones: S/ 0.00.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1389,116 +1629,196 @@ exports[`/dashboard/reports/sales-collections > sin filtros, vendedor > resultad
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos encontrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos encontrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Pedidos según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Suma del monto estimado de pedidos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto proformado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto proformado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Suma de proformas emitidas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total cobrado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total cobrado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Adelantos iniciales, adelantos, amortizaciones y cancelaciones.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Pedidos con saldo: 2.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos pagados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos pagados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Pedidos con proforma sin saldo pendiente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Adelantos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Adelantos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Adelantos iniciales y pagos tipo adelanto.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Amortizaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Amortizaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Cancelaciones: S/ 0.00.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1750,116 +2070,196 @@ exports[`/dashboard/reports/sales-collections > sin resultados > resultado 1`] =
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos encontrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos encontrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Pedidos según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Suma del monto estimado de pedidos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto proformado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto proformado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Suma de proformas emitidas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total cobrado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total cobrado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Adelantos iniciales, adelantos, amortizaciones y cancelaciones.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Pedidos con saldo: 0.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos pagados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos pagados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Pedidos con proforma sin saldo pendiente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Adelantos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Adelantos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Adelantos iniciales y pagos tipo adelanto.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Amortizaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Amortizaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Cancelaciones: S/ 0.00.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2067,116 +2467,196 @@ exports[`/dashboard/reports/sales-collections > todos los filtros > resultado 1`
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos encontrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos encontrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Pedidos según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Suma del monto estimado de pedidos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto proformado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto proformado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Suma de proformas emitidas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total cobrado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total cobrado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Adelantos iniciales, adelantos, amortizaciones y cancelaciones.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Pedidos con saldo: 2.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pedidos pagados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos pagados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Pedidos con proforma sin saldo pendiente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Adelantos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Adelantos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Adelantos iniciales y pagos tipo adelanto.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Amortizaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Amortizaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Cancelaciones: S/ 0.00.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

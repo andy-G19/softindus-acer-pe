@@ -112,60 +112,100 @@ exports[`/dashboard/staff/tasks > administrador > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tareas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tareas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Historial general de tareas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tareas de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tareas de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Actividades registradas para la fecha actual.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tareas del mes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tareas del mes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros del periodo actual.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Horas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Horas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>11.50 h</p>
 <p>Terminadas históricas: 42</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -349,60 +389,100 @@ exports[`/dashboard/staff/tasks > maestro de taller > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tareas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tareas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Historial general de tareas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tareas de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tareas de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Actividades registradas para la fecha actual.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tareas del mes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tareas del mes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros del periodo actual.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Horas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Horas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>11.50 h</p>
 <p>Terminadas históricas: 42</p>
+</div>
+</div>
 </div>
 </div>
 </section>

@@ -162,60 +162,100 @@ exports[`/dashboard/staff/attendance > faltas > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Registros totales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Registros totales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Historial general de asistencia.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Asistencias de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Asistencias de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros creados para la fecha actual.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Faltas de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Faltas de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Operarios marcados como ausentes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tardanzas de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tardanzas de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros marcados con tardanza.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -426,60 +466,100 @@ exports[`/dashboard/staff/attendance > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Registros totales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Registros totales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Historial general de asistencia.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Asistencias de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Asistencias de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros creados para la fecha actual.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Faltas de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Faltas de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Operarios marcados como ausentes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tardanzas de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tardanzas de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros marcados con tardanza.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -704,60 +784,100 @@ exports[`/dashboard/staff/attendance > tardanzas > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Registros totales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Registros totales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Historial general de asistencia.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Asistencias de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Asistencias de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros creados para la fecha actual.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Faltas de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Faltas de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Operarios marcados como ausentes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tardanzas de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tardanzas de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros marcados con tardanza.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1058,60 +1178,100 @@ exports[`/dashboard/staff/attendance > todos los filtros con presentes > resulta
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Registros totales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Registros totales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Historial general de asistencia.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Asistencias de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Asistencias de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros creados para la fecha actual.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Faltas de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Faltas de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Operarios marcados como ausentes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Tardanzas de hoy</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Tardanzas de hoy</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros marcados con tardanza.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

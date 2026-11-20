@@ -171,60 +171,100 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > resultado 1`
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planillas generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planillas generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Por pagar: S/ 1234.50</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Con su pago registrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Anuladas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Anuladas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros descartados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -482,60 +522,100 @@ exports[`/dashboard/staff/payrolls > segunda pagina con un filtro > resultado 1`
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planillas generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planillas generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>45</p>
 <p>Según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>7</p>
 <p>Por pagar: S/ 1234.50</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>7</p>
 <p>Con su pago registrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Anuladas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Anuladas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>7</p>
 <p>Registros descartados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -781,60 +861,100 @@ exports[`/dashboard/staff/payrolls > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planillas generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planillas generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Por pagar: S/ 1234.50</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Con su pago registrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Anuladas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Anuladas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros descartados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1190,60 +1310,100 @@ exports[`/dashboard/staff/payrolls > todos los filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planillas generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planillas generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Por pagar: S/ 1234.50</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Con su pago registrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Anuladas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Anuladas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros descartados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1489,60 +1649,100 @@ exports[`/dashboard/staff/payrolls > una planilla pendiente sin pagos ofrece anu
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planillas generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planillas generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Por pagar: S/ 1234.50</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pagadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pagadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Con su pago registrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Anuladas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Anuladas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Registros descartados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

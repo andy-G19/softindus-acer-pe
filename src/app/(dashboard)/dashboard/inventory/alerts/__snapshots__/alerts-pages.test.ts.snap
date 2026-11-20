@@ -106,46 +106,76 @@ exports[`/dashboard/inventory/alerts > administrador > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Materiales disponibles para uso.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales críticos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales críticos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Bajo el stock mínimo definido.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Alertas generadas sin atender.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -353,46 +383,76 @@ exports[`/dashboard/inventory/alerts > administrador con una alerta activa > res
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Materiales disponibles para uso.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales críticos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales críticos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Bajo el stock mínimo definido.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Alertas generadas sin atender.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -592,46 +652,76 @@ exports[`/dashboard/inventory/alerts > maestro de taller > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Materiales disponibles para uso.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales críticos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales críticos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Bajo el stock mínimo definido.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Alertas generadas sin atender.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -836,46 +926,76 @@ exports[`/dashboard/inventory/alerts > maestro de taller con una alerta activa >
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Materiales disponibles para uso.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales críticos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales críticos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Bajo el stock mínimo definido.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Alertas generadas sin atender.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
