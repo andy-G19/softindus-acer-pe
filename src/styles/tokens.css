@@ -211,7 +211,9 @@
   --shadow-menu: 0 18px 42px rgba(0, 0, 0, 0.35);
   --shadow-sidebar: 8px 0 32px rgba(0, 0, 0, 0.45);
   --shadow-hairline: 0 0 0 1px rgba(255, 255, 255, 0.08);
-  --shadow-toast: 0 24px 60px -28px rgba(0, 0, 0, 0.75);
+  /* Aviso temporal (propuesta de mensajes y estados): hasta ese diseno no se aplicaba nunca,
+     porque el CSS de toastify le ganaba al adaptador. */
+  --shadow-toast: 0 18px 42px rgba(0, 0, 0, 0.45);
   --shadow-dialog: 0 34px 90px -34px rgba(0, 0, 0, 0.85);
   --shadow-login: 0 40px 80px -30px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.2);
 

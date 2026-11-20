@@ -1,7 +1,14 @@
 "use client";
 
-import { ToastContainer } from "react-toastify";
+import { cssTransition, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+// Entrada y salida del diseno de mensajes y estados: las animaciones viven en
+// src/styles/adapters/toastify.css con estos nombres de clase.
+const toastTransition = cssTransition({
+  enter: "toast-industrial-enter",
+  exit: "toast-industrial-exit",
+});
 
 export function NotificationProvider() {
   return (
@@ -15,8 +22,7 @@ export function NotificationProvider() {
       draggable
       theme="dark"
       limit={4}
-      toastClassName="toast-industrial"
-      progressClassName="toast-industrial-progress"
+      transition={toastTransition}
     />
   );
 }

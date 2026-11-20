@@ -1,72 +1,114 @@
-/* Adaptador de react-toastify a la identidad visual. Lo usa la fachada de
-   notificaciones (src/lib/notifications.ts). */
-@layer utilities {
-  .Toastify__toast {
-    min-height: 72px;
-    border: 1px solid var(--border);
-    border-radius: 0.75rem;
-    background: linear-gradient(180deg, var(--card), var(--popover));
-    color: var(--foreground);
-    box-shadow: var(--shadow-toast);
-  }
+/* Adaptador de react-toastify al diseno de mensajes y estados (propuesta del responsable,
+   2026-11-19). Lo usa la fachada de notificaciones (src/lib/notifications.ts).
 
-  .Toastify__toast-body {
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 0.25rem 0.125rem;
-    color: var(--foreground);
-    font-family: var(--font-sans);
-  }
+   Va fuera de toda capa a proposito. El CSS base de toastify se importa desde JavaScript y no
+   tiene capa, y una regla sin capa gana a cualquiera dentro de @layer: hasta este diseno el
+   adaptador estaba en @layer utilities y casi nada se aplicaba (fondo, radio, sombra, icono y
+   barra eran los de toastify). Por eso:
+   - los colores, medidas y sombra son las variables de toastify, declaradas en .Toastify (el
+     contenedor): los avisos las heredan de el y ganan a las que toastify declara en :root;
+   - lo que toastify pinta como propiedad directa se sobrescribe con selectores prefijados por
+     .Toastify (0-2-0 contra su 0-1-0).
+   Posicion, duracion y barra de progreso se conservan (decision del responsable). */
 
-  .Toastify__toast-icon {
-    margin-top: 0.125rem;
-  }
+.Toastify {
+  --toastify-color-dark: var(--texture-metal), var(--card);
+  --toastify-text-color-dark: var(--foreground);
+  --toastify-toast-bd-radius: var(--radius-lg);
+  --toastify-toast-shadow: var(--shadow-toast);
+  --toastify-toast-padding: 13px 14px;
+  --toastify-toast-min-height: 0px;
+  --toastify-toast-width: 340px;
+  --toastify-font-family: var(--font-sans);
+  --toastify-icon-color-success: var(--success-foreground);
+  --toastify-icon-color-error: var(--destructive-foreground);
+  --toastify-icon-color-warning: var(--warning-foreground);
+  --toastify-icon-color-info: var(--info-foreground);
+  --toastify-color-progress-success: var(--success);
+  --toastify-color-progress-error: var(--destructive);
+  --toastify-color-progress-warning: var(--warning);
+  --toastify-color-progress-info: var(--info);
+}
 
-  .Toastify__close-button {
-    color: var(--muted-foreground);
-    opacity: 0.85;
-    transition: color var(--motion-fast) ease;
-  }
+.Toastify .Toastify__toast {
+  border: 1px solid var(--control-border);
+}
 
-  .Toastify__close-button:hover {
-    color: var(--foreground);
+.Toastify .Toastify__toast-body {
+  align-items: flex-start;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+}
+
+.Toastify .Toastify__toast-icon {
+  width: 18px;
+  margin-top: 1px;
+  margin-inline-end: 0;
+}
+
+.Toastify .Toastify__close-button {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--muted-foreground);
+  opacity: 1;
+  transition:
+    background-color var(--motion-fast) ease-out,
+    color var(--motion-fast) ease-out;
+}
+
+.Toastify .Toastify__close-button:hover {
+  background-color: var(--ghost-hover);
+  color: var(--foreground);
+}
+
+/* Entrada: aparece y sube 10 px; salida: se desvanece bajando un poco. La transicion la arma
+   notification-provider.tsx con cssTransition y estas clases. */
+.Toastify .toast-industrial-enter {
+  animation: toast-industrial-enter var(--motion-base) var(--ease-settle) both;
+}
+
+.Toastify .toast-industrial-exit {
+  animation: toast-industrial-exit var(--motion-base) var(--ease-settle) both;
+}
+
+@keyframes toast-industrial-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
     opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toast-industrial-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+}
+
+/* Con reducir movimiento no hay movimiento visible, pero la animacion dura 1 ms en lugar de
+   quitarse: toastify espera su animationend para retirar el aviso. */
+@media (prefers-reduced-motion: reduce) {
+  .Toastify .toast-industrial-enter,
+  .Toastify .toast-industrial-exit {
+    animation-duration: 1ms;
   }
 
-  .Toastify__progress-bar,
-  .toast-industrial-progress {
-    background: var(--primary);
-  }
-
-  .toast-industrial-success {
-    border-color: color-mix(in srgb, var(--success) 32%, transparent);
-  }
-
-  .toast-industrial-error {
-    border-color: color-mix(in srgb, var(--destructive) 35%, transparent);
-  }
-
-  .toast-industrial-warning {
-    border-color: color-mix(in srgb, var(--warning) 34%, transparent);
-  }
-
-  .toast-industrial-info {
-    border-color: color-mix(in srgb, var(--info) 34%, transparent);
-  }
-
-  .toast-industrial-progress-success {
-    background: var(--success);
-  }
-
-  .toast-industrial-progress-error {
-    background: var(--destructive);
-  }
-
-  .toast-industrial-progress-warning {
-    background: var(--warning);
-  }
-
-  .toast-industrial-progress-info {
-    background: var(--info);
+  .Toastify .Toastify__close-button {
+    transition: none;
   }
 }

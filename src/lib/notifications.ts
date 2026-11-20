@@ -4,25 +4,21 @@
 // y closeModal) se retiro en la 11.7a; las confirmaciones usan ConfirmDialog o
 // ConfirmActionButton.
 import { createElement } from "react";
-import { toast, type ToastOptions } from "react-toastify";
+import { toast } from "react-toastify";
 
 import type {
   NotificationDefinition,
   NotificationSeverity,
 } from "@/lib/notification-catalog";
 
-const toastTypeClassNames: Record<NotificationSeverity, string> = {
-  success: "toast-industrial-success",
-  error: "toast-industrial-error",
-  warning: "toast-industrial-warning",
-  info: "toast-industrial-info",
-};
-
+// Diseno de mensajes y estados (2026-11-19): el color de cada tipo (icono y barra) lo ponen las
+// variables de toastify en src/styles/adapters/toastify.css, asi que el aviso ya no lleva clases
+// por tipo. El mensaje va a 13 px en medio peso.
 function notificationContent(message: string, description?: string) {
   return createElement(
     "div",
     { className: "space-y-1" },
-    createElement("p", { className: "text-sm font-semibold" }, message),
+    createElement("p", { className: "text-[0.8125rem] font-medium" }, message),
     description
       ? createElement(
           "p",
@@ -38,12 +34,7 @@ function showToast(
   message: string,
   description?: string,
 ) {
-  const options: ToastOptions = {
-    className: toastTypeClassNames[type],
-    progressClassName: `toast-industrial-progress-${type}`,
-  };
-
-  toast[type](notificationContent(message, description), options);
+  toast[type](notificationContent(message, description));
 }
 
 export function showSuccess(message: string, description?: string) {
