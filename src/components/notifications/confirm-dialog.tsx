@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type ReactElement, type ReactNode } from "react";
-import { TriangleAlert } from "lucide-react";
+import { CircleCheck, TriangleAlert } from "lucide-react";
 
 import {
   AlertDialog,
@@ -141,16 +141,23 @@ export function ConfirmDialog({
           }
         }}
       >
-        <AlertDialogHeader className="items-center sm:flex-row sm:items-start sm:gap-4">
+        <AlertDialogHeader>
+          {/* Diseno de mensajes y estados: neutra con un check sobre el acento; destructiva
+              con el triangulo sobre la superficie granate de los botones destructivos. */}
           <span
+            data-slot="confirm-dialog-icon"
             className={cn(
-              "flex size-10 shrink-0 items-center justify-center rounded-full",
-              destructive ? "bg-destructive/10 text-destructive" : "bg-warning/10 text-warning",
+              "flex size-[38px] shrink-0 items-center justify-center rounded-full",
+              destructive ? "bg-destructive-surface text-destructive-foreground" : "bg-accent text-foreground",
             )}
           >
-            <TriangleAlert className="size-5" aria-hidden="true" />
+            {destructive ? (
+              <TriangleAlert className="size-5" aria-hidden="true" />
+            ) : (
+              <CircleCheck className="size-5" aria-hidden="true" />
+            )}
           </span>
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <AlertDialogTitle>{title}</AlertDialogTitle>
             <AlertDialogDescription>{description}</AlertDialogDescription>
           </div>

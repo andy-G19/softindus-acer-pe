@@ -85,9 +85,12 @@ describe("ConfirmDialog", () => {
     const normal = render();
     const destructive = render({ variant: "destructive", confirmText: "Anular pedido" });
 
-    expect(tag(normal, /<svg[^>]*lucide-triangle-alert[^>]*>/)).toContain('aria-hidden="true"');
-    expect(normal).toContain("bg-warning/10 text-warning");
-    expect(destructive).toContain("bg-destructive/10 text-destructive");
+    // Diseno de mensajes y estados: la neutra lleva un check sobre el acento y la destructiva el
+    // triangulo sobre la superficie granate; los dos iconos son decorativos.
+    expect(tag(normal, /<svg[^>]*lucide-circle-check[^>]*>/)).toContain('aria-hidden="true"');
+    expect(tag(destructive, /<svg[^>]*lucide-triangle-alert[^>]*>/)).toContain('aria-hidden="true"');
+    expect(normal).toContain("bg-accent text-foreground");
+    expect(destructive).toContain("bg-destructive-surface text-destructive-foreground");
     expect(tag(destructive, /<button [^>]*>Anular pedido/)).toContain('data-variant="destructive"');
   });
 
@@ -199,5 +202,50 @@ describe("ConfirmDialog controlada", () => {
     // Comprobacion de tipos: con disparador, Radix devuelve el foco al disparador.
     // @ts-expect-error: returnFocusTo exige open y onOpenChange
     expect(() => h(ConfirmDialog, { ...base, returnFocusTo: () => null })).not.toThrow();
+  });
+});
+
+// Diseno de mensajes y estados (propuesta del responsable, 2026-11-19): panel con textura y borde
+// de acero, radio de 14 px y relleno de 24; el icono va arriba, en un circulo de 38 px, neutro
+// con un check o granate con el triangulo; titulo de 16 px en la letra normal y cuerpo de 13 px.
+function classesOfSlot(html: string, slot: string) {
+  return (new RegExp(`data-slot="${slot}"[^>]*class="([^"]*)"|class="([^"]*)"[^>]*data-slot="${slot}"`).exec(html)
+    ?.slice(1)
+    .find(Boolean) ?? "")
+    .replaceAll("&amp;", "&")
+    .split(" ");
+}
+
+describe("ConfirmDialog con el diseno de mensajes y estados", () => {
+  it("el panel lleva textura, borde de acero, radio de 14 px y relleno de 24 px", () => {
+    expect(classesOfSlot(render(), "alert-dialog-content")).toEqual(
+      expect.arrayContaining(["bg-card", "bg-(image:--texture-metal)", "border-control-border", "rounded-xl", "p-6", "sm:max-w-[420px]"]),
+    );
+  });
+
+  it("titulo de 16 px en seminegrita con la letra normal, y cuerpo de 13 px", () => {
+    const html = render();
+
+    expect(classesOfSlot(html, "alert-dialog-title")).toEqual(expect.arrayContaining(["text-base", "font-semibold"]));
+    expect(classesOfSlot(html, "alert-dialog-title")).not.toContain("font-heading");
+    expect(classesOfSlot(html, "alert-dialog-description")).toEqual(expect.arrayContaining(["text-[0.8125rem]"]));
+  });
+
+  it("neutra: circulo de acento con un check; destructiva: circulo granate con el triangulo", () => {
+    const neutra = tag(render(), /<span[^>]*data-slot="confirm-dialog-icon"[^>]*>[\s\S]*?<\/span>/);
+    const destructiva = tag(
+      render({ variant: "destructive" }),
+      /<span[^>]*data-slot="confirm-dialog-icon"[^>]*>[\s\S]*?<\/span>/,
+    );
+
+    expect(neutra).toMatch(/class="[^"]*\bsize-\[38px\][^"]*\bbg-accent\b[^"]*\btext-foreground\b/);
+    expect(neutra).toMatch(/lucide-circle-check/);
+    expect(destructiva).toMatch(/class="[^"]*\bbg-destructive-surface\b[^"]*\btext-destructive-foreground\b/);
+    expect(destructiva).toMatch(/lucide-triangle-alert/);
+  });
+
+  it("el icono va arriba del titulo, alineado a la izquierda", () => {
+    expect(classesOfSlot(render(), "alert-dialog-header")).toEqual(expect.arrayContaining(["items-start", "text-left"]));
+    expect(classesOfSlot(render(), "alert-dialog-header")).not.toContain("sm:flex-row");
   });
 });
