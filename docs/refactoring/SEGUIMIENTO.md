@@ -11123,6 +11123,21 @@ visibilidad y el elemento en ese punto) que era el pintado del panel y se repiti
 | El login | Conserva su aspecto (sus reglas de `brand.css` ganan por orden); se rediseña con los botones que no siguen el diseño solos |
 | D99 | La parte de los campos se cerró en el F1; siguen las reglas de tablas y etiquetas de `patterns.css` |
 
+### Integración en `main` (botones y campos)
+
+Datos leídos de la API de GitHub el 2026-11-20 (UTC) y comparados con git:
+
+- El registro de los campos se publicó en `staging` con `1d83a8c`: CI #243 en verde (3m 35s).
+- PR #61 «Diseño de botones y campos», abierto a las 00:24:46 y fusionado con merge commit a las
+  00:41:39: 16 commits, de `68179d4` a `1d83a8c`, y 78 archivos (+4.673 −490). Su CI, el #244, sobre
+  `1d83a8c`, terminó en verde antes del merge (5m 49s).
+- El merge commit `1a46255` tiene como padres `fdfbef9` (`main`) y `1d83a8c` (`staging`), y su
+  árbol es el de `1d83a8c` (`4bcc9c9`).
+- CI #245 sobre `1a46255` en verde al primer intento (00:41:42 a 00:46:57, 5m 15s).
+- Vercel desplegó `1a46255` en producción (`success` a las 00:42:35). Sin migraciones.
+
+**El diseño de botones y campos queda integrado.**
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
