@@ -135,6 +135,13 @@ describe("tokens", () => {
     expect(tokens).toMatch(/--overlay:\s*rgba\(10, 11, 13, 0\.6\)/);
   });
 
+  // Diseno de fundamentos (propuesta del responsable, 2026-11-20): Grafico 4 era la brasa
+  // (#ff7a1a), casi igual al naranja de Grafico 1 (1,12:1 entre ellos); pasa al cobre de la marca.
+  // Tine el icono de las tarjetas de modulo con tone="chart-4".
+  it("el grafico 4 es el cobre, no otro naranja", () => {
+    expect(tokens).toMatch(/--chart-4:\s*var\(--accent-copper\)/);
+  });
+
   it("el interruptor tiene su verde, su sombra y su curva", () => {
     expect(theme).toContain("--color-accent-forge");
     expect(root).toContain("--shadow-thumb");

@@ -124,7 +124,9 @@
   --chart-1: #f2941f;
   --chart-2: #4a6fa5;
   --chart-3: #4f9142;
-  --chart-4: #ff7a1a;
+  /* Cobre, no la brasa: con el naranja de --chart-1 al lado no se distinguian (diseno de
+     fundamentos, 2026-11-20). */
+  --chart-4: var(--accent-copper);
   --chart-5: #94a3b8;
   --radius: 0.625rem;
   --sidebar: #15181d;
