@@ -1279,12 +1279,12 @@ exports[`Presentacion > indicador warning 1`] = `
 `;
 
 exports[`Presentacion > separador horizontal 1`] = `
-"<div data-orientation="horizontal" role="none" data-slot="separator" class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch">
+"<div data-orientation="horizontal" role="none" data-slot="separator" class="separator-gleam relative shrink-0 overflow-hidden bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch">
 </div>"
 `;
 
 exports[`Presentacion > separador vertical 1`] = `
-"<div data-orientation="vertical" role="none" data-slot="separator" class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch">
+"<div data-orientation="vertical" role="none" data-slot="separator" class="separator-gleam relative shrink-0 overflow-hidden bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch">
 </div>"
 `;
 

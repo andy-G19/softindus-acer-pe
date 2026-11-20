@@ -752,6 +752,53 @@
     translate: 0 0;
   }
 
+  /* Separador (propuesta de la presentacion, 2026-11-20; D158): un destello de acero recorre la
+     linea horizontal cada 4,5 s y la vertical late entre el borde comun y el acero claro cada
+     3 s. Excepcion elegida a la quietud en reposo (D153); se detiene con reducir movimiento. */
+  .separator-gleam[data-orientation="horizontal"]::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30%;
+    height: 100%;
+    background-image: linear-gradient(90deg, transparent, var(--accent-steel), transparent);
+    translate: -100% 0;
+    animation: separator-travel 4.5s ease-in-out infinite;
+  }
+
+  @keyframes separator-travel {
+    from {
+      translate: -100% 0;
+    }
+
+    to {
+      translate: 334% 0;
+    }
+  }
+
+  .separator-gleam[data-orientation="vertical"] {
+    animation: separator-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes separator-pulse {
+    0%,
+    100% {
+      background-color: var(--border);
+    }
+
+    50% {
+      background-color: var(--control-border-hover);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .separator-gleam,
+    .separator-gleam::after {
+      animation: none;
+    }
+  }
+
   /* Con reducir movimiento: sin respiracion, sin transiciones y sin desplazamientos ni escalas
      (la subida de la placa ya la quita Card). La flecha aparece igual, sin moverse. */
   @media (prefers-reduced-motion: reduce) {
