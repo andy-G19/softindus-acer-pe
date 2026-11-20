@@ -18,7 +18,8 @@ const geist = localFont({
   variable: "--font-sans",
 });
 // Oswald es variable, pero Google declaraba cada peso por separado sobre el
-// mismo archivo: un peso intermedio (650) se resuelve en 700, no en 650.
+// mismo archivo: un peso intermedio (650) se resuelve en 700, no en 650. Por eso
+// los titulos piden 700 (diseno de fundamentos, 2026-11-20).
 const oswald = localFont({
   src: [
     { path: "./fonts/oswald-latin.woff2", weight: "500", style: "normal" },

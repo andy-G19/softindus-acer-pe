@@ -142,6 +142,16 @@ describe("tokens", () => {
     expect(tokens).toMatch(/--chart-4:\s*var\(--accent-copper\)/);
   });
 
+  // Oswald se declara con los pesos 500, 600 y 700 (src/app/layout.tsx): un 650 se dibuja como 700.
+  // Los titulos piden 700, el peso que de verdad se ve (diseno de fundamentos, 2026-11-20).
+  it("ninguna hoja pide el peso 650, que se dibuja como 700", () => {
+    const pesos650 = cssFiles(STYLES_DIR).filter((file) =>
+      /font-weight:\s*650\b/.test(withoutComments(readFileSync(file, "utf8"))),
+    );
+
+    expect(pesos650).toEqual([]);
+  });
+
   it("el interruptor tiene su verde, su sombra y su curva", () => {
     expect(theme).toContain("--color-accent-forge");
     expect(root).toContain("--shadow-thumb");

@@ -156,11 +156,12 @@
   /* Titulos de las paginas (11.7c; antes en el adaptador, movidos tal cual). El tema vive en
      <html>, asi que sin el filtro alcanzarian el titulo del login, que tiene los suyos (su main
      llevaba la clase y por eso quedaba fuera). El filtro va en :where para no subir la
-     especificidad. */
+     especificidad. Peso 700: decia 650, que Oswald (declarada en 500, 600 y 700) ya dibujaba
+     como 700. */
   .industrial-dark main:where(:not(.login-industrial-bg)) h1 {
     color: var(--foreground);
     font-family: var(--font-heading);
-    font-weight: 650;
+    font-weight: 700;
     line-height: 1.15;
   }
 
