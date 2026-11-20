@@ -120,7 +120,13 @@ describe("gestos y puntos en patterns.css", () => {
   it("solo el punto de «En producción» late sin parar, con dos anillos desfasados", () => {
     expect(rule(".state-dot-live::before,\n  .state-dot-live::after")).toMatch(/state-ping[^;]*infinite/);
     expect(rule(".state-dot-live::before")).toMatch(/animation-delay:\s*0?\.9s/);
-    expect(patterns.match(/infinite/g)).toHaveLength(1);
+    // Entre las reglas de etiquetas y estados, la unica con un bucle es la del radar. Otras
+    // familias tienen los suyos (el acceso a modulo, D158).
+    const loops = [...patterns.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .filter((match) => match[2].includes("infinite"))
+      .map((match) => match[1].trim().replace(/\s+/g, " "))
+      .filter((selector) => /badge|state/.test(selector));
+    expect(loops).toEqual([".state-dot-live::before, .state-dot-live::after"]);
   });
 
   it("el punto de vigente brilla fijo y parcial tiene su relleno", () => {

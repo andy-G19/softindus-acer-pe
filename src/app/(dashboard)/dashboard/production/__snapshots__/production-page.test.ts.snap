@@ -372,71 +372,86 @@ exports[`/dashboard/production > indicadores > resultado 1`] = `
 <section>
 <a href="/dashboard/production/routes">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Rutas de fabricación</div>
-</div>
+</span>
 <div>
+<div>
+<div>Rutas de fabricación</div>
 <p>Define rutas por producto y estructura el proceso productivo.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/production/recipes">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Recetas técnicas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Recetas técnicas</div>
 <p>Administra recetas, versiones y materiales requeridos por producto.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/production/work-orders">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Órdenes de trabajo</div>
-</div>
+</span>
 <div>
+<div>
+<div>Órdenes de trabajo</div>
 <p>Crea órdenes, revisa materiales y controla avances por etapa.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/production/campaigns">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Campañas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Campañas</div>
 <p>Planifica lotes de producción y vincúlalos con órdenes de trabajo.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/production/bottlenecks">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Cuellos de botella</div>
-</div>
+</span>
 <div>
+<div>
+<div>Cuellos de botella</div>
 <p>Detecta etapas en proceso atrasadas, en riesgo o saturadas.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
@@ -876,71 +891,86 @@ exports[`/dashboard/production > maestro de taller > resultado 1`] = `
 <section>
 <a href="/dashboard/production/routes">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Rutas de fabricación</div>
-</div>
+</span>
 <div>
+<div>
+<div>Rutas de fabricación</div>
 <p>Define rutas por producto y estructura el proceso productivo.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/production/recipes">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Recetas técnicas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Recetas técnicas</div>
 <p>Administra recetas, versiones y materiales requeridos por producto.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/production/work-orders">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Órdenes de trabajo</div>
-</div>
+</span>
 <div>
+<div>
+<div>Órdenes de trabajo</div>
 <p>Crea órdenes, revisa materiales y controla avances por etapa.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/production/campaigns">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Campañas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Campañas</div>
 <p>Planifica lotes de producción y vincúlalos con órdenes de trabajo.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/production/bottlenecks">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Cuellos de botella</div>
-</div>
+</span>
 <div>
+<div>
+<div>Cuellos de botella</div>
 <p>Detecta etapas en proceso atrasadas, en riesgo o saturadas.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>

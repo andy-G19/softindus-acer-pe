@@ -167,113 +167,137 @@ exports[`/dashboard/inventory > indicadores > resultado 1`] = `
 <section>
 <a href="/dashboard/inventory/materials">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Materiales e insumos</div>
-</div>
+</span>
 <div>
+<div>
+<div>Materiales e insumos</div>
 <p>Registra materia prima, consumibles, repuestos, herramientas y stock mínimo.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/inventory/entries">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Entradas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Entradas</div>
 <p>Consulta las entradas de stock que generan las compras y otros registros.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/inventory/outputs">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Salidas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Salidas</div>
 <p>Registra y consulta las salidas de stock a producción u otros motivos.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/inventory/alerts">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Alertas y stock crítico</div>
-</div>
+</span>
 <div>
+<div>
+<div>Alertas y stock crítico</div>
 <p>Consulta materiales críticos y alertas activas de inventario.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/inventory/suppliers">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Proveedores</div>
-</div>
+</span>
 <div>
+<div>
+<div>Proveedores</div>
 <p>Registra proveedores y prepara la asociación con materiales y compras.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/inventory/supplier-materials">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">06</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Proveedor-material</div>
-</div>
+</span>
 <div>
+<div>
+<div>Proveedor-material</div>
 <p>Asocia proveedores con los materiales que pueden abastecer.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/inventory/purchases">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">07</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Compras</div>
-</div>
+</span>
 <div>
+<div>
+<div>Compras</div>
 <p>Registra compras y genera entradas automáticas de inventario.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/inventory/supplier-payments">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">08</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Pagos a proveedores</div>
-</div>
+</span>
 <div>
+<div>
+<div>Pagos a proveedores</div>
 <p>Consulta los pagos registrados desde las compras y su saldo pendiente.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
@@ -450,57 +474,69 @@ exports[`/dashboard/inventory > maestro de taller > resultado 1`] = `
 <section>
 <a href="/dashboard/inventory/materials">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Materiales e insumos</div>
-</div>
+</span>
 <div>
+<div>
+<div>Materiales e insumos</div>
 <p>Registra materia prima, consumibles, repuestos, herramientas y stock mínimo.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/inventory/entries">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Entradas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Entradas</div>
 <p>Consulta las entradas de stock que generan las compras y otros registros.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/inventory/outputs">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Salidas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Salidas</div>
 <p>Registra y consulta las salidas de stock a producción u otros motivos.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/inventory/alerts">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Alertas y stock crítico</div>
-</div>
+</span>
 <div>
+<div>
+<div>Alertas y stock crítico</div>
 <p>Consulta materiales críticos y alertas activas de inventario.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>

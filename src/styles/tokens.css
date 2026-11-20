@@ -245,6 +245,10 @@
   --kpi-grid-dot: rgba(255, 255, 255, 0.05);
   --kpi-led-gleam: rgba(255, 255, 255, 0.95);
 
+  /* Acceso a modulo (propuesta de la presentacion, D158): acento por defecto; cada
+     ModuleAccessCard lo redefine con su tono (chart-1 a chart-5). */
+  --module-accent: var(--chart-1);
+
   /* Sombras: cada valor es el que ya usaba su componente. */
   /* Filo de luz arriba y apoyo abajo del boton principal; reemplaza su halo naranja. */
   --shadow-button: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -260,6 +264,9 @@
   /* Indicador al pasar el puntero (D157): mas hondo que la tarjeta; el resplandor de su tono se
      suma en patterns.css. */
   --shadow-kpi-hover: 0 18px 38px rgba(0, 0, 0, 0.45);
+  /* Acceso a modulo con la intencion (D158): filo de luz y sombra honda; el resplandor de su
+     acento se suma en patterns.css. */
+  --shadow-module-hover: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 16px 32px rgba(0, 0, 0, 0.45);
   --shadow-raised: 0 14px 35px rgba(0, 0, 0, 0.18);
   --shadow-raised-hover: 0 12px 24px -8px rgba(0, 0, 0, 0.4);
   --shadow-card-hover: 0 16px 34px rgba(0, 0, 0, 0.24);

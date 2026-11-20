@@ -910,141 +910,171 @@ exports[`/dashboard/reports > panel del mes > resultado 1`] = `
 <div>
 <a href="/dashboard/reports/production">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de producción</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de producción</div>
 <p>Órdenes de trabajo filtradas por fecha, producto, estado y código de orden.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/inventory">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de inventario</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de inventario</div>
 <p>Movimientos por material, tipo, responsable, fechas y orden de trabajo asociada.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/sales-collections">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de ventas y cobranzas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de ventas y cobranzas</div>
 <p>Pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos y estados de cobranza.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/suppliers-purchases">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de proveedores y compras</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de proveedores y compras</div>
 <p>Proveedores, materiales comprados, montos, comprobantes, precios históricos y pagos pendientes.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/financial">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte financiero</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte financiero</div>
 <p>Caja chica, ingresos, egresos, costos, utilidad estimada, cuentas por cobrar y compras por pagar.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/maintenance">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">06</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de mantenimiento</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de mantenimiento</div>
 <p>Máquinas, fallas, reparaciones, costos, repuestos, preventivos y reincidencias.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/profitability">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">07</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de costos y rentabilidad</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de costos y rentabilidad</div>
 <p>Costeos, margenes, ingresos, utilidad estimada y alertas de baja rentabilidad.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/staff">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">08</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de personal y planillas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de personal y planillas</div>
 <p>Asistencias, faltas, tardanzas, planillas, pagos y pendientes por operario.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/export-history">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">09</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Historial de exportaciones</div>
-</div>
+</span>
 <div>
+<div>
+<div>Historial de exportaciones</div>
 <p>Auditoría de reportes exportados por usuario, módulo, formato, filtros y fecha.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/audit">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">10</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Bitacora de auditoria</div>
-</div>
+</span>
 <div>
+<div>
+<div>Bitacora de auditoria</div>
 <p>Operaciones criticas por usuario, accion, entidad afectada y fecha.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
@@ -1890,141 +1920,171 @@ exports[`/dashboard/reports > sin datos recientes, totales vacios ni materiales 
 <div>
 <a href="/dashboard/reports/production">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de producción</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de producción</div>
 <p>Órdenes de trabajo filtradas por fecha, producto, estado y código de orden.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/inventory">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de inventario</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de inventario</div>
 <p>Movimientos por material, tipo, responsable, fechas y orden de trabajo asociada.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/sales-collections">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de ventas y cobranzas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de ventas y cobranzas</div>
 <p>Pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos y estados de cobranza.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/suppliers-purchases">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de proveedores y compras</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de proveedores y compras</div>
 <p>Proveedores, materiales comprados, montos, comprobantes, precios históricos y pagos pendientes.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/financial">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte financiero</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte financiero</div>
 <p>Caja chica, ingresos, egresos, costos, utilidad estimada, cuentas por cobrar y compras por pagar.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/maintenance">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">06</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de mantenimiento</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de mantenimiento</div>
 <p>Máquinas, fallas, reparaciones, costos, repuestos, preventivos y reincidencias.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/profitability">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">07</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de costos y rentabilidad</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de costos y rentabilidad</div>
 <p>Costeos, margenes, ingresos, utilidad estimada y alertas de baja rentabilidad.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/staff">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">08</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de personal y planillas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de personal y planillas</div>
 <p>Asistencias, faltas, tardanzas, planillas, pagos y pendientes por operario.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/export-history">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">09</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Historial de exportaciones</div>
-</div>
+</span>
 <div>
+<div>
+<div>Historial de exportaciones</div>
 <p>Auditoría de reportes exportados por usuario, módulo, formato, filtros y fecha.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/audit">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">10</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Bitacora de auditoria</div>
-</div>
+</span>
 <div>
+<div>
+<div>Bitacora de auditoria</div>
 <p>Operaciones criticas por usuario, accion, entidad afectada y fecha.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>

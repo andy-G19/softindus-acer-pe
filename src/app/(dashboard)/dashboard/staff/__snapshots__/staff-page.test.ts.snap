@@ -237,71 +237,86 @@ exports[`/dashboard/staff > indicadores del dia y del mes > resultado 1`] = `
 <div>
 <a href="/dashboard/staff/operators">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Operarios</div>
-</div>
+</span>
 <div>
+<div>
+<div>Operarios</div>
 <p>Registrar y consultar trabajadores del taller. Acceso: ADMIN; maestro de taller, solo consulta.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/staff/attendance">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Asistencia diaria</div>
-</div>
+</span>
 <div>
+<div>
+<div>Asistencia diaria</div>
 <p>Registrar ingreso, salida, tardanza o falta. Acceso: ADMIN / Maestro de taller.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/staff/tasks">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Tareas diarias</div>
-</div>
+</span>
 <div>
+<div>
+<div>Tareas diarias</div>
 <p>Registrar actividades realizadas por operario. Acceso: ADMIN / Maestro de taller.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/staff/payrolls">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Planillas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Planillas</div>
 <p>Generar pagos según asistencia y modalidad. Acceso: ADMIN.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/staff/payment-history">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Historial de pagos</div>
-</div>
+</span>
 <div>
+<div>
+<div>Historial de pagos</div>
 <p>Consultar pagos realizados a operarios. Acceso: ADMIN.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
@@ -604,43 +619,52 @@ exports[`/dashboard/staff > maestro de taller > resultado 1`] = `
 <div>
 <a href="/dashboard/staff/operators">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Operarios</div>
-</div>
+</span>
 <div>
+<div>
+<div>Operarios</div>
 <p>Registrar y consultar trabajadores del taller. Acceso: ADMIN; maestro de taller, solo consulta.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/staff/attendance">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Asistencia diaria</div>
-</div>
+</span>
 <div>
+<div>
+<div>Asistencia diaria</div>
 <p>Registrar ingreso, salida, tardanza o falta. Acceso: ADMIN / Maestro de taller.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/staff/tasks">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Tareas diarias</div>
-</div>
+</span>
 <div>
+<div>
+<div>Tareas diarias</div>
 <p>Registrar actividades realizadas por operario. Acceso: ADMIN / Maestro de taller.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>

@@ -249,85 +249,103 @@ exports[`/dashboard/commercial > indicadores > resultado 1`] = `
 <div>
 <a href="/dashboard/commercial/clients">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Clientes</div>
-</div>
+</span>
 <div>
+<div>
+<div>Clientes</div>
 <p>Registrar y consultar clientes del taller.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/commercial/products">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Productos</div>
-</div>
+</span>
 <div>
+<div>
+<div>Productos</div>
 <p>Registrar y consultar productos comerciales o fabricados.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/commercial/orders">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Pedidos</div>
-</div>
+</span>
 <div>
+<div>
+<div>Pedidos</div>
 <p>Registrar pedidos de clientes y su detalle comercial.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/commercial/quotes">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Proformas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Proformas</div>
 <p>Generar y consultar proformas digitales desde pedidos.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/commercial/payments">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Pagos de cliente</div>
-</div>
+</span>
 <div>
+<div>
+<div>Pagos de cliente</div>
 <p>Consulta los pagos registrados desde las proformas y su saldo pendiente.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/commercial/receipts">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">06</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Comprobantes de venta</div>
-</div>
+</span>
 <div>
+<div>
+<div>Comprobantes de venta</div>
 <p>Consulta los comprobantes emitidos desde las proformas, también los anulados.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
@@ -587,85 +605,103 @@ exports[`/dashboard/commercial > vendedor > resultado 1`] = `
 <div>
 <a href="/dashboard/commercial/clients">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Clientes</div>
-</div>
+</span>
 <div>
+<div>
+<div>Clientes</div>
 <p>Registrar y consultar clientes del taller.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/commercial/products">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Productos</div>
-</div>
+</span>
 <div>
+<div>
+<div>Productos</div>
 <p>Registrar y consultar productos comerciales o fabricados.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/commercial/orders">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Pedidos</div>
-</div>
+</span>
 <div>
+<div>
+<div>Pedidos</div>
 <p>Registrar pedidos de clientes y su detalle comercial.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/commercial/quotes">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Proformas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Proformas</div>
 <p>Generar y consultar proformas digitales desde pedidos.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/commercial/payments">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Pagos de cliente</div>
-</div>
+</span>
 <div>
+<div>
+<div>Pagos de cliente</div>
 <p>Consulta los pagos registrados desde las proformas y su saldo pendiente.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/commercial/receipts">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">06</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Comprobantes de venta</div>
-</div>
+</span>
 <div>
+<div>
+<div>Comprobantes de venta</div>
 <p>Consulta los comprobantes emitidos desde las proformas, también los anulados.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>

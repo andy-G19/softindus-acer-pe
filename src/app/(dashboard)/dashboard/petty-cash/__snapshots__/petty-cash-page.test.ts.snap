@@ -409,99 +409,120 @@ exports[`/dashboard/petty-cash > indicadores del mes > resultado 1`] = `
 <section>
 <a href="/dashboard/petty-cash/boxes">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Listado de cajas chicas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Listado de cajas chicas</div>
 <p>Consultar cajas abiertas, cerradas, responsables, saldos y movimientos.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/petty-cash/boxes/new">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Abrir caja chica</div>
-</div>
+</span>
 <div>
+<div>
+<div>Abrir caja chica</div>
 <p>Registrar una nueva caja con saldo inicial y responsable.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/petty-cash/expenses/new">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Registrar egreso</div>
-</div>
+</span>
 <div>
+<div>
+<div>Registrar egreso</div>
 <p>Registrar gastos menores, descontar saldo de caja y clasificar el egreso por categoría.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/petty-cash/income-adjustments/new">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Registrar ingreso o ajuste</div>
-</div>
+</span>
 <div>
+<div>
+<div>Registrar ingreso o ajuste</div>
 <p>Registrar ingresos menores, ajustes positivos o ajustes negativos de caja chica.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/petty-cash/movements">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Movimientos de caja</div>
-</div>
+</span>
 <div>
+<div>
+<div>Movimientos de caja</div>
 <p>Consultar ingresos, egresos y ajustes con filtros por caja, tipo, categoría, fechas y concepto.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/petty-cash/monthly-summary">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">06</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Resumen mensual</div>
-</div>
+</span>
 <div>
+<div>
+<div>Resumen mensual</div>
 <p>Consultar ventas cobradas, saldos pendientes, costos, caja chica y utilidad estimada por mes.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/petty-cash/categories">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">07</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Categorías de gasto</div>
-</div>
+</span>
 <div>
+<div>
+<div>Categorías de gasto</div>
 <p>Administrar categorías como repuestos, transporte, mantenimiento, refrigerios y otros.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>

@@ -1311,12 +1311,13 @@ exports[`Presentacion > tarjeta con barra termica 1`] = `
 `;
 
 exports[`Presentacion > tarjeta de modulo con tono, indice e icono 1`] = `
-"<a style="--card-accent:var(--chart-3)" class="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45" href="/dashboard/inventory/materials">
-<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg bg-(image:--texture-metal) bg-[length:180px_180px] py-(--card-spacing) text-sm text-card-foreground duration-(--motion-base) ease-out hover:border-control-border-hover motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg relative h-full border border-border bg-card transition hover:-translate-y-0.5 hover:bg-secondary hover:shadow-card-hover">
-<span aria-hidden="true" class="pointer-events-none absolute top-3 right-4 font-heading text-4xl font-bold text-foreground/[0.06]">03</span>
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-lg px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-2">
-<div class="mb-3 flex size-11 items-center justify-center rounded-xl" style="background-color:color-mix(in srgb, var(--card-accent) 16%, transparent);color:var(--card-accent)">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package size-5" aria-hidden="true">
+"<a class="spotlight-host block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45" href="/dashboard/inventory/materials">
+<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col overflow-hidden rounded-lg border border-border bg-background bg-(image:--texture-metal) bg-[length:180px_180px] text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:-translate-y-0.5 hover:border-control-border-hover hover:shadow-card-lift motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg module-card h-full gap-3 px-5 py-[18px]" style="--module-accent:var(--chart-3)">
+<span data-slot="pointer-spotlight" aria-hidden="true" class="pointer-spotlight">
+</span>
+<span data-slot="module-number" aria-hidden="true" class="module-number" style="animation-delay:0.8s">03</span>
+<span data-slot="module-icon" aria-hidden="true" class="module-icon" style="animation-delay:1.3s">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package" aria-hidden="true">
 <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z">
 </path>
 <path d="M12 22V12">
@@ -1326,30 +1327,35 @@ exports[`Presentacion > tarjeta de modulo con tono, indice e icono 1`] = `
 <path d="m7.5 4.27 9 5.15">
 </path>
 </svg>
+</span>
+<div class="module-bottom">
+<div class="flex flex-col gap-1">
+<div data-slot="module-title" class="module-title">Materiales</div>
+<p data-slot="module-description" class="module-description">Catalogo</p>
 </div>
-<div data-slot="card-title" class="font-heading group-data-[size=sm]/card:text-sm text-base font-semibold text-foreground">Materiales</div>
-</div>
-<div data-slot="card-content" class="px-(--card-spacing)">
-<p class="text-sm leading-relaxed text-muted-foreground">Catalogo</p>
+<span data-slot="module-arrow" aria-hidden="true" class="module-arrow">→</span>
 </div>
 </div>
 </a>"
 `;
 
 exports[`Presentacion > tarjeta de modulo por defecto 1`] = `
-"<a style="--card-accent:var(--chart-1)" class="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45" href="/dashboard/commercial/clients">
-<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg bg-(image:--texture-metal) bg-[length:180px_180px] py-(--card-spacing) text-sm text-card-foreground duration-(--motion-base) ease-out hover:border-control-border-hover motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg relative h-full border border-border bg-card transition hover:-translate-y-0.5 hover:bg-secondary hover:shadow-card-hover">
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-lg px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-2">
-<div class="mb-3 flex size-11 items-center justify-center rounded-xl" style="background-color:color-mix(in srgb, var(--card-accent) 16%, transparent);color:var(--card-accent)">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle size-5" aria-hidden="true">
+"<a class="spotlight-host block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45" href="/dashboard/commercial/clients">
+<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col overflow-hidden rounded-lg border border-border bg-background bg-(image:--texture-metal) bg-[length:180px_180px] text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:-translate-y-0.5 hover:border-control-border-hover hover:shadow-card-lift motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg module-card h-full gap-3 px-5 py-[18px]" style="--module-accent:var(--chart-1)">
+<span data-slot="pointer-spotlight" aria-hidden="true" class="pointer-spotlight">
+</span>
+<span data-slot="module-icon" aria-hidden="true" class="module-icon" style="animation-delay:0s">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle" aria-hidden="true">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
+</span>
+<div class="module-bottom">
+<div class="flex flex-col gap-1">
+<div data-slot="module-title" class="module-title">Clientes</div>
+<p data-slot="module-description" class="module-description">Gestion de clientes</p>
 </div>
-<div data-slot="card-title" class="font-heading group-data-[size=sm]/card:text-sm text-base font-semibold text-foreground">Clientes</div>
-</div>
-<div data-slot="card-content" class="px-(--card-spacing)">
-<p class="text-sm leading-relaxed text-muted-foreground">Gestion de clientes</p>
+<span data-slot="module-arrow" aria-hidden="true" class="module-arrow">→</span>
 </div>
 </div>
 </a>"

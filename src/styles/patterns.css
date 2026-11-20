@@ -588,6 +588,185 @@
     }
   }
 
+  /* Acceso a modulo (propuesta de la presentacion, 2026-11-20; D158). Placa de acero cepillado en
+     degradado de la tarjeta al fondo, sin el desplazamiento de Card. Numero de fondo, icono en su
+     casco del acento (--module-accent, que ModuleAccessCard redefine), titulo y descripcion
+     abajo. El gesto fuerte queda para la intencion (puntero o foco en el enlace): la placa sube,
+     el borde toma el acento (cierra D101), el icono crece, el numero se desplaza y se tine y la
+     flecha aparece. En reposo el numero y el icono respiran despacio, como en la propuesta (D158
+     eligio la maqueta: una excepcion a la quietud de D153). */
+  .module-card {
+    --spotlight-color: var(--module-accent);
+    --spotlight-size: 300px;
+    --spotlight-strength: 12%;
+    --spotlight-fade: 72%;
+    position: relative;
+    min-height: 176px;
+    justify-content: space-between;
+    background-color: var(--background);
+    background-image:
+      var(--texture-brush),
+      linear-gradient(180deg, var(--card) 0%, var(--background) 100%);
+    background-size: auto;
+    animation: none;
+  }
+
+  .module-card:hover,
+  .spotlight-host:focus-visible .module-card {
+    translate: 0 -4px;
+    border-color: var(--module-accent);
+    box-shadow:
+      var(--shadow-module-hover),
+      0 0 24px color-mix(in oklch, var(--module-accent) 16%, transparent);
+  }
+
+  .module-number {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-family: var(--font-mono);
+    font-size: 2.1rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--foreground);
+    opacity: 0.07;
+    pointer-events: none;
+    user-select: none;
+    animation: module-number-breathe 5s ease-in-out infinite;
+    transition:
+      translate 280ms var(--ease-settle),
+      color 280ms ease,
+      opacity 280ms ease;
+  }
+
+  .module-card:hover .module-number,
+  .spotlight-host:focus-visible .module-number {
+    translate: -5px 3px;
+    color: var(--module-accent);
+    opacity: 0.32;
+    animation: none;
+  }
+
+  @keyframes module-number-breathe {
+    0%,
+    100% {
+      opacity: 0.07;
+    }
+
+    50% {
+      opacity: 0.11;
+    }
+  }
+
+  .module-icon {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: 46px;
+    height: 46px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in oklch, var(--module-accent) 32%, transparent);
+    border-radius: var(--radius-md);
+    background-color: color-mix(in oklch, var(--module-accent) 13%, transparent);
+    color: var(--module-accent);
+    animation: module-icon-idle 4s ease-in-out infinite;
+    transition:
+      scale 280ms var(--ease-settle),
+      box-shadow 280ms ease,
+      background-color 280ms ease;
+  }
+
+  .module-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  @keyframes module-icon-idle {
+    0%,
+    100% {
+      box-shadow: 0 0 4px 0 transparent;
+    }
+
+    50% {
+      box-shadow: 0 0 20px 0 color-mix(in oklch, var(--module-accent) 45%, transparent);
+    }
+  }
+
+  .module-card:hover .module-icon,
+  .spotlight-host:focus-visible .module-icon {
+    scale: 1.08;
+    background-color: color-mix(in oklch, var(--module-accent) 22%, transparent);
+    box-shadow: 0 0 24px 0 color-mix(in oklch, var(--module-accent) 45%, transparent);
+    animation: none;
+  }
+
+  .module-bottom {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .module-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--foreground);
+    transition: color 250ms ease;
+  }
+
+  .module-description {
+    font-size: 12.5px;
+    line-height: 18px;
+    color: var(--muted-foreground);
+    transition: color 250ms ease;
+  }
+
+  .module-card:hover .module-title,
+  .spotlight-host:focus-visible .module-title {
+    color: var(--module-accent);
+  }
+
+  .module-card:hover .module-description,
+  .spotlight-host:focus-visible .module-description {
+    color: var(--foreground);
+  }
+
+  .module-arrow {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--module-accent);
+    opacity: 0;
+    translate: -6px 0;
+    transition:
+      opacity 250ms ease,
+      translate 250ms ease;
+  }
+
+  .module-card:hover .module-arrow,
+  .spotlight-host:focus-visible .module-arrow {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  /* Con reducir movimiento: sin respiracion, sin transiciones y sin desplazamientos ni escalas
+     (la subida de la placa ya la quita Card). La flecha aparece igual, sin moverse. */
+  @media (prefers-reduced-motion: reduce) {
+    .module-card,
+    .module-card * {
+      transition: none;
+      animation: none;
+    }
+
+    .module-card * {
+      translate: none !important;
+      scale: none !important;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .badge-settle,
     .badge-shake,

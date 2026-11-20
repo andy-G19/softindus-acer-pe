@@ -194,7 +194,10 @@ describe("estilos del indicador", () => {
   });
 
   it("nada late en reposo y con reducir movimiento no hay transiciones", () => {
-    expect(patterns.match(/infinite/g)).toHaveLength(1);
+    const kpiLoops = [...patterns.matchAll(/([^{}]+)\{([^{}]*)\}/g)].filter(
+      (match) => match[1].includes("kpi") && match[2].includes("infinite"),
+    );
+    expect(kpiLoops).toEqual([]);
     expect(patterns).toMatch(/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.kpi-card,[^{]*\{\s*transition:\s*none/);
   });
 

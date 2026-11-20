@@ -241,85 +241,103 @@ exports[`/dashboard/maintenance > indicadores del mes > resultado 1`] = `
 <div>
 <a href="/dashboard/maintenance/machines">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Máquinas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Máquinas</div>
 <p>Registro y consulta de máquinas o equipos críticos del taller. Acceso: ADMIN.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/maintenance/failures">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Fallas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Fallas</div>
 <p>Registro de fallas, paradas, responsable e impacto productivo. Acceso: ADMIN / Maestro de taller.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/maintenance/spare-parts">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Repuestos</div>
-</div>
+</span>
 <div>
+<div>
+<div>Repuestos</div>
 <p>Registro de repuestos utilizados en reparaciones de maquinaria. Acceso: ADMIN.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/maintenance/repairs">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reparaciones</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reparaciones</div>
 <p>Registro de técnico, mano de obra, costo total y repuestos usados. Acceso: ADMIN.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/maintenance/preventive">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Preventivos</div>
-</div>
+</span>
 <div>
+<div>
+<div>Preventivos</div>
 <p>Programación y seguimiento de mantenimientos preventivos básicos. Acceso: ADMIN.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/maintenance/recurrences">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">06</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reincidencias</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reincidencias</div>
 <p>Consulta de máquinas con más fallas, tiempos perdidos y costos. Acceso: ADMIN.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
@@ -614,29 +632,35 @@ exports[`/dashboard/maintenance > maestro de taller > resultado 1`] = `
 <div>
 <a href="/dashboard/maintenance/machines">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Máquinas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Máquinas</div>
 <p>Registro y consulta de máquinas o equipos críticos del taller. Acceso: ADMIN.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/maintenance/failures">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Fallas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Fallas</div>
 <p>Registro de fallas, paradas, responsable e impacto productivo. Acceso: ADMIN / Maestro de taller.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
