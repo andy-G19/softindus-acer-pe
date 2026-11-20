@@ -11017,6 +11017,112 @@ destructiva, foco) en `tmp/diseno-botones/capturas/`, fuera de git.
 | Alturas nuevas (D129) | Solo junto con las de los campos |
 | D99 y D101 | Siguen abiertos: D131 solo sacó a los botones de la regla de foco |
 
+## Diseño de los campos (2026-11-19)
+
+Segundo paso de la sesión de diseño, en el mismo PR que los botones. El responsable trajo su
+propuesta como otra maqueta (`tmp/Diseño_propuesta/Campos-html.zip`, fuera de git), sobre los
+mismos tokens que la de los botones: borde de acero, textura de metal cepillado, foco con el
+anillo de los botones, error en rojo, solo lectura en acero, interruptor verde, búsqueda con
+lupa, campo de archivo y un estado «Validado». Se leyó entera y no se ejecutó su código.
+
+### Decisiones
+
+| # | Decisión | Motivo |
+|---|---|---|
+| D133 | Los campos conservan sus 32 px (la búsqueda, 36); la propuesta los llevaba a 42 | Con 42, ningún botón coincidía y las barras de filtros quedaban desalineadas; los botones también conservan sus alturas (D129) |
+| D134 | Primero un refactor que pasa a los componentes las reglas de campos de `patterns.css` (la parte de campos de D99), verificado en staging, y después el diseño | Si algo cambiaba, había que distinguir el traslado del diseño |
+| D135 | «Validado» y el campo de archivo se construyen aunque hoy no los use ninguna pantalla | Pedido del responsable, para usarlos después; quedan en la galería |
+| D136 | El chip «Solo lectura» en acero claro `#86a3cd` (6,9:1) | El acero de marca de la propuesta daba 3,48:1 a 10 px, bajo el 4,5:1 del texto pequeño |
+
+Detalles decididos al implementar, dentro del plan aprobado: el radio de los campos queda en 10 px,
+como los botones (la maqueta usaba 8); la separación etiqueta–control–ayuda es de 6 px (la maqueta,
+7, fuera de la escala); la flecha de las listas es un icono `ChevronDown` (la de la maqueta era un
+SVG con el color escrito dentro, y aquí los colores son tokens); el login no se rediseña en este
+PR (anula la textura, conserva su texto de ejemplo y su hover, y solo hereda una transición de
+200 ms en lugar de 150).
+
+### Commits
+
+| Commit | Qué cambia |
+|---|---|
+| `128d7ce` `fix(foco)` | La exclusión de los botones del contorno global (C2 de los botones) iba suelta, `:not(...)`, y subía la regla de 0-2-0 a 0-3-0: ganaba al `outline: none` de los campos, que en staging mostraban el contorno y su sombra a la vez (solo staging; producción no lo tuvo). Va dentro de `:where()` y la prueba lo fija |
+| `949016e` F1 `refactor(campos)` | Salen de `patterns.css` las reglas de fondo, borde, foco, deshabilitado, texto de ejemplo y opciones de todos los campos; cada componente (`Input`, `NativeSelect`, `Textarea`, la búsqueda de `SearchableSelect`) declara lo que se medía. Queda solo la regla de las tres casillas sueltas, y los campos salen de la lista del contorno global, que nunca mostraron. Token `--placeholder`; fuera `--login-field-border`, que nunca se vio |
+| `c052857` F2 `feat(campos)` | `field-control.ts` reúne el aspecto común: tarjeta con textura (`--texture-metal`), borde de acero 3,08:1 que se aclara en hover, foco con borde naranja y anillo con hueco, error rojo sin halo, deshabilitado sin textura al 0,65, solo lectura en acero, 200 ms y nada con reducir movimiento. `NativeSelect` lleva su propia flecha en un contenedor (ninguna de sus 173 llamadas pasa `className`) |
+| `449078d` F3 `feat(campos)` | `Field`: etiqueta de 13 px, separación de 6, asterisco cobre, error de 12 px en `--destructive-outline` (6,2:1; antes 4,6) con icono, y el chip «Solo lectura» oculto al lector. `FieldError` pierde `size`, sin uso |
+| `964768d` F4 `feat(campos)` | `Switch`: 44 × 24 px, verde forja encendido, pulgar claro de 18 px con sombra, anillo con hueco; la regla global de contorno también excluye `[data-slot="switch"]` |
+| `562accd` F5 `feat(campos)` | Búsqueda: lupa a la izquierda; «Limpiar» como `Button` ghost xs, centrado con flex porque `Button` se mueve con `translate`; etiqueta y asterisco de `Field` (el lector ya no lee «Cliente asterisco») |
+| `73c57bb` F6 `feat(campos)` | `Field` con `success`: `data-valid` pinta el control en verde y el mensaje lleva un check; un error lo oculta. `FileInput`: el input real oculto a la vista pero no al teclado ni al lector, y la fila visible es su etiqueta, con el foco, el error y el deshabilitado del input por `peer-*` |
+
+Cada `feat` empezó por su prueba roja; `npm run check` en verde antes de cada commit (de 5638 a
+5664 pruebas, 351 archivos; el único aviso de lint es el que ya existía). CI #241 (F1) y #242
+(F6, sobre `73c57bb`) en verde.
+
+### Paridad del F1
+
+Antes del F1 se midieron en la galería de staging los estilos calculados de los 31 campos en
+reposo (15 estilos distintos, 19 propiedades) y, con clic real, el foco de seis tipos (normal, con
+error, área de texto, solo lectura, búsqueda y lista). Después del despliegue, 0 diferencias en
+todo. La medición mostró que las reglas engañaban: el fondo visible era `dark:bg-input/30` del
+componente, no el de `patterns.css`; el deshabilitado de `NativeSelect` tomaba el de
+`patterns.css` y el de `Input` no; un campo con error y con foco tenía borde rojo y sombra naranja.
+Dos trampas de la medición, ya resueltas: el foco por JavaScript no aplica `:focus` si la ventana
+no tiene el foco (hace falta un clic real), y leer antes de que termine la transición da valores
+intermedios (`oklab(0 0 0 / 0)`).
+
+### Contraste medido (sobre la tarjeta `#15181d`)
+
+| Pieza | Contraste |
+|---|---|
+| Borde en reposo / en hover | 3,08 / 4,59:1 (antes 1,24:1, bajo el 3:1 de un control) |
+| Texto del campo / etiqueta | 16,2:1 |
+| Texto de ejemplo (85 %) | 4,52:1 |
+| Ayuda (12 px) | 5,74:1 |
+| Error (12 px) | 6,16:1 (antes 4,55:1) |
+| Validado (12 px) | 4,63:1 |
+| Chip «Solo lectura» (10 px) | 6,89:1 |
+| Asterisco cobre | 4,10:1 (decorativo: el lector anuncia el `required`) |
+| Interruptor encendido | 4,63:1 |
+
+### CSS compilado e instantáneas
+
+| Commit | Reglas quitadas / nuevas | Instantáneas |
+|---|---|---|
+| `128d7ce` | 2 / 2 (solo el selector) | 0 |
+| F1 | 12 / 11 | 26 (clases) |
+| F2 | 11 / 17 | 345 en 50 archivos: 757 listas con contenedor y flecha, el resto clases |
+| F3 | 0 / 8 | 35 (30 errores con icono, 7 chips) |
+| F4 | 7 / 11 | 3 |
+| F5 | 4 / 4 | 82 (123 lupas, 89 etiquetas, 29 «Limpiar») |
+| F6 | 0 / 15 | 27 |
+
+La comparación atrapó una tercera utilidad fantasma (`.border-primary`, de un texto de la prueba
+del interruptor) antes del commit. Desde el F6 el build parte el CSS en dos archivos: el nuevo, de
+14 KB, es el propio de `react-toastify`. Next los enlaza en el mismo orden relativo que tenían
+dentro del archivo único (el adaptador de los avisos antes que la base de toastify), así que su
+prioridad no cambia; para comparar se unen en ese orden.
+
+### Verificación en staging
+
+Con estilos calculados después del despliegue de `73c57bb`: cada estado de la galería (reposo,
+error, deshabilitado, solo lectura, validado, lista, texto de ejemplo, etiqueta, asterisco, error,
+chip, interruptor encendido y apagado, búsqueda y archivo) tiene los valores de la propuesta. Con
+clic real, el foco es borde y anillo con hueco de 2 px `#0a0b0d` en naranja, rojo (error), acero
+(solo lectura) y verde (validado), sin contorno; el hover aclara el borde a `#7a828f`. En la
+barra de filtros de Clientes, la lista, el campo y los dos botones miden 32 px y terminan en la
+misma línea. Capturas del antes (staging en el F1) y del después en `tmp/diseno-campos/capturas/`,
+fuera de git. Dos capturas salieron sin pintar parte de la página; se comprobó en el DOM (tamaño,
+visibilidad y el elemento en ese punto) que era el pintado del panel y se repitieron.
+
+### Pendientes que deja
+
+| Pendiente | Detalle |
+|---|---|
+| La búsqueda mide 36 px y los campos 32 | En la barra de filtros su borde inferior queda 2 px más arriba que el de los demás; ya era así antes |
+| `.input-forge-focus` sin uso | La regla de `brand.css` quedó sin consumidores desde el F2; se puede quitar en un paso propio |
+| Las muestras de la galería sin `Field` | «Con error» y «Área de texto con error» pintan su mensaje con un `<p>` propio, con el estilo anterior; las de `Field` ya usan `FieldError` |
+| El login | Conserva su aspecto (sus reglas de `brand.css` ganan por orden); se rediseña con los botones que no siguen el diseño solos |
+| D99 | La parte de los campos se cerró en el F1; siguen las reglas de tablas y etiquetas de `patterns.css` |
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
