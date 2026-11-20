@@ -11154,7 +11154,7 @@ código. La ilustración definitiva la entregó aparte (`Robot_tec_error.webp`).
 | D138 | La imagen conserva «SYSTEM ERROR» y «CAUTION» en inglés | Aceptado por el responsable: decorativos y genéricos; el título y el texto en español dicen qué pasó. La primera versión decía «503» y se descartó, porque `ErrorState` sirve a cualquier error y a «no encontrado» |
 | D139 | El archivo de 1 MB se sirve tal cual con `next/image` | En staging el navegador descarga una variante de 750 px en calidad 75: **22 KB** |
 | D140 | Los avisos siguen arriba a la derecha, 4 s y con barra de progreso; cambia su aspecto | La propuesta los ponía abajo y sin barra. **Sustituida por D144** (posición y aspecto de la segunda propuesta) |
-| D141 | El título de la pantalla de error queda en Oswald 650 a 18 px | Una regla global de `patterns.css` (D99) da a todo `<h1>` la letra de títulos; así coincide con los demás títulos del ERP. Se revisa al limpiar D99 |
+| D141 | El título de la pantalla de error queda en Oswald 650 a 18 px (700 desde D149, que se ve igual) | Una regla global de `patterns.css` (D99) da a todo `<h1>` la letra de títulos; así coincide con los demás títulos del ERP. Se revisa al limpiar D99 |
 
 Además: las confirmaciones conservan el `AlertDialog` de Radix (la maqueta usaba `<dialog>` nativo; su
 foco ya está probado); `Skeleton` no cambia, para seguir igual que `production/loading.tsx` (las
@@ -11347,6 +11347,99 @@ primer cuadro; se midió el estado sin transformar y no se tomó por un fallo.
 | Contraste del símbolo de error y de advertencia | 2,63 y 2,37:1; si se exige 1.4.11 al símbolo, oscurecerlo o cambiar el color del trazo |
 | Avisos en móvil | Radio 0 y pegados al borde, lo que decide toastify; la propuesta no define el móvil |
 | Zoom del icono al entrar | Toastify anima la insignia con su propio zoom; la propuesta no lo tiene |
+
+### Integración en `main` (ventanas y avisos)
+
+Datos leídos de la API de GitHub el 2026-11-20 (UTC) y comparados con git:
+
+- El registro de ventanas y avisos se publicó en `staging` con `37b8039`: CI #252 en verde.
+- PR #63 «Diseño de ventanas y avisos», abierto a las 12:57:56 y fusionado con merge commit a las
+  13:04:09: 6 commits, de `a94cf16` a `37b8039`, y 20 archivos (+688 −231). Su CI, el #253, sobre
+  `37b8039`, terminó en verde antes del merge.
+- El merge commit `c667931` tiene como padres `3b27170` (`main`) y `37b8039` (`staging`), y su
+  árbol es el de `37b8039` (`f1c9ee9`).
+- CI #254 sobre `c667931` en verde al primer intento (13:04:12 a 13:08:28).
+- Vercel desplegó `c667931` en producción (`success` a las 13:05:06). Sin migraciones.
+
+**El diseño de ventanas y avisos queda integrado.**
+
+## Diseño de fundamentos (2026-11-20)
+
+Quinto paso de la sesión de diseño. El responsable trajo su propuesta como maqueta
+(`tmp/Diseño_propuesta/Fundamentos-html.zip`, fuera de git), leída entera y sin ejecutar su
+código: la sección «Fundamentos» de la galería con los tokens agrupados por papel y dos valores
+marcados «PROPUESTO» (Advertencia en brasa y Gráfico 4 en cobre).
+
+Lo que la maqueta pedía y ya estaba hecho: Advertencia usa la brasa desde la entrega 8 (`667eb70`),
+el radio `2xl` ya existía y las capas coinciden (30, 40 y 50).
+
+### Decisiones
+
+| # | Decisión | Motivo |
+|---|---|---|
+| D147 | `--chart-4` pasa de la brasa al cobre (`var(--accent-copper)`) | Decisión del responsable: junto al naranja de `--chart-1` no se distinguían (1,12:1 entre ellos; con el cobre, 1,86:1). Cambia el icono de 11 tarjetas de módulo, en los inicios de 7 áreas y en el panel principal |
+| D148 | La galería muestra las sombras reales | La maqueta pintaba valores escritos a mano: 7 de las 9 no eran los de `tokens.css`. Cambiar los tokens sería un cambio visual grande en todo el ERP |
+| D149 | El título `h1` de las páginas pide Oswald 700 en lugar de 650 | Oswald se declara con 500, 600 y 700 sobre el mismo archivo y el 650 ya se dibujaba como 700. Se ve igual; actualiza D141 |
+| D150 | La galería muestra la `.heat-bar` real, y se crea el patrón `.heat-sweep` de la maqueta para integrarlo más adelante | Decisión del responsable. La barra de la maqueta no existía en el ERP |
+| D151 | `.heat-sweep` usa `--motion-temper`, no un `--motion-thermal` nuevo | Sería un segundo token con el mismo valor (6 s) y el mismo papel, el ciclo de la marca (regla 4) |
+| D152 | El marco de la galería (`GallerySection`, `GallerySample`) no cambia | Lo comparten las siete secciones; se rediseña solo el contenido de Fundamentos |
+
+### Commits
+
+| Commit | Qué cambia |
+|---|---|
+| `8e46b2b` F1 `feat(fundamentos): grafico 4 en cobre` | D147 |
+| `d5e231c` F2 `refactor(estilos): titulos con Oswald 700` | D149; una prueba impide que una hoja vuelva a pedir 650 |
+| `a979b51` F3 `feat(estilos): barrido termico` | `.heat-sweep` en `brand.css`: riel de 6 px atenuado y un brillo brasa→primario del 38 % que lo cruza cada 6 s, lineal, quieto con movimiento reducido |
+| `f450812` F4 `feat(galeria): fundamentos con el diseno de la propuesta` | Colores en cuatro grupos con chips de 52 px y notas que dicen lo que pasó; Geist por tamaño y Oswald en 500, 600 y 700; radios sobre la tarjeta; las 9 sombras reales; la cadena de capas, comparada en la prueba con `tokens.css`; las dos barras. `--color-accent-ember` entra en `@theme` |
+| `5cab17c` `fix(galeria): fundamentos sin desborde en movil` | F4 desbordaba a 375 px (ver abajo) |
+
+Cada `feat`, el `refactor` y el `fix` empezaron por su prueba roja; `npm run check` en verde antes de
+cada commit (de 5715 a 5731 pruebas, 358 archivos). CI #255 sobre `f450812` (F1 a F4, publicados
+juntos) y CI #256 sobre `5cab17c`, los dos en verde.
+
+### El desborde de F4 en móvil
+
+`GallerySample` trae `flex-wrap`. En un flex que puede envolver, cada línea mide lo que su elemento
+más ancho, no lo que el contenedor, así que `items-stretch` estiraba cada fila de tipografía hasta
+el ancho completo del texto de ejemplo y el `truncate` no recortaba. A 375 px las filas medían
+623 px y la página 750 de ancho; ninguna otra sección se desbordaba. Las muestras de Geist y Oswald
+llevan `flex-nowrap`. Las pruebas corren sin un navegador que calcule el diseño: lo encontró la
+medición en staging, y la prueba fija la clase.
+
+### CSS compilado e instantáneas
+
+| Commit | Reglas quitadas / nuevas / cambiadas | Instantáneas |
+|---|---|---|
+| F1 | 0 / 0 / 1 (`:root`) | 0 |
+| F2 | 0 / 0 / 1 (el peso del `h1`) | 0 |
+| F3 | 1 / 5 / 0 (el patrón y la regla de movimiento reducido, que el minificador une en una lista) | 0 |
+| F4 | 3 / 15 / 1 (salen `font-[650]`, `h-12` y `size-10`) | 1 (la galería; fuera de Fundamentos, idéntica) |
+| `fix` | 0 / 1 / 0 (`.flex-nowrap`) | 0 |
+
+Sin utilidades fantasma.
+
+### Verificación en staging
+
+Con estilos calculados:
+
+- **Gráfico 4:** en el inicio de Comercial, el icono de Proformas es `rgb(181, 101, 29)`; las demás
+  tarjetas conservan su color.
+- **Título:** el `h1` «Comercial» pide 700. El ancho de su texto es el mismo con 650 y con 700
+  (131,788 px) y distinto con 600 (128,506 px): el cambio no se ve.
+- **Galería en escritorio:** las cinco familias y los cuatro grupos de colores; chip de 52 px con
+  borde de acero; Oswald en 500, 600 y 700 y ningún 650; las 9 sombras reales; las capas 30, 40 y 50
+  en brasa; `.heat-bar` de 3 px con `temper` en 6 s; `.heat-sweep` de 6 px con un brillo de
+  159,6 px (38 % de 420) y `heat-sweep` en 6 s lineal.
+- **Galería a 375 px, tras el `fix`:** la página mide 376 px (el ancho de la pantalla), las filas
+  310 px y el texto se recorta con «…».
+
+### Pendientes que deja
+
+| Pendiente | Detalle |
+|---|---|
+| Integrar `.heat-sweep` | En los componentes que el responsable elija; hoy solo lo muestra la galería |
+| Sombras de la maqueta | Si se quieren sus valores, es un cambio de tokens en todo el ERP, en su propio paso (D148) |
 
 ## Secuencia de próximas entregas
 
