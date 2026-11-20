@@ -423,9 +423,7 @@ exports[`/dashboard/petty-cash/monthly-summary > mes actual > resultado 1`] = `
 </div>
 <div>
 <div>
-<div>
 <p>No hay egresos categorizados en este mes.</p>
-</div>
 </div>
 </div>
 </div>
@@ -983,9 +981,7 @@ exports[`/dashboard/petty-cash/monthly-summary > mes elegido > resultado 1`] = `
 </div>
 <div>
 <div>
-<div>
 <p>No hay egresos categorizados en este mes.</p>
-</div>
 </div>
 </div>
 </div>
@@ -1543,9 +1539,7 @@ exports[`/dashboard/petty-cash/monthly-summary > mes invalido usa el actual > re
 </div>
 <div>
 <div>
-<div>
 <p>No hay egresos categorizados en este mes.</p>
-</div>
 </div>
 </div>
 </div>

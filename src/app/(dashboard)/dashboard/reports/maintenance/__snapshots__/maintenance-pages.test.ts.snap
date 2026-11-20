@@ -2346,9 +2346,7 @@ exports[`/dashboard/reports/maintenance > sin resultados > resultado 1`] = `
 </div>
 <div>
 <div>
-<div>
 <p>No hay reincidencias o fallas registradas con los filtros aplicados.</p>
-</div>
 </div>
 </div>
 </div>
@@ -2358,9 +2356,7 @@ exports[`/dashboard/reports/maintenance > sin resultados > resultado 1`] = `
 </div>
 <div>
 <div>
-<div>
 <p>No se encontraron mantenimientos preventivos con los filtros aplicados.</p>
-</div>
 </div>
 </div>
 </div>
@@ -2371,9 +2367,7 @@ exports[`/dashboard/reports/maintenance > sin resultados > resultado 1`] = `
 </div>
 <div>
 <div>
-<div>
 <p>No se encontraron fallas con los filtros aplicados.</p>
-</div>
 </div>
 <p>Se muestran como máximo 100 fallas, 100 reparaciones y 100 mantenimientos preventivos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>

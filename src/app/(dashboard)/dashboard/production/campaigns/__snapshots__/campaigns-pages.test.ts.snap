@@ -528,9 +528,7 @@ exports[`/dashboard/production/campaigns > sin campanas > resultado 1`] = `
 <tr>
 <td colSpan="9">
 <div>
-<div>
 <p>Todavía no hay campañas de producción registradas.</p>
-</div>
 </div>
 </td>
 </tr>
@@ -1722,9 +1720,7 @@ exports[`/dashboard/production/campaigns/[id] > campana sin detalles no excluye 
 <tr>
 <td colSpan="7">
 <div>
-<div>
 <p>Esta campaña todavía no tiene productos registrados.</p>
-</div>
 </div>
 </td>
 </tr>
@@ -1754,9 +1750,7 @@ exports[`/dashboard/production/campaigns/[id] > campana sin detalles no excluye 
 <tr>
 <td colSpan="6">
 <div>
-<div>
 <p>No hay órdenes de trabajo asociadas a esta campaña.</p>
-</div>
 </div>
 </td>
 </tr>

@@ -733,9 +733,7 @@ exports[`/dashboard/costs > sin datos: modulo sin informacion economica > result
 </div>
 <div>
 <div>
-<div>
 <p>Aún no hay costeos registrados. Genera uno desde una orden de trabajo con receta técnica.</p>
-</div>
 </div>
 </div>
 </div>
@@ -746,9 +744,7 @@ exports[`/dashboard/costs > sin datos: modulo sin informacion economica > result
 </div>
 <div>
 <div>
-<div>
 <p>No hay alertas de bajo margen registradas.</p>
-</div>
 </div>
 </div>
 </div>
@@ -1098,9 +1094,7 @@ exports[`/dashboard/costs > solo ordenes sin costeo: modulo operativo > resultad
 </div>
 <div>
 <div>
-<div>
 <p>Aún no hay costeos registrados. Genera uno desde una orden de trabajo con receta técnica.</p>
-</div>
 </div>
 </div>
 </div>
@@ -1111,9 +1105,7 @@ exports[`/dashboard/costs > solo ordenes sin costeo: modulo operativo > resultad
 </div>
 <div>
 <div>
-<div>
 <p>No hay alertas de bajo margen registradas.</p>
-</div>
 </div>
 </div>
 </div>
@@ -2196,9 +2188,7 @@ exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 <tr>
 <td colSpan="10">
 <div>
-<div>
 <p>Todavía no hay costeos registrados. Puedes generar uno desde una orden de trabajo.</p>
-</div>
 </div>
 </td>
 </tr>
@@ -3290,9 +3280,7 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 </div>
 <div>
 <div>
-<div>
 <p>Este costeo no tiene una orden de trabajo con receta técnica asociada.</p>
-</div>
 </div>
 </div>
 </div>
@@ -3867,9 +3855,7 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 </div>
 <div>
 <div>
-<div>
 <p>Este costeo no tiene una orden de trabajo con receta técnica asociada.</p>
-</div>
 </div>
 </div>
 </div>
@@ -5135,9 +5121,7 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 </div>
 <div>
 <div>
-<div>
 <p>Este costeo no tiene una orden de trabajo con receta técnica asociada.</p>
-</div>
 </div>
 </div>
 </div>
@@ -7021,9 +7005,7 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 </div>
 <div>
 <div>
-<div>
 <p>Todavía no hay costos indirectos registrados para este costeo.</p>
-</div>
 </div>
 </div>
 </div>
@@ -7090,9 +7072,7 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 </div>
 <div>
 <div>
-<div>
 <p>Todavía no hay márgenes aplicados para este costeo.</p>
-</div>
 </div>
 </div>
 </div>
@@ -7116,9 +7096,7 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 </div>
 <div>
 <div>
-<div>
 <p>Todavía no hay cálculos de rentabilidad registrados para este costeo.</p>
-</div>
 </div>
 </div>
 </div>
@@ -7693,9 +7671,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 </div>
 <div>
 <div>
-<div>
 <p>Todavía no hay cálculos de rentabilidad registrados para este costeo.</p>
-</div>
 </div>
 </div>
 </div>
@@ -8605,9 +8581,7 @@ exports[`/dashboard/costs/work-orders > sin ordenes pendientes ni costeos > resu
 </div>
 <div>
 <div>
-<div>
 <p>No hay órdenes pendientes de costeo.</p>
-</div>
 </div>
 </div>
 </div>
@@ -8618,9 +8592,7 @@ exports[`/dashboard/costs/work-orders > sin ordenes pendientes ni costeos > resu
 </div>
 <div>
 <div>
-<div>
 <p>Todavía no hay costeos registrados.</p>
-</div>
 </div>
 </div>
 </div>

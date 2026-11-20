@@ -18,25 +18,36 @@ export function EmptyState({
   action,
   className,
 }: EmptyStateProps) {
+  // Diseno de mensajes y estados (2026-11-19): borde discontinuo de acero y ningun fondo, porque
+  // el vacio no es un error. Solo con su texto, una linea atenuada; con icono, descripcion o
+  // accion, el texto es el titulo.
+  const plain = !Icon && !description && !action;
+
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-surface-dashed px-4 py-6 text-center text-sm text-muted-foreground",
+        "flex flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-control-border px-6 py-9 text-center",
         className
       )}
     >
       {Icon ? (
-        <span className="flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
-          <Icon className="size-4.5" aria-hidden="true" />
+        <span className="mb-1.5 flex size-11 items-center justify-center rounded-full bg-accent text-muted-foreground">
+          <Icon className="size-[21px]" aria-hidden="true" />
         </span>
       ) : null}
 
-      <div className="space-y-1">
-        <p className="font-medium text-foreground">{label}</p>
-        {description ? <p>{description}</p> : null}
-      </div>
+      {plain ? (
+        <p className="text-[0.8125rem] text-muted-foreground">{label}</p>
+      ) : (
+        <>
+          <p className="text-[0.9375rem] font-semibold text-foreground">{label}</p>
+          {description ? (
+            <p className="max-w-[360px] text-[0.8125rem] text-muted-foreground">{description}</p>
+          ) : null}
+        </>
+      )}
 
-      {action}
+      {action ? <div className="mt-2.5">{action}</div> : null}
     </div>
   );
 }

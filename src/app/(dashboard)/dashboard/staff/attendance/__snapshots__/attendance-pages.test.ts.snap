@@ -1589,11 +1589,11 @@ exports[`/dashboard/staff/attendance/new > sin operarios activos > resultado 1`]
 </div>
 </section>
 <div>
-<div>
 <p>No hay operarios activos disponibles.</p>
 <p>Primero registra o activa operarios para poder controlar su asistencia.</p>
-</div>
+<div>
 <a data-variant="default" href="/dashboard/staff/operators">Ir a operarios</a>
+</div>
 </div>
 </div>",
   "outcome": "render",

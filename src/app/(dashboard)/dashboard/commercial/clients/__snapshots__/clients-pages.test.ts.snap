@@ -900,9 +900,7 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 <tr>
 <td colSpan="7">
 <div>
-<div>
 <p>Todavía no hay clientes registrados.</p>
-</div>
 </div>
 </td>
 </tr>

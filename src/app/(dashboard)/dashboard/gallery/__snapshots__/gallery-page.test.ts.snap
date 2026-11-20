@@ -1005,9 +1005,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figcaption>Vacío</figcaption>
 <div>
 <div>
-<div>
 <p>No se encontraron clientes con los filtros aplicados.</p>
-</div>
 </div>
 </div>
 </figure>
@@ -1018,11 +1016,11 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span>
 <svg/>
 </span>
-<div>
 <p>Todavía no hay materiales</p>
 <p>Registra el primero para empezar a controlar su stock.</p>
-</div>
+<div>
 <button data-variant="default" type="button">Nuevo material</button>
+</div>
 </div>
 </div>
 </figure>
@@ -1638,9 +1636,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <tr>
 <td colSpan="2">
 <div>
-<div>
 <p>No se encontraron clientes con los filtros aplicados.</p>
-</div>
 </div>
 </td>
 </tr>

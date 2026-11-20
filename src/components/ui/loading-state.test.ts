@@ -51,3 +51,25 @@ describe("Skeleton", () => {
     expect(render(h(Skeleton))).toContain("motion-reduce:animate-none");
   });
 });
+
+// Diseno de mensajes y estados (2026-11-19): la carga en bloque es una tarjeta con borde continuo
+// (no el discontinuo del vacio), radio de 14 px, spinner de 22 px y texto de 13 px; en linea, el
+// spinner de 16 px y el mismo texto.
+describe("LoadingState con el diseno de mensajes y estados", () => {
+  function classesOfStatus(html: string) {
+    return (/^<div role="status"[^>]*class="([^"]*)"/.exec(html)?.[1] ?? "").split(" ");
+  }
+
+  it("en bloque: tarjeta con borde continuo, radio de 14 px y texto de 13 px", () => {
+    const clases = classesOfStatus(render(h(LoadingState)));
+
+    expect(clases).toEqual(expect.arrayContaining(["rounded-xl", "border", "border-border", "bg-card", "text-[0.8125rem]"]));
+    expect(clases).not.toContain("border-dashed");
+  });
+
+  it("en bloque el spinner mide 22 px; en linea, 16 px", () => {
+    expect(render(h(LoadingState)).match(/<svg[^>]*>/)?.[0]).toContain("size-[22px]");
+    expect(render(h(LoadingState, { variant: "inline" })).match(/<svg[^>]*>/)?.[0]).toContain("size-4");
+    expect(classesOfStatus(render(h(LoadingState, { variant: "inline" })))).toContain("text-[0.8125rem]");
+  });
+});

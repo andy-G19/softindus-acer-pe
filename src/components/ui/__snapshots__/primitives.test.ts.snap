@@ -699,8 +699,8 @@ exports[`Campos > textarea invalido 1`] = `
 `;
 
 exports[`Carga > carga en bloque 1`] = `
-"<div role="status" data-slot="loading-state" class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-surface-dashed px-4 py-6 text-center text-sm text-muted-foreground">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle animate-spin [animation-duration:var(--motion-spin)] motion-reduce:animate-none size-5" data-slot="spinner" aria-hidden="true">
+"<div role="status" data-slot="loading-state" class="flex flex-col items-center justify-center gap-2.5 rounded-xl border border-border bg-card px-5 py-9 text-center text-[0.8125rem] text-muted-foreground">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle animate-spin [animation-duration:var(--motion-spin)] motion-reduce:animate-none size-[22px]" data-slot="spinner" aria-hidden="true">
 <path d="M21 12a9 9 0 1 1-6.219-8.56">
 </path>
 </svg>
@@ -709,7 +709,7 @@ exports[`Carga > carga en bloque 1`] = `
 `;
 
 exports[`Carga > carga en linea 1`] = `
-"<div role="status" data-slot="loading-state" class="inline-flex items-center gap-2 text-sm text-muted-foreground">
+"<div role="status" data-slot="loading-state" class="inline-flex items-center gap-2 text-[0.8125rem] text-muted-foreground">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle animate-spin [animation-duration:var(--motion-spin)] motion-reduce:animate-none size-4" data-slot="spinner" aria-hidden="true">
 <path d="M21 12a9 9 0 1 1-6.219-8.56">
 </path>
@@ -719,7 +719,7 @@ exports[`Carga > carga en linea 1`] = `
 `;
 
 exports[`Carga > carga solo para el lector 1`] = `
-"<div role="status" data-slot="loading-state" class="inline-flex items-center gap-2 text-sm text-muted-foreground sr-only">
+"<div role="status" data-slot="loading-state" class="inline-flex items-center gap-2 text-[0.8125rem] text-muted-foreground sr-only">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle animate-spin [animation-duration:var(--motion-spin)] motion-reduce:animate-none size-4" data-slot="spinner" aria-hidden="true">
 <path d="M21 12a9 9 0 1 1-6.219-8.56">
 </path>
@@ -814,7 +814,7 @@ exports[`Listados compartidos > tabla cargando 1`] = `
 <tbody data-slot="table-body" class="[&amp;_tr:last-child]:border-0">
 <tr data-slot="table-loading-row" class="border-b border-border/70 transition-colors hover:bg-secondary/65 has-aria-expanded:bg-secondary/65 data-[state=selected]:bg-secondary">
 <td data-slot="table-cell" class="px-4 py-3 align-middle whitespace-nowrap text-foreground tabular-nums first:font-mono [&amp;:has([role=checkbox])]:pr-0">
-<div role="status" data-slot="loading-state" class="inline-flex items-center gap-2 text-sm text-muted-foreground sr-only">
+<div role="status" data-slot="loading-state" class="inline-flex items-center gap-2 text-[0.8125rem] text-muted-foreground sr-only">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle animate-spin [animation-duration:var(--motion-spin)] motion-reduce:animate-none size-4" data-slot="spinner" aria-hidden="true">
 <path d="M21 12a9 9 0 1 1-6.219-8.56">
 </path>
@@ -1059,17 +1059,15 @@ exports[`Presentacion > estado de error completo 1`] = `
 `;
 
 exports[`Presentacion > estado vacio 1`] = `
-"<div class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-surface-dashed px-4 py-6 text-center text-sm text-muted-foreground">
-<div class="space-y-1">
-<p class="font-medium text-foreground">No se encontraron clientes con los filtros aplicados.</p>
-</div>
+"<div class="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-control-border px-6 py-9 text-center">
+<p class="text-[0.8125rem] text-muted-foreground">No se encontraron clientes con los filtros aplicados.</p>
 </div>"
 `;
 
 exports[`Presentacion > estado vacio completo 1`] = `
-"<div class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-surface-dashed px-4 py-6 text-center text-sm text-muted-foreground">
-<span class="flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package size-4.5" aria-hidden="true">
+"<div class="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-control-border px-6 py-9 text-center">
+<span class="mb-1.5 flex size-11 items-center justify-center rounded-full bg-accent text-muted-foreground">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package size-[21px]" aria-hidden="true">
 <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z">
 </path>
 <path d="M12 22V12">
@@ -1080,11 +1078,11 @@ exports[`Presentacion > estado vacio completo 1`] = `
 </path>
 </svg>
 </span>
-<div class="space-y-1">
-<p class="font-medium text-foreground">Sin materiales</p>
-<p>Registra el primero.</p>
-</div>
+<p class="text-[0.9375rem] font-semibold text-foreground">Sin materiales</p>
+<p class="max-w-[360px] text-[0.8125rem] text-muted-foreground">Registra el primero.</p>
+<div class="mt-2.5">
 <button data-slot="button" data-variant="default" data-size="sm" class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-[color,background-color,border-color,text-decoration-color,box-shadow,translate,scale,opacity] duration-(--motion-fast) ease-out outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:-translate-y-px active:not-aria-[haspopup]:translate-y-px active:not-aria-[haspopup]:scale-97 motion-reduce:transition-none motion-reduce:translate-none! motion-reduce:scale-none! disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 bg-primary bg-linear-to-b from-primary-hover to-primary text-primary-foreground shadow-button hover:bg-none hover:bg-primary-hover active:bg-none active:bg-primary-active active:shadow-none h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-3.5">Nuevo material</button>
+</div>
 </div>"
 `;
 
