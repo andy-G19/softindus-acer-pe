@@ -97,6 +97,9 @@
   --shadow-hairline: var(--shadow-hairline);
   --shadow-dialog: var(--shadow-dialog);
   --color-overlay: var(--overlay);
+  --color-badge-default-border: var(--badge-default-border);
+  --shadow-badge-default: var(--shadow-badge-default);
+  --shadow-badge-secondary: var(--shadow-badge-secondary);
 }
 
 :root {
@@ -198,11 +201,41 @@
     transparent 3px
   );
 
+  /* Etiquetas (propuesta de la presentacion, 2026-11-20; D154). Default es un lingote cobre:
+     degradado de 135 grados del cobre aclarado al cobre oscurecido, con borde claro y un
+     resplandor calido fijo (sin pulso, D153). Secondary es acero cepillado en vertical. Link
+     subraya con un filamento del cobre a la brasa. */
+  --badge-default-surface: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--primary) 65%, white) 0%,
+    var(--primary) 55%,
+    color-mix(in oklch, var(--primary) 78%, black) 100%
+  );
+  --badge-default-border: color-mix(in oklch, var(--primary) 55%, white);
+  --badge-filament: linear-gradient(
+    90deg,
+    var(--primary),
+    color-mix(in oklch, var(--primary) 35%, white),
+    var(--accent-ember)
+  );
+  --texture-brush: repeating-linear-gradient(
+    90deg,
+    var(--metal-brush) 0px,
+    var(--metal-brush) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+
   /* Sombras: cada valor es el que ya usaba su componente. */
   /* Filo de luz arriba y apoyo abajo del boton principal; reemplaza su halo naranja. */
   --shadow-button: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 1px 2px rgba(0, 0, 0, 0.5);
   /* Pulgar del interruptor (propuesta de los campos): un apoyo de 1 px. */
   --shadow-thumb: 0 1px 2px rgba(0, 0, 0, 0.5);
+  /* Etiquetas (propuesta de la presentacion): resplandor cobre con filo de luz arriba en default,
+     y solo el filo, tenue, en secondary. */
+  --shadow-badge-default: 0 2px 12px color-mix(in oklch, var(--primary) 35%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  --shadow-badge-secondary: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   --shadow-raised: 0 14px 35px rgba(0, 0, 0, 0.18);
   --shadow-raised-hover: 0 12px 24px -8px rgba(0, 0, 0, 0.4);
   --shadow-card-hover: 0 16px 34px rgba(0, 0, 0, 0.24);
@@ -242,6 +275,9 @@
   --motion-spin: 800ms;
   /* Curva que frena al final, para que el interruptor se asiente (propuesta de los campos). */
   --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Curva que se pasa un poco y vuelve: la etiqueta al subir y su sello al montar (propuesta de
+     la presentacion, 2026-11-20). */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --motion-temper: 6s;
   /* Escena de la pantalla de error (D137): barrido y humo, destellos de la antorcha y el
      parpadeo del LED (un ciclo por segundo: nada parpadea mas de 3 veces por segundo). */

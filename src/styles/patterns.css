@@ -1,35 +1,73 @@
-/* Patrones compartidos: tonos de etiquetas y alertas por estado, enlaces
+/* Patrones compartidos: gestos de las etiquetas, enlaces
    de la barra lateral, el contorno del foco de teclado, y los campos, las
    tablas y los titulos de toda la app. */
 @layer utilities {
-  .badge-state-success {
-    border-color: color-mix(in srgb, var(--success) 32%, transparent);
-    background-color: color-mix(in srgb, var(--success) 14%, transparent);
-    color: color-mix(in srgb, var(--success) 78%, var(--foreground) 22%);
+  /* Gestos de la etiqueta (propuesta de la presentacion, 2026-11-20; D153). Los colores por
+     estado vivian aqui (badge-state-*); desde este diseno los declara Badge con tokens. En
+     reposo nada se mueve: success se asienta con un sello y una onda al montar, y destructive
+     sacude una vez (la sacudida de la propuesta, sin desaparecer y volver). Los fotogramas
+     usan transform; la subida del hover usa translate y scale, otras propiedades, asi que no
+     se pisan. */
+  .badge-settle {
+    animation:
+      badge-pop 320ms var(--ease-spring) both,
+      badge-ring 900ms ease-out 320ms both;
   }
 
-  .badge-state-info {
-    border-color: color-mix(in srgb, var(--info) 32%, transparent);
-    background-color: color-mix(in srgb, var(--info) 14%, transparent);
-    color: color-mix(in srgb, var(--info) 72%, var(--foreground) 28%);
+  .badge-shake {
+    animation: badge-shake 500ms var(--ease-settle) both;
   }
 
-  .badge-state-active {
-    border-color: color-mix(in srgb, var(--primary) 32%, transparent);
-    background-color: color-mix(in srgb, var(--primary) 14%, transparent);
-    color: color-mix(in srgb, var(--primary) 82%, var(--foreground) 18%);
+  @keyframes badge-pop {
+    0% {
+      transform: scale(0.72);
+      opacity: 0;
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
 
-  .badge-state-warning {
-    border-color: color-mix(in srgb, var(--warning) 32%, transparent);
-    background-color: color-mix(in srgb, var(--warning) 14%, transparent);
-    color: color-mix(in srgb, var(--warning) 78%, var(--foreground) 22%);
+  @keyframes badge-ring {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklch, currentColor 50%, transparent);
+    }
+
+    100% {
+      box-shadow: 0 0 0 7px transparent;
+    }
   }
 
-  .badge-state-danger {
-    border-color: color-mix(in srgb, var(--destructive) 32%, transparent);
-    background-color: color-mix(in srgb, var(--destructive) 14%, transparent);
-    color: color-mix(in srgb, var(--destructive) 72%, var(--foreground) 28%);
+  @keyframes badge-shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    20% {
+      transform: translateX(-6px) rotate(-1.5deg);
+    }
+
+    40% {
+      transform: translateX(6px) rotate(1.5deg);
+    }
+
+    60% {
+      transform: translateX(-5px) rotate(-1deg);
+    }
+
+    80% {
+      transform: translateX(4px) rotate(1deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .badge-settle,
+    .badge-shake {
+      animation: none;
+    }
   }
 
   /* Los colores de las alertas por estado vivian aqui y su borde era el comun
