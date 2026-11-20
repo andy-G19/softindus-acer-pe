@@ -1465,9 +1465,7 @@ exports[`/dashboard/reports > sin datos recientes, totales vacios ni materiales 
 </div>
 <div>
 <div>
-<div>
 <p>Aún no hay Órdenes de trabajo registradas.</p>
-</div>
 </div>
 </div>
 </div>
@@ -1477,9 +1475,7 @@ exports[`/dashboard/reports > sin datos recientes, totales vacios ni materiales 
 </div>
 <div>
 <div>
-<div>
 <p>No hay materiales por debajo del stock mínimo.</p>
-</div>
 </div>
 </div>
 </div>
@@ -1520,9 +1516,7 @@ exports[`/dashboard/reports > sin datos recientes, totales vacios ni materiales 
 </div>
 <div>
 <div>
-<div>
 <p>Aún no hay movimientos de caja registrados.</p>
-</div>
 </div>
 </div>
 </div>

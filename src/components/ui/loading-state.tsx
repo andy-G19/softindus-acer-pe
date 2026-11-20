@@ -18,13 +18,15 @@ function LoadingState({ label = "Cargando...", variant = "block", className }: L
       role="status"
       data-slot="loading-state"
       className={cn(
+        // Diseno de mensajes y estados: el bloque es una tarjeta con borde continuo (el
+        // discontinuo es del vacio), radio de 14 px y texto de 13 px.
         variant === "block"
-          ? "flex flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-surface-dashed px-4 py-6 text-center text-sm text-muted-foreground"
-          : "inline-flex items-center gap-2 text-sm text-muted-foreground",
+          ? "flex flex-col items-center justify-center gap-2.5 rounded-xl border border-border bg-card px-5 py-9 text-center text-[0.8125rem] text-muted-foreground"
+          : "inline-flex items-center gap-2 text-[0.8125rem] text-muted-foreground",
         className
       )}
     >
-      <Spinner className={variant === "block" ? "size-5" : "size-4"} />
+      <Spinner className={variant === "block" ? "size-[22px]" : "size-4"} />
       <span>{label}</span>
     </div>
   )

@@ -11123,6 +11123,115 @@ visibilidad y el elemento en ese punto) que era el pintado del panel y se repiti
 | El login | Conserva su aspecto (sus reglas de `brand.css` ganan por orden); se rediseña con los botones que no siguen el diseño solos |
 | D99 | La parte de los campos se cerró en el F1; siguen las reglas de tablas y etiquetas de `patterns.css` |
 
+### Integración en `main` (botones y campos)
+
+Datos leídos de la API de GitHub el 2026-11-20 (UTC) y comparados con git:
+
+- El registro de los campos se publicó en `staging` con `1d83a8c`: CI #243 en verde (3m 35s).
+- PR #61 «Diseño de botones y campos», abierto a las 00:24:46 y fusionado con merge commit a las
+  00:41:39: 16 commits, de `68179d4` a `1d83a8c`, y 78 archivos (+4.673 −490). Su CI, el #244, sobre
+  `1d83a8c`, terminó en verde antes del merge (5m 49s).
+- El merge commit `1a46255` tiene como padres `fdfbef9` (`main`) y `1d83a8c` (`staging`), y su
+  árbol es el de `1d83a8c` (`4bcc9c9`).
+- CI #245 sobre `1a46255` en verde al primer intento (00:41:42 a 00:46:57, 5m 15s).
+- Vercel desplegó `1a46255` en producción (`success` a las 00:42:35). Sin migraciones.
+
+**El diseño de botones y campos queda integrado.**
+
+## Diseño de mensajes y estados (2026-11-20)
+
+Tercer paso de la sesión de diseño. El responsable trajo su propuesta como maqueta
+(`tmp/Diseño_propuesta/Estados-html.zip`, fuera de git): alertas con un color por significado,
+avisos con tarjeta texturizada, confirmaciones, vacíos con borde discontinuo, carga y una pantalla
+de error con la ilustración de un robot que suelda un monitor. Se leyó entera y no se ejecutó su
+código. La ilustración definitiva la entregó aparte (`Robot_tec_error.webp`).
+
+### Decisiones
+
+| # | Decisión | Motivo |
+|---|---|---|
+| D137 | La pantalla de error usa la ilustración del responsable (WebP sin pérdida, 1671 × 941, 1 MB) con capas CSS animadas **en bucle y sin botón de pausa** | Decisión del responsable («es un mensaje de advertencia»). **Riesgo anotado:** no cumple WCAG 2.2.2 (nivel A), porque la animación es decorativa (el aviso lo dan el título y el texto). Mitigado: con reducir movimiento todo queda quieto, y nada parpadea más de 3 veces por segundo (2.3.1). Añadir el botón después es un cambio pequeño |
+| D138 | La imagen conserva «SYSTEM ERROR» y «CAUTION» en inglés | Aceptado por el responsable: decorativos y genéricos; el título y el texto en español dicen qué pasó. La primera versión decía «503» y se descartó, porque `ErrorState` sirve a cualquier error y a «no encontrado» |
+| D139 | El archivo de 1 MB se sirve tal cual con `next/image` | En staging el navegador descarga una variante de 750 px en calidad 75: **22 KB** |
+| D140 | Los avisos siguen arriba a la derecha, 4 s y con barra de progreso; cambia su aspecto | La propuesta los ponía abajo y sin barra |
+| D141 | El título de la pantalla de error queda en Oswald 650 a 18 px | Una regla global de `patterns.css` (D99) da a todo `<h1>` la letra de títulos; así coincide con los demás títulos del ERP. Se revisa al limpiar D99 |
+
+Además: las confirmaciones conservan el `AlertDialog` de Radix (la maqueta usaba `<dialog>` nativo; su
+foco ya está probado); `Skeleton` no cambia, para seguir igual que `production/loading.tsx` (las
+diferencias eran 2 px de radio y 0,4 s de pulso).
+
+### Commits
+
+| Commit | Qué cambia |
+|---|---|
+| `13ef39f` E0 | Registro de la integración del PR #61 |
+| `ddafe12` E1 `feat(estados): alertas con tinte por significado` | Superficie al 14 %, borde al 40 % y texto propio para información, éxito y advertencia; la destructiva en granate; la por defecto sobre el acento. **Cierra D101.** Salen las reglas `.alert-state-*` de `patterns.css`. `FormErrorAlert` es un bloque granate compacto |
+| `194b640` E2 `feat(estados): avisos temporales` | **Arreglo además de diseño:** el adaptador de toastify casi no se aplicaba (ver abajo). Tarjeta con textura y borde de acero, icono y barra del color de cada tipo, mensaje de 13 px, cerrar `ghost` y entrada propia con `cssTransition`; con reducir movimiento la animación dura 1 ms (toastify espera su `animationend`) |
+| `4197682` E3 `feat(estados): confirmaciones` | Panel con textura y borde de acero, radio de 14 px, icono arriba en un círculo de 38 px (check neutro, triángulo granate), título de 16 px y cuerpo de 13 px |
+| `cf34777` E4 `feat(estados): vacios y carga` | Vacío con borde discontinuo de acero y sin fondo; solo con su texto, una línea atenuada. Carga en bloque como tarjeta de borde continuo. Fuera `--surface-dashed` |
+| `d72da2a` E5 `feat(estados): pantalla de error` | La escena con 10 capas animadas (flotación, barrido y caídas de brillo en el monitor, resplandor, chispa y chispas en la antorcha, humo, triángulo, LED y visor), en porcentajes medidos sobre la imagen; icono en un círculo granate sobre la escena; `<details>` plegable en monoespaciada. Duraciones `--motion-scene`, `--motion-spark` y `--motion-blink` |
+
+Cada `feat` empezó por su prueba roja; `npm run check` en verde antes de cada commit (de 5673 a 5696
+pruebas, 355 archivos). CI #246 sobre `d72da2a` en verde.
+
+### El adaptador de los avisos nunca se aplicó
+
+El CSS base de `react-toastify` se importa desde JavaScript y queda **sin capa**; el adaptador estaba
+en `@layer utilities`, y una regla sin capa gana a cualquiera dentro de una capa, sin importar
+especificidad ni orden. En staging el aviso tenía el fondo `#121212`, el radio de 6 px, la sombra y
+el verde `#07bc0c` de toastify; del adaptador solo se veía el color del borde (toastify no define
+uno), y `--shadow-toast` no se había aplicado nunca. Ahora el adaptador va fuera de capa: los
+colores y medidas son las variables de toastify declaradas en `.Toastify` (los avisos las heredan
+y ganan a las de `:root`), y las propiedades directas usan selectores prefijados por `.Toastify`.
+Verificado en staging con estilos calculados: tarjeta `#15181d` con textura, borde de acero, radio
+de 10 px, la sombra de la propuesta, icono y barra del color del tipo y cerrar atenuado.
+
+### Contraste medido
+
+| Pieza | Contraste |
+|---|---|
+| Alerta información: título / texto | 8,77 / 5,04:1 |
+| Alerta éxito: título / texto | 8,83 / 4,87:1 |
+| Alerta advertencia: título / texto | 5,55 / 4,67:1 |
+| Alerta destructiva: título / texto | 11,12 / 8,28:1 |
+| Alerta por defecto: título / texto | 13,10 / 4,65:1 |
+| Iconos de los avisos sobre la tarjeta | 6,82 (advertencia) a 12,24:1 (error) |
+| Borde discontinuo del vacío | 3,08:1 |
+
+### CSS compilado e instantáneas
+
+| Commit | Reglas quitadas / nuevas | Instantáneas |
+|---|---|---|
+| E1 | 18 / 20 | 6 (clases de `Alert`) |
+| E2 | 18 / 14 | 144 (10 de la fachada y 134 del puente `?toast=`: sin clases por tipo y título de 13 px) |
+| E3 | 6 / 4 | 3 |
+| E4 | 1 / 7 | 50 en 30 archivos (el vacío simple pierde su `<div>` intermedio) |
+| E5 | 6 / 69 (51 de la escena) | 3 |
+
+Sin utilidades fantasma en ningún paso. El CSS se compara con sus dos archivos unidos en el orden
+de carga.
+
+### Verificación en staging
+
+Con estilos calculados después de cada despliegue: las alertas muestran el borde de su estado; el
+aviso, lo descrito arriba; en la pantalla de error, las 14 animaciones están en marcha (`running`)
+y cada capa cae sobre su sitio de la imagen (por ejemplo el LED en 288, 206 px de una escena de
+560 × 315, el 51,4 % y el 66,1 %). Capturas del antes y el después en
+`tmp/diseno-estados/capturas/`, fuera de git. La herramienta de captura del panel devolvió varias
+veces imágenes sin repintar (la alerta destructiva en blanco aunque el DOM la tenía visible, con su
+fondo y sin nada encima; un cambio hecho a propósito en la página tampoco aparecía): se comprobó en
+el DOM y no se tomó por un fallo de la página.
+
+### Pendientes que deja
+
+| Pendiente | Detalle |
+|---|---|
+| Botón de pausa de la escena (D137) | Si un evaluador señala WCAG 2.2.2 |
+| El login | Su alerta conserva sus clases; su texto pasó del 90 % al 85 % porque la regla de la variante pesa más |
+| `--shadow-panel` | Ya no lo usa ningún componente; solo la paleta de la galería |
+| Título de la pantalla de error (D141) | Con la limpieza de D99 |
+| `Skeleton` | Si se quiere la medida de la propuesta, junto con `production/loading.tsx` |
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).

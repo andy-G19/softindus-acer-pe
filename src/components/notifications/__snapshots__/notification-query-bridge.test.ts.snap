@@ -3,11 +3,8 @@
 exports[`URL > con toast repetido muestra el primero y quita todos 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Cliente guardado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Cliente guardado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -19,11 +16,8 @@ exports[`URL > con toast repetido muestra el primero y quita todos 1`] = `
 exports[`URL > conserva los demas parametros al quitar toast 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Cliente guardado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Cliente guardado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -35,11 +29,8 @@ exports[`URL > conserva los demas parametros al quitar toast 1`] = `
 exports[`cada clave del catalogo > attendance-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Asistencia registrada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Asistencia registrada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -51,11 +42,8 @@ exports[`cada clave del catalogo > attendance-created: muestra su toast y limpia
 exports[`cada clave del catalogo > campaign-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Campaña creada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Campaña creada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -67,11 +55,8 @@ exports[`cada clave del catalogo > campaign-created: muestra su toast y limpia l
 exports[`cada clave del catalogo > campaign-detail-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Producto agregado a la campaña</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Producto agregado a la campaña</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -83,11 +68,8 @@ exports[`cada clave del catalogo > campaign-detail-created: muestra su toast y l
 exports[`cada clave del catalogo > campaign-status-activa: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Campaña activada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Campaña activada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -99,11 +81,8 @@ exports[`cada clave del catalogo > campaign-status-activa: muestra su toast y li
 exports[`cada clave del catalogo > campaign-status-anulada: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Campaña anulada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Campaña anulada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -115,11 +94,8 @@ exports[`cada clave del catalogo > campaign-status-anulada: muestra su toast y l
 exports[`cada clave del catalogo > campaign-status-finalizada: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Campaña finalizada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Campaña finalizada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -131,11 +107,8 @@ exports[`cada clave del catalogo > campaign-status-finalizada: muestra su toast 
 exports[`cada clave del catalogo > campaign-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Campaña actualizada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Campaña actualizada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -147,11 +120,8 @@ exports[`cada clave del catalogo > campaign-updated: muestra su toast y limpia l
 exports[`cada clave del catalogo > client-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Cliente activado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Cliente activado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -163,11 +133,8 @@ exports[`cada clave del catalogo > client-activated: muestra su toast y limpia l
 exports[`cada clave del catalogo > client-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Cliente guardado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Cliente guardado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -179,11 +146,8 @@ exports[`cada clave del catalogo > client-created: muestra su toast y limpia la 
 exports[`cada clave del catalogo > client-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Cliente desactivado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Cliente desactivado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -195,11 +159,8 @@ exports[`cada clave del catalogo > client-deactivated: muestra su toast y limpia
 exports[`cada clave del catalogo > client-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Cliente actualizado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Cliente actualizado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -211,11 +172,8 @@ exports[`cada clave del catalogo > client-updated: muestra su toast y limpia la 
 exports[`cada clave del catalogo > costing-already-exists: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">La orden ya tenía un costeo: se abrió el existente</p></div>",
-    "options": {
-      "className": "toast-industrial-info",
-      "progressClassName": "toast-industrial-progress-info",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">La orden ya tenía un costeo: se abrió el existente</p></div>",
+    "options": undefined,
     "toast": "info",
   },
   {
@@ -227,11 +185,8 @@ exports[`cada clave del catalogo > costing-already-exists: muestra su toast y li
 exports[`cada clave del catalogo > costing-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Costeo creado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Costeo creado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -243,11 +198,8 @@ exports[`cada clave del catalogo > costing-created: muestra su toast y limpia la
 exports[`cada clave del catalogo > costing-recalculated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Costeo recalculado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Costeo recalculado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -259,11 +211,8 @@ exports[`cada clave del catalogo > costing-recalculated: muestra su toast y limp
 exports[`cada clave del catalogo > costing-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Costeo actualizado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Costeo actualizado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -275,11 +224,8 @@ exports[`cada clave del catalogo > costing-updated: muestra su toast y limpia la
 exports[`cada clave del catalogo > expense-category-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Categoría de gasto activada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Categoría de gasto activada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -291,11 +237,8 @@ exports[`cada clave del catalogo > expense-category-activated: muestra su toast 
 exports[`cada clave del catalogo > expense-category-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Categoría de gasto creada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Categoría de gasto creada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -307,11 +250,8 @@ exports[`cada clave del catalogo > expense-category-created: muestra su toast y 
 exports[`cada clave del catalogo > expense-category-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Categoría de gasto desactivada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Categoría de gasto desactivada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -323,11 +263,8 @@ exports[`cada clave del catalogo > expense-category-deactivated: muestra su toas
 exports[`cada clave del catalogo > expense-category-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Categoría de gasto actualizada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Categoría de gasto actualizada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -339,11 +276,8 @@ exports[`cada clave del catalogo > expense-category-updated: muestra su toast y 
 exports[`cada clave del catalogo > failure-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Falla registrada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Falla registrada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -355,11 +289,8 @@ exports[`cada clave del catalogo > failure-created: muestra su toast y limpia la
 exports[`cada clave del catalogo > failure-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Estado de falla actualizado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Estado de falla actualizado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -371,11 +302,8 @@ exports[`cada clave del catalogo > failure-updated: muestra su toast y limpia la
 exports[`cada clave del catalogo > indirect-cost-annulled: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Costo indirecto anulado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Costo indirecto anulado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -387,11 +315,8 @@ exports[`cada clave del catalogo > indirect-cost-annulled: muestra su toast y li
 exports[`cada clave del catalogo > indirect-cost-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Costo indirecto agregado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Costo indirecto agregado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -403,11 +328,8 @@ exports[`cada clave del catalogo > indirect-cost-created: muestra su toast y lim
 exports[`cada clave del catalogo > inventory-movement-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Movimiento de inventario registrado</p><p class="text-xs leading-relaxed text-muted-foreground">Stock actualizado correctamente.</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Movimiento de inventario registrado</p><p class="text-xs leading-relaxed text-muted-foreground">Stock actualizado correctamente.</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -419,11 +341,8 @@ exports[`cada clave del catalogo > inventory-movement-created: muestra su toast 
 exports[`cada clave del catalogo > login-success: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Inicio de sesión exitoso</p><p class="text-xs leading-relaxed text-muted-foreground">Bienvenido al Sistema de Gestión Integral.</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Inicio de sesión exitoso</p><p class="text-xs leading-relaxed text-muted-foreground">Bienvenido al Sistema de Gestión Integral.</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -435,11 +354,8 @@ exports[`cada clave del catalogo > login-success: muestra su toast y limpia la U
 exports[`cada clave del catalogo > machine-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Máquina activada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Máquina activada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -451,11 +367,8 @@ exports[`cada clave del catalogo > machine-activated: muestra su toast y limpia 
 exports[`cada clave del catalogo > machine-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Máquina guardada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Máquina guardada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -467,11 +380,8 @@ exports[`cada clave del catalogo > machine-created: muestra su toast y limpia la
 exports[`cada clave del catalogo > machine-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Máquina desactivada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Máquina desactivada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -483,11 +393,8 @@ exports[`cada clave del catalogo > machine-deactivated: muestra su toast y limpi
 exports[`cada clave del catalogo > machine-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Máquina actualizada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Máquina actualizada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -499,11 +406,8 @@ exports[`cada clave del catalogo > machine-updated: muestra su toast y limpia la
 exports[`cada clave del catalogo > margin-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Margen aplicado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Margen aplicado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -515,11 +419,8 @@ exports[`cada clave del catalogo > margin-created: muestra su toast y limpia la 
 exports[`cada clave del catalogo > material-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Material activado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Material activado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -531,11 +432,8 @@ exports[`cada clave del catalogo > material-activated: muestra su toast y limpia
 exports[`cada clave del catalogo > material-category-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Categoría de material activada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Categoría de material activada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -547,11 +445,8 @@ exports[`cada clave del catalogo > material-category-activated: muestra su toast
 exports[`cada clave del catalogo > material-category-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Registro creado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Registro creado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -563,11 +458,8 @@ exports[`cada clave del catalogo > material-category-created: muestra su toast y
 exports[`cada clave del catalogo > material-category-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Categoría de material desactivada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Categoría de material desactivada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -579,11 +471,8 @@ exports[`cada clave del catalogo > material-category-deactivated: muestra su toa
 exports[`cada clave del catalogo > material-category-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Registro actualizado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Registro actualizado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -595,11 +484,8 @@ exports[`cada clave del catalogo > material-category-updated: muestra su toast y
 exports[`cada clave del catalogo > material-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Material guardado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Material guardado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -611,11 +497,8 @@ exports[`cada clave del catalogo > material-created: muestra su toast y limpia l
 exports[`cada clave del catalogo > material-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Material desactivado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Material desactivado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -627,11 +510,8 @@ exports[`cada clave del catalogo > material-deactivated: muestra su toast y limp
 exports[`cada clave del catalogo > material-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Material actualizado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Material actualizado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -643,11 +523,8 @@ exports[`cada clave del catalogo > material-updated: muestra su toast y limpia l
 exports[`cada clave del catalogo > operator-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Operario activado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Operario activado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -659,11 +536,8 @@ exports[`cada clave del catalogo > operator-activated: muestra su toast y limpia
 exports[`cada clave del catalogo > operator-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Operario guardado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Operario guardado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -675,11 +549,8 @@ exports[`cada clave del catalogo > operator-created: muestra su toast y limpia l
 exports[`cada clave del catalogo > operator-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Operario desactivado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Operario desactivado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -691,11 +562,8 @@ exports[`cada clave del catalogo > operator-deactivated: muestra su toast y limp
 exports[`cada clave del catalogo > operator-payment-registered: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Pago a operario registrado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Pago a operario registrado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -707,11 +575,8 @@ exports[`cada clave del catalogo > operator-payment-registered: muestra su toast
 exports[`cada clave del catalogo > operator-task-annulled: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Tarea anulada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Tarea anulada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -723,11 +588,8 @@ exports[`cada clave del catalogo > operator-task-annulled: muestra su toast y li
 exports[`cada clave del catalogo > operator-task-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Tarea registrada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Tarea registrada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -739,11 +601,8 @@ exports[`cada clave del catalogo > operator-task-created: muestra su toast y lim
 exports[`cada clave del catalogo > operator-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Operario actualizado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Operario actualizado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -755,11 +614,8 @@ exports[`cada clave del catalogo > operator-updated: muestra su toast y limpia l
 exports[`cada clave del catalogo > order-cancelled: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Pedido cancelado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Pedido cancelado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -771,11 +627,8 @@ exports[`cada clave del catalogo > order-cancelled: muestra su toast y limpia la
 exports[`cada clave del catalogo > order-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Pedido creado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Pedido creado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -787,11 +640,8 @@ exports[`cada clave del catalogo > order-created: muestra su toast y limpia la U
 exports[`cada clave del catalogo > order-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Pedido actualizado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Pedido actualizado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -803,11 +653,8 @@ exports[`cada clave del catalogo > order-updated: muestra su toast y limpia la U
 exports[`cada clave del catalogo > payment-registered: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Pago registrado correctamente</p><p class="text-xs leading-relaxed text-muted-foreground">El saldo fue actualizado.</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Pago registrado correctamente</p><p class="text-xs leading-relaxed text-muted-foreground">El saldo fue actualizado.</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -819,11 +666,8 @@ exports[`cada clave del catalogo > payment-registered: muestra su toast y limpia
 exports[`cada clave del catalogo > payroll-annulled: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Planilla anulada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Planilla anulada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -835,11 +679,8 @@ exports[`cada clave del catalogo > payroll-annulled: muestra su toast y limpia l
 exports[`cada clave del catalogo > payroll-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Planilla generada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Planilla generada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -851,11 +692,8 @@ exports[`cada clave del catalogo > payroll-created: muestra su toast y limpia la
 exports[`cada clave del catalogo > petty-cash-box-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Caja chica creada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Caja chica creada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -867,11 +705,8 @@ exports[`cada clave del catalogo > petty-cash-box-created: muestra su toast y li
 exports[`cada clave del catalogo > petty-cash-expense-registered: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Egreso de caja registrado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Egreso de caja registrado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -883,11 +718,8 @@ exports[`cada clave del catalogo > petty-cash-expense-registered: muestra su toa
 exports[`cada clave del catalogo > petty-cash-income-registered: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Ingreso de caja registrado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Ingreso de caja registrado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -899,11 +731,8 @@ exports[`cada clave del catalogo > petty-cash-income-registered: muestra su toas
 exports[`cada clave del catalogo > petty-cash-movement-annulled: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Movimiento de caja anulado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Movimiento de caja anulado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -915,11 +744,8 @@ exports[`cada clave del catalogo > petty-cash-movement-annulled: muestra su toas
 exports[`cada clave del catalogo > preventive-maintenance-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Mantenimiento preventivo programado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Mantenimiento preventivo programado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -931,11 +757,8 @@ exports[`cada clave del catalogo > preventive-maintenance-created: muestra su to
 exports[`cada clave del catalogo > preventive-maintenance-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Estado de mantenimiento actualizado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Estado de mantenimiento actualizado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -947,11 +770,8 @@ exports[`cada clave del catalogo > preventive-maintenance-updated: muestra su to
 exports[`cada clave del catalogo > product-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Producto activado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Producto activado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -963,11 +783,8 @@ exports[`cada clave del catalogo > product-activated: muestra su toast y limpia 
 exports[`cada clave del catalogo > product-category-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Categoría de producto activada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Categoría de producto activada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -979,11 +796,8 @@ exports[`cada clave del catalogo > product-category-activated: muestra su toast 
 exports[`cada clave del catalogo > product-category-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Categoría creada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Categoría creada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -995,11 +809,8 @@ exports[`cada clave del catalogo > product-category-created: muestra su toast y 
 exports[`cada clave del catalogo > product-category-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Categoría de producto desactivada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Categoría de producto desactivada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1011,11 +822,8 @@ exports[`cada clave del catalogo > product-category-deactivated: muestra su toas
 exports[`cada clave del catalogo > product-category-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Categoría actualizada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Categoría actualizada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1027,11 +835,8 @@ exports[`cada clave del catalogo > product-category-updated: muestra su toast y 
 exports[`cada clave del catalogo > product-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Producto guardado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Producto guardado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1043,11 +848,8 @@ exports[`cada clave del catalogo > product-created: muestra su toast y limpia la
 exports[`cada clave del catalogo > product-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Producto desactivado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Producto desactivado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1059,11 +861,8 @@ exports[`cada clave del catalogo > product-deactivated: muestra su toast y limpi
 exports[`cada clave del catalogo > product-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Producto actualizado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Producto actualizado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1075,11 +874,8 @@ exports[`cada clave del catalogo > product-updated: muestra su toast y limpia la
 exports[`cada clave del catalogo > profitability-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Rentabilidad calculada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Rentabilidad calculada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1091,11 +887,8 @@ exports[`cada clave del catalogo > profitability-created: muestra su toast y lim
 exports[`cada clave del catalogo > purchase-annulled: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Compra anulada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Compra anulada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1107,11 +900,8 @@ exports[`cada clave del catalogo > purchase-annulled: muestra su toast y limpia 
 exports[`cada clave del catalogo > purchase-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Compra registrada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Compra registrada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1123,11 +913,8 @@ exports[`cada clave del catalogo > purchase-created: muestra su toast y limpia l
 exports[`cada clave del catalogo > quote-annulled: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Proforma anulada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Proforma anulada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1139,11 +926,8 @@ exports[`cada clave del catalogo > quote-annulled: muestra su toast y limpia la 
 exports[`cada clave del catalogo > quote-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Proforma creada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Proforma creada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1155,11 +939,8 @@ exports[`cada clave del catalogo > quote-created: muestra su toast y limpia la U
 exports[`cada clave del catalogo > receipt-annulled: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Comprobante anulado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Comprobante anulado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1171,11 +952,8 @@ exports[`cada clave del catalogo > receipt-annulled: muestra su toast y limpia l
 exports[`cada clave del catalogo > receipt-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Comprobante registrado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Comprobante registrado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1187,11 +965,8 @@ exports[`cada clave del catalogo > receipt-created: muestra su toast y limpia la
 exports[`cada clave del catalogo > recipe-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Receta técnica activada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Receta técnica activada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1203,11 +978,8 @@ exports[`cada clave del catalogo > recipe-activated: muestra su toast y limpia l
 exports[`cada clave del catalogo > recipe-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Receta técnica creada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Receta técnica creada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1219,11 +991,8 @@ exports[`cada clave del catalogo > recipe-created: muestra su toast y limpia la 
 exports[`cada clave del catalogo > recipe-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Receta técnica desactivada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Receta técnica desactivada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1235,11 +1004,8 @@ exports[`cada clave del catalogo > recipe-deactivated: muestra su toast y limpia
 exports[`cada clave del catalogo > recipe-detail-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Material agregado a la receta</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Material agregado a la receta</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1251,11 +1017,8 @@ exports[`cada clave del catalogo > recipe-detail-created: muestra su toast y lim
 exports[`cada clave del catalogo > recipe-detail-deleted: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Material eliminado de la receta</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Material eliminado de la receta</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1267,11 +1030,8 @@ exports[`cada clave del catalogo > recipe-detail-deleted: muestra su toast y lim
 exports[`cada clave del catalogo > recipe-detail-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Detalle de receta actualizado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Detalle de receta actualizado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1283,11 +1043,8 @@ exports[`cada clave del catalogo > recipe-detail-updated: muestra su toast y lim
 exports[`cada clave del catalogo > recipe-version-annulled: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Versión de receta anulada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Versión de receta anulada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1299,11 +1056,8 @@ exports[`cada clave del catalogo > recipe-version-annulled: muestra su toast y l
 exports[`cada clave del catalogo > recipe-version-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Nueva versión de receta creada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Nueva versión de receta creada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1315,11 +1069,8 @@ exports[`cada clave del catalogo > recipe-version-created: muestra su toast y li
 exports[`cada clave del catalogo > recipe-version-set-current: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Versión de receta marcada como vigente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Versión de receta marcada como vigente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1331,11 +1082,8 @@ exports[`cada clave del catalogo > recipe-version-set-current: muestra su toast 
 exports[`cada clave del catalogo > repair-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Reparación registrada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Reparación registrada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1347,11 +1095,8 @@ exports[`cada clave del catalogo > repair-created: muestra su toast y limpia la 
 exports[`cada clave del catalogo > repair-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Estado de reparación actualizado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Estado de reparación actualizado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1363,11 +1108,8 @@ exports[`cada clave del catalogo > repair-updated: muestra su toast y limpia la 
 exports[`cada clave del catalogo > reusable-scrap-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Retazo reutilizable creado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Retazo reutilizable creado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1379,11 +1121,8 @@ exports[`cada clave del catalogo > reusable-scrap-created: muestra su toast y li
 exports[`cada clave del catalogo > reusable-scrap-discarded: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Retazo descartado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Retazo descartado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1395,11 +1134,8 @@ exports[`cada clave del catalogo > reusable-scrap-discarded: muestra su toast y 
 exports[`cada clave del catalogo > reusable-scrap-reused: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Retazo marcado como reutilizado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Retazo marcado como reutilizado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1411,11 +1147,8 @@ exports[`cada clave del catalogo > reusable-scrap-reused: muestra su toast y lim
 exports[`cada clave del catalogo > route-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Ruta de fabricación activada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Ruta de fabricación activada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1427,11 +1160,8 @@ exports[`cada clave del catalogo > route-activated: muestra su toast y limpia la
 exports[`cada clave del catalogo > route-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Ruta de fabricación creada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Ruta de fabricación creada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1443,11 +1173,8 @@ exports[`cada clave del catalogo > route-created: muestra su toast y limpia la U
 exports[`cada clave del catalogo > route-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Ruta de fabricación desactivada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Ruta de fabricación desactivada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1459,11 +1186,8 @@ exports[`cada clave del catalogo > route-deactivated: muestra su toast y limpia 
 exports[`cada clave del catalogo > route-stage-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Etapa de ruta activada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Etapa de ruta activada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1475,11 +1199,8 @@ exports[`cada clave del catalogo > route-stage-activated: muestra su toast y lim
 exports[`cada clave del catalogo > route-stage-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Etapa de ruta creada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Etapa de ruta creada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1491,11 +1212,8 @@ exports[`cada clave del catalogo > route-stage-created: muestra su toast y limpi
 exports[`cada clave del catalogo > route-stage-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Etapa de ruta desactivada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Etapa de ruta desactivada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1507,11 +1225,8 @@ exports[`cada clave del catalogo > route-stage-deactivated: muestra su toast y l
 exports[`cada clave del catalogo > route-stage-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Etapa de ruta actualizada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Etapa de ruta actualizada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1523,11 +1238,8 @@ exports[`cada clave del catalogo > route-stage-updated: muestra su toast y limpi
 exports[`cada clave del catalogo > route-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Ruta de fabricación actualizada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Ruta de fabricación actualizada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1539,11 +1251,8 @@ exports[`cada clave del catalogo > route-updated: muestra su toast y limpia la U
 exports[`cada clave del catalogo > scrap-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Chatarra registrada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Chatarra registrada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1555,11 +1264,8 @@ exports[`cada clave del catalogo > scrap-created: muestra su toast y limpia la U
 exports[`cada clave del catalogo > scrap-sale-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Venta de chatarra registrada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Venta de chatarra registrada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1571,11 +1277,8 @@ exports[`cada clave del catalogo > scrap-sale-created: muestra su toast y limpia
 exports[`cada clave del catalogo > spare-part-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Repuesto activado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Repuesto activado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1587,11 +1290,8 @@ exports[`cada clave del catalogo > spare-part-activated: muestra su toast y limp
 exports[`cada clave del catalogo > spare-part-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Repuesto guardado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Repuesto guardado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1603,11 +1303,8 @@ exports[`cada clave del catalogo > spare-part-created: muestra su toast y limpia
 exports[`cada clave del catalogo > spare-part-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Repuesto desactivado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Repuesto desactivado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1619,11 +1316,8 @@ exports[`cada clave del catalogo > spare-part-deactivated: muestra su toast y li
 exports[`cada clave del catalogo > spare-part-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Repuesto actualizado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Repuesto actualizado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1635,11 +1329,8 @@ exports[`cada clave del catalogo > spare-part-updated: muestra su toast y limpia
 exports[`cada clave del catalogo > stock-alert-attended: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Alerta de stock atendida</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Alerta de stock atendida</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1651,11 +1342,8 @@ exports[`cada clave del catalogo > stock-alert-attended: muestra su toast y limp
 exports[`cada clave del catalogo > supplier-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Proveedor activado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Proveedor activado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1667,11 +1355,8 @@ exports[`cada clave del catalogo > supplier-activated: muestra su toast y limpia
 exports[`cada clave del catalogo > supplier-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Proveedor guardado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Proveedor guardado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1683,11 +1368,8 @@ exports[`cada clave del catalogo > supplier-created: muestra su toast y limpia l
 exports[`cada clave del catalogo > supplier-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Proveedor desactivado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Proveedor desactivado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1699,11 +1381,8 @@ exports[`cada clave del catalogo > supplier-deactivated: muestra su toast y limp
 exports[`cada clave del catalogo > supplier-material-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Asociación proveedor-material activada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Asociación proveedor-material activada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1715,11 +1394,8 @@ exports[`cada clave del catalogo > supplier-material-activated: muestra su toast
 exports[`cada clave del catalogo > supplier-material-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Asociación proveedor-material creada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Asociación proveedor-material creada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1731,11 +1407,8 @@ exports[`cada clave del catalogo > supplier-material-created: muestra su toast y
 exports[`cada clave del catalogo > supplier-material-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Asociación proveedor-material desactivada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Asociación proveedor-material desactivada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1747,11 +1420,8 @@ exports[`cada clave del catalogo > supplier-material-deactivated: muestra su toa
 exports[`cada clave del catalogo > supplier-material-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Asociación proveedor-material actualizada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Asociación proveedor-material actualizada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1763,11 +1433,8 @@ exports[`cada clave del catalogo > supplier-material-updated: muestra su toast y
 exports[`cada clave del catalogo > supplier-payment-registered: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Pago a proveedor registrado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Pago a proveedor registrado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1779,11 +1446,8 @@ exports[`cada clave del catalogo > supplier-payment-registered: muestra su toast
 exports[`cada clave del catalogo > supplier-type-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Tipo de proveedor activado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Tipo de proveedor activado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1795,11 +1459,8 @@ exports[`cada clave del catalogo > supplier-type-activated: muestra su toast y l
 exports[`cada clave del catalogo > supplier-type-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Registro creado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Registro creado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1811,11 +1472,8 @@ exports[`cada clave del catalogo > supplier-type-created: muestra su toast y lim
 exports[`cada clave del catalogo > supplier-type-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Tipo de proveedor desactivado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Tipo de proveedor desactivado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1827,11 +1485,8 @@ exports[`cada clave del catalogo > supplier-type-deactivated: muestra su toast y
 exports[`cada clave del catalogo > supplier-type-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Registro actualizado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Registro actualizado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1843,11 +1498,8 @@ exports[`cada clave del catalogo > supplier-type-updated: muestra su toast y lim
 exports[`cada clave del catalogo > supplier-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Proveedor actualizado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Proveedor actualizado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1859,11 +1511,8 @@ exports[`cada clave del catalogo > supplier-updated: muestra su toast y limpia l
 exports[`cada clave del catalogo > user-activated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Usuario activado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Usuario activado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1875,11 +1524,8 @@ exports[`cada clave del catalogo > user-activated: muestra su toast y limpia la 
 exports[`cada clave del catalogo > user-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Usuario creado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Usuario creado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1891,11 +1537,8 @@ exports[`cada clave del catalogo > user-created: muestra su toast y limpia la UR
 exports[`cada clave del catalogo > user-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Usuario desactivado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Usuario desactivado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1907,11 +1550,8 @@ exports[`cada clave del catalogo > user-deactivated: muestra su toast y limpia l
 exports[`cada clave del catalogo > user-password-reset: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Contraseña reiniciada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Contraseña reiniciada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1923,11 +1563,8 @@ exports[`cada clave del catalogo > user-password-reset: muestra su toast y limpi
 exports[`cada clave del catalogo > user-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Usuario actualizado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Usuario actualizado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1939,11 +1576,8 @@ exports[`cada clave del catalogo > user-updated: muestra su toast y limpia la UR
 exports[`cada clave del catalogo > work-order-additional-delivery: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Entrega adicional registrada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Entrega adicional registrada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1955,11 +1589,8 @@ exports[`cada clave del catalogo > work-order-additional-delivery: muestra su to
 exports[`cada clave del catalogo > work-order-annulled: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Orden de trabajo anulada</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Orden de trabajo anulada</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -1971,11 +1602,8 @@ exports[`cada clave del catalogo > work-order-annulled: muestra su toast y limpi
 exports[`cada clave del catalogo > work-order-created: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Orden de trabajo creada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Orden de trabajo creada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -1987,11 +1615,8 @@ exports[`cada clave del catalogo > work-order-created: muestra su toast y limpia
 exports[`cada clave del catalogo > work-order-finished: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Orden de trabajo finalizada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Orden de trabajo finalizada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -2003,11 +1628,8 @@ exports[`cada clave del catalogo > work-order-finished: muestra su toast y limpi
 exports[`cada clave del catalogo > work-order-material-returned: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Devolución registrada</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Devolución registrada</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -2019,11 +1641,8 @@ exports[`cada clave del catalogo > work-order-material-returned: muestra su toas
 exports[`cada clave del catalogo > work-order-materials-closed: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Materiales cerrados</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Materiales cerrados</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -2035,11 +1654,8 @@ exports[`cada clave del catalogo > work-order-materials-closed: muestra su toast
 exports[`cada clave del catalogo > work-order-materials-delivered: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Materiales entregados a la orden</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Materiales entregados a la orden</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -2051,11 +1667,8 @@ exports[`cada clave del catalogo > work-order-materials-delivered: muestra su to
 exports[`cada clave del catalogo > work-order-materials-reopened: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Cierre de materiales reabierto</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Cierre de materiales reabierto</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -2067,11 +1680,8 @@ exports[`cada clave del catalogo > work-order-materials-reopened: muestra su toa
 exports[`cada clave del catalogo > work-order-progress-generated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Avances de orden generados correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Avances de orden generados correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -2083,11 +1693,8 @@ exports[`cada clave del catalogo > work-order-progress-generated: muestra su toa
 exports[`cada clave del catalogo > work-order-progress-reassigned: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Tarea reasignada correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Tarea reasignada correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -2099,11 +1706,8 @@ exports[`cada clave del catalogo > work-order-progress-reassigned: muestra su to
 exports[`cada clave del catalogo > work-order-progress-updated: muestra su toast y limpia la URL 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Avance de orden actualizado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Avance de orden actualizado</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
@@ -2115,22 +1719,16 @@ exports[`cada clave del catalogo > work-order-progress-updated: muestra su toast
 exports[`repeticion de claves en un mismo montaje > dos claves distintas seguidas se muestran las dos 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Cliente guardado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Cliente guardado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {
     "effect": "router.replace /dashboard/commercial/clients {"scroll":false}",
   },
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Cliente desactivado</p></div>",
-    "options": {
-      "className": "toast-industrial-warning",
-      "progressClassName": "toast-industrial-progress-warning",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Cliente desactivado</p></div>",
+    "options": undefined,
     "toast": "warning",
   },
   {
@@ -2142,11 +1740,8 @@ exports[`repeticion de claves en un mismo montaje > dos claves distintas seguida
 exports[`repeticion de claves en un mismo montaje > el mismo render dos veces (modo estricto) muestra un solo toast 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Cliente guardado correctamente</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
+    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Cliente guardado correctamente</p></div>",
+    "options": undefined,
     "toast": "success",
   },
   {

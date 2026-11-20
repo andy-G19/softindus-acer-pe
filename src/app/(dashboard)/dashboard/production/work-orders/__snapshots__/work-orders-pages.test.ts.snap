@@ -1953,9 +1953,7 @@ exports[`/dashboard/production/work-orders > sin resultados > resultado 1`] = `
 <tr>
 <td colSpan="10">
 <div>
-<div>
 <p>Todavía no hay órdenes de trabajo registradas.</p>
-</div>
 </div>
 </td>
 </tr>
@@ -5562,9 +5560,7 @@ exports[`/dashboard/production/work-orders/[id] > sin receta ni requerimiento > 
 <tr>
 <td colSpan="8">
 <div>
-<div>
 <p>Esta orden no tiene materiales calculados.</p>
-</div>
 </div>
 </td>
 </tr>
@@ -7931,9 +7927,7 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 </div>
 <div>
 <div>
-<div>
 <p>Este avance todavía no tiene reasignaciones registradas.</p>
-</div>
 </div>
 </div>
 </div>

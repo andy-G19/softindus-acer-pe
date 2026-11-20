@@ -1736,9 +1736,7 @@ exports[`/dashboard/reports/suppliers-purchases > sin resultados > resultado 1`]
 </div>
 <div>
 <div>
-<div>
 <p>No se encontraron compras con los filtros aplicados.</p>
-</div>
 </div>
 <p>Se muestran como máximo 100 compras para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>

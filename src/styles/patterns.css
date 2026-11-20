@@ -32,35 +32,9 @@
     color: color-mix(in srgb, var(--destructive) 72%, var(--foreground) 28%);
   }
 
-  /* Las alertas llevan el borde comun (--border, de base.css), no el de su estado: el adaptador
-     le ganaba a ese color, y es lo que se veia (D101 de la 11.7c2). Mostrar el color del estado
-     es una decision de diseno aparte. */
-  .alert-state-success {
-    background-color: color-mix(in srgb, var(--success) 12%, transparent);
-    color: color-mix(in srgb, var(--success) 80%, var(--foreground) 20%);
-  }
-
-  .alert-state-success [data-slot="alert-description"] {
-    color: color-mix(in srgb, var(--success) 55%, var(--foreground) 45%);
-  }
-
-  .alert-state-warning {
-    background-color: color-mix(in srgb, var(--warning) 12%, transparent);
-    color: color-mix(in srgb, var(--warning) 80%, var(--foreground) 20%);
-  }
-
-  .alert-state-warning [data-slot="alert-description"] {
-    color: color-mix(in srgb, var(--warning) 55%, var(--foreground) 45%);
-  }
-
-  .alert-state-info {
-    background-color: color-mix(in srgb, var(--info) 12%, transparent);
-    color: color-mix(in srgb, var(--info) 78%, var(--foreground) 22%);
-  }
-
-  .alert-state-info [data-slot="alert-description"] {
-    color: color-mix(in srgb, var(--info) 55%, var(--foreground) 45%);
-  }
+  /* Los colores de las alertas por estado vivian aqui y su borde era el comun
+     (D101). Desde el diseno de mensajes y estados (2026-11-19) los declara Alert con tokens de
+     tokens.css, borde incluido. */
 
   .sidebar-nav-link {
     color: color-mix(in srgb, var(--foreground) 68%, transparent);

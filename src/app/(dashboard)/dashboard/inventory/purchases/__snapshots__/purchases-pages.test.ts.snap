@@ -700,9 +700,7 @@ exports[`/dashboard/inventory/purchases > rango invertido > resultado 1`] = `
 <tr>
 <td colSpan="8">
 <div>
-<div>
 <p>No se encontraron compras con los filtros aplicados.</p>
-</div>
 </div>
 </td>
 </tr>
@@ -1871,9 +1869,7 @@ exports[`/dashboard/inventory/purchases/[id] > pendiente y sin pagos > resultado
 <tr>
 <td colSpan="5">
 <div>
-<div>
 <p>Todavía no hay pagos registrados para esta compra.</p>
-</div>
 </div>
 </td>
 </tr>

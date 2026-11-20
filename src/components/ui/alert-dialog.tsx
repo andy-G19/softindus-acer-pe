@@ -7,8 +7,9 @@ import { cn } from "@/lib/utils"
 
 // Ventana de confirmacion (entrega 8) sobre el AlertDialog de Radix: atrapa el
 // foco, lo pone en Cancelar al abrir, cierra con Esc y lo devuelve al boton que
-// la abrio. El aspecto es el de las confirmaciones de SweetAlert2 (borde,
-// degradado card a popover, --shadow-dialog y el mismo velo).
+// la abrio. Aspecto del diseno de mensajes y estados (2026-11-19): tarjeta con
+// textura y borde de acero, radio de 14 px, relleno de 24, --shadow-dialog y el
+// mismo velo; el icono va arriba y todo alineado a la izquierda.
 //
 // Las animaciones de tw-animate-css no miran prefers-reduced-motion y sus
 // variantes data-open/data-closed van despues de motion-reduce en el CSS: por
@@ -45,7 +46,7 @@ function AlertDialogContent({ className, ...props }: React.ComponentProps<typeof
       <AlertDialogPrimitive.Content
         data-slot="alert-dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-(--z-overlay) grid max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-5 overflow-y-auto rounded-xl border border-border bg-linear-to-b from-card to-popover p-6 text-foreground shadow-dialog outline-none sm:max-w-md data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "fixed top-1/2 left-1/2 z-(--z-overlay) grid max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-3.5 overflow-y-auto rounded-xl border border-control-border bg-card bg-(image:--texture-metal) p-6 text-foreground shadow-dialog outline-none sm:max-w-[420px] data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           motionClasses,
           className
         )}
@@ -59,7 +60,7 @@ function AlertDialogHeader({ className, ...props }: React.ComponentProps<"div">)
   return (
     <div
       data-slot="alert-dialog-header"
-      className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
+      className={cn("flex flex-col items-start gap-3.5 text-left", className)}
       {...props}
     />
   )
@@ -71,7 +72,7 @@ function AlertDialogFooter({ className, ...props }: React.ComponentProps<"div">)
   return (
     <div
       data-slot="alert-dialog-footer"
-      className={cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)}
+      className={cn("mt-1 flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end", className)}
       {...props}
     />
   )
@@ -81,7 +82,7 @@ function AlertDialogTitle({ className, ...props }: React.ComponentProps<typeof A
   return (
     <AlertDialogPrimitive.Title
       data-slot="alert-dialog-title"
-      className={cn("font-heading text-lg font-semibold text-foreground", className)}
+      className={cn("text-base font-semibold text-foreground", className)}
       {...props}
     />
   )
@@ -91,7 +92,7 @@ function AlertDialogDescription({ className, ...props }: React.ComponentProps<ty
   return (
     <AlertDialogPrimitive.Description
       data-slot="alert-dialog-description"
-      className={cn("text-sm leading-relaxed text-muted-foreground", className)}
+      className={cn("text-[0.8125rem] leading-relaxed text-muted-foreground", className)}
       {...props}
     />
   )

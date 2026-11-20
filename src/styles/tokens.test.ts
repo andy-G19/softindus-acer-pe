@@ -120,6 +120,15 @@ describe("tokens", () => {
     expect(theme).toContain("--color-placeholder");
   });
 
+  it("las alertas tienen superficie, borde y texto por significado", () => {
+    for (const significado of ["info", "success", "warning"]) {
+      for (const parte of ["surface", "border", "foreground"]) {
+        expect(root).toContain(`--${significado}-${parte}`);
+        expect(theme).toContain(`--color-${significado}-${parte}`);
+      }
+    }
+  });
+
   it("el interruptor tiene su verde, su sombra y su curva", () => {
     expect(theme).toContain("--color-accent-forge");
     expect(root).toContain("--shadow-thumb");

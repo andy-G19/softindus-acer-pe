@@ -151,4 +151,354 @@
     outline: 2px solid var(--primary);
     outline-offset: 2px;
   }
+
+  /* Escena de la pantalla de error (ErrorState, D137): la imagen quieta del robot que suelda el
+     monitor con capas animadas en bucle encima. Las posiciones son porcentajes medidos sobre la
+     imagen (public/images/estados/robot-error.webp, 1671 x 941); si cambia la imagen, se miden
+     de nuevo. Sin boton de pausa por decision del responsable (riesgo de WCAG 2.2.2); con
+     reducir movimiento todo queda quieto. */
+  .error-scene {
+    position: relative;
+    width: min(560px, 100%);
+    aspect-ratio: 1671 / 941;
+    margin: 0 auto 2px;
+    isolation: isolate;
+  }
+
+  .error-scene-float {
+    position: absolute;
+    inset: 0;
+    animation: error-scene-float var(--motion-temper) ease-in-out infinite;
+  }
+
+  .error-scene-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+    mask-image:
+      linear-gradient(to right, transparent 0%, black 9%, black 91%, transparent 100%),
+      linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%);
+    mask-composite: intersect;
+  }
+
+  .error-scene-screen {
+    position: absolute;
+    left: 19.45%;
+    top: 20.2%;
+    width: 31.1%;
+    height: 43.6%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .error-scene-scan {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 22%;
+    background: linear-gradient(
+      transparent,
+      color-mix(in oklch, var(--destructive-outline) 24%, transparent),
+      transparent
+    );
+    animation: error-scene-scan var(--motion-scene) linear infinite;
+  }
+
+  .error-scene-flicker {
+    position: absolute;
+    inset: 0;
+    background-color: var(--background);
+    opacity: 0;
+    animation: error-scene-flicker var(--motion-scene) linear infinite;
+  }
+
+  .error-scene-alert {
+    position: absolute;
+    left: 54.2%;
+    top: 12.2%;
+    width: 7.3%;
+    height: 11.7%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in oklch, var(--destructive-outline) 45%, transparent),
+      transparent 70%
+    );
+    pointer-events: none;
+    animation: error-scene-alert var(--motion-spark) ease-in-out infinite;
+  }
+
+  .error-scene-led {
+    position: absolute;
+    left: 51.4%;
+    top: 66.1%;
+    width: 1.2%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: var(--destructive-outline);
+    box-shadow: 0 0 6px color-mix(in oklch, var(--destructive-outline) 70%, transparent);
+    pointer-events: none;
+    animation: error-scene-led var(--motion-blink) ease-in-out infinite;
+  }
+
+  .error-scene-visor {
+    position: absolute;
+    left: 66.7%;
+    top: 34.5%;
+    width: 9.6%;
+    height: 10.6%;
+    border-radius: 30%;
+    background: radial-gradient(
+      ellipse,
+      color-mix(in oklch, var(--info-foreground) 35%, transparent),
+      transparent 70%
+    );
+    pointer-events: none;
+    animation: error-scene-visor var(--motion-temper) ease-in-out infinite;
+  }
+
+  .error-scene-smoke {
+    position: absolute;
+    width: 4%;
+    height: 9%;
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse,
+      color-mix(in srgb, var(--muted-foreground) 35%, transparent),
+      transparent 70%
+    );
+    filter: blur(3px);
+    opacity: 0;
+    pointer-events: none;
+    animation: error-scene-smoke var(--motion-scene) ease-out infinite;
+  }
+
+  .error-scene-smoke-monitor {
+    left: 9.6%;
+    top: 38%;
+  }
+
+  .error-scene-smoke-torch {
+    left: 55.5%;
+    top: 37%;
+    animation-delay: calc(var(--motion-scene) / -2);
+  }
+
+  .error-scene-glow {
+    position: absolute;
+    left: 56.67%;
+    top: 53.45%;
+    width: 9%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in oklch, var(--accent-ember) 32%, transparent),
+      transparent 66%
+    );
+    filter: blur(2px);
+    pointer-events: none;
+    animation: error-scene-glow var(--motion-spark) infinite;
+  }
+
+  .error-scene-spark {
+    position: absolute;
+    left: 56.67%;
+    top: 53.45%;
+    width: 6%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    filter: drop-shadow(0 0 3px color-mix(in oklch, var(--accent-ember) 75%, transparent));
+    pointer-events: none;
+    animation: error-scene-spark var(--motion-spark) ease-out infinite;
+  }
+
+  .error-scene-spark path {
+    stroke: var(--accent-ember);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+  }
+
+  .error-scene-particle {
+    position: absolute;
+    left: 56.67%;
+    top: 53.45%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--accent-ember);
+    box-shadow: 0 0 4px var(--accent-ember);
+    opacity: 0;
+    pointer-events: none;
+    rotate: -40deg;
+    animation: error-scene-particle var(--motion-spark) ease-out infinite;
+  }
+
+  /* Cada chispa sale en su direccion: rotate se aplica antes que transform, asi que la
+     animacion la mueve hacia arriba en su propio eje girado. */
+  .error-scene-particle:nth-of-type(2) {
+    rotate: 60deg;
+    animation-delay: 60ms;
+  }
+
+  .error-scene-particle:nth-of-type(3) {
+    rotate: 165deg;
+    animation-delay: 120ms;
+  }
+
+  @keyframes error-scene-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
+  }
+
+  @keyframes error-scene-scan {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(460%);
+    }
+  }
+
+  /* Dos caidas de brillo leves por ciclo de 4 s: muy por debajo de 3 destellos por segundo. */
+  @keyframes error-scene-flicker {
+    0%,
+    86%,
+    90%,
+    95%,
+    100% {
+      opacity: 0;
+    }
+    88% {
+      opacity: 0.2;
+    }
+    93% {
+      opacity: 0.14;
+    }
+  }
+
+  @keyframes error-scene-alert {
+    0%,
+    100% {
+      opacity: 0.15;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  @keyframes error-scene-led {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  @keyframes error-scene-visor {
+    0%,
+    100% {
+      opacity: 0.2;
+    }
+    50% {
+      opacity: 0.55;
+    }
+  }
+
+  @keyframes error-scene-smoke {
+    0% {
+      opacity: 0;
+      transform: translateY(0) scale(0.6);
+    }
+    25% {
+      opacity: 0.55;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-70%) scale(1.4);
+    }
+  }
+
+  @keyframes error-scene-glow {
+    0%,
+    12%,
+    40%,
+    100% {
+      opacity: 0.05;
+      transform: scale(0.7);
+    }
+    18%,
+    29% {
+      opacity: 0.85;
+      transform: scale(1.25);
+    }
+  }
+
+  @keyframes error-scene-spark {
+    0%,
+    12%,
+    33%,
+    100% {
+      opacity: 0;
+      transform: scale(0.58) rotate(-10deg);
+    }
+    18%,
+    25% {
+      opacity: 1;
+      transform: scale(1.06) rotate(5deg);
+    }
+  }
+
+  @keyframes error-scene-particle {
+    0%,
+    15% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    20% {
+      opacity: 1;
+    }
+    45%,
+    100% {
+      opacity: 0;
+      transform: translateY(-22px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .error-scene-float,
+    .error-scene-scan,
+    .error-scene-flicker,
+    .error-scene-alert,
+    .error-scene-led,
+    .error-scene-visor,
+    .error-scene-smoke,
+    .error-scene-glow,
+    .error-scene-spark,
+    .error-scene-particle {
+      animation: none;
+    }
+
+    .error-scene-scan,
+    .error-scene-flicker,
+    .error-scene-smoke,
+    .error-scene-spark,
+    .error-scene-particle {
+      opacity: 0;
+    }
+
+    .error-scene-glow {
+      opacity: 0.4;
+    }
+  }
 }

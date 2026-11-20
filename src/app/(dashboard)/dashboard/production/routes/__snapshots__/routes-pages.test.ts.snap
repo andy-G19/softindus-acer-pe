@@ -1771,9 +1771,7 @@ exports[`/dashboard/production/routes/[id]/stages > ruta sin etapas > resultado 
 <tr>
 <td colSpan="9">
 <div>
-<div>
 <p>Esta ruta todavía no tiene etapas registradas.</p>
-</div>
 </div>
 </td>
 </tr>

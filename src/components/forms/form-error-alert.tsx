@@ -1,5 +1,6 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import type { FieldErrors } from "@/lib/errors";
+import { cn } from "@/lib/utils";
 
 /** Lo que dice la alerta cuando su mensaje ya esta bajo un campo (D111 de la 11.7d2). */
 export const REPEATED_FIELD_MESSAGE = "Revisa los campos marcados.";
@@ -31,8 +32,20 @@ export function FormErrorAlert({ state, className }: FormErrorAlertProps) {
   );
 
   return (
-    <Alert variant="destructive" role="alert" aria-live="polite" className={className}>
-      <AlertDescription>{repeatsAField ? REPEATED_FIELD_MESSAGE : state.error}</AlertDescription>
+    // Diseno de mensajes y estados: un bloque granate mas compacto que la alerta, con el texto
+    // rosado entero (no al 85 %) y en medio peso.
+    <Alert
+      variant="destructive"
+      role="alert"
+      aria-live="polite"
+      className={cn(
+        "rounded-md px-4 py-3 *:data-[slot=alert-description]:text-destructive-foreground",
+        className,
+      )}
+    >
+      <AlertDescription className="font-medium">
+        {repeatsAField ? REPEATED_FIELD_MESSAGE : state.error}
+      </AlertDescription>
     </Alert>
   );
 }

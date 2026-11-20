@@ -472,9 +472,7 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 <tr>
 <td colSpan="9">
 <div>
-<div>
 <p>No se encontraron pagos con los filtros aplicados.</p>
-</div>
 </div>
 </td>
 </tr>

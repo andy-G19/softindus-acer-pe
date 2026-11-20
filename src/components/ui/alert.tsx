@@ -3,17 +3,22 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
+// Alertas (propuesta del responsable, 2026-11-19): un color por significado, con su superficie,
+// su borde y su texto (cierra D101: antes todas tenian el borde gris comun y sus colores vivian en
+// patterns.css). El icono y el titulo toman el color del significado; el texto queda atenuado.
 const alertVariants = cva(
-  "group/alert relative grid w-full gap-0.5 rounded-lg border px-2.5 py-2 text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4",
+  "group/alert relative grid w-full gap-0.5 rounded-lg border px-4 py-3.5 text-left text-sm text-foreground has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-3 *:[svg]:row-span-2 *:[svg]:translate-y-px *:[svg:not([class*='size-'])]:size-5",
   {
     variants: {
       variant: {
-        default: "bg-card text-card-foreground",
+        default: "border-border bg-accent",
         destructive:
-          "bg-destructive/10 text-destructive-foreground *:data-[slot=alert-description]:text-destructive-foreground/90 *:[svg]:text-current",
-        success: "alert-state-success *:[svg]:text-current",
-        warning: "alert-state-warning *:[svg]:text-current",
-        info: "alert-state-info *:[svg]:text-current",
+          "border-destructive-border bg-destructive-surface *:[svg]:text-destructive-foreground *:data-[slot=alert-title]:text-destructive-foreground *:data-[slot=alert-description]:text-destructive-foreground/85",
+        success:
+          "border-success-border bg-success-surface *:[svg]:text-success-foreground *:data-[slot=alert-title]:text-success-foreground",
+        warning:
+          "border-warning-border bg-warning-surface *:[svg]:text-warning-foreground *:data-[slot=alert-title]:text-warning-foreground",
+        info: "border-info-border bg-info-surface *:[svg]:text-info-foreground *:data-[slot=alert-title]:text-info-foreground",
       },
     },
     defaultVariants: {
@@ -42,7 +47,7 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="alert-title"
       className={cn(
-        "font-medium group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground",
+        "text-sm font-semibold group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground",
         className
       )}
       {...props}
@@ -58,7 +63,7 @@ function AlertDescription({
     <div
       data-slot="alert-description"
       className={cn(
-        "text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
+        "text-[0.8125rem] text-balance text-muted-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
         className
       )}
       {...props}

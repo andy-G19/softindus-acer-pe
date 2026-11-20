@@ -1147,9 +1147,7 @@ exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 <tr>
 <td colSpan="11">
 <div>
-<div>
 <p>No se encontraron materiales con los filtros aplicados.</p>
-</div>
 </div>
 </td>
 </tr>

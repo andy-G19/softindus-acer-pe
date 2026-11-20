@@ -57,7 +57,6 @@
   --color-destructive-outline: var(--destructive-outline);
   --color-destructive-surface: var(--destructive-surface);
   --color-shell: var(--shell);
-  --color-surface-dashed: var(--surface-dashed);
   --color-primary-hover: var(--primary-hover);
   --color-primary-active: var(--primary-active);
   --color-secondary-hover: var(--secondary-hover);
@@ -77,6 +76,15 @@
   --color-accent-copper: var(--accent-copper);
   --color-accent-forge: var(--accent-forge);
   --shadow-thumb: var(--shadow-thumb);
+  --color-info-surface: var(--info-surface);
+  --color-info-border: var(--info-border);
+  --color-info-foreground: var(--info-foreground);
+  --color-success-surface: var(--success-surface);
+  --color-success-border: var(--success-border);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning-surface: var(--warning-surface);
+  --color-warning-border: var(--warning-border);
+  --color-warning-foreground: var(--warning-foreground);
   --color-readonly-foreground: var(--readonly-foreground);
   --shadow-button: var(--shadow-button);
   --shadow-raised: var(--shadow-raised);
@@ -140,9 +148,6 @@
 
   /* Superficies y textos propios de la identidad. */
   --shell: #0f1011;
-  /* Fondo de los bloques punteados (EmptyState, LoadingState): la tarjeta al 78 %,
-     mezclada en sRGB como la regla del adaptador a la que reemplaza (11.7c2). */
-  --surface-dashed: color-mix(in srgb, var(--card) 78%, transparent);
 
   /* Botones (propuesta del responsable, 2026-11-19). Cada estado de cada variante tiene su
      token; los valores son los de la propuesta. El cobre de la variante clear reemplaza al
@@ -169,6 +174,19 @@
   --readonly-border: color-mix(in srgb, var(--accent-steel) 45%, transparent);
   /* Chip «Solo lectura»: acero claro, 6,9:1 a 10 px (el acero de marca da 3,5:1). */
   --readonly-foreground: #86a3cd;
+
+  /* Alertas y avisos (propuesta de mensajes y estados, 2026-11-19): superficie al 14 % y borde
+     al 40 % del color de su significado, y un texto mas claro que el tono base para 4,5:1 sobre
+     esa superficie (titulo e icono). La advertencia usa la brasa tal cual (5,6:1). */
+  --info-surface: color-mix(in srgb, var(--info) 14%, transparent);
+  --info-border: color-mix(in srgb, var(--info) 40%, transparent);
+  --info-foreground: #a9c4ec;
+  --success-surface: color-mix(in srgb, var(--success) 14%, transparent);
+  --success-border: color-mix(in srgb, var(--success) 40%, transparent);
+  --success-foreground: #7fd99a;
+  --warning-surface: color-mix(in srgb, var(--warning) 14%, transparent);
+  --warning-border: color-mix(in srgb, var(--warning) 40%, transparent);
+  --warning-foreground: var(--warning);
   --texture-metal: repeating-linear-gradient(
     135deg,
     var(--metal-brush) 0px,
@@ -189,7 +207,9 @@
   --shadow-menu: 0 18px 42px rgba(0, 0, 0, 0.35);
   --shadow-sidebar: 8px 0 32px rgba(0, 0, 0, 0.45);
   --shadow-hairline: 0 0 0 1px rgba(255, 255, 255, 0.08);
-  --shadow-toast: 0 24px 60px -28px rgba(0, 0, 0, 0.75);
+  /* Aviso temporal (propuesta de mensajes y estados): hasta ese diseno no se aplicaba nunca,
+     porque el CSS de toastify le ganaba al adaptador. */
+  --shadow-toast: 0 18px 42px rgba(0, 0, 0, 0.45);
   --shadow-dialog: 0 34px 90px -34px rgba(0, 0, 0, 0.85);
   --shadow-login: 0 40px 80px -30px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.2);
 
@@ -219,5 +239,10 @@
   /* Curva que frena al final, para que el interruptor se asiente (propuesta de los campos). */
   --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
   --motion-temper: 6s;
+  /* Escena de la pantalla de error (D137): barrido y humo, destellos de la antorcha y el
+     parpadeo del LED (un ciclo por segundo: nada parpadea mas de 3 veces por segundo). */
+  --motion-scene: 4s;
+  --motion-spark: 3s;
+  --motion-blink: 1s;
 }
 

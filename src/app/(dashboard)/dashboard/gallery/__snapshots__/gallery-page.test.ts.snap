@@ -1005,9 +1005,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figcaption>Vacío</figcaption>
 <div>
 <div>
-<div>
 <p>No se encontraron clientes con los filtros aplicados.</p>
-</div>
 </div>
 </div>
 </figure>
@@ -1018,11 +1016,11 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span>
 <svg/>
 </span>
-<div>
 <p>Todavía no hay materiales</p>
 <p>Registra el primero para empezar a controlar su stock.</p>
-</div>
+<div>
 <button data-variant="default" type="button">Nuevo material</button>
+</div>
 </div>
 </div>
 </figure>
@@ -1031,17 +1029,45 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figcaption>Error de pantalla</figcaption>
 <div>
 <section>
+<div aria-hidden="true">
+<div>
+<img alt="" loading="lazy" width="1671" height="941" decoding="async" data-nimg="1" sizes="(max-width: 640px) 100vw, 560px" srcSet="/_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=640&amp;q=75 640w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=750&amp;q=75 750w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=828&amp;q=75 828w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=3840&amp;q=75 3840w" src="/_next/image?url=%2Fimages%2Festados%2Frobot-error.webp&amp;w=3840&amp;q=75"/>
+<div>
+<div>
+</div>
+<div>
+</div>
+</div>
+<div>
+</div>
+<div>
+</div>
+<div>
+</div>
+<div>
+</div>
+<div>
+</div>
+<div>
+</div>
+<svg/>
+<span>
+</span>
+<span>
+</span>
+<span>
+</span>
+</div>
 <span>
 <svg/>
 </span>
-<div>
+</div>
 <h1>No se pudo cargar la información</h1>
 <p>Ocurrió un problema al consultar los datos. Intenta de nuevo en unos segundos.</p>
-</div>
-<div>
-<p>Detalle técnico:</p>
+<details>
+<summary>Detalle técnico</summary>
 <p>Ejemplo de la galería: tiempo de espera agotado.</p>
-</div>
+</details>
 <div>
 <button data-variant="outline" type="button">Reintentar</button>
 </div>
@@ -1638,9 +1664,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <tr>
 <td colSpan="2">
 <div>
-<div>
 <p>No se encontraron clientes con los filtros aplicados.</p>
-</div>
 </div>
 </td>
 </tr>

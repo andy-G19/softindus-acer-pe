@@ -472,9 +472,7 @@ exports[`/dashboard/production/recipes > sin recetas > resultado 1`] = `
 <tr>
 <td colSpan="9">
 <div>
-<div>
 <p>Todavía no hay recetas técnicas registradas.</p>
-</div>
 </div>
 </td>
 </tr>
@@ -1549,9 +1547,7 @@ exports[`/dashboard/production/recipes/[id]/versions > sin versiones > resultado
 <tr>
 <td colSpan="9">
 <div>
-<div>
 <p>Todavía no hay versiones registradas para esta receta.</p>
-</div>
 </div>
 </td>
 </tr>

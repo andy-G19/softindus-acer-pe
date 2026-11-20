@@ -1382,11 +1382,11 @@ exports[`/dashboard/maintenance/repairs/new > sin fallas abiertas > resultado 1`
 </div>
 <div>
 <div>
-<div>
 <p>No hay fallas pendientes o en atencion.</p>
 <p>Primero registra una falla para poder asociarle una reparacion.</p>
-</div>
+<div>
 <a data-variant="default" href="/dashboard/maintenance/failures/new">Registrar falla</a>
+</div>
 </div>
 </div>
 </div>

@@ -663,9 +663,7 @@ exports[`/dashboard/inventory/entries > rango invertido > resultado 1`] = `
 <tr>
 <td colSpan="8">
 <div>
-<div>
 <p>No se encontraron entradas con los filtros aplicados.</p>
-</div>
 </div>
 </td>
 </tr>

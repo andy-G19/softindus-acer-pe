@@ -1461,9 +1461,7 @@ exports[`/dashboard/reports/inventory > sin resultados > resultado 1`] = `
 </div>
 <div>
 <div>
-<div>
 <p>No se encontraron movimientos de inventario con los filtros aplicados.</p>
-</div>
 </div>
 <p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. La exportación a Excel incluye hasta 1.000 filas con los mismos filtros.</p>
 </div>
