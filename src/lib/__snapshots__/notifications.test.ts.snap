@@ -3,7 +3,7 @@
 exports[`toasts > escapa el HTML del mensaje y de la descripcion 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Error &lt;b&gt;grave&lt;/b&gt; &amp; total</p><p class="text-xs leading-relaxed text-muted-foreground">&lt;img src=x onerror=alert(1)&gt;</p></div>",
+    "html": "<div class="flex min-w-0 flex-1 flex-col gap-0.5 pt-px"><p class="text-[0.84375rem] leading-[18px] font-semibold">Error &lt;b&gt;grave&lt;/b&gt; &amp; total</p><p class="text-xs leading-[17px] text-muted-foreground">&lt;img src=x onerror=alert(1)&gt;</p></div>",
     "options": undefined,
     "toast": "error",
   },
@@ -13,7 +13,7 @@ exports[`toasts > escapa el HTML del mensaje y de la descripcion 1`] = `
 exports[`toasts > showError con mensaje y descripcion 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Mensaje de prueba</p><p class="text-xs leading-relaxed text-muted-foreground">Descripcion de prueba</p></div>",
+    "html": "<div class="flex min-w-0 flex-1 flex-col gap-0.5 pt-px"><p class="text-[0.84375rem] leading-[18px] font-semibold">Mensaje de prueba</p><p class="text-xs leading-[17px] text-muted-foreground">Descripcion de prueba</p></div>",
     "options": undefined,
     "toast": "error",
   },
@@ -23,7 +23,7 @@ exports[`toasts > showError con mensaje y descripcion 1`] = `
 exports[`toasts > showError solo con mensaje 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Mensaje de prueba</p></div>",
+    "html": "<div class="flex min-w-0 flex-1 flex-col gap-0.5 pt-px"><p class="text-[0.84375rem] leading-[18px] font-semibold">Mensaje de prueba</p></div>",
     "options": undefined,
     "toast": "error",
   },
@@ -33,7 +33,7 @@ exports[`toasts > showError solo con mensaje 1`] = `
 exports[`toasts > showInfo con mensaje y descripcion 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Mensaje de prueba</p><p class="text-xs leading-relaxed text-muted-foreground">Descripcion de prueba</p></div>",
+    "html": "<div class="flex min-w-0 flex-1 flex-col gap-0.5 pt-px"><p class="text-[0.84375rem] leading-[18px] font-semibold">Mensaje de prueba</p><p class="text-xs leading-[17px] text-muted-foreground">Descripcion de prueba</p></div>",
     "options": undefined,
     "toast": "info",
   },
@@ -43,7 +43,7 @@ exports[`toasts > showInfo con mensaje y descripcion 1`] = `
 exports[`toasts > showInfo solo con mensaje 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Mensaje de prueba</p></div>",
+    "html": "<div class="flex min-w-0 flex-1 flex-col gap-0.5 pt-px"><p class="text-[0.84375rem] leading-[18px] font-semibold">Mensaje de prueba</p></div>",
     "options": undefined,
     "toast": "info",
   },
@@ -53,7 +53,7 @@ exports[`toasts > showInfo solo con mensaje 1`] = `
 exports[`toasts > showSuccess con mensaje y descripcion 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Mensaje de prueba</p><p class="text-xs leading-relaxed text-muted-foreground">Descripcion de prueba</p></div>",
+    "html": "<div class="flex min-w-0 flex-1 flex-col gap-0.5 pt-px"><p class="text-[0.84375rem] leading-[18px] font-semibold">Mensaje de prueba</p><p class="text-xs leading-[17px] text-muted-foreground">Descripcion de prueba</p></div>",
     "options": undefined,
     "toast": "success",
   },
@@ -63,7 +63,7 @@ exports[`toasts > showSuccess con mensaje y descripcion 1`] = `
 exports[`toasts > showSuccess solo con mensaje 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Mensaje de prueba</p></div>",
+    "html": "<div class="flex min-w-0 flex-1 flex-col gap-0.5 pt-px"><p class="text-[0.84375rem] leading-[18px] font-semibold">Mensaje de prueba</p></div>",
     "options": undefined,
     "toast": "success",
   },
@@ -73,7 +73,7 @@ exports[`toasts > showSuccess solo con mensaje 1`] = `
 exports[`toasts > showWarning con mensaje y descripcion 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Mensaje de prueba</p><p class="text-xs leading-relaxed text-muted-foreground">Descripcion de prueba</p></div>",
+    "html": "<div class="flex min-w-0 flex-1 flex-col gap-0.5 pt-px"><p class="text-[0.84375rem] leading-[18px] font-semibold">Mensaje de prueba</p><p class="text-xs leading-[17px] text-muted-foreground">Descripcion de prueba</p></div>",
     "options": undefined,
     "toast": "warning",
   },
@@ -83,7 +83,7 @@ exports[`toasts > showWarning con mensaje y descripcion 1`] = `
 exports[`toasts > showWarning solo con mensaje 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">Mensaje de prueba</p></div>",
+    "html": "<div class="flex min-w-0 flex-1 flex-col gap-0.5 pt-px"><p class="text-[0.84375rem] leading-[18px] font-semibold">Mensaje de prueba</p></div>",
     "options": undefined,
     "toast": "warning",
   },
@@ -93,7 +93,7 @@ exports[`toasts > showWarning solo con mensaje 1`] = `
 exports[`toasts > una descripcion vacia no agrega el segundo parrafo 1`] = `
 [
   {
-    "html": "<div class="space-y-1"><p class="text-[0.8125rem] font-medium">No se pudo iniciar sesion</p></div>",
+    "html": "<div class="flex min-w-0 flex-1 flex-col gap-0.5 pt-px"><p class="text-[0.84375rem] leading-[18px] font-semibold">No se pudo iniciar sesion</p></div>",
     "options": undefined,
     "toast": "error",
   },

@@ -3,6 +3,8 @@
 import { cssTransition, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { ToastIcon } from "@/components/notifications/toast-icon";
+
 // Entrada y salida del diseno de mensajes y estados: las animaciones viven en
 // src/styles/adapters/toastify.css con estos nombres de clase.
 const toastTransition = cssTransition({
@@ -23,6 +25,7 @@ export function NotificationProvider() {
       theme="dark"
       limit={4}
       transition={toastTransition}
+      icon={ToastIcon}
     />
   );
 }

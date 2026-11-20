@@ -45,12 +45,8 @@ describe("adaptador de toastify", () => {
       ["--toastify-toast-bd-radius", "var(--radius-lg)"],
       ["--toastify-toast-shadow", "var(--shadow-toast)"],
       ["--toastify-font-family", "var(--font-sans)"],
-      ["--toastify-icon-color-success", "var(--success-foreground)"],
-      ["--toastify-icon-color-error", "var(--destructive-foreground)"],
-      ["--toastify-icon-color-warning", "var(--warning-foreground)"],
-      ["--toastify-icon-color-info", "var(--info-foreground)"],
       ["--toastify-color-progress-success", "var(--success)"],
-      ["--toastify-color-progress-error", "var(--destructive)"],
+      ["--toastify-color-progress-error", "var(--destructive-outline)"],
       ["--toastify-color-progress-warning", "var(--warning)"],
       ["--toastify-color-progress-info", "var(--info)"],
     ] as const) {
@@ -71,5 +67,64 @@ describe("adaptador de toastify", () => {
     const reducido = ADAPTER.slice(ADAPTER.indexOf("prefers-reduced-motion"));
     expect(reducido).toMatch(/animation-duration:\s*1ms/);
     expect(reducido).not.toMatch(/animation:\s*none/);
+  });
+});
+
+// Avisos con la propuesta «Estados (mensajes temporales)» del responsable (2026-11-20). En staging
+// el icono quedaba centrado contra el bloque de texto (entre el titulo y la descripcion), pegado al
+// texto, y la X iba posicionada encima del aviso: las reglas del cuerpo apuntaban a
+// .Toastify__toast-body, que toastify 11 ya no crea. Ahora el aviso mismo es la fila: insignia de
+// 28 px con el color del tipo, texto y X, alineados arriba; barra de 3 px sobre un riel gris.
+describe("avisos con la propuesta de mensajes temporales", () => {
+  it("no quedan reglas para .Toastify__toast-body, que toastify 11 no crea", () => {
+    expect(ADAPTER).not.toContain("Toastify__toast-body");
+  });
+
+  it("el aviso mide 360 px con relleno 14 16 17 y es una fila alineada arriba con 12 px entre piezas", () => {
+    const variables = declaracionesDe(".Toastify");
+    const aviso = declaracionesDe(".Toastify .Toastify__toast");
+
+    expect(variables).toMatch(/--toastify-toast-width:\s*360px/);
+    expect(variables).toMatch(/--toastify-toast-padding:\s*14px 16px 17px/);
+    expect(aviso).toMatch(/align-items:\s*flex-start/);
+    expect(aviso).toMatch(/gap:\s*12px/);
+    expect(aviso).toMatch(/overflow:\s*hidden/);
+  });
+
+  it("el icono es una insignia redonda de 28 px con el color de cada tipo", () => {
+    const insignia = declaracionesDe(".Toastify .Toastify__toast-icon");
+
+    expect(insignia).toMatch(/width:\s*28px/);
+    expect(insignia).toMatch(/height:\s*28px/);
+    expect(insignia).toMatch(/border-radius:\s*999px/);
+    expect(insignia).toMatch(/color:\s*var\(--foreground\)/);
+    expect(insignia).toMatch(/margin:\s*0/);
+    for (const [tipo, color] of [
+      ["success", "--success"],
+      ["error", "--destructive-outline"],
+      ["warning", "--warning"],
+      ["info", "--info"],
+    ] as const) {
+      expect(declaracionesDe(`.Toastify .Toastify__toast--${tipo} .Toastify__toast-icon`)).toMatch(
+        new RegExp(`background-color:\\s*var\\(${color}\\)`),
+      );
+    }
+    expect(declaracionesDe(".Toastify .Toastify__toast-icon svg")).toMatch(/width:\s*15px/);
+  });
+
+  it("la X es una pieza de la fila, arriba, y no se posiciona encima del texto", () => {
+    const cerrar = declaracionesDe(".Toastify .Toastify__close-button");
+
+    expect(cerrar).toMatch(/position:\s*static/);
+    expect(cerrar).toMatch(/align-self:\s*flex-start/);
+    expect(cerrar).toMatch(/flex-shrink:\s*0/);
+  });
+
+  it("la barra mide 3 px, va opaca y corre sobre un riel gris", () => {
+    expect(declaracionesDe(".Toastify .Toastify__progress-bar--wrp")).toMatch(/height:\s*3px/);
+    expect(declaracionesDe(".Toastify .Toastify__progress-bar")).toMatch(/opacity:\s*1/);
+    const riel = declaracionesDe(".Toastify .Toastify__progress-bar--bg");
+    expect(riel).toMatch(/background:\s*var\(--border\)/);
+    expect(riel).toMatch(/opacity:\s*1/);
   });
 });
