@@ -143,7 +143,7 @@ exports[`/dashboard/waste-scrap > administrador > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Mermas y chatarra</span>
 </li>
 </ol>
@@ -554,7 +554,7 @@ exports[`/dashboard/waste-scrap > maestro de taller > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Mermas y chatarra</span>
 </li>
 </ol>

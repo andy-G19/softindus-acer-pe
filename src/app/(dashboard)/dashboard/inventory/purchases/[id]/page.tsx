@@ -209,7 +209,7 @@ export default async function PurchaseDetailPage({
 
                 return (
                   <TableRow key={detail.id_detalle_compra}>
-                    <TableCell className="font-medium">
+                    <TableCell data-cell="text" className="font-medium">
                       {material?.nombre_material ?? detail.id_material}
                     </TableCell>
                     <TableCell>

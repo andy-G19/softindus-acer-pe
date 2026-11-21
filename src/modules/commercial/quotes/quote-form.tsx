@@ -229,7 +229,7 @@ export function QuoteForm({ action, orders, defaultOrderId, successNotification,
               <TableBody>
                 {selectedOrder.productos.map((item) => (
                   <TableRow key={item.id_detalle_pedido}>
-                    <TableCell>{item.producto}</TableCell>
+                    <TableCell data-cell="text">{item.producto}</TableCell>
                     <TableCell>{Number(item.cantidad).toFixed(2)}</TableCell>
                     <TableCell>{formatMoney(item.precio_unitario)}</TableCell>
                     <TableCell>{formatMoney(item.subtotal)}</TableCell>

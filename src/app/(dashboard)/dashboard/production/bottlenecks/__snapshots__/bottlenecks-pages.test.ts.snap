@@ -100,11 +100,11 @@ exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Cuellos de botella</span>
 </li>
 </ol>
@@ -296,7 +296,7 @@ exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
 </thead>
 <tbody>
 <tr>
-<td>nombre_etapa-1</td>
+<td data-cell="text">nombre_etapa-1</td>
 <td>1</td>
 <td>1</td>
 <td>0</td>
@@ -307,7 +307,7 @@ exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
 </td>
 </tr>
 <tr>
-<td>nombre_etapa-2</td>
+<td data-cell="text">nombre_etapa-2</td>
 <td>1</td>
 <td>0</td>
 <td>0</td>
@@ -479,11 +479,11 @@ exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Cuellos de botella</span>
 </li>
 </ol>
@@ -675,7 +675,7 @@ exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
 </thead>
 <tbody>
 <tr>
-<td>nombre_etapa-1</td>
+<td data-cell="text">nombre_etapa-1</td>
 <td>1</td>
 <td>1</td>
 <td>0</td>
@@ -686,7 +686,7 @@ exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
 </td>
 </tr>
 <tr>
-<td>nombre_etapa-2</td>
+<td data-cell="text">nombre_etapa-2</td>
 <td>1</td>
 <td>0</td>
 <td>0</td>
@@ -877,11 +877,11 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] =
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Cuellos de botella</span>
 </li>
 </ol>
@@ -1076,7 +1076,7 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] =
 </thead>
 <tbody>
 <tr>
-<td>nombre_etapa-1</td>
+<td data-cell="text">nombre_etapa-1</td>
 <td>1</td>
 <td>1</td>
 <td>0</td>
@@ -1087,7 +1087,7 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] =
 </td>
 </tr>
 <tr>
-<td>nombre_etapa-2</td>
+<td data-cell="text">nombre_etapa-2</td>
 <td>1</td>
 <td>0</td>
 <td>0</td>

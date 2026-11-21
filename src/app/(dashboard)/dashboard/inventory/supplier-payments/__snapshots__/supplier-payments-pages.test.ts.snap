@@ -89,11 +89,11 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos a proveedores</span>
 </li>
 </ol>
@@ -227,8 +227,10 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > resultado 
 <div>
 <p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/inventory/supplier-payments?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-payments?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -327,11 +329,11 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > resultado 1`
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos a proveedores</span>
 </li>
 </ol>
@@ -446,8 +448,10 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > resultado 1`
 <div>
 <p>Mostrando 0-0 de 0 pagos · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>",
@@ -528,11 +532,11 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > resultado 1`] = 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos a proveedores</span>
 </li>
 </ol>
@@ -666,8 +670,10 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > resultado 1`] = 
 <div>
 <p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/inventory/supplier-payments?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-payments?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -846,11 +852,11 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos a proveedores</span>
 </li>
 </ol>
@@ -984,8 +990,10 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > resultado 
 <div>
 <p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/inventory/supplier-payments?q=F001&amp;supplier=PRV00000001&amp;purchase=COM00000001&amp;method=transferencia&amp;status=pagado&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-payments?q=F001&amp;supplier=PRV00000001&amp;purchase=COM00000001&amp;method=transferencia&amp;status=pagado&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",

@@ -106,11 +106,11 @@ exports[`/dashboard/maintenance/machines > filtros y maestro de taller > resulta
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Máquinas</span>
 </li>
 </ol>
@@ -384,11 +384,11 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Máquinas</span>
 </li>
 </ol>
@@ -564,7 +564,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/machines/id_maquina-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/machines/id_maquina-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -585,7 +585,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/machines/id_maquina-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/machines/id_maquina-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -678,11 +678,11 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Máquinas</span>
 </li>
 </ol>
@@ -858,7 +858,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000001/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/machines/MAQ00000001/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -879,7 +879,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000002/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/machines/MAQ00000002/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -900,7 +900,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000003/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/machines/MAQ00000003/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -921,7 +921,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000004/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/machines/MAQ00000004/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
 <button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
@@ -965,15 +965,15 @@ exports[`/dashboard/maintenance/machines/[id]/edit > editar con regreso al lista
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance/machines?status=operativa">Máquinas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar máquina</span>
 </li>
 </ol>
@@ -1112,15 +1112,15 @@ exports[`/dashboard/maintenance/machines/new > con regreso al listado filtrado >
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance/machines?type=prensa">Máquinas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva máquina</span>
 </li>
 </ol>
@@ -1233,15 +1233,15 @@ exports[`/dashboard/maintenance/machines/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance/machines">Máquinas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva máquina</span>
 </li>
 </ol>

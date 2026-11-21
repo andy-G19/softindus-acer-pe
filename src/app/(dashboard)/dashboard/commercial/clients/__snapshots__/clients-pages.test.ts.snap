@@ -9,15 +9,15 @@ exports[`alta de cliente > muestra el formulario vacio sin consultar Prisma y vu
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/clients">Clientes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo cliente</span>
 </li>
 </ol>
@@ -116,15 +116,15 @@ exports[`edicion de cliente > consulta el cliente y muestra el formulario con el
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/clients?q=andina&amp;page=2">Clientes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar cliente</span>
 </li>
 </ol>
@@ -255,15 +255,15 @@ exports[`edicion de cliente > muestra vacios los campos opcionales ausentes e ig
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/clients">Clientes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar cliente</span>
 </li>
 </ol>
@@ -810,11 +810,11 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Clientes</span>
 </li>
 </ol>
@@ -910,8 +910,10 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 <div>
 <p>Mostrando 0-0 de 0 clientes · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>"
@@ -926,11 +928,11 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Clientes</span>
 </li>
 </ol>
@@ -1024,7 +1026,7 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/clients/CLI00000003/edit?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Editar</a>
+<a data-variant="row-link" href="/dashboard/commercial/clients/CLI00000003/edit?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -1040,8 +1042,8 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/clients/CLI00000002/edit?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Editar</a>
-<button data-variant="ghost" type="button">Activar</button>
+<a data-variant="row-link" href="/dashboard/commercial/clients/CLI00000002/edit?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Editar</a>
+<button data-variant="row-link" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -1051,8 +1053,10 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 <div>
 <p>Mostrando 21-40 de 45 clientes · Página 2 de 3</p>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/clients?q=andina&amp;status=activo&amp;page=1">Anterior</a>
-<a data-variant="outline" href="/dashboard/commercial/clients?q=andina&amp;status=activo&amp;page=3">Siguiente</a>
+<a data-variant="outline" href="/dashboard/commercial/clients?q=andina&amp;status=activo&amp;page=1">
+<svg/>Anterior</a>
+<a data-variant="outline" href="/dashboard/commercial/clients?q=andina&amp;status=activo&amp;page=3">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>"

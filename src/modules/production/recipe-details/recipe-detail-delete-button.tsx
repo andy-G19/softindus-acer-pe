@@ -21,7 +21,7 @@ export function RecipeDetailDeleteButton({ detail, action, deletedNotification }
       action={action}
       fields={{ id_detalle_receta: detail.id_detalle_receta }}
       variant="destructive"
-      size="sm"
+      size="xs"
       successNotification={deletedNotification}
       confirm={{
         title: "¿Eliminar material de la receta?",

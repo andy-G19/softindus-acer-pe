@@ -370,11 +370,11 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Órdenes de trabajo</span>
 </li>
 </ol>
@@ -678,8 +678,10 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 <div>
 <p>Mostrando 1-20 de 42 órdenes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/production/work-orders?from=2026-13-45&amp;q=+lote+&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/production/work-orders?from=2026-13-45&amp;q=+lote+&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -852,11 +854,11 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Órdenes de trabajo</span>
 </li>
 </ol>
@@ -1222,8 +1224,10 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 <div>
 <p>Mostrando 1-20 de 42 órdenes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/production/work-orders?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/production/work-orders?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1396,11 +1400,11 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Órdenes de trabajo</span>
 </li>
 </ol>
@@ -1704,8 +1708,10 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 órdenes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/production/work-orders?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/production/work-orders?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1878,11 +1884,11 @@ exports[`/dashboard/production/work-orders > sin resultados > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Órdenes de trabajo</span>
 </li>
 </ol>
@@ -2123,8 +2129,10 @@ exports[`/dashboard/production/work-orders > sin resultados > resultado 1`] = `
 <div>
 <p>Mostrando 0-0 de 0 órdenes · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>",
@@ -2337,11 +2345,11 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Órdenes de trabajo</span>
 </li>
 </ol>
@@ -2645,8 +2653,10 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 órdenes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/production/work-orders?to=2026-07-31&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/production/work-orders?to=2026-07-31&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -3199,11 +3209,11 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Órdenes de trabajo</span>
 </li>
 </ol>
@@ -3507,8 +3517,10 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 <div>
 <p>Mostrando 21-40 de 42 órdenes · Página 2 de 3</p>
 <div>
-<a data-variant="outline" href="/dashboard/production/work-orders?q=puerta&amp;product=PRO00000001&amp;client=CLI00000001&amp;campaign=CAM00000001&amp;type=pedido&amp;status=en_proceso&amp;priority=alta&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=1">Anterior</a>
-<a data-variant="outline" href="/dashboard/production/work-orders?q=puerta&amp;product=PRO00000001&amp;client=CLI00000001&amp;campaign=CAM00000001&amp;type=pedido&amp;status=en_proceso&amp;priority=alta&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente</a>
+<a data-variant="outline" href="/dashboard/production/work-orders?q=puerta&amp;product=PRO00000001&amp;client=CLI00000001&amp;campaign=CAM00000001&amp;type=pedido&amp;status=en_proceso&amp;priority=alta&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=1">
+<svg/>Anterior</a>
+<a data-variant="outline" href="/dashboard/production/work-orders?q=puerta&amp;product=PRO00000001&amp;client=CLI00000001&amp;campaign=CAM00000001&amp;type=pedido&amp;status=en_proceso&amp;priority=alta&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -3601,15 +3613,15 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders?status=en_proceso">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_orden_trabajo-1</span>
 </li>
 </ol>
@@ -3788,7 +3800,7 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -3805,7 +3817,7 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -3848,7 +3860,7 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-1</span>
 </td>
 <td>50.00 unidad_medida-1</td>
@@ -3859,7 +3871,7 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 <td>-</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-2</span>
 <span data-variant="warning">Entregado por encima del plan</span>
 </td>
@@ -4152,15 +4164,15 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_orden_trabajo-1</span>
 </li>
 </ol>
@@ -4339,7 +4351,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -4356,7 +4368,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -4399,7 +4411,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-1</span>
 </td>
 <td>11.50 unidad_medida-1</td>
@@ -4410,7 +4422,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
 <td>-11.50</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-2</span>
 </td>
 <td>22.50 unidad_medida-2</td>
@@ -4534,15 +4546,15 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_orden_trabajo-1</span>
 </li>
 </ol>
@@ -4721,7 +4733,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -4738,7 +4750,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -4781,7 +4793,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-1</span>
 </td>
 <td>11.50 unidad_medida-1</td>
@@ -4792,7 +4804,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
 <td>-11.50</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-2</span>
 </td>
 <td>22.50 unidad_medida-2</td>
@@ -4901,15 +4913,15 @@ exports[`/dashboard/production/work-orders/[id] > orden anulada: sin conciliacio
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_orden_trabajo-1</span>
 </li>
 </ol>
@@ -5088,7 +5100,7 @@ exports[`/dashboard/production/work-orders/[id] > orden anulada: sin conciliacio
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -5105,7 +5117,7 @@ exports[`/dashboard/production/work-orders/[id] > orden anulada: sin conciliacio
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5216,15 +5228,15 @@ exports[`/dashboard/production/work-orders/[id] > orden historica sin requerimie
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_orden_trabajo-1</span>
 </li>
 </ol>
@@ -5405,7 +5417,7 @@ exports[`/dashboard/production/work-orders/[id] > orden historica sin requerimie
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -5422,7 +5434,7 @@ exports[`/dashboard/production/work-orders/[id] > orden historica sin requerimie
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5533,15 +5545,15 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_orden_trabajo-1</span>
 </li>
 </ol>
@@ -5720,7 +5732,7 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -5737,7 +5749,7 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5780,7 +5792,7 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-1</span>
 </td>
 <td>50.00 unidad_medida-1</td>
@@ -5791,7 +5803,7 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 <td>-</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-2</span>
 </td>
 <td>50.00 unidad_medida-2</td>
@@ -5900,15 +5912,15 @@ exports[`/dashboard/production/work-orders/[id] > sin receta ni requerimiento > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_orden_trabajo-1</span>
 </li>
 </ol>
@@ -6179,15 +6191,15 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_orden_trabajo-1</span>
 </li>
 </ol>
@@ -6366,7 +6378,7 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -6383,7 +6395,7 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -6426,7 +6438,7 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-1</span>
 </td>
 <td>50.00 unidad_medida-1</td>
@@ -6437,7 +6449,7 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 <td>-</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-2</span>
 </td>
 <td>50.00 unidad_medida-2</td>
@@ -6634,19 +6646,19 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders?page=2">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders/id_orden_trabajo-1">id_orden_trabajo-1</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Avances</span>
 </li>
 </ol>
@@ -7039,19 +7051,19 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders/id_orden_trabajo-1">id_orden_trabajo-1</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Avances</span>
 </li>
 </ol>
@@ -7513,19 +7525,19 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders/id_orden_trabajo-1">id_orden_trabajo-1</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Avances</span>
 </li>
 </ol>
@@ -7916,19 +7928,19 @@ exports[`/dashboard/production/work-orders/[id]/progress > ruta sin etapas activ
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders/id_orden_trabajo-1">id_orden_trabajo-1</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Avances</span>
 </li>
 </ol>
@@ -8158,19 +8170,19 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances con ruta 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders/id_orden_trabajo-1">id_orden_trabajo-1</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Avances</span>
 </li>
 </ol>
@@ -8397,19 +8409,19 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances y sin rut
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders/id_orden_trabajo-1">id_orden_trabajo-1</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Avances</span>
 </li>
 </ol>
@@ -8699,15 +8711,15 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Reasignar avance</span>
 </li>
 </ol>
@@ -8898,15 +8910,15 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Reasignar avance</span>
 </li>
 </ol>
@@ -9113,15 +9125,15 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Reasignar avance</span>
 </li>
 </ol>
@@ -9325,15 +9337,15 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Reasignar avance</span>
 </li>
 </ol>
@@ -9607,15 +9619,15 @@ exports[`/dashboard/production/work-orders/new > con opciones > resultado 1`] = 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva orden</span>
 </li>
 </ol>
@@ -9888,15 +9900,15 @@ exports[`/dashboard/production/work-orders/new > sin rutas: no permite crear > r
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/work-orders">Órdenes de trabajo</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva orden</span>
 </li>
 </ol>

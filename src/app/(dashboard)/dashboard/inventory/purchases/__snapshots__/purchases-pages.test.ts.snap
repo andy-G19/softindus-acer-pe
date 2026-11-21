@@ -80,11 +80,11 @@ exports[`/dashboard/inventory/purchases > con una compra anulable > resultado 1`
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Compras</span>
 </li>
 </ol>
@@ -229,8 +229,10 @@ exports[`/dashboard/inventory/purchases > con una compra anulable > resultado 1`
 <div>
 <p>Mostrando 1-20 de 42 compras · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/inventory/purchases?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/purchases?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -334,11 +336,11 @@ exports[`/dashboard/inventory/purchases > fechas no validas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Compras</span>
 </li>
 </ol>
@@ -482,8 +484,10 @@ exports[`/dashboard/inventory/purchases > fechas no validas > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 compras · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/inventory/purchases?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/purchases?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -589,11 +593,11 @@ exports[`/dashboard/inventory/purchases > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Compras</span>
 </li>
 </ol>
@@ -710,8 +714,10 @@ exports[`/dashboard/inventory/purchases > rango invertido > resultado 1`] = `
 <div>
 <p>Mostrando 0-0 de 0 compras · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>",
@@ -799,11 +805,11 @@ exports[`/dashboard/inventory/purchases > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Compras</span>
 </li>
 </ol>
@@ -947,8 +953,10 @@ exports[`/dashboard/inventory/purchases > sin filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 compras · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/inventory/purchases?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/purchases?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1134,11 +1142,11 @@ exports[`/dashboard/inventory/purchases > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Compras</span>
 </li>
 </ol>
@@ -1282,8 +1290,10 @@ exports[`/dashboard/inventory/purchases > todos los filtros > resultado 1`] = `
 <div>
 <p>Mostrando 21-40 de 42 compras · Página 2 de 3</p>
 <div>
-<a data-variant="outline" href="/dashboard/inventory/purchases?q=F001&amp;supplier=PRV00000001&amp;material=MAT00000001&amp;status=confirmada&amp;payment=pendiente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=1">Anterior</a>
-<a data-variant="outline" href="/dashboard/inventory/purchases?q=F001&amp;supplier=PRV00000001&amp;material=MAT00000001&amp;status=confirmada&amp;payment=pendiente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente</a>
+<a data-variant="outline" href="/dashboard/inventory/purchases?q=F001&amp;supplier=PRV00000001&amp;material=MAT00000001&amp;status=confirmada&amp;payment=pendiente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=1">
+<svg/>Anterior</a>
+<a data-variant="outline" href="/dashboard/inventory/purchases?q=F001&amp;supplier=PRV00000001&amp;material=MAT00000001&amp;status=confirmada&amp;payment=pendiente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1363,15 +1373,15 @@ exports[`/dashboard/inventory/purchases/[id] > detalle con regreso al listado > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory/purchases?payment=pendiente">Compras</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_compra-1</span>
 </li>
 </ol>
@@ -1532,14 +1542,14 @@ exports[`/dashboard/inventory/purchases/[id] > detalle con regreso al listado > 
 </thead>
 <tbody>
 <tr>
-<td>nombre_material-1</td>
+<td data-cell="text">nombre_material-1</td>
 <td>11.50</td>
 <td>unidad_medida-1</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 </tr>
 <tr>
-<td>nombre_material-2</td>
+<td data-cell="text">nombre_material-2</td>
 <td>22.50</td>
 <td>unidad_medida-2</td>
 <td>S/ 22.50</td>
@@ -1693,15 +1703,15 @@ exports[`/dashboard/inventory/purchases/[id] > pendiente y sin pagos > resultado
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory/purchases">Compras</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_compra-1</span>
 </li>
 </ol>
@@ -1863,14 +1873,14 @@ exports[`/dashboard/inventory/purchases/[id] > pendiente y sin pagos > resultado
 </thead>
 <tbody>
 <tr>
-<td>nombre_material-1</td>
+<td data-cell="text">nombre_material-1</td>
 <td>11.50</td>
 <td>unidad_medida-1</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 </tr>
 <tr>
-<td>nombre_material-2</td>
+<td data-cell="text">nombre_material-2</td>
 <td>22.50</td>
 <td>unidad_medida-2</td>
 <td>S/ 22.50</td>
@@ -2017,15 +2027,15 @@ exports[`/dashboard/inventory/purchases/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory/purchases">Compras</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva compra</span>
 </li>
 </ol>

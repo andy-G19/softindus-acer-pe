@@ -297,7 +297,7 @@ export default async function ProductionBottlenecksPage({
         <TableBody>
           {stageSummaries.map((summary) => (
             <TableRow key={summary.id}>
-              <TableCell className="font-medium">{summary.name}</TableCell>
+              <TableCell data-cell="text" className="font-medium">{summary.name}</TableCell>
               <TableCell>{summary.orderCount}</TableCell>
               <TableCell>{summary.delayedCount}</TableCell>
               <TableCell>{summary.riskCount}</TableCell>

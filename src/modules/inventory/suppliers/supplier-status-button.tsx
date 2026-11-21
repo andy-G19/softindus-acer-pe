@@ -33,7 +33,7 @@ export function SupplierStatusButton({
       <ConfirmActionButton
         action={action}
         fields={{ id_proveedor: supplier.id_proveedor, estado: "true" }}
-        variant="ghost"
+        variant="row-link"
         successNotification={activatedNotification}
         pendingText="Activando..."
       >
@@ -47,6 +47,7 @@ export function SupplierStatusButton({
       action={action}
       fields={{ id_proveedor: supplier.id_proveedor, estado: "false" }}
       variant="destructive"
+      size="xs"
       successNotification={deactivatedNotification}
       confirm={{
         title: `¿Inactivar el proveedor ${supplier.razon_social}?`,

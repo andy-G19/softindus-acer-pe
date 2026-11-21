@@ -107,7 +107,7 @@ export function RecipeCostBreakdown({ workOrder }: RecipeCostBreakdownProps) {
             <TableBody>
               {materialRows.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell>
+                  <TableCell data-cell="text">
                     <div className="font-medium">{row.materialName}</div>
                     <p className="mt-1 text-xs text-muted-foreground">
                       {row.category}

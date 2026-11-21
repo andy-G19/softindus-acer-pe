@@ -42,9 +42,9 @@ const badgeVariants = cva(
   }
 )
 
-// Gesto al montar, una sola vez (patterns.css). Cada variante trae el suyo y gesture lo reemplaza:
-// StateBadge sella un registro aunque sea info, deja que entregado solo se asiente y hace entrar
-// a un anulado con un golpe de sello en lugar de la sacudida (D155).
+// Gesto al montar, una sola vez (patterns.css). Cada variante trae el suyo y gesture lo reemplaza
+// (pop solo se asienta; stamp entra con un golpe de sello, D155). StateBadge pasa none desde el
+// diseno de listados (D170): la etiqueta de estado es simple, sin gestos.
 const badgeGestures = {
   settle: "badge-settle",
   pop: "badge-pop",

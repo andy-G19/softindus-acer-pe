@@ -69,11 +69,11 @@ exports[`/dashboard/reports/sales-collections > filtro por estado de cobranza en
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Ventas y cobranzas</span>
 </li>
 </ol>
@@ -482,11 +482,11 @@ exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza >
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Ventas y cobranzas</span>
 </li>
 </ol>
@@ -978,11 +978,11 @@ exports[`/dashboard/reports/sales-collections > rango de mas de 366 dias > resul
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Ventas y cobranzas</span>
 </li>
 </ol>
@@ -1387,11 +1387,11 @@ exports[`/dashboard/reports/sales-collections > rango invertido > resultado 1`] 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Ventas y cobranzas</span>
 </li>
 </ol>
@@ -1545,11 +1545,11 @@ exports[`/dashboard/reports/sales-collections > sin filtros, vendedor > resultad
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Ventas y cobranzas</span>
 </li>
 </ol>
@@ -1986,11 +1986,11 @@ exports[`/dashboard/reports/sales-collections > sin resultados > resultado 1`] =
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Ventas y cobranzas</span>
 </li>
 </ol>
@@ -2383,11 +2383,11 @@ exports[`/dashboard/reports/sales-collections > todos los filtros > resultado 1`
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Ventas y cobranzas</span>
 </li>
 </ol>

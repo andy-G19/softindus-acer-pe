@@ -92,11 +92,11 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > resultado 1`
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Planillas</span>
 </li>
 </ol>
@@ -330,8 +330,10 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > resultado 1`
 <div>
 <p>Mostrando 1-20 de 42 planillas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/staff/payrolls?periodo=2026-7&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/staff/payrolls?periodo=2026-7&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -443,11 +445,11 @@ exports[`/dashboard/staff/payrolls > segunda pagina con un filtro > resultado 1`
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Planillas</span>
 </li>
 </ol>
@@ -681,8 +683,10 @@ exports[`/dashboard/staff/payrolls > segunda pagina con un filtro > resultado 1`
 <div>
 <p>Mostrando 21-40 de 45 planillas · Página 2 de 3</p>
 <div>
-<a data-variant="outline" href="/dashboard/staff/payrolls?estado=pendiente&amp;page=1">Anterior</a>
-<a data-variant="outline" href="/dashboard/staff/payrolls?estado=pendiente&amp;page=3">Siguiente</a>
+<a data-variant="outline" href="/dashboard/staff/payrolls?estado=pendiente&amp;page=1">
+<svg/>Anterior</a>
+<a data-variant="outline" href="/dashboard/staff/payrolls?estado=pendiente&amp;page=3">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -782,11 +786,11 @@ exports[`/dashboard/staff/payrolls > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Planillas</span>
 </li>
 </ol>
@@ -1020,8 +1024,10 @@ exports[`/dashboard/staff/payrolls > sin filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 planillas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/staff/payrolls?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/staff/payrolls?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1231,11 +1237,11 @@ exports[`/dashboard/staff/payrolls > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Planillas</span>
 </li>
 </ol>
@@ -1469,8 +1475,10 @@ exports[`/dashboard/staff/payrolls > todos los filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 planillas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/staff/payrolls?q=quispe&amp;operario=OPE&amp;periodo=2026-07&amp;modalidad=semanal&amp;estado=pendiente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/staff/payrolls?q=quispe&amp;operario=OPE&amp;periodo=2026-07&amp;modalidad=semanal&amp;estado=pendiente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1570,11 +1578,11 @@ exports[`/dashboard/staff/payrolls > una planilla pendiente sin pagos ofrece anu
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Planillas</span>
 </li>
 </ol>
@@ -1808,8 +1816,10 @@ exports[`/dashboard/staff/payrolls > una planilla pendiente sin pagos ofrece anu
 <div>
 <p>Mostrando 1-20 de 42 planillas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/staff/payrolls?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/staff/payrolls?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1862,15 +1872,15 @@ exports[`/dashboard/staff/payrolls/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/payrolls">Planillas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva planilla</span>
 </li>
 </ol>
@@ -1965,14 +1975,14 @@ exports[`/dashboard/staff/payrolls/new > formulario > resultado 1`] = `
 </thead>
 <tbody>
 <tr>
-<td>apellidos-1, nombres-1</td>
+<td data-cell="text">apellidos-1, nombres-1</td>
 <td>modalidad_pago-1</td>
 <td>S/ 11.50</td>
 <td>2</td>
 <td>2</td>
 </tr>
 <tr>
-<td>apellidos-2, nombres-2</td>
+<td data-cell="text">apellidos-2, nombres-2</td>
 <td>modalidad_pago-2</td>
 <td>-</td>
 <td>2</td>

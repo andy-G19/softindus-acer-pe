@@ -116,11 +116,11 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proformas</span>
 </li>
 </ol>
@@ -268,8 +268,10 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/quotes?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -395,11 +397,11 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proformas</span>
 </li>
 </ol>
@@ -516,8 +518,10 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 <div>
 <p>Mostrando 0-0 de 0 proformas · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>",
@@ -637,11 +641,11 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proformas</span>
 </li>
 </ol>
@@ -789,8 +793,10 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/quotes?balance=paid&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?balance=paid&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -898,11 +904,11 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proformas</span>
 </li>
 </ol>
@@ -1050,8 +1056,10 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/quotes?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1261,11 +1269,11 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proformas</span>
 </li>
 </ol>
@@ -1413,8 +1421,10 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 <div>
 <p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/quotes?q=PRF&amp;client=CLI00000001&amp;order=PED00000001&amp;status=vigente&amp;balance=pending&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?q=PRF&amp;client=CLI00000001&amp;order=PED00000001&amp;status=vigente&amp;balance=pending&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1522,11 +1532,11 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proformas</span>
 </li>
 </ol>
@@ -1725,8 +1735,10 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 <div>
 <p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/quotes?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1797,15 +1809,15 @@ exports[`/dashboard/commercial/quotes/[id] > aceptada con saldo cero: no admite 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/quotes">Proformas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle de proforma</span>
 </li>
 </ol>
@@ -2172,15 +2184,15 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/quotes">Proformas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle de proforma</span>
 </li>
 </ol>
@@ -2544,15 +2556,15 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/quotes">Proformas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle de proforma</span>
 </li>
 </ol>
@@ -2998,15 +3010,15 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/quotes">Proformas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle de proforma</span>
 </li>
 </ol>
@@ -3390,15 +3402,15 @@ exports[`/dashboard/commercial/quotes/new > desde el listado filtrado: vuelve a 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/quotes?status=vigente">Proformas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva proforma</span>
 </li>
 </ol>
@@ -3540,15 +3552,15 @@ exports[`/dashboard/commercial/quotes/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/quotes">Proformas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva proforma</span>
 </li>
 </ol>
@@ -3690,15 +3702,15 @@ exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > resultado 1
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/quotes">Proformas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva proforma</span>
 </li>
 </ol>
@@ -3766,13 +3778,13 @@ exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > resultado 1
 </thead>
 <tbody>
 <tr>
-<td>nombre_producto-1</td>
+<td data-cell="text">nombre_producto-1</td>
 <td>11.50</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 </tr>
 <tr>
-<td>nombre_producto-2</td>
+<td data-cell="text">nombre_producto-2</td>
 <td>22.50</td>
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
@@ -3895,15 +3907,15 @@ exports[`/dashboard/commercial/quotes/new > un returnTo externo se ignora > resu
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/quotes">Proformas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva proforma</span>
 </li>
 </ol>

@@ -44,11 +44,11 @@ exports[`/dashboard/maintenance/preventive > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Preventivos</span>
 </li>
 </ol>
@@ -403,11 +403,11 @@ exports[`/dashboard/maintenance/preventive > todos los filtros > resultado 1`] =
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Preventivos</span>
 </li>
 </ol>
@@ -706,11 +706,11 @@ exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > r
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Preventivos</span>
 </li>
 </ol>
@@ -1077,15 +1077,15 @@ exports[`/dashboard/maintenance/preventive/new > con regreso al listado filtrado
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance/preventive?status=vencido">Preventivos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo preventivo</span>
 </li>
 </ol>
@@ -1222,15 +1222,15 @@ exports[`/dashboard/maintenance/preventive/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance/preventive">Preventivos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo preventivo</span>
 </li>
 </ol>

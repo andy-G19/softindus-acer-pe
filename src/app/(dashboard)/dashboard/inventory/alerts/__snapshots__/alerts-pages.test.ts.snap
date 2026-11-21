@@ -81,11 +81,11 @@ exports[`/dashboard/inventory/alerts > administrador > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Alertas</span>
 </li>
 </ol>
@@ -200,7 +200,7 @@ exports[`/dashboard/inventory/alerts > administrador > resultado 1`] = `
 </thead>
 <tbody>
 <tr>
-<td>nombre_material-1</td>
+<td data-cell="text">nombre_material-1</td>
 <td>categoria-1</td>
 <td>11.50</td>
 <td>11.50</td>
@@ -211,7 +211,7 @@ exports[`/dashboard/inventory/alerts > administrador > resultado 1`] = `
 <td>unidad_medida-1</td>
 </tr>
 <tr>
-<td>nombre_material-2</td>
+<td data-cell="text">nombre_material-2</td>
 <td>categoria-2</td>
 <td>22.50</td>
 <td>22.50</td>
@@ -358,11 +358,11 @@ exports[`/dashboard/inventory/alerts > administrador con una alerta activa > res
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Alertas</span>
 </li>
 </ol>
@@ -477,7 +477,7 @@ exports[`/dashboard/inventory/alerts > administrador con una alerta activa > res
 </thead>
 <tbody>
 <tr>
-<td>Plancha LAC 1/16</td>
+<td data-cell="text">Plancha LAC 1/16</td>
 <td>planchas</td>
 <td>2.00</td>
 <td>0.00</td>
@@ -627,11 +627,11 @@ exports[`/dashboard/inventory/alerts > maestro de taller > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Alertas</span>
 </li>
 </ol>
@@ -746,7 +746,7 @@ exports[`/dashboard/inventory/alerts > maestro de taller > resultado 1`] = `
 </thead>
 <tbody>
 <tr>
-<td>nombre_material-1</td>
+<td data-cell="text">nombre_material-1</td>
 <td>categoria-1</td>
 <td>11.50</td>
 <td>11.50</td>
@@ -757,7 +757,7 @@ exports[`/dashboard/inventory/alerts > maestro de taller > resultado 1`] = `
 <td>unidad_medida-1</td>
 </tr>
 <tr>
-<td>nombre_material-2</td>
+<td data-cell="text">nombre_material-2</td>
 <td>categoria-2</td>
 <td>22.50</td>
 <td>22.50</td>
@@ -901,11 +901,11 @@ exports[`/dashboard/inventory/alerts > maestro de taller con una alerta activa >
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Alertas</span>
 </li>
 </ol>
@@ -1020,7 +1020,7 @@ exports[`/dashboard/inventory/alerts > maestro de taller con una alerta activa >
 </thead>
 <tbody>
 <tr>
-<td>Plancha LAC 1/16</td>
+<td data-cell="text">Plancha LAC 1/16</td>
 <td>planchas</td>
 <td>2.00</td>
 <td>0.00</td>

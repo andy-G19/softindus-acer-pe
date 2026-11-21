@@ -169,7 +169,7 @@ export default async function NewPayrollPage({ searchParams }: NewPayrollPagePro
             <TableBody>
               {operators.map((operator) => (
                 <TableRow key={operator.id_operario}>
-                  <TableCell className="font-medium">
+                  <TableCell data-cell="text" className="font-medium">
                     {operator.apellidos}, {operator.nombres}
                   </TableCell>
 

@@ -364,7 +364,7 @@ exports[`/dashboard/reports > panel del mes > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Reportes</span>
 </li>
 </ol>
@@ -1452,7 +1452,7 @@ exports[`/dashboard/reports > sin datos recientes, totales vacios ni materiales 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Reportes</span>
 </li>
 </ol>

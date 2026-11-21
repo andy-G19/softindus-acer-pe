@@ -61,11 +61,11 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Repuestos</span>
 </li>
 </ol>
@@ -223,7 +223,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -240,7 +240,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Editar</a>
 <button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
@@ -310,11 +310,11 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Repuestos</span>
 </li>
 </ol>
@@ -472,7 +472,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -489,7 +489,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Editar</a>
 <button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
@@ -584,11 +584,11 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Repuestos</span>
 </li>
 </ol>
@@ -746,7 +746,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -763,7 +763,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Editar</a>
 <button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
@@ -845,15 +845,15 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > r
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance/spare-parts?q=faja">Repuestos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar repuesto</span>
 </li>
 </ol>
@@ -1002,15 +1002,15 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con su proveedor 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance/spare-parts">Repuestos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar repuesto</span>
 </li>
 </ol>
@@ -1156,15 +1156,15 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar sin proveedor > r
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance/spare-parts">Repuestos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar repuesto</span>
 </li>
 </ol>
@@ -1320,15 +1320,15 @@ exports[`/dashboard/maintenance/spare-parts/new > con regreso al listado filtrad
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance/spare-parts?status=inactive">Repuestos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo repuesto</span>
 </li>
 </ol>
@@ -1458,15 +1458,15 @@ exports[`/dashboard/maintenance/spare-parts/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance/spare-parts">Repuestos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo repuesto</span>
 </li>
 </ol>

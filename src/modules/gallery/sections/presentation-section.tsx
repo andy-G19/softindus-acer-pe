@@ -98,20 +98,16 @@ export function PresentationSection() {
       </GalleryNote>
 
       <GallerySample label="Etiqueta de estado (StateBadge)">
-        <GestureReplayDemo>
-          {COMMERCIAL_STATUSES.map((status) => (
-            <StateBadge key={status} status={status} />
-          ))}
-        </GestureReplayDemo>
+        {COMMERCIAL_STATUSES.map((status) => (
+          <StateBadge key={status} status={status} />
+        ))}
       </GallerySample>
       <GalleryNote>
-        StateBadge es Badge con el tono, el gesto y el punto de cada estado comercial: el punto deja
-        ver, sin leer, qué tan avanzado va. Registrado se sella, vigente brilla fijo, pagada y
-        entregado cierran en verde, pendiente y parcial esperan en ámbar (parcial a medio rellenar),
-        en producción emite un doble pulso de radar, el único movimiento continuo, y anulado entra
-        con un golpe de sello. Un estado desconocido se muestra tal cual, con borde discontinuo.
-        Comercial la usa desde la entrega 10.4b; Mantenimiento y Mermas usan Badge con sus propias
-        variantes.
+        StateBadge es una etiqueta simple: 22 px de alto, letra de 10,5 px y un punto fijo del color
+        de su tono. Registrado y aprobado van en azul, vigente en gris, pagada y entregado en verde,
+        pendiente, parcial y en producción en ámbar, y anulado en rojo. No tiene gestos ni
+        movimiento. Un estado desconocido se muestra tal cual, con borde discontinuo. Comercial la
+        usa desde la entrega 10.4b; Mantenimiento y Mermas usan Badge con sus propias variantes.
       </GalleryNote>
 
       <div className="grid gap-6 lg:grid-cols-3">

@@ -50,7 +50,7 @@ exports[`/dashboard/inventory > indicadores > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Inventario</span>
 </li>
 </ol>
@@ -357,7 +357,7 @@ exports[`/dashboard/inventory > maestro de taller > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Inventario</span>
 </li>
 </ol>

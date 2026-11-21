@@ -36,8 +36,9 @@ const ROWS = [
   { id: "CLI00000003", name: "Estructuras del Sur", type: "Empresa", phone: "054223344", active: false, rejects: false },
 ];
 
-// Estados de muestra de la etiqueta: cada uno con su variante de Badge (active
-// es la default; el estado desconocido usa outline).
+// Estados de muestra de la etiqueta: cada uno con su tono (el estado
+// desconocido usa outline con borde discontinuo). La columna del estado es la
+// primera, asi que se ve como un codigo sin clases propias.
 const STATUS_SAMPLES = [
   "pagada",
   "aprobado",
@@ -111,7 +112,7 @@ export function ListingSection() {
               <TableHead>Tipo</TableHead>
               <TableHead>Teléfono</TableHead>
               <TableHead>Estado</TableHead>
-              <TableHead>Acciones</TableHead>
+              <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -144,11 +145,22 @@ export function ListingSection() {
         />
       </GallerySample>
       <GalleryNote>
-        «Inactivar» usa ConfirmActionButton: pide confirmar con el nombre del
-        registro y, mientras la acción espera, la confirmación no se cancela ni
-        se cierra con Esc; al terminar da un solo aviso, se cierra y el foco
-        vuelve al botón. En «Taller Arequipa» la acción de ejemplo falla y el
-        mensaje queda dentro de la confirmación. «Activar» no pide confirmar.
+        La cabecera es acero cepillado: el acento con la textura de metal, letra
+        mono de 10,5 px en mayúsculas y una línea de acero de 2 px debajo. Las
+        filas tienen texto de 13,5 px, sin cebra, y se aclaran al pasar el
+        puntero. La primera columna, el código o la fecha que abre la fila, va en
+        mono gris; si es un nombre, la celda lleva {'data-cell="text"'} y se ve como
+        las demás. Las acciones de la fila van a la derecha: «Editar» y
+        «Activar» son enlaces de texto que toman el cobre al pasar el puntero, e
+        «Inactivar» es un botón destructivo pequeño. La paginación lleva una
+        flecha hacia cada lado.
+      </GalleryNote>
+      <GalleryNote>
+        «Inactivar» usa ConfirmActionButton. La confirmación sigue siendo la ventana:
+        pide confirmar con el nombre del registro y, mientras la acción espera, no
+        se cancela ni se cierra con Esc; al terminar da un solo aviso, se cierra y
+        el foco vuelve al botón. En «Taller Arequipa» la acción de ejemplo falla y
+        el mensaje queda dentro de la confirmación. «Activar» no pide confirmar.
         Aquí la acción solo espera en el navegador: no se guarda nada.
       </GalleryNote>
 
@@ -191,7 +203,7 @@ export function ListingSection() {
           <TableBody>
             {STATUS_SAMPLES.map((status) => (
               <TableRow key={status}>
-                <TableCell className="font-mono text-xs text-muted-foreground">{status}</TableCell>
+                <TableCell>{status}</TableCell>
                 <TableCell>
                   <StateBadge status={status} />
                 </TableCell>
@@ -201,9 +213,10 @@ export function ListingSection() {
         </Table>
       </GallerySample>
       <GalleryNote>
-        StateBadge es un Badge con la etiqueta y la variante de cada estado
-        comercial; Comercial la usa desde la entrega 10.4b. Mantenimiento y
-        Mermas usan Badge con sus propias variantes.
+        StateBadge es una etiqueta simple, sin gestos: 22 px de alto y un punto
+        fijo del color de su tono; «En producción» espera en ámbar. Comercial la
+        usa desde la entrega 10.4b. Mantenimiento y Mermas usan Badge con sus
+        propias variantes.
       </GalleryNote>
 
       <GallerySample label="Tabla sin resultados" className="block">
@@ -240,8 +253,10 @@ export function ListingSection() {
         </GallerySample>
       </div>
       <GalleryNote>
-        La cabecera de esta página es el componente compartido PageHeader, con
-        migas de pan y descripción.
+        Las migas de pan separan cada parte con «›» en gris; los enlaces se
+        aclaran con subrayado al pasar el puntero y la página actual va en
+        semibold. La cabecera de esta página es el componente compartido
+        PageHeader, con migas de pan y descripción.
       </GalleryNote>
     </GallerySection>
   );

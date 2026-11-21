@@ -65,11 +65,11 @@ exports[`/dashboard/production/campaigns > acciones de cada estado > resultado 1
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Campañas</span>
 </li>
 </ol>
@@ -421,11 +421,11 @@ exports[`/dashboard/production/campaigns > sin campanas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Campañas</span>
 </li>
 </ol>
@@ -685,11 +685,11 @@ exports[`/dashboard/production/campaigns > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Campañas</span>
 </li>
 </ol>
@@ -997,11 +997,11 @@ exports[`/dashboard/production/campaigns > solo hasta > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Campañas</span>
 </li>
 </ol>
@@ -1336,11 +1336,11 @@ exports[`/dashboard/production/campaigns > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Campañas</span>
 </li>
 </ol>
@@ -1793,15 +1793,15 @@ exports[`/dashboard/production/campaigns/[id] > campana sin detalles no excluye 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/campaigns">Campañas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle de campaña</span>
 </li>
 </ol>
@@ -2081,15 +2081,15 @@ exports[`/dashboard/production/campaigns/[id] > detalle > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/campaigns">Campañas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle de campaña</span>
 </li>
 </ol>
@@ -2246,7 +2246,7 @@ exports[`/dashboard/production/campaigns/[id] > detalle > resultado 1`] = `
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_producto-1</div>
 <p>id_campania_detalle-1</p>
 </td>
@@ -2258,7 +2258,7 @@ exports[`/dashboard/production/campaigns/[id] > detalle > resultado 1`] = `
 <td>observaciones-1</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_producto-2</div>
 <p>id_campania_detalle-2</p>
 </td>
@@ -2375,15 +2375,15 @@ exports[`/dashboard/production/campaigns/[id] > finalizada no ofrece agregar pro
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/campaigns">Campañas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle de campaña</span>
 </li>
 </ol>
@@ -2542,7 +2542,7 @@ exports[`/dashboard/production/campaigns/[id] > finalizada no ofrece agregar pro
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_producto-1</div>
 <p>id_campania_detalle-1</p>
 </td>
@@ -2554,7 +2554,7 @@ exports[`/dashboard/production/campaigns/[id] > finalizada no ofrece agregar pro
 <td>observaciones-1</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_producto-2</div>
 <p>id_campania_detalle-2</p>
 </td>
@@ -2698,15 +2698,15 @@ exports[`/dashboard/production/campaigns/[id]/edit > anulada queda bloqueada > r
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/campaigns">Campañas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar campaña</span>
 </li>
 </ol>
@@ -2792,15 +2792,15 @@ exports[`/dashboard/production/campaigns/[id]/edit > editar > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/campaigns">Campañas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar campaña</span>
 </li>
 </ol>
@@ -2902,15 +2902,15 @@ exports[`/dashboard/production/campaigns/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/campaigns">Campañas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva campaña</span>
 </li>
 </ol>
@@ -2996,15 +2996,15 @@ exports[`/dashboard/production/campaigns/new > un returnTo ajeno vuelve a la lis
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/campaigns">Campañas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva campaña</span>
 </li>
 </ol>
@@ -3090,15 +3090,15 @@ exports[`/dashboard/production/campaigns/new > vuelve al returnTo > resultado 1`
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/campaigns?status=activa">Campañas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva campaña</span>
 </li>
 </ol>

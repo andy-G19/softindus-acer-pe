@@ -53,11 +53,11 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash">Caja chica</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Categorías</span>
 </li>
 </ol>
@@ -278,11 +278,11 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash">Caja chica</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Categorías</span>
 </li>
 </ol>
@@ -497,11 +497,11 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash">Caja chica</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Categorías</span>
 </li>
 </ol>
@@ -704,15 +704,15 @@ exports[`/dashboard/petty-cash/categories/[id]/edit > editar > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash">Caja chica</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash/categories">Categorías</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar categoría</span>
 </li>
 </ol>

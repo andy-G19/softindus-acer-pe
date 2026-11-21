@@ -33,7 +33,7 @@ export function ProductStatusButton({
       <ConfirmActionButton
         action={action}
         fields={{ id_producto: product.id_producto, estado: "true" }}
-        variant="ghost"
+        variant="row-link"
         successNotification={activatedNotification}
         pendingText="Activando..."
       >
@@ -47,6 +47,7 @@ export function ProductStatusButton({
       action={action}
       fields={{ id_producto: product.id_producto, estado: "false" }}
       variant="destructive"
+      size="xs"
       successNotification={deactivatedNotification}
       confirm={{
         title: `¿Inactivar el producto ${product.nombre_producto}?`,

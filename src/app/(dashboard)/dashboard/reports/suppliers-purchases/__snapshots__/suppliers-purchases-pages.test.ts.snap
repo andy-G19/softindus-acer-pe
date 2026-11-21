@@ -87,11 +87,11 @@ exports[`/dashboard/reports/suppliers-purchases > estados de pago y compra sin d
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proveedores y compras</span>
 </li>
 </ol>
@@ -619,11 +619,11 @@ exports[`/dashboard/reports/suppliers-purchases > rango de mas de 366 dias > res
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proveedores y compras</span>
 </li>
 </ol>
@@ -1082,11 +1082,11 @@ exports[`/dashboard/reports/suppliers-purchases > rango invertido > resultado 1`
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proveedores y compras</span>
 </li>
 </ol>
@@ -1266,11 +1266,11 @@ exports[`/dashboard/reports/suppliers-purchases > sin filtros > resultado 1`] = 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proveedores y compras</span>
 </li>
 </ol>
@@ -1765,11 +1765,11 @@ exports[`/dashboard/reports/suppliers-purchases > sin resultados > resultado 1`]
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proveedores y compras</span>
 </li>
 </ol>
@@ -2181,11 +2181,11 @@ exports[`/dashboard/reports/suppliers-purchases > todos los filtros > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proveedores y compras</span>
 </li>
 </ol>

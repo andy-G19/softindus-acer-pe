@@ -185,7 +185,7 @@ exports[`/dashboard/costs > con datos > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Costos</span>
 </li>
 </ol>
@@ -658,7 +658,7 @@ exports[`/dashboard/costs > sin datos: modulo sin informacion economica > result
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Costos</span>
 </li>
 </ol>
@@ -1099,7 +1099,7 @@ exports[`/dashboard/costs > solo ordenes sin costeo: modulo operativo > resultad
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Costos</span>
 </li>
 </ol>
@@ -1447,11 +1447,11 @@ exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Costeos</span>
 </li>
 </ol>
@@ -1776,11 +1776,11 @@ exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Costeos</span>
 </li>
 </ol>
@@ -2089,11 +2089,11 @@ exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Costeos</span>
 </li>
 </ol>
@@ -2402,11 +2402,11 @@ exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Costeos</span>
 </li>
 </ol>
@@ -2852,11 +2852,11 @@ exports[`/dashboard/costs/costings > todos los filtros, estado rentable > result
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Costeos</span>
 </li>
 </ol>
@@ -3165,11 +3165,11 @@ exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Costeos</span>
 </li>
 </ol>
@@ -3566,15 +3566,15 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs/costings">Costeos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle</span>
 </li>
 </ol>
@@ -4191,15 +4191,15 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs/costings">Costeos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle</span>
 </li>
 </ol>
@@ -4898,15 +4898,15 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs/costings">Costeos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle</span>
 </li>
 </ol>
@@ -5157,7 +5157,7 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>categoria-1</p>
 </td>
@@ -5170,7 +5170,7 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <td>S/ 1695.78</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>categoria-2</p>
 </td>
@@ -5557,15 +5557,15 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs/costings">Costeos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle</span>
 </li>
 </ol>
@@ -6182,15 +6182,15 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs/costings">Costeos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle</span>
 </li>
 </ol>
@@ -6441,7 +6441,7 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>categoria-1</p>
 </td>
@@ -6454,7 +6454,7 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <td>S/ 1695.78</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>categoria-2</p>
 </td>
@@ -6848,15 +6848,15 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs/costings">Costeos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle</span>
 </li>
 </ol>
@@ -7101,7 +7101,7 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>categoria-1</p>
 </td>
@@ -7114,7 +7114,7 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <td>S/ 1695.78</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>categoria-2</p>
 </td>
@@ -7491,15 +7491,15 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs/costings">Costeos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle</span>
 </li>
 </ol>
@@ -7742,7 +7742,7 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>categoria-1</p>
 </td>
@@ -7755,7 +7755,7 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 <td>S/ 1695.78</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>categoria-2</p>
 </td>
@@ -8022,15 +8022,15 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs/costings">Costeos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Detalle</span>
 </li>
 </ol>
@@ -8273,7 +8273,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>categoria-1</p>
 </td>
@@ -8286,7 +8286,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <td>S/ 1695.78</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>categoria-2</p>
 </td>
@@ -8689,11 +8689,11 @@ exports[`/dashboard/costs/work-orders > con ordenes > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Órdenes de trabajo</span>
 </li>
 </ol>
@@ -9042,11 +9042,11 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Órdenes de trabajo</span>
 </li>
 </ol>
@@ -9441,11 +9441,11 @@ exports[`/dashboard/costs/work-orders > sin ordenes pendientes ni costeos > resu
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/costs">Costos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Órdenes de trabajo</span>
 </li>
 </ol>

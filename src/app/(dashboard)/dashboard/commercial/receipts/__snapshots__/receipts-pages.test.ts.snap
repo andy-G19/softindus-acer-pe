@@ -79,11 +79,11 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Comprobantes de venta</span>
 </li>
 </ol>
@@ -198,8 +198,10 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 comprobantes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/receipts?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/receipts?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -288,11 +290,11 @@ exports[`/dashboard/commercial/receipts > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Comprobantes de venta</span>
 </li>
 </ol>
@@ -383,8 +385,10 @@ exports[`/dashboard/commercial/receipts > rango invertido > resultado 1`] = `
 <div>
 <p>Mostrando 0-0 de 0 comprobantes · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>",
@@ -455,11 +459,11 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Comprobantes de venta</span>
 </li>
 </ol>
@@ -574,8 +578,10 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 comprobantes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/receipts?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/receipts?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -728,11 +734,11 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Comprobantes de venta</span>
 </li>
 </ol>
@@ -847,8 +853,10 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 comprobantes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/receipts?q=B001&amp;type=boleta&amp;status=emitido&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/receipts?q=B001&amp;type=boleta&amp;status=emitido&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -919,11 +927,11 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Comprobantes de venta</span>
 </li>
 </ol>
@@ -1060,8 +1068,10 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 <div>
 <p>Mostrando 1-20 de 42 comprobantes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/receipts?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/receipts?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",

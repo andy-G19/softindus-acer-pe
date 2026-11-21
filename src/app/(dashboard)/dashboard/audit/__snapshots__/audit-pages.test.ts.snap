@@ -157,7 +157,7 @@ exports[`/dashboard/audit > rango de mas de 366 dias > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Auditoría</span>
 </li>
 </ol>
@@ -349,8 +349,10 @@ exports[`/dashboard/audit > rango de mas de 366 dias > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 operaciones · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/audit?from=2025-01-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/audit?from=2025-01-01&amp;to=2026-07-31&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -425,7 +427,7 @@ exports[`/dashboard/audit > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Auditoría</span>
 </li>
 </ol>
@@ -626,7 +628,7 @@ exports[`/dashboard/audit > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Auditoría</span>
 </li>
 </ol>
@@ -819,8 +821,10 @@ exports[`/dashboard/audit > sin filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 operaciones · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/audit?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/audit?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1133,7 +1137,7 @@ exports[`/dashboard/audit > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Auditoría</span>
 </li>
 </ol>
@@ -1326,8 +1330,10 @@ exports[`/dashboard/audit > todos los filtros > resultado 1`] = `
 <div>
 <p>Mostrando 21-40 de 42 operaciones · Página 2 de 3</p>
 <div>
-<a data-variant="outline" href="/dashboard/audit?q=cliente&amp;usuario=USU00000001&amp;accion=crear&amp;entidad=cliente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=1">Anterior</a>
-<a data-variant="outline" href="/dashboard/audit?q=cliente&amp;usuario=USU00000001&amp;accion=crear&amp;entidad=cliente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente</a>
+<a data-variant="outline" href="/dashboard/audit?q=cliente&amp;usuario=USU00000001&amp;accion=crear&amp;entidad=cliente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=1">
+<svg/>Anterior</a>
+<a data-variant="outline" href="/dashboard/audit?q=cliente&amp;usuario=USU00000001&amp;accion=crear&amp;entidad=cliente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",

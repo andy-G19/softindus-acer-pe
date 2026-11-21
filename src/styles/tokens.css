@@ -99,6 +99,7 @@
   --color-overlay: var(--overlay);
   --shadow-badge-default: var(--shadow-badge-default);
   --shadow-badge-secondary: var(--shadow-badge-secondary);
+  --shadow-table-head: var(--shadow-table-head);
 }
 
 :root {
@@ -247,6 +248,9 @@
      resplandor (D161), y un filo de luz tenue arriba en secondary. */
   --shadow-badge-default: inset 2px 0 0 var(--primary);
   --shadow-badge-secondary: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  /* Cabecera de tabla (propuesta de listados, 2026-11-21; D163): filo de luz arriba y una sombra
+     corta que la separa de la primera fila. */
+  --shadow-table-head: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 6px -2px rgba(0, 0, 0, 0.5);
   /* Indicador al pasar el puntero (D157): se separa de la pagina; el resplandor de su tono se
      suma en patterns.css. */
   --shadow-kpi-hover: 0 18px 38px rgba(0, 0, 0, 0.45);

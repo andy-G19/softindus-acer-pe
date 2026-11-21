@@ -20,7 +20,8 @@ type RowStatusDemoProps = {
 // funcion del navegador que espera y responde como lo haria la del servidor:
 // la galeria no ejecuta acciones de servidor (gallery-page.test.ts) y un
 // componente de servidor no puede pasarle una funcion a uno de cliente, asi
-// que la demo vive aqui.
+// que la demo vive aqui. Desde el diseno de listados (D166) Activar es un
+// enlace row-link e Inactivar un destructivo xs, como en las listas reales.
 export function RowStatusDemo({ id, name, active, rejects = false }: RowStatusDemoProps) {
   async function demoAction(_prevState: DemoState, formData: FormData): Promise<DemoState> {
     await new Promise((resolve) => window.setTimeout(resolve, PENDING_MS));
@@ -43,7 +44,7 @@ export function RowStatusDemo({ id, name, active, rejects = false }: RowStatusDe
       <ConfirmActionButton
         action={demoAction}
         fields={{ id }}
-        variant="ghost"
+        variant="row-link"
         successNotification={{ type: "success", message: "Cliente de ejemplo activado", description: DEMO_NOTE }}
         pendingText="Activando..."
       >
@@ -57,6 +58,7 @@ export function RowStatusDemo({ id, name, active, rejects = false }: RowStatusDe
       action={demoAction}
       fields={{ id }}
       variant="destructive"
+      size="xs"
       successNotification={{ type: "warning", message: "Cliente de ejemplo inactivado", description: DEMO_NOTE }}
       confirm={{
         title: `¿Inactivar el cliente ${name}?`,

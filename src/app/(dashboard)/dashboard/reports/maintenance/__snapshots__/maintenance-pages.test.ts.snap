@@ -106,11 +106,11 @@ exports[`/dashboard/reports/maintenance > maquina reincidente y preventivo venci
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Mantenimiento</span>
 </li>
 </ol>
@@ -866,11 +866,11 @@ exports[`/dashboard/reports/maintenance > rango de mas de 366 dias > resultado 1
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Mantenimiento</span>
 </li>
 </ol>
@@ -1510,11 +1510,11 @@ exports[`/dashboard/reports/maintenance > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Mantenimiento</span>
 </li>
 </ol>
@@ -1717,11 +1717,11 @@ exports[`/dashboard/reports/maintenance > sin filtros, maestro de taller > resul
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Mantenimiento</span>
 </li>
 </ol>
@@ -2434,11 +2434,11 @@ exports[`/dashboard/reports/maintenance > sin resultados > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Mantenimiento</span>
 </li>
 </ol>
@@ -3030,11 +3030,11 @@ exports[`/dashboard/reports/maintenance > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Mantenimiento</span>
 </li>
 </ol>

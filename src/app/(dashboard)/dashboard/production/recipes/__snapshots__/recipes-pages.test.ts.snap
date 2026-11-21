@@ -71,11 +71,11 @@ exports[`/dashboard/production/recipes > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Recetas</span>
 </li>
 </ol>
@@ -378,11 +378,11 @@ exports[`/dashboard/production/recipes > sin recetas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Recetas</span>
 </li>
 </ol>
@@ -668,11 +668,11 @@ exports[`/dashboard/production/recipes > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Recetas</span>
 </li>
 </ol>
@@ -969,15 +969,15 @@ exports[`/dashboard/production/recipes/[id]/versions > historial con cada estado
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Versiones</span>
 </li>
 </ol>
@@ -1336,15 +1336,15 @@ exports[`/dashboard/production/recipes/[id]/versions > receta inactiva con histo
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Versiones</span>
 </li>
 </ol>
@@ -1638,15 +1638,15 @@ exports[`/dashboard/production/recipes/[id]/versions > sin versiones > resultado
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Versiones</span>
 </li>
 </ol>
@@ -1864,15 +1864,15 @@ exports[`/dashboard/production/recipes/[id]/versions > versiones > resultado 1`]
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Versiones</span>
 </li>
 </ol>
@@ -2116,15 +2116,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > detal
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Materiales requeridos</span>
 </li>
 </ol>
@@ -2401,15 +2401,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > unida
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Materiales requeridos</span>
 </li>
 </ol>
@@ -2563,7 +2563,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > unida
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-1/edit">Editar</a>
+<a data-variant="row-link" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-1/edit">Editar</a>
 <button data-variant="destructive" type="button">Eliminar</button>
 </div>
 </td>
@@ -2584,7 +2584,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > unida
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-2/edit">Editar</a>
+<a data-variant="row-link" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-2/edit">Editar</a>
 <button data-variant="destructive" type="button">Eliminar</button>
 </div>
 </td>
@@ -2654,15 +2654,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > versi
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Materiales requeridos</span>
 </li>
 </ol>
@@ -2815,7 +2815,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > versi
 <td>11.50 unidad_medida-1</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-1/edit">Editar</a>
+<a data-variant="row-link" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-1/edit">Editar</a>
 <button data-variant="destructive" type="button">Eliminar</button>
 </div>
 </td>
@@ -2835,7 +2835,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > versi
 <td>22.50 unidad_medida-2</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-2/edit">Editar</a>
+<a data-variant="row-link" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-2/edit">Editar</a>
 <button data-variant="destructive" type="button">Eliminar</button>
 </div>
 </td>
@@ -2902,15 +2902,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > versi
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Materiales requeridos</span>
 </li>
 </ol>
@@ -3139,15 +3139,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > versi
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Materiales requeridos</span>
 </li>
 </ol>
@@ -3376,15 +3376,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > versi
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Materiales requeridos</span>
 </li>
 </ol>
@@ -3699,15 +3699,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/[detail
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar material</span>
 </li>
 </ol>
@@ -3986,15 +3986,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > n
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Agregar material</span>
 </li>
 </ol>
@@ -4160,15 +4160,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > r
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Agregar material</span>
 </li>
 </ol>
@@ -4328,15 +4328,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > s
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Agregar material</span>
 </li>
 </ol>
@@ -4505,15 +4505,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > v
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Agregar material</span>
 </li>
 </ol>
@@ -4670,15 +4670,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > v
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Agregar material</span>
 </li>
 </ol>
@@ -4806,15 +4806,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Cálculo de materiales</span>
 </li>
 </ol>
@@ -4970,7 +4970,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 <p>observaciones-1</p>
@@ -4989,7 +4989,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5063,15 +5063,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Cálculo de materiales</span>
 </li>
 </ol>
@@ -5230,7 +5230,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 <p>observaciones-1</p>
@@ -5249,7 +5249,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5366,15 +5366,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Cálculo de materiales</span>
 </li>
 </ol>
@@ -5527,7 +5527,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 <p>observaciones-1</p>
@@ -5546,7 +5546,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5620,15 +5620,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Cálculo de materiales</span>
 </li>
 </ol>
@@ -5784,7 +5784,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 <p>observaciones-1</p>
@@ -5803,7 +5803,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5877,15 +5877,15 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Cálculo de materiales</span>
 </li>
 </ol>
@@ -6041,7 +6041,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 <p>observaciones-1</p>
@@ -6060,7 +6060,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -6229,15 +6229,15 @@ exports[`/dashboard/production/recipes/[id]/versions/new > nueva version > resul
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva versión</span>
 </li>
 </ol>
@@ -6455,15 +6455,15 @@ exports[`/dashboard/production/recipes/[id]/versions/new > receta inactiva > res
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva versión</span>
 </li>
 </ol>
@@ -6629,15 +6629,15 @@ exports[`/dashboard/production/recipes/[id]/versions/new > sin materiales activo
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva versión</span>
 </li>
 </ol>
@@ -6833,15 +6833,15 @@ exports[`/dashboard/production/recipes/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva receta</span>
 </li>
 </ol>
@@ -6945,15 +6945,15 @@ exports[`/dashboard/production/recipes/new > sin productos activos > resultado 1
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/recipes">Recetas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva receta</span>
 </li>
 </ol>

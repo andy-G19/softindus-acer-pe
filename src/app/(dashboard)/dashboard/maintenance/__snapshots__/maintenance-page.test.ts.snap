@@ -115,7 +115,7 @@ exports[`/dashboard/maintenance > indicadores del mes > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Mantenimiento</span>
 </li>
 </ol>
@@ -506,7 +506,7 @@ exports[`/dashboard/maintenance > maestro de taller > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Mantenimiento</span>
 </li>
 </ol>

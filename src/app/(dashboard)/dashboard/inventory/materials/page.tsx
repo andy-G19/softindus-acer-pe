@@ -163,7 +163,7 @@ export default async function MaterialsPage({
             <TableHead>Stock mínimo</TableHead>
             <TableHead>Costo actual</TableHead>
             <TableHead>Estado</TableHead>
-            <TableHead>Acciones</TableHead>
+            <TableHead className="text-right">Acciones</TableHead>
           </TableRow>
         </TableHeader>
 
