@@ -1,5 +1,10 @@
 "use client"
 
+// Tabla compartida (shadcn). Desde el diseno de listados y navegacion (propuesta del responsable,
+// 2026-11-21; D163) la cabecera es acero cepillado: cada celda lleva --accent con la textura de
+// metal (en thead la taparia el hover de la fila), letra mono de 10,5 px en negrita con espaciado
+// de 0,08em, una linea de acero de 2 px debajo y el filo de luz con sombra de
+// --shadow-table-head. Las reglas de tabla de patterns.css ya no la pisan (D164).
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
@@ -24,7 +29,7 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
     <thead
       data-slot="table-header"
       className={cn(
-        "bg-secondary text-foreground [&_tr]:border-b [&_tr]:border-border",
+        "text-foreground [&_tr]:border-b [&_tr]:border-border",
         className
       )}
       {...props}
@@ -73,7 +78,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "h-11 px-4 text-left align-middle font-mono text-xs font-semibold uppercase whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0",
+        "border-b-2 border-control-border-hover bg-accent bg-(image:--texture-metal) px-4 py-3 text-left align-middle font-mono text-[10.5px] font-bold tracking-[0.08em] uppercase whitespace-nowrap text-foreground shadow-table-head [&:has([role=checkbox])]:pr-0",
         className
       )}
       {...props}

@@ -989,10 +989,10 @@ exports[`Navegacion y listados > tabla completa 1`] = `
 "<div data-slot="table-container" class="relative w-full overflow-x-auto rounded-xl border border-border bg-card">
 <table data-slot="table" class="w-full min-w-max caption-bottom text-sm">
 <caption data-slot="table-caption" class="mt-4 text-sm text-muted-foreground">Leyenda</caption>
-<thead data-slot="table-header" class="bg-secondary text-foreground [&amp;_tr]:border-b [&amp;_tr]:border-border">
+<thead data-slot="table-header" class="text-foreground [&amp;_tr]:border-b [&amp;_tr]:border-border">
 <tr data-slot="table-row" class="border-b border-border/70 transition-colors hover:bg-secondary/65 has-aria-expanded:bg-secondary/65 data-[state=selected]:bg-secondary">
-<th data-slot="table-head" class="h-11 px-4 text-left align-middle font-mono text-xs font-semibold uppercase whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0">Codigo</th>
-<th data-slot="table-head" class="h-11 px-4 text-left align-middle font-mono text-xs font-semibold uppercase whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0">Cliente</th>
+<th data-slot="table-head" class="border-b-2 border-control-border-hover bg-accent bg-(image:--texture-metal) px-4 py-3 text-left align-middle font-mono text-[10.5px] font-bold tracking-[0.08em] uppercase whitespace-nowrap text-foreground shadow-table-head [&amp;:has([role=checkbox])]:pr-0">Codigo</th>
+<th data-slot="table-head" class="border-b-2 border-control-border-hover bg-accent bg-(image:--texture-metal) px-4 py-3 text-left align-middle font-mono text-[10.5px] font-bold tracking-[0.08em] uppercase whitespace-nowrap text-foreground shadow-table-head [&amp;:has([role=checkbox])]:pr-0">Cliente</th>
 </tr>
 </thead>
 <tbody data-slot="table-body" class="[&amp;_tr:last-child]:border-0">
