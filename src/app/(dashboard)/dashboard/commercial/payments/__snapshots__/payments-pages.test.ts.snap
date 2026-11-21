@@ -244,8 +244,10 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/payments?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/payments?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -482,8 +484,10 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 <div>
 <p>Mostrando 0-0 de 0 pagos · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>",
@@ -719,8 +723,10 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/payments?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/payments?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -969,8 +975,10 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <div>
 <p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/payments?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/payments?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1328,8 +1336,10 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 pagos · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/payments?q=PRO&amp;client=CLI00000001&amp;order=PED00000001&amp;method=efectivo&amp;type=adelanto&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/payments?q=PRO&amp;client=CLI00000001&amp;order=PED00000001&amp;method=efectivo&amp;type=adelanto&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",

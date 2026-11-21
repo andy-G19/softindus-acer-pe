@@ -206,8 +206,10 @@ exports[`/dashboard/inventory/outputs > fechas no validas > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 salidas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/inventory/outputs?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/outputs?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -410,8 +412,10 @@ exports[`/dashboard/inventory/outputs > rango invertido > resultado 1`] = `
 <div>
 <p>Mostrando 0-0 de 0 salidas · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>",
@@ -615,8 +619,10 @@ exports[`/dashboard/inventory/outputs > sin filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 salidas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/inventory/outputs?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/outputs?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -896,8 +902,10 @@ exports[`/dashboard/inventory/outputs > todos los filtros > resultado 1`] = `
 <div>
 <p>Mostrando 21-40 de 42 salidas · Página 2 de 3</p>
 <div>
-<a data-variant="outline" href="/dashboard/inventory/outputs?q=OT&amp;material=MAT00000001&amp;order=ORT00000001&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=1">Anterior</a>
-<a data-variant="outline" href="/dashboard/inventory/outputs?q=OT&amp;material=MAT00000001&amp;order=ORT00000001&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente</a>
+<a data-variant="outline" href="/dashboard/inventory/outputs?q=OT&amp;material=MAT00000001&amp;order=ORT00000001&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=1">
+<svg/>Anterior</a>
+<a data-variant="outline" href="/dashboard/inventory/outputs?q=OT&amp;material=MAT00000001&amp;order=ORT00000001&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",

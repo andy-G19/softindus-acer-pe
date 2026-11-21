@@ -276,8 +276,10 @@ exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultad
 <div>
 <p>Mostrando 21-40 de 42 materiales · Página 2 de 3</p>
 <div>
-<a data-variant="outline" href="/dashboard/inventory/materials?q=plancha&amp;category=materia_prima&amp;unit=kg&amp;status=active&amp;page=1">Anterior</a>
-<a data-variant="outline" href="/dashboard/inventory/materials?q=plancha&amp;category=materia_prima&amp;unit=kg&amp;status=active&amp;page=3">Siguiente</a>
+<a data-variant="outline" href="/dashboard/inventory/materials?q=plancha&amp;category=materia_prima&amp;unit=kg&amp;status=active&amp;page=1">
+<svg/>Anterior</a>
+<a data-variant="outline" href="/dashboard/inventory/materials?q=plancha&amp;category=materia_prima&amp;unit=kg&amp;status=active&amp;page=3">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -524,8 +526,10 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 materiales · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/inventory/materials?status=inactive&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/materials?status=inactive&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -760,8 +764,10 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 materiales · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/inventory/materials?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/materials?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -966,8 +972,10 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 <div>
 <p>Mostrando 1-1 de 2 materiales · Página 1 de 2</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/inventory/materials?stock=critical&amp;pageSize=1&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/materials?stock=critical&amp;pageSize=1&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1157,8 +1165,10 @@ exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 <div>
 <p>Mostrando 0-0 de 0 materiales · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>",

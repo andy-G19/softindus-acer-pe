@@ -268,8 +268,10 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/quotes?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -516,8 +518,10 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 <div>
 <p>Mostrando 0-0 de 0 proformas · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>",
@@ -789,8 +793,10 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/quotes?balance=paid&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?balance=paid&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1050,8 +1056,10 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/quotes?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1413,8 +1421,10 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 <div>
 <p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/quotes?q=PRF&amp;client=CLI00000001&amp;order=PED00000001&amp;status=vigente&amp;balance=pending&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?q=PRF&amp;client=CLI00000001&amp;order=PED00000001&amp;status=vigente&amp;balance=pending&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1725,8 +1735,10 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 <div>
 <p>Mostrando 1-20 de 42 proformas · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/quotes?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",

@@ -1699,8 +1699,10 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 45 clientes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/gallery?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/gallery?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>

@@ -910,8 +910,10 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 <div>
 <p>Mostrando 0-0 de 0 clientes · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>"
@@ -1051,8 +1053,10 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 <div>
 <p>Mostrando 21-40 de 45 clientes · Página 2 de 3</p>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/clients?q=andina&amp;status=activo&amp;page=1">Anterior</a>
-<a data-variant="outline" href="/dashboard/commercial/clients?q=andina&amp;status=activo&amp;page=3">Siguiente</a>
+<a data-variant="outline" href="/dashboard/commercial/clients?q=andina&amp;status=activo&amp;page=1">
+<svg/>Anterior</a>
+<a data-variant="outline" href="/dashboard/commercial/clients?q=andina&amp;status=activo&amp;page=3">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>"

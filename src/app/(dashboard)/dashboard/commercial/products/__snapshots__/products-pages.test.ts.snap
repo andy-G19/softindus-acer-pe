@@ -197,8 +197,10 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 productos · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/products?status=todos&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/products?status=todos&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -459,8 +461,10 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 <div>
 <p>Mostrando 1-20 de 42 productos · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/products?q=lampa&amp;category=herramientas&amp;unit=docena&amp;status=inactive&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/products?q=lampa&amp;category=herramientas&amp;unit=docena&amp;status=inactive&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -714,8 +718,10 @@ exports[`/dashboard/commercial/products > filtros y vendedor > resultado 1`] = `
 <div>
 <p>Mostrando 21-40 de 42 productos · Página 2 de 3</p>
 <div>
-<a data-variant="outline" href="/dashboard/commercial/products?q=reja&amp;category=estructuras&amp;unit=unidad&amp;status=active&amp;page=1">Anterior</a>
-<a data-variant="outline" href="/dashboard/commercial/products?q=reja&amp;category=estructuras&amp;unit=unidad&amp;status=active&amp;page=3">Siguiente</a>
+<a data-variant="outline" href="/dashboard/commercial/products?q=reja&amp;category=estructuras&amp;unit=unidad&amp;status=active&amp;page=1">
+<svg/>Anterior</a>
+<a data-variant="outline" href="/dashboard/commercial/products?q=reja&amp;category=estructuras&amp;unit=unidad&amp;status=active&amp;page=3">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -932,8 +938,10 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 productos · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/products?status=inactive&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/products?status=inactive&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1138,8 +1146,10 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 productos · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/commercial/products?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/products?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1317,8 +1327,10 @@ exports[`/dashboard/commercial/products > sin productos registrados > resultado 
 <div>
 <p>Mostrando 0-0 de 0 productos · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>",

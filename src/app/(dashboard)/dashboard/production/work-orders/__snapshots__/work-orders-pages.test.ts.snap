@@ -678,8 +678,10 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 <div>
 <p>Mostrando 1-20 de 42 órdenes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/production/work-orders?from=2026-13-45&amp;q=+lote+&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/production/work-orders?from=2026-13-45&amp;q=+lote+&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1222,8 +1224,10 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 <div>
 <p>Mostrando 1-20 de 42 órdenes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/production/work-orders?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/production/work-orders?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -1704,8 +1708,10 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 órdenes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/production/work-orders?page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/production/work-orders?page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -2123,8 +2129,10 @@ exports[`/dashboard/production/work-orders > sin resultados > resultado 1`] = `
 <div>
 <p>Mostrando 0-0 de 0 órdenes · Página 1 de 1</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<button data-variant="outline" disabled="">Siguiente</button>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<button data-variant="outline" disabled="">Siguiente<svg/>
+</button>
 </div>
 </div>
 </div>",
@@ -2645,8 +2653,10 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 <div>
 <p>Mostrando 1-20 de 42 órdenes · Página 1 de 3</p>
 <div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/production/work-orders?to=2026-07-31&amp;page=2">Siguiente</a>
+<button data-variant="outline" disabled="">
+<svg/>Anterior</button>
+<a data-variant="outline" href="/dashboard/production/work-orders?to=2026-07-31&amp;page=2">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
@@ -3507,8 +3517,10 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 <div>
 <p>Mostrando 21-40 de 42 órdenes · Página 2 de 3</p>
 <div>
-<a data-variant="outline" href="/dashboard/production/work-orders?q=puerta&amp;product=PRO00000001&amp;client=CLI00000001&amp;campaign=CAM00000001&amp;type=pedido&amp;status=en_proceso&amp;priority=alta&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=1">Anterior</a>
-<a data-variant="outline" href="/dashboard/production/work-orders?q=puerta&amp;product=PRO00000001&amp;client=CLI00000001&amp;campaign=CAM00000001&amp;type=pedido&amp;status=en_proceso&amp;priority=alta&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente</a>
+<a data-variant="outline" href="/dashboard/production/work-orders?q=puerta&amp;product=PRO00000001&amp;client=CLI00000001&amp;campaign=CAM00000001&amp;type=pedido&amp;status=en_proceso&amp;priority=alta&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=1">
+<svg/>Anterior</a>
+<a data-variant="outline" href="/dashboard/production/work-orders?q=puerta&amp;product=PRO00000001&amp;client=CLI00000001&amp;campaign=CAM00000001&amp;type=pedido&amp;status=en_proceso&amp;priority=alta&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente<svg/>
+</a>
 </div>
 </div>
 </div>",
