@@ -11566,6 +11566,120 @@ cada hover se leyó adelantándolas con `finish()`.
 | Lo que no se adoptó de la maqueta | Título y pie de la tarjeta, barrido a 4,5 s, entradas escalonadas, franjas de 4 px y la ruta en el pie del indicador (arriba) |
 | Advertencias de lint anteriores | `GalleryNote` sin uso en `foundations-section.tsx` y `_line` en `commercial/orders/actions.ts` |
 
+### Integración en `main` (presentación)
+
+Datos leídos de la API de GitHub el 2026-11-21 (UTC) y comparados con git:
+
+- PR #65 «Diseño de la presentación.», abierto el 2026-11-21 a las 11:01:17 y fusionado con merge
+  commit a las 11:07:20: 12 commits, de `fc08494` (el registro de fundamentos, que había quedado
+  fuera del PR #64) a `d21599e`, y 76 archivos (+17133 −3717). Su CI, el #263, sobre `d21599e`,
+  terminó en verde antes del merge (11:01:21 a 11:06:58).
+- El merge commit `fe23d19` tiene como padres `1689265` (`main`) y `d21599e` (`staging`), y su
+  árbol es el de `d21599e` (`86a281b`).
+- CI #264 sobre `fe23d19` en verde al primer intento (11:07:23 a 11:13:02).
+- Vercel desplegó `fe23d19` en producción (`success` a las 11:08:20). Sin migraciones.
+
+**El diseño de la presentación queda integrado.**
+
+## Diseño de listados y navegación (2026-11-21)
+
+Séptimo paso de la sesión de diseño. El responsable trajo su propuesta como maqueta
+(`tmp/Diseño_propuesta/Listados y navegación-html.zip` y
+`tmp/Diseño_propuesta/Presentacion/tabla_acciones_fila.html`, fuera de git), leída entera y sin
+ejecutar su código: la sección «Listados» de la galería con la barra de filtros, la tabla con
+acciones por fila, la carga, las etiquetas de estado, el vacío, la paginación y las migas de pan.
+Las decisiones D163 a D170 se tomaron con preguntas antes del plan; D171 se propuso desde la
+maqueta. El plan está en `tmp/propuesta-listados/plan-listados.md`.
+
+### Decisiones
+
+| # | Decisión | Motivo |
+|---|---|---|
+| D163 | Cabecera de tabla de acero cepillado: cada celda con `--accent` y `--texture-metal`, JetBrains Mono 700 a 10,5 px en mayúsculas con 0,08em, línea de 2 px `--control-border-hover` y el token nuevo `--shadow-table-head` (filo de luz y sombra) | Decisión del responsable. El fondo va en la celda y no en `thead`, como en la maqueta: en `thead` lo taparía el hover de la fila |
+| D164 | Las reglas de tabla de `patterns.css` (D99) solo alcanzan a las tablas crudas, `table:not([data-slot])` | Con especificidad 0-1-1 ganaban a las clases de `Table*` (0-1-0), así que el componente no podía tomar el diseño. Las 2 tablas crudas (detalle de proforma y cierre de materiales) conservan su estilo |
+| D165 | Filas con las medidas de la maqueta, sin cebra: texto de 13,5 px, celda de 13 × 16 px, línea `--border` y hover `--muted` en 150 ms. La primera columna (el código, o la fecha que abre la fila) en mono de 12,5 px y gris tenue; una celda que abarca columnas, en gris sin mono | Decisión del responsable. Al implementarla, 12 celdas tenían un nombre en la primera columna (producto, material, máquina, operario, línea de proforma): llevan `data-cell="text"` y se ven como las demás, porque son el dato principal de su fila |
+| D166 | Acciones de fila como enlace: variante nueva `row-link` de Button (texto claro de 13 px, 24 px de alto, sin relleno, subrayado transparente que aparece en `--primary-hover` al pasar el puntero, sin moverse); `RowEditLink` la usa; `RowActions` alinea a la derecha; en las 5 listas con `RowActions` la cabecera «Acciones» va a la derecha, «Activar» es `row-link` y la acción destructiva es `xs` | Decisión del responsable. El alto, el relleno y la letra de `row-link` van en `compoundVariants`, que cva aplica después del tamaño, para que se vea igual con cualquier `size`. 24 px cumple WCAG 2.5.8 |
+| D167 | La confirmación sigue siendo la ventana (`ConfirmDialog`) | La maqueta confirmaba dentro de la fila y con un botón de dos pasos de 3 s; la ventana ya tiene foco, Esc, espera y errores probados |
+| D168 | Migas de pan como la maqueta: 13 px con 8 px entre partes, separador «›» en gris atenuado (oculto al lector de pantalla y sin selección), enlaces en gris que se aclaran con subrayado (ya no cobre) y la página actual en 600 | Decisión del responsable |
+| D169 | El vacío sigue con `EmptyState` | 80 usos; la maqueta no aportaba un cambio que lo justificara |
+| D170 | StateBadge simple, como la maqueta: 22 px, 10,5 px, 9 px a los lados y un punto de 5,5 px del color del texto, sin brillo. Cada estado solo tiene un tono: sin gestos, sin el radar de «En producción», que pasa a ámbar con el punto fijo, y sin el relleno a medias de parcial | Decisión del responsable («maqueta completa»). Reemplaza esa parte de D155; con esto ninguna etiqueta tiene un bucle (actualiza D153) |
+| D171 | Paginación con una flecha decorativa hacia cada lado en «Anterior» y «Siguiente», también deshabilitados | Propuesto desde la maqueta |
+
+Lo que la maqueta pedía y no se adoptó: la cebra; atenuar Tipo y Teléfono columna por columna; el
+esqueleto a 1,6 s y 11 px; la rejilla de filtros de 160 px; la etiqueta de tipo y el teléfono en mono
+de `tabla_acciones_fila.html`; y su edición en modal (Clientes edita en el panel).
+
+### Commits
+
+| Commit | Qué cambia |
+|---|---|
+| `e07051e` L1 `feat(ui): cabecera de tabla de acero cepillado` | D163 y la mitad de D164: las reglas de `table`, `thead`, `th`, `tfoot` y `caption` pasan a `table:not([data-slot])` |
+| `ad70023` L2 `feat(ui): filas de tabla con las medidas de la propuesta` | D165 y el resto de D164 (`td`, `tbody tr`, su hover y `td[colspan]`); `data-cell="text"` en 12 celdas de 11 archivos; el lector de la prueba de stock del detalle de la orden acepta celdas con atributos |
+| `e096ea5` L3 `feat(ui): acciones de fila como enlace` | D166: `row-link`, `RowEditLink`, `RowActions` con `data-slot`, los 4 botones de estado (cliente, producto, material, proveedor), el «Eliminar» de la línea de receta en `xs` y las 5 cabeceras |
+| `d8ea8df` L4 `feat(ui): migas de pan de la propuesta` | D168 |
+| `c28d12d` L5 `feat(comercial): etiqueta de estado simple` | D170: `stateLooks` pasa a `stateTones`; salen de `patterns.css` el radar (`state-dot-live`, `state-ping`), el brillo de vigente y el relleno de parcial; la fila de StateBadge de Presentación pierde «Repetir gestos». Badge conserva `pop` y `stamp` en su API |
+| `bbb8b7d` L6 `feat(ui): paginacion con flechas` | D171 |
+| `7a016b7` L7 `feat(galeria): listados con el diseno de la propuesta` | La demo de la fila como las listas reales, la cabecera «Acciones» a la derecha y las notas de tabla, confirmación, StateBadge y migas |
+
+Cada commit empezó por su prueba roja (5 archivos de prueba nuevos: `table`, `row-actions`,
+`breadcrumbs`, `pagination-controls` y `listing-section`, y `status-badge` reescrita); `npm run
+check` en verde antes de cada uno (de 5834 a 5872 pruebas, de 366 a 371 archivos). Se publicaron
+juntos: CI #265 sobre `7a016b7`, en verde.
+
+Para no aceptar a ciegas las instantáneas, un guion comparó cada diff sin las clases: en L2 solo
+apareció `data-cell="text"`; en L3, `data-variant` de `ghost` a `row-link` (64 veces; el arnés de
+páginas quita `data-size`, así que `xs` lo prueba solo `row-actions.test.ts`); en L4, `<svg/>` por
+`<span aria-hidden="true">›</span>` (948 veces); en L6, solo líneas de «Anterior» y «Siguiente».
+
+### CSS compilado e instantáneas
+
+| Commit | Reglas quitadas / nuevas / cambiadas | Total de reglas | Instantáneas |
+|---|---|---|---|
+| L1 | 5 / 9 / 2 | 1407 → 1411 | 1 |
+| L2 | 12 / 15 / 0 | 1414 | 36 |
+| L3 | 0 / 4 / 0 | 1418 | 27 |
+| L4 | 0 / 0 / 0 | 1418 | 398 (64 archivos) |
+| L5 | 11 / 4 / 0 (salen el radar, sus fotogramas, el brillo, el relleno y `size-1.5`) | 1411 | 4 |
+| L6 | 0 / 0 / 0 | 1411 | 80 (19 archivos) |
+| L7 | 0 / 0 / 0 | 1411 | 1 (la galería) |
+
+Sin utilidades fantasma. La prueba de StateBadge nombra `overflow-visible` solo porque el shell
+también la usa.
+
+### Verificación en staging
+
+Con estilos calculados y el puntero real; las transiciones se adelantaron con `finish()`.
+
+- **Cabecera (clientes):** #262a31 con la textura de 135°, JetBrains Mono 700 a 10,5 px en
+  mayúsculas con 0,84 px de espaciado, línea #7a828f, filo y sombra, relleno de 12 × 16 px. El
+  borde se lee 1,68 px: los 2 px a la escala de píxeles del panel.
+- **Filas:** celda de 13 × 16 px a 13,5 px, línea `--border`, 150 ms; al pasar el puntero, #1c2027.
+  La primera columna en mono de 12,5 px y #8b93a0 tanto con un código (`CLI00000010`) como con una
+  fecha (`14/11/2026`, movimientos de caja); las celdas `data-cell="text"` del detalle de
+  `OTR00000010` en sans, claras y a 13,5 px.
+- **Acciones:** «Acciones» y la columna a la derecha; «Editar» y «Activar» a 13 px y 24 px de alto,
+  sin relleno; al pasar el puntero, #f6a64a con subrayado y sin desplazamiento; «Inactivar» `xs`
+  de 24 px.
+- **Migas:** «›» en gris atenuado, 8 px entre partes, enlaces de 13 px en gris y la página actual
+  en 600.
+- **«En producción»:** ámbar, 22 px, 10,5 px, 9 px a los lados, punto de 5,5 px sin brillo, sin
+  `::before` ni animación. En pedidos siguen los `badge-pop` y `badge-ring` de una sola vez de los
+  Badge success (D153), no de StateBadge.
+- **Paginación:** flecha a cada lado, también en los botones deshabilitados.
+- **Tablas crudas:** las 3 del detalle de `PRF00000005` y la del cierre de materiales de
+  `OTR00000010` conservan `--secondary` en la cabecera, `th` en 600, la línea al 78 % y `colspan`
+  en gris. La orden tiene además 8 tablas vacías y ocultas (`hidden`), sin efecto visible.
+- **Galería:** carga; «Activar» `row-link`, los dos «Inactivar» `xs` de 24 px y las notas nuevas.
+
+### Pendientes que deja
+
+| Pendiente | Detalle |
+|---|---|
+| Listas con «Editar» sin `RowActions` | Máquinas, repuestos, materiales por proveedor, operarios y usuarios ya tenían «Acciones» a la derecha y ahora tienen «Editar» como enlace, pero sus botones de estado conservan «Activar» `ghost` y la acción destructiva en `sm`. Llevarlas a D166, en su propio paso |
+| Gestos sin consumidor | `pop` y `stamp` de Badge ya no los usa ninguna pantalla (D170); quitarlos o darles uso |
+| Lo que no se adoptó de la maqueta | Cebra, columnas atenuadas, esqueleto, rejilla de filtros, tipo y teléfono en mono, edición en modal (arriba) |
+| Advertencias de lint anteriores | `GalleryNote` sin uso en `foundations-section.tsx` y `_line` en `commercial/orders/actions.ts` |
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
