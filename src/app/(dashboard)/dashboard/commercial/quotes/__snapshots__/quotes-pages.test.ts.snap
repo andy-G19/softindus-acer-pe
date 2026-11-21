@@ -3766,13 +3766,13 @@ exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > resultado 1
 </thead>
 <tbody>
 <tr>
-<td>nombre_producto-1</td>
+<td data-cell="text">nombre_producto-1</td>
 <td>11.50</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 </tr>
 <tr>
-<td>nombre_producto-2</td>
+<td data-cell="text">nombre_producto-2</td>
 <td>22.50</td>
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>

@@ -5157,7 +5157,7 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>categoria-1</p>
 </td>
@@ -5170,7 +5170,7 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 <td>S/ 1695.78</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>categoria-2</p>
 </td>
@@ -6441,7 +6441,7 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>categoria-1</p>
 </td>
@@ -6454,7 +6454,7 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 <td>S/ 1695.78</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>categoria-2</p>
 </td>
@@ -7101,7 +7101,7 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>categoria-1</p>
 </td>
@@ -7114,7 +7114,7 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 <td>S/ 1695.78</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>categoria-2</p>
 </td>
@@ -7742,7 +7742,7 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>categoria-1</p>
 </td>
@@ -7755,7 +7755,7 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 <td>S/ 1695.78</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>categoria-2</p>
 </td>
@@ -8273,7 +8273,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>categoria-1</p>
 </td>
@@ -8286,7 +8286,7 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 <td>S/ 1695.78</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>categoria-2</p>
 </td>

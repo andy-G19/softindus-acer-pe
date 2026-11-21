@@ -124,7 +124,7 @@ export default async function OrderDetailPage({
         <TableBody>
           {order.detalle_pedido.map((detail) => (
             <TableRow key={detail.id_detalle_pedido}>
-              <TableCell className="font-medium">
+              <TableCell data-cell="text" className="font-medium">
                 {detail.producto.nombre_producto}
               </TableCell>
               <TableCell className="text-right">

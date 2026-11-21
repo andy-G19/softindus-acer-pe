@@ -1965,14 +1965,14 @@ exports[`/dashboard/staff/payrolls/new > formulario > resultado 1`] = `
 </thead>
 <tbody>
 <tr>
-<td>apellidos-1, nombres-1</td>
+<td data-cell="text">apellidos-1, nombres-1</td>
 <td>modalidad_pago-1</td>
 <td>S/ 11.50</td>
 <td>2</td>
 <td>2</td>
 </tr>
 <tr>
-<td>apellidos-2, nombres-2</td>
+<td data-cell="text">apellidos-2, nombres-2</td>
 <td>modalidad_pago-2</td>
 <td>-</td>
 <td>2</td>

@@ -2246,7 +2246,7 @@ exports[`/dashboard/production/campaigns/[id] > detalle > resultado 1`] = `
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_producto-1</div>
 <p>id_campania_detalle-1</p>
 </td>
@@ -2258,7 +2258,7 @@ exports[`/dashboard/production/campaigns/[id] > detalle > resultado 1`] = `
 <td>observaciones-1</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_producto-2</div>
 <p>id_campania_detalle-2</p>
 </td>
@@ -2542,7 +2542,7 @@ exports[`/dashboard/production/campaigns/[id] > finalizada no ofrece agregar pro
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_producto-1</div>
 <p>id_campania_detalle-1</p>
 </td>
@@ -2554,7 +2554,7 @@ exports[`/dashboard/production/campaigns/[id] > finalizada no ofrece agregar pro
 <td>observaciones-1</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_producto-2</div>
 <p>id_campania_detalle-2</p>
 </td>

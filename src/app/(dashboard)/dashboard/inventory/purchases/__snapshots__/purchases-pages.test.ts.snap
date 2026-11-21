@@ -1532,14 +1532,14 @@ exports[`/dashboard/inventory/purchases/[id] > detalle con regreso al listado > 
 </thead>
 <tbody>
 <tr>
-<td>nombre_material-1</td>
+<td data-cell="text">nombre_material-1</td>
 <td>11.50</td>
 <td>unidad_medida-1</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 </tr>
 <tr>
-<td>nombre_material-2</td>
+<td data-cell="text">nombre_material-2</td>
 <td>22.50</td>
 <td>unidad_medida-2</td>
 <td>S/ 22.50</td>
@@ -1863,14 +1863,14 @@ exports[`/dashboard/inventory/purchases/[id] > pendiente y sin pagos > resultado
 </thead>
 <tbody>
 <tr>
-<td>nombre_material-1</td>
+<td data-cell="text">nombre_material-1</td>
 <td>11.50</td>
 <td>unidad_medida-1</td>
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 </tr>
 <tr>
-<td>nombre_material-2</td>
+<td data-cell="text">nombre_material-2</td>
 <td>22.50</td>
 <td>unidad_medida-2</td>
 <td>S/ 22.50</td>

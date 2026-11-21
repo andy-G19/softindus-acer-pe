@@ -4,7 +4,12 @@
 // 2026-11-21; D163) la cabecera es acero cepillado: cada celda lleva --accent con la textura de
 // metal (en thead la taparia el hover de la fila), letra mono de 10,5 px en negrita con espaciado
 // de 0,08em, una linea de acero de 2 px debajo y el filo de luz con sombra de
-// --shadow-table-head. Las reglas de tabla de patterns.css ya no la pisan (D164).
+// --shadow-table-head. Las reglas de tabla de patterns.css ya no la pisan (D164). Las filas tienen
+// las medidas de la maqueta, sin cebra (D165): texto de 13,5 px, celda de 13 px por 16 px, linea de
+// --border y hover --muted; la primera columna (el codigo, o la fecha que abre la fila) en mono de
+// 12,5 px y gris tenue, salvo una celda que abarca columnas (el vacio, «Totales»), que va en gris
+// sin ser codigo, y una con data-cell="text": un nombre (producto, material, maquina, operario) es
+// el dato principal de su fila y no se atenua.
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
@@ -17,7 +22,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
     >
       <table
         data-slot="table"
-        className={cn("w-full min-w-max caption-bottom text-sm", className)}
+        className={cn("w-full min-w-max caption-bottom text-[13.5px]", className)}
         {...props}
       />
     </div>
@@ -65,7 +70,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "border-b border-border/70 transition-colors hover:bg-secondary/65 has-aria-expanded:bg-secondary/65 data-[state=selected]:bg-secondary",
+        "border-b border-border transition-colors duration-(--motion-fast) ease-out hover:bg-muted has-aria-expanded:bg-muted data-[state=selected]:bg-muted",
         className
       )}
       {...props}
@@ -91,7 +96,7 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        "px-4 py-3 align-middle whitespace-nowrap text-foreground tabular-nums first:font-mono [&:has([role=checkbox])]:pr-0",
+        "px-4 py-[13px] align-middle whitespace-nowrap text-foreground tabular-nums [&:first-child:not([colspan]):not([data-cell=text])]:font-mono [&:first-child:not([colspan]):not([data-cell=text])]:text-[12.5px] [&:first-child:not([colspan]):not([data-cell=text])]:text-muted-foreground [&:has([role=checkbox])]:pr-0 [&[colspan]]:text-muted-foreground",
         className
       )}
       {...props}

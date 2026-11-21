@@ -164,7 +164,7 @@ export default async function ProductionCampaignDetailPage({
 
                 return (
                   <TableRow key={detail.id_campania_detalle}>
-                    <TableCell>
+                    <TableCell data-cell="text">
                       <div className="font-medium">
                         {detail.producto.nombre_producto}
                       </div>

@@ -3788,7 +3788,7 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -3805,7 +3805,7 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -3848,7 +3848,7 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-1</span>
 </td>
 <td>50.00 unidad_medida-1</td>
@@ -3859,7 +3859,7 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 <td>-</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-2</span>
 <span data-variant="warning">Entregado por encima del plan</span>
 </td>
@@ -4339,7 +4339,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -4356,7 +4356,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -4399,7 +4399,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-1</span>
 </td>
 <td>11.50 unidad_medida-1</td>
@@ -4410,7 +4410,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
 <td>-11.50</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-2</span>
 </td>
 <td>22.50 unidad_medida-2</td>
@@ -4721,7 +4721,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -4738,7 +4738,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -4781,7 +4781,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-1</span>
 </td>
 <td>11.50 unidad_medida-1</td>
@@ -4792,7 +4792,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
 <td>-11.50</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-2</span>
 </td>
 <td>22.50 unidad_medida-2</td>
@@ -5088,7 +5088,7 @@ exports[`/dashboard/production/work-orders/[id] > orden anulada: sin conciliacio
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -5105,7 +5105,7 @@ exports[`/dashboard/production/work-orders/[id] > orden anulada: sin conciliacio
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5405,7 +5405,7 @@ exports[`/dashboard/production/work-orders/[id] > orden historica sin requerimie
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -5422,7 +5422,7 @@ exports[`/dashboard/production/work-orders/[id] > orden historica sin requerimie
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5720,7 +5720,7 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -5737,7 +5737,7 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5780,7 +5780,7 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-1</span>
 </td>
 <td>50.00 unidad_medida-1</td>
@@ -5791,7 +5791,7 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 <td>-</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-2</span>
 </td>
 <td>50.00 unidad_medida-2</td>
@@ -6366,7 +6366,7 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 </td>
@@ -6383,7 +6383,7 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -6426,7 +6426,7 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-1</span>
 </td>
 <td>50.00 unidad_medida-1</td>
@@ -6437,7 +6437,7 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 <td>-</td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <span>nombre_material-2</span>
 </td>
 <td>50.00 unidad_medida-2</td>

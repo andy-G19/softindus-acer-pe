@@ -25,7 +25,9 @@ const html = renderToStaticMarkup(
 );
 
 function classesOf(slot: string) {
-  return (html.match(new RegExp(`<[a-z]+ data-slot="${slot}" class="([^"]*)"`))?.[1] ?? "").split(" ");
+  return (html.match(new RegExp(`<[a-z]+ data-slot="${slot}" class="([^"]*)"`))?.[1] ?? "")
+    .replaceAll("&amp;", "&")
+    .split(" ");
 }
 
 describe("cabecera de la tabla", () => {
@@ -61,6 +63,51 @@ describe("cabecera de la tabla", () => {
   });
 });
 
+// D165: filas con las medidas de la maqueta, sin cebra. La primera columna (el codigo) en mono de
+// 12,5 px y gris tenue; una celda que abarca columnas (el vacio, «Totales») no es un codigo, ni una
+// con data-cell="text" (un nombre: el dato principal de su fila). Las paginas que la marcan lo
+// muestran en sus instantaneas, que conservan los atributos data-* salvo data-slot.
+describe("filas de la tabla", () => {
+  it("texto de 13,5 px en la tabla", () => {
+    const table = classesOf("table");
+
+    expect(table).toContain("text-[13.5px]");
+    expect(table).not.toContain("text-sm");
+  });
+
+  it("celda de 13 px por 16 px", () => {
+    const cell = classesOf("table-cell");
+
+    expect(cell).toEqual(expect.arrayContaining(["px-4", "py-[13px]"]));
+    expect(cell).not.toContain("py-3");
+  });
+
+  it("la primera columna en mono de 12,5 px y gris tenue, salvo una celda que abarca columnas o un nombre", () => {
+    const cell = classesOf("table-cell");
+
+    expect(cell).toEqual(
+      expect.arrayContaining([
+        "[&:first-child:not([colspan]):not([data-cell=text])]:font-mono",
+        "[&:first-child:not([colspan]):not([data-cell=text])]:text-[12.5px]",
+        "[&:first-child:not([colspan]):not([data-cell=text])]:text-muted-foreground",
+        "[&[colspan]]:text-muted-foreground",
+      ]),
+    );
+    expect(cell).not.toContain("first:font-mono");
+  });
+
+  it("linea de --border, hover --muted y sin cebra", () => {
+    const row = html.match(/<tr data-slot="table-row" class="([^"]*)"/g) ?? [];
+    const bodyRow = (row[1]?.match(/class="([^"]*)"/)?.[1] ?? "").split(" ");
+
+    expect(bodyRow).toEqual(
+      expect.arrayContaining(["border-b", "border-border", "hover:bg-muted", "duration-(--motion-fast)", "ease-out"]),
+    );
+    expect(bodyRow).not.toContain("border-border/70");
+    expect(bodyRow.some((name) => name.startsWith("even:") || name.startsWith("odd:"))).toBe(false);
+  });
+});
+
 describe("reglas de tabla de patterns.css (D99)", () => {
   const patterns = withoutComments(readFileSync("src/styles/patterns.css", "utf8"));
 
@@ -68,6 +115,14 @@ describe("reglas de tabla de patterns.css (D99)", () => {
     for (const part of ["table", "thead", "th", "tfoot", "caption"]) {
       expect(patterns).not.toMatch(new RegExp(`\\.industrial-dark\\s+${part}\\s*\\{`));
     }
+  });
+
+  it("ninguna regla pinta las filas ni las celdas de una tabla del componente", () => {
+    expect(patterns).not.toMatch(/\.industrial-dark\s+td[\s[{]/);
+    expect(patterns).not.toMatch(/\.industrial-dark\s+tbody/);
+    expect(patterns).toMatch(/\.industrial-dark\s+table:not\(\[data-slot\]\)\s+td\s*\{/);
+    expect(patterns).toMatch(/\.industrial-dark\s+table:not\(\[data-slot\]\)\s+tbody tr:hover\s*\{/);
+    expect(patterns).toMatch(/\.industrial-dark\s+table:not\(\[data-slot\]\)\s+td\[colspan\]\s*\{/);
   });
 
   it("las de la cabecera solo alcanzan a las tablas crudas", () => {

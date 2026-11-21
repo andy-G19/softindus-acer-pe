@@ -447,7 +447,7 @@ export default async function WorkOrderDetailPage({
             <TableBody>
               {materialRows.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell>
+                  <TableCell data-cell="text">
                     <div className="font-medium">{row.materialName}</div>
                     <p className="mt-1 text-xs text-muted-foreground">
                       Categoría: {row.materialCategory}
@@ -538,7 +538,7 @@ export default async function WorkOrderDetailPage({
                 <TableBody>
                   {reconciliationRows.map((row) => (
                     <TableRow key={row.idRequerimiento}>
-                      <TableCell>
+                      <TableCell data-cell="text">
                         <span className="font-medium">{row.materialName}</span>
                         {row.overDelivered ? (
                           <Badge variant="warning" className="mt-1">

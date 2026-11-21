@@ -318,7 +318,7 @@ exports[`/dashboard/maintenance/recurrences > reporte del mes > resultado 1`] = 
 </thead>
 <tbody>
 <tr>
-<td>nombre-1<p>tipo-1 · ubicacion-1</p>
+<td data-cell="text">nombre-1<p>tipo-1 · ubicacion-1</p>
 </td>
 <td>estado-1</td>
 <td>2</td>
@@ -334,7 +334,7 @@ exports[`/dashboard/maintenance/recurrences > reporte del mes > resultado 1`] = 
 </td>
 </tr>
 <tr>
-<td>nombre-2<p>tipo-2 · Sin ubicación</p>
+<td data-cell="text">nombre-2<p>tipo-2 · Sin ubicación</p>
 </td>
 <td>estado-2</td>
 <td>2</td>

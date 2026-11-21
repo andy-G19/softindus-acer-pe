@@ -43,7 +43,7 @@ function stockRows(html: string | null) {
   expect(html).not.toBeNull();
 
   return [...(html ?? "").matchAll(/<tr>([\s\S]*?)<\/tr>/g)]
-    .map(([, row]) => [...row.matchAll(/<td>([\s\S]*?)<\/td>/g)].map(([, cell]) => cell.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()))
+    .map(([, row]) => [...row.matchAll(/<td(?: [^>]*)?>([\s\S]*?)<\/td>/g)].map(([, cell]) => cell.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()))
     .filter((cells) => cells.some((cell) => cell === "Suficiente" || cell === "Insuficiente"));
 }
 

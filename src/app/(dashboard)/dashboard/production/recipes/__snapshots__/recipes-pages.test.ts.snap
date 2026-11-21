@@ -4970,7 +4970,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 <p>observaciones-1</p>
@@ -4989,7 +4989,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5230,7 +5230,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 <p>observaciones-1</p>
@@ -5249,7 +5249,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5527,7 +5527,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 <p>observaciones-1</p>
@@ -5546,7 +5546,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -5784,7 +5784,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 <p>observaciones-1</p>
@@ -5803,7 +5803,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>
@@ -6041,7 +6041,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </thead>
 <tbody>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-1</div>
 <p>Categoría: categoria-1</p>
 <p>observaciones-1</p>
@@ -6060,7 +6060,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/requirements > 
 </td>
 </tr>
 <tr>
-<td>
+<td data-cell="text">
 <div>nombre_material-2</div>
 <p>Categoría: categoria-2</p>
 </td>

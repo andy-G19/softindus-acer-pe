@@ -901,9 +901,9 @@
   }
 
   /* Tablas en toda la app (11.7c; antes en el adaptador, movidas tal cual). Ganaban a las clases
-     de los componentes Table* donde chocaban (D99). Desde el diseno de listados (2026-11-21; D164)
-     las de la tabla y su cabecera solo alcanzan a las tablas crudas, sin data-slot: las del
-     componente las pinta src/components/ui/table.tsx. */
+     de los componentes Table* donde chocaban (D99). Desde el diseno de listados (2026-11-21; D164
+     y D165) solo alcanzan a las tablas crudas, sin data-slot: las del componente las pinta
+     src/components/ui/table.tsx. */
   .industrial-dark :is(section, div).overflow-hidden:has(table) {
     overflow-x: auto;
   }
@@ -925,17 +925,17 @@
     font-weight: 600;
   }
 
-  .industrial-dark td {
+  .industrial-dark table:not([data-slot]) td {
     border-color: color-mix(in srgb, var(--border) 78%, transparent);
   }
 
-  .industrial-dark tbody tr {
+  .industrial-dark table:not([data-slot]) tbody tr {
     border-color: color-mix(in srgb, var(--border) 78%, transparent);
     transition-property: background-color;
     transition-duration: var(--motion-fast);
   }
 
-  .industrial-dark tbody tr:hover {
+  .industrial-dark table:not([data-slot]) tbody tr:hover {
     background-color: color-mix(in srgb, var(--secondary) 70%, transparent);
   }
 
@@ -948,7 +948,7 @@
     color: var(--muted-foreground);
   }
 
-  .industrial-dark td[colspan] {
+  .industrial-dark table:not([data-slot]) td[colspan] {
     color: var(--muted-foreground);
   }
 

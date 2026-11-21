@@ -113,7 +113,7 @@ export default async function InventoryAlertsPage() {
 
                 return (
                   <TableRow key={material.id_material}>
-                    <TableCell className="font-medium">
+                    <TableCell data-cell="text" className="font-medium">
                       {material.nombre_material}
                     </TableCell>
                     <TableCell>{material.categoria}</TableCell>

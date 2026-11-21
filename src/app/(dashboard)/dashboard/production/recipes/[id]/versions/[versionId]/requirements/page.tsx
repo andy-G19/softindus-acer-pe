@@ -232,7 +232,7 @@ export default async function MaterialRequirementsPage({
         <TableBody>
           {calculationRows.map((row) => (
             <TableRow key={row.id}>
-              <TableCell>
+              <TableCell data-cell="text">
                 <div className="font-medium">{row.materialName}</div>
                 <p className="mt-1 text-xs text-muted-foreground">
                   Categoría: {row.materialCategory}

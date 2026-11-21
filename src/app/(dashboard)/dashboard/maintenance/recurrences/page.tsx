@@ -372,7 +372,7 @@ export default async function MaintenanceRecurrencesPage() {
               <TableBody>
                 {machineReports.map((machine) => (
                   <TableRow key={machine.id_maquina} className="align-top">
-                    <TableCell className="font-medium">
+                    <TableCell data-cell="text" className="font-medium">
                       {machine.nombre}
                       <p className="text-xs font-normal text-muted-foreground">
                         {machine.tipo} · {machine.ubicacion ?? "Sin ubicación"}
