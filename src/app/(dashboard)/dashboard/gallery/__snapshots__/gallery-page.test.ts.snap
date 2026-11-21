@@ -1689,7 +1689,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <td>
 <div>
 <a data-variant="row-link" href="#listados">Editar</a>
-<button data-variant="ghost" type="button">Activar</button>
+<button data-variant="row-link" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -1707,7 +1707,8 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </div>
 </figure>
-<p>«Inactivar» usa ConfirmActionButton: pide confirmar con el nombre del registro y, mientras la acción espera, la confirmación no se cancela ni se cierra con Esc; al terminar da un solo aviso, se cierra y el foco vuelve al botón. En «Taller Arequipa» la acción de ejemplo falla y el mensaje queda dentro de la confirmación. «Activar» no pide confirmar. Aquí la acción solo espera en el navegador: no se guarda nada.</p>
+<p>La cabecera es acero cepillado: el acento con la textura de metal, letra mono de 10,5 px en mayúsculas y una línea de acero de 2 px debajo. Las filas tienen texto de 13,5 px, sin cebra, y se aclaran al pasar el puntero. La primera columna, el código o la fecha que abre la fila, va en mono gris; si es un nombre, la celda lleva data-cell=&quot;text&quot; y se ve como las demás. Las acciones de la fila van a la derecha: «Editar» y «Activar» son enlaces de texto que toman el cobre al pasar el puntero, e «Inactivar» es un botón destructivo pequeño. La paginación lleva una flecha hacia cada lado.</p>
+<p>«Inactivar» usa ConfirmActionButton. La confirmación sigue siendo la ventana: pide confirmar con el nombre del registro y, mientras la acción espera, no se cancela ni se cierra con Esc; al terminar da un solo aviso, se cierra y el foco vuelve al botón. En «Taller Arequipa» la acción de ejemplo falla y el mensaje queda dentro de la confirmación. «Activar» no pide confirmar. Aquí la acción solo espera en el navegador: no se guarda nada.</p>
 <figure>
 <figcaption>Cambio de estado desde la fila (RowStatusSelect)</figcaption>
 <div>
@@ -1890,7 +1891,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </div>
 </figure>
-<p>StateBadge es un Badge con la etiqueta y la variante de cada estado comercial; Comercial la usa desde la entrega 10.4b. Mantenimiento y Mermas usan Badge con sus propias variantes.</p>
+<p>StateBadge es una etiqueta simple, sin gestos: 22 px de alto y un punto fijo del color de su tono; «En producción» espera en ámbar. Comercial la usa desde la entrega 10.4b. Mantenimiento y Mermas usan Badge con sus propias variantes.</p>
 <figure>
 <figcaption>Tabla sin resultados</figcaption>
 <div>
@@ -1944,7 +1945,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </figure>
 </div>
-<p>La cabecera de esta página es el componente compartido PageHeader, con migas de pan y descripción.</p>
+<p>Las migas de pan separan cada parte con «›» en gris; los enlaces se aclaran con subrayado al pasar el puntero y la página actual va en semibold. La cabecera de esta página es el componente compartido PageHeader, con migas de pan y descripción.</p>
 </section>
 </div>",
   "outcome": "render",
