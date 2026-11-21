@@ -85,20 +85,20 @@ exports[`Alert > variante warning 1`] = `
 `;
 
 exports[`Badge > cada variante 1`] = `
-"<span data-slot="badge" data-variant="default" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-active [a]:hover:bg-primary/20">default</span>
-<span data-slot="badge" data-variant="success" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-success [a]:hover:bg-muted">success</span>
-<span data-slot="badge" data-variant="warning" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-warning [a]:hover:bg-muted">warning</span>
-<span data-slot="badge" data-variant="info" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-info [a]:hover:bg-muted">info</span>
-<span data-slot="badge" data-variant="secondary" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-info [a]:hover:bg-secondary/80">secondary</span>
-<span data-slot="badge" data-variant="destructive" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-danger focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20">destructive</span>
-<span data-slot="badge" data-variant="outline" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground">outline</span>
-<span data-slot="badge" data-variant="ghost" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50">ghost</span>
-<span data-slot="badge" data-variant="link" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! text-primary underline-offset-4 hover:underline">link</span>"
+"<span data-slot="badge" data-variant="default" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-border bg-secondary text-primary shadow-badge-default">default</span>
+<span data-slot="badge" data-variant="success" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-success-border bg-success-surface text-success-foreground badge-settle">success</span>
+<span data-slot="badge" data-variant="warning" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-warning-border bg-warning-surface text-warning-foreground">warning</span>
+<span data-slot="badge" data-variant="info" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-info-border bg-info-surface text-info-foreground">info</span>
+<span data-slot="badge" data-variant="secondary" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border border-transparent px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! bg-muted bg-(image:--texture-brush) text-foreground shadow-badge-secondary">secondary</span>
+<span data-slot="badge" data-variant="destructive" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-destructive-border bg-destructive-surface text-destructive-foreground focus-visible:ring-destructive/20 badge-shake">destructive</span>
+<span data-slot="badge" data-variant="outline" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-control-border bg-transparent text-foreground hover:border-control-border-hover">outline</span>
+<span data-slot="badge" data-variant="ghost" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border border-transparent px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! bg-transparent text-muted-foreground hover:bg-ghost-hover hover:text-foreground">ghost</span>
+<span data-slot="badge" data-variant="link" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border border-transparent font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! bg-transparent bg-(image:--badge-filament) bg-[length:calc(100%-6px)_1.5px] bg-[position:center_bottom_4px] bg-no-repeat px-[3px] text-primary hover:text-primary-hover">link</span>"
 `;
 
-exports[`Badge > como enlace (asChild) 1`] = `"<a data-slot="badge" data-variant="default" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-active [a]:hover:bg-primary/20" href="/dashboard">Ver</a>"`;
+exports[`Badge > como enlace (asChild) 1`] = `"<a data-slot="badge" data-variant="default" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-border bg-secondary text-primary shadow-badge-default" href="/dashboard">Ver</a>"`;
 
-exports[`Badge > con clase propia 1`] = `"<span data-slot="badge" data-variant="success" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-success [a]:hover:bg-muted text-[10.5px]">Sistema activo</span>"`;
+exports[`Badge > con clase propia 1`] = `"<span data-slot="badge" data-variant="success" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border px-2.5 font-sans font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-success-border bg-success-surface text-success-foreground badge-settle text-[10.5px]">Sistema activo</span>"`;
 
 exports[`Button > como enlace (asChild) 1`] = `"<a data-slot="button" data-variant="default" data-size="default" class="group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-[color,background-color,border-color,text-decoration-color,box-shadow,translate,scale,opacity] duration-(--motion-fast) ease-out outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:-translate-y-px active:not-aria-[haspopup]:translate-y-px active:not-aria-[haspopup]:scale-97 motion-reduce:transition-none motion-reduce:translate-none! motion-reduce:scale-none! disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 bg-primary bg-linear-to-b from-primary-hover to-primary text-primary-foreground shadow-button hover:bg-none hover:bg-primary-hover active:bg-none active:bg-primary-active active:shadow-none h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2" href="/dashboard/commercial/clients/new">Nuevo cliente</a>"`;
 
@@ -1149,23 +1149,41 @@ exports[`Presentacion > estado vacio completo 1`] = `
 `;
 
 exports[`Presentacion > etiqueta de estado con Badge 1`] = `
-"<span data-slot="badge" data-variant="success" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-success [a]:hover:bg-muted">Pagada</span>
-<span data-slot="badge" data-variant="default" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-active [a]:hover:bg-primary/20">Pendiente</span>
-<span data-slot="badge" data-variant="destructive" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-danger focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20">Anulado</span>
-<span data-slot="badge" data-variant="default" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-active [a]:hover:bg-primary/20">En producción</span>
-<span data-slot="badge" data-variant="default" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-active [a]:hover:bg-primary/20">Sin proforma</span>
-<span data-slot="badge" data-variant="outline" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground">desconocido</span>
-<span data-slot="badge" data-variant="outline" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground">-</span>
-<span data-slot="badge" data-variant="outline" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground">constructor</span>"
+"<span data-slot="badge" data-variant="success" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-success-border bg-success-surface text-success-foreground badge-settle gap-1.5" data-tone="success">
+<span data-slot="state-dot" aria-hidden="true" class="relative size-1.5 shrink-0 rounded-full bg-current">
+</span>Pagada</span>
+<span data-slot="badge" data-variant="warning" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-warning-border bg-warning-surface text-warning-foreground gap-1.5" data-tone="warning">
+<span data-slot="state-dot" aria-hidden="true" class="relative size-1.5 shrink-0 rounded-full bg-current">
+</span>Pendiente</span>
+<span data-slot="badge" data-variant="destructive" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-destructive-border bg-destructive-surface text-destructive-foreground focus-visible:ring-destructive/20 badge-stamp gap-1.5" data-tone="destructive">
+<span data-slot="state-dot" aria-hidden="true" class="relative size-1.5 shrink-0 rounded-full bg-current">
+</span>Anulado</span>
+<span data-slot="badge" data-variant="info" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-info-border bg-info-surface text-info-foreground gap-1.5 overflow-visible" data-tone="info">
+<span data-slot="state-dot" aria-hidden="true" class="relative size-1.5 shrink-0 rounded-full bg-current state-dot-live">
+</span>En producción</span>
+<span data-slot="badge" data-variant="warning" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-warning-border bg-warning-surface text-warning-foreground gap-1.5" data-tone="warning">
+<span data-slot="state-dot" aria-hidden="true" class="relative size-1.5 shrink-0 rounded-full bg-current">
+</span>Sin proforma</span>
+<span data-slot="badge" data-variant="outline" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-control-border bg-transparent hover:border-control-border-hover border-dashed text-muted-foreground" data-tone="unknown">desconocido</span>
+<span data-slot="badge" data-variant="outline" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-control-border bg-transparent hover:border-control-border-hover border-dashed text-muted-foreground" data-tone="unknown">-</span>
+<span data-slot="badge" data-variant="outline" class="group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm border px-2.5 font-sans text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-(--motion-base) ease-out hover:brightness-110 motion-reduce:transition-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! border-control-border bg-transparent hover:border-control-border-hover border-dashed text-muted-foreground" data-tone="unknown">constructor</span>"
 `;
 
 exports[`Presentacion > indicador con enlace e icono 1`] = `
-"<a class="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45" href="/dashboard/inventory/alerts">
-<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl relative h-full border border-border bg-card shadow-raised transition duration-150 ease-out [--card-spacing:20px] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[var(--kpi-tone)] hover:-translate-y-[2px] hover:border-border hover:bg-secondary hover:shadow-raised-hover" style="--kpi-tone:var(--warning)">
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-1">
-<div class="flex items-center gap-2">
-<span class="flex size-7 shrink-0 items-center justify-center rounded-lg" style="background-color:color-mix(in srgb, var(--kpi-tone) 18%, transparent);color:var(--kpi-tone)">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package size-4" aria-hidden="true">
+"<a class="spotlight-host block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45" href="/dashboard/inventory/alerts">
+<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col overflow-hidden rounded-lg border border-border bg-card bg-(image:--texture-metal) bg-[length:180px_180px] text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:border-control-border-hover motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg kpi-card h-full gap-0 py-0" data-tone="warning" style="--kpi-tone:var(--warning)">
+<span data-slot="kpi-led" aria-hidden="true" class="kpi-led">
+</span>
+<span data-slot="kpi-halo" aria-hidden="true" class="kpi-halo">
+</span>
+<span data-slot="pointer-spotlight" aria-hidden="true" class="pointer-spotlight">
+</span>
+<div class="relative z-[1] flex h-full flex-col gap-2.5 px-[18px] pt-[18px] pb-3.5">
+<div class="kpi-head">
+<span data-slot="kpi-label" class="kpi-label">Stock bajo</span>
+<span class="flex items-center gap-2">
+<span data-slot="kpi-icon" aria-hidden="true" class="kpi-icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package" aria-hidden="true">
 <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z">
 </path>
 <path d="M12 22V12">
@@ -1176,72 +1194,103 @@ exports[`Presentacion > indicador con enlace e icono 1`] = `
 </path>
 </svg>
 </span>
-<div data-slot="card-title" class="group-data-[size=sm]/card:text-sm font-mono text-[11px] font-medium uppercase tracking-[0.07em] text-muted-foreground">Stock bajo</div>
+</span>
+</div>
+<div class="kpi-body">
+<div class="flex min-w-0 flex-col gap-1.5">
+<p data-slot="kpi-value" class="kpi-value">3</p>
+<p class="kpi-caption">Materiales</p>
 </div>
 </div>
-<div data-slot="card-content" class="px-(--card-spacing) space-y-2">
-<p class="font-mono text-3xl font-bold text-[var(--kpi-tone)]">3</p>
-<p class="text-sm leading-relaxed text-muted-foreground">Materiales</p>
+<div data-slot="kpi-footer" class="kpi-footer">
+<span class="kpi-status">
+</span>
+<span data-slot="kpi-open" class="kpi-open">Abrir →</span>
+</div>
 </div>
 </div>
 </a>"
 `;
 
 exports[`Presentacion > indicador info 1`] = `
-"<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl relative h-full border border-border bg-card shadow-raised transition duration-150 ease-out [--card-spacing:20px] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[var(--kpi-tone)]" style="--kpi-tone:var(--info)">
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-1">
-<div class="flex items-center gap-2">
-<div data-slot="card-title" class="group-data-[size=sm]/card:text-sm font-mono text-[11px] font-medium uppercase tracking-[0.07em] text-muted-foreground">Pedidos</div>
+"<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col overflow-hidden rounded-lg border border-border bg-card bg-(image:--texture-metal) bg-[length:180px_180px] text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:border-control-border-hover motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg kpi-card h-full gap-0 py-0 spotlight-host" data-tone="info" style="--kpi-tone:var(--info)">
+<span data-slot="kpi-led" aria-hidden="true" class="kpi-led">
+</span>
+<span data-slot="kpi-halo" aria-hidden="true" class="kpi-halo">
+</span>
+<span data-slot="pointer-spotlight" aria-hidden="true" class="pointer-spotlight">
+</span>
+<div class="relative z-[1] flex h-full flex-col gap-2.5 px-[18px] pt-[18px] pb-3.5">
+<div class="kpi-head">
+<span data-slot="kpi-label" class="kpi-label">Pedidos</span>
+</div>
+<div class="kpi-body">
+<div class="flex min-w-0 flex-col gap-1.5">
+<p data-slot="kpi-value" class="kpi-value">12</p>
+<p class="kpi-caption">Pendientes de entrega</p>
 </div>
 </div>
-<div data-slot="card-content" class="px-(--card-spacing) space-y-2">
-<p class="font-mono text-3xl font-bold text-[var(--kpi-tone)]">12</p>
-<p class="text-sm leading-relaxed text-muted-foreground">Pendientes de entrega</p>
 </div>
 </div>"
 `;
 
 exports[`Presentacion > indicador success 1`] = `
-"<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl relative h-full border border-border bg-card shadow-raised transition duration-150 ease-out [--card-spacing:20px] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[var(--kpi-tone)]" style="--kpi-tone:var(--success)">
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-1">
-<div class="flex items-center gap-2">
-<div data-slot="card-title" class="group-data-[size=sm]/card:text-sm font-mono text-[11px] font-medium uppercase tracking-[0.07em] text-muted-foreground">Pedidos</div>
+"<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col overflow-hidden rounded-lg border border-border bg-card bg-(image:--texture-metal) bg-[length:180px_180px] text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:border-control-border-hover motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg kpi-card h-full gap-0 py-0 spotlight-host" data-tone="success" style="--kpi-tone:var(--success)">
+<span data-slot="kpi-led" aria-hidden="true" class="kpi-led">
+</span>
+<span data-slot="kpi-halo" aria-hidden="true" class="kpi-halo">
+</span>
+<span data-slot="pointer-spotlight" aria-hidden="true" class="pointer-spotlight">
+</span>
+<div class="relative z-[1] flex h-full flex-col gap-2.5 px-[18px] pt-[18px] pb-3.5">
+<div class="kpi-head">
+<span data-slot="kpi-label" class="kpi-label">Pedidos</span>
+</div>
+<div class="kpi-body">
+<div class="flex min-w-0 flex-col gap-1.5">
+<p data-slot="kpi-value" class="kpi-value">12</p>
+<p class="kpi-caption">Pendientes de entrega</p>
 </div>
 </div>
-<div data-slot="card-content" class="px-(--card-spacing) space-y-2">
-<p class="font-mono text-3xl font-bold text-[var(--kpi-tone)]">12</p>
-<p class="text-sm leading-relaxed text-muted-foreground">Pendientes de entrega</p>
 </div>
 </div>"
 `;
 
 exports[`Presentacion > indicador warning 1`] = `
-"<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl relative h-full border border-border bg-card shadow-raised transition duration-150 ease-out [--card-spacing:20px] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[var(--kpi-tone)]" style="--kpi-tone:var(--warning)">
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-1">
-<div class="flex items-center gap-2">
-<div data-slot="card-title" class="group-data-[size=sm]/card:text-sm font-mono text-[11px] font-medium uppercase tracking-[0.07em] text-muted-foreground">Pedidos</div>
+"<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col overflow-hidden rounded-lg border border-border bg-card bg-(image:--texture-metal) bg-[length:180px_180px] text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:border-control-border-hover motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg kpi-card h-full gap-0 py-0 spotlight-host" data-tone="warning" style="--kpi-tone:var(--warning)">
+<span data-slot="kpi-led" aria-hidden="true" class="kpi-led">
+</span>
+<span data-slot="kpi-halo" aria-hidden="true" class="kpi-halo">
+</span>
+<span data-slot="pointer-spotlight" aria-hidden="true" class="pointer-spotlight">
+</span>
+<div class="relative z-[1] flex h-full flex-col gap-2.5 px-[18px] pt-[18px] pb-3.5">
+<div class="kpi-head">
+<span data-slot="kpi-label" class="kpi-label">Pedidos</span>
+</div>
+<div class="kpi-body">
+<div class="flex min-w-0 flex-col gap-1.5">
+<p data-slot="kpi-value" class="kpi-value">12</p>
+<p class="kpi-caption">Pendientes de entrega</p>
 </div>
 </div>
-<div data-slot="card-content" class="px-(--card-spacing) space-y-2">
-<p class="font-mono text-3xl font-bold text-[var(--kpi-tone)]">12</p>
-<p class="text-sm leading-relaxed text-muted-foreground">Pendientes de entrega</p>
 </div>
 </div>"
 `;
 
 exports[`Presentacion > separador horizontal 1`] = `
-"<div data-orientation="horizontal" role="none" data-slot="separator" class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch">
+"<div data-orientation="horizontal" role="none" data-slot="separator" class="separator-gleam relative shrink-0 overflow-hidden bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch">
 </div>"
 `;
 
 exports[`Presentacion > separador vertical 1`] = `
-"<div data-orientation="vertical" role="none" data-slot="separator" class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch">
+"<div data-orientation="vertical" role="none" data-slot="separator" class="separator-gleam relative shrink-0 overflow-hidden bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch">
 </div>"
 `;
 
 exports[`Presentacion > tarjeta completa 1`] = `
-"<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl">
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) border-b">
+"<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg border border-border bg-card bg-(image:--texture-metal) bg-[length:180px_180px] py-(--card-spacing) text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:border-control-border-hover motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg">
+<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-lg px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) border-b">
 <div data-slot="card-title" class="font-heading text-base leading-snug font-medium group-data-[size=sm]/card:text-sm">Titulo</div>
 <div data-slot="card-description" class="text-sm text-muted-foreground">Descripcion</div>
 <div data-slot="card-action" class="col-start-2 row-span-2 row-start-1 self-start justify-self-end">
@@ -1249,25 +1298,26 @@ exports[`Presentacion > tarjeta completa 1`] = `
 </div>
 </div>
 <div data-slot="card-content" class="px-(--card-spacing)">Contenido</div>
-<div data-slot="card-footer" class="flex items-center rounded-b-xl border-t bg-muted/50 p-(--card-spacing)">Pie</div>
+<div data-slot="card-footer" class="flex items-center rounded-b-lg border-t bg-muted/50 p-(--card-spacing)">Pie</div>
 </div>"
 `;
 
 exports[`Presentacion > tarjeta con barra termica 1`] = `
-"<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl pt-0">
-<div class="heat-bar shrink-0" aria-hidden="true">
+"<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg border border-border bg-card bg-(image:--texture-metal) bg-[length:180px_180px] py-(--card-spacing) text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:border-control-border-hover motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg pt-0">
+<div class="heat-sweep heat-sweep-thin shrink-0" aria-hidden="true">
 </div>
 <div data-slot="card-content" class="px-(--card-spacing)">Contenido</div>
 </div>"
 `;
 
 exports[`Presentacion > tarjeta de modulo con tono, indice e icono 1`] = `
-"<a style="--card-accent:var(--chart-3)" class="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45" href="/dashboard/inventory/materials">
-<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl relative h-full border border-border bg-card transition hover:-translate-y-0.5 hover:bg-secondary hover:shadow-card-hover">
-<span aria-hidden="true" class="pointer-events-none absolute top-3 right-4 font-heading text-4xl font-bold text-foreground/[0.06]">03</span>
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-2">
-<div class="mb-3 flex size-11 items-center justify-center rounded-xl" style="background-color:color-mix(in srgb, var(--card-accent) 16%, transparent);color:var(--card-accent)">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package size-5" aria-hidden="true">
+"<a class="spotlight-host block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45" href="/dashboard/inventory/materials">
+<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col overflow-hidden rounded-lg border border-border bg-card bg-(image:--texture-metal) bg-[length:180px_180px] text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:border-control-border-hover motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg module-card h-full gap-3 px-5 py-[18px]" style="--module-accent:var(--chart-3)">
+<span data-slot="pointer-spotlight" aria-hidden="true" class="pointer-spotlight">
+</span>
+<span data-slot="module-number" aria-hidden="true" class="module-number" style="animation-delay:0.8s">03</span>
+<span data-slot="module-icon" aria-hidden="true" class="module-icon" style="animation-delay:1.3s">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package" aria-hidden="true">
 <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z">
 </path>
 <path d="M12 22V12">
@@ -1277,37 +1327,42 @@ exports[`Presentacion > tarjeta de modulo con tono, indice e icono 1`] = `
 <path d="m7.5 4.27 9 5.15">
 </path>
 </svg>
+</span>
+<div class="module-bottom">
+<div class="flex flex-col gap-1">
+<div data-slot="module-title" class="module-title">Materiales</div>
+<p data-slot="module-description" class="module-description">Catalogo</p>
 </div>
-<div data-slot="card-title" class="font-heading group-data-[size=sm]/card:text-sm text-base font-semibold text-foreground">Materiales</div>
-</div>
-<div data-slot="card-content" class="px-(--card-spacing)">
-<p class="text-sm leading-relaxed text-muted-foreground">Catalogo</p>
+<span data-slot="module-arrow" aria-hidden="true" class="module-arrow">→</span>
 </div>
 </div>
 </a>"
 `;
 
 exports[`Presentacion > tarjeta de modulo por defecto 1`] = `
-"<a style="--card-accent:var(--chart-1)" class="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45" href="/dashboard/commercial/clients">
-<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl relative h-full border border-border bg-card transition hover:-translate-y-0.5 hover:bg-secondary hover:shadow-card-hover">
-<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-2">
-<div class="mb-3 flex size-11 items-center justify-center rounded-xl" style="background-color:color-mix(in srgb, var(--card-accent) 16%, transparent);color:var(--card-accent)">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle size-5" aria-hidden="true">
+"<a class="spotlight-host block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45" href="/dashboard/commercial/clients">
+<div data-slot="card" data-size="default" class="group/card card-brushed flex flex-col overflow-hidden rounded-lg border border-border bg-card bg-(image:--texture-metal) bg-[length:180px_180px] text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:border-control-border-hover motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg module-card h-full gap-3 px-5 py-[18px]" style="--module-accent:var(--chart-1)">
+<span data-slot="pointer-spotlight" aria-hidden="true" class="pointer-spotlight">
+</span>
+<span data-slot="module-icon" aria-hidden="true" class="module-icon" style="animation-delay:0s">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle" aria-hidden="true">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
+</span>
+<div class="module-bottom">
+<div class="flex flex-col gap-1">
+<div data-slot="module-title" class="module-title">Clientes</div>
+<p data-slot="module-description" class="module-description">Gestion de clientes</p>
 </div>
-<div data-slot="card-title" class="font-heading group-data-[size=sm]/card:text-sm text-base font-semibold text-foreground">Clientes</div>
-</div>
-<div data-slot="card-content" class="px-(--card-spacing)">
-<p class="text-sm leading-relaxed text-muted-foreground">Gestion de clientes</p>
+<span data-slot="module-arrow" aria-hidden="true" class="module-arrow">→</span>
 </div>
 </div>
 </a>"
 `;
 
 exports[`Presentacion > tarjeta pequena 1`] = `
-"<div data-slot="card" data-size="sm" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl">
+"<div data-slot="card" data-size="sm" class="group/card card-brushed flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg border border-border bg-card bg-(image:--texture-metal) bg-[length:180px_180px] py-(--card-spacing) text-sm text-card-foreground transition-[border-color,translate,box-shadow] duration-(--motion-base) ease-out hover:border-control-border-hover motion-reduce:transition-none motion-reduce:translate-none! [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg">
 <div data-slot="card-content" class="px-(--card-spacing)">Contenido</div>
 </div>"
 `;

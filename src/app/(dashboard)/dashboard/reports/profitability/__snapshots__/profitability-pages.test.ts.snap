@@ -122,74 +122,124 @@ exports[`/dashboard/reports/profitability > costeo sin pedido, orden, margen ni 
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Registros listados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Costo acumulado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingreso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingreso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Ingreso estimado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Utilidad estimada.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Margen promedio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Margen promedio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>100.00%</p>
 <p>Alertas: 1</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -376,74 +426,124 @@ exports[`/dashboard/reports/profitability > rango de mas de 366 dias > resultado
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Registros listados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Costo acumulado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingreso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingreso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Ingreso estimado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Utilidad estimada.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Margen promedio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Margen promedio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>100.00%</p>
 <p>Alertas: 2</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -714,74 +814,124 @@ exports[`/dashboard/reports/profitability > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Registros listados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Costo acumulado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingreso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingreso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Ingreso estimado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Utilidad estimada.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Margen promedio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Margen promedio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>100.00%</p>
 <p>Alertas: 2</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -960,74 +1110,124 @@ exports[`/dashboard/reports/profitability > sin resultados > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Registros listados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Costo acumulado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingreso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingreso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingreso estimado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Utilidad estimada.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Margen promedio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Margen promedio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00%</p>
 <p>Alertas: 0</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1235,74 +1435,124 @@ exports[`/dashboard/reports/profitability > todos los filtros > resultado 1`] = 
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Registros listados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Costo acumulado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingreso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingreso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Ingreso estimado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Utilidad estimada.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Margen promedio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Margen promedio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>100.00%</p>
 <p>Alertas: 2</p>
+</div>
+</div>
 </div>
 </div>
 </section>

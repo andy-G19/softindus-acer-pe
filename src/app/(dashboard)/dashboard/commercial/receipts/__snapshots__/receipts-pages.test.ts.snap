@@ -167,7 +167,7 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 <td>1/7/2026</td>
 <td>S/ 11.50</td>
 <td>
-<span data-variant="outline">estado-1</span>
+<span data-variant="outline" data-tone="unknown">estado-1</span>
 </td>
 <td>
 <div>
@@ -184,7 +184,7 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 <td>2/7/2026</td>
 <td>S/ 22.50</td>
 <td>
-<span data-variant="outline">estado-2</span>
+<span data-variant="outline" data-tone="unknown">estado-2</span>
 </td>
 <td>
 <div>
@@ -543,7 +543,7 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 <td>1/7/2026</td>
 <td>S/ 11.50</td>
 <td>
-<span data-variant="outline">estado-1</span>
+<span data-variant="outline" data-tone="unknown">estado-1</span>
 </td>
 <td>
 <div>
@@ -560,7 +560,7 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 <td>2/7/2026</td>
 <td>S/ 22.50</td>
 <td>
-<span data-variant="outline">estado-2</span>
+<span data-variant="outline" data-tone="unknown">estado-2</span>
 </td>
 <td>
 <div>
@@ -816,7 +816,7 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 <td>1/7/2026</td>
 <td>S/ 11.50</td>
 <td>
-<span data-variant="outline">estado-1</span>
+<span data-variant="outline" data-tone="unknown">estado-1</span>
 </td>
 <td>
 <div>
@@ -833,7 +833,7 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 <td>2/7/2026</td>
 <td>S/ 22.50</td>
 <td>
-<span data-variant="outline">estado-2</span>
+<span data-variant="outline" data-tone="unknown">estado-2</span>
 </td>
 <td>
 <div>
@@ -1007,7 +1007,9 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 <td>1/7/2026</td>
 <td>S/ 11.50</td>
 <td>
-<span data-variant="success">Emitido</span>
+<span data-variant="success" data-tone="success">
+<span aria-hidden="true">
+</span>Emitido</span>
 </td>
 <td>
 <div>
@@ -1024,7 +1026,9 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 <td>1/7/2026</td>
 <td>S/ 11.50</td>
 <td>
-<span data-variant="destructive">Anulado</span>
+<span data-variant="destructive" data-tone="destructive">
+<span aria-hidden="true">
+</span>Anulado</span>
 </td>
 <td>
 <div>
@@ -1040,7 +1044,9 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 <td>2/7/2026</td>
 <td>S/ 22.50</td>
 <td>
-<span data-variant="success">Emitido</span>
+<span data-variant="success" data-tone="success">
+<span aria-hidden="true">
+</span>Emitido</span>
 </td>
 <td>
 <div>

@@ -343,172 +343,292 @@ exports[`/dashboard/reports/financial > rango de mas de 366 dias > resultado 1`]
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Saldo actual acumulado de cajas abiertas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Ingresos menores según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Egresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Gastos menores registrados según filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimiento neto</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimiento neto</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos menos egresos de caja chica.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cobrado a clientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cobrado a clientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Pagos de clientes registrados en el periodo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cuentas por cobrar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cuentas por cobrar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Saldo pendiente de proformas activas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras por pagar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras por pagar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Compras pendientes o parciales: 2.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Resultado estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Resultado estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Cobros + ingresos caja - egresos - costos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo producción</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo producción</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Costos de producción registrados en costeo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Alertas de bajo margen: 42.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingreso estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingreso estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Ingreso estimado registrado en rentabilidad.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Costo total usado en cálculo de rentabilidad.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1060,172 +1180,292 @@ exports[`/dashboard/reports/financial > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Saldo actual acumulado de cajas abiertas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Ingresos menores según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Egresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Gastos menores registrados según filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimiento neto</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimiento neto</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos menos egresos de caja chica.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cobrado a clientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cobrado a clientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Pagos de clientes registrados en el periodo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cuentas por cobrar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cuentas por cobrar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Saldo pendiente de proformas activas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras por pagar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras por pagar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Compras pendientes o parciales: 2.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Resultado estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Resultado estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Cobros + ingresos caja - egresos - costos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo producción</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo producción</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Costos de producción registrados en costeo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Alertas de bajo margen: 42.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingreso estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingreso estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Ingreso estimado registrado en rentabilidad.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Costo total usado en cálculo de rentabilidad.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1760,172 +2000,292 @@ exports[`/dashboard/reports/financial > todos los filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Saldo actual acumulado de cajas abiertas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Ingresos menores según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Egresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Gastos menores registrados según filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimiento neto</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimiento neto</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos menos egresos de caja chica.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cobrado a clientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cobrado a clientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Pagos de clientes registrados en el periodo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cuentas por cobrar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cuentas por cobrar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Saldo pendiente de proformas activas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras por pagar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras por pagar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Compras pendientes o parciales: 2.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Resultado estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Resultado estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Cobros + ingresos caja - egresos - costos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo producción</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo producción</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Costos de producción registrados en costeo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Alertas de bajo margen: 42.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingreso estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingreso estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Ingreso estimado registrado en rentabilidad.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Costo total usado en cálculo de rentabilidad.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2345,172 +2705,292 @@ exports[`/dashboard/reports/financial > totales vacios y movimientos por tipo > 
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Saldo actual acumulado de cajas abiertas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Ingresos menores según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Egresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 22.50</p>
 <p>Gastos menores registrados según filtros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimiento neto</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimiento neto</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ -11.00</p>
 <p>Ingresos menos egresos de caja chica.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cobrado a clientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cobrado a clientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Pagos de clientes registrados en el periodo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cuentas por cobrar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cuentas por cobrar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Saldo pendiente de proformas activas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras por pagar</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras por pagar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Compras pendientes o parciales: 0.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Resultado estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Resultado estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ -11.00</p>
 <p>Cobros + ingresos caja - egresos - costos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo producción</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo producción</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Costos de producción registrados en costeo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Alertas de bajo margen: 0.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingreso estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingreso estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingreso estimado registrado en rentabilidad.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Costo total usado en cálculo de rentabilidad.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

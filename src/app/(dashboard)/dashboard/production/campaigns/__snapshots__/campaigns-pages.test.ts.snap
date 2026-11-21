@@ -136,60 +136,100 @@ exports[`/dashboard/production/campaigns > acciones de cada estado > resultado 1
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Campañas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Campañas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>4</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planificadas o activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planificadas o activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>En ejecución o por iniciar.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Objetivo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Objetivo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>136.00</p>
 <p>Suma de cantidades objetivo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Producido total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Producido total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>136.00</p>
 <p>Suma de cantidades producidas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -452,60 +492,100 @@ exports[`/dashboard/production/campaigns > sin campanas > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Campañas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Campañas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planificadas o activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planificadas o activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>En ejecución o por iniciar.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Objetivo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Objetivo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Suma de cantidades objetivo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Producido total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Producido total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Suma de cantidades producidas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -676,60 +756,100 @@ exports[`/dashboard/production/campaigns > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Campañas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Campañas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planificadas o activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planificadas o activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>En ejecución o por iniciar.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Objetivo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Objetivo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>68.00</p>
 <p>Suma de cantidades objetivo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Producido total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Producido total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>68.00</p>
 <p>Suma de cantidades producidas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -948,60 +1068,100 @@ exports[`/dashboard/production/campaigns > solo hasta > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Campañas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Campañas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planificadas o activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planificadas o activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>En ejecución o por iniciar.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Objetivo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Objetivo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>68.00</p>
 <p>Suma de cantidades objetivo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Producido total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Producido total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>68.00</p>
 <p>Suma de cantidades producidas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1247,60 +1407,100 @@ exports[`/dashboard/production/campaigns > todos los filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Campañas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Campañas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Planificadas o activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Planificadas o activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>En ejecución o por iniciar.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Objetivo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Objetivo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>68.00</p>
 <p>Suma de cantidades objetivo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Producido total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Producido total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>68.00</p>
 <p>Suma de cantidades producidas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1624,60 +1824,100 @@ exports[`/dashboard/production/campaigns/[id] > campana sin detalles no excluye 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Productos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Productos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Productos en la campaña.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad objetivo</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad objetivo</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Meta total planificada.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad producida</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad producida</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Avance real registrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendiente estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendiente estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Restante por producir.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1872,60 +2112,100 @@ exports[`/dashboard/production/campaigns/[id] > detalle > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Productos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Productos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Productos en la campaña.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad objetivo</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad objetivo</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>34.00</p>
 <p>Meta total planificada.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad producida</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad producida</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>34.00</p>
 <p>Avance real registrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendiente estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendiente estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Restante por producir.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2125,60 +2405,100 @@ exports[`/dashboard/production/campaigns/[id] > finalizada no ofrece agregar pro
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Productos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Productos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Productos en la campaña.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad objetivo</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad objetivo</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>34.00</p>
 <p>Meta total planificada.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad producida</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad producida</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>34.00</p>
 <p>Avance real registrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendiente estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendiente estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Restante por producir.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

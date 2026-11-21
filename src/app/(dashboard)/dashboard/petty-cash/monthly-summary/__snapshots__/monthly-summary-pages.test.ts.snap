@@ -238,132 +238,222 @@ exports[`/dashboard/petty-cash/monthly-summary > mes actual > resultado 1`] = `
 </div>
 </div>
 <section>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ventas cobradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ventas cobradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>42 pagos de cliente en el mes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldos pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldos pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>42 proformas con saldo pendiente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costos de producción</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costos de producción</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>42 costeos registrados en el mes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Margen promedio: 617.25%</p>
 </div>
 </div>
+</div>
+</div>
 </section>
 <section>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos menores del mes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Egresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Gastos menores del mes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes netos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes netos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ajustes positivos menos negativos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Resultado caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Resultado caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos + ajustes - egresos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo abierto actual</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo abierto actual</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma de cajas abiertas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -796,132 +886,222 @@ exports[`/dashboard/petty-cash/monthly-summary > mes elegido > resultado 1`] = `
 </div>
 </div>
 <section>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ventas cobradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ventas cobradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>42 pagos de cliente en el mes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldos pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldos pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>42 proformas con saldo pendiente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costos de producción</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costos de producción</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>42 costeos registrados en el mes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Margen promedio: 617.25%</p>
 </div>
 </div>
+</div>
+</div>
 </section>
 <section>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos menores del mes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Egresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Gastos menores del mes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes netos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes netos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ajustes positivos menos negativos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Resultado caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Resultado caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos + ajustes - egresos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo abierto actual</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo abierto actual</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma de cajas abiertas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1354,132 +1534,222 @@ exports[`/dashboard/petty-cash/monthly-summary > mes invalido usa el actual > re
 </div>
 </div>
 <section>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ventas cobradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ventas cobradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>42 pagos de cliente en el mes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldos pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldos pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>42 proformas con saldo pendiente.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costos de producción</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costos de producción</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>42 costeos registrados en el mes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Margen promedio: 617.25%</p>
 </div>
 </div>
+</div>
+</div>
 </section>
 <section>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos menores del mes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Egresos caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Gastos menores del mes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes netos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes netos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ajustes positivos menos negativos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Resultado caja chica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Resultado caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos + ajustes - egresos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo abierto actual</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo abierto actual</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma de cajas abiertas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

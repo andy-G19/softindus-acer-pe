@@ -396,60 +396,100 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Sin iniciar todavía.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Órdenes completadas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -838,60 +878,100 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Sin iniciar todavía.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Órdenes completadas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1342,60 +1422,100 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Sin iniciar todavía.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Órdenes completadas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1784,60 +1904,100 @@ exports[`/dashboard/production/work-orders > sin resultados > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Total según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Sin iniciar todavía.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Órdenes completadas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2203,60 +2363,100 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Sin iniciar todavía.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Órdenes completadas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -3025,60 +3225,100 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Sin iniciar todavía.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Órdenes completadas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -3393,60 +3633,100 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Origen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Origen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>nombre_campania-1</p>
 <p>Origen de la orden.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inicio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inicio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Fecha de inicio.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entrega estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entrega estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Compromiso de entrega.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo material estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo material estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1700.00</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -3904,60 +4184,100 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Origen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Origen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>Reposición de stock</p>
 <p>Origen de la orden.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inicio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inicio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Fecha de inicio.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entrega estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entrega estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Compromiso de entrega.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo material estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo material estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 638.50</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -4246,60 +4566,100 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Origen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Origen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>Reposición de stock</p>
 <p>Origen de la orden.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inicio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inicio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Fecha de inicio.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entrega estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entrega estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Compromiso de entrega.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo material estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo material estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 638.50</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -4573,60 +4933,100 @@ exports[`/dashboard/production/work-orders/[id] > orden anulada: sin conciliacio
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Origen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Origen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>Reposición de stock</p>
 <p>Origen de la orden.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inicio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inicio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Fecha de inicio.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entrega estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entrega estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Compromiso de entrega.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo material estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo material estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 638.50</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -4848,60 +5248,100 @@ exports[`/dashboard/production/work-orders/[id] > orden historica sin requerimie
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Origen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Origen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>nombre_razon_social-1</p>
 <p>Origen de la orden.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inicio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inicio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Fecha de inicio.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entrega estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entrega estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Compromiso de entrega.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo material estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo material estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 7517.66</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -5125,60 +5565,100 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Origen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Origen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>Reposición de stock</p>
 <p>Origen de la orden.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inicio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inicio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Fecha de inicio.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entrega estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entrega estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Compromiso de entrega.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo material estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo material estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1700.00</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -5452,60 +5932,100 @@ exports[`/dashboard/production/work-orders/[id] > sin receta ni requerimiento > 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Origen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Origen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>nombre_razon_social-1</p>
 <p>Origen de la orden.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inicio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inicio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Fecha de inicio.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entrega estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entrega estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Compromiso de entrega.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo material estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo material estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -5691,60 +6211,100 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Origen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Origen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>Reposición de stock</p>
 <p>Origen de la orden.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inicio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inicio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Fecha de inicio.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entrega estimada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entrega estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1 jul. 2026</p>
 <p>Compromiso de entrega.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo material estimado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo material estimado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1700.00</p>
 <p>Con merma incluida.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -6108,74 +6668,124 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total de la ruta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En proceso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En proceso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Con avance activo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pausadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pausadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Requieren atención.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Terminadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Terminadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Etapas completadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Avance general</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Avance general</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>17.00%</p>
 <p>Promedio de todas las etapas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -6463,74 +7073,124 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total de la ruta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En proceso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En proceso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Con avance activo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pausadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pausadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Requieren atención.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Terminadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Terminadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Etapas completadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Avance general</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Avance general</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>17.00%</p>
 <p>Promedio de todas las etapas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -6887,74 +7547,124 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total de la ruta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En proceso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En proceso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Con avance activo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pausadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pausadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Requieren atención.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Terminadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Terminadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Etapas completadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Avance general</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Avance general</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>17.00%</p>
 <p>Promedio de todas las etapas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -7240,74 +7950,124 @@ exports[`/dashboard/production/work-orders/[id]/progress > ruta sin etapas activ
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Total de la ruta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En proceso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En proceso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Con avance activo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pausadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pausadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Requieren atención.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Terminadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Terminadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Etapas completadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Avance general</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Avance general</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00%</p>
 <p>Promedio de todas las etapas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -7432,74 +8192,124 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances con ruta 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Total de la ruta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En proceso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En proceso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Con avance activo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pausadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pausadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Requieren atención.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Terminadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Terminadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Etapas completadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Avance general</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Avance general</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00%</p>
 <p>Promedio de todas las etapas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -7621,74 +8431,124 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances y sin rut
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas generadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas generadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Total de la ruta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>En proceso</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>En proceso</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Con avance activo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pausadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pausadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Requieren atención.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Terminadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Terminadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Etapas completadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Avance general</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Avance general</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00%</p>
 <p>Promedio de todas las etapas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -7868,32 +8728,52 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapa</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapa</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1. nombre_etapa-1</p>
 <p>Etapa del avance.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operario actual</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operario actual</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>Sin operario asignado</p>
 <p>Antes de la reasignación.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -8047,32 +8927,52 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapa</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapa</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1. nombre_etapa-1</p>
 <p>Etapa del avance.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operario actual</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operario actual</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>apellidos-1, nombres-1</p>
 <p>Antes de la reasignación.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -8242,32 +9142,52 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapa</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapa</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1. nombre_etapa-1</p>
 <p>Etapa del avance.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operario actual</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operario actual</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>apellidos-1, nombres-1</p>
 <p>Antes de la reasignación.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -8434,32 +9354,52 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapa</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapa</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1. nombre_etapa-1</p>
 <p>Etapa del avance.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operario actual</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operario actual</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>apellidos-1, nombres-1</p>
 <p>Antes de la reasignación.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

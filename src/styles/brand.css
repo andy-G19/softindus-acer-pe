@@ -66,8 +66,8 @@
   }
 
   /* Barrido termico (propuesta de fundamentos, 2026-11-20): un brillo de brasa a primario cruza un
-     riel atenuado cada 6 s. Patron para integrar mas adelante; hoy solo lo muestra la galeria. Es
-     decorativo: quien lo use lo marca aria-hidden. */
+     riel atenuado cada 6 s. Desde el diseno de la presentacion es la barra termica de la tarjeta
+     (Card heatBar), en su version fina. Es decorativo: quien lo use lo marca aria-hidden. */
   .heat-sweep {
     position: relative;
     height: 6px;
@@ -84,6 +84,30 @@
     border-radius: inherit;
     background: linear-gradient(90deg, transparent, var(--accent-ember) 45%, var(--primary) 55%, transparent);
     animation: heat-sweep var(--motion-temper) linear infinite;
+  }
+
+  /* Riel fino de la barra termica de la tarjeta (propuesta de la presentacion, D156): 3 px, recto y
+     del color del borde. Va despues de .heat-sweep: con la misma especificidad, gana el ultimo. */
+  .heat-sweep-thin {
+    height: 3px;
+    border-radius: 0;
+    background-color: var(--border);
+  }
+
+  /* Placa de acero de la tarjeta (propuesta de la presentacion, D156): la textura de metal se
+     desplaza un mosaico de 180 px por vuelta. Es la excepcion elegida a la regla de quietud en
+     reposo (D153); se detiene con reducir movimiento. */
+  .card-brushed {
+    animation: card-brush-pan var(--motion-brush) linear infinite;
+  }
+
+  @keyframes card-brush-pan {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 180px 180px;
+    }
   }
 
   .login-ember {
@@ -145,6 +169,10 @@
     }
 
     .heat-sweep::before {
+      animation: none;
+    }
+
+    .card-brushed {
       animation: none;
     }
   }

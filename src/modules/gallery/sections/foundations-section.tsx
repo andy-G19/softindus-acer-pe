@@ -235,7 +235,7 @@ export function FoundationsSection() {
           <GallerySample label="Barra térmica (.heat-bar)" className="flex-col items-stretch">
             <div aria-hidden="true" className="heat-bar w-full max-w-[420px]" />
           </GallerySample>
-          <GallerySample label="Barrido térmico (.heat-sweep), para integrar más adelante" className="flex-col items-stretch">
+          <GallerySample label="Barrido térmico (.heat-sweep), la barra de la tarjeta en su versión fina" className="flex-col items-stretch">
             <div aria-hidden="true" className="heat-sweep w-full max-w-[420px]" />
           </GallerySample>
           <FoundationNote>

@@ -164,46 +164,76 @@ exports[`/dashboard/staff/operators > filtros y maestro de taller > resultado 1`
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operarios registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operarios registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total de operarios en el sistema.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Disponibles para asignación.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Retirados o suspendidos.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -445,46 +475,76 @@ exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operarios registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operarios registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total de operarios en el sistema.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Disponibles para asignación.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Retirados o suspendidos.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

@@ -127,46 +127,76 @@ exports[`/dashboard/maintenance/machines > filtros y maestro de taller > resulta
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Maquinas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Maquinas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total de equipos registrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operativas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operativas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Disponibles para producción.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Fuera de operación.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -378,46 +408,76 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Maquinas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Maquinas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total de equipos registrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operativas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operativas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Disponibles para producción.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Fuera de operación.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -642,46 +702,76 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Maquinas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Maquinas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>4</p>
 <p>Total de equipos registrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Operativas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Operativas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Disponibles para producción.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Fuera de operación.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

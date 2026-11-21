@@ -179,116 +179,196 @@ exports[`/dashboard/reports/suppliers-purchases > estados de pago y compra sin d
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras encontradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras encontradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>3</p>
 <p>Compras según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto comprado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto comprado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 45.50</p>
 <p>Suma total de compras encontradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 68.00</p>
 <p>Pagos registrados a proveedores.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Monto estimado aún pendiente de pago.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Parciales: 1. Pagadas: 1.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Proveedores</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Proveedores</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Proveedores presentes en el reporte.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales distintos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales distintos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Materiales comprados en el periodo filtrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad comprada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad comprada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>68.00</p>
 <p>Suma general de cantidades compradas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -630,116 +710,196 @@ exports[`/dashboard/reports/suppliers-purchases > rango de mas de 366 dias > res
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras encontradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras encontradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Compras según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto comprado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto comprado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma total de compras encontradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 68.00</p>
 <p>Pagos registrados a proveedores.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Monto estimado aún pendiente de pago.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Parciales: 0. Pagadas: 0.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Proveedores</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Proveedores</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Proveedores presentes en el reporte.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales distintos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales distintos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Materiales comprados en el periodo filtrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad comprada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad comprada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>68.00</p>
 <p>Suma general de cantidades compradas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1198,116 +1358,196 @@ exports[`/dashboard/reports/suppliers-purchases > sin filtros > resultado 1`] = 
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras encontradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras encontradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Compras según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto comprado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto comprado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma total de compras encontradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 68.00</p>
 <p>Pagos registrados a proveedores.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Monto estimado aún pendiente de pago.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Parciales: 0. Pagadas: 0.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Proveedores</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Proveedores</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Proveedores presentes en el reporte.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales distintos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales distintos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Materiales comprados en el periodo filtrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad comprada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad comprada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>68.00</p>
 <p>Suma general de cantidades compradas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1617,116 +1857,196 @@ exports[`/dashboard/reports/suppliers-purchases > sin resultados > resultado 1`]
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras encontradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras encontradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Compras según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto comprado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto comprado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Suma total de compras encontradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Pagos registrados a proveedores.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Monto estimado aún pendiente de pago.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Parciales: 0. Pagadas: 0.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Proveedores</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Proveedores</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Proveedores presentes en el reporte.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales distintos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales distintos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Materiales comprados en el periodo filtrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad comprada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad comprada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Suma general de cantidades compradas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1953,116 +2273,196 @@ exports[`/dashboard/reports/suppliers-purchases > todos los filtros > resultado 
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras encontradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras encontradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Compras según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto comprado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto comprado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma total de compras encontradas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Monto pagado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Monto pagado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 68.00</p>
 <p>Pagos registrados a proveedores.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo pendiente</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo pendiente</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Monto estimado aún pendiente de pago.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Compras pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Parciales: 0. Pagadas: 0.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Proveedores</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Proveedores</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Proveedores presentes en el reporte.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Materiales distintos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Materiales distintos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Materiales comprados en el periodo filtrado.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad comprada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad comprada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>68.00</p>
 <p>Suma general de cantidades compradas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

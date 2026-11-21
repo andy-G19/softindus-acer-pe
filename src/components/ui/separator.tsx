@@ -5,6 +5,9 @@ import { Separator as SeparatorPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
+// Desde el diseno de la presentacion (propuesta del responsable, 2026-11-20; D158) un destello de
+// acero recorre la linea horizontal y la vertical late (.separator-gleam de patterns.css, que
+// lee el data-orientation de Radix); se detiene con reducir movimiento.
 function Separator({
   className,
   orientation = "horizontal",
@@ -17,7 +20,7 @@ function Separator({
       decorative={decorative}
       orientation={orientation}
       className={cn(
-        "shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch",
+        "separator-gleam relative shrink-0 overflow-hidden bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch",
         className
       )}
       {...props}

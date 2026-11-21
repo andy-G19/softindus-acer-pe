@@ -83,46 +83,76 @@ exports[`/dashboard/petty-cash/income-adjustments/new > formulario > resultado 1
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cajas abiertas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cajas abiertas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Disponibles para ingresos y ajustes.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo disponible</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo disponible</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma de cajas abiertas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes recientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes recientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Dentro de los últimos movimientos consultados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

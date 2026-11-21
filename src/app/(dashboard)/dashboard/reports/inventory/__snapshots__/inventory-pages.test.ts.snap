@@ -170,88 +170,148 @@ exports[`/dashboard/reports/inventory > maestro de taller > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total de movimientos encontrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad ingresada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Salidas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Salidas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad retirada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Movimientos correctivos de inventario.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reservas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reservas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad reservada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Balance cantidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Balance cantidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Entradas menos salidas del reporte.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -524,88 +584,148 @@ exports[`/dashboard/reports/inventory > rango de mas de 366 dias > resultado 1`]
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total de movimientos encontrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad ingresada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Salidas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Salidas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad retirada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Movimientos correctivos de inventario.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reservas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reservas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad reservada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Balance cantidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Balance cantidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Entradas menos salidas del reporte.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1020,88 +1140,148 @@ exports[`/dashboard/reports/inventory > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total de movimientos encontrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad ingresada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Salidas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Salidas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad retirada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Movimientos correctivos de inventario.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reservas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reservas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad reservada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Balance cantidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Balance cantidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Entradas menos salidas del reporte.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1370,88 +1550,148 @@ exports[`/dashboard/reports/inventory > sin resultados > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Total de movimientos encontrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad ingresada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Salidas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Salidas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad retirada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Movimientos correctivos de inventario.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reservas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reservas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad reservada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Balance cantidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Balance cantidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Entradas menos salidas del reporte.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1644,88 +1884,148 @@ exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>4</p>
 <p>Total de movimientos encontrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Cantidad ingresada: 11.50.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Salidas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Salidas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Cantidad retirada: 22.50.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Movimientos correctivos de inventario.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reservas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reservas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Cantidad reservada: 11.50.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Balance cantidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Balance cantidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>-11.00</p>
 <p>Entradas menos salidas del reporte.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2052,88 +2352,148 @@ exports[`/dashboard/reports/inventory > todos los filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total de movimientos encontrados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Entradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Entradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad ingresada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Salidas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Salidas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad retirada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Movimientos correctivos de inventario.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reservas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reservas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad reservada: 0.00.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Balance cantidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Balance cantidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Entradas menos salidas del reporte.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

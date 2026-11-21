@@ -212,118 +212,198 @@ exports[`/dashboard/costs > con datos > resultado 1`] = `
 </div>
 </div>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 generados este mes</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo acumulado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo acumulado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Promedio: S/ 29.39</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costos indirectos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costos indirectos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Gastos agregados a costeos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas de bajo margen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas de bajo margen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Rentabilidades críticas.</p>
 </div>
 </div>
+</div>
+</div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>No anuladas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes sin receta</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes sin receta</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>No pueden costearse aún.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes pendientes de costeo</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes pendientes de costeo</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Con receta y sin costeo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Rentabilidades calculadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Rentabilidades calculadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Márgenes reales evaluados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -605,118 +685,198 @@ exports[`/dashboard/costs > sin datos: modulo sin informacion economica > result
 </div>
 </div>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>0 generados este mes</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo acumulado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo acumulado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Promedio: S/ 0.00</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costos indirectos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costos indirectos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Gastos agregados a costeos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas de bajo margen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas de bajo margen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Rentabilidades críticas.</p>
 </div>
 </div>
+</div>
+</div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>No anuladas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes sin receta</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes sin receta</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>No pueden costearse aún.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes pendientes de costeo</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes pendientes de costeo</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Con receta y sin costeo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Rentabilidades calculadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Rentabilidades calculadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Márgenes reales evaluados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -966,118 +1126,198 @@ exports[`/dashboard/costs > solo ordenes sin costeo: modulo operativo > resultad
 </div>
 </div>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>0 generados este mes</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo acumulado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo acumulado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Promedio: S/ 0.00</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costos indirectos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costos indirectos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Gastos agregados a costeos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas de bajo margen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas de bajo margen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Rentabilidades críticas.</p>
 </div>
 </div>
+</div>
+</div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>3</p>
 <p>No anuladas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes sin receta</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes sin receta</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>3</p>
 <p>No pueden costearse aún.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes pendientes de costeo</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes pendientes de costeo</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>3</p>
 <p>Con receta y sin costeo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Rentabilidades calculadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Rentabilidades calculadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Márgenes reales evaluados.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1276,60 +1516,100 @@ exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos listados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos listados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Últimos 50 registros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo acumulado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo acumulado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma de costos totales.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad acumulada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad acumulada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Según rentabilidades calculadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas de bajo margen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas de bajo margen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Rentabilidad crítica.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1565,60 +1845,100 @@ exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos listados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos listados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Últimos 50 registros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo acumulado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo acumulado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma de costos totales.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad acumulada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad acumulada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Según rentabilidades calculadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas de bajo margen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas de bajo margen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Rentabilidad crítica.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1838,60 +2158,100 @@ exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos listados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos listados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Últimos 50 registros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo acumulado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo acumulado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma de costos totales.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad acumulada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad acumulada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Según rentabilidades calculadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas de bajo margen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas de bajo margen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Rentabilidad crítica.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2111,60 +2471,100 @@ exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos listados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos listados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Últimos 50 registros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo acumulado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo acumulado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Suma de costos totales.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad acumulada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad acumulada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Según rentabilidades calculadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas de bajo margen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas de bajo margen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Rentabilidad crítica.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2521,60 +2921,100 @@ exports[`/dashboard/costs/costings > todos los filtros, estado rentable > result
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos listados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos listados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Últimos 50 registros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo acumulado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo acumulado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Suma de costos totales.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad acumulada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad acumulada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 23.00</p>
 <p>Según rentabilidades calculadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas de bajo margen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas de bajo margen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Rentabilidad crítica.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -2794,60 +3234,100 @@ exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = 
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costeos listados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costeos listados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Últimos 50 registros.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo acumulado</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo acumulado</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 68.50</p>
 <p>Suma de costos totales.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Utilidad acumulada</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad acumulada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 46.00</p>
 <p>Según rentabilidades calculadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Alertas de bajo margen</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Alertas de bajo margen</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>4</p>
 <p>Rentabilidad crítica.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -3116,74 +3596,124 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > result
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo materiales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo materiales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Materia prima.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Insumos secundarios.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Mano de obra</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Mano de obra</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Estimada u operativa.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo indirecto total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo indirecto total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Gastos indirectos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Unitario: S/ 11.50</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -3691,74 +4221,124 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo materiales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo materiales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Materia prima.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Insumos secundarios.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Mano de obra</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Mano de obra</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Estimada u operativa.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo indirecto total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo indirecto total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Gastos indirectos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Unitario: S/ 11.50</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -4348,74 +4928,124 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo materiales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo materiales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Materia prima.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Insumos secundarios.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Mano de obra</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Mano de obra</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Estimada u operativa.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo indirecto total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo indirecto total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Gastos indirectos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1000.00</p>
 <p>Unitario: S/ 11.50</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -4957,74 +5587,124 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo materiales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo materiales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Materia prima.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Insumos secundarios.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Mano de obra</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Mano de obra</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Estimada u operativa.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo indirecto total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo indirecto total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Gastos indirectos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Unitario: S/ 11.50</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -5532,74 +6212,124 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo materiales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo materiales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Materia prima.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Insumos secundarios.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Mano de obra</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Mano de obra</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Estimada u operativa.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo indirecto total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo indirecto total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Gastos indirectos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Unitario: S/ 11.50</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -6148,74 +6878,124 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo materiales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo materiales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Materia prima.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Insumos secundarios.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Mano de obra</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Mano de obra</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Estimada u operativa.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo indirecto total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo indirecto total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Gastos indirectos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Unitario: S/ 11.50</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -6741,74 +7521,124 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo materiales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo materiales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Materia prima.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Insumos secundarios.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Mano de obra</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Mano de obra</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Estimada u operativa.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo indirecto total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo indirecto total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Gastos indirectos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Unitario: S/ 0.00</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -7222,74 +8052,124 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo materiales</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo materiales</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Materia prima.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo consumibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo consumibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Insumos secundarios.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Mano de obra</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Mano de obra</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Estimada u operativa.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo indirecto total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo indirecto total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 11.50</p>
 <p>Gastos indirectos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Unitario: S/ 11.50</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -7835,60 +8715,100 @@ exports[`/dashboard/costs/work-orders > con ordenes > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Con receta y sin costeo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total de órdenes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total de órdenes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Incluye activas y anuladas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Sin receta técnica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Sin receta técnica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Deben completarse en producción.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ya costeadas / anuladas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ya costeadas / anuladas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42 / 42</p>
 <p>No aparecen como pendientes.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -8148,60 +9068,100 @@ exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > 
 </div>
 </section>
 <section>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>4</p>
 <p>Con receta y sin costeo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total de órdenes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total de órdenes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Incluye activas y anuladas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Sin receta técnica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Sin receta técnica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Deben completarse en producción.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ya costeadas / anuladas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ya costeadas / anuladas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42 / 42</p>
 <p>No aparecen como pendientes.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -8507,60 +9467,100 @@ exports[`/dashboard/costs/work-orders > sin ordenes pendientes ni costeos > resu
 </div>
 </section>
 <section>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Con receta y sin costeo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total de órdenes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total de órdenes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Incluye activas y anuladas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Sin receta técnica</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Sin receta técnica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Deben completarse en producción.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ya costeadas / anuladas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ya costeadas / anuladas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42 / 42</p>
 <p>No aparecen como pendientes.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

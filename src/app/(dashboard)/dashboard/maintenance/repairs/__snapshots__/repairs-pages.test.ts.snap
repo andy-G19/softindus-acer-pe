@@ -110,74 +110,124 @@ exports[`/dashboard/maintenance/repairs > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reparaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reparaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Programadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Programadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Observadas: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ejecutadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ejecutadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Anuladas: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Mano de obra + repuestos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Promedio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Promedio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 17.00</p>
 <p>Costo promedio por reparación.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -450,74 +500,124 @@ exports[`/dashboard/maintenance/repairs > todos los filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reparaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reparaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Programadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Programadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Observadas: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ejecutadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ejecutadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Anuladas: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 34.00</p>
 <p>Mano de obra + repuestos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Promedio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Promedio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 17.00</p>
 <p>Costo promedio por reparación.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -728,74 +828,124 @@ exports[`/dashboard/maintenance/repairs > una reparacion en cada estado > result
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reparaciones</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reparaciones</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>4</p>
 <p>Total histórico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Programadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Programadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Observadas: 1</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ejecutadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ejecutadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Anuladas: 1</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Costo total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 60.13</p>
 <p>Mano de obra + repuestos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Promedio</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Promedio</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 15.03</p>
 <p>Costo promedio por reparación.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

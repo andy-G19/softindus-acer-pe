@@ -65,60 +65,100 @@ exports[`/dashboard/petty-cash/boxes > listado > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cajas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cajas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico de cajas chicas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cajas abiertas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cajas abiertas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cajas disponibles para nuevos movimientos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cajas cerradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cajas cerradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cajas que ya no deberían recibir movimientos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo abierto</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo abierto</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Suma actual de cajas abiertas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

@@ -1,27 +1,23 @@
 /**
- * Ubicación destino: src/components/ui/module-access-card.tsx (reemplaza el archivo actual)
+ * Acceso a un modulo (las tarjetas de las pantallas de inicio de cada area). Desde el diseno de
+ * la presentacion (propuesta del responsable, 2026-11-20; D158) es una placa de acero cepillado
+ * con el numero de fondo, el icono en un casco del color del modulo, el titulo y la descripcion
+ * abajo, y una flecha que aparece con la intencion (puntero o foco en el enlace). Con ella la
+ * placa sube, el borde toma el acento (cierra D101), el icono crece, el numero se desplaza y se
+ * tine, y el resplandor sigue el puntero (PointerSpotlight). En reposo el numero y el icono
+ * respiran despacio, desfasados segun el indice, como en la propuesta. Los estilos viven en
+ * patterns.css (.module-*) y leen el acento de --module-accent.
  *
- * Cambios respecto al original:
- * - Nuevo prop `icon` (lucide-react) con badge de color de fondo suave.
- * - Nuevo prop opcional `tone` (chart-1..chart-5) — reutiliza los colores
- *   categóricos que ya existen en globals.css, no introduce hex nuevos.
- * - Nuevo prop opcional `index` — número grande y muy tenue en la esquina
- *   superior derecha (solo decorativo, aria-hidden).
- * - El color de acento se pasa vía CSS custom property (--card-accent) en
- *   el estilo inline del <Link>, y las clases de Tailwind (hover:border-*)
- *   son un string ESTÁTICO que referencia esa variable — así el JIT de
- *   Tailwind sí genera la clase (no se puede interpolar un color dinámico
- *   directo en el nombre de la clase, el compilador no lo detectaría).
+ * tone elige uno de los colores categoricos (chart-1 a chart-5); icon es opcional para que una
+ * pagina sin icono curado siga compilando, y muestra un circulo generico. Sigue siendo un
+ * componente de servidor: icon es una funcion y no puede pasar a uno de cliente.
  */
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { Circle, type LucideIcon } from "lucide-react";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import { PointerSpotlight } from "@/components/ui/pointer-spotlight";
 
 export type ModuleCardTone =
   | "chart-1"
@@ -34,13 +30,17 @@ type ModuleAccessCardProps = {
   title: string;
   description: string;
   href: string;
-  /** Opcional a propósito: las páginas que aún no se actualizaron con un
-   * ícono curado (ej. production/page.tsx) siguen compilando y muestran
-   * un ícono genérico en su lugar. */
   icon?: LucideIcon;
   tone?: ModuleCardTone;
   index?: number;
 };
+
+// Desfase de la respiracion de cada modulo, como la propuesta: 0,4 s el numero y 0,65 s el
+// icono por cada posicion. Redondeado a centesimas para no escribir 1.2000000000000002s.
+function breathDelay(index: number | undefined, step: number) {
+  const position = index ? index - 1 : 0;
+  return `${Math.round(position * step * 100) / 100}s`;
+}
 
 export function ModuleAccessCard({
   title,
@@ -53,40 +53,47 @@ export function ModuleAccessCard({
   return (
     <Link
       href={href}
-      style={{ "--card-accent": `var(--${tone})` } as React.CSSProperties}
-      className="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45"
+      className="spotlight-host block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45"
     >
-      <Card className="relative h-full border border-border bg-card transition hover:-translate-y-0.5 hover:bg-secondary hover:shadow-card-hover">
+      <Card
+        style={{ "--module-accent": `var(--${tone})` } as CSSProperties & Record<"--module-accent", string>}
+        className="module-card h-full gap-3 px-5 py-[18px]"
+      >
+        <PointerSpotlight />
+
         {index ? (
           <span
+            data-slot="module-number"
             aria-hidden="true"
-            className="pointer-events-none absolute top-3 right-4 font-heading text-4xl font-bold text-foreground/[0.06]"
+            className="module-number"
+            style={{ animationDelay: breathDelay(index, 0.4) }}
           >
             {index.toString().padStart(2, "0")}
           </span>
         ) : null}
 
-        <CardHeader className="pb-2">
-          <div
-            className="mb-3 flex size-11 items-center justify-center rounded-xl"
-            style={{
-              backgroundColor:
-                "color-mix(in srgb, var(--card-accent) 16%, transparent)",
-              color: "var(--card-accent)",
-            }}
-          >
-            <Icon className="size-5" aria-hidden="true" />
-          </div>
-          <CardTitle className="text-base font-semibold text-foreground">
-            {title}
-          </CardTitle>
-        </CardHeader>
+        <span
+          data-slot="module-icon"
+          aria-hidden="true"
+          className="module-icon"
+          style={{ animationDelay: breathDelay(index, 0.65) }}
+        >
+          <Icon />
+        </span>
 
-        <CardContent>
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            {description}
-          </p>
-        </CardContent>
+        <div className="module-bottom">
+          <div className="flex flex-col gap-1">
+            <div data-slot="module-title" className="module-title">
+              {title}
+            </div>
+            <p data-slot="module-description" className="module-description">
+              {description}
+            </p>
+          </div>
+          <span data-slot="module-arrow" aria-hidden="true" className="module-arrow">
+            →
+          </span>
+        </div>
       </Card>
     </Link>
   );

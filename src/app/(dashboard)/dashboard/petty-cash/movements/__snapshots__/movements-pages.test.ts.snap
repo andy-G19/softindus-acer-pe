@@ -184,74 +184,124 @@ exports[`/dashboard/petty-cash/movements > sin filtros > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos encontrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos encontrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos mostrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos mostrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Total de ingresos según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Egresos mostrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos mostrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Total de egresos según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes netos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes netos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ajustes positivos menos negativos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Resultado neto</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Resultado neto</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos y ajustes positivos menos egresos y ajustes negativos.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -598,74 +648,124 @@ exports[`/dashboard/petty-cash/movements > solo desde > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos encontrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos encontrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos mostrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos mostrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Total de ingresos según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Egresos mostrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos mostrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Total de egresos según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes netos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes netos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ajustes positivos menos negativos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Resultado neto</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Resultado neto</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos y ajustes positivos menos egresos y ajustes negativos.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1012,74 +1112,124 @@ exports[`/dashboard/petty-cash/movements > solo hasta > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos encontrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos encontrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos mostrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos mostrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Total de ingresos según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Egresos mostrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos mostrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Total de egresos según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes netos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes netos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ajustes positivos menos negativos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Resultado neto</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Resultado neto</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos y ajustes positivos menos egresos y ajustes negativos.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1606,74 +1756,124 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos encontrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos encontrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos mostrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos mostrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Total de ingresos según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Egresos mostrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos mostrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Total de egresos según filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ajustes netos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ajustes netos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ajustes positivos menos negativos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Resultado neto</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Resultado neto</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos y ajustes positivos menos egresos y ajustes negativos.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

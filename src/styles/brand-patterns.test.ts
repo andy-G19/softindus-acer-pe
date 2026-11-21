@@ -4,9 +4,10 @@ import { describe, expect, it } from "vitest";
 
 // Barrido termico (propuesta de fundamentos del responsable, 2026-11-20): un riel de 6 px atenuado
 // que un brillo brasa -> primario del 38 % del ancho cruza cada 6 s. Es un patron para integrar mas
-// adelante en algunos componentes; hoy solo lo muestra la galeria. Usa --motion-temper, el ciclo de
+// adelante en algunos componentes. Usa --motion-temper, el ciclo de
 // 6 s de la marca que ya mueven la barra termica y el riel templado, en lugar de un token nuevo con
-// el mismo valor.
+// el mismo valor. Desde el diseno de la presentacion es la barra termica de Card (heatBar), en su
+// riel fino de 3 px; card.test.ts prueba esa version.
 
 const BRAND = readFileSync("src/styles/brand.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 

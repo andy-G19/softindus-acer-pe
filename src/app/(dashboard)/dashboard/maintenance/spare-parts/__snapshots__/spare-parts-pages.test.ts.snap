@@ -87,46 +87,76 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Repuestos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Repuestos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en catálogo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Disponibles para uso.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Fuera de catálogo.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -306,46 +336,76 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Repuestos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Repuestos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en catálogo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Disponibles para uso.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Fuera de catálogo.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -550,46 +610,76 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Repuestos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Repuestos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en catálogo.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Activos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Activos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Disponibles para uso.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Inactivos</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Inactivos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Fuera de catálogo.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

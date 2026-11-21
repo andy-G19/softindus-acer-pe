@@ -11154,7 +11154,7 @@ código. La ilustración definitiva la entregó aparte (`Robot_tec_error.webp`).
 | D138 | La imagen conserva «SYSTEM ERROR» y «CAUTION» en inglés | Aceptado por el responsable: decorativos y genéricos; el título y el texto en español dicen qué pasó. La primera versión decía «503» y se descartó, porque `ErrorState` sirve a cualquier error y a «no encontrado» |
 | D139 | El archivo de 1 MB se sirve tal cual con `next/image` | En staging el navegador descarga una variante de 750 px en calidad 75: **22 KB** |
 | D140 | Los avisos siguen arriba a la derecha, 4 s y con barra de progreso; cambia su aspecto | La propuesta los ponía abajo y sin barra. **Sustituida por D144** (posición y aspecto de la segunda propuesta) |
-| D141 | El título de la pantalla de error queda en Oswald 650 a 18 px | Una regla global de `patterns.css` (D99) da a todo `<h1>` la letra de títulos; así coincide con los demás títulos del ERP. Se revisa al limpiar D99 |
+| D141 | El título de la pantalla de error queda en Oswald 650 a 18 px (700 desde D149, que se ve igual) | Una regla global de `patterns.css` (D99) da a todo `<h1>` la letra de títulos; así coincide con los demás títulos del ERP. Se revisa al limpiar D99 |
 
 Además: las confirmaciones conservan el `AlertDialog` de Radix (la maqueta usaba `<dialog>` nativo; su
 foco ya está probado); `Skeleton` no cambia, para seguir igual que `production/loading.tsx` (las
@@ -11347,6 +11347,224 @@ primer cuadro; se midió el estado sin transformar y no se tomó por un fallo.
 | Contraste del símbolo de error y de advertencia | 2,63 y 2,37:1; si se exige 1.4.11 al símbolo, oscurecerlo o cambiar el color del trazo |
 | Avisos en móvil | Radio 0 y pegados al borde, lo que decide toastify; la propuesta no define el móvil |
 | Zoom del icono al entrar | Toastify anima la insignia con su propio zoom; la propuesta no lo tiene |
+
+### Integración en `main` (ventanas y avisos)
+
+Datos leídos de la API de GitHub el 2026-11-20 (UTC) y comparados con git:
+
+- El registro de ventanas y avisos se publicó en `staging` con `37b8039`: CI #252 en verde.
+- PR #63 «Diseño de ventanas y avisos», abierto a las 12:57:56 y fusionado con merge commit a las
+  13:04:09: 6 commits, de `a94cf16` a `37b8039`, y 20 archivos (+688 −231). Su CI, el #253, sobre
+  `37b8039`, terminó en verde antes del merge.
+- El merge commit `c667931` tiene como padres `3b27170` (`main`) y `37b8039` (`staging`), y su
+  árbol es el de `37b8039` (`f1c9ee9`).
+- CI #254 sobre `c667931` en verde al primer intento (13:04:12 a 13:08:28).
+- Vercel desplegó `c667931` en producción (`success` a las 13:05:06). Sin migraciones.
+
+**El diseño de ventanas y avisos queda integrado.**
+
+## Diseño de fundamentos (2026-11-20)
+
+Quinto paso de la sesión de diseño. El responsable trajo su propuesta como maqueta
+(`tmp/Diseño_propuesta/Fundamentos-html.zip`, fuera de git), leída entera y sin ejecutar su
+código: la sección «Fundamentos» de la galería con los tokens agrupados por papel y dos valores
+marcados «PROPUESTO» (Advertencia en brasa y Gráfico 4 en cobre).
+
+Lo que la maqueta pedía y ya estaba hecho: Advertencia usa la brasa desde la entrega 8 (`667eb70`),
+el radio `2xl` ya existía y las capas coinciden (30, 40 y 50).
+
+### Decisiones
+
+| # | Decisión | Motivo |
+|---|---|---|
+| D147 | `--chart-4` pasa de la brasa al cobre (`var(--accent-copper)`) | Decisión del responsable: junto al naranja de `--chart-1` no se distinguían (1,12:1 entre ellos; con el cobre, 1,86:1). Cambia el icono de 11 tarjetas de módulo, en los inicios de 7 áreas y en el panel principal |
+| D148 | La galería muestra las sombras reales | La maqueta pintaba valores escritos a mano: 7 de las 9 no eran los de `tokens.css`. Cambiar los tokens sería un cambio visual grande en todo el ERP |
+| D149 | El título `h1` de las páginas pide Oswald 700 en lugar de 650 | Oswald se declara con 500, 600 y 700 sobre el mismo archivo y el 650 ya se dibujaba como 700. Se ve igual; actualiza D141 |
+| D150 | La galería muestra la `.heat-bar` real, y se crea el patrón `.heat-sweep` de la maqueta para integrarlo más adelante | Decisión del responsable. La barra de la maqueta no existía en el ERP |
+| D151 | `.heat-sweep` usa `--motion-temper`, no un `--motion-thermal` nuevo | Sería un segundo token con el mismo valor (6 s) y el mismo papel, el ciclo de la marca (regla 4) |
+| D152 | El marco de la galería (`GallerySection`, `GallerySample`) no cambia | Lo comparten las siete secciones; se rediseña solo el contenido de Fundamentos |
+
+### Commits
+
+| Commit | Qué cambia |
+|---|---|
+| `8e46b2b` F1 `feat(fundamentos): grafico 4 en cobre` | D147 |
+| `d5e231c` F2 `refactor(estilos): titulos con Oswald 700` | D149; una prueba impide que una hoja vuelva a pedir 650 |
+| `a979b51` F3 `feat(estilos): barrido termico` | `.heat-sweep` en `brand.css`: riel de 6 px atenuado y un brillo brasa→primario del 38 % que lo cruza cada 6 s, lineal, quieto con movimiento reducido |
+| `f450812` F4 `feat(galeria): fundamentos con el diseno de la propuesta` | Colores en cuatro grupos con chips de 52 px y notas que dicen lo que pasó; Geist por tamaño y Oswald en 500, 600 y 700; radios sobre la tarjeta; las 9 sombras reales; la cadena de capas, comparada en la prueba con `tokens.css`; las dos barras. `--color-accent-ember` entra en `@theme` |
+| `5cab17c` `fix(galeria): fundamentos sin desborde en movil` | F4 desbordaba a 375 px (ver abajo) |
+
+Cada `feat`, el `refactor` y el `fix` empezaron por su prueba roja; `npm run check` en verde antes de
+cada commit (de 5715 a 5731 pruebas, 358 archivos). CI #255 sobre `f450812` (F1 a F4, publicados
+juntos) y CI #256 sobre `5cab17c`, los dos en verde.
+
+### El desborde de F4 en móvil
+
+`GallerySample` trae `flex-wrap`. En un flex que puede envolver, cada línea mide lo que su elemento
+más ancho, no lo que el contenedor, así que `items-stretch` estiraba cada fila de tipografía hasta
+el ancho completo del texto de ejemplo y el `truncate` no recortaba. A 375 px las filas medían
+623 px y la página 750 de ancho; ninguna otra sección se desbordaba. Las muestras de Geist y Oswald
+llevan `flex-nowrap`. Las pruebas corren sin un navegador que calcule el diseño: lo encontró la
+medición en staging, y la prueba fija la clase.
+
+### CSS compilado e instantáneas
+
+| Commit | Reglas quitadas / nuevas / cambiadas | Instantáneas |
+|---|---|---|
+| F1 | 0 / 0 / 1 (`:root`) | 0 |
+| F2 | 0 / 0 / 1 (el peso del `h1`) | 0 |
+| F3 | 1 / 5 / 0 (el patrón y la regla de movimiento reducido, que el minificador une en una lista) | 0 |
+| F4 | 3 / 15 / 1 (salen `font-[650]`, `h-12` y `size-10`) | 1 (la galería; fuera de Fundamentos, idéntica) |
+| `fix` | 0 / 1 / 0 (`.flex-nowrap`) | 0 |
+
+Sin utilidades fantasma.
+
+### Verificación en staging
+
+Con estilos calculados:
+
+- **Gráfico 4:** en el inicio de Comercial, el icono de Proformas es `rgb(181, 101, 29)`; las demás
+  tarjetas conservan su color.
+- **Título:** el `h1` «Comercial» pide 700. El ancho de su texto es el mismo con 650 y con 700
+  (131,788 px) y distinto con 600 (128,506 px): el cambio no se ve.
+- **Galería en escritorio:** las cinco familias y los cuatro grupos de colores; chip de 52 px con
+  borde de acero; Oswald en 500, 600 y 700 y ningún 650; las 9 sombras reales; las capas 30, 40 y 50
+  en brasa; `.heat-bar` de 3 px con `temper` en 6 s; `.heat-sweep` de 6 px con un brillo de
+  159,6 px (38 % de 420) y `heat-sweep` en 6 s lineal.
+- **Galería a 375 px, tras el `fix`:** la página mide 376 px (el ancho de la pantalla), las filas
+  310 px y el texto se recorta con «…».
+
+### Pendientes que deja
+
+| Pendiente | Detalle |
+|---|---|
+| Integrar `.heat-sweep` | En los componentes que el responsable elija; hoy solo lo muestra la galería |
+| Sombras de la maqueta | Si se quieren sus valores, es un cambio de tokens en todo el ERP, en su propio paso (D148) |
+
+### Integración en `main` (fundamentos)
+
+Datos leídos de la API de GitHub el 2026-11-21 (UTC) y comparados con git:
+
+- PR #64 «Diseño de fundamentos.», abierto el 2026-11-20 a las 15:16:27 y fusionado con merge
+  commit a las 15:33:28: 5 commits, de `8e46b2b` a `5cab17c`, y 9 archivos (+659 −250). Su CI, el
+  #257, sobre `5cab17c`, terminó en verde antes del merge (15:16:31 a 15:22:23).
+- El merge commit `1689265` tiene como padres `c667931` (`main`) y `5cab17c` (`staging`), y su
+  árbol es el de `5cab17c` (`f971aa0`).
+- CI #258 sobre `1689265` en verde al primer intento (15:33:31 a 15:39:11).
+- Vercel desplegó `1689265` en producción (`success` a las 15:34:17). Sin migraciones.
+- El registro de fundamentos (`fc08494`) se publicó después en `staging` (CI #259 en verde) y va en
+  el próximo PR.
+
+**El diseño de fundamentos queda integrado.**
+
+## Diseño de la presentación (2026-11-20 y 2026-11-21)
+
+Sexto paso de la sesión de diseño. El responsable trajo su propuesta como maqueta
+(`tmp/Diseño_propuesta/Presentacion`, fuera de git: `Presentacion-html.zip`,
+`Badge & StateBadge.html` y `kpicard_moduleaccesscard.html`), leída entera y sin ejecutar su
+código: la sección «Presentación» de la galería con etiquetas, etiquetas de estado, tarjetas,
+indicadores, accesos a módulo y separadores. Las decisiones D153 a D158 se tomaron con preguntas
+antes del plan; D159 a D162 salieron de verificar en staging, también con preguntas.
+
+### Decisiones
+
+| # | Decisión | Motivo |
+|---|---|---|
+| D153 | Quietos en reposo: cada pieza hace un solo gesto al montar y el único bucle de las etiquetas es el punto de «En producción» | La maqueta animaba casi todo en bucle; en un ERP que se mira horas, el movimiento continuo distrae. Las excepciones son D156 y D158 |
+| D154 | Badge con la forma de la maqueta: 24 px, radio de 6 px, Geist 700 a 11 px en mayúsculas, con hover | Decisión del responsable. El hover se reduce en D162 |
+| D155 | StateBadge con el mapa de la maqueta y un punto: tono, gesto (`settle`, `pop`, `stamp`, `shake`), punto fijo o vivo y relleno parcial por estado | La maqueta no dibujaba cinco estados: van con su familia (emitido como pagada; anulada y cancelado como anulado; aprobado y aceptada como registrado) y sin proforma y sin comprobante como pendiente, en advertencia. Un estado desconocido se muestra tal cual, con borde discontinuo y sin punto |
+| D156 | Card como la maqueta: acero cepillado (`--texture-metal` en mosaicos de 180 px) que se desplaza una vuelta cada 18 s, radio de 10 px y barra térmica en barrido | Decisión del responsable; la textura en movimiento es la excepción elegida a D153. El fondo y el hover se corrigen en D159 y D160 |
+| D157 | KpiCard con todo lo de la maqueta: franja LED, halo, resplandor que sigue el puntero, periodo, minigráfico, estado, variación y dial | Decisión del responsable: por ahora solo visual. Las props nuevas son opcionales y hoy solo las llena la galería; serán la guía para que las consultas calculen solo lo que se ve |
+| D158 | ModuleAccessCard y Separator como la maqueta: número e icono que respiran, acento del módulo, flecha y resplandor; destello en el separador horizontal y latido en el vertical | Decisión del responsable; la respiración y el destello son excepciones a D153 |
+| D159 | Card vuelve a la superficie elevada (`bg-card`, #15181d), con la textura | En staging, 117 de las 122 tarjetas quedaban hundidas: #0a0b0d sobre el shell #0f1011. En la maqueta la página era #0a0b0d. KpiCard y ModuleAccessCard conservan #0a0b0d desde `patterns.css` |
+| D160 | Card al pasar el puntero solo aclara el borde: no sube ni proyecta sombra | Un formulario de 851 × 657 px (nueva reparación) saltaba 2 px cada vez que el puntero entraba o salía. Solo suben lo que se pulsa: el indicador y el acceso a módulo (4 px) |
+| D161 | La etiqueta default es una placa de acero (`bg-secondary`), con borde común, texto cobre y una franja cobre de 2 px a la izquierda (`--shadow-badge-default: inset 2px 0 0 var(--primary)`) | El lingote cobre relleno con resplandor se confundía con el botón primario en los roles de usuarios y en la cabecera. Un tinte cobre se habría confundido con «Pendiente» (advertencia en brasa) |
+| D162 | Al pasar el puntero, toda etiqueta solo se aclara (`brightness-110`) | Subir 3 px y crecer al 105 % invitaba a pulsar algo que no se pulsa. Actualiza D154 |
+
+Lo que la maqueta pedía y no se adoptó: el título de la tarjeta en sans de 14,5 px y su pie y
+relleno; el barrido de la barra a 4,5 s (sigue el ciclo de la marca, 6 s, D151); las entradas
+escalonadas de los indicadores; las franjas de 4 px del fondo del acceso a módulo (usa
+`--texture-brush`, de 3 px); y la ruta («RUTA /ORDENES») en el pie del indicador.
+
+### Commits
+
+| Commit | Qué cambia |
+|---|---|
+| `9cb57fe` C1 `feat(ui): etiqueta con la forma de la propuesta` | D154: forma, superficies por token, hover y la prop `gesture` (`settle` en success, `shake` en destructive) |
+| `9b5d96e` C2 `feat(comercial): estados con el mapa y el punto de la propuesta` | D155: `stateLooks` con tono, gesto y punto; salen las clases `badge-state-*` de `patterns.css`; el radar `state-ping` es el único bucle |
+| `e71d0df` C3 `feat(ui): tarjeta de acero cepillado con barra en barrido` | D156: `.card-brushed` en `brand.css`; la barra térmica es `.heat-sweep` en su riel fino de 3 px (`.heat-sweep-thin`) |
+| `b22b2a8` C4 `feat(ui): resplandor que sigue el cursor` | `PointerSpotlight`: escribe `--spotlight-x` y `--spotlight-y` en porcentaje al mover el puntero sobre su anfitrión (`.spotlight-host`) |
+| `2f9016f` C5 `feat(ui): indicador con franja LED, halo y datos opcionales` | D157: KpiCard con `period`, `history`, `status`, `delta` y `gauge`; el minigráfico se lee entero con un lector de pantalla y el pie suma «Abrir →» |
+| `1980524` C6 `feat(ui): acceso a modulo con acento, flecha y resplandor` | D158: número e índice, acento por `--chart-N`, flecha al pasar el puntero |
+| `ce5a959` C7a `feat(ui): separador con destello de acero` | D158: `.separator-gleam` |
+| `f2e95e4` C7b `feat(galeria): presentacion con el diseno de la propuesta` | La sección con datos ficticios y «Repetir gestos», que vuelve a montar cada fila de etiquetas para ver sus gestos sin enviar nada |
+| `951d5cc` `fix(ui): tarjeta elevada que solo aclara el borde` | D159 y D160; sale `--shadow-card-lift`, que quedó sin uso |
+| `0a4cffe` `fix(ui): etiqueta default como placa y hover sin desplazamiento` | D161 y D162; salen `--badge-default-surface`, `--badge-default-border` y su `@theme`, que quedaron sin uso |
+
+Cada `feat` y cada `fix` empezaron por su prueba roja; `npm run check` en verde antes de cada commit
+(de 5731 a 5834 pruebas, de 358 a 366 archivos). C1 a C7b se publicaron juntos: CI #260 sobre
+`f2e95e4`. Los dos `fix`, juntos: CI #261 sobre `0a4cffe`. Los dos en verde.
+
+Con C5 y C6, para no aceptar a ciegas las instantáneas de 58 páginas, un guion comparó el texto
+visible del diff: lo único nuevo fue «Abrir →» (26 veces) y «→» (83 veces), sin texto quitado.
+
+D101 tenía dos mitades: el borde de color de las alertas, cerrado con el diseño de mensajes y
+estados (`ddafe12`), y el hover de la tarjeta de módulo, que queda resuelto con C6: el acceso a
+módulo toma su acento al pasar el puntero.
+
+### CSS compilado e instantáneas
+
+| Commit | Reglas quitadas / nuevas / cambiadas | Total de reglas | Instantáneas |
+|---|---|---|---|
+| C1 | 24 / 32 / 3 | 1293 → 1301 | 2 |
+| C2 | 1 / 18 / 0 | 1318 | 6 |
+| C3 | 5 / 12 / 2 | 1325 | 3 |
+| C4 | 0 / 4 / 1 | 1329 | 0 |
+| C5 | 11 / 70 / 3 | 1388 | 49 (solo «Abrir →» como texto nuevo) |
+| C6 | 5 / 24 / 2 | 1407 | 9 (solo «→» como texto nuevo) |
+| C7a | 0 / 7 / 0 | 1414 | 1 |
+| C7b | 0 / 0 / 0 | 1414 | 1 (la galería) |
+| `fix` tarjeta | 2 / 0 / 2 (salen `hover:-translate-y-0.5` y `hover:shadow-card-lift`) | 1412 | 3 |
+| `fix` etiqueta | 6 / 1 / 3 (salen el degradado, el borde, `ease-(--ease-spring)` y los dos hover) | 1407 | 3 |
+
+Sin utilidades fantasma. Dos veces estuvo a punto de colarse una: una variable llamada `container`
+(renombrada a `mountNode`) y una expresión regular con el nombre de una curva de easing en una
+prueba (la prueba arma el nombre con `join`).
+
+### Verificación en staging
+
+Con estilos calculados y el puntero real, a 1440 px y a 375 px. El panel del navegador no pintaba
+cuadros (un fotograma tardó 925 ms) y las transiciones quedaban en el tiempo 0: el estado final de
+cada hover se leyó adelantándolas con `finish()`.
+
+- **Badge:** 24 px, radio de 6 px y Geist 700 a 11 px; success con `badge-pop` y `badge-ring`,
+  destructive con `badge-shake`; las demás quietas.
+- **StateBadge:** los 16 estados con su tono y su gesto; «Vigente» con el punto fijo; «En
+  producción» con `state-ping` en bucle, el único; «Parcial» medio relleno; «desconocido» con borde
+  discontinuo y sin punto. «Repetir gestos» reemplaza los nodos y la animación arranca en 0 ms.
+- **KpiCard:** quieto en reposo. Al pasar el puntero sube 4 px, el resplandor llega a 1 y sigue al
+  cursor (del 20,3 % / 29,8 % al 80,2 % / 70,6 %), el halo a 0,95 y 1,12, el destello cruza la
+  franja y la barra actual se enciende. El dial enciende 6 de 16 marcas (3 de 8).
+- **ModuleAccessCard:** sube 4 px, el borde toma el acento, aparece la flecha, el icono crece a
+  1,08 y el número se desplaza.
+- **Separadores:** destello de 4,5 s en el horizontal y latido en el vertical.
+- **375 px:** sin desborde; indicadores y accesos en una columna de 310 px.
+- **Reducir movimiento:** las 12 animaciones de la sección tienen una regla que las detiene.
+- **Después de los `fix`:** las 7 etiquetas default de usuarios y cabecera pintan #1c2027 con
+  texto #f2941f (7,03:1) y la franja interior de 2 px, y al pasar el puntero solo
+  `brightness(1.1)`. El formulario de nueva reparación es #15181d sobre #0f1011 y al pasar el
+  puntero solo aclara el borde (#7a828f). En el inicio, indicadores y accesos siguen en #0a0b0d y
+  el indicador sube 4 px.
+
+### Pendientes que deja
+
+| Pendiente | Detalle |
+|---|---|
+| Datos opcionales del indicador | Periodo, minigráfico, estado, variación y dial solo los llena la galería; cada uno necesita su consulta (D157) |
+| Barra térmica de la tarjeta | `Card heatBar` no lo usa ninguna página todavía |
+| Sombras sin uso | `--shadow-card-hover`, `--shadow-raised-hover` y `--shadow-panel` ya no tienen consumidor; la galería aún las rotula «Módulo al pasar», «Indicador al pasar» y «Panel de error». Quitarlas o reasignarlas, en su propio paso |
+| Lo que no se adoptó de la maqueta | Título y pie de la tarjeta, barrido a 4,5 s, entradas escalonadas, franjas de 4 px y la ruta en el pie del indicador (arriba) |
+| Advertencias de lint anteriores | `GalleryNote` sin uso en `foundations-section.tsx` y `_line` en `commercial/orders/actions.ts` |
 
 ## Secuencia de próximas entregas
 

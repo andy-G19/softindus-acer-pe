@@ -134,74 +134,124 @@ exports[`/dashboard/reports/production > maestro de taller > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes encontradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes encontradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Cantidad de Órdenes según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Órdenes marcadas como finalizadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes retrasadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes retrasadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Órdenes activas con fecha estimada vencida.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>34.00</p>
 <p>Suma de cantidades planificadas a fabricar.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -411,74 +461,124 @@ exports[`/dashboard/reports/production > orden retrasada sin cliente, ruta ni av
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes encontradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes encontradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Cantidad de Órdenes según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Órdenes marcadas como finalizadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes retrasadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes retrasadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Órdenes activas con fecha estimada vencida.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>34.00</p>
 <p>Suma de cantidades planificadas a fabricar.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -693,74 +793,124 @@ exports[`/dashboard/reports/production > rango de mas de 366 dias > resultado 1`
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes encontradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes encontradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Cantidad de Órdenes según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Órdenes marcadas como finalizadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes retrasadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes retrasadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Órdenes activas con fecha estimada vencida.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>34.00</p>
 <p>Suma de cantidades planificadas a fabricar.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1083,74 +1233,124 @@ exports[`/dashboard/reports/production > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes encontradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes encontradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Cantidad de Órdenes según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Órdenes marcadas como finalizadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes retrasadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes retrasadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Órdenes activas con fecha estimada vencida.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>34.00</p>
 <p>Suma de cantidades planificadas a fabricar.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1360,74 +1560,124 @@ exports[`/dashboard/reports/production > sin resultados > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes encontradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes encontradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cantidad de Órdenes según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Órdenes marcadas como finalizadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes retrasadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes retrasadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Órdenes activas con fecha estimada vencida.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00</p>
 <p>Suma de cantidades planificadas a fabricar.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1594,74 +1844,124 @@ exports[`/dashboard/reports/production > todos los filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes encontradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes encontradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Cantidad de Órdenes según los filtros aplicados.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Pendientes, en proceso o pausadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes finalizadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes finalizadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Órdenes marcadas como finalizadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes retrasadas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes retrasadas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Órdenes activas con fecha estimada vencida.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cantidad total</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cantidad total</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>34.00</p>
 <p>Suma de cantidades planificadas a fabricar.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

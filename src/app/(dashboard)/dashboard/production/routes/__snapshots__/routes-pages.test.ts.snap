@@ -1121,60 +1121,100 @@ exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en esta ruta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Disponibles para producción.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Requieren máquina</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Requieren máquina</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Dependen de equipo crítico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Minutos por unidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Minutos por unidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>11.50 min</p>
 <p>1 etapa(s) sin tiempo capturado.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1388,60 +1428,100 @@ exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activa
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en esta ruta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Disponibles para producción.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Requieren máquina</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Requieren máquina</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Dependen de equipo crítico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Minutos por unidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Minutos por unidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>11.50 min</p>
 <p>1 etapa(s) sin tiempo capturado.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1695,60 +1775,100 @@ exports[`/dashboard/production/routes/[id]/stages > ruta sin etapas > resultado 
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Total en esta ruta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Disponibles para producción.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Requieren máquina</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Requieren máquina</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Dependen de equipo crítico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Minutos por unidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Minutos por unidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0.00 min</p>
 <p>Suma de etapas activas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1912,60 +2032,100 @@ exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > re
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total en esta ruta.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Etapas activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Etapas activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Disponibles para producción.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Requieren máquina</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Requieren máquina</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Dependen de equipo crítico.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Minutos por unidad</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Minutos por unidad</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>11.50 min</p>
 <p>1 etapa(s) sin tiempo capturado.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

@@ -388,194 +388,374 @@ exports[`/dashboard/reports > panel del mes > resultado 1`] = `
 </section>
 <section>
 <a href="/dashboard/production/work-orders">
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Retrasadas: 42. Finalizadas este mes: 42.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/commercial/orders">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/orders">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Pedidos pendientes</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pedidos registrados, aprobados o en producción.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/inventory/materials">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/inventory/materials">
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Stock crítico</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Stock crítico</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Alertas activas de stock: 42.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/commercial/payments">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/payments">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Cuentas por cobrar</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cuentas por cobrar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Proformas con saldo pendiente: 42.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/commercial/payments">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/payments">
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Cobrado este mes</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cobrado este mes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Pagos de clientes registrados durante el mes.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/commercial/receipts">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/receipts">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Comprobantes emitidos</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Comprobantes emitidos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Monto emitido: S/ 1234.50.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/petty-cash">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Saldo de caja chica</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo de caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Movimiento neto del mes: S/ 0.00.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/costs">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/costs">
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Utilidad estimada</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Alertas de bajo margen: 42.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/maintenance">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance">
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Fallas abiertas</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Fallas abiertas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Preventivos vencidos: 42.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/maintenance/repairs">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/repairs">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Costo mantenimiento</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo mantenimiento</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Costo total de reparaciones registradas este mes.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/inventory/purchases">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/inventory/purchases">
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Compras por pagar</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras por pagar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Monto referencial pendiente: S/ 1234.50.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/petty-cash/movements">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash/movements">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Egresos caja chica</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Ingresos del mes: S/ 1234.50.</p>
+</div>
+</div>
+<div>
+<span>
+</span>
+<span>Abrir →</span>
+</div>
 </div>
 </div>
 </a>
@@ -730,141 +910,171 @@ exports[`/dashboard/reports > panel del mes > resultado 1`] = `
 <div>
 <a href="/dashboard/reports/production">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de producción</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de producción</div>
 <p>Órdenes de trabajo filtradas por fecha, producto, estado y código de orden.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/inventory">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de inventario</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de inventario</div>
 <p>Movimientos por material, tipo, responsable, fechas y orden de trabajo asociada.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/sales-collections">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de ventas y cobranzas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de ventas y cobranzas</div>
 <p>Pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos y estados de cobranza.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/suppliers-purchases">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de proveedores y compras</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de proveedores y compras</div>
 <p>Proveedores, materiales comprados, montos, comprobantes, precios históricos y pagos pendientes.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/financial">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte financiero</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte financiero</div>
 <p>Caja chica, ingresos, egresos, costos, utilidad estimada, cuentas por cobrar y compras por pagar.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/maintenance">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">06</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de mantenimiento</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de mantenimiento</div>
 <p>Máquinas, fallas, reparaciones, costos, repuestos, preventivos y reincidencias.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/profitability">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">07</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de costos y rentabilidad</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de costos y rentabilidad</div>
 <p>Costeos, margenes, ingresos, utilidad estimada y alertas de baja rentabilidad.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/staff">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">08</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de personal y planillas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de personal y planillas</div>
 <p>Asistencias, faltas, tardanzas, planillas, pagos y pendientes por operario.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/export-history">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">09</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Historial de exportaciones</div>
-</div>
+</span>
 <div>
+<div>
+<div>Historial de exportaciones</div>
 <p>Auditoría de reportes exportados por usuario, módulo, formato, filtros y fecha.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/audit">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">10</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Bitacora de auditoria</div>
-</div>
+</span>
 <div>
+<div>
+<div>Bitacora de auditoria</div>
 <p>Operaciones criticas por usuario, accion, entidad afectada y fecha.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
@@ -1266,194 +1476,374 @@ exports[`/dashboard/reports > sin datos recientes, totales vacios ni materiales 
 </section>
 <section>
 <a href="/dashboard/production/work-orders">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Órdenes activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Órdenes activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Retrasadas: 0. Finalizadas este mes: 0.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/commercial/orders">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/orders">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Pedidos pendientes</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pedidos pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Pedidos registrados, aprobados o en producción.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/inventory/materials">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/inventory/materials">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Stock crítico</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Stock crítico</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Alertas activas de stock: 42.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/commercial/payments">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/payments">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Cuentas por cobrar</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cuentas por cobrar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Proformas con saldo pendiente: 42.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/commercial/payments">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/payments">
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Cobrado este mes</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cobrado este mes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Pagos de clientes registrados durante el mes.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/commercial/receipts">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/receipts">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Comprobantes emitidos</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Comprobantes emitidos</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Monto emitido: S/ 0.00.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/petty-cash">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Saldo de caja chica</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo de caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Movimiento neto del mes: S/ 0.00.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/costs">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/costs">
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Utilidad estimada</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Utilidad estimada</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Alertas de bajo margen: 0.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/maintenance">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Fallas abiertas</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Fallas abiertas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Preventivos vencidos: 0.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/maintenance/repairs">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/repairs">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Costo mantenimiento</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Costo mantenimiento</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Costo total de reparaciones registradas este mes.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/inventory/purchases">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/inventory/purchases">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Compras por pagar</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Compras por pagar</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Monto referencial pendiente: S/ 0.00.</p>
 </div>
 </div>
-</a>
-<a href="/dashboard/petty-cash/movements">
-<div>
-<div>
 <div>
 <span>
+</span>
+<span>Abrir →</span>
+</div>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash/movements">
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<div>
+<div>
+<span>Egresos caja chica</span>
+<span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos caja chica</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos del mes: S/ 0.00.</p>
+</div>
+</div>
+<div>
+<span>
+</span>
+<span>Abrir →</span>
+</div>
 </div>
 </div>
 </a>
@@ -1530,141 +1920,171 @@ exports[`/dashboard/reports > sin datos recientes, totales vacios ni materiales 
 <div>
 <a href="/dashboard/reports/production">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de producción</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de producción</div>
 <p>Órdenes de trabajo filtradas por fecha, producto, estado y código de orden.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/inventory">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de inventario</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de inventario</div>
 <p>Movimientos por material, tipo, responsable, fechas y orden de trabajo asociada.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/sales-collections">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de ventas y cobranzas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de ventas y cobranzas</div>
 <p>Pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos y estados de cobranza.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/suppliers-purchases">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de proveedores y compras</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de proveedores y compras</div>
 <p>Proveedores, materiales comprados, montos, comprobantes, precios históricos y pagos pendientes.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/financial">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte financiero</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte financiero</div>
 <p>Caja chica, ingresos, egresos, costos, utilidad estimada, cuentas por cobrar y compras por pagar.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/maintenance">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">06</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de mantenimiento</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de mantenimiento</div>
 <p>Máquinas, fallas, reparaciones, costos, repuestos, preventivos y reincidencias.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/profitability">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">07</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de costos y rentabilidad</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de costos y rentabilidad</div>
 <p>Costeos, margenes, ingresos, utilidad estimada y alertas de baja rentabilidad.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/staff">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">08</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Reporte de personal y planillas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Reporte de personal y planillas</div>
 <p>Asistencias, faltas, tardanzas, planillas, pagos y pendientes por operario.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/reports/export-history">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">09</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Historial de exportaciones</div>
-</div>
+</span>
 <div>
+<div>
+<div>Historial de exportaciones</div>
 <p>Auditoría de reportes exportados por usuario, módulo, formato, filtros y fecha.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/audit">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">10</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Bitacora de auditoria</div>
-</div>
+</span>
 <div>
+<div>
+<div>Bitacora de auditoria</div>
 <p>Operaciones criticas por usuario, accion, entidad afectada y fecha.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>

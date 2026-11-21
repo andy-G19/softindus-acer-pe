@@ -112,60 +112,100 @@ exports[`/dashboard/maintenance/preventive > sin filtros > resultado 1`] = `
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Preventivos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Preventivos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico de programaciones.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Vencidos: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Realizados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Realizados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cumplidos según registro.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Anulados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Anulados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Programaciones canceladas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -431,60 +471,100 @@ exports[`/dashboard/maintenance/preventive > todos los filtros > resultado 1`] =
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Preventivos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Preventivos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Total histórico de programaciones.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Vencidos: 0</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Realizados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Realizados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Cumplidos según registro.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Anulados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Anulados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>0</p>
 <p>Programaciones canceladas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -694,60 +774,100 @@ exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > r
 </div>
 </form>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Preventivos registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Preventivos registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>5</p>
 <p>Total histórico de programaciones.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Pendientes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Pendientes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>2</p>
 <p>Vencidos: 1</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Realizados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Realizados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Cumplidos según registro.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Anulados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Anulados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>1</p>
 <p>Programaciones canceladas.</p>
+</div>
+</div>
 </div>
 </div>
 </section>

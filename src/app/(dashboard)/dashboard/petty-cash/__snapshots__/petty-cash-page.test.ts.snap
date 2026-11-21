@@ -139,118 +139,198 @@ exports[`/dashboard/petty-cash > indicadores del mes > resultado 1`] = `
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Saldo actual abierto</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Saldo actual abierto</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Suma de saldos de cajas abiertas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Ingresos del mes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Ingresos del mes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Incluye ingresos menores y ventas de chatarra vinculadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Egresos del mes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Egresos del mes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 1234.50</p>
 <p>Gastos menores registrados en caja chica.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Resultado mensual</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Resultado mensual</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>S/ 0.00</p>
 <p>Ingresos menos egresos del mes actual.</p>
 </div>
 </div>
+</div>
+</div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cajas abiertas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cajas abiertas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Total de cajas chicas actualmente abiertas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Cajas registradas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Cajas registradas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Historial total de cajas creadas.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Categorías activas</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Categorías activas</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Disponibles para clasificar egresos.</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Movimientos del mes</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Movimientos del mes</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Ingresos, egresos y ajustes registrados este mes.</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -329,99 +409,120 @@ exports[`/dashboard/petty-cash > indicadores del mes > resultado 1`] = `
 <section>
 <a href="/dashboard/petty-cash/boxes">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">01</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Listado de cajas chicas</div>
-</div>
+</span>
 <div>
+<div>
+<div>Listado de cajas chicas</div>
 <p>Consultar cajas abiertas, cerradas, responsables, saldos y movimientos.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/petty-cash/boxes/new">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">02</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Abrir caja chica</div>
-</div>
+</span>
 <div>
+<div>
+<div>Abrir caja chica</div>
 <p>Registrar una nueva caja con saldo inicial y responsable.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/petty-cash/expenses/new">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">03</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Registrar egreso</div>
-</div>
+</span>
 <div>
+<div>
+<div>Registrar egreso</div>
 <p>Registrar gastos menores, descontar saldo de caja y clasificar el egreso por categoría.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/petty-cash/income-adjustments/new">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">04</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Registrar ingreso o ajuste</div>
-</div>
+</span>
 <div>
+<div>
+<div>Registrar ingreso o ajuste</div>
 <p>Registrar ingresos menores, ajustes positivos o ajustes negativos de caja chica.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/petty-cash/movements">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">05</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Movimientos de caja</div>
-</div>
+</span>
 <div>
+<div>
+<div>Movimientos de caja</div>
 <p>Consultar ingresos, egresos y ajustes con filtros por caja, tipo, categoría, fechas y concepto.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/petty-cash/monthly-summary">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">06</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Resumen mensual</div>
-</div>
+</span>
 <div>
+<div>
+<div>Resumen mensual</div>
 <p>Consultar ventas cobradas, saldos pendientes, costos, caja chica y utilidad estimada por mes.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>
 <a href="/dashboard/petty-cash/categories">
 <div>
+<span aria-hidden="true">
+</span>
 <span aria-hidden="true">07</span>
-<div>
-<div>
+<span aria-hidden="true">
 <svg/>
-</div>
-<div>Categorías de gasto</div>
-</div>
+</span>
 <div>
+<div>
+<div>Categorías de gasto</div>
 <p>Administrar categorías como repuestos, transporte, mantenimiento, refrigerios y otros.</p>
+</div>
+<span aria-hidden="true">→</span>
 </div>
 </div>
 </a>

@@ -116,60 +116,100 @@ exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > resu
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 según filtros</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Disponibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Disponibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Listos para reutilizar</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reutilizados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reutilizados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Aprovechados en producción</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Descartados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Descartados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>No aprovechables</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -425,60 +465,100 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > resultado 1`] = 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 según filtros</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Disponibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Disponibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Listos para reutilizar</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reutilizados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reutilizados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Aprovechados en producción</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Descartados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Descartados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>No aprovechables</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -708,60 +788,100 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin retazos > resultado 1`] = 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 según filtros</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Disponibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Disponibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Listos para reutilizar</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reutilizados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reutilizados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Aprovechados en producción</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Descartados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Descartados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>No aprovechables</p>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -999,60 +1119,100 @@ exports[`/dashboard/waste-scrap/reusable-scraps > todos los filtros > resultado 
 </div>
 </section>
 <section>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Total registrados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Total registrados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>42 según filtros</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="success">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Disponibles</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Disponibles</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Listos para reutilizar</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="info">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Reutilizados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Reutilizados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>Aprovechados en producción</p>
 </div>
 </div>
+</div>
+</div>
+<div data-tone="warning">
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
+<span aria-hidden="true">
+</span>
 <div>
 <div>
-<div>
+<span>Descartados</span>
 <span>
+<span aria-hidden="true">
 <svg/>
 </span>
-<div>Descartados</div>
+</span>
 </div>
-</div>
+<div>
 <div>
 <p>42</p>
 <p>No aprovechables</p>
+</div>
+</div>
 </div>
 </div>
 </section>

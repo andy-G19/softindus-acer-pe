@@ -1,35 +1,833 @@
-/* Patrones compartidos: tonos de etiquetas y alertas por estado, enlaces
+/* Patrones compartidos: gestos de las etiquetas, enlaces
    de la barra lateral, el contorno del foco de teclado, y los campos, las
    tablas y los titulos de toda la app. */
 @layer utilities {
-  .badge-state-success {
-    border-color: color-mix(in srgb, var(--success) 32%, transparent);
-    background-color: color-mix(in srgb, var(--success) 14%, transparent);
-    color: color-mix(in srgb, var(--success) 78%, var(--foreground) 22%);
+  /* Gestos de la etiqueta (propuesta de la presentacion, 2026-11-20; D153). Los colores por
+     estado vivian aqui (badge-state-*); desde este diseno los declara Badge con tokens. En
+     reposo nada se mueve: success se asienta con un sello y una onda al montar, y destructive
+     sacude una vez (la sacudida de la propuesta, sin desaparecer y volver). Los fotogramas
+     usan transform; la subida del hover usa translate y scale, otras propiedades, asi que no
+     se pisan. */
+  .badge-settle {
+    animation:
+      badge-pop 320ms var(--ease-spring) both,
+      badge-ring 900ms ease-out 320ms both;
   }
 
-  .badge-state-info {
-    border-color: color-mix(in srgb, var(--info) 32%, transparent);
-    background-color: color-mix(in srgb, var(--info) 14%, transparent);
-    color: color-mix(in srgb, var(--info) 72%, var(--foreground) 28%);
+  .badge-shake {
+    animation: badge-shake 500ms var(--ease-settle) both;
   }
 
-  .badge-state-active {
-    border-color: color-mix(in srgb, var(--primary) 32%, transparent);
-    background-color: color-mix(in srgb, var(--primary) 14%, transparent);
-    color: color-mix(in srgb, var(--primary) 82%, var(--foreground) 18%);
+  /* Gestos de StateBadge (D155): entregado solo se asienta, sin onda; anulado entra con un golpe
+     de sello seco y un eco. */
+  .badge-pop {
+    animation: badge-pop 320ms var(--ease-spring) both;
   }
 
-  .badge-state-warning {
-    border-color: color-mix(in srgb, var(--warning) 32%, transparent);
-    background-color: color-mix(in srgb, var(--warning) 14%, transparent);
-    color: color-mix(in srgb, var(--warning) 78%, var(--foreground) 22%);
+  .badge-stamp {
+    animation:
+      badge-stamp 480ms var(--ease-spring) both,
+      badge-ring 700ms ease-out 180ms both;
   }
 
-  .badge-state-danger {
-    border-color: color-mix(in srgb, var(--destructive) 32%, transparent);
-    background-color: color-mix(in srgb, var(--destructive) 14%, transparent);
-    color: color-mix(in srgb, var(--destructive) 72%, var(--foreground) 28%);
+  @keyframes badge-stamp {
+    0% {
+      transform: scale(1.5) rotate(-6deg);
+      opacity: 0;
+    }
+
+    60% {
+      transform: scale(0.94) rotate(2deg);
+      opacity: 1;
+    }
+
+    100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
+
+  /* Punto de StateBadge. Vigente lo deja brillar fijo; En produccion emite un doble pulso de
+     radar, el unico movimiento continuo de la presentacion (D153): es una senal activa de verdad.
+     Los anillos salen del punto, por eso esa etiqueta no recorta su contenido. */
+  .state-dot-steady {
+    box-shadow: 0 0 6px color-mix(in oklch, var(--info-border) 70%, transparent);
+  }
+
+  .state-dot-live::before,
+  .state-dot-live::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 9999px;
+    border: 1px solid currentColor;
+    opacity: 0.6;
+    animation: state-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .state-dot-live::before {
+    animation-delay: 0.9s;
+  }
+
+  @keyframes state-ping {
+    0% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+
+    75%,
+    100% {
+      transform: scale(1.9);
+      opacity: 0;
+    }
+  }
+
+  /* Parcial se distingue de pendiente (mismo tono) con un relleno a medias: el degradado
+     bicolor de la propuesta, quieto en su primer fotograma (D153), cubre un tercio. */
+  .state-badge-partial {
+    background-image: linear-gradient(
+      90deg,
+      color-mix(in oklch, var(--warning-border) 42%, transparent) 0%,
+      color-mix(in oklch, var(--warning-border) 26%, transparent) 52%,
+      transparent 56%,
+      transparent 100%
+    );
+    background-size: 160% 100%;
+    background-position: 85% 50%;
+  }
+
+  @keyframes badge-pop {
+    0% {
+      transform: scale(0.72);
+      opacity: 0;
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes badge-ring {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklch, currentColor 50%, transparent);
+    }
+
+    100% {
+      box-shadow: 0 0 0 7px transparent;
+    }
+  }
+
+  @keyframes badge-shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    20% {
+      transform: translateX(-6px) rotate(-1.5deg);
+    }
+
+    40% {
+      transform: translateX(6px) rotate(1.5deg);
+    }
+
+    60% {
+      transform: translateX(-5px) rotate(-1deg);
+    }
+
+    80% {
+      transform: translateX(4px) rotate(1deg);
+    }
+  }
+
+  /* Resplandor que sigue el puntero (propuesta de la presentacion, 2026-11-20; D157 y D158):
+     PointerSpotlight escribe --spotlight-x y --spotlight-y en la capa; el anfitrion
+     (.spotlight-host) puede redefinir color, tamano, intensidad y desvanecido, que heredan de los
+     valores por defecto de tokens.css. Se ve solo con el anfitrion bajo el puntero o con foco de
+     teclado. */
+  .pointer-spotlight {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 320ms ease;
+    background: radial-gradient(
+      var(--spotlight-size) circle at var(--spotlight-x) var(--spotlight-y),
+      color-mix(in oklch, var(--spotlight-color) var(--spotlight-strength), transparent),
+      transparent var(--spotlight-fade)
+    );
+  }
+
+  .spotlight-host:hover .pointer-spotlight,
+  .spotlight-host:focus-visible .pointer-spotlight {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pointer-spotlight {
+      transition: none;
+    }
+  }
+
+  /* Indicador (propuesta de la presentacion, 2026-11-20; D157). Placa con rejilla de puntos
+     quieta sobre el fondo de la pagina: reemplaza el cepillado de Card (estas reglas van despues
+     de brand.css y de las utilidades, y con la misma especificidad ganan). Franja LED y halo del
+     tono (--kpi-tone, que KpiCard redefine), y el resplandor de PointerSpotlight del mismo color.
+     Al pasar el puntero, o con foco en su enlace, sube 4 px y el borde, la sombra, la franja, el
+     halo, el valor y las barras se encienden. En reposo nada se mueve (D153). */
+  .kpi-card {
+    --spotlight-color: var(--kpi-tone);
+    position: relative;
+    background-color: var(--background);
+    background-image: radial-gradient(var(--kpi-grid-dot) 1px, transparent 1.4px);
+    background-size: 16px 16px;
+    animation: none;
+  }
+
+  .kpi-card:hover,
+  .spotlight-host:focus-visible .kpi-card {
+    translate: 0 -4px;
+    border-color: color-mix(in oklch, var(--kpi-tone) 55%, transparent);
+    box-shadow:
+      var(--shadow-kpi-hover),
+      0 0 26px 0 color-mix(in oklch, var(--kpi-tone) 18%, transparent);
+  }
+
+  .kpi-led {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    z-index: 2;
+    height: 3px;
+    overflow: hidden;
+    background-color: var(--kpi-tone);
+    box-shadow: 0 2px 16px color-mix(in oklch, var(--kpi-tone) 45%, transparent);
+    transition: box-shadow 300ms ease;
+  }
+
+  .kpi-led::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 16%;
+    width: 48px;
+    height: 100%;
+    background-image: linear-gradient(90deg, transparent, var(--kpi-led-gleam), transparent);
+    transition: right 650ms var(--ease-settle);
+  }
+
+  .kpi-card:hover .kpi-led,
+  .spotlight-host:focus-visible .kpi-led {
+    box-shadow: 0 3px 24px var(--kpi-tone);
+  }
+
+  .kpi-card:hover .kpi-led::after,
+  .spotlight-host:focus-visible .kpi-led::after {
+    right: 72%;
+  }
+
+  .kpi-halo {
+    position: absolute;
+    top: -48px;
+    left: 9%;
+    width: 82%;
+    height: 96px;
+    pointer-events: none;
+    opacity: 0.55;
+    background: radial-gradient(
+      ellipse at center,
+      color-mix(in oklch, var(--kpi-tone) 35%, transparent) 0%,
+      transparent 72%
+    );
+    transition:
+      opacity 350ms ease,
+      scale 350ms ease;
+  }
+
+  .kpi-card:hover .kpi-halo,
+  .spotlight-host:focus-visible .kpi-halo {
+    opacity: 0.95;
+    scale: 1.12;
+  }
+
+  .kpi-head {
+    display: flex;
+    min-height: 30px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .kpi-head[data-align="center"] {
+    justify-content: center;
+  }
+
+  .kpi-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    transition: color 250ms ease;
+  }
+
+  .kpi-period {
+    padding: 2px 8px;
+    border: 1px solid color-mix(in oklch, var(--kpi-tone) 42%, transparent);
+    border-radius: 9999px;
+    background-color: color-mix(in oklch, var(--kpi-tone) 18%, transparent);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--kpi-tone);
+    transition:
+      scale 250ms ease,
+      box-shadow 250ms ease;
+  }
+
+  .kpi-icon {
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in oklch, var(--kpi-tone) 38%, transparent);
+    border-radius: var(--radius-sm);
+    background-color: color-mix(in oklch, var(--kpi-tone) 20%, transparent);
+    color: var(--kpi-tone);
+    transition:
+      scale 280ms var(--ease-settle),
+      box-shadow 280ms ease;
+  }
+
+  .kpi-icon svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .kpi-body {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 6px 0 4px;
+  }
+
+  .kpi-value {
+    font-family: var(--font-mono);
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--foreground);
+    transition:
+      translate 280ms var(--ease-settle),
+      text-shadow 280ms ease;
+  }
+
+  .kpi-card[data-tone="success"] .kpi-value {
+    color: var(--success-foreground);
+  }
+
+  .kpi-caption {
+    font-size: 12px;
+    color: var(--muted-foreground);
+    transition: color 250ms ease;
+  }
+
+  .kpi-card:hover .kpi-label,
+  .kpi-card:hover .kpi-caption,
+  .spotlight-host:focus-visible .kpi-label,
+  .spotlight-host:focus-visible .kpi-caption {
+    color: var(--foreground);
+  }
+
+  .kpi-card:hover .kpi-period {
+    scale: 1.04;
+    box-shadow: 0 0 12px color-mix(in oklch, var(--kpi-tone) 35%, transparent);
+  }
+
+  .kpi-card:hover .kpi-icon {
+    scale: 1.08;
+    box-shadow: 0 0 16px color-mix(in oklch, var(--kpi-tone) 45%, transparent);
+  }
+
+  .kpi-card:hover .kpi-value {
+    translate: 2px 0;
+    text-shadow: 0 0 22px color-mix(in oklch, var(--kpi-tone) 50%, transparent);
+  }
+
+  /* Minigrafico: la barra actual (la ultima) brilla mas; al pasar el puntero por una barra, su
+     etiqueta y su valor aparecen encima. El texto completo esta en el aria-label del grupo. */
+  .kpi-bars {
+    position: relative;
+    display: flex;
+    height: 42px;
+    flex-shrink: 0;
+    align-items: flex-end;
+    gap: 5px;
+    padding-bottom: 2px;
+  }
+
+  .kpi-bar {
+    position: relative;
+    width: 6px;
+    border-radius: 3px;
+    background-color: var(--kpi-tone);
+    opacity: 0.5;
+    box-shadow: 0 0 8px 0 color-mix(in oklch, var(--kpi-tone) 55%, transparent);
+    transform-origin: bottom;
+    transition:
+      opacity 250ms ease,
+      scale 280ms var(--ease-settle),
+      box-shadow 250ms ease;
+  }
+
+  .kpi-bar[data-current="true"] {
+    opacity: 1;
+    box-shadow: 0 0 14px 0 var(--kpi-tone);
+  }
+
+  .kpi-card:hover .kpi-bar {
+    opacity: 0.82;
+    scale: 1 1.05;
+  }
+
+  .kpi-card:hover .kpi-bar[data-current="true"] {
+    opacity: 1;
+    scale: 1 1.1;
+  }
+
+  .kpi-card .kpi-bar:hover {
+    opacity: 1;
+    box-shadow: 0 0 16px 0 var(--kpi-tone);
+  }
+
+  .kpi-bar:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 7px);
+    z-index: 20;
+    padding: 3px 7px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background-color: var(--card);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    white-space: nowrap;
+    color: var(--foreground);
+    pointer-events: none;
+  }
+
+  .kpi-bar-separator {
+    width: 1px;
+    align-self: stretch;
+    margin: 0 1px;
+    background-color: var(--border);
+  }
+
+  .kpi-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    transition: border-color 250ms ease;
+  }
+
+  .kpi-card:hover .kpi-footer {
+    border-top-color: color-mix(in oklch, var(--kpi-tone) 30%, var(--border));
+  }
+
+  .kpi-status {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .kpi-status-dot {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    background-color: var(--kpi-tone);
+    box-shadow: 0 0 5px 0 color-mix(in oklch, var(--kpi-tone) 70%, transparent);
+    transition: scale 250ms ease;
+  }
+
+  .kpi-card:hover .kpi-status-dot {
+    scale: 1.3;
+  }
+
+  .kpi-delta {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: none;
+    color: var(--muted-foreground);
+  }
+
+  .kpi-delta[data-positive="true"] {
+    color: var(--success-foreground);
+  }
+
+  .kpi-open {
+    flex-shrink: 0;
+    font-size: 11.5px;
+    font-weight: 600;
+    text-transform: none;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    color: var(--primary);
+    transition:
+      color 200ms ease,
+      translate 200ms ease;
+  }
+
+  .kpi-card:hover .kpi-open,
+  .spotlight-host:focus-visible .kpi-open {
+    translate: 2px 0;
+    color: var(--primary-hover);
+  }
+
+  /* Dial: segmentos que se encienden desde la izquierda segun el porcentaje. */
+  .kpi-gauge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1px 0 2px;
+  }
+
+  .kpi-gauge-stage {
+    position: relative;
+    width: 100%;
+    max-width: 208px;
+    transition: scale 300ms var(--ease-settle);
+  }
+
+  .kpi-gauge-stage svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .kpi-gauge-tick {
+    stroke: var(--border);
+    stroke-width: 6.5;
+    stroke-linecap: round;
+    transition:
+      stroke 300ms ease,
+      filter 300ms ease;
+  }
+
+  .kpi-gauge-tick[data-lit="true"] {
+    stroke: var(--kpi-tone);
+    filter: drop-shadow(0 0 4px color-mix(in oklch, var(--kpi-tone) 75%, transparent));
+  }
+
+  .kpi-card:hover .kpi-gauge-stage {
+    scale: 1.03;
+  }
+
+  .kpi-card:hover .kpi-gauge-tick[data-lit="true"] {
+    filter: drop-shadow(0 0 10px color-mix(in oklch, var(--kpi-tone) 95%, transparent));
+  }
+
+  .kpi-gauge-value {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 4px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--kpi-tone);
+    transition: text-shadow 300ms ease;
+  }
+
+  .kpi-card:hover .kpi-gauge-value {
+    text-shadow: 0 0 20px color-mix(in oklch, var(--kpi-tone) 55%, transparent);
+  }
+
+  .kpi-gauge-unit {
+    margin-left: 1px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .kpi-gauge .kpi-caption {
+    text-align: center;
+  }
+
+  /* Con reducir movimiento: sin transiciones y sin desplazamientos ni escalas al pasar el puntero
+     (la subida de la placa ya la quita Card). Los cambios de color y brillo quedan. */
+  @media (prefers-reduced-motion: reduce) {
+    .kpi-card,
+    .kpi-card *,
+    .kpi-card *::after {
+      transition: none;
+    }
+
+    .kpi-card * {
+      translate: none !important;
+      scale: none !important;
+    }
+  }
+
+  /* Acceso a modulo (propuesta de la presentacion, 2026-11-20; D158). Placa de acero cepillado en
+     degradado de la tarjeta al fondo, sin el desplazamiento de Card. Numero de fondo, icono en su
+     casco del acento (--module-accent, que ModuleAccessCard redefine), titulo y descripcion
+     abajo. El gesto fuerte queda para la intencion (puntero o foco en el enlace): la placa sube,
+     el borde toma el acento (cierra D101), el icono crece, el numero se desplaza y se tine y la
+     flecha aparece. En reposo el numero y el icono respiran despacio, como en la propuesta (D158
+     eligio la maqueta: una excepcion a la quietud de D153). */
+  .module-card {
+    --spotlight-color: var(--module-accent);
+    --spotlight-size: 300px;
+    --spotlight-strength: 12%;
+    --spotlight-fade: 72%;
+    position: relative;
+    min-height: 176px;
+    justify-content: space-between;
+    background-color: var(--background);
+    background-image:
+      var(--texture-brush),
+      linear-gradient(180deg, var(--card) 0%, var(--background) 100%);
+    background-size: auto;
+    animation: none;
+  }
+
+  .module-card:hover,
+  .spotlight-host:focus-visible .module-card {
+    translate: 0 -4px;
+    border-color: var(--module-accent);
+    box-shadow:
+      var(--shadow-module-hover),
+      0 0 24px color-mix(in oklch, var(--module-accent) 16%, transparent);
+  }
+
+  .module-number {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-family: var(--font-mono);
+    font-size: 2.1rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--foreground);
+    opacity: 0.07;
+    pointer-events: none;
+    user-select: none;
+    animation: module-number-breathe 5s ease-in-out infinite;
+    transition:
+      translate 280ms var(--ease-settle),
+      color 280ms ease,
+      opacity 280ms ease;
+  }
+
+  .module-card:hover .module-number,
+  .spotlight-host:focus-visible .module-number {
+    translate: -5px 3px;
+    color: var(--module-accent);
+    opacity: 0.32;
+    animation: none;
+  }
+
+  @keyframes module-number-breathe {
+    0%,
+    100% {
+      opacity: 0.07;
+    }
+
+    50% {
+      opacity: 0.11;
+    }
+  }
+
+  .module-icon {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: 46px;
+    height: 46px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in oklch, var(--module-accent) 32%, transparent);
+    border-radius: var(--radius-md);
+    background-color: color-mix(in oklch, var(--module-accent) 13%, transparent);
+    color: var(--module-accent);
+    animation: module-icon-idle 4s ease-in-out infinite;
+    transition:
+      scale 280ms var(--ease-settle),
+      box-shadow 280ms ease,
+      background-color 280ms ease;
+  }
+
+  .module-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  @keyframes module-icon-idle {
+    0%,
+    100% {
+      box-shadow: 0 0 4px 0 transparent;
+    }
+
+    50% {
+      box-shadow: 0 0 20px 0 color-mix(in oklch, var(--module-accent) 45%, transparent);
+    }
+  }
+
+  .module-card:hover .module-icon,
+  .spotlight-host:focus-visible .module-icon {
+    scale: 1.08;
+    background-color: color-mix(in oklch, var(--module-accent) 22%, transparent);
+    box-shadow: 0 0 24px 0 color-mix(in oklch, var(--module-accent) 45%, transparent);
+    animation: none;
+  }
+
+  .module-bottom {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .module-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--foreground);
+    transition: color 250ms ease;
+  }
+
+  .module-description {
+    font-size: 12.5px;
+    line-height: 18px;
+    color: var(--muted-foreground);
+    transition: color 250ms ease;
+  }
+
+  .module-card:hover .module-title,
+  .spotlight-host:focus-visible .module-title {
+    color: var(--module-accent);
+  }
+
+  .module-card:hover .module-description,
+  .spotlight-host:focus-visible .module-description {
+    color: var(--foreground);
+  }
+
+  .module-arrow {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--module-accent);
+    opacity: 0;
+    translate: -6px 0;
+    transition:
+      opacity 250ms ease,
+      translate 250ms ease;
+  }
+
+  .module-card:hover .module-arrow,
+  .spotlight-host:focus-visible .module-arrow {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  /* Separador (propuesta de la presentacion, 2026-11-20; D158): un destello de acero recorre la
+     linea horizontal cada 4,5 s y la vertical late entre el borde comun y el acero claro cada
+     3 s. Excepcion elegida a la quietud en reposo (D153); se detiene con reducir movimiento. */
+  .separator-gleam[data-orientation="horizontal"]::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30%;
+    height: 100%;
+    background-image: linear-gradient(90deg, transparent, var(--accent-steel), transparent);
+    translate: -100% 0;
+    animation: separator-travel 4.5s ease-in-out infinite;
+  }
+
+  @keyframes separator-travel {
+    from {
+      translate: -100% 0;
+    }
+
+    to {
+      translate: 334% 0;
+    }
+  }
+
+  .separator-gleam[data-orientation="vertical"] {
+    animation: separator-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes separator-pulse {
+    0%,
+    100% {
+      background-color: var(--border);
+    }
+
+    50% {
+      background-color: var(--control-border-hover);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .separator-gleam,
+    .separator-gleam::after {
+      animation: none;
+    }
+  }
+
+  /* Con reducir movimiento: sin respiracion, sin transiciones y sin desplazamientos ni escalas
+     (la subida de la placa ya la quita Card). La flecha aparece igual, sin moverse. */
+  @media (prefers-reduced-motion: reduce) {
+    .module-card,
+    .module-card * {
+      transition: none;
+      animation: none;
+    }
+
+    .module-card * {
+      translate: none !important;
+      scale: none !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .badge-settle,
+    .badge-shake,
+    .badge-pop,
+    .badge-stamp,
+    .state-dot-live::before,
+    .state-dot-live::after {
+      animation: none;
+    }
+
+    .state-dot-live::before,
+    .state-dot-live::after {
+      opacity: 0.4;
+    }
   }
 
   /* Los colores de las alertas por estado vivian aqui y su borde era el comun
