@@ -1368,7 +1368,7 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
 <td>S/ 11.50</td>
 <td>
-<span data-variant="info" data-tone="info">
+<span data-variant="warning" data-tone="warning">
 <span aria-hidden="true">
 </span>En producción</span>
 </td>
@@ -1789,7 +1789,7 @@ exports[`/dashboard/commercial/orders/[id] > en produccion > resultado 1`] = `
 <div>
 <p>Estado</p>
 <div>
-<span data-variant="info" data-tone="info">
+<span data-variant="warning" data-tone="warning">
 <span aria-hidden="true">
 </span>En producción</span>
 </div>

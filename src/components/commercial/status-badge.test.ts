@@ -5,14 +5,15 @@ import { describe, expect, it } from "vitest";
 
 import { StateBadge } from "@/components/commercial/status-badge";
 
-// Diseno de la presentacion (propuesta del responsable, 2026-11-20; D155). Cada estado comercial
-// tiene un tono (data-tone), un gesto que ocurre una sola vez al montar (D153) y un punto de
-// color que deja ver, sin leer, que tan avanzado va. El unico movimiento continuo es el doble
-// pulso de radar del punto de «En producción». Los estados que la propuesta no dibuja siguen a
-// su familia: emitido como pagada, anulada y cancelado como anulado, aprobado y aceptada como
-// registrado; «Sin proforma» y «Sin comprobante» como pendiente, porque son un paso que falta.
-// Se comprueban data-tone y data-variant, no clases de color: un nombre de utilidad escrito en
-// una prueba llega al CSS de produccion.
+// Diseno de listados y navegacion (propuesta del responsable, 2026-11-21; D170). La etiqueta de
+// estado es simple y documental: 22 px de alto, letra de 10,5 px, 9 px a los lados y un punto de
+// 5,5 px del color del texto, sin brillo. Cada estado tiene solo un tono (data-tone): sin gestos al
+// montar, sin el radar de «En producción», que pasa a ambar con el punto fijo, y sin el relleno a
+// medias de parcial. Reemplaza esa parte de D155; con esto ninguna etiqueta tiene un bucle (D153).
+// Los estados que la propuesta no dibuja siguen a su familia: emitido como pagada, anulada y
+// cancelado como anulado, aprobado y aceptada como registrado; «Sin proforma» y «Sin comprobante»
+// como pendiente, porque son un paso que falta. Se comprueban data-tone y data-variant, no clases
+// de color: un nombre de utilidad escrito en una prueba llega al CSS de produccion.
 
 function render(status: string | null | undefined) {
   return renderToStaticMarkup(h(StateBadge, { status }));
@@ -31,47 +32,54 @@ function dot(html: string) {
 }
 
 const EXPECTED = [
-  // estado, tono, variante de Badge, gesto, punto
-  ["registrado", "info", "info", "badge-settle", "plain"],
-  ["aprobado", "info", "info", "badge-settle", "plain"],
-  ["aceptada", "info", "info", "badge-settle", "plain"],
-  ["vigente", "neutral", "outline", null, "state-dot-steady"],
-  ["pagada", "success", "success", "badge-settle", "plain"],
-  ["emitido", "success", "success", "badge-settle", "plain"],
-  ["entregado", "success", "success", "badge-pop", "plain"],
-  ["pendiente", "warning", "warning", null, "plain"],
-  ["sin-proforma", "warning", "warning", null, "plain"],
-  ["sin-comprobante", "warning", "warning", null, "plain"],
-  ["parcial", "warning", "warning", null, "plain"],
-  ["en_produccion", "info", "info", null, "state-dot-live"],
-  ["anulado", "destructive", "destructive", "badge-stamp", "plain"],
-  ["anulada", "destructive", "destructive", "badge-stamp", "plain"],
-  ["cancelado", "destructive", "destructive", "badge-stamp", "plain"],
+  // estado, tono, variante de Badge
+  ["registrado", "info", "info"],
+  ["aprobado", "info", "info"],
+  ["aceptada", "info", "info"],
+  ["vigente", "neutral", "outline"],
+  ["pagada", "success", "success"],
+  ["emitido", "success", "success"],
+  ["entregado", "success", "success"],
+  ["pendiente", "warning", "warning"],
+  ["sin-proforma", "warning", "warning"],
+  ["sin-comprobante", "warning", "warning"],
+  ["parcial", "warning", "warning"],
+  ["en_produccion", "warning", "warning"],
+  ["anulado", "destructive", "destructive"],
+  ["anulada", "destructive", "destructive"],
+  ["cancelado", "destructive", "destructive"],
 ] as const;
 
 const GESTURES = ["badge-settle", "badge-pop", "badge-shake", "badge-stamp"];
+const RETIRED = ["state-dot-steady", "state-dot-live", "state-badge-partial"];
 
 describe("StateBadge", () => {
-  for (const [status, tone, variant, gesture, dotKind] of EXPECTED) {
-    it(`${status}: tono ${tone}, ${gesture ?? "sin gesto"} y su punto`, () => {
+  for (const [status, tone, variant] of EXPECTED) {
+    it(`${status}: tono ${tone}, sin gesto y con su punto fijo`, () => {
       const html = render(status);
       const actual = classes(html);
 
       expect(attribute(html, "data-tone")).toBe(tone);
       expect(attribute(html, "data-variant")).toBe(variant);
-      expect(actual.filter((name) => GESTURES.includes(name))).toEqual(gesture ? [gesture] : []);
+      expect(actual.filter((name) => GESTURES.includes(name) || RETIRED.includes(name))).toEqual([]);
 
-      const marker = dot(html);
+      const marker = dot(html) ?? "";
       expect(marker).toContain('aria-hidden="true"');
-      for (const kind of ["state-dot-steady", "state-dot-live"]) {
-        expect(marker?.includes(kind)).toBe(kind === dotKind);
-      }
+      expect(marker).toContain("size-[5.5px]");
+      expect(RETIRED.some((name) => marker.includes(name))).toBe(false);
     });
   }
 
-  it("parcial se distingue de pendiente con un relleno a medias", () => {
-    expect(classes(render("parcial"))).toContain("state-badge-partial");
-    expect(classes(render("pendiente"))).not.toContain("state-badge-partial");
+  it("22 px de alto, letra de 10,5 px y 9 px a los lados", () => {
+    expect(classes(render("pagada"))).toEqual(
+      expect.arrayContaining(["h-[22px]", "px-[9px]", "text-[10.5px]", "gap-1.5"]),
+    );
+  });
+
+  it("en producción ya no se sale de su borde: la etiqueta recorta su contenido como las demas", () => {
+    // La clase la usa tambien el shell, asi que nombrarla aqui no agrega nada al CSS.
+    expect(classes(render("en_produccion"))).not.toContain("overflow-visible");
+    expect(classes(render("en_produccion"))).toContain("overflow-hidden");
   });
 
   it("un estado desconocido se muestra tal cual, con borde discontinuo y sin punto ni gesto", () => {
@@ -80,7 +88,7 @@ describe("StateBadge", () => {
 
     expect(attribute(html, "data-tone")).toBe("unknown");
     expect(attribute(html, "data-variant")).toBe("outline");
-    expect(actual).toContain("border-dashed");
+    expect(actual).toEqual(expect.arrayContaining(["border-dashed", "h-[22px]", "px-[9px]", "text-[10.5px]"]));
     expect(actual.filter((name) => GESTURES.includes(name))).toEqual([]);
     expect(dot(html)).toBeUndefined();
     expect(html).toContain(">en_revision<");
@@ -96,48 +104,29 @@ describe("StateBadge", () => {
   it("solo cuentan los estados de la tabla: constructor no toma una propiedad de Object", () => {
     expect(attribute(render("constructor"), "data-tone")).toBe("unknown");
   });
-
-  it("el pulso de radar no se recorta: la etiqueta deja ver lo que sale de su borde", () => {
-    expect(classes(render("en_produccion"))).toContain("overflow-visible");
-  });
 });
 
 describe("gestos y puntos en patterns.css", () => {
   const patterns = readFileSync("src/styles/patterns.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 
-  function rule(selector: string) {
-    // Los espacios del selector valen cualquier espacio: el archivo puede tener finales CRLF.
-    const pattern = selector.replace(/[.:]/g, "\\$&").replace(/\s+/g, "\\s+");
-    return patterns.match(new RegExp(`${pattern}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
-  }
-
-  it("el pop y el golpe de sello ocurren una vez", () => {
-    expect(rule(".badge-pop")).toMatch(/animation:\s*badge-pop\b/);
-    expect(rule(".badge-stamp")).toMatch(/badge-stamp\b[^,]*,\s*badge-ring\b/);
-    expect(`${rule(".badge-pop")}${rule(".badge-stamp")}`).not.toContain("infinite");
+  it("el radar, el brillo fijo y el relleno a medias se retiraron", () => {
+    for (const name of [...RETIRED, "state-ping"]) {
+      expect(patterns).not.toContain(name);
+    }
   });
 
-  it("solo el punto de «En producción» late sin parar, con dos anillos desfasados", () => {
-    expect(rule(".state-dot-live::before,\n  .state-dot-live::after")).toMatch(/state-ping[^;]*infinite/);
-    expect(rule(".state-dot-live::before")).toMatch(/animation-delay:\s*0?\.9s/);
-    // Entre las reglas de etiquetas y estados, la unica con un bucle es la del radar. Otras
-    // familias tienen los suyos (el acceso a modulo, D158).
+  it("ninguna regla de etiquetas o estados tiene un bucle", () => {
+    // Otras familias tienen los suyos (el acceso a modulo, D158).
     const loops = [...patterns.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
       .filter((match) => match[2].includes("infinite"))
       .map((match) => match[1].trim().replace(/\s+/g, " "))
       .filter((selector) => /badge|state/.test(selector));
-    expect(loops).toEqual([".state-dot-live::before, .state-dot-live::after"]);
+    expect(loops).toEqual([]);
   });
 
-  it("el punto de vigente brilla fijo y parcial tiene su relleno", () => {
-    expect(rule(".state-dot-steady")).toMatch(/box-shadow:/);
-    expect(rule(".state-dot-steady")).not.toContain("animation");
-    expect(rule(".state-badge-partial")).toMatch(/background-image:\s*linear-gradient/);
-  });
-
-  it("con reducir movimiento no hay gestos y los anillos quedan quietos y tenues", () => {
+  it("con reducir movimiento no hay gestos", () => {
     expect(patterns).toMatch(
-      /@media \(prefers-reduced-motion: reduce\)\s*\{[^}]*\.badge-settle,\s*\.badge-shake,\s*\.badge-pop,\s*\.badge-stamp,\s*\.state-dot-live::before,\s*\.state-dot-live::after\s*\{\s*animation:\s*none;/,
+      /@media \(prefers-reduced-motion: reduce\)\s*\{[^}]*\.badge-settle,\s*\.badge-shake,\s*\.badge-pop,\s*\.badge-stamp\s*\{\s*animation:\s*none;\s*\}/,
     );
   });
 });

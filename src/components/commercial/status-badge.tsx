@@ -1,4 +1,4 @@
-import { Badge, type BadgeGesture } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 type StateBadgeProps = {
@@ -7,39 +7,35 @@ type StateBadgeProps = {
 
 type StateTone = "info" | "success" | "warning" | "destructive" | "neutral";
 
-type StateLook = {
-  tone: StateTone;
-  gesture?: BadgeGesture;
-  dot?: "steady" | "live";
-  partial?: boolean;
-};
-
-// Diseno de la presentacion (propuesta del responsable, 2026-11-20; D155). Cada estado tiene un
-// tono, un gesto que ocurre una vez al montar (D153) y un punto de color que deja ver, sin leer,
-// que tan avanzado va: registrado se sella, vigente respira quieto, pagada y entregado cierran
-// en verde, pendiente y parcial esperan en ambar (parcial con un relleno a medias), en produccion
-// emite un doble pulso de radar, el unico movimiento continuo, y anulado entra con un golpe de
-// sello. Los estados que la propuesta no dibuja siguen a su familia: emitido como pagada, anulada
+// Diseno de listados y navegacion (propuesta del responsable, 2026-11-21; D170). La etiqueta de
+// estado es simple y documental, como en la maqueta: 22 px de alto, letra de 10,5 px, 9 px a los
+// lados y un punto de 5,5 px del color del texto, sin brillo. Cada estado tiene solo un tono: sin
+// gestos al montar, sin el radar de «En producción», que pasa a ambar con el punto fijo, y sin el
+// relleno a medias de parcial (reemplaza esa parte de D155; ninguna etiqueta tiene ya un bucle,
+// D153). Los estados que la propuesta no dibuja siguen a su familia: emitido como pagada, anulada
 // y cancelado como anulado, aprobado y aceptada como registrado, y «Sin proforma» y «Sin
 // comprobante» como pendiente, porque son un paso que falta. Hasta la 11.7a pasaba por la clase
 // de tono de StatusBadge (badge-state-*), que se retiro.
-const stateLooks: Record<string, StateLook> = {
-  registrado: { tone: "info", gesture: "settle" },
-  aprobado: { tone: "info", gesture: "settle" },
-  aceptada: { tone: "info", gesture: "settle" },
-  vigente: { tone: "neutral", dot: "steady" },
-  pagada: { tone: "success", gesture: "settle" },
-  emitido: { tone: "success", gesture: "settle" },
-  entregado: { tone: "success", gesture: "pop" },
-  pendiente: { tone: "warning" },
-  "sin-proforma": { tone: "warning" },
-  "sin-comprobante": { tone: "warning" },
-  parcial: { tone: "warning", partial: true },
-  "en-produccion": { tone: "info", gesture: "none", dot: "live" },
-  anulado: { tone: "destructive", gesture: "stamp" },
-  anulada: { tone: "destructive", gesture: "stamp" },
-  cancelado: { tone: "destructive", gesture: "stamp" },
+const stateTones: Record<string, StateTone> = {
+  registrado: "info",
+  aprobado: "info",
+  aceptada: "info",
+  vigente: "neutral",
+  pagada: "success",
+  emitido: "success",
+  entregado: "success",
+  pendiente: "warning",
+  "sin-proforma": "warning",
+  "sin-comprobante": "warning",
+  parcial: "warning",
+  "en-produccion": "warning",
+  anulado: "destructive",
+  anulada: "destructive",
+  cancelado: "destructive",
 };
+
+// Las medidas de la maqueta, comunes a todos los estados, el desconocido incluido.
+const stateSize = "h-[22px] gap-1.5 px-[9px] text-[10.5px]";
 
 // Neutro y desconocido no tienen variante propia de Badge: parten de outline. Neutro toma la
 // superficie y el borde comunes con el texto atenuado; desconocido, el borde discontinuo.
@@ -84,50 +80,36 @@ function normalizeStatus(status: string | null | undefined) {
 // la 11.7a (D8 de la 10.5).
 export function StateBadge({ status }: StateBadgeProps) {
   const normalizedStatus = normalizeStatus(status);
-  const look =
-    normalizedStatus && Object.hasOwn(stateLooks, normalizedStatus)
-      ? stateLooks[normalizedStatus]
+  const tone =
+    normalizedStatus && Object.hasOwn(stateTones, normalizedStatus)
+      ? stateTones[normalizedStatus]
       : undefined;
   const label =
     normalizedStatus && Object.hasOwn(statusLabels, normalizedStatus)
       ? statusLabels[normalizedStatus]
       : status ?? "-";
 
-  if (!look) {
+  if (!tone) {
     return (
       <Badge
         variant="outline"
         gesture="none"
         data-tone="unknown"
-        className="border-dashed text-muted-foreground"
+        className={cn(stateSize, "border-dashed text-muted-foreground")}
       >
         {label}
       </Badge>
     );
   }
 
-  const { variant, className } = toneVariants[look.tone];
+  const { variant, className } = toneVariants[tone];
 
   return (
-    <Badge
-      variant={variant}
-      gesture={look.gesture ?? "none"}
-      data-tone={look.tone}
-      className={cn(
-        "gap-1.5",
-        className,
-        look.partial && "state-badge-partial",
-        look.dot === "live" && "overflow-visible",
-      )}
-    >
+    <Badge variant={variant} gesture="none" data-tone={tone} className={cn(stateSize, className)}>
       <span
         data-slot="state-dot"
         aria-hidden="true"
-        className={cn(
-          "relative size-1.5 shrink-0 rounded-full bg-current",
-          look.dot === "steady" && "state-dot-steady",
-          look.dot === "live" && "state-dot-live",
-        )}
+        className="size-[5.5px] shrink-0 rounded-full bg-current"
       />
       {label}
     </Badge>

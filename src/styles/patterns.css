@@ -18,8 +18,9 @@
     animation: badge-shake 500ms var(--ease-settle) both;
   }
 
-  /* Gestos de StateBadge (D155): entregado solo se asienta, sin onda; anulado entra con un golpe
-     de sello seco y un eco. */
+  /* Gestos que Badge ofrece con gesture (D155): pop solo se asienta, sin onda; stamp entra con un
+     golpe de sello seco y un eco. Desde el diseno de listados (D170) StateBadge ya no los usa: la
+     etiqueta de estado es simple, sin gestos ni bucles. */
   .badge-pop {
     animation: badge-pop 320ms var(--ease-spring) both;
   }
@@ -45,55 +46,6 @@
       transform: scale(1) rotate(0deg);
       opacity: 1;
     }
-  }
-
-  /* Punto de StateBadge. Vigente lo deja brillar fijo; En produccion emite un doble pulso de
-     radar, el unico movimiento continuo de la presentacion (D153): es una senal activa de verdad.
-     Los anillos salen del punto, por eso esa etiqueta no recorta su contenido. */
-  .state-dot-steady {
-    box-shadow: 0 0 6px color-mix(in oklch, var(--info-border) 70%, transparent);
-  }
-
-  .state-dot-live::before,
-  .state-dot-live::after {
-    content: "";
-    position: absolute;
-    inset: -3px;
-    border-radius: 9999px;
-    border: 1px solid currentColor;
-    opacity: 0.6;
-    animation: state-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
-  }
-
-  .state-dot-live::before {
-    animation-delay: 0.9s;
-  }
-
-  @keyframes state-ping {
-    0% {
-      transform: scale(1);
-      opacity: 0.6;
-    }
-
-    75%,
-    100% {
-      transform: scale(1.9);
-      opacity: 0;
-    }
-  }
-
-  /* Parcial se distingue de pendiente (mismo tono) con un relleno a medias: el degradado
-     bicolor de la propuesta, quieto en su primer fotograma (D153), cubre un tercio. */
-  .state-badge-partial {
-    background-image: linear-gradient(
-      90deg,
-      color-mix(in oklch, var(--warning-border) 42%, transparent) 0%,
-      color-mix(in oklch, var(--warning-border) 26%, transparent) 52%,
-      transparent 56%,
-      transparent 100%
-    );
-    background-size: 160% 100%;
-    background-position: 85% 50%;
   }
 
   @keyframes badge-pop {
@@ -818,15 +770,8 @@
     .badge-settle,
     .badge-shake,
     .badge-pop,
-    .badge-stamp,
-    .state-dot-live::before,
-    .state-dot-live::after {
+    .badge-stamp {
       animation: none;
-    }
-
-    .state-dot-live::before,
-    .state-dot-live::after {
-      opacity: 0.4;
     }
   }
 

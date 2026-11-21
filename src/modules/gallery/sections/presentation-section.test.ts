@@ -8,8 +8,9 @@ import { PresentationSection } from "@/modules/gallery/sections/presentation-sec
 // cada pieza en sus estados con datos ficticios: las nueve variantes de Badge, todos los estados
 // de StateBadge mas uno desconocido, las tres tarjetas, los cuatro indicadores de la propuesta
 // (tres con minigrafico, uno de ellos con enlace e icono, y el dial), los cuatro accesos a modulo numerados
-// y los dos separadores. Los gestos ocurren una sola vez al montar, asi que cada fila de
-// etiquetas tiene un boton que la vuelve a montar para repetirlos.
+// y los dos separadores. Los gestos ocurren una sola vez al montar, asi que la fila de Badge
+// tiene un boton que la vuelve a montar para repetirlos; StateBadge no tiene gestos desde el
+// diseno de listados (D170), asi que su fila no lo lleva.
 
 const html = renderToStaticMarkup(h(PresentationSection)).replaceAll("&quot;", '"');
 
@@ -67,13 +68,16 @@ describe("Presentación", () => {
     expect(figure("Etiqueta de estado (StateBadge)")).toContain(">Sin proforma<");
   });
 
-  it("cada fila de etiquetas tiene un boton para repetir sus gestos, que no envia nada", () => {
-    for (const caption of ["Etiqueta (Badge) en cada variante", "Etiqueta de estado (StateBadge)"]) {
-      const replay = figure(caption).match(/<button [^>]*>(?:(?!<\/button>)[\s\S])*<\/button>/)?.[0] ?? "";
-      expect(replay).toContain('type="button"');
-      expect(replay).toContain("Repetir gestos</button>");
-    }
+  it("la fila de Badge tiene un boton para repetir sus gestos, que no envia nada", () => {
+    const replay =
+      figure("Etiqueta (Badge) en cada variante").match(/<button [^>]*>(?:(?!<\/button>)[\s\S])*<\/button>/)?.[0] ?? "";
+    expect(replay).toContain('type="button"');
+    expect(replay).toContain("Repetir gestos</button>");
     expect(html).not.toContain("<form");
+  });
+
+  it("la fila de StateBadge no tiene gestos que repetir", () => {
+    expect(figure("Etiqueta de estado (StateBadge)")).not.toContain("<button");
   });
 
   it("la tarjeta con barra termica usa el barrido", () => {
