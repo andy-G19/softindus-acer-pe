@@ -78,7 +78,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Usuarios</span>
 </li>
 </ol>
@@ -365,7 +365,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Usuarios</span>
 </li>
 </ol>
@@ -730,7 +730,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Usuarios</span>
 </li>
 </ol>
@@ -1266,11 +1266,11 @@ exports[`/dashboard/users/[id]/edit > editar el propio usuario > resultado 1`] =
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/users">Usuarios</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar usuario</span>
 </li>
 </ol>
@@ -1379,11 +1379,11 @@ exports[`/dashboard/users/[id]/edit > editar otro usuario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/users">Usuarios</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar usuario</span>
 </li>
 </ol>
@@ -1534,11 +1534,11 @@ exports[`/dashboard/users/[id]/edit > vuelve al returnTo > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/users?rol=SELLER">Usuarios</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar usuario</span>
 </li>
 </ol>
@@ -1629,11 +1629,11 @@ exports[`/dashboard/users/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/users">Usuarios</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo usuario</span>
 </li>
 </ol>
@@ -1736,11 +1736,11 @@ exports[`/dashboard/users/new > un returnTo ajeno vuelve a la lista > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/users">Usuarios</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo usuario</span>
 </li>
 </ol>
@@ -1843,11 +1843,11 @@ exports[`/dashboard/users/new > vuelve al returnTo > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/users?estado=inactivo">Usuarios</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo usuario</span>
 </li>
 </ol>

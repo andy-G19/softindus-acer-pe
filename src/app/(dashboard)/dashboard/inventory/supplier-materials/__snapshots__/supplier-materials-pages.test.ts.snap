@@ -72,11 +72,11 @@ exports[`/dashboard/inventory/supplier-materials > activos > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proveedor-material</span>
 </li>
 </ol>
@@ -273,11 +273,11 @@ exports[`/dashboard/inventory/supplier-materials > sin filtros > resultado 1`] =
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proveedor-material</span>
 </li>
 </ol>
@@ -489,11 +489,11 @@ exports[`/dashboard/inventory/supplier-materials > todos los filtros > resultado
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Proveedor-material</span>
 </li>
 </ol>
@@ -702,15 +702,15 @@ exports[`/dashboard/inventory/supplier-materials/[id]/edit > editar > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory/supplier-materials">Proveedor-material</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar asociación</span>
 </li>
 </ol>
@@ -885,15 +885,15 @@ exports[`/dashboard/inventory/supplier-materials/[id]/edit > editar con regreso 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory/supplier-materials?supplier=PRV00000001">Proveedor-material</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar asociación</span>
 </li>
 </ol>
@@ -1072,15 +1072,15 @@ exports[`/dashboard/inventory/supplier-materials/new > formulario > resultado 1`
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory/supplier-materials">Proveedor-material</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva asociación</span>
 </li>
 </ol>
@@ -1228,15 +1228,15 @@ exports[`/dashboard/inventory/supplier-materials/new > formulario con regreso al
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory/supplier-materials?status=active">Proveedor-material</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva asociación</span>
 </li>
 </ol>

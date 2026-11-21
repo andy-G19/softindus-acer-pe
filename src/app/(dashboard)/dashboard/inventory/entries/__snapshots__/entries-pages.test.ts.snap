@@ -109,11 +109,11 @@ exports[`/dashboard/inventory/entries > fechas no validas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Entradas</span>
 </li>
 </ol>
@@ -334,11 +334,11 @@ exports[`/dashboard/inventory/entries > maestro de taller > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Entradas</span>
 </li>
 </ol>
@@ -569,11 +569,11 @@ exports[`/dashboard/inventory/entries > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Entradas</span>
 </li>
 </ol>
@@ -781,11 +781,11 @@ exports[`/dashboard/inventory/entries > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Entradas</span>
 </li>
 </ol>
@@ -1096,11 +1096,11 @@ exports[`/dashboard/inventory/entries > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Entradas</span>
 </li>
 </ol>

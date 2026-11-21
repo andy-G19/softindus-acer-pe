@@ -57,15 +57,15 @@ exports[`/dashboard/waste-scrap/scrap-sales/new > chatarra preseleccionada > res
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap">Mermas y chatarra</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap/scraps">Chatarra</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva venta</span>
 </li>
 </ol>
@@ -234,15 +234,15 @@ exports[`/dashboard/waste-scrap/scrap-sales/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap">Mermas y chatarra</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap/scraps">Chatarra</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva venta</span>
 </li>
 </ol>

@@ -88,11 +88,11 @@ exports[`/dashboard/reports/inventory > maestro de taller > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Inventario</span>
 </li>
 </ol>
@@ -503,11 +503,11 @@ exports[`/dashboard/reports/inventory > rango de mas de 366 dias > resultado 1`]
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Inventario</span>
 </li>
 </ol>
@@ -883,11 +883,11 @@ exports[`/dashboard/reports/inventory > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Inventario</span>
 </li>
 </ol>
@@ -1058,11 +1058,11 @@ exports[`/dashboard/reports/inventory > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Inventario</span>
 </li>
 </ol>
@@ -1468,11 +1468,11 @@ exports[`/dashboard/reports/inventory > sin resultados > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Inventario</span>
 </li>
 </ol>
@@ -1802,11 +1802,11 @@ exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Inventario</span>
 </li>
 </ol>
@@ -2270,11 +2270,11 @@ exports[`/dashboard/reports/inventory > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Inventario</span>
 </li>
 </ol>

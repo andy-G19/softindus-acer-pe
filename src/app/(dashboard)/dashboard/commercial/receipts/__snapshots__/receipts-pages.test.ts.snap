@@ -79,11 +79,11 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Comprobantes de venta</span>
 </li>
 </ol>
@@ -288,11 +288,11 @@ exports[`/dashboard/commercial/receipts > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Comprobantes de venta</span>
 </li>
 </ol>
@@ -455,11 +455,11 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Comprobantes de venta</span>
 </li>
 </ol>
@@ -728,11 +728,11 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Comprobantes de venta</span>
 </li>
 </ol>
@@ -919,11 +919,11 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Comprobantes de venta</span>
 </li>
 </ol>

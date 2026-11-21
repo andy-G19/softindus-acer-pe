@@ -66,11 +66,11 @@ exports[`/dashboard/production/routes > inactivas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Rutas</span>
 </li>
 </ol>
@@ -247,11 +247,11 @@ exports[`/dashboard/production/routes > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Rutas</span>
 </li>
 </ol>
@@ -461,11 +461,11 @@ exports[`/dashboard/production/routes > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Rutas</span>
 </li>
 </ol>
@@ -642,15 +642,15 @@ exports[`/dashboard/production/routes/[id]/edit > con el producto inactivo > res
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar ruta</span>
 </li>
 </ol>
@@ -766,15 +766,15 @@ exports[`/dashboard/production/routes/[id]/edit > con ordenes asociadas > result
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar ruta</span>
 </li>
 </ol>
@@ -885,15 +885,15 @@ exports[`/dashboard/production/routes/[id]/edit > editar > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar ruta</span>
 </li>
 </ol>
@@ -1059,15 +1059,15 @@ exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Etapas</span>
 </li>
 </ol>
@@ -1366,15 +1366,15 @@ exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activa
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Etapas</span>
 </li>
 </ol>
@@ -1713,15 +1713,15 @@ exports[`/dashboard/production/routes/[id]/stages > ruta sin etapas > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Etapas</span>
 </li>
 </ol>
@@ -1970,15 +1970,15 @@ exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > re
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Etapas</span>
 </li>
 </ol>
@@ -2280,19 +2280,19 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con av
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes/id_ruta-1/stages">Etapas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar etapa</span>
 </li>
 </ol>
@@ -2455,19 +2455,19 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con ma
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes/id_ruta-1/stages">Etapas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar etapa</span>
 </li>
 </ol>
@@ -2653,19 +2653,19 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar sin ma
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes/id_ruta-1/stages">Etapas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar etapa</span>
 </li>
 </ol>
@@ -2921,19 +2921,19 @@ exports[`/dashboard/production/routes/[id]/stages/new > nueva etapa > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes/id_ruta-1/stages">Etapas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva etapa</span>
 </li>
 </ol>
@@ -3075,19 +3075,19 @@ exports[`/dashboard/production/routes/[id]/stages/new > ruta inactiva > resultad
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes/id_ruta-1/stages">Etapas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva etapa</span>
 </li>
 </ol>
@@ -3215,15 +3215,15 @@ exports[`/dashboard/production/routes/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production/routes">Rutas</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva ruta</span>
 </li>
 </ol>

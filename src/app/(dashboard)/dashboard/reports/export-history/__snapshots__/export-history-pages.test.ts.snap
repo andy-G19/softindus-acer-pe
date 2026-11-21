@@ -61,11 +61,11 @@ exports[`/dashboard/reports/export-history > parametros vacios, con filtros e il
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Historial de exportaciones</span>
 </li>
 </ol>
@@ -452,11 +452,11 @@ exports[`/dashboard/reports/export-history > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Historial de exportaciones</span>
 </li>
 </ol>
@@ -615,11 +615,11 @@ exports[`/dashboard/reports/export-history > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Historial de exportaciones</span>
 </li>
 </ol>
@@ -1008,11 +1008,11 @@ exports[`/dashboard/reports/export-history > todos los filtros > resultado 1`] =
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Historial de exportaciones</span>
 </li>
 </ol>

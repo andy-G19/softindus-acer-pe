@@ -84,11 +84,11 @@ exports[`/dashboard/maintenance/recurrences > reporte del mes > resultado 1`] = 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/maintenance">Mantenimiento</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Reincidencias</span>
 </li>
 </ol>

@@ -143,11 +143,11 @@ exports[`/dashboard/staff/operators > filtros y maestro de taller > resultado 1`
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Operarios</span>
 </li>
 </ol>
@@ -451,11 +451,11 @@ exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Operarios</span>
 </li>
 </ol>
@@ -912,15 +912,15 @@ exports[`/dashboard/staff/operators/[id]/edit > editar > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/operators">Operarios</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar operario</span>
 </li>
 </ol>
@@ -1067,15 +1067,15 @@ exports[`/dashboard/staff/operators/[id]/edit > vuelve al returnTo > resultado 1
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/operators?status=activo">Operarios</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar operario</span>
 </li>
 </ol>
@@ -1188,15 +1188,15 @@ exports[`/dashboard/staff/operators/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/operators">Operarios</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo operario</span>
 </li>
 </ol>
@@ -1309,15 +1309,15 @@ exports[`/dashboard/staff/operators/new > un returnTo ajeno vuelve a la lista > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/operators">Operarios</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo operario</span>
 </li>
 </ol>
@@ -1430,15 +1430,15 @@ exports[`/dashboard/staff/operators/new > vuelve al returnTo > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/operators?status=inactivo">Operarios</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo operario</span>
 </li>
 </ol>

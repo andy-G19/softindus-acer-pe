@@ -137,11 +137,11 @@ exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultad
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Materiales</span>
 </li>
 </ol>
@@ -378,11 +378,11 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Materiales</span>
 </li>
 </ol>
@@ -614,11 +614,11 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Materiales</span>
 </li>
 </ol>
@@ -842,11 +842,11 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Materiales</span>
 </li>
 </ol>
@@ -1048,11 +1048,11 @@ exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Materiales</span>
 </li>
 </ol>
@@ -1217,15 +1217,15 @@ exports[`/dashboard/inventory/materials/[id]/edit > editar con regreso al listad
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory/materials?status=active">Materiales</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar material</span>
 </li>
 </ol>
@@ -1366,15 +1366,15 @@ exports[`/dashboard/inventory/materials/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory/materials">Materiales</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo material</span>
 </li>
 </ol>
@@ -1490,15 +1490,15 @@ exports[`/dashboard/inventory/materials/new > formulario con regreso al listado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory/materials?status=inactive&amp;page=2">Materiales</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo material</span>
 </li>
 </ol>

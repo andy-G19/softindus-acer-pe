@@ -89,11 +89,11 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos a proveedores</span>
 </li>
 </ol>
@@ -327,11 +327,11 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > resultado 1`
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos a proveedores</span>
 </li>
 </ol>
@@ -528,11 +528,11 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > resultado 1`] = 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos a proveedores</span>
 </li>
 </ol>
@@ -846,11 +846,11 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos a proveedores</span>
 </li>
 </ol>

@@ -78,11 +78,11 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Productos</span>
 </li>
 </ol>
@@ -340,11 +340,11 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Productos</span>
 </li>
 </ol>
@@ -602,11 +602,11 @@ exports[`/dashboard/commercial/products > filtros y vendedor > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Productos</span>
 </li>
 </ol>
@@ -813,11 +813,11 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Productos</span>
 </li>
 </ol>
@@ -1019,11 +1019,11 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Productos</span>
 </li>
 </ol>
@@ -1225,11 +1225,11 @@ exports[`/dashboard/commercial/products > sin productos registrados > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Productos</span>
 </li>
 </ol>
@@ -1385,15 +1385,15 @@ exports[`/dashboard/commercial/products/[id]/edit > con su categoria y su unidad
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/products">Productos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar producto</span>
 </li>
 </ol>
@@ -1524,15 +1524,15 @@ exports[`/dashboard/commercial/products/[id]/edit > editar > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/products">Productos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar producto</span>
 </li>
 </ol>
@@ -1663,15 +1663,15 @@ exports[`/dashboard/commercial/products/[id]/edit > editar con regreso al listad
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/products?q=lampa">Productos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar producto</span>
 </li>
 </ol>
@@ -1813,15 +1813,15 @@ exports[`/dashboard/commercial/products/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/products">Productos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo producto</span>
 </li>
 </ol>
@@ -1929,15 +1929,15 @@ exports[`/dashboard/commercial/products/new > formulario con regreso al listado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/products?status=inactive">Productos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo producto</span>
 </li>
 </ol>
@@ -2045,15 +2045,15 @@ exports[`/dashboard/commercial/products/new > sin categorias activas > resultado
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/products">Productos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo producto</span>
 </li>
 </ol>

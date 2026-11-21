@@ -21,7 +21,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Galería de componentes</span>
 </li>
 </ol>
@@ -1929,11 +1929,11 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="#listados">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Clientes</span>
 </li>
 </ol>

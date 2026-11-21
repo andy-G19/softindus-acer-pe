@@ -86,11 +86,11 @@ exports[`/dashboard/staff/payment-history > pagos del mes > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Historial de pagos</span>
 </li>
 </ol>
@@ -355,11 +355,11 @@ exports[`/dashboard/staff/payment-history > segunda pagina > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Historial de pagos</span>
 </li>
 </ol>
@@ -578,15 +578,15 @@ exports[`/dashboard/staff/payment-history/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/payment-history">Historial de pagos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Registrar pago</span>
 </li>
 </ol>

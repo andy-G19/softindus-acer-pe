@@ -86,11 +86,11 @@ exports[`/dashboard/staff/tasks > administrador > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Tareas diarias</span>
 </li>
 </ol>
@@ -363,11 +363,11 @@ exports[`/dashboard/staff/tasks > maestro de taller > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Tareas diarias</span>
 </li>
 </ol>
@@ -983,15 +983,15 @@ exports[`/dashboard/staff/tasks/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/tasks">Tareas diarias</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva tarea</span>
 </li>
 </ol>
@@ -1185,15 +1185,15 @@ exports[`/dashboard/staff/tasks/new > un returnTo ajeno vuelve a la lista > resu
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/tasks">Tareas diarias</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva tarea</span>
 </li>
 </ol>
@@ -1387,15 +1387,15 @@ exports[`/dashboard/staff/tasks/new > vuelve al returnTo > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/tasks?vista=1">Tareas diarias</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva tarea</span>
 </li>
 </ol>

@@ -9,15 +9,15 @@ exports[`alta de cliente > muestra el formulario vacio sin consultar Prisma y vu
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/clients">Clientes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo cliente</span>
 </li>
 </ol>
@@ -116,15 +116,15 @@ exports[`edicion de cliente > consulta el cliente y muestra el formulario con el
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/clients?q=andina&amp;page=2">Clientes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar cliente</span>
 </li>
 </ol>
@@ -255,15 +255,15 @@ exports[`edicion de cliente > muestra vacios los campos opcionales ausentes e ig
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/clients">Clientes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar cliente</span>
 </li>
 </ol>
@@ -810,11 +810,11 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Clientes</span>
 </li>
 </ol>
@@ -926,11 +926,11 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Clientes</span>
 </li>
 </ol>

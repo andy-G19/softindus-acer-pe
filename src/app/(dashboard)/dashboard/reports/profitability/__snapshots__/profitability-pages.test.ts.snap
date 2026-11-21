@@ -56,11 +56,11 @@ exports[`/dashboard/reports/profitability > costeo sin pedido, orden, margen ni 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Rentabilidad</span>
 </li>
 </ol>
@@ -361,11 +361,11 @@ exports[`/dashboard/reports/profitability > rango de mas de 366 dias > resultado
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Rentabilidad</span>
 </li>
 </ol>
@@ -621,11 +621,11 @@ exports[`/dashboard/reports/profitability > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Rentabilidad</span>
 </li>
 </ol>
@@ -748,11 +748,11 @@ exports[`/dashboard/reports/profitability > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Rentabilidad</span>
 </li>
 </ol>
@@ -1044,11 +1044,11 @@ exports[`/dashboard/reports/profitability > sin resultados > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Rentabilidad</span>
 </li>
 </ol>
@@ -1369,11 +1369,11 @@ exports[`/dashboard/reports/profitability > todos los filtros > resultado 1`] = 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Rentabilidad</span>
 </li>
 </ol>

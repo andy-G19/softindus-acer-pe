@@ -157,7 +157,7 @@ exports[`/dashboard/audit > rango de mas de 366 dias > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Auditoría</span>
 </li>
 </ol>
@@ -425,7 +425,7 @@ exports[`/dashboard/audit > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Auditoría</span>
 </li>
 </ol>
@@ -626,7 +626,7 @@ exports[`/dashboard/audit > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Auditoría</span>
 </li>
 </ol>
@@ -1133,7 +1133,7 @@ exports[`/dashboard/audit > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Auditoría</span>
 </li>
 </ol>

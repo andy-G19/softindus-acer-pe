@@ -119,11 +119,11 @@ exports[`/dashboard/commercial/orders > fechas no validas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pedidos</span>
 </li>
 </ol>
@@ -389,11 +389,11 @@ exports[`/dashboard/commercial/orders > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pedidos</span>
 </li>
 </ol>
@@ -610,11 +610,11 @@ exports[`/dashboard/commercial/orders > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pedidos</span>
 </li>
 </ol>
@@ -966,11 +966,11 @@ exports[`/dashboard/commercial/orders > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pedidos</span>
 </li>
 </ol>
@@ -1218,11 +1218,11 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pedidos</span>
 </li>
 </ol>
@@ -1504,15 +1504,15 @@ exports[`/dashboard/commercial/orders/[id] > detalle > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_pedido-1</span>
 </li>
 </ol>
@@ -1709,15 +1709,15 @@ exports[`/dashboard/commercial/orders/[id] > en produccion > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_pedido-1</span>
 </li>
 </ol>
@@ -1972,15 +1972,15 @@ exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > resul
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders?status=aprobado">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">id_pedido-1</span>
 </li>
 </ol>
@@ -2400,15 +2400,15 @@ exports[`/dashboard/commercial/orders/[id]/edit > cliente inactivo > resultado 1
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar pedido</span>
 </li>
 </ol>
@@ -2749,15 +2749,15 @@ exports[`/dashboard/commercial/orders/[id]/edit > editable > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar pedido</span>
 </li>
 </ol>
@@ -3005,15 +3005,15 @@ exports[`/dashboard/commercial/orders/[id]/edit > importes con decimales > resul
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar pedido</span>
 </li>
 </ol>
@@ -3354,15 +3354,15 @@ exports[`/dashboard/commercial/orders/[id]/edit > producto inactivo > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar pedido</span>
 </li>
 </ol>
@@ -3570,15 +3570,15 @@ exports[`/dashboard/commercial/orders/[id]/edit > regreso al listado filtrado > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders?status=registrado">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar pedido</span>
 </li>
 </ol>
@@ -3826,15 +3826,15 @@ exports[`/dashboard/commercial/orders/[id]/edit > subtotal en empate > resultado
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Editar pedido</span>
 </li>
 </ol>
@@ -4002,15 +4002,15 @@ exports[`/dashboard/commercial/orders/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo pedido</span>
 </li>
 </ol>
@@ -4172,15 +4172,15 @@ exports[`/dashboard/commercial/orders/new > regreso al listado filtrado > result
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders?status=registrado">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo pedido</span>
 </li>
 </ol>
@@ -4342,15 +4342,15 @@ exports[`/dashboard/commercial/orders/new > sin clientes ni productos activos > 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo pedido</span>
 </li>
 </ol>
@@ -4515,15 +4515,15 @@ exports[`/dashboard/commercial/orders/new > sin productos activos > resultado 1`
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial/orders">Pedidos</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo pedido</span>
 </li>
 </ol>

@@ -107,11 +107,11 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos de cliente</span>
 </li>
 </ol>
@@ -362,11 +362,11 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos de cliente</span>
 </li>
 </ol>
@@ -582,11 +582,11 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos de cliente</span>
 </li>
 </ol>
@@ -819,11 +819,11 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos de cliente</span>
 </li>
 </ol>
@@ -1191,11 +1191,11 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/commercial">Comercial</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Pagos de cliente</span>
 </li>
 </ol>

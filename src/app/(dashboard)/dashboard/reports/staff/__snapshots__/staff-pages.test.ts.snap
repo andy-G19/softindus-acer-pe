@@ -79,11 +79,11 @@ exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistenci
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Personal</span>
 </li>
 </ol>
@@ -444,11 +444,11 @@ exports[`/dashboard/reports/staff > rango de mas de 366 dias > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Personal</span>
 </li>
 </ol>
@@ -759,11 +759,11 @@ exports[`/dashboard/reports/staff > rango invertido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Personal</span>
 </li>
 </ol>
@@ -924,11 +924,11 @@ exports[`/dashboard/reports/staff > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Personal</span>
 </li>
 </ol>
@@ -1328,11 +1328,11 @@ exports[`/dashboard/reports/staff > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/reports">Reportes</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Personal</span>
 </li>
 </ol>

@@ -120,7 +120,7 @@ exports[`/dashboard/staff > indicadores del dia y del mes > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Personal</span>
 </li>
 </ol>
@@ -502,7 +502,7 @@ exports[`/dashboard/staff > maestro de taller > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Personal</span>
 </li>
 </ol>

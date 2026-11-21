@@ -100,11 +100,11 @@ exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Cuellos de botella</span>
 </li>
 </ol>
@@ -479,11 +479,11 @@ exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Cuellos de botella</span>
 </li>
 </ol>
@@ -877,11 +877,11 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] =
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/production">Producción</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Cuellos de botella</span>
 </li>
 </ol>

@@ -192,11 +192,11 @@ exports[`/dashboard/petty-cash/monthly-summary > mes actual > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash">Caja chica</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Resumen mensual</span>
 </li>
 </ol>
@@ -840,11 +840,11 @@ exports[`/dashboard/petty-cash/monthly-summary > mes elegido > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash">Caja chica</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Resumen mensual</span>
 </li>
 </ol>
@@ -1488,11 +1488,11 @@ exports[`/dashboard/petty-cash/monthly-summary > mes invalido usa el actual > re
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash">Caja chica</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Resumen mensual</span>
 </li>
 </ol>

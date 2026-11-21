@@ -159,11 +159,11 @@ exports[`/dashboard/petty-cash/movements > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash">Caja chica</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Movimientos</span>
 </li>
 </ol>
@@ -623,11 +623,11 @@ exports[`/dashboard/petty-cash/movements > solo desde > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash">Caja chica</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Movimientos</span>
 </li>
 </ol>
@@ -1087,11 +1087,11 @@ exports[`/dashboard/petty-cash/movements > solo hasta > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash">Caja chica</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Movimientos</span>
 </li>
 </ol>
@@ -1731,11 +1731,11 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash">Caja chica</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Movimientos</span>
 </li>
 </ol>

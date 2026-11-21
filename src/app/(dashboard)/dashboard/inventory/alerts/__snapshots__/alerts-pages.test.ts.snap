@@ -81,11 +81,11 @@ exports[`/dashboard/inventory/alerts > administrador > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Alertas</span>
 </li>
 </ol>
@@ -358,11 +358,11 @@ exports[`/dashboard/inventory/alerts > administrador con una alerta activa > res
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Alertas</span>
 </li>
 </ol>
@@ -627,11 +627,11 @@ exports[`/dashboard/inventory/alerts > maestro de taller > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Alertas</span>
 </li>
 </ol>
@@ -901,11 +901,11 @@ exports[`/dashboard/inventory/alerts > maestro de taller con una alerta activa >
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/inventory">Inventario</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Alertas</span>
 </li>
 </ol>

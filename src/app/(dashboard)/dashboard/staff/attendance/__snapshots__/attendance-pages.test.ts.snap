@@ -99,11 +99,11 @@ exports[`/dashboard/staff/attendance > faltas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Asistencia</span>
 </li>
 </ol>
@@ -403,11 +403,11 @@ exports[`/dashboard/staff/attendance > sin filtros > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Asistencia</span>
 </li>
 </ol>
@@ -721,11 +721,11 @@ exports[`/dashboard/staff/attendance > tardanzas > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Asistencia</span>
 </li>
 </ol>
@@ -1115,11 +1115,11 @@ exports[`/dashboard/staff/attendance > todos los filtros con presentes > resulta
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Asistencia</span>
 </li>
 </ol>
@@ -1582,15 +1582,15 @@ exports[`/dashboard/staff/attendance/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/attendance">Asistencia</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva asistencia</span>
 </li>
 </ol>
@@ -1719,15 +1719,15 @@ exports[`/dashboard/staff/attendance/new > sin operarios activos > resultado 1`]
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/attendance">Asistencia</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva asistencia</span>
 </li>
 </ol>
@@ -1804,15 +1804,15 @@ exports[`/dashboard/staff/attendance/new > un returnTo ajeno vuelve a la lista >
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/attendance">Asistencia</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva asistencia</span>
 </li>
 </ol>
@@ -1941,15 +1941,15 @@ exports[`/dashboard/staff/attendance/new > vuelve al returnTo > resultado 1`] = 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff">Personal</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/staff/attendance?estado=falta">Asistencia</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nueva asistencia</span>
 </li>
 </ol>

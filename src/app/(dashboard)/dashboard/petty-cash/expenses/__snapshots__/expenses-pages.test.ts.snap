@@ -68,11 +68,11 @@ exports[`/dashboard/petty-cash/expenses/new > formulario > resultado 1`] = `
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/petty-cash">Caja chica</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Registrar egreso</span>
 </li>
 </ol>

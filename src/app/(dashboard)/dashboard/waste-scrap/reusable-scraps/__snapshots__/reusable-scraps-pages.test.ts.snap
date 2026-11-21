@@ -90,11 +90,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps > acciones de cada estado > resu
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap">Mermas y chatarra</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Retazos reutilizables</span>
 </li>
 </ol>
@@ -439,11 +439,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > resultado 1`] = 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap">Mermas y chatarra</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Retazos reutilizables</span>
 </li>
 </ol>
@@ -762,11 +762,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin retazos > resultado 1`] = 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap">Mermas y chatarra</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Retazos reutilizables</span>
 </li>
 </ol>
@@ -1093,11 +1093,11 @@ exports[`/dashboard/waste-scrap/reusable-scraps > todos los filtros > resultado 
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap">Mermas y chatarra</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Retazos reutilizables</span>
 </li>
 </ol>
@@ -1630,15 +1630,15 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > formulario > resultado 1`]
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap">Mermas y chatarra</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap/reusable-scraps">Retazos reutilizables</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo retazo</span>
 </li>
 </ol>
@@ -1786,15 +1786,15 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > sin materiales > resultado
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap">Mermas y chatarra</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap/reusable-scraps">Retazos reutilizables</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo retazo</span>
 </li>
 </ol>
@@ -1945,15 +1945,15 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > un returnTo ajeno vuelve a
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap">Mermas y chatarra</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap/reusable-scraps">Retazos reutilizables</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo retazo</span>
 </li>
 </ol>
@@ -2101,15 +2101,15 @@ exports[`/dashboard/waste-scrap/reusable-scraps/new > vuelve al returnTo > resul
 <a href="/dashboard">Dashboard</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap">Mermas y chatarra</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <a href="/dashboard/waste-scrap/reusable-scraps">Retazos reutilizables</a>
 </li>
 <li>
-<svg/>
+<span aria-hidden="true">›</span>
 <span aria-current="page">Nuevo retazo</span>
 </li>
 </ol>

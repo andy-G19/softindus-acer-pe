@@ -870,17 +870,14 @@ exports[`Navegacion y listados > boton volver 1`] = `
 
 exports[`Navegacion y listados > cabecera completa 1`] = `
 "<section class="max-w-full space-y-4 overflow-hidden border-b border-border/70 pb-6">
-<nav aria-label="Ruta de navegación" class="max-w-full overflow-x-auto text-sm text-muted-foreground [-ms-overflow-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
-<ol class="flex min-w-0 items-center gap-1 whitespace-nowrap">
-<li class="flex min-w-0 shrink-0 items-center gap-1 last:min-w-0 last:shrink">
-<a class="block max-w-48 truncate transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 sm:max-w-72 md:max-w-none" href="/dashboard">Inicio</a>
+<nav aria-label="Ruta de navegación" class="max-w-full overflow-x-auto text-[13px] text-muted-foreground [-ms-overflow-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
+<ol class="flex min-w-0 items-center gap-2 whitespace-nowrap">
+<li class="flex min-w-0 shrink-0 items-center gap-2 last:min-w-0 last:shrink">
+<a class="block max-w-48 truncate underline-offset-2 transition-colors duration-(--motion-fast) ease-out hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 sm:max-w-72 md:max-w-none" href="/dashboard">Inicio</a>
 </li>
-<li class="flex min-w-0 shrink-0 items-center gap-1 last:min-w-0 last:shrink">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-3.5 shrink-0 text-muted-foreground/60" aria-hidden="true">
-<path d="m9 18 6-6-6-6">
-</path>
-</svg>
-<span aria-current="page" class="block max-w-48 truncate text-foreground sm:max-w-72 md:max-w-none">Clientes</span>
+<li class="flex min-w-0 shrink-0 items-center gap-2 last:min-w-0 last:shrink">
+<span aria-hidden="true" class="shrink-0 text-muted-foreground/60 select-none">›</span>
+<span aria-current="page" class="block max-w-48 truncate font-semibold text-foreground sm:max-w-72 md:max-w-none">Clientes</span>
 </li>
 </ol>
 </nav>
@@ -922,24 +919,18 @@ exports[`Navegacion y listados > cabecera minima 1`] = `
 `;
 
 exports[`Navegacion y listados > migas de pan 1`] = `
-"<nav aria-label="Ruta de navegación" class="max-w-full overflow-x-auto text-sm text-muted-foreground [-ms-overflow-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
-<ol class="flex min-w-0 items-center gap-1 whitespace-nowrap">
-<li class="flex min-w-0 shrink-0 items-center gap-1 last:min-w-0 last:shrink">
-<a class="block max-w-48 truncate transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 sm:max-w-72 md:max-w-none" href="/dashboard">Inicio</a>
+"<nav aria-label="Ruta de navegación" class="max-w-full overflow-x-auto text-[13px] text-muted-foreground [-ms-overflow-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
+<ol class="flex min-w-0 items-center gap-2 whitespace-nowrap">
+<li class="flex min-w-0 shrink-0 items-center gap-2 last:min-w-0 last:shrink">
+<a class="block max-w-48 truncate underline-offset-2 transition-colors duration-(--motion-fast) ease-out hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 sm:max-w-72 md:max-w-none" href="/dashboard">Inicio</a>
 </li>
-<li class="flex min-w-0 shrink-0 items-center gap-1 last:min-w-0 last:shrink">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-3.5 shrink-0 text-muted-foreground/60" aria-hidden="true">
-<path d="m9 18 6-6-6-6">
-</path>
-</svg>
-<a class="block max-w-48 truncate transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 sm:max-w-72 md:max-w-none" href="/dashboard/commercial">Comercial</a>
+<li class="flex min-w-0 shrink-0 items-center gap-2 last:min-w-0 last:shrink">
+<span aria-hidden="true" class="shrink-0 text-muted-foreground/60 select-none">›</span>
+<a class="block max-w-48 truncate underline-offset-2 transition-colors duration-(--motion-fast) ease-out hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 sm:max-w-72 md:max-w-none" href="/dashboard/commercial">Comercial</a>
 </li>
-<li class="flex min-w-0 shrink-0 items-center gap-1 last:min-w-0 last:shrink">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-3.5 shrink-0 text-muted-foreground/60" aria-hidden="true">
-<path d="m9 18 6-6-6-6">
-</path>
-</svg>
-<span aria-current="page" class="block max-w-48 truncate text-foreground sm:max-w-72 md:max-w-none">Clientes</span>
+<li class="flex min-w-0 shrink-0 items-center gap-2 last:min-w-0 last:shrink">
+<span aria-hidden="true" class="shrink-0 text-muted-foreground/60 select-none">›</span>
+<span aria-current="page" class="block max-w-48 truncate font-semibold text-foreground sm:max-w-72 md:max-w-none">Clientes</span>
 </li>
 </ol>
 </nav>"
