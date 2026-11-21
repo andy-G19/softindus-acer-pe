@@ -143,7 +143,7 @@ export default async function SuppliersPage({
             <TableHead>Teléfono</TableHead>
             <TableHead>Condición de pago</TableHead>
             <TableHead>Estado</TableHead>
-            <TableHead>Acciones</TableHead>
+            <TableHead className="text-right">Acciones</TableHead>
           </TableRow>
         </TableHeader>
 

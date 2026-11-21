@@ -158,7 +158,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
             <TableHead>Teléfono</TableHead>
             <TableHead>Origen</TableHead>
             <TableHead>Estado</TableHead>
-            <TableHead>Acciones</TableHead>
+            <TableHead className="text-right">Acciones</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

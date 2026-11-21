@@ -170,7 +170,7 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dtodos">Editar</a>
+<a data-variant="row-link" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dtodos">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -186,8 +186,8 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dtodos">Editar</a>
-<button data-variant="ghost" type="button">Activar</button>
+<a data-variant="row-link" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dtodos">Editar</a>
+<button data-variant="row-link" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -432,7 +432,7 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fq%3Dlampa%26category%3Dherramientas%26unit%3Ddocena%26status%3Dinactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fq%3Dlampa%26category%3Dherramientas%26unit%3Ddocena%26status%3Dinactive">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -448,8 +448,8 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fq%3Dlampa%26category%3Dherramientas%26unit%3Ddocena%26status%3Dinactive">Editar</a>
-<button data-variant="ghost" type="button">Activar</button>
+<a data-variant="row-link" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fq%3Dlampa%26category%3Dherramientas%26unit%3Ddocena%26status%3Dinactive">Editar</a>
+<button data-variant="row-link" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -905,7 +905,7 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dinactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dinactive">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -921,8 +921,8 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dinactive">Editar</a>
-<button data-variant="ghost" type="button">Activar</button>
+<a data-variant="row-link" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dinactive">Editar</a>
+<button data-variant="row-link" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -1111,7 +1111,7 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts">Editar</a>
+<a data-variant="row-link" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -1127,8 +1127,8 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts">Editar</a>
-<button data-variant="ghost" type="button">Activar</button>
+<a data-variant="row-link" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts">Editar</a>
+<button data-variant="row-link" type="button">Activar</button>
 </div>
 </td>
 </tr>

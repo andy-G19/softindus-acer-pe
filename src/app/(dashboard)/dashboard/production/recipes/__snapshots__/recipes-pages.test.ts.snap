@@ -2563,7 +2563,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > unida
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-1/edit">Editar</a>
+<a data-variant="row-link" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-1/edit">Editar</a>
 <button data-variant="destructive" type="button">Eliminar</button>
 </div>
 </td>
@@ -2584,7 +2584,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > unida
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-2/edit">Editar</a>
+<a data-variant="row-link" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-2/edit">Editar</a>
 <button data-variant="destructive" type="button">Eliminar</button>
 </div>
 </td>
@@ -2815,7 +2815,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > versi
 <td>11.50 unidad_medida-1</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-1/edit">Editar</a>
+<a data-variant="row-link" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-1/edit">Editar</a>
 <button data-variant="destructive" type="button">Eliminar</button>
 </div>
 </td>
@@ -2835,7 +2835,7 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details > versi
 <td>22.50 unidad_medida-2</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-2/edit">Editar</a>
+<a data-variant="row-link" href="/dashboard/production/recipes/id_receta-1/versions/id_version_receta-1/details/id_detalle_receta-2/edit">Editar</a>
 <button data-variant="destructive" type="button">Eliminar</button>
 </div>
 </td>

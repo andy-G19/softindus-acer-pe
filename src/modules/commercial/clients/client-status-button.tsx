@@ -33,7 +33,7 @@ export function ClientStatusButton({
       <ConfirmActionButton
         action={action}
         fields={{ id_cliente: client.id_cliente, estado: "true" }}
-        variant="ghost"
+        variant="row-link"
         successNotification={activatedNotification}
         pendingText="Activando..."
       >
@@ -47,6 +47,7 @@ export function ClientStatusButton({
       action={action}
       fields={{ id_cliente: client.id_cliente, estado: "false" }}
       variant="destructive"
+      size="xs"
       successNotification={deactivatedNotification}
       confirm={{
         title: `¿Inactivar el cliente ${client.nombre_razon_social}?`,

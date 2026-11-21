@@ -564,7 +564,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/machines/id_maquina-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/machines/id_maquina-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -585,7 +585,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/machines/id_maquina-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/machines/id_maquina-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -858,7 +858,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000001/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/machines/MAQ00000001/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -879,7 +879,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000002/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/machines/MAQ00000002/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -900,7 +900,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000003/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/machines/MAQ00000003/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -921,7 +921,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000004/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/machines/MAQ00000004/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
 <button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>

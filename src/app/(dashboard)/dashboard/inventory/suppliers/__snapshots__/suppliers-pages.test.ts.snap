@@ -170,7 +170,7 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fstatus%3Dinactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/inventory/suppliers/id_proveedor-1/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fstatus%3Dinactive">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -187,8 +187,8 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fstatus%3Dinactive">Editar</a>
-<button data-variant="ghost" type="button">Activar</button>
+<a data-variant="row-link" href="/dashboard/inventory/suppliers/id_proveedor-2/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fstatus%3Dinactive">Editar</a>
+<button data-variant="row-link" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -364,7 +364,7 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers">Editar</a>
+<a data-variant="row-link" href="/dashboard/inventory/suppliers/id_proveedor-1/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -381,8 +381,8 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers">Editar</a>
-<button data-variant="ghost" type="button">Activar</button>
+<a data-variant="row-link" href="/dashboard/inventory/suppliers/id_proveedor-2/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers">Editar</a>
+<button data-variant="row-link" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -598,7 +598,7 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fq%3Dacero%26type%3Ddistribuidor%26payment%3Dcontado%26status%3Dactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/inventory/suppliers/id_proveedor-1/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fq%3Dacero%26type%3Ddistribuidor%26payment%3Dcontado%26status%3Dactive">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -615,8 +615,8 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fq%3Dacero%26type%3Ddistribuidor%26payment%3Dcontado%26status%3Dactive">Editar</a>
-<button data-variant="ghost" type="button">Activar</button>
+<a data-variant="row-link" href="/dashboard/inventory/suppliers/id_proveedor-2/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fq%3Dacero%26type%3Ddistribuidor%26payment%3Dcontado%26status%3Dactive">Editar</a>
+<button data-variant="row-link" type="button">Activar</button>
 </div>
 </td>
 </tr>

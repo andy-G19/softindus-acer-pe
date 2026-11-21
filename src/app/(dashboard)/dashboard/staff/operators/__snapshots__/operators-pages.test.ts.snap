@@ -639,7 +639,7 @@ exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/staff/operators/id_operario-1/edit?returnTo=%2Fdashboard%2Fstaff%2Foperators">Editar</a>
+<a data-variant="row-link" href="/dashboard/staff/operators/id_operario-1/edit?returnTo=%2Fdashboard%2Fstaff%2Foperators">Editar</a>
 <button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
@@ -660,7 +660,7 @@ exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/staff/operators/id_operario-2/edit?returnTo=%2Fdashboard%2Fstaff%2Foperators">Editar</a>
+<a data-variant="row-link" href="/dashboard/staff/operators/id_operario-2/edit?returnTo=%2Fdashboard%2Fstaff%2Foperators">Editar</a>
 <button data-variant="outline" type="button">Activar</button>
 </div>
 </td>

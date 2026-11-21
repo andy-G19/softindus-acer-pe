@@ -1024,7 +1024,7 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/clients/CLI00000003/edit?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Editar</a>
+<a data-variant="row-link" href="/dashboard/commercial/clients/CLI00000003/edit?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -1040,8 +1040,8 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/clients/CLI00000002/edit?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Editar</a>
-<button data-variant="ghost" type="button">Activar</button>
+<a data-variant="row-link" href="/dashboard/commercial/clients/CLI00000002/edit?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Editar</a>
+<button data-variant="row-link" type="button">Activar</button>
 </div>
 </td>
 </tr>

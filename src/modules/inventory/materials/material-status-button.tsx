@@ -31,7 +31,7 @@ export function MaterialStatusButton({
       <ConfirmActionButton
         action={action}
         fields={{ id_material: material.id_material, estado: "true" }}
-        variant="ghost"
+        variant="row-link"
         successNotification={activatedNotification}
         pendingText="Activando..."
       >
@@ -45,6 +45,7 @@ export function MaterialStatusButton({
       action={action}
       fields={{ id_material: material.id_material, estado: "false" }}
       variant="destructive"
+      size="xs"
       successNotification={deactivatedNotification}
       confirm={{
         title: `¿Inactivar el material ${material.nombre_material}?`,

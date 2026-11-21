@@ -1664,7 +1664,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="#listados">Editar</a>
+<a data-variant="row-link" href="#listados">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -1679,7 +1679,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="#listados">Editar</a>
+<a data-variant="row-link" href="#listados">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -1694,7 +1694,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="#listados">Editar</a>
+<a data-variant="row-link" href="#listados">Editar</a>
 <button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>

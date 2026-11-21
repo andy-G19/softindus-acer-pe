@@ -149,7 +149,7 @@ export default async function ProductsPage({
             <TableHead>Unidad</TableHead>
             <TableHead>Precio referencial</TableHead>
             <TableHead>Estado</TableHead>
-            <TableHead>Acciones</TableHead>
+            <TableHead className="text-right">Acciones</TableHead>
           </TableRow>
         </TableHeader>
 

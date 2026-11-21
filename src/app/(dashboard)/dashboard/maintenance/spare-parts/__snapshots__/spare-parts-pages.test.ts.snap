@@ -223,7 +223,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -240,7 +240,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Editar</a>
 <button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
@@ -472,7 +472,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -489,7 +489,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Editar</a>
 <button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
@@ -746,7 +746,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -763,7 +763,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Editar</a>
 <button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>

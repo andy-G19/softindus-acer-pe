@@ -132,7 +132,7 @@ export default async function RecipeDetailsPage({
             <TableHead>Costo unitario</TableHead>
             <TableHead>Costo estimado</TableHead>
             <TableHead>Stock actual</TableHead>
-            {canEditDetails ? <TableHead>Acciones</TableHead> : null}
+            {canEditDetails ? <TableHead className="text-right">Acciones</TableHead> : null}
           </TableRow>
         </TableHeader>
 

@@ -10,6 +10,11 @@
  * encoge al 97 %, en --motion-fast; link no se mueve. Con reducir movimiento
  * no hay transicion ni desplazamiento.
  *
+ * Diseno de listados (2026-11-21; D166): la variante "row-link" es la accion de
+ * una fila (Editar, Activar): texto claro de 13 px sin relleno, 24 px de alto,
+ * con el subrayado transparente; al pasar el puntero toma --primary-hover y el
+ * subrayado aparece. No se mueve, como link.
+ *
  * Entrega 8: estado pendiente (pending) y tipos que exigen aria-label en los
  * tamanos de solo icono. Sin pending, el HTML es el mismo de antes.
  *
@@ -44,6 +49,8 @@ const buttonVariants = cva(
         link: "text-primary underline decoration-link-underline decoration-1 underline-offset-4 hover:translate-y-0 hover:decoration-primary active:not-aria-[haspopup]:translate-y-0 active:not-aria-[haspopup]:scale-100",
         clear:
           "border-clear-border bg-clear-surface text-clear-foreground hover:bg-clear-surface-hover",
+        "row-link":
+          "bg-transparent text-foreground underline decoration-transparent underline-offset-2 hover:translate-y-0 hover:text-primary-hover hover:decoration-current active:not-aria-[haspopup]:translate-y-0 active:not-aria-[haspopup]:scale-100",
       },
       size: {
         default:
@@ -59,6 +66,9 @@ const buttonVariants = cva(
         "icon-lg": "size-9",
       },
     },
+    // row-link no tiene relleno y mide 24 px con cualquier tamano: va aqui porque cva pone los
+    // compoundVariants despues del tamano, y cn deja la ultima clase de cada grupo.
+    compoundVariants: [{ variant: "row-link", className: "h-6 px-0 text-[13px]" }],
     defaultVariants: {
       variant: "default",
       size: "default",

@@ -240,7 +240,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 <td>30 jun. 2026, 7:00 p. m.</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers%3Festado%3Dtodos">Editar</a>
+<a data-variant="row-link" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers%3Festado%3Dtodos">Editar</a>
 <button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
 <button data-variant="outline" type="button">Activar</button>
 </div>
@@ -262,7 +262,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 <td>1 jul. 2026, 7:00 p. m.</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers%3Festado%3Dtodos">Editar</a>
+<a data-variant="row-link" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers%3Festado%3Dtodos">Editar</a>
 <button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
 <button data-variant="outline" type="button">Activar</button>
 </div>
@@ -527,7 +527,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 <td>30 jun. 2026, 7:00 p. m.</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers">Editar</a>
+<a data-variant="row-link" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers">Editar</a>
 <button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
 <button data-variant="outline" type="button">Activar</button>
 </div>
@@ -549,7 +549,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 <td>1 jul. 2026, 7:00 p. m.</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers">Editar</a>
+<a data-variant="row-link" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers">Editar</a>
 <button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
 <button data-variant="outline" type="button">Activar</button>
 </div>
@@ -892,7 +892,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 <td>30 jun. 2026, 7:00 p. m.</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers%3Fq%3Dana%26rol%3DSELLER%26estado%3Dactivo%26page%3D2">Editar</a>
+<a data-variant="row-link" href="/dashboard/users/id_usuario-1/edit?returnTo=%2Fdashboard%2Fusers%3Fq%3Dana%26rol%3DSELLER%26estado%3Dactivo%26page%3D2">Editar</a>
 <button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
 <button data-variant="outline" type="button">Activar</button>
 </div>
@@ -914,7 +914,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 <td>1 jul. 2026, 7:00 p. m.</td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers%3Fq%3Dana%26rol%3DSELLER%26estado%3Dactivo%26page%3D2">Editar</a>
+<a data-variant="row-link" href="/dashboard/users/id_usuario-2/edit?returnTo=%2Fdashboard%2Fusers%3Fq%3Dana%26rol%3DSELLER%26estado%3Dactivo%26page%3D2">Editar</a>
 <button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Resetear contraseña</button>
 <button data-variant="outline" type="button">Activar</button>
 </div>

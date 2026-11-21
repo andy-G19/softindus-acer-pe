@@ -491,7 +491,7 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Editar</a>
+<a data-variant="row-link" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -513,8 +513,8 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/materials/id_material-2/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Editar</a>
-<button data-variant="ghost" type="button">Activar</button>
+<a data-variant="row-link" href="/dashboard/inventory/materials/id_material-2/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Editar</a>
+<button data-variant="row-link" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -727,7 +727,7 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Editar</a>
+<a data-variant="row-link" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
@@ -749,8 +749,8 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/materials/id_material-2/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Editar</a>
-<button data-variant="ghost" type="button">Activar</button>
+<a data-variant="row-link" href="/dashboard/inventory/materials/id_material-2/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Editar</a>
+<button data-variant="row-link" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -955,7 +955,7 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstock%3Dcritical%26pageSize%3D1">Editar</a>
+<a data-variant="row-link" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstock%3Dcritical%26pageSize%3D1">Editar</a>
 <button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
