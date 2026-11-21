@@ -7,9 +7,12 @@ import { Badge } from "@/components/ui/badge";
 
 // Diseno de la presentacion (propuesta del responsable, 2026-11-20; D153 y D154). La etiqueta es
 // un rectangulo de 24 px, radio de 6 px, letra sans de 11 px en negrita y mayusculas, con el
-// color de cada variante tomado de un token. Al pasar el puntero sube 3 px, crece al 105 % y
-// se aclara (D154). En reposo no se mueve (D153): success se asienta con un sello al montar y
-// destructive sacude una vez; ninguna variante tiene un bucle.
+// color de cada variante tomado de un token. En reposo no se mueve (D153): success se asienta con
+// un sello al montar y destructive sacude una vez; ninguna variante tiene un bucle.
+// Revision en staging (D161 y D162): el lingote cobre con resplandor de default y el hover que
+// subia 3 px y crecia al 105 % la hacian parecer un boton, y no se puede pulsar. Default es ahora
+// una placa de acero con texto cobre y una franja cobre a la izquierda, y al pasar el puntero
+// todas solo se aclaran.
 
 type Variant = NonNullable<Parameters<typeof Badge>[0]["variant"]>;
 
@@ -58,12 +61,7 @@ describe("forma de la etiqueta", () => {
 
 describe("colores de las variantes", () => {
   const expected: Record<Variant, string[]> = {
-    default: [
-      "border-badge-default-border",
-      "bg-(image:--badge-default-surface)",
-      "text-primary-foreground",
-      "shadow-badge-default",
-    ],
+    default: ["border-border", "bg-secondary", "text-primary", "shadow-badge-default"],
     secondary: ["bg-muted", "bg-(image:--texture-brush)", "text-foreground", "shadow-badge-secondary"],
     success: ["border-success-border", "bg-success-surface", "text-success-foreground"],
     warning: ["border-warning-border", "bg-warning-surface", "text-warning-foreground"],
@@ -81,6 +79,20 @@ describe("colores de las variantes", () => {
       expect(expected[variant].filter((name) => !actual.includes(name))).toEqual([]);
     });
   }
+
+  // Un boton primario es un relleno cobre con resplandor: default no rellena con cobre ni brilla.
+  it("default no se parece a un boton: sin relleno cobre ni degradado", () => {
+    const actual = classes("default");
+
+    expect(actual.filter((name) => /^bg-(primary|\(image:)/.test(name))).toEqual([]);
+    expect(actual).not.toContain("text-primary-foreground");
+  });
+
+  it("la franja de default es una sombra interior cobre de 2 px a la izquierda, sin resplandor", () => {
+    const tokens = withoutComments(readFileSync("src/styles/tokens.css", "utf8"));
+
+    expect(tokens).toMatch(/^\s*--shadow-badge-default:\s*inset 2px 0 0 var\(--primary\);/m);
+  });
 
   // Hasta este diseno secondary pintaba la misma clase que info y no se distinguian.
   it("secondary ya no se ve igual que info", () => {
@@ -102,26 +114,21 @@ describe("colores de las variantes", () => {
 });
 
 describe("movimiento de la etiqueta", () => {
-  // En Tailwind v4 el desplazamiento, la escala y el filtro son propiedades CSS propias: la
-  // transicion las nombra. Con reducir movimiento no hay transicion ni desplazamiento; el
-  // important gana a las clases de hover, que tienen mas especificidad que la media query.
-  it("cada variante sube 3 px, crece al 105 % y se aclara al pasar el puntero", () => {
+  // En Tailwind v4 el filtro es una propiedad CSS propia: la transicion la nombra. Con reducir
+  // movimiento no hay transicion.
+  it("al pasar el puntero cada variante solo se aclara: no sube ni crece", () => {
     const tacto = [
-      "transition-[color,background-color,border-color,box-shadow,translate,scale,filter]",
+      "transition-[color,background-color,border-color,box-shadow,filter]",
       "duration-(--motion-base)",
-      "ease-(--ease-spring)",
-      "hover:-translate-y-[3px]",
-      "hover:scale-105",
       "hover:brightness-110",
       "motion-reduce:transition-none",
-      "motion-reduce:translate-none!",
-      "motion-reduce:scale-none!",
     ];
 
     for (const variant of VARIANTS) {
       const actual = classes(variant);
 
       expect(tacto.filter((name) => !actual.includes(name))).toEqual([]);
+      expect(actual.filter((name) => /translate|scale/.test(name))).toEqual([]);
       expect(actual).not.toContain("transition-all");
     }
   });
@@ -170,12 +177,17 @@ describe("tokens de la etiqueta", () => {
   const tokens = withoutComments(readFileSync("src/styles/tokens.css", "utf8"));
 
   it("los colores, sombras y texturas de la etiqueta existen en :root y en @theme", () => {
-    for (const name of ["--badge-default-surface", "--badge-default-border", "--badge-filament", "--texture-brush"]) {
+    for (const name of ["--badge-filament", "--texture-brush"]) {
       expect(tokens).toMatch(new RegExp(`^\\s*${name}:`, "m"));
     }
-    for (const name of ["--color-badge-default-border", "--shadow-badge-default", "--shadow-badge-secondary"]) {
+    for (const name of ["--shadow-badge-default", "--shadow-badge-secondary"]) {
       expect(tokens).toMatch(new RegExp(`^\\s*${name}:\\s*var\\(`, "m"));
     }
     expect(tokens).toMatch(/--ease-spring:\s*cubic-bezier\(0\.34, 1\.56, 0\.64, 1\)/);
+  });
+
+  it("el degradado y el borde del lingote, que ya no tienen uso, no existen", () => {
+    expect(tokens).not.toContain("--badge-default-surface");
+    expect(tokens).not.toContain("--badge-default-border");
   });
 });

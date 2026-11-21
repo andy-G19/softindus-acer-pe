@@ -89,11 +89,12 @@ export function PresentationSection() {
         </GestureReplayDemo>
       </GallerySample>
       <GalleryNote>
-        Nueve variantes con el mismo significado que Button: default (lingote cobre) y secondary
-        (acero cepillado) son rellenos; success, warning, info y destructive son las superficies de
-        las alertas; outline, ghost y link acompañan texto sin competir con él. Al pasar el puntero
-        suben y se aclaran. En reposo no se mueven: success se asienta con un sello al aparecer y
-        destructive sacude una vez.
+        Nueve variantes con el mismo significado que Button, sin parecer botones: default es una
+        placa de acero con texto cobre y franja cobre a la izquierda, secondary es acero cepillado;
+        success, warning, info y destructive son las superficies de las alertas; outline, ghost y
+        link acompañan texto sin competir con él. Al pasar el puntero solo se aclaran, porque no se
+        pulsan. En reposo no se mueven: success se asienta con un sello al aparecer y destructive
+        sacude una vez.
       </GalleryNote>
 
       <GallerySample label="Etiqueta de estado (StateBadge)">

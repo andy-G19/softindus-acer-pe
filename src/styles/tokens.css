@@ -97,7 +97,6 @@
   --shadow-hairline: var(--shadow-hairline);
   --shadow-dialog: var(--shadow-dialog);
   --color-overlay: var(--overlay);
-  --color-badge-default-border: var(--badge-default-border);
   --shadow-badge-default: var(--shadow-badge-default);
   --shadow-badge-secondary: var(--shadow-badge-secondary);
 }
@@ -201,17 +200,8 @@
     transparent 3px
   );
 
-  /* Etiquetas (propuesta de la presentacion, 2026-11-20; D154). Default es un lingote cobre:
-     degradado de 135 grados del cobre aclarado al cobre oscurecido, con borde claro y un
-     resplandor calido fijo (sin pulso, D153). Secondary es acero cepillado en vertical. Link
-     subraya con un filamento del cobre a la brasa. */
-  --badge-default-surface: linear-gradient(
-    135deg,
-    color-mix(in oklch, var(--primary) 65%, white) 0%,
-    var(--primary) 55%,
-    color-mix(in oklch, var(--primary) 78%, black) 100%
-  );
-  --badge-default-border: color-mix(in oklch, var(--primary) 55%, white);
+  /* Etiquetas (propuesta de la presentacion, 2026-11-20; D154). Secondary es acero cepillado en
+     vertical. Link subraya con un filamento del cobre a la brasa. */
   --badge-filament: linear-gradient(
     90deg,
     var(--primary),
@@ -253,10 +243,9 @@
   --shadow-button: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 1px 2px rgba(0, 0, 0, 0.5);
   /* Pulgar del interruptor (propuesta de los campos): un apoyo de 1 px. */
   --shadow-thumb: 0 1px 2px rgba(0, 0, 0, 0.5);
-  /* Etiquetas (propuesta de la presentacion): resplandor cobre con filo de luz arriba en default,
-     y solo el filo, tenue, en secondary. */
-  --shadow-badge-default: 0 2px 12px color-mix(in oklch, var(--primary) 35%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  /* Etiquetas (propuesta de la presentacion): franja cobre de 2 px a la izquierda en default, sin
+     resplandor (D161), y un filo de luz tenue arriba en secondary. */
+  --shadow-badge-default: inset 2px 0 0 var(--primary);
   --shadow-badge-secondary: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   /* Indicador al pasar el puntero (D157): se separa de la pagina; el resplandor de su tono se
      suma en patterns.css. */
